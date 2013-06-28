@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using CollectionsOnline.Core.DomainModels;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
 using Raven.Client;
@@ -36,9 +39,6 @@ namespace CollectionsOnline.Import
                 DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
             }.Initialize();
 
-            // Ensure DB exists
-            _documentStore.DatabaseCommands.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
-
             // Connect to Imu
             _log.Debug("Connecting to Imu server: {0}:{1}", ConfigurationManager.AppSettings["EmuServerHost"], ConfigurationManager.AppSettings["EmuServerPort"]);
             _session = new Session(ConfigurationManager.AppSettings["EmuServerHost"], int.Parse(ConfigurationManager.AppSettings["EmuServerPort"]));
@@ -69,7 +69,7 @@ namespace CollectionsOnline.Import
         private static void Import()
         {
             var dateRun = DateTime.Now;
-            bool hasFailed = false;
+            var hasFailed = false;
 
             try
             {
@@ -88,6 +88,7 @@ namespace CollectionsOnline.Import
                     documentSession.Dispose();
 
                     // Run Imports
+                    RunStoryImport(application.LastDataImport);
                 }
             }
             catch (Exception exception)
@@ -112,6 +113,96 @@ namespace CollectionsOnline.Import
                 }
 
                 documentSession.SaveChanges();
+            }
+        }
+
+        private static void RunStoryImport(DateTime dateLastRun)
+        {            
+            _log.Debug("Begining import");
+
+            var storyFactory = new StoryFactory();
+            var storyDocuments = new List<Story>();
+            var module = new Module(storyFactory.MakeModuleName(), _session);
+            var terms = storyFactory.MakeTerms();
+
+            if (dateLastRun == default(DateTime))
+            {
+                var hits = module.FindTerms(terms);
+
+                _log.Debug("Finished Search. {0} Hits", hits);
+
+                var count = 0;
+
+                while (true)
+                {
+                    using (var documentSession = _documentStore.OpenSession())
+                    {
+                        if (_importCancelled)
+                        {
+                            _log.Debug("Canceling Data import");
+                            return;
+                        }
+
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyFactory.MakeColumns());
+
+                        if (results.Count == 0)
+                            break;
+
+                        // Create documents
+                        storyDocuments.AddRange(results.Rows.Select(storyFactory.MakeStory));
+
+                        count += results.Count;
+                        _log.Debug("Story import progress... {0}/{1}", count, hits);
+                    }
+                }
+            }
+            else
+            {
+                terms.Add("AdmDateModified", dateLastRun.ToString("MMM dd yyyy"), ">=");
+
+                var hits = module.FindTerms(terms);
+
+                _log.Debug("Finished Search. {0} Hits", hits);
+
+                var count = 0;
+
+                while (true)
+                {
+                    using (var documentSession = _documentStore.OpenSession())
+                    {
+                        if (_importCancelled)
+                        {
+                            _log.Debug("Canceling Data import");
+                            return;
+                        }
+
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyFactory.MakeColumns());
+
+                        if (results.Count == 0)
+                            break;
+
+                        // Update documents
+                        var existingStoryDocuments = documentSession.Load<Story>(results.Rows.Select(x => @"Story/" + x.GetString("irn")));
+
+                        foreach (var map in results.Rows)
+                        {
+                            var existingStory = existingStoryDocuments.SingleOrDefault(x => x != null && x.Id == @"Story/" + map.GetString("irn"));
+
+                            if (existingStory != null)
+                            {
+                                // Update existing story
+                            }
+                            else
+                            {
+                                // Create new story
+                                storyDocuments.Add(storyFactory.MakeStory(map));
+                            }
+                        }
+
+                        count += results.Count;
+                        _log.Debug("Story import progress... {0}/{1}", count, hits);
+                    }
+                }
             }
         }
 

@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Config\Constants.cs" />
     <Compile Include="DomainModels\Application.cs" />
+    <Compile Include="DomainModels\Story.cs" />
     <Compile Include="DomainModels\DomainModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
