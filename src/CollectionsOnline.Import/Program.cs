@@ -10,6 +10,8 @@ using NLog;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
+using Ninject;
+using Ninject.Extensions.Conventions;
 
 namespace CollectionsOnline.Import
 {
@@ -19,6 +21,7 @@ namespace CollectionsOnline.Import
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
         private static Session _session;
         private static volatile bool _importCancelled = false;
+        private static IKernel _kernal;
 
         static void Main(string[] args)
         {
@@ -38,6 +41,9 @@ namespace CollectionsOnline.Import
                 Url = ConfigurationManager.AppSettings["DatabaseUrl"],
                 DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
             }.Initialize();
+
+            // Ensure DB exists
+            _documentStore.DatabaseCommands.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
 
             // Connect to Imu
             _log.Debug("Connecting to Imu server: {0}:{1}", ConfigurationManager.AppSettings["EmuServerHost"], ConfigurationManager.AppSettings["EmuServerPort"]);
@@ -64,6 +70,13 @@ namespace CollectionsOnline.Import
                     eventArgs.Cancel = true;
                     _importCancelled = true;
                 };
+
+            // Set up niject
+            _kernal = new StandardKernel();
+            _kernal.Bind(x => x
+                .FromAssemblyContaining(typeof(StoryDocumentFactory), typeof(Story))
+                .SelectAllClasses()
+                .BindAllInterfaces());
         }
 
         private static void Import()
@@ -120,10 +133,9 @@ namespace CollectionsOnline.Import
         {            
             _log.Debug("Begining import");
 
-            var storyFactory = new StoryFactory();
-            var storyDocuments = new List<Story>();
-            var module = new Module(storyFactory.MakeModuleName(), _session);
-            var terms = storyFactory.MakeTerms();
+            var storyDocumentFactory = _kernal.Get<StoryDocumentFactory>();
+            var module = new Module(storyDocumentFactory.MakeModuleName(), _session);
+            var terms = storyDocumentFactory.MakeTerms();
 
             if (dateLastRun == default(DateTime))
             {
@@ -143,14 +155,19 @@ namespace CollectionsOnline.Import
                             return;
                         }
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyFactory.MakeColumns());
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyDocumentFactory.MakeColumns());
 
                         if (results.Count == 0)
                             break;
 
-                        // Create documents
-                        storyDocuments.AddRange(results.Rows.Select(storyFactory.MakeStory));
+                        // Create and store documents
+                        results.Rows
+                            .Select(storyDocumentFactory.MakeDocument)
+                            .ToList()
+                            .ForEach(documentSession.Store);
 
+                        // Save any changes
+                        documentSession.SaveChanges();
                         count += results.Count;
                         _log.Debug("Story import progress... {0}/{1}", count, hits);
                     }
@@ -176,29 +193,33 @@ namespace CollectionsOnline.Import
                             return;
                         }
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyFactory.MakeColumns());
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyDocumentFactory.MakeColumns());
 
                         if (results.Count == 0)
                             break;
 
                         // Update documents
-                        var existingStoryDocuments = documentSession.Load<Story>(results.Rows.Select(x => @"Story/" + x.GetString("irn")));
+                        var newStories = results.Rows.Select(storyDocumentFactory.MakeDocument).ToList();
+                        var existingStories = documentSession.Load<Story>(newStories.Select(x => x.Id));
 
-                        foreach (var map in results.Rows)
+                        foreach (var newStory in newStories)
                         {
-                            var existingStory = existingStoryDocuments.SingleOrDefault(x => x != null && x.Id == @"Story/" + map.GetString("irn"));
+                            var existingStory = existingStories.SingleOrDefault(x => x != null && x.Id == newStory.Id);
 
                             if (existingStory != null)
                             {
                                 // Update existing story
+                                existingStory.Update(newStory.Title);
                             }
                             else
                             {
                                 // Create new story
-                                storyDocuments.Add(storyFactory.MakeStory(map));
+                                documentSession.Store(newStory);
                             }
                         }
 
+                        // Save any changes
+                        documentSession.SaveChanges();
                         count += results.Count;
                         _log.Debug("Story import progress... {0}/{1}", count, hits);
                     }
