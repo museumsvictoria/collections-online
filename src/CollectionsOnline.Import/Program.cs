@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using CollectionsOnline.Core.DomainModels;
+﻿using AutoMapper;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Import.Factories;
+using CollectionsOnline.Core.DomainModels;
+using CollectionsOnline.Import.Helpers;
 using IMu;
+using Ninject;
+using Ninject.Extensions.Conventions;
 using NLog;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
-using Ninject;
-using Ninject.Extensions.Conventions;
+using System;
+using System.Configuration;
+using System.Linq;
 
 namespace CollectionsOnline.Import
 {
@@ -74,7 +74,7 @@ namespace CollectionsOnline.Import
             // Set up niject
             _kernal = new StandardKernel();
             _kernal.Bind(x => x
-                .FromAssemblyContaining(typeof(StoryDocumentFactory), typeof(Story))
+                .FromAssemblyContaining(typeof(StoryImportHelper), typeof(Story))
                 .SelectAllClasses()
                 .BindAllInterfaces());
         }
@@ -101,7 +101,8 @@ namespace CollectionsOnline.Import
                     documentSession.Dispose();
 
                     // Run Imports
-                    RunStoryImport(application.LastDataImport);
+                    //RunDocumentImport<Story>(application.LastDataImport);
+                    RunDocumentImport<Item>(application.LastDataImport);
                 }
             }
             catch (Exception exception)
@@ -129,13 +130,13 @@ namespace CollectionsOnline.Import
             }
         }
 
-        private static void RunStoryImport(DateTime dateLastRun)
-        {            
-            _log.Debug("Begining import");
+        private static void RunDocumentImport<T>(DateTime dateLastRun) where T : DomainModel
+        {
+            _log.Debug("Begining {0} import", typeof(T).Name);
 
-            var storyDocumentFactory = _kernal.Get<StoryDocumentFactory>();
-            var module = new Module(storyDocumentFactory.MakeModuleName(), _session);
-            var terms = storyDocumentFactory.MakeTerms();
+            var importHelper = _kernal.Get<IImportHelper<T>>();
+            var module = new Module(importHelper.MakeModuleName(), _session);
+            var terms = importHelper.MakeTerms();
 
             if (dateLastRun == default(DateTime))
             {
@@ -155,26 +156,28 @@ namespace CollectionsOnline.Import
                             return;
                         }
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyDocumentFactory.MakeColumns());
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, importHelper.MakeColumns());
 
-                        if (results.Count == 0)
+                        if (results.Count == 0 || count == 2000)
                             break;
 
                         // Create and store documents
                         results.Rows
-                            .Select(storyDocumentFactory.MakeDocument)
+                            .Select(importHelper.MakeDocument)
                             .ToList()
                             .ForEach(documentSession.Store);
 
                         // Save any changes
                         documentSession.SaveChanges();
                         count += results.Count;
-                        _log.Debug("Story import progress... {0}/{1}", count, hits);
+                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, count, hits);
                     }
                 }
             }
             else
             {
+                Mapper.CreateMap<T, T>().ForMember(x => x.Id, y => y.Ignore());
+
                 terms.Add("AdmDateModified", dateLastRun.ToString("MMM dd yyyy"), ">=");
 
                 var hits = module.FindTerms(terms);
@@ -193,35 +196,35 @@ namespace CollectionsOnline.Import
                             return;
                         }
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, storyDocumentFactory.MakeColumns());
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, importHelper.MakeColumns());
 
                         if (results.Count == 0)
                             break;
 
                         // Update documents
-                        var newStories = results.Rows.Select(storyDocumentFactory.MakeDocument).ToList();
-                        var existingStories = documentSession.Load<Story>(newStories.Select(x => x.Id));
+                        var newDocuments = results.Rows.Select(importHelper.MakeDocument).ToList();
+                        var existingDocuments = documentSession.Load<T>(newDocuments.Select(x => x.Id));
 
-                        foreach (var newStory in newStories)
+                        foreach (var newDocument in newDocuments)
                         {
-                            var existingStory = existingStories.SingleOrDefault(x => x != null && x.Id == newStory.Id);
+                            var existingDocument = existingDocuments.SingleOrDefault(x => x != null && x.Id == newDocument.Id);                            
 
-                            if (existingStory != null)
+                            if (existingDocument != null)
                             {
                                 // Update existing story
-                                existingStory.Update(newStory.Title);
+                                Mapper.Map(newDocument, existingDocument);
                             }
                             else
                             {
                                 // Create new story
-                                documentSession.Store(newStory);
+                                documentSession.Store(newDocument);
                             }
                         }
 
                         // Save any changes
                         documentSession.SaveChanges();
                         count += results.Count;
-                        _log.Debug("Story import progress... {0}/{1}", count, hits);
+                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, count, hits);
                     }
                 }
             }

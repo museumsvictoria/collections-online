@@ -5,9 +5,9 @@ namespace CollectionsOnline.Core.DomainModels
 {
     public class Application : DomainModel
     {
-        public DateTime LastDataImport { get; private set; }
+        public DateTime LastDataImport { get; set; }
 
-        public bool DataImportRunning { get; private set; }
+        public bool DataImportRunning { get; set; }
 
         public Application()
         {

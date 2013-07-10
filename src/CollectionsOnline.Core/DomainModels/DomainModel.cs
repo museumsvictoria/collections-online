@@ -2,6 +2,6 @@
 {
     public abstract class DomainModel
     {
-        public string Id { get; set; }
+        public string Id { get; protected set; }
     }
 }

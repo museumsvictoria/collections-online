@@ -1,8 +1,8 @@
 ﻿using IMu;
 
-namespace CollectionsOnline.Import.Factories
+namespace CollectionsOnline.Import.Helpers
 {
-    public interface IDocumentFactory<out T>
+    public interface IImportHelper<out T>
     {
         string MakeModuleName();
 
