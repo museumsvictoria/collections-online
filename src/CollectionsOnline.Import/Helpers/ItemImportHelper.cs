@@ -54,6 +54,9 @@ namespace CollectionsOnline.Import.Helpers
                     "dimensions=[DimConfiguration_tab,DimLengthUnit_tab,DimWeightUnit_tab,DimLength_tab,DimWidth_tab,DimDepth_tab,DimHeight_tab,DimCircumference_tab,DimWeight_tab,DimDimensionComments0]",
                     "SupReferences",
                     "bibliography=[summary=BibBibliographyRef_tab.(SummaryData),BibIssuedDate_tab,BibPages_tab]",
+                    "Pro2ModelNameNumber_tab",
+                    "Pro2BrandName_tab",
+                    "related=ColRelatedRecordsRef_tab.(irn,ClaObjectName)"
                 };
         }
 
@@ -177,11 +180,26 @@ namespace CollectionsOnline.Import.Helpers
                     bibliography.Add(bibliographyMap.GetString("BibIssuedDate_tab"));
 
                 if (!string.IsNullOrWhiteSpace(bibliographyMap.GetString("BibPages_tab")))
-                    bibliography.Add(bibliographyMap.GetString("BibPages_tab"));
+                    bibliography.Add(string.Format("{0} Pages", bibliographyMap.GetString("BibPages_tab")));
 
                 bibliographies.Add(bibliography.Concatenate(", "));
             }
             item.Bibliographies = bibliographies;
+
+            // Brand/Model names
+            item.ModelNames = map.GetStrings("Pro2ModelNameNumber_tab").Concatenate("; ");
+            item.BrandNames = map.GetStrings("Pro2BrandName_tab").Concatenate("; ");
+
+            var relatedItems = new List<DenormalizedItemReference>();
+            foreach (var relatedMap in map.GetMaps("related"))
+            {
+                relatedItems.Add(new DenormalizedItemReference
+                    {
+                        Id = relatedMap.GetString("irn"),
+                        Name = relatedMap.GetString("ClaObjectName")
+                    });
+            }
+            item.RelatedItems = relatedItems.ToArray();
 
             return item;
         }

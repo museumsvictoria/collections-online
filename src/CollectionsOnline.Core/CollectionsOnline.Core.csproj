@@ -40,9 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\Constants.cs" />
+    <Compile Include="DesignByContract\AssertException.cs" />
+    <Compile Include="DesignByContract\Checks.cs" />
+    <Compile Include="DesignByContract\Requires.cs" />
+    <Compile Include="DesignByContract\Ensures.cs" />
     <Compile Include="DomainModels\Application.cs" />
     <Compile Include="DomainModels\Author.cs" />
     <Compile Include="DomainModels\Association.cs" />
+    <Compile Include="DomainModels\DenormalizedItemReference.cs" />
     <Compile Include="DomainModels\Item.cs" />
     <Compile Include="DomainModels\Story.cs" />
     <Compile Include="DomainModels\DomainModel.cs" />

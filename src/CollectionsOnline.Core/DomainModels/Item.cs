@@ -47,6 +47,12 @@ namespace CollectionsOnline.Core.DomainModels
 
         public ICollection<string> Bibliographies { get; set; }
 
+        public string ModelNames { get; set; }
+
+        public string BrandNames { get; set; }
+
+        public ICollection<DenormalizedItemReference> RelatedItems { get; set; }
+
         public Item(string irn)
         {
             Id = "Items/" + irn;
