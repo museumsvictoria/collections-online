@@ -21,9 +21,17 @@ namespace CollectionsOnline.Core.DomainModels
 
         public ICollection<Author> Authors { get; set; }
 
+        public ICollection<Media> Media { get; set; }
+
+        public string ParentStoryId { get; set; }
+
+        public ICollection<string> RelatedStoryIds { get; set; }
+
+        public ICollection<string> RelatedItemIds { get; set; }
+
         public Story(string irn)
         {
-            Id = "Stories/" + irn;
+            Id = "stories/" + irn;
         }
     }
 }

@@ -101,8 +101,9 @@ namespace CollectionsOnline.Import
                     documentSession.Dispose();
 
                     // Run Imports
-                    //RunDocumentImport<Story>(application.LastDataImport);
+                    RunDocumentImport<Story>(application.LastDataImport);
                     RunDocumentImport<Item>(application.LastDataImport);
+                    RunDocumentImport<Species>(application.LastDataImport);
                 }
             }
             catch (Exception exception)

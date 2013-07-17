@@ -65,6 +65,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\SpeciesImportHelper.cs" />
     <Compile Include="Helpers\ItemImportHelper.cs" />
     <Compile Include="Helpers\IImportHelper.cs" />
     <Compile Include="Helpers\StoryImportHelper.cs" />

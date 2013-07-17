@@ -37,7 +37,11 @@ namespace CollectionsOnline.Import.Helpers
                     "DesType_tab",
                     "DesGeographicLocation_tab",
                     "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
-                    "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword)),NarContributorRole_tab]"
+                    "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword)),NarContributorRole_tab]",
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                    "parent=AssMasterNarrativeRef.(irn)",
+                    "relatedstories=AssAssociatedWithRef_tab.(irn)",
+                    "relateditems=ObjObjectsRef_tab.(irn)"
                 };
         }
 
@@ -85,6 +89,29 @@ namespace CollectionsOnline.Import.Helpers
                            Biography = x.GetString("BioLabel")
                        }));
             story.Authors = authors;
+
+            // Media
+            var media = new List<Media>();
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
+            {
+                media.Add(new Media
+                {
+                    DateModified =
+                        DateTime.ParseExact(
+                            string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                                          mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
+                            new CultureInfo("en-AU")),
+                    Title = mediaMap.GetString("MulTitle"),
+                    Type = mediaMap.GetString("MulMimeType")
+                });
+            }
+            story.Media = media;
+
+            // Relationships
+            if (map.GetMap("parent") != null)
+                story.ParentStoryId = "stories/" + map.GetMap("parent").GetString("irn");
+            story.RelatedStoryIds = map.GetMaps("relatedstories").Where(x => x != null).Select(x => "stories/" + x.GetString("irn")).ToList();
+            story.RelatedItemIds = map.GetMaps("relateditems").Where(x => x != null).Select(x => "items/" + x.GetString("irn")).ToList();
             
             return story;
         }

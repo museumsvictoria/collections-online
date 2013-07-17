@@ -56,7 +56,60 @@ namespace CollectionsOnline.Import.Helpers
                     "bibliography=[summary=BibBibliographyRef_tab.(SummaryData),BibIssuedDate_tab,BibPages_tab]",
                     "Pro2ModelNameNumber_tab",
                     "Pro2BrandName_tab",
-                    "related=ColRelatedRecordsRef_tab.(irn,ClaObjectName)"
+                    "related=ColRelatedRecordsRef_tab.(irn)",
+                    "ArcContextNumber",
+                    "ArcSiteName=ArcSiteNameRef.(SummaryData)",
+                    "ArcDescription",
+                    "ArcDistinguishingMarks",
+                    "ArcActivity",
+                    "ArcSpecificActivity",
+                    "ArcDecoration",
+                    "ArcPattern",
+                    "ArcColour",
+                    "ArcMoulding",
+                    "ArcPlacement",
+                    "ArcForm",
+                    "ArcShape",
+                    "ArcManufacturerName=ArcManufacturerNameRef.(NamFullName)",
+                    "ArcManufactureDate",
+                    "ArcTechnique",
+                    "ArcProvenance",
+                    "NumDenomination",
+                    "NumDateEra",
+                    "NumSeries",
+                    "NumMaterial",
+                    "NumEdgeDescription",
+                    "NumObverseDescription",
+                    "NumReverseDescription",
+                    "PhiColour",
+                    "PhiDenomination",
+                    "PhiImprint",
+                    "PhiIssue",
+                    "PhiIssueDate",
+                    "PhiItemForm",
+                    "PhiOverprint",
+                    "PhiGibbonsNo",
+                    "GenMedium",
+                    "GenFormat",
+                    "GenColour",
+                    "GenLanguage",
+                    "Con1Description",
+                    "Con3PeopleDepicted_tab",
+                    "AudRecordingType",
+                    "AudTotalLengthOfRecording",
+                    "AudUnits",
+                    "AudAudibilityRating",
+                    "AudComments",
+                    "audiocontent=[AudItemNumber_tab,AudSegmentPosition_tab,AudContentUnits_tab,AudSegmentContent_tab]",
+                    "TLDNumberOfPages",
+                    "TLDPageSizeFormat",
+                    "TLSCoverTitle",
+                    "TLSPrimarySubject",
+                    "TLSPublicationDate",
+                    "TLDIllustraionTypes_tab",
+                    "TLDPrintingTypes_tab",
+                    "TLDPublicationTypes_tab",
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
                 };
         }
 
@@ -65,7 +118,7 @@ namespace CollectionsOnline.Import.Helpers
             var terms = new Terms();
 
             terms.Add("MdaDataSets_tab", "History & Technology Collections Online");
-            terms.Add("AdmPublishWebNoPassword", "Yes");
+            terms.Add("AdmPublishWebNoPassword", "Yes");            
 
             return terms;
         }
@@ -190,17 +243,109 @@ namespace CollectionsOnline.Import.Helpers
             item.ModelNames = map.GetStrings("Pro2ModelNameNumber_tab").Concatenate("; ");
             item.BrandNames = map.GetStrings("Pro2BrandName_tab").Concatenate("; ");
 
-            var relatedItems = new List<DenormalizedItemReference>();
-            foreach (var relatedMap in map.GetMaps("related"))
+            // Related items
+            item.RelatedItemIds = map.GetMaps("related").Select(x => "items/" + x.GetString("irn")).ToList();
+
+            // Archeology fields
+            item.ArcheologyContextNumber = map.GetString("ArcContextNumber");
+            if (map.GetMap("ArcSiteName") != null)
+                item.ArcheologySite = map.GetMap("ArcSiteName").GetString("SummaryData");
+            item.ArcheologyDescription = map.GetString("ArcDescription");
+            item.ArcheologyDistinguishingMarks = map.GetString("ArcDistinguishingMarks");
+            item.ArcheologyActivity = map.GetString("ArcActivity");
+            item.ArcheologySpecificActivity = map.GetString("ArcSpecificActivity");
+            item.ArcheologyDecoration = map.GetString("ArcDecoration");
+            item.ArcheologyPattern = map.GetString("ArcPattern");
+            item.ArcheologyColour = map.GetString("ArcColour");
+            item.ArcheologyMoulding = map.GetString("ArcMoulding");
+            item.ArcheologyPlacement = map.GetString("ArcPlacement");
+            item.ArcheologyForm = map.GetString("ArcForm");
+            item.ArcheologyShape = map.GetString("ArcShape");
+            if (map.GetMap("ArcManufacturerName") != null)
+                item.ArcheologySite = map.GetMap("ArcManufacturerName").GetString("NamFullName");
+            item.ArcheologyManufactureDate = map.GetString("ArcManufactureDate");
+            item.ArcheologyTechnique = map.GetString("ArcTechnique");
+            item.ArcheologyProvenance = map.GetString("ArcProvenance");
+
+            // Numismatics fields
+            item.NumismaticsDenomination = map.GetString("NumDenomination");
+            item.NumismaticsDateIssued = map.GetString("NumDateEra");
+            item.NumismaticsSeries = map.GetString("NumSeries");
+            item.NumismaticsMaterial = map.GetString("NumMaterial");
+            item.NumismaticsEdgeDescription = map.GetString("NumEdgeDescription");
+            item.NumismaticsObverseDescription = map.GetString("NumObverseDescription");
+            item.NumismaticsReverseDescription = map.GetString("NumReverseDescription");
+
+            // Philately Fields
+            item.PhilatelyColour = map.GetString("PhiColour");
+            item.PhilatelyDenomination = map.GetString("PhiDenomination");
+            item.PhilatelyImprint = map.GetString("PhiImprint");
+            item.PhilatelyIssue = map.GetString("PhiIssue");
+            item.PhilatelyDateIssued = map.GetString("PhiIssueDate");
+            item.PhilatelyForm = map.GetString("PhiItemForm");
+            item.PhilatelyOverprint = map.GetString("PhiOverprint");
+            item.PhilatelyGibbonsNumber = map.GetString("PhiGibbonsNo");
+
+            // ISD Fields
+            item.IsdFormat = new[]
+                {
+                    map.GetString("GenMedium"), 
+                    map.GetString("GenFormat"), 
+                    map.GetString("GenColour")
+                }.Concatenate(", ");
+            item.IsdLanguage = map.GetString("GenLanguage");
+            item.IsdDescriptionOfContent = map.GetString("Con1Description");
+            item.IsdPeopleDepicted = map.GetStrings("Con3PeopleDepicted_tab").Concatenate("; ");
+
+            // Audiovisual Fields
+            item.AudioVisualRecordingDetails = new[]
+                {
+                    map.GetString("AudRecordingType"),
+                    string.Format("{0} {1}", map.GetString("AudTotalLengthOfRecording"), map.GetString("AudUnits")).Trim(),
+                    map.GetString("AudAudibilityRating"),
+                    map.GetString("AudComments")
+                }.Concatenate(", ");
+
+            var audioContents = new List<string>();
+            foreach (var audioContentMap in map.GetMaps("audiocontent"))
             {
-                relatedItems.Add(new DenormalizedItemReference
+                var audioContent = new List<string>();
+
+                audioContent.Add(audioContentMap.GetString("AudItemNumber_tab"));
+                audioContent.Add(string.Format("{0} {1}", audioContentMap.GetString("AudSegmentPosition_tab"), audioContentMap.GetString("AudContentUnits_tab")).Trim());
+                audioContent.Add(audioContentMap.GetString("AudSegmentContent_tab"));
+
+                audioContents.Add(audioContent.Concatenate(", "));
+            }
+            item.AudioVisualContentSummary = audioContents.Concatenate(Environment.NewLine);
+
+            // Trade Literature Fields
+            item.TradeLiteratureNumberofPages = map.GetString("TLDNumberOfPages");
+            item.TradeLiteraturePageSizeFormat = map.GetString("TLDPageSizeFormat");
+            item.TradeLiteratureCoverTitle = map.GetString("TLSCoverTitle");
+            item.TradeLiteraturePrimarySubject = map.GetString("TLSPrimarySubject");
+            item.TradeLiteraturePublicationDate = map.GetString("TLSPublicationDate");
+            item.TradeLiteratureIllustrationTypes = map.GetStrings("TLDIllustraionTypes_tab").Concatenate("; ");
+            item.TradeLiteraturePrintingTypes = map.GetStrings("TLDPrintingTypes_tab").Concatenate("; ");
+            item.TradeLiteraturePublicationTypes = map.GetStrings("TLDPublicationTypes_tab").Concatenate("; ");
+
+            // Media
+            var media = new List<Media>();
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
+            {
+                media.Add(new Media
                     {
-                        Id = relatedMap.GetString("irn"),
-                        Name = relatedMap.GetString("ClaObjectName")
+                        DateModified =
+                            DateTime.ParseExact(
+                                string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                                              mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
+                                new CultureInfo("en-AU")),
+                        Title = mediaMap.GetString("MulTitle"),
+                        Type = mediaMap.GetString("MulMimeType")
                     });
             }
-            item.RelatedItems = relatedItems.ToArray();
-
+            item.Media = media;
+            
             return item;
         }
     }
