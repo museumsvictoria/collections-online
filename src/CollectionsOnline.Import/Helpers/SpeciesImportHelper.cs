@@ -49,21 +49,9 @@ namespace CollectionsOnline.Import.Helpers
                     "SpeFlightEnd",
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
-                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))"
-                    //"SpeIdentifyingCharacters",
-                    //"SpeHazards",
-                    //"SpeBiology",
-                    //"SpeDiet",
-                    //"SpeHabitatNotes",
-                    //"SpeEndemicity",
-                    //"SpeBriefID",
-                    //"SpeDistribution",
-                    //"conservation=[SpeConservationList_tab,SpeStatus_tab,SpeComments_tab]",
-                    //"SpeFlightStart",
-                    //"SpeFlightEnd",
-                    //"SpeCommercialSpecies",
-                    //"media=MulMultiMediaRef_tab.(irn,MulDescription,MulMimeType,MulMimeFormat,MulIdentifier,MdaDataSets_tab,ChaRepository_tab,MdaQualifier_tab,MdaFreeText_tab,credit=<erights:MulMultiMediaRef_tab>.(RigAcknowledgement,RigType))",
-                    //"taxa=TaxTaxaRef_tab.(irn,ClaPhylum,ClaClass,ClaOrder,ClaFamily,ClaGenus,ClaSpecies,ClaSubspecies,ClaScientificName,names=[ComName_tab,ComStatus_tab])"
+                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
+                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                 };
         }
 
@@ -199,6 +187,30 @@ namespace CollectionsOnline.Import.Helpers
                 // Relationships
                 species.SpecimenIds = taxaMap.GetMaps("specimens").Where(x => x != null).Select(x => "specimens/" + x.GetString("irn")).ToList();
             }
+
+            // Authors
+            var authors = new List<Author>();
+            authors.AddRange(map.GetMaps("authors").Select(x => new Author
+            {
+                Name = x.GetString("NamFullName"),
+                Biography = x.GetString("BioLabel")
+            }));
+            species.Authors = authors;
+
+            // Media
+            var media = new List<Media>();
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
+            {
+                media.Add(new Media
+                {
+                    DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                                                        mediaMap.GetString("AdmTimeModified")),
+                                                       "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
+                    Title = mediaMap.GetString("MulTitle"),
+                    Type = mediaMap.GetString("MulMimeType")
+                });
+            }
+            species.Media = media;
 
             return species;
         }

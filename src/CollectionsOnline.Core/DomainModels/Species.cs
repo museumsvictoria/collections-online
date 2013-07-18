@@ -107,6 +107,10 @@ namespace CollectionsOnline.Core.DomainModels
 
         public ICollection<string> SpecimenIds { get; set; }
 
+        public ICollection<Author> Authors { get; set; }
+
+        public ICollection<Media> Media { get; set; }
+
         public Species(string irn)
         {
             Id = "species/" + irn;
