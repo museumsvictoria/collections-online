@@ -21,6 +21,8 @@ namespace CollectionsOnline.Import.Helpers
             return new[]
                 {
                     "irn",
+                    "AdmDateModified",
+                    "AdmTimeModified",
                     "SpeTaxonGroup",
                     "SpeTaxonSubGroup",
                     "SpeColour_tab",
@@ -68,6 +70,11 @@ namespace CollectionsOnline.Import.Helpers
         public Species MakeDocument(Map map)
         {
             var species = new Species(map.GetString("irn"));
+
+            species.DateModified = DateTime.ParseExact(
+                string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
+                "dd/MM/yyyy HH:mm",
+                new CultureInfo("en-AU"));
 
             species.AnimalType = map.GetString("SpeTaxonGroup");
             species.AnimalSubType = map.GetString("SpeTaxonSubGroup");

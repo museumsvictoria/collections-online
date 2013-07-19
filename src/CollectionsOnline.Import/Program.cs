@@ -104,6 +104,7 @@ namespace CollectionsOnline.Import
                     RunDocumentImport<Story>(application.LastDataImport);
                     RunDocumentImport<Item>(application.LastDataImport);
                     RunDocumentImport<Species>(application.LastDataImport);
+                    RunDocumentImport<Specimen>(application.LastDataImport);
                 }
             }
             catch (Exception exception)

@@ -47,6 +47,7 @@
     <Compile Include="DomainModels\Application.cs" />
     <Compile Include="DomainModels\Author.cs" />
     <Compile Include="DomainModels\Association.cs" />
+    <Compile Include="DomainModels\Specimen.cs" />
     <Compile Include="DomainModels\Species.cs" />
     <Compile Include="DomainModels\Media.cs" />
     <Compile Include="DomainModels\DenormalizedItemReference.cs" />
