@@ -7,7 +7,83 @@ namespace CollectionsOnline.Core.DomainModels
     {
         public DateTime DateModified { get; set; }
 
+        public string Category { get; set; }
+
+        public string ScientificGroup { get; set; }
+
+        public string Discipline { get; set; }
+
+        public string RegistrationNumber { get; set; }
+
+        public ICollection<string> CollectionNames { get; set; }
+
+        public string Type { get; set; }        
+
         public ICollection<Media> Media { get; set; }
+
+        #region Paleontology
+
+        public string PalaeontologyNumber { get; set; }
+
+        #endregion
+
+        #region Mineralogy
+
+        public string MineralogySpecies { get; set; }
+
+        public string MineralogyVariety { get; set; }
+
+        public string MineralogyGroup { get; set; }
+
+        public string MineralogyClass { get; set; }
+
+        public string MineralogyAssociatedMatrix { get; set; }
+
+        public string MineralogyType { get; set; }
+
+        #endregion
+
+        #region Meteorites
+
+        public string MeteoritesName { get; set; }
+
+        public string MeteoritesClass { get; set; }
+
+        public string MeteoritesGroup { get; set; }
+
+        public string MeteoritesType { get; set; }
+
+        public string MeteoritesMinerals { get; set; }
+
+        public string MeteoritesSpecimenWeight { get; set; }
+
+        public string MeteoritesTotalWeight { get; set; }
+
+        public string MeteoritesDateFell { get; set; }
+
+        public string MeteoritesDateFound { get; set; }
+
+        #endregion
+
+        #region Tektites
+
+        public string TektitesName { get; set; }
+
+        public string TektitesClassification { get; set; }
+
+        public string TektitesShape { get; set; }
+
+        public string TektitesLocalStrewnfield { get; set; }
+
+        public string TektitesGlobalStrewnfield { get; set; }
+
+        public string TektitesSurfaceUp { get; set; }
+
+        public string TektitesDegreeOfAbrasion { get; set; }
+
+        #endregion
+
+        #region DwC Fields
 
         #region Record-level Terms
 
@@ -182,7 +258,9 @@ namespace CollectionsOnline.Core.DomainModels
 
         public string VernacularName { get; set; }
 
-        public string NomenclaturalCode { get; set; }
+        public string NomenclaturalCode { get; set; }        
+
+        #endregion
 
         #endregion
 

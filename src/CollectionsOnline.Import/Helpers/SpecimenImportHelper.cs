@@ -39,7 +39,34 @@ namespace CollectionsOnline.Import.Helpers
                     "DarDayCollected",                                   
                     "site=SitSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
                     "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(SummaryData),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulDescription,MulCreator_tab,MdaDataSets_tab,credit=<erights:MulMultiMediaRef_tab>.(RigAcknowledgement,RigType),AdmPublishWebNoPassword)"
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,credit=<erights:MulMultiMediaRef_tab>.(RigAcknowledgement,RigType),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                    "ColCategory",
+                    "ColScientificGroup",
+                    "ColDiscipline",
+                    "ColCollectionName_tab",
+                    "SpeNoSpecimens",
+                    "MinSpecies",
+                    "MinVariety",
+                    "MinGroup",
+                    "MinClass",
+                    "MinAssociatedMatrix",
+                    "MinTypeType",
+                    "MetName",
+                    "MetClass",
+                    "MetGroup",
+                    "MetType",
+                    "MetMainMineralsPresent",
+                    "MetSpecimenWeight",
+                    "MetTotalWeight",
+                    "MetDateSpecimenFell",
+                    "MetDateSpecimenFound",
+                    "TekName",
+                    "TekClassification",
+                    "TekShape",
+                    "TekLocalStrewnfield",
+                    "TekGlobalStrewnfield",
+                    "TekSurfaceUp",
+                    "TekDegreeOfAbrasion"
                 };
         }
 
@@ -62,6 +89,53 @@ namespace CollectionsOnline.Import.Helpers
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
+
+            specimen.Category = map.GetString("ColCategory");
+            specimen.ScientificGroup = map.GetString("ColScientificGroup");
+            specimen.Discipline = map.GetString("ColDiscipline");
+            specimen.RegistrationNumber = map["ColRegPart"] != null
+                             ? string.Format("{0}{1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
+                             : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
+            specimen.CollectionNames = map.GetStrings("ColCollectionName_tab");
+            specimen.Type = map.GetString("ColTypeOfItem");
+
+            // Discipline specific fields
+            switch (specimen.Discipline)
+            {
+                case "Palaeontology":
+                    specimen.PalaeontologyNumber = map.GetString("SpeNoSpecimens");
+                    break;
+                case "Mineralogy":
+                    specimen.MineralogySpecies = map.GetString("MinSpecies");
+                    specimen.MineralogyVariety = map.GetString("MinVariety");
+                    specimen.MineralogyGroup = map.GetString("MinGroup");
+                    specimen.MineralogyClass = map.GetString("MinClass");
+                    specimen.MineralogyAssociatedMatrix = map.GetString("MinAssociatedMatrix");                    
+                    specimen.MineralogyType = map.GetString("MinTypeType");
+                    break;
+                case "Meteorites":
+                    specimen.MeteoritesName = map.GetString("MetName");
+                    specimen.MeteoritesClass = map.GetString("MetClass");
+                    specimen.MeteoritesGroup = map.GetString("MetGroup");
+                    specimen.MeteoritesType = map.GetString("MetType");
+                    specimen.MeteoritesMinerals = map.GetString("MetMainMineralsPresent");
+                    specimen.MeteoritesSpecimenWeight = map.GetString("MetSpecimenWeight");
+                    specimen.MeteoritesTotalWeight = map.GetString("MetTotalWeight");
+                    specimen.MeteoritesDateFell = map.GetString("MetDateSpecimenFell");
+                    specimen.MeteoritesDateFound = map.GetString("MetDateSpecimenFound");
+                    break;
+                case "Tektites":
+                    specimen.TektitesName = map.GetString("TekName");
+                    specimen.TektitesClassification = map.GetString("TekClassification");
+                    specimen.TektitesShape = map.GetString("TekShape");
+                    specimen.TektitesLocalStrewnfield = map.GetString("TekLocalStrewnfield");
+                    specimen.TektitesGlobalStrewnfield = map.GetString("TekGlobalStrewnfield");
+                    specimen.TektitesSurfaceUp = map.GetString("TekSurfaceUp");
+                    specimen.TektitesDegreeOfAbrasion = map.GetString("TekDegreeOfAbrasion");
+                    break;
+            }
+
+            #region DwC Fields
 
             #region Record-level Terms
 
@@ -445,6 +519,8 @@ namespace CollectionsOnline.Import.Helpers
                     specimen.OriginalNameUsage = taxonomy.GetString("ClaScientificName");
                 }
             }
+
+            #endregion 
 
             #endregion
 

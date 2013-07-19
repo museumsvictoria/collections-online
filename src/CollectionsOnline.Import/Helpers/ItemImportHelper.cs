@@ -137,7 +137,7 @@ namespace CollectionsOnline.Import.Helpers
             item.RegistrationNumber = map["ColRegPart"] != null
                                          ? string.Format("{0}{1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
                                          : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
-            item.CollectionNames = map.GetStrings("ColCollectionName_tab").ToArray();
+            item.CollectionNames = map.GetStrings("ColCollectionName_tab");
             item.PrimaryClassification = map.GetString("ClaPrimaryClassification");
             item.SecondaryClassification = map.GetString("ClaSecondaryClassification");
             item.TertiaryClassification = map.GetString("ClaTertiaryClassification");
@@ -244,7 +244,7 @@ namespace CollectionsOnline.Import.Helpers
             item.BrandNames = map.GetStrings("Pro2BrandName_tab").Concatenate("; ");
 
             // Related items
-            item.RelatedItemIds = map.GetMaps("related").Select(x => "items/" + x.GetString("irn")).ToList();
+            item.RelatedItemIds = map.GetMaps("related").Where(x => x != null).Select(x => "items/" + x.GetString("irn")).ToList();
 
             // Archeology fields
             item.ArcheologyContextNumber = map.GetString("ArcContextNumber");
