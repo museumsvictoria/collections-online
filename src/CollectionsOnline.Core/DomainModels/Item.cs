@@ -171,6 +171,49 @@ namespace CollectionsOnline.Core.DomainModels
 
         #endregion
 
+        #region Indigenous Cultures
+
+        public string IndigenousCulturesLocalName { get; set; }
+
+        public string IndigenousCulturesLocality { get; set; }
+
+        public string IndigenousCulturesCulturalGroups { get; set; }
+
+        public string IndigenousCulturesDescription { get; set; }
+
+        public string IndigenousCulturesDateMade { get; set; }
+
+        public string IndigenousCulturesDateCollected { get; set; }
+
+        public string IndigenousCulturesCaption { get; set; }
+
+        public string IndigenousCulturesIndividualsIdentified { get; set; }
+
+        public string IndigenousCulturesTitle { get; set; }
+
+        public string IndigenousCulturesSheets { get; set; }
+
+        public string IndigenousCulturesPages { get; set; }
+
+        public string IndigenousCulturesLetterTo { get; set; }
+
+        public string IndigenousCulturesLetterFrom { get; set; }
+
+        public string IndigenousCulturesIndividualsMentioned { get; set; }
+
+        public string IndigenousCulturesLocalitiesMentioned { get; set; }
+
+        public string IndigenousCulturesStateProvinceMentioned { get; set; }
+
+        public string IndigenousCulturesRegionsMentioned { get; set; }
+
+        public string IndigenousCulturesCountryMentioned { get; set; }
+
+        public string IndigenousCulturesGroupNames { get; set; }
+
+        public string IndigenousCulturesNamesMentioned { get; set; }
+
+        #endregion
 
         public Item(string irn)
         {

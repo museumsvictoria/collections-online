@@ -109,7 +109,39 @@ namespace CollectionsOnline.Import.Helpers
                     "TLDIllustraionTypes_tab",
                     "TLDPrintingTypes_tab",
                     "TLDPublicationTypes_tab",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                    "DesLocalName",
+                    "locality=[ProSpecificLocality_tab,ProRegion_tab,ProStateProvince_tab,]",
+                    "ProCountry",
+                    "ProCulturalGroups_tab",
+                    "DesObjectDescription",
+                    "photographer=SouPhotographerRef.(NamFullName)",
+                    "author=SouAuthorRef.(NamFullName)",
+                    "illustrator=SouIllustratorRef.(NamFullName)",
+                    "maker=SouMakerRef.(NamFullName)",
+                    "SouDateProduced",
+                    "SouDateProducedCirca",
+                    "SouProducedEarliestDate",
+                    "SouProducedLatestDate",
+                    "collector=SouCollectorRef.(NamFullName)",
+                    "SouCollectionDate",
+                    "SouCollectionDateCirca",
+                    "SouCollectionEarliestDate",
+                    "SouCollectionLatestDate",
+                    "DesCaption_tab",
+                    "DesIndividualsIdentified",
+                    "ManTitle",
+                    "ManSheets",
+                    "ManPages",
+                    "letterto=ManLetterToRef.(NamFullName)",
+                    "letterfrom=ManLetterFromRef.(NamFullName)",
+                    "DesIndividualsMentioned_tab",
+                    "DesLocalitiesMentioned_tab",
+                    "DesStateProvinceMentioned_tab",
+                    "DesRegionsMentioned_tab",
+                    "DesCountryMentioned_tab",
+                    "DesGroupNames_tab",
+                    "DesGroupNamesMentioned_tab"
                 };
         }
 
@@ -345,7 +377,84 @@ namespace CollectionsOnline.Import.Helpers
                     });
             }
             item.Media = media;
-            
+
+            // Indigenous Cultures
+            item.IndigenousCulturesLocalName = map.GetString("DesLocalName");
+
+            var localityMap = map.GetMaps("locality").FirstOrDefault();
+            if (localityMap != null)
+            {
+                item.IndigenousCulturesLocality = new[]
+                    {
+                        localityMap.GetString("ProSpecificLocality_tab"),
+                        localityMap.GetString("ProRegion_tab"),
+                        localityMap.GetString("ProStateProvince_tab"),
+                        map.GetString("ProCountry"),
+                    }.Concatenate(", ");
+            }
+
+            item.IndigenousCulturesCulturalGroups = map.GetStrings("ProCulturalGroups_tab").Concatenate(", ");
+            item.IndigenousCulturesDescription = map.GetString("DesObjectDescription");
+
+                    //            "photographer=SouPhotographerRef.(NamFullName)",
+                    //"author=SouAuthorRef.(NamFullName)",
+                    //"illustrator=SouIllustratorRef.(NamFullName)",
+                    //"maker=SouMakerRef.(NamFullName)",
+
+            if (!string.IsNullOrWhiteSpace(map.GetString("SouDateProduced")))
+            {
+                item.IndigenousCulturesDateMade = map.GetString("SouDateProduced");
+            }
+            else if (!string.IsNullOrWhiteSpace(map.GetString("SouDateProducedCirca")))
+            {
+                item.IndigenousCulturesDateMade = map.GetString("SouDateProducedCirca");
+            }
+            else if (!string.IsNullOrWhiteSpace(map.GetString("SouDateProducedEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouDateProducedLatestDate")))
+            {
+                item.IndigenousCulturesDateMade = new[]
+                    {
+                        map.GetString("SouDateProducedEarliestDate"),
+                        map.GetString("SouDateProducedLatestDate")
+                    }.Concatenate(" - ");
+            }
+
+            //"collector=SouCollectorRef.(NamFullName)",
+
+            if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionDate")))
+            {
+                item.IndigenousCulturesDateCollected = map.GetString("SouCollectionDate");
+            }
+            else if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionDateCirca")))
+            {
+                item.IndigenousCulturesDateCollected = map.GetString("SouCollectionDateCirca");
+            }
+            else if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionDateEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouCollectionDateLatestDate")))
+            {
+                item.IndigenousCulturesDateCollected = new[]
+                    {
+                        map.GetString("SouCollectionDateEarliestDate"),
+                        map.GetString("SouCollectionDateLatestDate")
+                    }.Concatenate(" - ");
+            }
+
+            item.IndigenousCulturesCaption = map.GetStrings("DesCaption_tab").FirstOrDefault();
+            item.IndigenousCulturesIndividualsIdentified = map.GetString("DesIndividualsIdentified");
+            item.IndigenousCulturesTitle = map.GetString("ManTitle");
+            item.IndigenousCulturesSheets = map.GetString("ManSheets");
+            item.IndigenousCulturesPages = map.GetString("ManPages");
+
+            //item.IndigenousCulturesLetterTo = map.GetString("ManLetterTo");
+            //item.IndigenousCulturesLetterFrom = map.GetString("ManLetterFrom");
+
+
+            item.IndigenousCulturesIndividualsMentioned = map.GetStrings("DesIndividualsMentioned_tab").Concatenate(", ");
+            item.IndigenousCulturesLocalitiesMentioned = map.GetStrings("DesLocalitiesMentioned_tab").Concatenate(", ");
+            item.IndigenousCulturesStateProvinceMentioned = map.GetStrings("DesStateProvinceMentioned_tab").Concatenate(", ");
+            item.IndigenousCulturesRegionsMentioned = map.GetStrings("DesRegionsMentioned_tab").Concatenate(", ");
+            item.IndigenousCulturesCountryMentioned = map.GetStrings("DesCountryMentioned_tab").Concatenate(", ");
+            item.IndigenousCulturesGroupNames = map.GetStrings("DesGroupNames_tab").Concatenate(", ");
+            item.IndigenousCulturesNamesMentioned = map.GetStrings("DesGroupNamesMentioned_tab").Concatenate(", ");
+
             return item;
         }
     }
