@@ -1,9 +1,9 @@
 ﻿using System;
 using CollectionsOnline.Core.Config;
 
-namespace CollectionsOnline.Core.DomainModels
+namespace CollectionsOnline.Core.Models
 {
-    public class Application : DomainModel
+    public class Application : AggregateRoot
     {
         public DateTime LastDataImport { get; set; }
 

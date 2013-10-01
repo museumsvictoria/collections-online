@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using CollectionsOnline.Core.DomainModels;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
+using CollectionsOnline.Core.Models;
 using IMu;
 
 namespace CollectionsOnline.Import.Helpers

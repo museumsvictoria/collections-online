@@ -1,4 +1,4 @@
-﻿namespace CollectionsOnline.Core.DomainModels
+﻿namespace CollectionsOnline.Core.Models
 {
     public class Author
     {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.DomainModels;
+using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Helpers;
 using IMu;
 using Ninject;
@@ -132,7 +132,7 @@ namespace CollectionsOnline.Import
             }
         }
 
-        private static void RunDocumentImport<T>(DateTime dateLastRun) where T : DomainModel
+        private static void RunDocumentImport<T>(DateTime dateLastRun) where T : AggregateRoot
         {
             _log.Debug("Begining {0} import", typeof(T).Name);
 

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CollectionsOnline.Core.DesignByContract;
+﻿using CollectionsOnline.Core.DesignByContract;
 
-namespace CollectionsOnline.Core.DomainModels
+namespace CollectionsOnline.Core.Models
 {
     public class DenormalizedItemReference
     {

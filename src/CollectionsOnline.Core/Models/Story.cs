@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CollectionsOnline.Core.DomainModels
+namespace CollectionsOnline.Core.Models
 {
-    public class Story : DomainModel
+    public class Story : AggregateRoot, IHideable
     {
         public DateTime DateModified { get; set; }
 
@@ -33,5 +33,7 @@ namespace CollectionsOnline.Core.DomainModels
         {
             Id = "stories/" + irn;
         }
+
+        public bool IsHidden { get; set; }
     }
 }
