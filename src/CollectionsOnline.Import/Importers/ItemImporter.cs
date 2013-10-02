@@ -7,156 +7,162 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
 
-namespace CollectionsOnline.Import.Helpers
+namespace CollectionsOnline.Import.Importers
 {
-    public class ItemImportHelper : IImportHelper<Item>
+    public class ItemImporter : IImporter<Item>
     {
         private readonly ISlugFactory _slugFactory;
 
-        public ItemImportHelper(
+        public ItemImporter(
             ISlugFactory slugFactory)
         {
             _slugFactory = slugFactory;
         }
 
-        public string MakeModuleName()
+        public string ModuleName
         {
-            return "ecatalogue";
+            get { return "ecatalogue"; }
         }
 
-        public string[] MakeColumns()
+        public string[] Columns
         {
-            return new[]
-                {
-                    "irn",
-                    "AdmDateModified",
-                    "AdmTimeModified",
-                    "ColCategory",
-                    "ColDiscipline",
-                    "ColTypeOfItem",
-                    "ColRegPrefix",
-                    "ColRegNumber",
-                    "ColRegPart",
-                    "ColCollectionName_tab",
-                    "ClaPrimaryClassification",
-                    "ClaSecondaryClassification",
-                    "ClaTertiaryClassification",
-                    "ClaObjectName",
-                    "ClaObjectSummary",
-                    "DesPhysicalDescription",
-                    "DesInscriptions",
-                    "associations=[AssAssociationType_tab,name=AssAssociationNameRef_tab.(NamFullName),AssAssociationCountry_tab,AssAssociationState_tab,AssAssociationRegion_tab,AssAssociationLocality_tab,AssAssociationStreetAddress_tab,AssAssociationDate_tab,AssAssociationComments0]",
-                    "SubThemes_tab",
-                    "SubSubjects_tab",
-                    "SubHistoryTechSignificance",
-                    "DimModelScale",
-                    "DimShape",
-                    "dimensions=[DimConfiguration_tab,DimLengthUnit_tab,DimWeightUnit_tab,DimLength_tab,DimWidth_tab,DimDepth_tab,DimHeight_tab,DimCircumference_tab,DimWeight_tab,DimDimensionComments0]",
-                    "SupReferences",
-                    "bibliography=[summary=BibBibliographyRef_tab.(SummaryData),BibIssuedDate_tab,BibPages_tab]",
-                    "Pro2ModelNameNumber_tab",
-                    "Pro2BrandName_tab",
-                    "related=ColRelatedRecordsRef_tab.(irn)",
-                    "ArcContextNumber",
-                    "ArcSiteName=ArcSiteNameRef.(SummaryData)",
-                    "ArcDescription",
-                    "ArcDistinguishingMarks",
-                    "ArcActivity",
-                    "ArcSpecificActivity",
-                    "ArcDecoration",
-                    "ArcPattern",
-                    "ArcColour",
-                    "ArcMoulding",
-                    "ArcPlacement",
-                    "ArcForm",
-                    "ArcShape",
-                    "ArcManufacturerName=ArcManufacturerNameRef.(NamFullName)",
-                    "ArcManufactureDate",
-                    "ArcTechnique",
-                    "ArcProvenance",
-                    "NumDenomination",
-                    "NumDateEra",
-                    "NumSeries",
-                    "NumMaterial",
-                    "NumEdgeDescription",
-                    "NumObverseDescription",
-                    "NumReverseDescription",
-                    "PhiColour",
-                    "PhiDenomination",
-                    "PhiImprint",
-                    "PhiIssue",
-                    "PhiIssueDate",
-                    "PhiItemForm",
-                    "PhiOverprint",
-                    "PhiGibbonsNo",
-                    "GenMedium",
-                    "GenFormat",
-                    "GenColour",
-                    "GenLanguage",
-                    "Con1Description",
-                    "Con3PeopleDepicted_tab",
-                    "AudRecordingType",
-                    "AudTotalLengthOfRecording",
-                    "AudUnits",
-                    "AudAudibilityRating",
-                    "AudComments",
-                    "audiocontent=[AudItemNumber_tab,AudSegmentPosition_tab,AudContentUnits_tab,AudSegmentContent_tab]",
-                    "TLDNumberOfPages",
-                    "TLDPageSizeFormat",
-                    "TLSCoverTitle",
-                    "TLSPrimarySubject",
-                    "TLSPublicationDate",
-                    "TLDIllustraionTypes_tab",
-                    "TLDPrintingTypes_tab",
-                    "TLDPublicationTypes_tab",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                    "DesLocalName",
-                    "locality=[ProSpecificLocality_tab,ProRegion_tab,ProStateProvince_tab,]",
-                    "ProCountry",
-                    "ProCulturalGroups_tab",
-                    "DesObjectDescription",
-                    "photographer=SouPhotographerRef.(NamFullName)",
-                    "author=SouAuthorRef.(NamFullName)",
-                    "illustrator=SouIllustratorRef.(NamFullName)",
-                    "maker=SouMakerRef.(NamFullName)",
-                    "SouDateProduced",
-                    "SouDateProducedCirca",
-                    "SouDateProducedEarliestDate",
-                    "SouDateProducedLatestDate",
-                    "SouProducedEarliestDate",
-                    "SouProducedLatestDate",
-                    "collector=SouCollectorRef.(NamFullName)",
-                    "SouCollectionDate",
-                    "SouCollectionDateCirca",
-                    "SouCollectionEarliestDate",
-                    "SouCollectionLatestDate",
-                    "DesCaption_tab",
-                    "DesIndividualsIdentified",
-                    "ManTitle",
-                    "ManSheets",
-                    "ManPages",
-                    "letterto=ManLetterToRef.(NamFullName)",
-                    "letterfrom=ManLetterFromRef.(NamFullName)",
-                    "DesIndividualsMentioned_tab",
-                    "DesLocalitiesMentioned_tab",
-                    "DesStateProvinceMentioned_tab",
-                    "DesRegionsMentioned_tab",
-                    "DesCountryMentioned_tab",
-                    "DesGroupNames_tab",
-                    "DesGroupNamesMentioned_tab"
-                };
+            get
+            {
+                return new[]
+                    {
+                        "irn",
+                        "AdmDateModified",
+                        "AdmTimeModified",
+                        "ColCategory",
+                        "ColDiscipline",
+                        "ColTypeOfItem",
+                        "ColRegPrefix",
+                        "ColRegNumber",
+                        "ColRegPart",
+                        "ColCollectionName_tab",
+                        "ClaPrimaryClassification",
+                        "ClaSecondaryClassification",
+                        "ClaTertiaryClassification",
+                        "ClaObjectName",
+                        "ClaObjectSummary",
+                        "DesPhysicalDescription",
+                        "DesInscriptions",
+                        "associations=[AssAssociationType_tab,name=AssAssociationNameRef_tab.(NamFullName),AssAssociationCountry_tab,AssAssociationState_tab,AssAssociationRegion_tab,AssAssociationLocality_tab,AssAssociationStreetAddress_tab,AssAssociationDate_tab,AssAssociationComments0]",
+                        "SubThemes_tab",
+                        "SubSubjects_tab",
+                        "SubHistoryTechSignificance",
+                        "DimModelScale",
+                        "DimShape",
+                        "dimensions=[DimConfiguration_tab,DimLengthUnit_tab,DimWeightUnit_tab,DimLength_tab,DimWidth_tab,DimDepth_tab,DimHeight_tab,DimCircumference_tab,DimWeight_tab,DimDimensionComments0]",
+                        "SupReferences",
+                        "bibliography=[summary=BibBibliographyRef_tab.(SummaryData),BibIssuedDate_tab,BibPages_tab]",
+                        "Pro2ModelNameNumber_tab",
+                        "Pro2BrandName_tab",
+                        "related=ColRelatedRecordsRef_tab.(irn)",
+                        "ArcContextNumber",
+                        "ArcSiteName=ArcSiteNameRef.(SummaryData)",
+                        "ArcDescription",
+                        "ArcDistinguishingMarks",
+                        "ArcActivity",
+                        "ArcSpecificActivity",
+                        "ArcDecoration",
+                        "ArcPattern",
+                        "ArcColour",
+                        "ArcMoulding",
+                        "ArcPlacement",
+                        "ArcForm",
+                        "ArcShape",
+                        "ArcManufacturerName=ArcManufacturerNameRef.(NamFullName)",
+                        "ArcManufactureDate",
+                        "ArcTechnique",
+                        "ArcProvenance",
+                        "NumDenomination",
+                        "NumDateEra",
+                        "NumSeries",
+                        "NumMaterial",
+                        "NumEdgeDescription",
+                        "NumObverseDescription",
+                        "NumReverseDescription",
+                        "PhiColour",
+                        "PhiDenomination",
+                        "PhiImprint",
+                        "PhiIssue",
+                        "PhiIssueDate",
+                        "PhiItemForm",
+                        "PhiOverprint",
+                        "PhiGibbonsNo",
+                        "GenMedium",
+                        "GenFormat",
+                        "GenColour",
+                        "GenLanguage",
+                        "Con1Description",
+                        "Con3PeopleDepicted_tab",
+                        "AudRecordingType",
+                        "AudTotalLengthOfRecording",
+                        "AudUnits",
+                        "AudAudibilityRating",
+                        "AudComments",
+                        "audiocontent=[AudItemNumber_tab,AudSegmentPosition_tab,AudContentUnits_tab,AudSegmentContent_tab]",
+                        "TLDNumberOfPages",
+                        "TLDPageSizeFormat",
+                        "TLSCoverTitle",
+                        "TLSPrimarySubject",
+                        "TLSPublicationDate",
+                        "TLDIllustraionTypes_tab",
+                        "TLDPrintingTypes_tab",
+                        "TLDPublicationTypes_tab",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "DesLocalName",
+                        "locality=[ProSpecificLocality_tab,ProRegion_tab,ProStateProvince_tab,]",
+                        "ProCountry",
+                        "ProCulturalGroups_tab",
+                        "DesObjectDescription",
+                        "photographer=SouPhotographerRef.(NamFullName)",
+                        "author=SouAuthorRef.(NamFullName)",
+                        "illustrator=SouIllustratorRef.(NamFullName)",
+                        "maker=SouMakerRef.(NamFullName)",
+                        "SouDateProduced",
+                        "SouDateProducedCirca",
+                        "SouDateProducedEarliestDate",
+                        "SouDateProducedLatestDate",
+                        "SouProducedEarliestDate",
+                        "SouProducedLatestDate",
+                        "collector=SouCollectorRef.(NamFullName)",
+                        "SouCollectionDate",
+                        "SouCollectionDateCirca",
+                        "SouCollectionEarliestDate",
+                        "SouCollectionLatestDate",
+                        "DesCaption_tab",
+                        "DesIndividualsIdentified",
+                        "ManTitle",
+                        "ManSheets",
+                        "ManPages",
+                        "letterto=ManLetterToRef.(NamFullName)",
+                        "letterfrom=ManLetterFromRef.(NamFullName)",
+                        "DesIndividualsMentioned_tab",
+                        "DesLocalitiesMentioned_tab",
+                        "DesStateProvinceMentioned_tab",
+                        "DesRegionsMentioned_tab",
+                        "DesCountryMentioned_tab",
+                        "DesGroupNames_tab",
+                        "DesGroupNamesMentioned_tab"
+                    };
+            }
         }
 
-        public Terms MakeTerms()
+        public Terms Terms
         {
-            var terms = new Terms();
+            get
+            {
+                var terms = new Terms();
 
-            terms.Add("MdaDataSets_tab", "History & Technology Collections Online");
-            terms.Add("AdmPublishWebNoPassword", "Yes");            
+                terms.Add("MdaDataSets_tab", "History & Technology Collections Online");
+                terms.Add("AdmPublishWebNoPassword", "Yes");
 
-            return terms;
+                return terms;
+            }
         }
-
+        
         public Item MakeDocument(Map map)
         {
             var item = new Item(map.GetString("irn"));

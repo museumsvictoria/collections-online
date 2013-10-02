@@ -67,11 +67,11 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\SpecimenImportHelper.cs" />
-    <Compile Include="Helpers\SpeciesImportHelper.cs" />
-    <Compile Include="Helpers\ItemImportHelper.cs" />
-    <Compile Include="Helpers\IImportHelper.cs" />
-    <Compile Include="Helpers\StoryImportHelper.cs" />
+    <Compile Include="Importers\SpecimenImportHelper.cs" />
+    <Compile Include="Importers\SpeciesImportHelper.cs" />
+    <Compile Include="Importers\ItemImporter.cs" />
+    <Compile Include="Importers\IImporter.cs" />
+    <Compile Include="Importers\StoryImportHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

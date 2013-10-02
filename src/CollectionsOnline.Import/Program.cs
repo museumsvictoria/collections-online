@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Helpers;
+using CollectionsOnline.Import.Importers;
 using IMu;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -74,7 +74,7 @@ namespace CollectionsOnline.Import
             // Set up niject
             _kernal = new StandardKernel();
             _kernal.Bind(x => x
-                .FromAssemblyContaining(typeof(StoryImportHelper), typeof(Story))
+                .FromAssemblyContaining(typeof(StoryImporter), typeof(Story))
                 .SelectAllClasses()
                 .BindAllInterfaces());
         }
@@ -132,13 +132,13 @@ namespace CollectionsOnline.Import
             }
         }
 
-        private static void RunDocumentImport<T>(DateTime dateLastRun) where T : AggregateRoot
+        private static void RunDocumentImport<T>(DateTime dateLastRun) where T : AggregateRoot, IHideable
         {
             _log.Debug("Begining {0} import", typeof(T).Name);
 
-            var importHelper = _kernal.Get<IImportHelper<T>>();
-            var module = new Module(importHelper.MakeModuleName(), _session);
-            var terms = importHelper.MakeTerms();
+            var importer = _kernal.Get<IImporter<T>>();
+            var module = new Module(importer.ModuleName, _session);
+            var terms = importer.Terms;
 
             if (dateLastRun == default(DateTime))
             {
@@ -158,14 +158,15 @@ namespace CollectionsOnline.Import
                             return;
                         }
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, importHelper.MakeColumns());
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, importer.Columns);
 
+                        // Todo: REMOVE IMPORT LIMIT
                         if (results.Count == 0 || count == 2000)
                             break;
 
                         // Create and store documents
                         results.Rows
-                            .Select(importHelper.MakeDocument)
+                            .Select(importer.MakeDocument)
                             .ToList()
                             .ForEach(documentSession.Store);
 
@@ -198,13 +199,13 @@ namespace CollectionsOnline.Import
                             return;
                         }
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, importHelper.MakeColumns());
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, importer.Columns);
 
                         if (results.Count == 0)
                             break;
 
                         // Update documents
-                        var newDocuments = results.Rows.Select(importHelper.MakeDocument).ToList();
+                        var newDocuments = results.Rows.Select(importer.MakeDocument).ToList();
                         var existingDocuments = documentSession.Load<T>(newDocuments.Select(x => x.Id));
 
                         foreach (var newDocument in newDocuments)

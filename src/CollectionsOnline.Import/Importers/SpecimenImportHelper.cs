@@ -2,83 +2,88 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
 
-namespace CollectionsOnline.Import.Helpers
+namespace CollectionsOnline.Import.Importers
 {
-    public class SpecimenImportHelper : IImportHelper<Specimen>
+    public class SpecimenImporter : IImporter<Specimen>
     {
-        public string MakeModuleName()
+        public string ModuleName
         {
-            return "ecatalogue";
+            get { return "ecatalogue"; }
         }
 
-        public string[] MakeColumns()
+        public string[] Columns
         {
-            return new[]
-                {
-                    "irn",
-                    "ColRegPrefix",
-                    "ColRegNumber",
-                    "ColRegPart",
-                    "ColTypeOfItem",
-                    "AdmDateModified",
-                    "AdmTimeModified",
-                    "ColDiscipline",
-                    "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(SummaryData))",
-                    "SpeNoSpecimens",
-                    "SpeSex_tab",
-                    "SpeStageAge_tab",
-                    "preparations=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab]",
-                    "ManPreviousNumbers_tab",
-                    "DarYearCollected",
-                    "DarMonthCollected",
-                    "DarDayCollected",                                   
-                    "site=SitSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
-                    "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(SummaryData),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,credit=<erights:MulMultiMediaRef_tab>.(RigAcknowledgement,RigType),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                    "ColCategory",
-                    "ColScientificGroup",
-                    "ColDiscipline",
-                    "ColCollectionName_tab",
-                    "SpeNoSpecimens",
-                    "MinSpecies",
-                    "MinVariety",
-                    "MinGroup",
-                    "MinClass",
-                    "MinAssociatedMatrix",
-                    "MinTypeType",
-                    "MetName",
-                    "MetClass",
-                    "MetGroup",
-                    "MetType",
-                    "MetMainMineralsPresent",
-                    "MetSpecimenWeight",
-                    "MetTotalWeight",
-                    "MetDateSpecimenFell",
-                    "MetDateSpecimenFound",
-                    "TekName",
-                    "TekClassification",
-                    "TekShape",
-                    "TekLocalStrewnfield",
-                    "TekGlobalStrewnfield",
-                    "TekSurfaceUp",
-                    "TekDegreeOfAbrasion"
-                };
+            get
+            {
+                return new[]
+                    {
+                        "irn",
+                        "ColRegPrefix",
+                        "ColRegNumber",
+                        "ColRegPart",
+                        "ColTypeOfItem",
+                        "AdmDateModified",
+                        "AdmTimeModified",
+                        "ColDiscipline",
+                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(SummaryData))",
+                        "SpeNoSpecimens",
+                        "SpeSex_tab",
+                        "SpeStageAge_tab",
+                        "preparations=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab]",
+                        "ManPreviousNumbers_tab",
+                        "DarYearCollected",
+                        "DarMonthCollected",
+                        "DarDayCollected",
+                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(SummaryData),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,credit=<erights:MulMultiMediaRef_tab>.(RigAcknowledgement,RigType),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "ColCategory",
+                        "ColScientificGroup",
+                        "ColDiscipline",
+                        "ColCollectionName_tab",
+                        "SpeNoSpecimens",
+                        "MinSpecies",
+                        "MinVariety",
+                        "MinGroup",
+                        "MinClass",
+                        "MinAssociatedMatrix",
+                        "MinTypeType",
+                        "MetName",
+                        "MetClass",
+                        "MetGroup",
+                        "MetType",
+                        "MetMainMineralsPresent",
+                        "MetSpecimenWeight",
+                        "MetTotalWeight",
+                        "MetDateSpecimenFell",
+                        "MetDateSpecimenFound",
+                        "TekName",
+                        "TekClassification",
+                        "TekShape",
+                        "TekLocalStrewnfield",
+                        "TekGlobalStrewnfield",
+                        "TekSurfaceUp",
+                        "TekDegreeOfAbrasion"
+                    };
+            }
         }
 
-        public Terms MakeTerms()
+        public Terms Terms
         {
-            var terms = new Terms();
+            get
+            {
+                var terms = new Terms();
 
-            terms.Add("ColCategory", "Natural Sciences");
-            terms.Add("MdaDataSets_tab", "Website - Atlas of Living Australia");
-            terms.Add("AdmPublishWebNoPassword", "Yes");     
+                terms.Add("ColCategory", "Natural Sciences");
+                terms.Add("MdaDataSets_tab", "Website - Atlas of Living Australia");
+                terms.Add("AdmPublishWebNoPassword", "Yes");
 
-            return terms;
+                return terms;
+            }
         }
 
         public Specimen MakeDocument(Map map)

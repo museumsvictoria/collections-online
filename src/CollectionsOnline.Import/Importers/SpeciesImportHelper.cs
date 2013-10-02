@@ -3,68 +3,73 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using CollectionsOnline.Core.Extensions;
-using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using IMu;
 
-namespace CollectionsOnline.Import.Helpers
+namespace CollectionsOnline.Import.Importers
 {
-    public class SpeciesImportHelper : IImportHelper<Species>
+    public class SpeciesImporter : IImporter<Species>
     {
-        public string MakeModuleName()
+        public string ModuleName
         {
-            return "enarratives";
+            get { return "enarratives"; }
         }
 
-        public string[] MakeColumns()
+        public string[] Columns
         {
-            return new[]
-                {
-                    "irn",
-                    "AdmDateModified",
-                    "AdmTimeModified",
-                    "SpeTaxonGroup",
-                    "SpeTaxonSubGroup",
-                    "SpeColour_tab",
-                    "SpeMaximumSize",
-                    "SpeUnit",
-                    "SpeHabitat_tab",
-                    "SpeWhereToLook_tab",
-                    "SpeWhenActive_tab",
-                    "SpeNationalParks_tab",
-                    "SpeDiet",
-                    "SpeDietCategories_tab",
-                    "SpeFastFact",
-                    "SpeHabitatNotes",
-                    "SpeDistribution",
-                    "SpeBiology",
-                    "SpeIdentifyingCharacters",
-                    "SpeBriefID",
-                    "SpeHazards",
-                    "SpeEndemicity",
-                    "SpeCommercialSpecies",
-                    "conservation=[SpeConservationList_tab,SpeStatus_tab]",
-                    "SpeScientificDiagnosis",
-                    "SpeWeb",
-                    "SpePlant_tab",
-                    "SpeFlightStart",
-                    "SpeFlightEnd",
-                    "SpeDepth_tab",
-                    "SpeWaterColumnLocation_tab",
-                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
-                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                };
+            get
+            {
+                return new[]
+                    {
+                        "irn",
+                        "AdmDateModified",
+                        "AdmTimeModified",
+                        "SpeTaxonGroup",
+                        "SpeTaxonSubGroup",
+                        "SpeColour_tab",
+                        "SpeMaximumSize",
+                        "SpeUnit",
+                        "SpeHabitat_tab",
+                        "SpeWhereToLook_tab",
+                        "SpeWhenActive_tab",
+                        "SpeNationalParks_tab",
+                        "SpeDiet",
+                        "SpeDietCategories_tab",
+                        "SpeFastFact",
+                        "SpeHabitatNotes",
+                        "SpeDistribution",
+                        "SpeBiology",
+                        "SpeIdentifyingCharacters",
+                        "SpeBriefID",
+                        "SpeHazards",
+                        "SpeEndemicity",
+                        "SpeCommercialSpecies",
+                        "conservation=[SpeConservationList_tab,SpeStatus_tab]",
+                        "SpeScientificDiagnosis",
+                        "SpeWeb",
+                        "SpePlant_tab",
+                        "SpeFlightStart",
+                        "SpeFlightEnd",
+                        "SpeDepth_tab",
+                        "SpeWaterColumnLocation_tab",
+                        "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
+                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                    };
+            }
         }
 
-        public Terms MakeTerms()
+        public Terms Terms
         {
-            var terms = new Terms();
+            get
+            {
+                var terms = new Terms();
 
-            terms.Add("DetPurpose_tab", "Website - Species profile");
-            terms.Add("AdmPublishWebNoPassword", "Yes");
+                terms.Add("DetPurpose_tab", "Website - Species profile");
+                terms.Add("AdmPublishWebNoPassword", "Yes");
 
-            return terms;
+                return terms;
+            }
         }
 
         public Species MakeDocument(Map map)

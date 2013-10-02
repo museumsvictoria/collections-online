@@ -6,53 +6,59 @@ using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using IMu;
 
-namespace CollectionsOnline.Import.Helpers
+namespace CollectionsOnline.Import.Importers
 {
-    public class StoryImportHelper : IImportHelper<Story>
+    public class StoryImporter : IImporter<Story>
     {
         private readonly ISlugFactory _slugFactory;
 
-        public StoryImportHelper(
+        public StoryImporter(
             ISlugFactory slugFactory)
         {
             _slugFactory = slugFactory;
         }
 
-        public string MakeModuleName()
+        public string ModuleName
         {
-            return "enarratives";
+            get { return "enarratives"; }
         }
 
-        public string[] MakeColumns()
+        public string[] Columns
         {
-            return new[]
-                {
-                    "irn",
-                    "AdmDateModified",
-                    "AdmTimeModified",
-                    "NarTitle",
-                    "DesSubjects_tab",
-                    "NarNarrative",
-                    "NarNarrativeSummary",
-                    "DesType_tab",
-                    "DesGeographicLocation_tab",
-                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
-                    "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword)),NarContributorRole_tab]",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                    "parent=AssMasterNarrativeRef.(irn)",
-                    "relatedstories=AssAssociatedWithRef_tab.(irn)",
-                    "relateditems=ObjObjectsRef_tab.(irn)"
-                };
+            get
+            {
+                return new[]
+                    {
+                        "irn",
+                        "AdmDateModified",
+                        "AdmTimeModified",
+                        "NarTitle",
+                        "DesSubjects_tab",
+                        "NarNarrative",
+                        "NarNarrativeSummary",
+                        "DesType_tab",
+                        "DesGeographicLocation_tab",
+                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
+                        "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword)),NarContributorRole_tab]",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "parent=AssMasterNarrativeRef.(irn)",
+                        "relatedstories=AssAssociatedWithRef_tab.(irn)",
+                        "relateditems=ObjObjectsRef_tab.(irn)"
+                    };
+            }
         }
 
-        public Terms MakeTerms()
+        public Terms Terms
         {
-            var terms = new Terms();
+            get
+            {
+                var terms = new Terms();
 
-            terms.Add("DetPurpose_tab", "Website - History & Technology Collections");
-            terms.Add("AdmPublishWebNoPassword", "Yes");
+                terms.Add("DetPurpose_tab", "Website - History & Technology Collections");
+                terms.Add("AdmPublishWebNoPassword", "Yes");
 
-            return terms;
+                return terms;
+            }
         }
 
         public Story MakeDocument(Map map)
