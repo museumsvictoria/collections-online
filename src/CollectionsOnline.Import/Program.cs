@@ -71,7 +71,7 @@ namespace CollectionsOnline.Import
                     _importCancelled = true;
                 };
 
-            // Set up niject
+            // Set up ninject
             _kernal = new StandardKernel();
             _kernal.Bind(x => x
                 .FromAssemblyContaining(typeof(StoryImporter), typeof(Story))
@@ -137,6 +137,7 @@ namespace CollectionsOnline.Import
             _log.Debug("Begining {0} import", typeof(T).Name);
 
             var importer = _kernal.Get<IImporter<T>>();
+
             var module = new Module(importer.ModuleName, _session);
             var terms = importer.Terms;
 
