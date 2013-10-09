@@ -1,8 +1,10 @@
-﻿using IMu;
+﻿using System;
+using CollectionsOnline.Core.Models;
+using IMu;
 
 namespace CollectionsOnline.Import.Importers
 {
-    public interface IImporter<out T>
+    public interface IImport<out T> where T : EmuAggregateRoot
     {
         string ModuleName { get; }
 
@@ -11,5 +13,7 @@ namespace CollectionsOnline.Import.Importers
         Terms Terms { get; }
 
         T MakeDocument(Map map);
+
+        void Run(DateTime dateLastRun);
     }
 }

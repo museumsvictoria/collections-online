@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CollectionsOnline.Core.Models
 {
-    public class Story : AggregateRoot, IHideable
+    public class Story : EmuAggregateRoot
     {
         public DateTime DateModified { get; set; }
 
@@ -33,7 +33,5 @@ namespace CollectionsOnline.Core.Models
         {
             Id = "stories/" + irn;
         }
-
-        public bool IsHidden { get; set; }
     }
 }

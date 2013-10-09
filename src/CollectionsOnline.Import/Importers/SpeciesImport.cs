@@ -5,17 +5,24 @@ using System.Linq;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
+using Raven.Client;
 
 namespace CollectionsOnline.Import.Importers
 {
-    public class SpeciesImporter : IImporter<Species>
+    public class SpeciesImport : Import<Species>
     {
-        public string ModuleName
+        public SpeciesImport(
+            IDocumentStore documentStore,
+            Session session) : base(documentStore, session)
+        {
+        }
+
+        public override string ModuleName
         {
             get { return "enarratives"; }
         }
 
-        public string[] Columns
+        public override string[] Columns
         {
             get
             {
@@ -59,7 +66,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public Terms Terms
+        public override Terms Terms
         {
             get
             {
@@ -72,7 +79,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public Species MakeDocument(Map map)
+        public override Species MakeDocument(Map map)
         {
             var species = new Species(map.GetString("irn"));
 

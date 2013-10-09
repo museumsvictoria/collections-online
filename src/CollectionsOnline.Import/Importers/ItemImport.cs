@@ -6,25 +6,28 @@ using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
+using Raven.Client;
 
 namespace CollectionsOnline.Import.Importers
 {
-    public class ItemImporter : IImporter<Item>
+    public class ItemImport : Import<Item>
     {
         private readonly ISlugFactory _slugFactory;
 
-        public ItemImporter(
-            ISlugFactory slugFactory)
+        public ItemImport(
+            ISlugFactory slugFactory,
+            IDocumentStore documentStore,
+            Session session) : base(documentStore, session)
         {
             _slugFactory = slugFactory;
         }
 
-        public string ModuleName
+        public override string ModuleName
         {
             get { return "ecatalogue"; }
         }
 
-        public string[] Columns
+        public override string[] Columns
         {
             get
             {
@@ -150,7 +153,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public Terms Terms
+        public override Terms Terms
         {
             get
             {
@@ -162,8 +165,8 @@ namespace CollectionsOnline.Import.Importers
                 return terms;
             }
         }
-        
-        public Item MakeDocument(Map map)
+
+        public override Item MakeDocument(Map map)
         {
             var item = new Item(map.GetString("irn"));
 
@@ -233,10 +236,10 @@ namespace CollectionsOnline.Import.Importers
                 var lengthUnit = dimensionMap.GetString("DimLengthUnit_tab");
                 var weightUnit = dimensionMap.GetString("DimWeightUnit_tab");
 
-                if(!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimLength_tab")))
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimLength_tab")))
                     dimension.Add(string.Format("{0} {1} (Length)", dimensionMap.GetString("DimLength_tab"), lengthUnit));
 
-                if(!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimWidth_tab")))
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimWidth_tab")))
                     dimension.Add(string.Format("{0} {1} (Width)", dimensionMap.GetString("DimWidth_tab"), lengthUnit));
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimDepth_tab")))
@@ -249,7 +252,7 @@ namespace CollectionsOnline.Import.Importers
                     dimension.Add(string.Format("{0} {1} (Circumference)", dimensionMap.GetString("DimCircumference_tab"), lengthUnit));
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimWeight_tab")))
-                    dimension.Add(string.Format("{0} {1} (Weight)", dimensionMap.GetString("DimWeight_tab"), weightUnit));                
+                    dimension.Add(string.Format("{0} {1} (Weight)", dimensionMap.GetString("DimWeight_tab"), weightUnit));
 
                 var notes = dimensionMap.GetString("DimDimensionComments0");
 
@@ -404,10 +407,10 @@ namespace CollectionsOnline.Import.Importers
             item.IndigenousCulturesCulturalGroups = map.GetStrings("ProCulturalGroups_tab").Concatenate(", ");
             item.IndigenousCulturesDescription = map.GetString("DesObjectDescription");
 
-                    //            "photographer=SouPhotographerRef.(NamFullName)",
-                    //"author=SouAuthorRef.(NamFullName)",
-                    //"illustrator=SouIllustratorRef.(NamFullName)",
-                    //"maker=SouMakerRef.(NamFullName)",
+            //            "photographer=SouPhotographerRef.(NamFullName)",
+            //"author=SouAuthorRef.(NamFullName)",
+            //"illustrator=SouIllustratorRef.(NamFullName)",
+            //"maker=SouMakerRef.(NamFullName)",
 
             if (!string.IsNullOrWhiteSpace(map.GetString("SouDateProduced")))
             {

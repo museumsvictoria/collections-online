@@ -5,25 +5,28 @@ using System.Linq;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using IMu;
+using Raven.Client;
 
 namespace CollectionsOnline.Import.Importers
 {
-    public class StoryImporter : IImporter<Story>
+    public class StoryImport : Import<Story>
     {
         private readonly ISlugFactory _slugFactory;
 
-        public StoryImporter(
-            ISlugFactory slugFactory)
+        public StoryImport(
+            ISlugFactory slugFactory,
+            IDocumentStore documentStore,
+            Session session) : base(documentStore, session)
         {
             _slugFactory = slugFactory;
         }
 
-        public string ModuleName
+        public override string ModuleName
         {
             get { return "enarratives"; }
         }
 
-        public string[] Columns
+        public override string[] Columns
         {
             get
             {
@@ -48,7 +51,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public Terms Terms
+        public override Terms Terms
         {
             get
             {
@@ -61,7 +64,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public Story MakeDocument(Map map)
+        public override Story MakeDocument(Map map)
         {
             var story = new Story(map.GetString("irn"));
 
@@ -118,7 +121,7 @@ namespace CollectionsOnline.Import.Importers
                 story.ParentStoryId = "stories/" + map.GetMap("parent").GetString("irn");
             story.RelatedStoryIds = map.GetMaps("relatedstories").Where(x => x != null).Select(x => "stories/" + x.GetString("irn")).ToList();
             story.RelatedItemIds = map.GetMaps("relateditems").Where(x => x != null).Select(x => "items/" + x.GetString("irn")).ToList();
-            
+
             return story;
         }
     }

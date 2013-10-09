@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CollectionsOnline.Core.Models
 {
-    public class Specimen : AggregateRoot, IHideable
+    public class Specimen : EmuAggregateRoot
     {
         public DateTime DateModified { get; set; }
 
@@ -268,7 +268,5 @@ namespace CollectionsOnline.Core.Models
         {
             Id = "specimens/" + irn;
         }
-
-        public bool IsHidden { get; set; }
     }
 }

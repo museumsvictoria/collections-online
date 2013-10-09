@@ -46,12 +46,6 @@
     <Reference Include="imu-1.0.03">
       <HintPath>..\..\lib\IMu\imu-1.0.03.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\packages\Ninject.Extensions.Conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -71,11 +65,13 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Importers\SpecimenImportHelper.cs" />
-    <Compile Include="Importers\SpeciesImportHelper.cs" />
-    <Compile Include="Importers\ItemImporter.cs" />
-    <Compile Include="Importers\IImporter.cs" />
-    <Compile Include="Importers\StoryImportHelper.cs" />
+    <Compile Include="ImportRunner.cs" />
+    <Compile Include="Importers\Import.cs" />
+    <Compile Include="Importers\SpecimenImport.cs" />
+    <Compile Include="Importers\SpeciesImport.cs" />
+    <Compile Include="Importers\ItemImport.cs" />
+    <Compile Include="Importers\IImport.cs" />
+    <Compile Include="Importers\StoryImport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

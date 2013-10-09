@@ -5,17 +5,24 @@ using System.Linq;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
+using Raven.Client;
 
 namespace CollectionsOnline.Import.Importers
 {
-    public class SpecimenImporter : IImporter<Specimen>
+    public class SpecimenImport : Import<Specimen>
     {
-        public string ModuleName
+        public SpecimenImport(
+            IDocumentStore documentStore,
+            Session session) : base(documentStore, session)
+        {
+        }
+
+        public override string ModuleName
         {
             get { return "ecatalogue"; }
         }
 
-        public string[] Columns
+        public override string[] Columns
         {
             get
             {
@@ -72,7 +79,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public Terms Terms
+        public override Terms Terms
         {
             get
             {
@@ -86,7 +93,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public Specimen MakeDocument(Map map)
+        public override Specimen MakeDocument(Map map)
         {
             var specimen = new Specimen(map.GetString("irn"));
 
@@ -115,7 +122,7 @@ namespace CollectionsOnline.Import.Importers
                     specimen.MineralogyVariety = map.GetString("MinVariety");
                     specimen.MineralogyGroup = map.GetString("MinGroup");
                     specimen.MineralogyClass = map.GetString("MinClass");
-                    specimen.MineralogyAssociatedMatrix = map.GetString("MinAssociatedMatrix");                    
+                    specimen.MineralogyAssociatedMatrix = map.GetString("MinAssociatedMatrix");
                     specimen.MineralogyType = map.GetString("MinTypeType");
                     break;
                 case "Meteorites":
@@ -525,7 +532,7 @@ namespace CollectionsOnline.Import.Importers
                 }
             }
 
-            #endregion 
+            #endregion
 
             #endregion
 
