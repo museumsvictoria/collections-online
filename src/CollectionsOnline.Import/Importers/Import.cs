@@ -47,11 +47,14 @@ namespace CollectionsOnline.Import.Importers
                             _log.Debug("Canceling Data import");
                             return;
                         }
+                        
+                        // Todo: REMOVE IMPORT LIMIT
+                        if (count >= 500)
+                            break;
 
                         var results = module.Fetch("start", count, Constants.DataBatchSize, Columns);
 
-                        // Todo: REMOVE IMPORT LIMIT
-                        if (results.Count == 0 || count == 2000)
+                        if (results.Count == 0)
                             break;
 
                         // Create and store documents

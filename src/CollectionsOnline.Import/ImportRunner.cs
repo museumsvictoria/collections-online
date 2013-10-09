@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Importers;
@@ -11,23 +12,14 @@ namespace CollectionsOnline.Import
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
-        private readonly IImport<Item> _itemImport;
-        private readonly IImport<Species> _speciesImport;
-        private readonly IImport<Specimen> _specimenImport;
-        private readonly IImport<Story> _storyImport;
+        private readonly IEnumerable<IImport<EmuAggregateRoot>> _imports;
 
         public ImportRunner(
             IDocumentStore documentStore, 
-            IImport<Item> itemImport,
-            IImport<Species> speciesImport,
-            IImport<Specimen> specimenImport,
-            IImport<Story> storyImport)
+            IEnumerable<IImport<EmuAggregateRoot>> imports)
         {
             _documentStore = documentStore;
-            _itemImport = itemImport;
-            _speciesImport = speciesImport;
-            _specimenImport = specimenImport;
-            _storyImport = storyImport;
+            _imports = imports;
         }
 
         public void Run()
@@ -52,10 +44,10 @@ namespace CollectionsOnline.Import
                     documentSession.Dispose();
 
                     // Run Imports
-                    _itemImport.Run(application.LastDataImport);
-                    _speciesImport.Run(application.LastDataImport);
-                    _specimenImport.Run(application.LastDataImport);
-                    _storyImport.Run(application.LastDataImport);
+                    foreach (var import in _imports)
+                    {
+                        import.Run(application.LastDataImport);
+                    }
                 }
             }
             catch (Exception exception)

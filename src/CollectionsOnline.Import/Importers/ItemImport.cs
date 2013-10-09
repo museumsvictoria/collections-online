@@ -126,8 +126,6 @@ namespace CollectionsOnline.Import.Importers
                         "maker=SouMakerRef.(NamFullName)",
                         "SouDateProduced",
                         "SouDateProducedCirca",
-                        "SouDateProducedEarliestDate",
-                        "SouDateProducedLatestDate",
                         "SouProducedEarliestDate",
                         "SouProducedLatestDate",
                         "collector=SouCollectorRef.(NamFullName)",
@@ -420,12 +418,12 @@ namespace CollectionsOnline.Import.Importers
             {
                 item.IndigenousCulturesDateMade = map.GetString("SouDateProducedCirca");
             }
-            else if (!string.IsNullOrWhiteSpace(map.GetString("SouDateProducedEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouDateProducedLatestDate")))
+            else if (!string.IsNullOrWhiteSpace(map.GetString("SouProducedEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouProducedLatestDate")))
             {
                 item.IndigenousCulturesDateMade = new[]
                     {
-                        map.GetString("SouDateProducedEarliestDate"),
-                        map.GetString("SouDateProducedLatestDate")
+                        map.GetString("SouProducedEarliestDate"),
+                        map.GetString("SouProducedLatestDate")
                     }.Concatenate(" - ");
             }
 
@@ -439,12 +437,12 @@ namespace CollectionsOnline.Import.Importers
             {
                 item.IndigenousCulturesDateCollected = map.GetString("SouCollectionDateCirca");
             }
-            else if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionDateEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouCollectionDateLatestDate")))
+            else if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouCollectionLatestDate")))
             {
                 item.IndigenousCulturesDateCollected = new[]
                     {
-                        map.GetString("SouCollectionDateEarliestDate"),
-                        map.GetString("SouCollectionDateLatestDate")
+                        map.GetString("SouCollectionEarliestDate"),
+                        map.GetString("SouCollectionLatestDate")
                     }.Concatenate(" - ");
             }
 

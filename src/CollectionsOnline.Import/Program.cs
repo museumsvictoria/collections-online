@@ -81,10 +81,13 @@ namespace CollectionsOnline.Import
 
         private static void RegisterImports()
         {
-            _container.Register<IImport<Item>, ItemImport>();
-            _container.Register<IImport<Species>, SpeciesImport>();
-            _container.Register<IImport<Specimen>, SpecimenImport>();
-            _container.Register<IImport<Story>, StoryImport>();
+            _container.RegisterMultiple<IImport<EmuAggregateRoot>>(new[]
+                {
+                    typeof (ItemImport), 
+                    typeof (SpeciesImport), 
+                    typeof(SpecimenImport), 
+                    typeof(StoryImport)
+                });
         }
     }
 }
