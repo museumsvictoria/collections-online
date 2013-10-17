@@ -83,8 +83,8 @@ namespace CollectionsOnline.Import
         {
             _container.RegisterMultiple<IImport<EmuAggregateRoot>>(new[]
                 {
-                    typeof (ItemImport), 
-                    typeof (SpeciesImport), 
+                    typeof(ItemImport), 
+                    typeof(SpeciesImport), 
                     typeof(SpecimenImport), 
                     typeof(StoryImport)
                 });
