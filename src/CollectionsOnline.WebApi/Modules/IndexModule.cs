@@ -1,6 +1,4 @@
-﻿using Nancy;
-
-namespace CollectionsOnline.WebApi.Modules
+﻿namespace CollectionsOnline.WebApi.Modules
 {
     public class IndexModule : BaseModule
     {

@@ -86,7 +86,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Models\BaseInputModel.cs" />
+    <Compile Include="Modules\StoryModule.cs" />
+    <Compile Include="Modules\SpecimenModule.cs" />
+    <Compile Include="Modules\SpeciesModule.cs" />
+    <Compile Include="WebApiJsonSerializer.cs" />
+    <Compile Include="Models\PaginationInputModel.cs" />
     <Compile Include="Modules\BaseModule.cs" />
     <Compile Include="Modules\ItemModule.cs" />
     <Compile Include="Modules\IndexModule.cs" />
@@ -95,12 +99,6 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Views\index.sshtml" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionsOnline.Core\CollectionsOnline.Core.csproj">

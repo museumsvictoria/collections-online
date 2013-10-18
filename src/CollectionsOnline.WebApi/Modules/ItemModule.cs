@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using System.Web;
 using CollectionsOnline.Core.Models;
 using Nancy;
-using Nancy.Responses.Negotiation;
 using Raven.Client;
 
 namespace CollectionsOnline.WebApi.Modules
@@ -18,10 +16,10 @@ namespace CollectionsOnline.WebApi.Modules
                         .Query<Item>()
                         .Statistics(out Statistics)
                         .Skip(Offset)
-                        .Take(Size)
+                        .Take(Limit)
                         .ToList();
 
-                    return Response.AsJson(items);
+                    return BuildResponse(items);
                 };
 
             Get["/{itemId}"] = parameters =>
@@ -30,12 +28,7 @@ namespace CollectionsOnline.WebApi.Modules
                     var item = documentSession
                         .Load<Item>("items/" + itemId);
 
-                    if (item == null)
-                    {
-                        // TODO: Throw Error
-                    }
-
-                    return Response.AsJson(item);
+                    return item == null ? BuildErrorResponse(HttpStatusCode.NotFound, "Item {0} not found", itemId) : BuildResponse(item);
                 };
         }
     }

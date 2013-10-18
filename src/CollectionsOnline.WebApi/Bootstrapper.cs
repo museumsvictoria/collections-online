@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using NLog;
@@ -11,9 +8,9 @@ using Nancy.Bootstrapper;
 using Nancy.Json;
 using Nancy.Responses.Negotiation;
 using Nancy.TinyIoc;
-using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
+using Newtonsoft.Json;
 
 namespace CollectionsOnline.WebApi
 {
@@ -26,8 +23,14 @@ namespace CollectionsOnline.WebApi
             base.ApplicationStartup(container, pipelines);
 
             RegisterRavenDb(container);
-            
+            RegisterJsonNet(container);
+        }
+
+        private void RegisterJsonNet(TinyIoCContainer container)
+        {
             JsonSettings.MaxJsonLength = Int32.MaxValue;
+
+            container.Register(typeof(JsonSerializer), typeof(WebApiJsonSerializer));
         }
 
         protected override NancyInternalConfiguration InternalConfiguration
