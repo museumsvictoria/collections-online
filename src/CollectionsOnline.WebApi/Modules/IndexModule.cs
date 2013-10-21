@@ -1,6 +1,8 @@
-﻿namespace CollectionsOnline.WebApi.Modules
+﻿using Nancy;
+
+namespace CollectionsOnline.WebApi.Modules
 {
-    public class IndexModule : BaseModule
+    public class IndexModule : NancyModule
     {
         public IndexModule()
         {

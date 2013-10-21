@@ -42,7 +42,6 @@ namespace CollectionsOnline.WebApi
                         // Prevent Content negotioation.
                         context.ResponseProcessors.Remove(typeof(JsonProcessor));
                         context.ResponseProcessors.Remove(typeof(XmlProcessor));
-                        context.ResponseProcessors.Remove(typeof(ViewProcessor));
                     });
             }
         }

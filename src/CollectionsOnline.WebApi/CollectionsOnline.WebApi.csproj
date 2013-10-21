@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Models\EnvelopeViewModel.cs" />
     <Compile Include="Modules\StoryModule.cs" />
     <Compile Include="Modules\SpecimenModule.cs" />
     <Compile Include="Modules\SpeciesModule.cs" />

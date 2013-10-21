@@ -20,38 +20,47 @@ namespace CollectionsOnline.WebApi.Modules
 
                     return null;
                 };
-
-            After += context =>
-                { 
-                    BuildResponseHeaders(context);
-                };
         }
 
-        protected Response BuildResponse(object model)
+        protected Response BuildResponse(object model, HttpStatusCode httpStatus = HttpStatusCode.OK)
         {
-            // TODO: add logic to prevent pagination data going out if not a paginated response
             if (Envelope)
+            {
+                if (Statistics != null)
+                {
+                    return Response.AsJson(new
+                    {
+                        Headers = new
+                        {
+                            Link = BuildLinkHeader(),
+                            TotalResults = Statistics.TotalResults
+                        },
+                        Response = model,
+                        Status = httpStatus
+                    });
+                }
+                
                 return Response.AsJson(new
                     {
-                        Data = model,
-                        Pagination = new
-                            {
-                                Offset, 
-                                Limit,
-                                Total = Statistics.TotalResults,
-                            }
+                        Response = model,
+                        Status = httpStatus
                     });
+            }
             
+            if (Statistics != null)
+            {
+                Context.Response.Headers["Link"] = BuildLinkHeader();
+                Context.Response.Headers["Total-Results"] = Statistics.TotalResults.ToString();                
+            }
+
+            Context.Response.StatusCode = httpStatus;
+                
             return Response.AsJson(model);
         }
 
         protected Response BuildErrorResponse(HttpStatusCode httpStatus, string message, params object[] args)
-        {            
-            return Response.AsJson(new
-                {
-                    Error = string.Format(message, args),
-                    HttpStatus = httpStatus
-                }).WithStatusCode(httpStatus);
+        {
+            return BuildResponse(new { Error = string.Format(message, args) }, httpStatus);
         }
 
         private void BindPagination()
@@ -69,11 +78,8 @@ namespace CollectionsOnline.WebApi.Modules
             Envelope = paginationInputModel.Envelope;
         }
 
-        private void BuildResponseHeaders(NancyContext context)
+        private string BuildLinkHeader()
         {
-            // If we are not paginating dont set headers
-            if (Statistics == null) return;
-
             var queryString = HttpUtility.ParseQueryString(Request.Url.Query);
             var url = Request.Url;
             var links = new List<string>();
@@ -100,8 +106,7 @@ namespace CollectionsOnline.WebApi.Modules
                 links.Add(string.Format("<{0}>; rel=\"prev\"", url));
             }
 
-            context.Response.Headers["Link"] = links.Aggregate((lp1, lp2) => lp1 + "," + lp2);
-            context.Response.Headers["Total"] = Statistics.TotalResults.ToString();
+            return links.Aggregate((lp1, lp2) => lp1 + "," + lp2);
         }
 
         protected int Offset { get; private set; }
