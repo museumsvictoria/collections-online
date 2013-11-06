@@ -263,10 +263,5 @@ namespace CollectionsOnline.Core.Models
         #endregion
 
         #endregion
-
-        public Specimen(string irn)
-        {
-            Id = "specimens/" + irn;
-        }
     }
 }

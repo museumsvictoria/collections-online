@@ -20,6 +20,15 @@ namespace CollectionsOnline.WebApi.Modules
 
                     return null;
                 };
+
+            After += context =>
+                {
+                    if (Statistics != null && !Envelope)
+                    {
+                        Context.Response.Headers["Link"] = BuildLinkHeader();
+                        Context.Response.Headers["Total-Results"] = Statistics.TotalResults.ToString();
+                    }
+                };
         }
 
         protected Response BuildResponse(object model, HttpStatusCode httpStatus = HttpStatusCode.OK)
@@ -46,16 +55,8 @@ namespace CollectionsOnline.WebApi.Modules
                         Status = httpStatus
                     });
             }
-            
-            if (Statistics != null)
-            {
-                Context.Response.Headers["Link"] = BuildLinkHeader();
-                Context.Response.Headers["Total-Results"] = Statistics.TotalResults.ToString();                
-            }
 
-            Context.Response.StatusCode = httpStatus;
-                
-            return Response.AsJson(model);
+            return Response.AsJson(model).WithStatusCode(httpStatus);
         }
 
         protected Response BuildErrorResponse(HttpStatusCode httpStatus, string message, params object[] args)
@@ -106,7 +107,10 @@ namespace CollectionsOnline.WebApi.Modules
                 links.Add(string.Format("<{0}>; rel=\"prev\"", url));
             }
 
-            return links.Aggregate((lp1, lp2) => lp1 + "," + lp2);
+            if(links.Any())
+                return links.Aggregate((lp1, lp2) => lp1 + "," + lp2);
+
+            return string.Empty;
         }
 
         protected int Offset { get; private set; }

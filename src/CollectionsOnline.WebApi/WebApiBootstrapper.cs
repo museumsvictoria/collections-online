@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace CollectionsOnline.WebApi
 {
-    public class Bootstrapper : DefaultNancyBootstrapper
+    public class WebApiBootstrapper : DefaultNancyBootstrapper
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
@@ -39,7 +39,7 @@ namespace CollectionsOnline.WebApi
             {
                 return NancyInternalConfiguration.WithOverrides((context) =>
                     {
-                        // Prevent Content negotioation.
+                        // Prevent Content negotiation.
                         context.ResponseProcessors.Remove(typeof(JsonProcessor));
                         context.ResponseProcessors.Remove(typeof(XmlProcessor));
                     });

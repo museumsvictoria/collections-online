@@ -110,10 +110,5 @@ namespace CollectionsOnline.Core.Models
         public ICollection<Author> Authors { get; set; }
 
         public ICollection<Media> Media { get; set; }
-
-        public Species(string irn)
-        {
-            Id = "species/" + irn;
-        }
     }
 }

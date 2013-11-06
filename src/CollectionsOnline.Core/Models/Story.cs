@@ -27,11 +27,6 @@ namespace CollectionsOnline.Core.Models
 
         public ICollection<string> RelatedStoryIds { get; set; }
 
-        public ICollection<string> RelatedItemIds { get; set; }
-
-        public Story(string irn)
-        {
-            Id = "stories/" + irn;
-        }
+        public ICollection<string> RelatedItemIds { get; set; }        
     }
 }

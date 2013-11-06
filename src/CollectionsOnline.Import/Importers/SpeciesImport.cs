@@ -81,7 +81,9 @@ namespace CollectionsOnline.Import.Importers
 
         public override Species MakeDocument(Map map)
         {
-            var species = new Species(map.GetString("irn"));
+            var species = new Species();
+
+            species.Id = "species/" + map.GetString("irn");
 
             species.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),

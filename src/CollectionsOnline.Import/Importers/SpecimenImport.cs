@@ -95,7 +95,9 @@ namespace CollectionsOnline.Import.Importers
 
         public override Specimen MakeDocument(Map map)
         {
-            var specimen = new Specimen(map.GetString("irn"));
+            var specimen = new Specimen();
+
+            specimen.Id = "specimens/" + map.GetString("irn");
 
             specimen.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),

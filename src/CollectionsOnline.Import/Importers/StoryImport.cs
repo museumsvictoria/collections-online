@@ -66,7 +66,9 @@ namespace CollectionsOnline.Import.Importers
 
         public override Story MakeDocument(Map map)
         {
-            var story = new Story(map.GetString("irn"));
+            var story = new Story();
+
+            story.Id = "stories/" + map.GetString("irn");
 
             story.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),

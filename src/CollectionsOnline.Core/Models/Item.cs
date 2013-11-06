@@ -214,10 +214,5 @@ namespace CollectionsOnline.Core.Models
         public string IndigenousCulturesNamesMentioned { get; set; }
 
         #endregion
-
-        public Item(string irn)
-        {
-            Id = "items/" + irn;
-        }
     }
 }

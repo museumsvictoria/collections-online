@@ -166,7 +166,9 @@ namespace CollectionsOnline.Import.Importers
 
         public override Item MakeDocument(Map map)
         {
-            var item = new Item(map.GetString("irn"));
+            var item = new Item();
+
+            item.Id = "items/" + map.GetString("irn");
 
             item.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),

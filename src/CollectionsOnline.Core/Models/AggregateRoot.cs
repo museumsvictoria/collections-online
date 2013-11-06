@@ -2,6 +2,6 @@
 {
     public abstract class AggregateRoot
     {
-        public string Id { get; protected set; }
+        public string Id { get; set; }
     }
 }
