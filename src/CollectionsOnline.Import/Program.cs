@@ -18,7 +18,7 @@ namespace CollectionsOnline.Import
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
         private static TinyIoCContainer _container;
-        public static volatile bool ImportCancelled = false;
+        public static volatile bool ImportCanceled = false;
 
         static void Main(string[] args)
         {
@@ -26,7 +26,7 @@ namespace CollectionsOnline.Import
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
                 eventArgs.Cancel = true;
-                ImportCancelled = true;
+                ImportCanceled = true;
             };
 
             _container = TinyIoCContainer.Current;

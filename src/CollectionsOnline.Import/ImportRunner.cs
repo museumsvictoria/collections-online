@@ -60,7 +60,7 @@ namespace CollectionsOnline.Import
             {
                 var application = documentSession.Load<Application>(Constants.ApplicationId);
 
-                if (Program.ImportCancelled || hasFailed)
+                if (Program.ImportCanceled || hasFailed)
                 {
                     _log.Debug("Data import finished (cancelled or failed)");
                     application.DataImportFinished();

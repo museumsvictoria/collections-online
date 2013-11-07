@@ -42,7 +42,7 @@ namespace CollectionsOnline.Import.Importers
                 {
                     using (var documentSession = _documentStore.OpenSession())
                     {
-                        if (Program.ImportCancelled)
+                        if (Program.ImportCanceled)
                         {
                             _log.Debug("Canceling Data import");
                             return;
@@ -86,7 +86,7 @@ namespace CollectionsOnline.Import.Importers
                 {
                     using (var documentSession = _documentStore.OpenSession())
                     {
-                        if (Program.ImportCancelled)
+                        if (Program.ImportCanceled)
                         {
                             _log.Debug("Canceling Data import");
                             return;

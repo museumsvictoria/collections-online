@@ -11,18 +11,18 @@ using Xunit;
 
 namespace CollectionsOnline.Tests.WebApi.Modules
 {
-    public class ItemModuleTests : RavenDbTestBase
+    public class StoryModuleTests : RavenDbTestBase
     {
-        public ItemModuleTests()
+        public StoryModuleTests()
         {
             DataToBeSeeded = new List<IEnumerable>
                 {
-                    FakeItems.CreateFakeItems(5)
+                    FakeStories.CreateFakeStories(5)
                 };
 
             Browser = new Browser(with =>
                 {
-                    with.Module<ItemModule>();
+                    with.Module<StoryModule>();
                     with.Dependency(DocumentSession);
                 });
         }
@@ -30,17 +30,17 @@ namespace CollectionsOnline.Tests.WebApi.Modules
         protected Browser Browser { get; set; }
 
         [Fact]
-        public void GetItems_ReturnsItems()
+        public void GetSpecimens_ReturnsSpecimens()
         {
-            var result = Browser.Get("/v1/items", with => with.HttpRequest());
+            var result = Browser.Get("/v1/stories", with => with.HttpRequest());
 
-            result.Body.DeserializeJson<IEnumerable<Item>>().Count().ShouldBe(5);
+            result.Body.DeserializeJson<IEnumerable<Story>>().Count().ShouldBe(5);
         }
 
         [Fact]
-        public void GivenAnInvalidId_GetItem_ReturnsNotFound()
+        public void GivenAnInvalidId_GetSpecies_ReturnsNotFound()
         {
-            var result = Browser.Get("/v1/items/6", with => with.HttpRequest());
+            var result = Browser.Get("/v1/stories/6", with => with.HttpRequest());
 
             result.StatusCode.ShouldBe(HttpStatusCode.NotFound);
         }

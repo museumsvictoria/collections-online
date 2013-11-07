@@ -95,7 +95,7 @@
     <Compile Include="Modules\SpecimenModule.cs" />
     <Compile Include="Modules\SpeciesModule.cs" />
     <Compile Include="WebApiJsonSerializer.cs" />
-    <Compile Include="Models\PaginationInputModel.cs" />
+    <Compile Include="Models\WebApiInputModel.cs" />
     <Compile Include="Modules\BaseModule.cs" />
     <Compile Include="Modules\ItemModule.cs" />
     <Compile Include="Modules\IndexModule.cs" />

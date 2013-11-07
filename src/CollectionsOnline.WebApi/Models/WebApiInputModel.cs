@@ -1,6 +1,6 @@
 ﻿namespace CollectionsOnline.WebApi.Models
 {
-    public class PaginationInputModel
+    public class WebApiInputModel
     {
         public int Offset { get; set; }
 

@@ -16,7 +16,7 @@ namespace CollectionsOnline.WebApi.Modules
         {
             Before += context =>
                 {
-                    BindPagination();
+                    BindWebApiInput();
 
                     return null;
                 };
@@ -64,19 +64,19 @@ namespace CollectionsOnline.WebApi.Modules
             return BuildResponse(new { Error = string.Format(message, args) }, httpStatus);
         }
 
-        private void BindPagination()
+        private void BindWebApiInput()
         {
-            var paginationInputModel = this.Bind<PaginationInputModel>();
+            var webApiInputModel = this.Bind<WebApiInputModel>();
 
-            if (paginationInputModel.Offset < 0)
-                paginationInputModel.Offset = 0;
+            if (webApiInputModel.Offset < 0)
+                webApiInputModel.Offset = 0;
 
-            if (paginationInputModel.Limit <= 0 || paginationInputModel.Limit > Constants.WebApiPagingPageSizeMax)
-                paginationInputModel.Limit = Constants.WebApiPagingPageSizeDefault;
+            if (webApiInputModel.Limit <= 0 || webApiInputModel.Limit > Constants.WebApiPagingPageSizeMax)
+                webApiInputModel.Limit = Constants.WebApiPagingPageSizeDefault;
 
-            Offset = paginationInputModel.Offset;
-            Limit = paginationInputModel.Limit;
-            Envelope = paginationInputModel.Envelope;
+            Offset = webApiInputModel.Offset;
+            Limit = webApiInputModel.Limit;
+            Envelope = webApiInputModel.Envelope;
         }
 
         private string BuildLinkHeader()

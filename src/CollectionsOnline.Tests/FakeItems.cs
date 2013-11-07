@@ -29,13 +29,17 @@ namespace CollectionsOnline.Tests
                 "Trade Literature"
             };
 
-        public static Item CreateFakeItem()
+        public static Item CreateFakeItem(string id = null)
         {
+            if (id == null)
+            {
+                id = "items/" + GetRandom.Int(1, 1500000);
+            }
+
             return Builder<Item>
                 .CreateNew()
-                .With(x => x.Id = "items/" + (GetRandom.Int(80000, 1500000).ToString()))
+                .With(x => x.Id = id)
                 .With(x => x.DateModified = GetRandom.DateTime(DateTime.Now.AddYears(-2), DateTime.Now.AddDays(-1)))
-                .With(x => x.Name = GetRandom.String(20))
                 .With(x => x.Category = "History & Technology")
                 .With(x => x.Type = Types[GetRandom.Int(0, Types.Length - 1)])
                 .With(x => x.Discipline = Disciplines[GetRandom.Int(0, Disciplines.Length - 1)])
@@ -46,9 +50,9 @@ namespace CollectionsOnline.Tests
         {
             var fakeItems = new List<Item>();
 
-            for (int i = 0; i < count; i++)
+            for (int i = 1; i < count+1; i++)
             {
-                fakeItems.Add(CreateFakeItem());
+                fakeItems.Add(CreateFakeItem("items/" + i));
             }
 
             return fakeItems;
