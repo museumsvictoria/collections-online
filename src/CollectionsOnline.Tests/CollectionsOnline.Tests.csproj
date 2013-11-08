@@ -62,6 +62,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.6.1.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RavenDB.Database.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
@@ -102,10 +105,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeStories.cs" />
-    <Compile Include="FakeSpecimens.cs" />
-    <Compile Include="FakeSpecies.cs" />
-    <Compile Include="FakeItems.cs" />
+    <Compile Include="Fakes\FakeStories.cs" />
+    <Compile Include="Fakes\FakeSpecimens.cs" />
+    <Compile Include="Fakes\FakeSpecies.cs" />
+    <Compile Include="Fakes\FakeItems.cs" />
+    <Compile Include="Import\ImportRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApi\Modules\BaseModuleTests.cs" />
     <Compile Include="WebApi\Modules\StoryModuleTests.cs" />
@@ -120,6 +124,10 @@
     <ProjectReference Include="..\CollectionsOnline.Core\CollectionsOnline.Core.csproj">
       <Project>{B921FF9A-4D54-46C7-A511-54E5CE055205}</Project>
       <Name>CollectionsOnline.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CollectionsOnline.Import\CollectionsOnline.Import.csproj">
+      <Project>{362a7a4c-1a6f-41a2-a8a7-a143a7616812}</Project>
+      <Name>CollectionsOnline.Import</Name>
     </ProjectReference>
     <ProjectReference Include="..\CollectionsOnline.WebApi\CollectionsOnline.WebApi.csproj">
       <Project>{887a8565-4a10-44c8-82ef-f2f2d1d2bfbf}</Project>

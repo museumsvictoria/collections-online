@@ -33,56 +33,64 @@ namespace CollectionsOnline.Tests.WebApi.Modules
         [Fact]
         public void GivenEnvelopeRequest_GetItems_ReturnsEnvelope()
         {
+            // Given When
             var result = Browser.Get("/v1/items", with =>
                 {
                     with.HttpRequest();
                     with.Query("envelope", "true");
                 });
 
+            // Then
             dynamic bodyResult = JsonConvert.DeserializeObject<ExpandoObject>(result.Body.AsString());
-
             ((object)bodyResult.Response).ShouldNotBe(null);
         }
 
         [Fact]
         public void GivenOneLimitRequest_GetItems_ReturnsOneItem()
         {
+            // Given When
             var result = Browser.Get("/v1/items", with =>
             {
                 with.HttpRequest();
                 with.Query("limit", "1");
             });
 
+            // Then
             result.Body.DeserializeJson<IEnumerable<Item>>().Count().ShouldBe(1);
         }
 
         [Fact]
         public void GivenOneLimitRequest_GetItems_ReturnsLinkHeader()
         {
+            // Given When
             var result = Browser.Get("/v1/items", with =>
             {
                 with.HttpRequest();
                 with.Query("limit", "1");
             });
 
+            // Then
             result.Headers["Link"].ShouldNotBe(string.Empty);
         }
 
         [Fact]
         public void GivenThirtyLimitRequest_GetItems_DoesNotReturnLinkHeader()
         {
+            // Given When
             var result = Browser.Get("/v1/items", with =>
             {
                 with.HttpRequest();
                 with.Query("limit", "30");
             });
 
+            // Then
             result.Headers["Link"].ShouldBe(string.Empty);
         }
 
         [Fact]
         public void GivenOffsetRequest_GetItems_ReturnsCorrectItem()
         {
+            // Given When
             var result = Browser.Get("/v1/items", with =>
             {
                 with.HttpRequest();
@@ -90,6 +98,7 @@ namespace CollectionsOnline.Tests.WebApi.Modules
                 with.Query("offset", "10");
             });
 
+            // Then
             result.Body.DeserializeJson<IEnumerable<Item>>().First().Id.ShouldBe("items/11");
         }
     }

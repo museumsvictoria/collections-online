@@ -27,51 +27,49 @@ namespace CollectionsOnline.Import
             var dateRun = DateTime.Now;
             var hasFailed = false;
 
-            try
+            _log.Debug("Data Import begining");
+
+            var documentSession = _documentStore.OpenSession();
+            var application = documentSession.Load<Application>(Constants.ApplicationId);
+
+            if (!application.DataImportRunning)
             {
-                _log.Debug("Data Import begining");
+                application.RunDataImport();
+                documentSession.SaveChanges();
+                documentSession.Dispose();
 
-                var documentSession = _documentStore.OpenSession();
-                var application = documentSession.Load<Application>(Constants.ApplicationId);
-
-                if (application == null)
-                    throw new Exception("Application not found");
-
-                if (!application.DataImportRunning)
+                try
                 {
-                    application.RunDataImport();
-                    documentSession.SaveChanges();
-                    documentSession.Dispose();
-
                     // Run Imports
                     foreach (var import in _imports)
                     {
                         import.Run(application.LastDataImport);
                     }
                 }
-            }
-            catch (Exception exception)
-            {
-                hasFailed = true;
-                _log.Debug(exception.ToString);
-            }
-
-            using (var documentSession = _documentStore.OpenSession())
-            {
-                var application = documentSession.Load<Application>(Constants.ApplicationId);
-
-                if (Program.ImportCanceled || hasFailed)
+                catch (Exception exception)
                 {
-                    _log.Debug("Data import finished (cancelled or failed)");
-                    application.DataImportFinished();
-                }
-                else
-                {
-                    _log.Debug("Data import finished succesfully");
-                    application.DataImportSuccess(dateRun);
+                    hasFailed = true;
+                    _log.Debug(exception.ToString);
                 }
 
-                documentSession.SaveChanges();
+                // Imports have run, finish up
+                using (documentSession = _documentStore.OpenSession())
+                {
+                    application = documentSession.Load<Application>(Constants.ApplicationId);
+
+                    if (Program.ImportCanceled || hasFailed)
+                    {
+                        _log.Debug("Data import finished (cancelled or failed)");
+                        application.DataImportFinished();
+                    }
+                    else
+                    {
+                        _log.Debug("Data import finished succesfully");
+                        application.DataImportSuccess(dateRun);
+                    }
+
+                    documentSession.SaveChanges();
+                }
             }
         }
     }
