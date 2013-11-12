@@ -52,24 +52,23 @@ namespace CollectionsOnline.Import
                     _log.Debug(exception.ToString);
                 }
 
-                // Imports have run, finish up
-                using (documentSession = _documentStore.OpenSession())
+                // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.
+                documentSession = _documentStore.OpenSession();
+                application = documentSession.Load<Application>(Constants.ApplicationId);
+
+                if (Program.ImportCanceled || hasFailed)
                 {
-                    application = documentSession.Load<Application>(Constants.ApplicationId);
-
-                    if (Program.ImportCanceled || hasFailed)
-                    {
-                        _log.Debug("Data import finished (cancelled or failed)");
-                        application.DataImportFinished();
-                    }
-                    else
-                    {
-                        _log.Debug("Data import finished succesfully");
-                        application.DataImportSuccess(dateRun);
-                    }
-
-                    documentSession.SaveChanges();
+                    _log.Debug("Data import finished (cancelled or failed)");
+                    application.DataImportFinished();
                 }
+                else
+                {
+                    _log.Debug("Data import finished succesfully");
+                    application.DataImportSuccess(dateRun);
+                }
+
+                documentSession.SaveChanges();
+                documentSession.Dispose();
             }
         }
     }

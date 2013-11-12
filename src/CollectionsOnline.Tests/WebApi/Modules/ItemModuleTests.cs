@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Tests.Fakes;
 using CollectionsOnline.WebApi.Modules;
 using Nancy;
 using Nancy.Testing;
@@ -32,16 +33,20 @@ namespace CollectionsOnline.Tests.WebApi.Modules
         [Fact]
         public void GetItems_ReturnsItems()
         {
+            // Given When
             var result = Browser.Get("/v1/items", with => with.HttpRequest());
 
+            // Then
             result.Body.DeserializeJson<IEnumerable<Item>>().Count().ShouldBe(5);
         }
 
         [Fact]
         public void GivenAnInvalidId_GetItem_ReturnsNotFound()
         {
+            // Given When
             var result = Browser.Get("/v1/items/6", with => with.HttpRequest());
 
+            // Then
             result.StatusCode.ShouldBe(HttpStatusCode.NotFound);
         }
     }

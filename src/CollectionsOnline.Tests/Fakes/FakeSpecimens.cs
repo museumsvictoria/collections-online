@@ -4,7 +4,7 @@ using CollectionsOnline.Core.Models;
 using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
 
-namespace CollectionsOnline.Tests
+namespace CollectionsOnline.Tests.Fakes
 {
     public class FakeSpecimens
     {

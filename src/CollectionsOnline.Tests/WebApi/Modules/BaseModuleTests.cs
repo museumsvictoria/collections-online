@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Tests.Fakes;
 using CollectionsOnline.WebApi.Modules;
 using Nancy.Testing;
 using Newtonsoft.Json;
