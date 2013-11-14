@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
@@ -19,7 +20,7 @@ namespace CollectionsOnline.Import.Importers
             IDocumentStore documentStore,
             Session session) : base(documentStore, session)
         {
-            _slugFactory = slugFactory;
+            _slugFactory = slugFactory;            
         }
 
         public override string ModuleName
@@ -34,6 +35,7 @@ namespace CollectionsOnline.Import.Importers
                 return new[]
                     {
                         "irn",
+                        "AdmPublishWebNoPassword",
                         "AdmDateModified",
                         "AdmTimeModified",
                         "ColCategory",
@@ -157,8 +159,7 @@ namespace CollectionsOnline.Import.Importers
             {
                 var terms = new Terms();
 
-                terms.Add("MdaDataSets_tab", "History & Technology Collections Online");
-                terms.Add("AdmPublishWebNoPassword", "Yes");
+                terms.Add("MdaDataSets_tab", "History & Technology Collections Online");                
 
                 return terms;
             }
@@ -169,6 +170,8 @@ namespace CollectionsOnline.Import.Importers
             var item = new Item();
 
             item.Id = "items/" + map.GetString("irn");
+
+            item.IsHidden = map.GetString("AdmPublishWebNoPassword") == "No";
 
             item.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
@@ -467,6 +470,14 @@ namespace CollectionsOnline.Import.Importers
             item.IndigenousCulturesNamesMentioned = map.GetStrings("DesGroupNamesMentioned_tab").Concatenate(", ");
 
             return item;
+        }
+
+        protected override void RegisterAutoMapperMap()
+        {
+            Mapper.CreateMap<Item, Item>()
+                .ForMember(x => x.Id, options => options.Ignore());
+
+            // TODO add ignores for non-EMu fields so they dont get overwritten when updating
         }
     }
 }

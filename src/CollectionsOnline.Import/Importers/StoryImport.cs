@@ -33,6 +33,7 @@ namespace CollectionsOnline.Import.Importers
                 return new[]
                     {
                         "irn",
+                        "AdmPublishWebNoPassword",
                         "AdmDateModified",
                         "AdmTimeModified",
                         "NarTitle",
@@ -57,8 +58,7 @@ namespace CollectionsOnline.Import.Importers
             {
                 var terms = new Terms();
 
-                terms.Add("DetPurpose_tab", "Website - History & Technology Collections");
-                terms.Add("AdmPublishWebNoPassword", "Yes");
+                terms.Add("DetPurpose_tab", "Website - History & Technology Collections");                
 
                 return terms;
             }
@@ -69,6 +69,8 @@ namespace CollectionsOnline.Import.Importers
             var story = new Story();
 
             story.Id = "stories/" + map.GetString("irn");
+
+            story.IsHidden = map.GetString("AdmPublishWebNoPassword") == "No";
 
             story.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),

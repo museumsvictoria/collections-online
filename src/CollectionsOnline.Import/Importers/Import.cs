@@ -20,12 +20,12 @@ namespace CollectionsOnline.Import.Importers
             Session session)
         {
             _documentStore = documentStore;
-            _session = session;
+            _session = session;            
         }
 
         public void Run(DateTime dateLastRun)
         {
-            _log.Debug("Begining {0} import", typeof(T).Name);
+            _log.Debug("Beginning {0} import", typeof(T).Name);
 
             var module = new Module(ModuleName, _session);
             var terms = Terms;
@@ -49,7 +49,7 @@ namespace CollectionsOnline.Import.Importers
                         }
                         
                         // TODO: REMOVE IMPORT LIMIT
-                        if (count >= 500)
+                        if (count >= 100)
                             break;
 
                         var results = module.Fetch("start", count, Constants.DataBatchSize, Columns);
@@ -72,7 +72,7 @@ namespace CollectionsOnline.Import.Importers
             }
             else
             {
-                Mapper.CreateMap<T, T>().ForMember(x => x.Id, y => y.Ignore());
+                RegisterAutoMapperMap();
 
                 terms.Add("AdmDateModified", dateLastRun.ToString("MMM dd yyyy"), ">=");
 
@@ -91,6 +91,10 @@ namespace CollectionsOnline.Import.Importers
                             _log.Debug("Canceling Data import");
                             return;
                         }
+
+                        // TODO: REMOVE IMPORT LIMIT
+                        if (count >= 100)
+                            break;
 
                         var results = module.Fetch("start", count, Constants.DataBatchSize, Columns);
 
@@ -133,5 +137,10 @@ namespace CollectionsOnline.Import.Importers
         public abstract Terms Terms { get; }
 
         public abstract T MakeDocument(Map map);
+
+        protected virtual void RegisterAutoMapperMap()
+        {
+            Mapper.CreateMap<T, T>().ForMember(x => x.Id, options => options.Ignore());
+        }
     }
 }

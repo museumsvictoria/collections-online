@@ -29,6 +29,7 @@ namespace CollectionsOnline.Import.Importers
                 return new[]
                     {
                         "irn",
+                        "AdmPublishWebNoPassword",
                         "AdmDateModified",
                         "AdmTimeModified",
                         "SpeTaxonGroup",
@@ -72,8 +73,7 @@ namespace CollectionsOnline.Import.Importers
             {
                 var terms = new Terms();
 
-                terms.Add("DetPurpose_tab", "Website - Species profile");
-                terms.Add("AdmPublishWebNoPassword", "Yes");
+                terms.Add("DetPurpose_tab", "Website - Species profile");                
 
                 return terms;
             }
@@ -84,6 +84,8 @@ namespace CollectionsOnline.Import.Importers
             var species = new Species();
 
             species.Id = "species/" + map.GetString("irn");
+
+            species.IsHidden = map.GetString("AdmPublishWebNoPassword") == "No";
 
             species.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),

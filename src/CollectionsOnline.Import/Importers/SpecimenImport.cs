@@ -29,6 +29,7 @@ namespace CollectionsOnline.Import.Importers
                 return new[]
                     {
                         "irn",
+                        "AdmPublishWebNoPassword",
                         "ColRegPrefix",
                         "ColRegNumber",
                         "ColRegPart",
@@ -86,8 +87,7 @@ namespace CollectionsOnline.Import.Importers
                 var terms = new Terms();
 
                 terms.Add("ColCategory", "Natural Sciences");
-                terms.Add("MdaDataSets_tab", "Website - Atlas of Living Australia");
-                terms.Add("AdmPublishWebNoPassword", "Yes");
+                terms.Add("MdaDataSets_tab", "Website - Atlas of Living Australia");                
 
                 return terms;
             }
@@ -98,6 +98,8 @@ namespace CollectionsOnline.Import.Importers
             var specimen = new Specimen();
 
             specimen.Id = "specimens/" + map.GetString("irn");
+
+            specimen.IsHidden = map.GetString("AdmPublishWebNoPassword") == "No";
 
             specimen.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
