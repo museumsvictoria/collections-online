@@ -29,9 +29,11 @@ namespace CollectionsOnline.Import.Importers
 
             var module = new Module(ModuleName, _session);
             var terms = Terms;
-
+            
             if (dateLastRun == default(DateTime))
             {
+                // Import has never run, do a fresh import
+
                 var hits = module.FindTerms(terms);
 
                 _log.Debug("Finished Search. {0} Hits", hits);
@@ -72,6 +74,8 @@ namespace CollectionsOnline.Import.Importers
             }
             else
             {
+                // Import has been run before, do an update import
+
                 RegisterAutoMapperMap();
 
                 terms.Add("AdmDateModified", dateLastRun.ToString("MMM dd yyyy"), ">=");

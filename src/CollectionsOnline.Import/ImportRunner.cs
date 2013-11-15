@@ -13,13 +13,16 @@ namespace CollectionsOnline.Import
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly IEnumerable<IImport<EmuAggregateRoot>> _imports;
+        private readonly IItemMigration _itemMigration;
 
         public ImportRunner(
             IDocumentStore documentStore, 
-            IEnumerable<IImport<EmuAggregateRoot>> imports)
+            IEnumerable<IImport<EmuAggregateRoot>> imports,
+            IItemMigration itemMigration)
         {
             _documentStore = documentStore;
             _imports = imports;
+            _itemMigration = itemMigration;
         }
 
         public void Run()
@@ -45,6 +48,9 @@ namespace CollectionsOnline.Import
                     {
                         import.Run(application.LastDataImport);
                     }
+
+                    // Run Item Migration
+                    _itemMigration.Run();
                 }
                 catch (Exception exception)
                 {

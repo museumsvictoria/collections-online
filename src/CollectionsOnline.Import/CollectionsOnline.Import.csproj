@@ -43,6 +43,9 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.13\lib\net45\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="imu-1.0.03">
       <HintPath>..\..\lib\IMu\imu-1.0.03.dll</HintPath>
     </Reference>
@@ -63,8 +66,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Importers\IItemMigration.cs" />
+    <Compile Include="Importers\ItemMigration.cs" />
     <Compile Include="ImportRunner.cs" />
     <Compile Include="Importers\Import.cs" />
     <Compile Include="Importers\SpecimenImport.cs" />
