@@ -33,7 +33,6 @@ namespace CollectionsOnline.Import.Importers
             if (dateLastRun == default(DateTime))
             {
                 // Import has never run, do a fresh import
-
                 var hits = module.FindTerms(terms);
 
                 _log.Debug("Finished Search. {0} Hits", hits);
@@ -75,7 +74,6 @@ namespace CollectionsOnline.Import.Importers
             else
             {
                 // Import has been run before, do an update import
-
                 RegisterAutoMapperMap();
 
                 terms.Add("AdmDateModified", dateLastRun.ToString("MMM dd yyyy"), ">=");
@@ -109,19 +107,17 @@ namespace CollectionsOnline.Import.Importers
                         var newDocuments = results.Rows.Select(MakeDocument).ToList();
                         var existingDocuments = documentSession.Load<T>(newDocuments.Select(x => x.Id));
 
-                        foreach (var newDocument in newDocuments)
+                        for (var i = 0; i < newDocuments.Count; i++)
                         {
-                            var existingDocument = existingDocuments.SingleOrDefault(x => x != null && x.Id == newDocument.Id);
-
-                            if (existingDocument != null)
+                            if (existingDocuments[i] != null)
                             {
                                 // Update existing story
-                                Mapper.Map(newDocument, existingDocument);
+                                Mapper.Map(newDocuments[i], existingDocuments[i]);
                             }
                             else
                             {
                                 // Create new story
-                                documentSession.Store(newDocument);
+                                documentSession.Store(newDocuments[i]);
                             }
                         }
 

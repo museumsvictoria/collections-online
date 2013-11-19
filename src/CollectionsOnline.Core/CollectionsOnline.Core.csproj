@@ -47,6 +47,7 @@
     <Compile Include="DesignByContract\Requires.cs" />
     <Compile Include="DesignByContract\Ensures.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Association.cs" />
     <Compile Include="Models\EmuAggregateRoot.cs" />

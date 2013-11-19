@@ -75,6 +75,7 @@ namespace CollectionsOnline.WebApi
 
             container.Register(documentStore);
 
+            // Register IDocumentSession
             container.Register((c,p) => documentStore.OpenSession());
         }
     }

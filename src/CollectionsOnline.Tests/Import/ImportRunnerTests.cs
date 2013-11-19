@@ -23,7 +23,7 @@ namespace CollectionsOnline.Tests.Import
                     new[] { new Application { DataImportRunning = true }}
                 };
             var import = Substitute.For<IImport<EmuAggregateRoot>>();
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration());
+            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration(DocumentSession.Advanced.DocumentStore));
 
             // When
             importRunner.Run();
@@ -44,7 +44,7 @@ namespace CollectionsOnline.Tests.Import
                     new[] { new Application() }
                 };
             var import = Substitute.For<IImport<EmuAggregateRoot>>();
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration());
+            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration(DocumentSession.Advanced.DocumentStore));
 
             // When
             importRunner.Run();
@@ -68,7 +68,7 @@ namespace CollectionsOnline.Tests.Import
             var import = Substitute.For<IImport<EmuAggregateRoot>>();
             import.When(x => x.Run(Arg.Any<DateTime>())).Do(x => { throw new Exception(); });
 
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration());
+            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration(DocumentSession.Advanced.DocumentStore));
 
             // When
             importRunner.Run();

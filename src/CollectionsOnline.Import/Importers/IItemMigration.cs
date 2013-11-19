@@ -1,7 +1,9 @@
-﻿namespace CollectionsOnline.Import.Importers
+﻿using System;
+
+namespace CollectionsOnline.Import.Importers
 {
     public interface IItemMigration
     {
-        void Run();
+        void Run(DateTime dateLastRun);
     }
 }

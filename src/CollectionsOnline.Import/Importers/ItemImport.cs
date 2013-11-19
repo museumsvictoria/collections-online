@@ -169,6 +169,9 @@ namespace CollectionsOnline.Import.Importers
         {
             var item = new Item();
 
+            // Initialize collections that need to be initialized.
+            item.Comments = new List<Comment>();
+
             item.Id = "items/" + map.GetString("irn");
 
             item.IsHidden = map.GetString("AdmPublishWebNoPassword") == "No";
@@ -475,7 +478,8 @@ namespace CollectionsOnline.Import.Importers
         protected override void RegisterAutoMapperMap()
         {
             Mapper.CreateMap<Item, Item>()
-                .ForMember(x => x.Id, options => options.Ignore());
+                .ForMember(x => x.Id, options => options.Ignore())
+                .ForMember(x => x.Comments, options => options.Ignore());
 
             // TODO add ignores for non-EMu fields so they dont get overwritten when updating
         }

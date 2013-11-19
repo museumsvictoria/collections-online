@@ -50,7 +50,7 @@ namespace CollectionsOnline.Import
                     }
 
                     // Run Item Migration
-                    _itemMigration.Run();
+                    _itemMigration.Run(application.LastDataImport);
                 }
                 catch (Exception exception)
                 {

@@ -5,6 +5,12 @@ namespace CollectionsOnline.Core.Models
 {
     public class Item : EmuAggregateRoot
     {
+        #region Non-Emu
+
+        public List<Comment> Comments { get; set; }
+
+        #endregion
+
         public DateTime DateModified { get; set; }
 
         public string Category { get; set; }
