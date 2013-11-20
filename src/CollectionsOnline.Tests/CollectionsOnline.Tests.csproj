@@ -113,6 +113,7 @@
     <Compile Include="Fakes\FakeItems.cs" />
     <Compile Include="Import\ImportRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
     <Compile Include="WebApi\Modules\BaseModuleTests.cs" />
     <Compile Include="WebApi\Modules\StoryModuleTests.cs" />
     <Compile Include="WebApi\Modules\SpecimenModuleTests.cs" />
@@ -130,6 +131,10 @@
     <ProjectReference Include="..\CollectionsOnline.Import\CollectionsOnline.Import.csproj">
       <Project>{362a7a4c-1a6f-41a2-a8a7-a143a7616812}</Project>
       <Name>CollectionsOnline.Import</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CollectionsOnline.RedirectWebSite\CollectionsOnline.RedirectWebSite.csproj">
+      <Project>{3EF059D8-3822-40D0-95B9-4FB40F4D4DA9}</Project>
+      <Name>CollectionsOnline.RedirectWebSite</Name>
     </ProjectReference>
     <ProjectReference Include="..\CollectionsOnline.WebApi\CollectionsOnline.WebApi.csproj">
       <Project>{887a8565-4a10-44c8-82ef-f2f2d1d2bfbf}</Project>
