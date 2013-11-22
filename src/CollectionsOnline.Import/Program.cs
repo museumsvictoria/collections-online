@@ -1,15 +1,13 @@
-﻿using AutoMapper;
-using CollectionsOnline.Core.Config;
+﻿using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Importers;
+using CollectionsOnline.Import.Factories;
+using CollectionsOnline.Import.Imports;
 using IMu;
 using NLog;
-using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using System;
 using System.Configuration;
-using System.Linq;
 using TinyIoC;
 
 namespace CollectionsOnline.Import
@@ -81,13 +79,19 @@ namespace CollectionsOnline.Import
 
         private static void RegisterImports()
         {
-            _container.RegisterMultiple<IImport<EmuAggregateRoot>>(new[]
+            _container.RegisterMultiple<IImport>(new[]
                 {
-                    typeof(ItemImport), 
-                    //typeof(SpeciesImport), 
-                    //typeof(SpecimenImport), 
-                    //typeof(StoryImport)
+                    typeof(ImuImport<Item>),
+                    typeof(ImuImport<Species>),
+                    typeof(ImuImport<Specimen>),
+                    typeof(ImuImport<Story>),
+                    typeof(MigrationImport)
                 });
+
+            _container.Register<IImuFactory<Item>, ItemImuFactory>();
+            _container.Register<IImuFactory<Species>, SpeciesImuFactory>();
+            _container.Register<IImuFactory<Specimen>, SpecimenImuFactory>();
+            _container.Register<IImuFactory<Story>, StoryImuFactory>();
         }
     }
 }

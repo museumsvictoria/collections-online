@@ -3,33 +3,37 @@ using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
 using Raven.Client;
 
-namespace CollectionsOnline.Import.Importers
+namespace CollectionsOnline.Import.Imports
 {
-    public abstract class Import<T> : IImport<T> where T : EmuAggregateRoot
+    public class ImuImport<T> : IImport where T : EmuAggregateRoot
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly Session _session;
+        private readonly IImuFactory<T> _imuFactory;
 
-        protected Import(
+        public ImuImport(
             IDocumentStore documentStore,
-            Session session)
+            Session session,
+            IImuFactory<T> imuFactory)
         {
             _documentStore = documentStore;
-            _session = session;            
+            _session = session;
+            _imuFactory = imuFactory;
         }
 
         public void Run(DateTime dateLastRun)
         {
             _log.Debug("Beginning {0} import", typeof(T).Name);
 
-            var module = new Module(ModuleName, _session);
-            var terms = Terms;
-            
+            var module = new Module(_imuFactory.ModuleName, _session);
+            var terms = _imuFactory.Terms;
+
             if (dateLastRun == default(DateTime))
             {
                 // Import has never run, do a fresh import
@@ -48,19 +52,19 @@ namespace CollectionsOnline.Import.Importers
                             _log.Debug("Canceling Data import");
                             return;
                         }
-                        
+
                         // TODO: REMOVE IMPORT LIMIT
                         if (count >= 100)
                             break;
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, Columns);
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, _imuFactory.Columns);
 
                         if (results.Count == 0)
                             break;
 
                         // Create and store documents
                         results.Rows
-                            .Select(MakeDocument)
+                            .Select(_imuFactory.MakeDocument)
                             .ToList()
                             .ForEach(documentSession.Store);
 
@@ -74,7 +78,7 @@ namespace CollectionsOnline.Import.Importers
             else
             {
                 // Import has been run before, do an update import
-                RegisterAutoMapperMap();
+                _imuFactory.RegisterAutoMapperMap();
 
                 terms.Add("AdmDateModified", dateLastRun.ToString("MMM dd yyyy"), ">=");
 
@@ -98,13 +102,13 @@ namespace CollectionsOnline.Import.Importers
                         if (count >= 100)
                             break;
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, Columns);
+                        var results = module.Fetch("start", count, Constants.DataBatchSize, _imuFactory.Columns);
 
                         if (results.Count == 0)
                             break;
 
                         // Update documents
-                        var newDocuments = results.Rows.Select(MakeDocument).ToList();
+                        var newDocuments = results.Rows.Select(_imuFactory.MakeDocument).ToList();
                         var existingDocuments = documentSession.Load<T>(newDocuments.Select(x => x.Id));
 
                         for (var i = 0; i < newDocuments.Count; i++)
@@ -128,19 +132,6 @@ namespace CollectionsOnline.Import.Importers
                     }
                 }
             }
-        }
-
-        public abstract string ModuleName { get; }
-
-        public abstract string[] Columns { get; }
-
-        public abstract Terms Terms { get; }
-
-        public abstract T MakeDocument(Map map);
-
-        protected virtual void RegisterAutoMapperMap()
-        {
-            Mapper.CreateMap<T, T>().ForMember(x => x.Id, options => options.Ignore());
         }
     }
 }

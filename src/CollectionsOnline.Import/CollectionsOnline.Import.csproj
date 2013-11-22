@@ -69,15 +69,15 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Importers\IItemMigration.cs" />
-    <Compile Include="Importers\ItemMigration.cs" />
+    <Compile Include="Factories\IImuFactory.cs" />
+    <Compile Include="Factories\StoryImuFactory.cs" />
+    <Compile Include="Factories\SpecimenImuFactory.cs" />
+    <Compile Include="Factories\SpeciesImuFactory.cs" />
+    <Compile Include="Factories\ItemImuFactory.cs" />
+    <Compile Include="Imports\MigrationImport.cs" />
     <Compile Include="ImportRunner.cs" />
-    <Compile Include="Importers\Import.cs" />
-    <Compile Include="Importers\SpecimenImport.cs" />
-    <Compile Include="Importers\SpeciesImport.cs" />
-    <Compile Include="Importers\ItemImport.cs" />
-    <Compile Include="Importers\IImport.cs" />
-    <Compile Include="Importers\StoryImport.cs" />
+    <Compile Include="Imports\ImuImport.cs" />
+    <Compile Include="Imports\IImport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

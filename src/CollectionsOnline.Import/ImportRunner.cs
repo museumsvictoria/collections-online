@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Importers;
+using CollectionsOnline.Import.Imports;
 using NLog;
 using Raven.Client;
 
@@ -12,17 +12,14 @@ namespace CollectionsOnline.Import
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
-        private readonly IEnumerable<IImport<EmuAggregateRoot>> _imports;
-        private readonly IItemMigration _itemMigration;
+        private readonly IEnumerable<IImport> _imports;
 
         public ImportRunner(
             IDocumentStore documentStore, 
-            IEnumerable<IImport<EmuAggregateRoot>> imports,
-            IItemMigration itemMigration)
+            IEnumerable<IImport> imports)
         {
             _documentStore = documentStore;
             _imports = imports;
-            _itemMigration = itemMigration;
         }
 
         public void Run()
@@ -48,9 +45,6 @@ namespace CollectionsOnline.Import
                     {
                         import.Run(application.LastDataImport);
                     }
-
-                    // Run Item Migration
-                    _itemMigration.Run(application.LastDataImport);
                 }
                 catch (Exception exception)
                 {

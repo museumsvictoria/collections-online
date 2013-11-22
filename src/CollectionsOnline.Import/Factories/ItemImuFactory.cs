@@ -3,32 +3,29 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using IMu;
-using Raven.Client;
 
-namespace CollectionsOnline.Import.Importers
+namespace CollectionsOnline.Import.Factories
 {
-    public class ItemImport : Import<Item>
+    public class ItemImuFactory : IImuFactory<Item>
     {
         private readonly ISlugFactory _slugFactory;
 
-        public ItemImport(
-            ISlugFactory slugFactory,
-            IDocumentStore documentStore,
-            Session session) : base(documentStore, session)
+        public ItemImuFactory(
+            ISlugFactory slugFactory)
         {
             _slugFactory = slugFactory;            
         }
 
-        public override string ModuleName
+        public string ModuleName
         {
             get { return "ecatalogue"; }
         }
 
-        public override string[] Columns
+        public string[] Columns
         {
             get
             {
@@ -153,7 +150,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public override Terms Terms
+        public Terms Terms
         {
             get
             {
@@ -165,7 +162,7 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public override Item MakeDocument(Map map)
+        public Item MakeDocument(Map map)
         {
             var item = new Item();
 
@@ -475,13 +472,11 @@ namespace CollectionsOnline.Import.Importers
             return item;
         }
 
-        protected override void RegisterAutoMapperMap()
+        public void RegisterAutoMapperMap()
         {
             Mapper.CreateMap<Item, Item>()
                 .ForMember(x => x.Id, options => options.Ignore())
                 .ForMember(x => x.Comments, options => options.Ignore());
-
-            // TODO add ignores for non-EMu fields so they dont get overwritten when updating
         }
     }
 }

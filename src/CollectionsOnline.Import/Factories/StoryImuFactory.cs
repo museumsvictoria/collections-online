@@ -2,31 +2,29 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using IMu;
-using Raven.Client;
 
-namespace CollectionsOnline.Import.Importers
+namespace CollectionsOnline.Import.Factories
 {
-    public class StoryImport : Import<Story>
+    public class StoryImuFactory : IImuFactory<Story>
     {
         private readonly ISlugFactory _slugFactory;
 
-        public StoryImport(
-            ISlugFactory slugFactory,
-            IDocumentStore documentStore,
-            Session session) : base(documentStore, session)
+        public StoryImuFactory(
+            ISlugFactory slugFactory)
         {
-            _slugFactory = slugFactory;
+            _slugFactory = slugFactory;            
         }
 
-        public override string ModuleName
+        public string ModuleName
         {
             get { return "enarratives"; }
         }
 
-        public override string[] Columns
+        public string[] Columns
         {
             get
             {
@@ -52,19 +50,19 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public override Terms Terms
+        public Terms Terms
         {
             get
             {
                 var terms = new Terms();
 
-                terms.Add("DetPurpose_tab", "Website - History & Technology Collections");                
+                terms.Add("DetPurpose_tab", "Website - History & Technology Collections");
 
                 return terms;
             }
         }
 
-        public override Story MakeDocument(Map map)
+        public Story MakeDocument(Map map)
         {
             var story = new Story();
 
@@ -85,10 +83,10 @@ namespace CollectionsOnline.Import.Importers
 
             var authors = new List<Author>();
             authors.AddRange(map.GetMaps("authors").Select(x => new Author
-                {
-                    Name = x.GetString("NamFullName"),
-                    Biography = x.GetString("BioLabel")
-                }));
+            {
+                Name = x.GetString("NamFullName"),
+                Biography = x.GetString("BioLabel")
+            }));
             authors.AddRange(
                 map.GetMaps("contributors")
                    .Where(
@@ -97,10 +95,10 @@ namespace CollectionsOnline.Import.Importers
                        x.GetString("NarContributorRole_tab") == "Author of quoted text")
                    .Select(x => x.GetMap("contributor"))
                    .Select(x => new Author
-                       {
-                           Name = x.GetString("NamFullName"),
-                           Biography = x.GetString("BioLabel")
-                       }));
+                   {
+                       Name = x.GetString("NamFullName"),
+                       Biography = x.GetString("BioLabel")
+                   }));
             story.Authors = authors;
 
             // Media
@@ -127,6 +125,12 @@ namespace CollectionsOnline.Import.Importers
             story.RelatedItemIds = map.GetMaps("relateditems").Where(x => x != null).Select(x => "items/" + x.GetString("irn")).ToList();
 
             return story;
+        }
+
+        public void RegisterAutoMapperMap()
+        {
+            Mapper.CreateMap<Story, Story>()
+                .ForMember(x => x.Id, options => options.Ignore());
         }
     }
 }

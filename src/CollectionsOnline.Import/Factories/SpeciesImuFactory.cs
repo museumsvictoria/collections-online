@@ -2,84 +2,78 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
-using Raven.Client;
 
-namespace CollectionsOnline.Import.Importers
+namespace CollectionsOnline.Import.Factories
 {
-    public class SpeciesImport : Import<Species>
+    public class SpeciesImuFactory : IImuFactory<Species>
     {
-        public SpeciesImport(
-            IDocumentStore documentStore,
-            Session session) : base(documentStore, session)
-        {
-        }
-
-        public override string ModuleName
+        public string ModuleName
         {
             get { return "enarratives"; }
         }
 
-        public override string[] Columns
+        public string[] Columns
         {
             get
             {
                 return new[]
-                    {
-                        "irn",
-                        "AdmPublishWebNoPassword",
-                        "AdmDateModified",
-                        "AdmTimeModified",
-                        "SpeTaxonGroup",
-                        "SpeTaxonSubGroup",
-                        "SpeColour_tab",
-                        "SpeMaximumSize",
-                        "SpeUnit",
-                        "SpeHabitat_tab",
-                        "SpeWhereToLook_tab",
-                        "SpeWhenActive_tab",
-                        "SpeNationalParks_tab",
-                        "SpeDiet",
-                        "SpeDietCategories_tab",
-                        "SpeFastFact",
-                        "SpeHabitatNotes",
-                        "SpeDistribution",
-                        "SpeBiology",
-                        "SpeIdentifyingCharacters",
-                        "SpeBriefID",
-                        "SpeHazards",
-                        "SpeEndemicity",
-                        "SpeCommercialSpecies",
-                        "conservation=[SpeConservationList_tab,SpeStatus_tab]",
-                        "SpeScientificDiagnosis",
-                        "SpeWeb",
-                        "SpePlant_tab",
-                        "SpeFlightStart",
-                        "SpeFlightEnd",
-                        "SpeDepth_tab",
-                        "SpeWaterColumnLocation_tab",
-                        "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
-                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                    };
+                {
+                    "irn",
+                    "AdmPublishWebNoPassword",
+                    "AdmDateModified",
+                    "AdmTimeModified",
+                    "SpeTaxonGroup",
+                    "SpeTaxonSubGroup",
+                    "SpeColour_tab",
+                    "SpeMaximumSize",
+                    "SpeUnit",
+                    "SpeHabitat_tab",
+                    "SpeWhereToLook_tab",
+                    "SpeWhenActive_tab",
+                    "SpeNationalParks_tab",
+                    "SpeDiet",
+                    "SpeDietCategories_tab",
+                    "SpeFastFact",
+                    "SpeHabitatNotes",
+                    "SpeDistribution",
+                    "SpeBiology",
+                    "SpeIdentifyingCharacters",
+                    "SpeBriefID",
+                    "SpeHazards",
+                    "SpeEndemicity",
+                    "SpeCommercialSpecies",
+                    "conservation=[SpeConservationList_tab,SpeStatus_tab]",
+                    "SpeScientificDiagnosis",
+                    "SpeWeb",
+                    "SpePlant_tab",
+                    "SpeFlightStart",
+                    "SpeFlightEnd",
+                    "SpeDepth_tab",
+                    "SpeWaterColumnLocation_tab",
+                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
+                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                };
             }
         }
 
-        public override Terms Terms
+        public Terms Terms
         {
             get
             {
                 var terms = new Terms();
 
-                terms.Add("DetPurpose_tab", "Website - Species profile");                
+                terms.Add("DetPurpose_tab", "Website - Species profile");
 
                 return terms;
             }
         }
 
-        public override Species MakeDocument(Map map)
+        public Species MakeDocument(Map map)
         {
             var species = new Species();
 
@@ -96,7 +90,7 @@ namespace CollectionsOnline.Import.Importers
             species.AnimalSubType = map.GetString("SpeTaxonSubGroup");
 
             species.Colours = map.GetStrings("SpeColour_tab");
-            species.MaximumSize = string.Format("{0} {1}", map.GetString("SpeMaximumSize"), map.GetString("SpeUnit"));
+            species.MaximumSize = string.Format("{0} {1}", map.GetString("SpeMaximumSize"), map.GetString("SpeUnit")).Trim();
 
             species.Habitats = map.GetStrings("SpeHabitat_tab");
             species.WhereToLook = map.GetStrings("SpeWhereToLook_tab");
@@ -192,23 +186,27 @@ namespace CollectionsOnline.Import.Importers
 
                 species.Author = taxaMap.GetString("AutAuthorString");
                 species.HigherClassification = new[]
-                    {
-                        species.Phylum, 
-                        species.Class, 
-                        species.Order, 
-                        species.Family
-                    }.Concatenate(" ");
+                {
+                    species.Phylum,
+                    species.Class,
+                    species.Order,
+                    species.Family
+                }.Concatenate(" ");
 
                 species.ScientificName = new[]
-                    {
-                        species.Genus,
-                        species.SpeciesName,
-                        species.MoV,
-                        species.Author
-                    }.Concatenate(" ");
+                {
+                    species.Genus,
+                    species.SpeciesName,
+                    species.MoV,
+                    species.Author
+                }.Concatenate(" ");
 
                 // Relationships
-                species.SpecimenIds = taxaMap.GetMaps("specimens").Where(x => x != null).Select(x => "specimens/" + x.GetString("irn")).ToList();
+                species.SpecimenIds =
+                    taxaMap.GetMaps("specimens")
+                        .Where(x => x != null)
+                        .Select(x => "specimens/" + x.GetString("irn"))
+                        .ToList();
             }
 
             // Authors
@@ -227,8 +225,8 @@ namespace CollectionsOnline.Import.Importers
                 media.Add(new Media
                 {
                     DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                                                        mediaMap.GetString("AdmTimeModified")),
-                                                       "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
+                        mediaMap.GetString("AdmTimeModified")),
+                        "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
                     Title = mediaMap.GetString("MulTitle"),
                     Type = mediaMap.GetString("MulMimeType")
                 });
@@ -236,6 +234,12 @@ namespace CollectionsOnline.Import.Importers
             species.Media = media;
 
             return species;
+        }
+
+        public void RegisterAutoMapperMap()
+        {
+            Mapper.CreateMap<Species, Species>()
+                .ForMember(x => x.Id, options => options.Ignore());
         }
     }
 }

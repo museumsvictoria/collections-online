@@ -2,27 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
-using Raven.Client;
 
-namespace CollectionsOnline.Import.Importers
+namespace CollectionsOnline.Import.Factories
 {
-    public class SpecimenImport : Import<Specimen>
+    public class SpecimenImuFactory : IImuFactory<Specimen>
     {
-        public SpecimenImport(
-            IDocumentStore documentStore,
-            Session session) : base(documentStore, session)
-        {
-        }
-
-        public override string ModuleName
+        public string ModuleName
         {
             get { return "ecatalogue"; }
         }
 
-        public override string[] Columns
+        public string[] Columns
         {
             get
             {
@@ -80,20 +74,20 @@ namespace CollectionsOnline.Import.Importers
             }
         }
 
-        public override Terms Terms
+        public Terms Terms
         {
             get
             {
                 var terms = new Terms();
 
                 terms.Add("ColCategory", "Natural Sciences");
-                terms.Add("MdaDataSets_tab", "Website - Atlas of Living Australia");                
+                terms.Add("MdaDataSets_tab", "Website - Atlas of Living Australia");
 
                 return terms;
             }
         }
 
-        public override Specimen MakeDocument(Map map)
+        public Specimen MakeDocument(Map map)
         {
             var specimen = new Specimen();
 
@@ -541,6 +535,12 @@ namespace CollectionsOnline.Import.Importers
             #endregion
 
             return specimen;
+        }
+
+        public void RegisterAutoMapperMap()
+        {
+            Mapper.CreateMap<Specimen, Specimen>()
+                .ForMember(x => x.Id, options => options.Ignore());
         }
     }
 }

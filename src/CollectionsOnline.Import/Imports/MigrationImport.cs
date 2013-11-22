@@ -8,14 +8,14 @@ using Dapper;
 using NLog;
 using Raven.Client;
 
-namespace CollectionsOnline.Import.Importers
+namespace CollectionsOnline.Import.Imports
 {
-    public class ItemMigration : IItemMigration
+    public class MigrationImport : IImport
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
 
-        public ItemMigration(IDocumentStore documentStore)
+        public MigrationImport(IDocumentStore documentStore)
         {
             _documentStore = documentStore;
         }
@@ -58,7 +58,7 @@ namespace CollectionsOnline.Import.Importers
                             if (comments.Count == 0)
                                 break;
 
-                            var existingItems = documentSession.Load<Item>(comments.Select(x => (ValueType) x.ItemId));
+                            var existingItems = documentSession.Load<Item>(comments.Select(x => (ValueType)x.ItemId));
 
                             for (var i = 0; i < comments.Count; i++)
                             {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import;
-using CollectionsOnline.Import.Importers;
+using CollectionsOnline.Import.Imports;
 using NSubstitute;
 using Shouldly;
 using WorldDomination.Raven.Tests.Helpers;
@@ -22,8 +22,8 @@ namespace CollectionsOnline.Tests.Import
                 {
                     new[] { new Application { DataImportRunning = true }}
                 };
-            var import = Substitute.For<IImport<EmuAggregateRoot>>();
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration(DocumentSession.Advanced.DocumentStore));
+            var import = Substitute.For<IImport>();
+            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import });
 
             // When
             importRunner.Run();
@@ -43,8 +43,8 @@ namespace CollectionsOnline.Tests.Import
                 {
                     new[] { new Application() }
                 };
-            var import = Substitute.For<IImport<EmuAggregateRoot>>();
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration(DocumentSession.Advanced.DocumentStore));
+            var import = Substitute.For<IImport>();
+            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import });
 
             // When
             importRunner.Run();
@@ -65,10 +65,10 @@ namespace CollectionsOnline.Tests.Import
                 {
                     new[] { new Application { LastDataImport = lastDataImport } }
                 };
-            var import = Substitute.For<IImport<EmuAggregateRoot>>();
+            var import = Substitute.For<IImport>();
             import.When(x => x.Run(Arg.Any<DateTime>())).Do(x => { throw new Exception(); });
 
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import }, new ItemMigration(DocumentSession.Advanced.DocumentStore));
+            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import });
 
             // When
             importRunner.Run();
