@@ -32,7 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,6 +53,8 @@
     <Compile Include="DesignByContract\Checks.cs" />
     <Compile Include="DesignByContract\Requires.cs" />
     <Compile Include="DesignByContract\Ensures.cs" />
+    <Compile Include="Indexes\CombinedSearchResult.cs" />
+    <Compile Include="Indexes\CombinedSearch.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Author.cs" />
@@ -67,6 +76,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
