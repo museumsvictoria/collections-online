@@ -25,6 +25,8 @@ namespace CollectionsOnline.Core.Models
 
         public string ParentStoryId { get; set; }
 
+        public ICollection<string> ChildStoryIds { get; set; }
+
         public ICollection<string> RelatedStoryIds { get; set; }
 
         public ICollection<string> RelatedItemIds { get; set; }        

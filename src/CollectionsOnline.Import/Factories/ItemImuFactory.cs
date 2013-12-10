@@ -113,6 +113,8 @@ namespace CollectionsOnline.Import.Factories
                         "TLDIllustraionTypes_tab",
                         "TLDPrintingTypes_tab",
                         "TLDPublicationTypes_tab",
+                        "TLSPrimaryRole",
+                        "TLSPrimaryName=TLSPrimaryNameRef.(NamBranch,NamDepartment,NamOrganisation,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry)",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "DesLocalName",
                         "locality=[ProSpecificLocality_tab,ProRegion_tab,ProStateProvince_tab,]",
@@ -184,9 +186,13 @@ namespace CollectionsOnline.Import.Factories
                                          ? string.Format("{0}{1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
                                          : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
             item.CollectionNames = map.GetStrings("ColCollectionName_tab");
-            item.PrimaryClassification = map.GetString("ClaPrimaryClassification");
-            item.SecondaryClassification = map.GetString("ClaSecondaryClassification");
-            item.TertiaryClassification = map.GetString("ClaTertiaryClassification");
+
+            item.PrimaryClassification = map.GetString("ClaPrimaryClassification").ToSentenceCase();
+            if (map.GetString("ClaSecondaryClassification") != null && !map.GetString("ClaSecondaryClassification").ToLower().Contains("to be classified"))
+                item.SecondaryClassification = map.GetString("ClaSecondaryClassification").ToSentenceCase();
+            if (map.GetString("ClaTertiaryClassification") != null && !map.GetString("ClaTertiaryClassification").ToLower().Contains("to be classified"))
+                item.TertiaryClassification = map.GetString("ClaTertiaryClassification").ToSentenceCase();
+
             item.Name = map.GetString("ClaObjectName");
             item.Summary = map.GetString("ClaObjectSummary");
             item.Description = map.GetString("DesPhysicalDescription");
@@ -374,6 +380,22 @@ namespace CollectionsOnline.Import.Factories
             item.TradeLiteratureIllustrationTypes = map.GetStrings("TLDIllustraionTypes_tab").Concatenate("; ");
             item.TradeLiteraturePrintingTypes = map.GetStrings("TLDPrintingTypes_tab").Concatenate("; ");
             item.TradeLiteraturePublicationTypes = map.GetStrings("TLDPublicationTypes_tab").Concatenate("; ");
+            item.TradeLiteraturePrimaryRole = map.GetString("TLSPrimaryRole");
+
+            var tradeLiteratureNameMap = map.GetMap("TLSPrimaryName");
+            if (tradeLiteratureNameMap != null)
+            {
+                item.TradeLiteraturePrimaryName = new[]
+                {
+                    tradeLiteratureNameMap.GetString("NamBranch"),
+                    tradeLiteratureNameMap.GetString("NamDepartment"),
+                    tradeLiteratureNameMap.GetString("NamOrganisation"),
+                    tradeLiteratureNameMap.GetString("AddPhysStreet"),
+                    tradeLiteratureNameMap.GetString("AddPhysCity"),
+                    tradeLiteratureNameMap.GetString("AddPhysState"),
+                    tradeLiteratureNameMap.GetString("AddPhysCountry")
+                }.Concatenate(", ");
+            }
 
             // Media
             var media = new List<Media>();

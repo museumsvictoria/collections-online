@@ -175,6 +175,10 @@ namespace CollectionsOnline.Core.Models
 
         public string TradeLiteraturePublicationTypes { get; set; }
 
+        public string TradeLiteraturePrimaryRole { get; set; }
+
+        public string TradeLiteraturePrimaryName { get; set; }
+
         #endregion
 
         #region Indigenous Cultures
@@ -217,7 +221,7 @@ namespace CollectionsOnline.Core.Models
 
         public string IndigenousCulturesGroupNames { get; set; }
 
-        public string IndigenousCulturesNamesMentioned { get; set; }
+        public string IndigenousCulturesNamesMentioned { get; set; }        
 
         #endregion
     }

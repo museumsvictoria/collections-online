@@ -43,9 +43,10 @@ namespace CollectionsOnline.Import.Factories
                         "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
                         "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword)),NarContributorRole_tab]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                        "parent=AssMasterNarrativeRef.(irn)",
-                        "relatedstories=AssAssociatedWithRef_tab.(irn)",
-                        "relateditems=ObjObjectsRef_tab.(irn)"
+                        "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
+                        "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
+                        "relatedstories=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
+                        "relateditems=ObjObjectsRef_tab.(irn,MdaDataSets_tab)"
                     };
             }
         }
@@ -119,10 +120,26 @@ namespace CollectionsOnline.Import.Factories
             story.Media = media;
 
             // Relationships
-            if (map.GetMap("parent") != null)
+            if (map.GetMap("parent") != null && map.GetMap("parent").GetStrings("DetPurpose_tab").Contains("Website - History & Technology Collections"))
                 story.ParentStoryId = "stories/" + map.GetMap("parent").GetString("irn");
-            story.RelatedStoryIds = map.GetMaps("relatedstories").Where(x => x != null).Select(x => "stories/" + x.GetString("irn")).ToList();
-            story.RelatedItemIds = map.GetMaps("relateditems").Where(x => x != null).Select(x => "items/" + x.GetString("irn")).ToList();
+
+            story.ChildStoryIds = map
+                .GetMaps("children")
+                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains("Website - History & Technology Collections"))
+                .Select(x => "stories/" + x.GetString("irn"))
+                .ToList();
+            
+            story.RelatedStoryIds = map
+                .GetMaps("relatedstories")
+                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains("Website - History & Technology Collections"))
+                .Select(x => "stories/" + x.GetString("irn"))
+                .ToList();
+             
+            story.RelatedItemIds = map
+                .GetMaps("relateditems")
+                .Where(x => x != null && x.GetStrings("MdaDataSets_tab").Contains("History & Technology Collections Online"))
+                .Select(x => "items/" + x.GetString("irn"))
+                .ToList();
 
             return story;
         }

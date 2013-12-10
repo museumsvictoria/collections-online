@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using CollectionsOnline.Core.Models;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
@@ -12,107 +13,178 @@ namespace CollectionsOnline.Core.Indexes
             AddMap<Item>(items => from item in items
                                         select new
                                         {
-                                            Content = new object[] { item.Name, item.Discipline, item.RegistrationNumber },
-                                            Type = "Item",
                                             Id = item.Id,
                                             Name = item.Name,
-                                            Category = item.Category,
-                                            Tags = item.Tags,
+                                            Content = new object[] { item.Name, item.Discipline, item.RegistrationNumber },
 
+                                            Type = "Item",
+                                            Category = item.Category,
                                             ItemType = item.Type,
+                                            SpeciesType = (string)null,
+                                            SpeciesSubType = (string)null,
+                                            SpeciesHabitats = new object[] { },
+                                            SpeciesDepths = new object[] { },
+                                            SpeciesWaterColumnLocations = new object[] { },
+                                            SpeciesPhylum = (string)null,
+                                            SpeciesClass = (string)null,
+                                            SpeciesOrder = (string)null,
+                                            SpeciesFamily = (string)null,
+                                            SpecimenScientificGroup = (string)null,
+                                            SpecimenDiscipline = (string)null,
+                                            StoryTypes = new object[] { },
+                                            
+                                            Tags = item.Tags,
+                                            Country = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country).ToArray(),
                                             ItemCollectionNames = item.CollectionNames,
                                             ItemPrimaryClassification = item.PrimaryClassification,
                                             ItemSecondaryClassification = item.SecondaryClassification,
                                             ItemTertiaryClassification = item.TertiaryClassification,
-                                            ItemAssociationNames = item.Associations.Select(x => x.Name).ToArray(),
-
-                                            StoryTypes = new object[] { },
-                                            SpeciesType = (string)null,
-                                            SpeciesSubType = (string)null,
+                                            ItemAssociationNames = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name).ToArray(),
+                                            ItemTradeLiteraturePrimarySubject = item.TradeLiteraturePrimarySubject,
+                                            ItemTradeLiteraturePublicationDate = item.TradeLiteraturePublicationDate,
+                                            ItemTradeLiteraturePrimaryRole = item.TradeLiteraturePrimaryRole,
+                                            ItemTradeLiteraturePrimaryName = item.TradeLiteraturePrimaryName,
                                         });
 
             AddMap<Species>(speciesDocs => from species in speciesDocs
+                                        where species.IsHidden == false
                                         select new
                                         {
-                                            Content = new object[] { species.AnimalType, species.AnimalSubType, species.HigherClassification, species.CommonNames },
-                                            Type = "Species",
                                             Id = species.Id,
                                             Name = species.CommonNames.FirstOrDefault() ?? species.SpeciesName,
-                                            Category = "Natural Sciences",
-                                            Tags = new object[] { },
+                                            Content = new object[] { species.AnimalType, species.AnimalSubType, species.HigherClassification, species.CommonNames },
 
+                                            Type = "Species",
+                                            Category = "Natural Sciences",
                                             ItemType = (string)null,
+                                            SpeciesType = species.AnimalType,
+                                            SpeciesSubType = species.AnimalSubType,
+                                            SpeciesHabitats = species.Habitats,
+                                            SpeciesDepths = species.Depths,
+                                            SpeciesWaterColumnLocations = species.WaterColumnLocations,
+                                            SpeciesPhylum = species.Phylum,
+                                            SpeciesClass = species.Class,
+                                            SpeciesOrder = species.Order,
+                                            SpeciesFamily = species.Family,
+                                            SpecimenScientificGroup = (string)null,
+                                            SpecimenDiscipline = (string)null,
+                                            StoryTypes = new object[] { },
+
+
+                                            Tags = new object[] { },
+                                            Country = new object[] { },
                                             ItemCollectionNames = new object[] { },
                                             ItemPrimaryClassification = (string)null,
                                             ItemSecondaryClassification = (string)null,
                                             ItemTertiaryClassification = (string)null,
                                             ItemAssociationNames = new object[] { },
-
-                                            StoryTypes = new object[] { },
-                                            SpeciesType = species.AnimalType,
-                                            SpeciesSubType = species.AnimalSubType,
+                                            ItemTradeLiteraturePrimarySubject = (string)null,
+                                            ItemTradeLiteraturePublicationDate = (string)null,
+                                            ItemTradeLiteraturePrimaryRole = (string)null,
+                                            ItemTradeLiteraturePrimaryName = (string)null,
                                         });
 
             AddMap<Specimen>(specimens => from specimen in specimens
+                                        where specimen.IsHidden == false
                                         select new
                                         {
-                                            Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
-                                            Type = "Specimen",
                                             Id = specimen.Id,
                                             Name = specimen.ScientificName ?? specimen.AcceptedNameUsage,
-                                            Category = "Natural Sciences",
-                                            Tags = new object[] { },
+                                            Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
 
+                                            Type = "Specimen",
+                                            Category = "Natural Sciences",
                                             ItemType = (string)null,
+                                            SpeciesType = (string)null,
+                                            SpeciesSubType = (string)null,
+                                            SpeciesHabitats = new object[] { },
+                                            SpeciesDepths = new object[] { },
+                                            SpeciesWaterColumnLocations = new object[] { },
+                                            SpeciesPhylum = (string)null,
+                                            SpeciesClass = (string)null,
+                                            SpeciesOrder = (string)null,
+                                            SpeciesFamily = (string)null,
+                                            SpecimenScientificGroup = specimen.ScientificGroup,
+                                            SpecimenDiscipline = specimen.Discipline,
+                                            StoryTypes = new object[] { },
+
+                                            Tags = new object[] { },
+                                            Country = new object[] { specimen.Country },
                                             ItemCollectionNames = new object[] { },
                                             ItemPrimaryClassification = (string)null,
                                             ItemSecondaryClassification = (string)null,
                                             ItemTertiaryClassification = (string)null,
                                             ItemAssociationNames = new object[] { },
-
-                                            StoryTypes = new object[] { },
-                                            SpeciesType = (string)null,
-                                            SpeciesSubType = (string)null,
+                                            ItemTradeLiteraturePrimarySubject = (string)null,
+                                            ItemTradeLiteraturePublicationDate = (string)null,
+                                            ItemTradeLiteraturePrimaryRole = (string)null,
+                                            ItemTradeLiteraturePrimaryName = (string)null,
                                         });
 
-            AddMap<Story>(stories => from story in stories
+            AddMap<Story>(stories =>    from story in stories
+                                        where story.IsHidden == false
                                         select new
                                         {
-                                            Content = new object[] { story.Content, story.ContentSummary },
-                                            Type = "Story",
                                             Id = story.Id,
                                             Name = story.Title,
-                                            Category = "History & Technology",
-                                            Tags = new object[] { story.Tags, story.GeographicTags },
+                                            Content = new object[] { story.Content, story.ContentSummary },
 
+                                            Type = "Story",
+                                            Category = "History & Technology",
                                             ItemType = (string)null,
+                                            SpeciesType = (string)null,
+                                            SpeciesSubType = (string)null,
+                                            SpeciesHabitats = new object[] { },
+                                            SpeciesDepths = new object[] { },
+                                            SpeciesWaterColumnLocations = new object[] { },
+                                            SpeciesPhylum = (string)null,
+                                            SpeciesClass = (string)null,
+                                            SpeciesOrder = (string)null,
+                                            SpeciesFamily = (string)null,
+                                            SpecimenScientificGroup = (string)null,
+                                            SpecimenDiscipline = (string)null,
+                                            StoryTypes = story.Types,
+
+                                            Tags = new object[] { story.Tags, story.GeographicTags },
+                                            Country = new object[] { },
                                             ItemCollectionNames = new object[] { },
                                             ItemPrimaryClassification = (string)null,
                                             ItemSecondaryClassification = (string)null,
                                             ItemTertiaryClassification = (string)null,
                                             ItemAssociationNames = new object[] { },
-
-                                            StoryTypes = story.Types,
-                                            SpeciesType = (string)null,
-                                            SpeciesSubType = (string)null,
+                                            ItemTradeLiteraturePrimarySubject = (string)null,
+                                            ItemTradeLiteraturePublicationDate = (string)null,
+                                            ItemTradeLiteraturePrimaryRole = (string)null,
+                                            ItemTradeLiteraturePrimaryName = (string)null,
                                         });
 
 
+            Index(x => x.Id, FieldIndexing.No);
+            Index(x => x.Name, FieldIndexing.No);
             Index(x => x.Content, FieldIndexing.Analyzed);
+
+            Index(x => x.Tags, FieldIndexing.NotAnalyzed);
+            Index(x => x.Country, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemCollectionNames, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemPrimaryClassification, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemSecondaryClassification, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemTertiaryClassification, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemAssociationNames, FieldIndexing.NotAnalyzed);
-            Index(x => x.Tags, FieldIndexing.NotAnalyzed);
 
+            Store(x => x.Id, FieldStorage.No);
+            Store(x => x.Name, FieldStorage.No);
             Store(x => x.Content, FieldStorage.No);
+
+            Store(x => x.Tags, FieldStorage.Yes);
+            Store(x => x.Country, FieldStorage.Yes);
             Store(x => x.ItemCollectionNames, FieldStorage.Yes);
             Store(x => x.ItemPrimaryClassification, FieldStorage.Yes);
             Store(x => x.ItemSecondaryClassification, FieldStorage.Yes);
             Store(x => x.ItemTertiaryClassification, FieldStorage.Yes);
             Store(x => x.ItemAssociationNames, FieldStorage.Yes);
-            Store(x => x.Tags, FieldStorage.Yes);
+
+            Analyzers.Add(x => x.Content, "SimpleAnalyzer");
+            Suggestion(x => x.Content);
         }
     }
 }
