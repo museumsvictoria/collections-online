@@ -1,0 +1,129 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+@{
+    Layout = "layout.cshtml";
+}
+<form method="GET" action="/">
+    <label for="query">Query</label>
+    <input type="text" name="query" />
+</form>
+
+<div>
+    TotalResults: @Model.Results.QueryResult.TotalResults
+</div>
+
+<div class="facets">
+    @foreach (var facet in Model.Facets.Results)
+    {
+        <div>
+            <h4>@facet.Key</h4>
+            @foreach (var value in facet.Value.Values)
+            {
+                if (@value.Range != "NULL_VALUE")
+                {
+                    <div>
+                        <a href="~/?@facet.Key=@value.Range">@value.Range (@value.Hits)</a>
+                    </div>
+                }
+            }
+        </div>
+    }       
+</div>
+<ul class="results">
+    @foreach (var result in Model.Results)
+    {
+        <li>
+            <h4>@result.Name</h4>
+            <div>Id: @result.Id, Type: @result.Type</div>
+            <h5>Terms:</h5>
+            <div>
+                @if (result.Tags != null)
+                {
+                    @:Tags:
+                    foreach (var tag in result.Tags)
+                    {
+                        <a href="#">@tag</a>
+                    }
+                }
+            </div>
+            <div>
+                @if (result.Country != null)
+                {
+                    @:Country:
+                    foreach (var country in result.Country)
+                    {
+                        <a href="#">@country</a>
+                    }
+                }
+            </div>
+            <div>
+                @if (result.ItemCollectionNames != null)
+                {
+                    @:ItemCollectionNames:
+                    foreach (var itemCollectionName in result.ItemCollectionNames)
+                    {
+                        <a href="#">@itemCollectionName</a>
+                    }
+                }
+            </div>
+            <div>
+                @if(!string.IsNullOrWhiteSpace(result.ItemPrimaryClassification))
+                {
+                    @:ItemPrimaryClassification:
+                    <a href="#">@result.ItemPrimaryClassification</a>
+                }
+            </div>
+            <div>
+                @if (!string.IsNullOrWhiteSpace(result.ItemSecondaryClassification))
+                {
+                    @:ItemSecondaryClassification:
+                    <a href="#">@result.ItemSecondaryClassification</a>
+                }
+            </div>
+            <div>
+                @if (!string.IsNullOrWhiteSpace(result.ItemTertiaryClassification))
+                {
+                    @:ItemTertiaryClassification:
+                    <a href="#">@result.ItemTertiaryClassification</a>
+                }
+            </div>
+            <div>
+                @if (result.ItemAssociationNames != null)
+                {
+                    @:ItemAssociationNames:
+                    foreach (var itemAssociationName in result.ItemAssociationNames)
+                    {
+                        <a href="#">@itemAssociationName</a>
+                    }
+                }
+            </div>
+            <div>
+                @if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePrimarySubject))
+                {
+                    @:ItemTradeLiteraturePrimarySubject:
+                    <a href="#">@result.ItemTradeLiteraturePrimarySubject</a>
+                }
+            </div>
+            <div>
+                @if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePublicationDate))
+                {
+                    @:ItemTradeLiteraturePublicationDate:
+                    <a href="#">@result.ItemTradeLiteraturePublicationDate</a>
+                }
+            </div>
+            <div>
+                @if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePrimaryRole))
+                {
+                    @:ItemTradeLiteraturePrimaryRole:
+                    <a href="#">@result.ItemTradeLiteraturePrimaryRole</a>
+                }
+            </div>
+            <div>
+                @if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePrimaryName))
+                {
+                    @:ItemTradeLiteraturePrimaryName:
+                    <a href="#">@result.ItemTradeLiteraturePrimaryName</a>
+                }
+            </div>
+        </li>
+    }
+</ul>

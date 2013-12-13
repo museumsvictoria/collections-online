@@ -171,8 +171,8 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.ItemTertiaryClassification, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemAssociationNames, FieldIndexing.NotAnalyzed);
 
-            Store(x => x.Id, FieldStorage.No);
-            Store(x => x.Name, FieldStorage.No);
+            Store(x => x.Id, FieldStorage.Yes);
+            Store(x => x.Name, FieldStorage.Yes);
             Store(x => x.Content, FieldStorage.No);
 
             Store(x => x.Tags, FieldStorage.Yes);
