@@ -94,6 +94,7 @@
     <Compile Include="Features\Search\SearchInputModel.cs" />
     <Compile Include="Features\Search\SearchModule.cs" />
     <Compile Include="Features\Search\ISearchViewModelQuery.cs" />
+    <Compile Include="Features\Search\ISearchViewModelFactory.cs" />
     <Compile Include="Features\Search\SearchViewModelQuery.cs" />
     <Compile Include="Features\Search\SearchViewModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

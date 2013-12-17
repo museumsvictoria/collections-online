@@ -12,11 +12,11 @@ namespace CollectionsOnline.WebSite.Features.Search
         public SearchModule(            
             ISearchViewModelQuery searchViewModelQuery)            
         {
-            Get["/"] = parameters =>
+            Get["/search"] = parameters =>
             {
                 var searchInputModel = this.Bind<SearchInputModel>();
 
-                return View["search", searchViewModelQuery.BuildSearch(searchInputModel)];
+                return View["search", searchViewModelQuery.BuildSearch(searchInputModel, this.Request)];
             };
         }
     }

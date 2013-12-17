@@ -5,6 +5,7 @@ using CollectionsOnline.Core.Models;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
+using Nancy.Hosting.Aspnet;
 using Nancy.TinyIoc;
 using NLog;
 using Raven.Client.Document;
@@ -54,7 +55,7 @@ namespace CollectionsOnline.WebSite
             container.Register(documentStore);
 
             // Register IDocumentSession
-            container.Register((c,p) => documentStore.OpenSession());
+            container.Register((c, p) => documentStore.OpenSession());
 
             // TODO: DELETE THIS
             IndexCreation.CreateIndexes(typeof(CombinedSearch).Assembly, documentStore);
