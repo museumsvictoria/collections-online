@@ -7,10 +7,22 @@
     <input type="text" name="query" />
 </form>
 
-<div>
+<div class="stats">
     TotalResults: @Model.TotalResults
     Limit: @Model.Limit
     Offset: @Model.Offset
+    Time Elapsed: @Model.ElapsedMilliseconds ms
+</div>
+
+<div class="active-facets">    
+    @foreach (var activeFacet in Model.ActiveFacets)
+    {
+        <a href="@activeFacet.Url">@activeFacet.Facet : @activeFacet.Name</a>
+    }
+    @foreach (var activeTerms in Model.ActiveTerms)
+    {
+        <a href="@activeTerms.Url">@activeTerms.Term : @activeTerms.Name</a>
+    }
 </div>
 
 <div class="facets">
@@ -21,7 +33,11 @@
             @foreach (var value in facet.Values)
             {
                 <div>
-                    <a href="@value.Value">@value.Key</a>
+                    <a href="@value.Url">@value.Name (@value.Hits)</a>
+                    @if (value.Active)
+                    {
+                        <span>Active</span>
+                    }
                 </div>
             }
         </div>
@@ -33,6 +49,14 @@
         <li>
             <h4>@result.Result.Name</h4>
             <div>Id: @result.Result.Id, Type: @result.Result.Type</div>
+            <div>
+                @foreach (var term in result.Terms)
+                {
+                    <div>
+                        @term.Term <a href="@term.Url">@term.Name</a>
+                    </div>
+                }
+            </div>
         </li>
     }
 </ul>

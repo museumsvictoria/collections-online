@@ -64,19 +64,5 @@
         public string ItemTradeLiteraturePrimaryRole { get; set; }
 
         public string ItemTradeLiteraturePrimaryName { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
     }
 }

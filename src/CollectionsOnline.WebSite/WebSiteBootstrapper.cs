@@ -1,69 +1,30 @@
-﻿using System.Configuration;
-using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Models;
+﻿using CollectionsOnline.Core.Factories;
+using CollectionsOnline.WebSite.Infrastructure;
 using Nancy;
-using Nancy.Bootstrapper;
+using Nancy.Bootstrappers.Ninject;
 using Nancy.Conventions;
-using Nancy.Hosting.Aspnet;
-using Nancy.TinyIoc;
+using Ninject.Extensions.Conventions;
+using Ninject;
 using NLog;
-using Raven.Client.Document;
-using Raven.Client.Extensions;
-using Raven.Client.Indexes;
+using Raven.Client;
 
 namespace CollectionsOnline.WebSite
 {
-    public class WebSiteBootstrapper : DefaultNancyBootstrapper
+    public class WebSiteBootstrapper : NinjectNancyBootstrapper 
     {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
-
-        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+        protected override void ConfigureApplicationContainer(IKernel kernel)
         {
-            base.ApplicationStartup(container, pipelines);
-
-            RegisterRavenDb(container);
+            kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
         }
 
-        private void RegisterRavenDb(TinyIoCContainer container)
+        protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)
         {
-            // Connect to raven db instance
-            _log.Debug("Initializing document store");
-            var documentStore = new DocumentStore
-            {
-                Url = ConfigurationManager.AppSettings["DatabaseUrl"],
-                DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
-            }.Initialize();
-
-            // Ensure DB exists
-            documentStore.DatabaseCommands.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
-
-            // Ensure we have a application document
-            using (var documentSession = documentStore.OpenSession())
-            {
-                var application = documentSession.Load<Application>(Constants.ApplicationId);
-
-                if (application == null)
-                {
-                    application = new Application();
-                    documentSession.Store(application);
-                }
-
-                documentSession.SaveChanges();
-            }
-
-            container.Register(documentStore);
-
-            // Register IDocumentSession
-            container.Register((c, p) => documentStore.OpenSession());
-
-            // TODO: DELETE THIS
-            IndexCreation.CreateIndexes(typeof(CombinedSearch).Assembly, documentStore);
-            using (var documentSession = documentStore.OpenSession())
-            {
-                documentSession.Store(new CombinedSearchFacets());
-                documentSession.SaveChanges();
-            }
+            kernel.Bind<IDocumentSession>().ToProvider<NinjectRavenDocumentSessionProvider>();            
+            kernel.Bind(x => x
+                .FromAssemblyContaining(typeof(WebSiteBootstrapper), typeof(SlugFactory))
+                .SelectAllClasses()
+                .InNamespaces(new[] { "CollectionsOnline" })
+                .BindAllInterfaces());
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)
