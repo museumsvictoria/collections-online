@@ -11,6 +11,6 @@ namespace CollectionsOnline.WebSite.Features.Search
 {
     public interface ISearchViewModelFactory
     {
-        SearchViewModel MakeViewModel(IList<CombinedSearchResult> results, FacetResults facets, Request request, int totalResults, SearchInputModel searchInputModel, long elapsedMilliseconds);
+        SearchViewModel MakeViewModel(IList<CombinedSearchResult> results, FacetResults facets, Request request, int totalResults, SearchInputModel searchInputModel, long queryTimeElapsed, long facetTimeElapsed);
     }
 }

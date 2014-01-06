@@ -19,16 +19,17 @@ namespace CollectionsOnline.Core.Indexes
 
                                             Type = "Item",
                                             Category = item.Category,
+                                            HasImages = (item.Media.Any()) ? "Yes" : "No",
                                             ItemType = item.Type,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
                                             SpeciesHabitats = new object[] { },
                                             SpeciesDepths = new object[] { },
                                             SpeciesWaterColumnLocations = new object[] { },
-                                            SpeciesPhylum = (string)null,
-                                            SpeciesClass = (string)null,
-                                            SpeciesOrder = (string)null,
-                                            SpeciesFamily = (string)null,
+                                            Phylum = (string)null,
+                                            Class = (string)null,
+                                            Order = (string)null,
+                                            Family = (string)null,
                                             SpecimenScientificGroup = (string)null,
                                             SpecimenDiscipline = (string)null,
                                             StoryTypes = new object[] { },
@@ -56,16 +57,17 @@ namespace CollectionsOnline.Core.Indexes
 
                                             Type = "Species",
                                             Category = "Natural Sciences",
+                                            HasImages = (species.Media.Any()) ? "Yes" : "No",
                                             ItemType = (string)null,
                                             SpeciesType = species.AnimalType,
                                             SpeciesSubType = species.AnimalSubType,
                                             SpeciesHabitats = species.Habitats,
                                             SpeciesDepths = species.Depths,
                                             SpeciesWaterColumnLocations = species.WaterColumnLocations,
-                                            SpeciesPhylum = species.Phylum,
-                                            SpeciesClass = species.Class,
-                                            SpeciesOrder = species.Order,
-                                            SpeciesFamily = species.Family,
+                                            Phylum = species.Phylum,
+                                            Class = species.Class,
+                                            Order = species.Order,
+                                            Family = species.Family,
                                             SpecimenScientificGroup = (string)null,
                                             SpecimenDiscipline = (string)null,
                                             StoryTypes = new object[] { },
@@ -94,16 +96,17 @@ namespace CollectionsOnline.Core.Indexes
 
                                             Type = "Specimen",
                                             Category = "Natural Sciences",
+                                            HasImages = (specimen.Media.Any()) ? "Yes" : "No",
                                             ItemType = (string)null,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
                                             SpeciesHabitats = new object[] { },
                                             SpeciesDepths = new object[] { },
                                             SpeciesWaterColumnLocations = new object[] { },
-                                            SpeciesPhylum = (string)null,
-                                            SpeciesClass = (string)null,
-                                            SpeciesOrder = (string)null,
-                                            SpeciesFamily = (string)null,
+                                            Phylum = specimen.Phylum,
+                                            Class = specimen.Class,
+                                            Order = specimen.Order,
+                                            Family = specimen.Family,
                                             SpecimenScientificGroup = specimen.ScientificGroup,
                                             SpecimenDiscipline = specimen.Discipline,
                                             StoryTypes = new object[] { },
@@ -131,16 +134,17 @@ namespace CollectionsOnline.Core.Indexes
 
                                             Type = "Story",
                                             Category = "History & Technology",
+                                            HasImages = (story.Media.Any()) ? "Yes" : "No",
                                             ItemType = (string)null,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
                                             SpeciesHabitats = new object[] { },
                                             SpeciesDepths = new object[] { },
                                             SpeciesWaterColumnLocations = new object[] { },
-                                            SpeciesPhylum = (string)null,
-                                            SpeciesClass = (string)null,
-                                            SpeciesOrder = (string)null,
-                                            SpeciesFamily = (string)null,
+                                            Phylum = (string)null,
+                                            Class = (string)null,
+                                            Order = (string)null,
+                                            Family = (string)null,
                                             SpecimenScientificGroup = (string)null,
                                             SpecimenDiscipline = (string)null,
                                             StoryTypes = story.Types,
@@ -161,6 +165,7 @@ namespace CollectionsOnline.Core.Indexes
 
             Index(x => x.Id, FieldIndexing.No);
             Index(x => x.Name, FieldIndexing.No);
+            Index(x => x.Type, FieldIndexing.NotAnalyzed);
             Index(x => x.Content, FieldIndexing.Analyzed);
 
             Index(x => x.Tags, FieldIndexing.NotAnalyzed);
@@ -171,8 +176,9 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.ItemTertiaryClassification, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemAssociationNames, FieldIndexing.NotAnalyzed);
 
-            Store(x => x.Id, FieldStorage.Yes);
+            Store(x => x.Id, FieldStorage.Yes);            
             Store(x => x.Name, FieldStorage.Yes);
+            Store(x => x.Type, FieldStorage.Yes);
             Store(x => x.Content, FieldStorage.No);
 
             Store(x => x.Tags, FieldStorage.Yes);

@@ -11,7 +11,12 @@
     TotalResults: @Model.TotalResults
     Limit: @Model.Limit
     Offset: @Model.Offset
-    Time Elapsed: @Model.ElapsedMilliseconds ms
+    TotalFacetValues: @Model.TotalFacetValues
+    QueryTimeElapsed: @Model.QueryTimeElapsed ms
+    FacetTimeElapsed: @Model.FacetTimeElapsed ms
+    
+    <a href="@Model.PrevPageUrl">< Previous page</a>
+    <a href="@Model.NextPageUrl">Next page ></a>
 </div>
 
 <div class="active-facets">    
@@ -46,7 +51,7 @@
 <ul class="results">
     @foreach (var result in Model.Results)
     {
-        <li>
+        <li class="@result.Result.Type.ToLower()">
             <h4>@result.Result.Name</h4>
             <div>Id: @result.Result.Id, Type: @result.Result.Type</div>
             <div>

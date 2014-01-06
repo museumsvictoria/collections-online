@@ -12,14 +12,15 @@ namespace CollectionsOnline.WebSite.Features.Search
 {
     public class SearchViewModelFactory : ISearchViewModelFactory
     {
-        public SearchViewModel MakeViewModel(IList<CombinedSearchResult> results, FacetResults facets, Request request, int totalResults, SearchInputModel searchInputModel, long elapsedMilliseconds)
+        public SearchViewModel MakeViewModel(IList<CombinedSearchResult> results, FacetResults facets, Request request, int totalResults, SearchInputModel searchInputModel, long queryTimeElapsed, long facetTimeElapsed)
         {
             var searchViewModel = new SearchViewModel
             {
                 TotalResults = totalResults,
                 Limit = searchInputModel.Limit,
                 Offset = searchInputModel.Offset,
-                ElapsedMilliseconds = elapsedMilliseconds
+                QueryTimeElapsed = queryTimeElapsed,
+                FacetTimeElapsed = facetTimeElapsed
             };
 
             var baseUrl = string.Format("{0}{1}", request.Url.SiteBase, request.Url.Path);
@@ -29,39 +30,47 @@ namespace CollectionsOnline.WebSite.Features.Search
             {
                 var facetViewModel = new FacetViewModel { Name = facet.Key };
 
-                foreach (var facetValue in facet.Value.Values)
+                if (!(facet.Key == "Class" && string.IsNullOrWhiteSpace(searchInputModel.Phylum)) &&
+                    !(facet.Key == "Order" && string.IsNullOrWhiteSpace(searchInputModel.Class)) &&
+                    !(facet.Key == "Family" && string.IsNullOrWhiteSpace(searchInputModel.Order)) &&
+                    !(facet.Key == "SpeciesSubType" && string.IsNullOrWhiteSpace(searchInputModel.SpeciesType)))
                 {
-                    if (facetValue.Range != "NULL_VALUE")
+                    foreach (var facetValue in facet.Value.Values)
                     {
-                        var facetValueQueryString = HttpUtility.ParseQueryString(request.Url.Query);
-                        var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
-
-                        var facetValueViewModel = new FacetValueViewModel
+                        if (facetValue.Range != "NULL_VALUE")
                         {
-                            Facet = facet.Key,
-                            Name = facetValue.Range,
-                            Hits = facetValue.Hits
-                        };
+                            var facetValueQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                            var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
 
-                        if (facetValues != null && facetValues.Contains(facetValue.Range))
-                        {
-                            facetValueQueryString.Remove(facet.Key.ToLower());
-
-                            foreach (var value in facetValues.Where(x => x != facetValue.Range))
+                            var facetValueViewModel = new FacetValueViewModel
                             {
-                                facetValueQueryString.Add(facet.Key.ToLower(), value);
+                                Facet = facet.Key,
+                                Name = facetValue.Range,
+                                Hits = facetValue.Hits
+                            };
+
+                            if (facetValues != null && facetValues.Contains(facetValue.Range))
+                            {
+                                facetValueQueryString.Remove(facet.Key.ToLower());
+
+                                foreach (var value in facetValues.Where(x => x != facetValue.Range))
+                                {
+                                    facetValueQueryString.Add(facet.Key.ToLower(), value);
+                                }
+
+                                facetValueViewModel.Active = true;
+                            }
+                            else
+                            {
+                                facetValueQueryString.Add(facet.Key.ToLower(), facetValue.Range);
                             }
 
-                            facetValueViewModel.Active = true;
-                        }
-                        else
-                        {
-                            facetValueQueryString.Add(facet.Key.ToLower(), facetValue.Range);
-                        }
+                            facetValueViewModel.Url = (facetValueQueryString.Count > 0)
+                                ? String.Concat(baseUrl, "?", facetValueQueryString)
+                                : baseUrl;
 
-                        facetValueViewModel.Url = (facetValueQueryString.Count > 0) ? String.Concat(baseUrl, "?", facetValueQueryString) : baseUrl;
-
-                        facetViewModel.Values.Add(facetValueViewModel);
+                            facetViewModel.Values.Add(facetValueViewModel);
+                        }
                     }
                 }
 
@@ -107,7 +116,7 @@ namespace CollectionsOnline.WebSite.Features.Search
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.Tag,
+                    Name = searchInputModel.Country,
                     Term = "Country",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
@@ -256,7 +265,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                         {
                             Name = country as string,
                             Term = "Country",
-                            Url = String.Concat(baseUrl, "?country=", HttpUtility.UrlEncode(country as string).ToLower())
+                            Url = String.Concat(baseUrl, "?country=", HttpUtility.UrlEncode(country as string))
                         });
                     }
                 }
@@ -349,6 +358,27 @@ namespace CollectionsOnline.WebSite.Features.Search
                 }
 
                 searchViewModel.Results.Add(searchResultViewModel);
+
+                // Build next prev page links
+                var queryString = HttpUtility.ParseQueryString(request.Url.Query);
+                if ((searchInputModel.Offset + searchInputModel.Limit) < totalResults)
+                {
+                    queryString.Set("offset", (searchInputModel.Offset + searchInputModel.Limit).ToString());
+
+                    searchViewModel.NextPageUrl = String.Concat(baseUrl, "?", queryString);
+                }
+
+                if ((searchInputModel.Offset - searchInputModel.Limit) >= 0)
+                {
+                    queryString.Set("offset", (searchInputModel.Offset - searchInputModel.Limit).ToString());
+                    if ((searchInputModel.Offset - searchInputModel.Limit) == 0)
+                    {
+                        queryString.Remove("offset");
+                    }
+
+                    searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(baseUrl, "?", queryString) : baseUrl;
+                }
+
             }
 
             return searchViewModel;

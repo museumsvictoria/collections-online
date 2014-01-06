@@ -13,6 +13,8 @@
 
         public string Category { get; set; }
 
+        public string HasImages { get; set; }
+
         public string ItemType { get; set; }
 
         public string SpeciesType { get; set; }
@@ -25,13 +27,13 @@
 
         public string[] SpeciesWaterColumnLocations { get; set; }
 
-        public string SpeciesPhylum { get; set; }
+        public string Phylum { get; set; }
 
-        public string SpeciesClass { get; set; }
+        public string Class { get; set; }
 
-        public string SpeciesOrder { get; set; }
+        public string Order { get; set; }
 
-        public string SpeciesFamily { get; set; }
+        public string Family { get; set; }
 
         public string SpecimenScientificGroup { get; set; }
 

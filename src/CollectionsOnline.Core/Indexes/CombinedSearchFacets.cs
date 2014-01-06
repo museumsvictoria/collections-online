@@ -25,6 +25,10 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedSearchResult>
                 {
+                    Name = x => x.HasImages
+                },
+                new Facet<CombinedSearchResult>
+                {
                     Name = x => x.ItemType
                 },
                 new Facet<CombinedSearchResult>
@@ -49,19 +53,19 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedSearchResult>
                 {
-                    Name = x => x.SpeciesPhylum
+                    Name = x => x.Phylum
                 },
                 new Facet<CombinedSearchResult>
                 {
-                    Name = x => x.SpeciesClass
+                    Name = x => x.Class
                 },
                 new Facet<CombinedSearchResult>
                 {
-                    Name = x => x.SpeciesOrder
+                    Name = x => x.Order
                 },
                 new Facet<CombinedSearchResult>
                 {
-                    Name = x => x.SpeciesFamily
+                    Name = x => x.Family
                 },
                 new Facet<CombinedSearchResult>
                 {

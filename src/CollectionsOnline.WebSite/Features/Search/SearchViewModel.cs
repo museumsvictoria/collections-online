@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CollectionsOnline.Core.Indexes;
+using Raven.Client.Linq.Indexing;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {
@@ -11,11 +13,25 @@ namespace CollectionsOnline.WebSite.Features.Search
 
         public int TotalResults { get; set; }
 
-        public long ElapsedMilliseconds { get; set; }
+        public long QueryTimeElapsed { get; set; }
+
+        public long FacetTimeElapsed { get; set; }
 
         public string Query { get; set; }
 
+        public string NextPageUrl { get; set; }
+
+        public string PrevPageUrl { get; set; }        
+
         public IList<FacetViewModel> Facets { get; set; }
+
+        public long TotalFacetValues
+        {
+            get
+            {
+                return Facets.SelectMany(x => x.Values).Count();
+            }
+        }
 
         public IList<SearchResultViewModel> Results { get; set; }
 
