@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Dynamic;
 using System.Linq;
-using System.Web;
 using CollectionsOnline.Core.Indexes;
 using Nancy;
 using Raven.Abstractions.Data;
@@ -30,8 +27,8 @@ namespace CollectionsOnline.WebSite.Features.Search
             // normalize inputs
             if (searchInputModel.Offset < 0)
                 searchInputModel.Offset = 0;
-            if (searchInputModel.Limit <= 0 || searchInputModel.Limit > Constants.WebApiPagingPageSizeMax)
-                searchInputModel.Limit = Constants.WebApiPagingPageSizeDefault;
+            if (searchInputModel.Limit <= 0 || searchInputModel.Limit > Constants.PagingPageSizeMax)
+                searchInputModel.Limit = Constants.PagingPageSizeDefault;
             searchInputModel.Query = searchInputModel.Query ?? string.Empty;
 
             var queryStopwatch = new Stopwatch();
@@ -229,10 +226,28 @@ namespace CollectionsOnline.WebSite.Features.Search
 
             var facets = facetQuery.ToFacets("facets/combinedFacets");
             facetStopwatch.Stop();
+
+            // Get suggestions if needed
+            var suggestions = new List<string>();
+            if (!string.IsNullOrWhiteSpace(searchInputModel.Query) && results.Count <= Constants.SuggestionsMinResultsSize)
+            {
+                suggestions = _documentSession
+                    .Query<CombinedSearchResult, CombinedSearch>()
+                    .Suggest(new SuggestionQuery()
+                    {
+                        Field = "Content",
+                        Term = searchInputModel.Query,
+                        Accuracy = 0.4f,
+                        MaxSuggestions = 5,
+                        Distance = StringDistanceTypes.JaroWinkler,
+                        Popularity = true,
+                    }).Suggestions.ToList();
+            }
             
             return _searchViewModelFactory.MakeViewModel(
                 results,
                 facets,
+                suggestions,
                 request,
                 query.QueryResult.TotalResults,
                 searchInputModel,

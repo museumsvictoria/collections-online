@@ -1,9 +1,5 @@
-﻿using System.Dynamic;
-using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Indexes;
-using Nancy;
+﻿using Nancy;
 using Nancy.ModelBinding;
-using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {
@@ -16,7 +12,7 @@ namespace CollectionsOnline.WebSite.Features.Search
             {
                 var searchInputModel = this.Bind<SearchInputModel>();
 
-                return View["search", searchViewModelQuery.BuildSearch(searchInputModel, this.Request)];
+                return View["search", searchViewModelQuery.BuildSearch(searchInputModel, Request)];
             };
         }
     }

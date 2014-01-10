@@ -71,8 +71,8 @@ namespace CollectionsOnline.WebApi.Modules
             if (webApiInputModel.Offset < 0)
                 webApiInputModel.Offset = 0;
 
-            if (webApiInputModel.Limit <= 0 || webApiInputModel.Limit > Constants.WebApiPagingPageSizeMax)
-                webApiInputModel.Limit = Constants.WebApiPagingPageSizeDefault;
+            if (webApiInputModel.Limit <= 0 || webApiInputModel.Limit > Constants.PagingPageSizeMax)
+                webApiInputModel.Limit = Constants.PagingPageSizeDefault;
 
             Offset = webApiInputModel.Offset;
             Limit = webApiInputModel.Limit;

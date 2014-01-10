@@ -1,0 +1,27 @@
+﻿body {
+	padding: 0 0 15px;
+}
+.search-results-header {
+	background: #F7F7F9;
+}
+.search-results-pagination {
+	margin-right: 15px;	
+}
+.search-active-facets {
+	margin-bottom: 20px;
+}
+.search-active-facets .btn .glyphicon, .search-active-facets .btn strong {
+	margin-left: 10px;
+}
+.search-results .story {
+	background: #ecffe5;
+}
+.search-results .item {
+	background: #fff5c9;
+}
+.search-results .specimen {
+	background: #fff1f9;
+}
+.search-results .species {
+	background: #e1f7ff;
+}

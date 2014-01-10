@@ -12,10 +12,11 @@ namespace CollectionsOnline.WebSite.Features.Search
 {
     public class SearchViewModelFactory : ISearchViewModelFactory
     {
-        public SearchViewModel MakeViewModel(IList<CombinedSearchResult> results, FacetResults facets, Request request, int totalResults, SearchInputModel searchInputModel, long queryTimeElapsed, long facetTimeElapsed)
+        public SearchViewModel MakeViewModel(IList<CombinedSearchResult> results, FacetResults facets, List<string> suggestions, Request request, int totalResults, SearchInputModel searchInputModel, long queryTimeElapsed, long facetTimeElapsed)
         {
             var searchViewModel = new SearchViewModel
             {
+                Query = searchInputModel.Query,
                 TotalResults = totalResults,
                 Limit = searchInputModel.Limit,
                 Offset = searchInputModel.Offset,
@@ -30,16 +31,18 @@ namespace CollectionsOnline.WebSite.Features.Search
             {
                 var facetViewModel = new FacetViewModel { Name = facet.Key };
 
-                if (!(facet.Key == "Class" && string.IsNullOrWhiteSpace(searchInputModel.Phylum)) &&
-                    !(facet.Key == "Order" && string.IsNullOrWhiteSpace(searchInputModel.Class)) &&
-                    !(facet.Key == "Family" && string.IsNullOrWhiteSpace(searchInputModel.Order)) &&
-                    !(facet.Key == "SpeciesSubType" && string.IsNullOrWhiteSpace(searchInputModel.SpeciesType)))
-                {
+                //if (!(facet.Key == "Class" && string.IsNullOrWhiteSpace(searchInputModel.Phylum)) &&
+                //    !(facet.Key == "Order" && string.IsNullOrWhiteSpace(searchInputModel.Class)) &&
+                //    !(facet.Key == "Family" && string.IsNullOrWhiteSpace(searchInputModel.Order)) &&
+                //    !(facet.Key == "SpeciesSubType" && string.IsNullOrWhiteSpace(searchInputModel.SpeciesType)))
+                //{
                     foreach (var facetValue in facet.Value.Values)
                     {
                         if (facetValue.Range != "NULL_VALUE")
                         {
                             var facetValueQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                            facetValueQueryString.Remove("offset");
+
                             var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
 
                             var facetValueViewModel = new FacetValueViewModel
@@ -72,7 +75,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                             facetViewModel.Values.Add(facetValueViewModel);
                         }
                     }
-                }
+                //}
 
                 if (facetViewModel.Values.Any())
                     searchViewModel.Facets.Add(facetViewModel);
@@ -378,7 +381,16 @@ namespace CollectionsOnline.WebSite.Features.Search
 
                     searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(baseUrl, "?", queryString) : baseUrl;
                 }
+            }
 
+            // Build suggestions
+            foreach (var suggestion in suggestions)
+            {
+                searchViewModel.Suggestions.Add(new SuggestionViewModel
+                {
+                    Suggestion = suggestion,
+                    Url = String.Concat(baseUrl, "?query=", HttpUtility.UrlEncode(suggestion))
+                });
             }
 
             return searchViewModel;

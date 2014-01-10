@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Indexes;
 using Raven.Client.Linq.Indexing;
@@ -11,6 +12,22 @@ namespace CollectionsOnline.WebSite.Features.Search
 
         public int Limit { get; set; }
 
+        public int CurrentPage
+        {
+            get
+            {
+                return ((Offset) / Limit) + 1;
+            }
+        }
+
+        public int TotalPages
+        {
+            get
+            {
+                return (TotalResults / Limit) + (TotalResults % Limit > 0 ? 1 : 0);
+            }
+        }
+
         public int TotalResults { get; set; }
 
         public long QueryTimeElapsed { get; set; }
@@ -21,11 +38,11 @@ namespace CollectionsOnline.WebSite.Features.Search
 
         public string NextPageUrl { get; set; }
 
-        public string PrevPageUrl { get; set; }        
+        public string PrevPageUrl { get; set; }
 
         public IList<FacetViewModel> Facets { get; set; }
 
-        public long TotalFacetValues
+        public int TotalFacetValues
         {
             get
             {
@@ -39,12 +56,15 @@ namespace CollectionsOnline.WebSite.Features.Search
 
         public IList<TermViewModel> ActiveTerms { get; set; }
 
+        public IList<SuggestionViewModel> Suggestions { get; set; }
+
         public SearchViewModel()
         {
             Facets = new List<FacetViewModel>();
             Results = new List<SearchResultViewModel>();
             ActiveFacets = new List<FacetValueViewModel>();
             ActiveTerms = new List<TermViewModel>();
+            Suggestions = new List<SuggestionViewModel>();
         }
     }
 
@@ -92,5 +112,12 @@ namespace CollectionsOnline.WebSite.Features.Search
         {
             Terms = new List<TermViewModel>();
         }
+    }
+
+    public class SuggestionViewModel
+    {
+        public string Suggestion { get; set; }
+
+        public string Url { get; set; }
     }
 }

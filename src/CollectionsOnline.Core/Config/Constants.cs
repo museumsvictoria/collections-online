@@ -6,10 +6,10 @@
 
         public static int DataBatchSize = 100;
 
-        public static int WebApiPagingPageSizeDefault = 30;
+        public static int PagingPageSizeDefault = 30;
 
-        public static int WebApiPagingPageSizeMax = 120;
+        public static int PagingPageSizeMax = 120;
 
-        public static int WebSitePagingPageSizeMax = 15;
+        public static int SuggestionsMinResultsSize = 15;
     }
 }
