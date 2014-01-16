@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
 using Nancy;
 using Nancy.ViewEngines;
@@ -359,6 +360,10 @@ namespace CollectionsOnline.WebSite.Features.Search
                         Url = String.Concat(baseUrl, "?itemtradeliteratureprimaryname=", HttpUtility.UrlEncode(result.ItemTradeLiteraturePrimaryName))
                     });
                 }
+
+                // Trim summary to fit
+                if (searchResultViewModel.Result.Summary != null)
+                    searchResultViewModel.Result.Summary = searchResultViewModel.Result.Summary.Truncate(Core.Config.Constants.SummaryMaxChars);
 
                 searchViewModel.Results.Add(searchResultViewModel);
 

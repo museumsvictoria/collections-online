@@ -1,4 +1,4 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Search.SearchViewModel>
 @{
     Layout = "layout.cshtml";
 }
@@ -22,14 +22,7 @@
                 <div class="list-group">
                     @foreach (var value in facet.Values)
                     {
-                        if (value.Active)
-                        {
-                            <a href="@value.Url" class="list-group-item active">@value.Name <span class="badge">@value.Hits</span></a>
-                        }
-                        else
-                        {
-                            <a href="@value.Url" class="list-group-item">@value.Name <span class="badge">@value.Hits</span></a>
-                        }
+                        <a href="@value.Url" class="list-group-item @(value.Active ? "active" : "")">@value.Name <span class="badge">@value.Hits</span></a>
                     }
                 </div>
             }
@@ -56,7 +49,7 @@
                 <div class="nav navbar-right search-results-pagination">
                     <span class="navbar-text navbar-left">Page @Model.CurrentPage of @Model.TotalPages </span>
                     <a role="button" href="@Model.PrevPageUrl" class="btn btn-xs navbar-btn btn-default @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="glyphicon glyphicon-chevron-left"></span> Previous</a>
-                    <a role="button" href="@Model.NextPageUrl" class="btn btn-xs navbar-btn btn-default @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")"><span class="glyphicon glyphicon-chevron-right"></span> Next</a>
+                    <a role="button" href="@Model.NextPageUrl" class="btn btn-xs navbar-btn btn-default @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
             </nav>
             @if (Model.Suggestions.Count > 0)
@@ -74,16 +67,24 @@
                 @foreach (var result in Model.Results)
                 {
                     <div class="list-group-item @result.Result.Type.ToLower()">
-                        <h4>@result.Result.Name</h4>
-                        <div>Id: @result.Result.Id, Type: @result.Result.Type</div>
-                        <div>
-                            @foreach (var term in result.Terms)
-                            {
-                                <div>
-                                    @term.Term <a href="@term.Url">@term.Name</a>
+                        <div class="row">
+                            <div class="col-md-2">
+                                @if (!string.IsNullOrWhiteSpace(result.Result.ThumbUrl))
+                                {
+                                    <img src="@result.Result.ThumbUrl" width="110" height="110" class="img-thumbnail" />
+                                }
+                                else
+                                {
+                                    <img src="http://placehold.it/110" width="110" height="110" class="img-thumbnail" />
+                                }
+                            </div>
+                            <div class="col-md-10">
+                                <h4>@result.Result.Name</h4>
+                                <div class="summary">
+                                    @result.Result.Summary
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        </div>                       
                     </div>
                 }
             </div>

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Utilities;
+using ImageResizer;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
@@ -42,7 +46,7 @@ namespace CollectionsOnline.Import.Factories
                         "DarDayCollected",
                         "site=SitSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(SummaryData),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,credit=<erights:MulMultiMediaRef_tab>.(RigAcknowledgement,RigType),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,resource,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,credit=<erights:MulMultiMediaRef_tab>.(RigAcknowledgement,RigType),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
                         "ColScientificGroup",
                         "ColDiscipline",
@@ -273,14 +277,33 @@ namespace CollectionsOnline.Import.Factories
             var media = new List<Media>();
             foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetStrings("MdaDataSets_tab").Contains("Website  Atlas of Living Australia")))
             {
-                media.Add(new Media
+                var irn = long.Parse(mediaMap.GetString("irn"));
+                var fileStream = mediaMap.GetMap("resource")["file"] as FileStream;
+
+                var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                var thumbResizeSettings = new ResizeSettings
                 {
-                    DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                                                        mediaMap.GetString("AdmTimeModified")),
-                                                       "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
-                    Title = mediaMap.GetString("MulTitle"),
-                    Type = mediaMap.GetString("MulMimeType")
-                });
+                    Format = FileFormatType.Jpg.ToString(),
+                    Height = 365,
+                    Width = 365,
+                    Mode = FitMode.Crop,
+                    PaddingColor = Color.White,
+                    Quality = 65
+                };
+
+                if (MediaHelper.Save(fileStream, irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                {
+                    media.Add(new Media
+                    {
+                        DateModified =
+                            DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                                mediaMap.GetString("AdmTimeModified")),
+                                "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
+                        Title = mediaMap.GetString("MulTitle"),
+                        Type = mediaMap.GetString("MulMimeType"),
+                        Url = url
+                    });
+                }
             }
             specimen.Media = media;
             specimen.AssociatedMedia = media.Select(x => x.Title).Concatenate(";");
@@ -475,27 +498,27 @@ namespace CollectionsOnline.Import.Factories
 
                     //higherClassification
                     specimen.HigherClassification = new[]
-                                {
-                                    taxonomy.GetString("ClaKingdom"), 
-                                    taxonomy.GetString("ClaPhylum"),
-                                    taxonomy.GetString("ClaSubphylum"),
-                                    taxonomy.GetString("ClaSuperclass"),
-                                    taxonomy.GetString("ClaClass"),
-                                    taxonomy.GetString("ClaSubclass"),
-                                    taxonomy.GetString("ClaSuperorder"),
-                                    taxonomy.GetString("ClaOrder"),
-                                    taxonomy.GetString("ClaSuborder"),
-                                    taxonomy.GetString("ClaInfraorder"),
-                                    taxonomy.GetString("ClaSuperfamily"),
-                                    taxonomy.GetString("ClaFamily"),
-                                    taxonomy.GetString("ClaSubfamily"),
-                                    taxonomy.GetString("ClaTribe"),
-                                    taxonomy.GetString("ClaSubtribe"),
-                                    taxonomy.GetString("ClaGenus"),
-                                    taxonomy.GetString("ClaSubgenus"),
-                                    taxonomy.GetString("ClaSpecies"),
-                                    taxonomy.GetString("ClaSubspecies")
-                                }.Concatenate(";");
+                        {
+                            taxonomy.GetString("ClaKingdom"), 
+                            taxonomy.GetString("ClaPhylum"),
+                            taxonomy.GetString("ClaSubphylum"),
+                            taxonomy.GetString("ClaSuperclass"),
+                            taxonomy.GetString("ClaClass"),
+                            taxonomy.GetString("ClaSubclass"),
+                            taxonomy.GetString("ClaSuperorder"),
+                            taxonomy.GetString("ClaOrder"),
+                            taxonomy.GetString("ClaSuborder"),
+                            taxonomy.GetString("ClaInfraorder"),
+                            taxonomy.GetString("ClaSuperfamily"),
+                            taxonomy.GetString("ClaFamily"),
+                            taxonomy.GetString("ClaSubfamily"),
+                            taxonomy.GetString("ClaTribe"),
+                            taxonomy.GetString("ClaSubtribe"),
+                            taxonomy.GetString("ClaGenus"),
+                            taxonomy.GetString("ClaSubgenus"),
+                            taxonomy.GetString("ClaSpecies"),
+                            taxonomy.GetString("ClaSubspecies")
+                        }.Concatenate(";");
 
                     //vernacularName
                     var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => x.GetString("ComStatus_tab") != null && x.GetString("ComStatus_tab").Trim().ToLower() == "preferred");
@@ -534,6 +557,18 @@ namespace CollectionsOnline.Import.Factories
 
             #endregion
 
+            // Build summary
+            specimen.Summary = new[]
+                {
+                    specimen.VernacularName,
+                    new[] {
+                        specimen.Phylum,
+                        specimen.Class,
+                        specimen.Order,
+                        specimen.Family
+                    }.Concatenate(" ")
+                }.Concatenate(Environment.NewLine);
+            
             return specimen;
         }
 

@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
@@ -11,15 +13,18 @@ namespace CollectionsOnline.Core.Indexes
         public CombinedSearch()
         {
             AddMap<Item>(items => from item in items
+                                        where item.IsHidden == false
                                         select new
                                         {
                                             Id = item.Id,
                                             Name = item.Name,
                                             Content = new object[] { item.Name, item.Discipline, item.RegistrationNumber },
+                                            Summary = item.Summary,
+                                            ThumbUrl = item.Media.FirstOrDefault() != null ? item.Media.FirstOrDefault().Url : (string)null,
 
                                             Type = "Item",
                                             Category = item.Category,
-                                            HasImages = (item.Media.Any()) ? "Yes" : "No",
+                                            HasImages = (item.Media.Any()) ? "Yes" : (string)null,
                                             ItemType = item.Type,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
@@ -52,12 +57,14 @@ namespace CollectionsOnline.Core.Indexes
                                         select new
                                         {
                                             Id = species.Id,
-                                            Name = species.CommonNames.FirstOrDefault() ?? species.SpeciesName,
+                                            Name = species.CommonNames.FirstOrDefault() ?? species.SpeciesName ?? species.Genus,
                                             Content = new object[] { species.AnimalType, species.AnimalSubType, species.HigherClassification, species.CommonNames },
+                                            Summary = species.Summary,
+                                            ThumbUrl = species.Media.FirstOrDefault() != null ? species.Media.FirstOrDefault().Url : (string)null,
 
                                             Type = "Species",
                                             Category = "Natural Sciences",
-                                            HasImages = (species.Media.Any()) ? "Yes" : "No",
+                                            HasImages = (species.Media.Any()) ? "Yes" : (string)null,
                                             ItemType = (string)null,
                                             SpeciesType = species.AnimalType,
                                             SpeciesSubType = species.AnimalSubType,
@@ -93,10 +100,12 @@ namespace CollectionsOnline.Core.Indexes
                                             Id = specimen.Id,
                                             Name = specimen.ScientificName ?? specimen.AcceptedNameUsage,
                                             Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
+                                            Summary = specimen.Summary,
+                                            ThumbUrl = specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string)null,
 
                                             Type = "Specimen",
                                             Category = "Natural Sciences",
-                                            HasImages = (specimen.Media.Any()) ? "Yes" : "No",
+                                            HasImages = (specimen.Media.Any()) ? "Yes" : (string)null,
                                             ItemType = (string)null,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
@@ -131,10 +140,12 @@ namespace CollectionsOnline.Core.Indexes
                                             Id = story.Id,
                                             Name = story.Title,
                                             Content = new object[] { story.Content, story.ContentSummary },
+                                            Summary = story.Summary,
+                                            ThumbUrl = story.Media.FirstOrDefault() != null ? story.Media.FirstOrDefault().Url : (string)null,
 
                                             Type = "Story",
                                             Category = "History & Technology",
-                                            HasImages = (story.Media.Any()) ? "Yes" : "No",
+                                            HasImages = (story.Media.Any()) ? "Yes" : (string)null,
                                             ItemType = (string)null,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
@@ -165,6 +176,8 @@ namespace CollectionsOnline.Core.Indexes
 
             Index(x => x.Id, FieldIndexing.No);
             Index(x => x.Name, FieldIndexing.No);
+            Index(x => x.Summary, FieldIndexing.No);
+            Index(x => x.ThumbUrl, FieldIndexing.No);
             Index(x => x.Type, FieldIndexing.NotAnalyzed);
             Index(x => x.Content, FieldIndexing.Analyzed);
 
@@ -178,6 +191,8 @@ namespace CollectionsOnline.Core.Indexes
 
             Store(x => x.Id, FieldStorage.Yes);            
             Store(x => x.Name, FieldStorage.Yes);
+            Store(x => x.Summary, FieldStorage.Yes);
+            Store(x => x.ThumbUrl, FieldStorage.Yes);
             Store(x => x.Type, FieldStorage.Yes);
             Store(x => x.Content, FieldStorage.No);
 

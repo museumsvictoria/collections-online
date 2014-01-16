@@ -11,5 +11,7 @@
         public static int PagingPageSizeMax = 120;
 
         public static int SuggestionsMinResultsSize = 15;
+
+        public static int SummaryMaxChars = 200;
     }
 }

@@ -107,9 +107,17 @@
     <Content Include="content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="content\js\bootstrap.js" />
     <Content Include="content\js\bootstrap.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\Item\IItemViewModelFactory.cs" />
+    <Compile Include="Features\Item\IItemViewModelQuery.cs" />
+    <Compile Include="Features\Item\ItemModule.cs" />
+    <Compile Include="Features\Item\ItemViewModel.cs" />
+    <Compile Include="Features\Item\ItemViewModelFactory.cs" />
+    <Compile Include="Features\Item\ItemViewModelQuery.cs" />
     <Compile Include="Features\Search\SearchViewModel.cs" />
     <Compile Include="Features\Search\SearchInputModel.cs" />
     <Compile Include="Features\Search\SearchModule.cs" />
@@ -135,11 +143,13 @@
   <ItemGroup>
     <Content Include="Features\Shared\Views\layout.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\Item\Views\item.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

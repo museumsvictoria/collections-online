@@ -9,6 +9,8 @@ namespace CollectionsOnline.Core.Models
 
         public List<Comment> Comments { get; set; }
 
+        public string Summary { get; set; }
+
         #endregion
 
         public DateTime DateModified { get; set; }
@@ -31,7 +33,7 @@ namespace CollectionsOnline.Core.Models
 
         public string Name { get; set; }
 
-        public string Summary { get; set; }
+        public string ObjectSummary { get; set; }
 
         public string Description { get; set; }
 

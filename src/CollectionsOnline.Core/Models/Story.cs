@@ -5,6 +5,12 @@ namespace CollectionsOnline.Core.Models
 {
     public class Story : EmuAggregateRoot
     {
+        #region Non-Emu
+
+        public string Summary { get; set; }
+
+        #endregion
+
         public DateTime DateModified { get; set; }
 
         public string Title { get; set; }

@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using AutoMapper;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Utilities;
+using ImageResizer;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
@@ -115,7 +120,7 @@ namespace CollectionsOnline.Import.Factories
                         "TLDPublicationTypes_tab",
                         "TLSPrimaryRole",
                         "TLSPrimaryName=TLSPrimaryNameRef.(NamBranch,NamDepartment,NamOrganisation,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry)",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,resource,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "DesLocalName",
                         "locality=[ProSpecificLocality_tab,ProRegion_tab,ProStateProvince_tab,]",
                         "ProCountry",
@@ -194,7 +199,7 @@ namespace CollectionsOnline.Import.Factories
                 item.TertiaryClassification = map.GetString("ClaTertiaryClassification").ToSentenceCase();
 
             item.Name = map.GetString("ClaObjectName");
-            item.Summary = map.GetString("ClaObjectSummary");
+            item.ObjectSummary = map.GetString("ClaObjectSummary");
             item.Description = map.GetString("DesPhysicalDescription");
             item.Inscription = map.GetString("DesInscriptions");
 
@@ -401,16 +406,34 @@ namespace CollectionsOnline.Import.Factories
             var media = new List<Media>();
             foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
             {
-                media.Add(new Media
+                var irn = long.Parse(mediaMap.GetString("irn"));
+                var fileStream = mediaMap.GetMap("resource")["file"] as FileStream;
+
+                var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                var thumbResizeSettings = new ResizeSettings
+                {
+                    Format = FileFormatType.Jpg.ToString(),
+                    Height = 365,
+                    Width = 365,
+                    Mode = FitMode.Crop,
+                    PaddingColor = Color.White,
+                    Quality = 65
+                };
+
+                if (MediaHelper.Save(fileStream, irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                {
+                    media.Add(new Media
                     {
                         DateModified =
                             DateTime.ParseExact(
                                 string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                                              mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
+                                    mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
                                 new CultureInfo("en-AU")),
                         Title = mediaMap.GetString("MulTitle"),
-                        Type = mediaMap.GetString("MulMimeType")
+                        Type = mediaMap.GetString("MulMimeType"),
+                        Url = url
                     });
+                }
             }
             item.Media = media;
 
@@ -490,6 +513,14 @@ namespace CollectionsOnline.Import.Factories
             item.IndigenousCulturesCountryMentioned = map.GetStrings("DesCountryMentioned_tab").Concatenate(", ");
             item.IndigenousCulturesGroupNames = map.GetStrings("DesGroupNames_tab").Concatenate(", ");
             item.IndigenousCulturesNamesMentioned = map.GetStrings("DesGroupNamesMentioned_tab").Concatenate(", ");
+
+            // Build summary
+            if (!string.IsNullOrWhiteSpace(item.ObjectSummary))
+                item.Summary = item.ObjectSummary;
+            else if (!string.IsNullOrWhiteSpace(item.Description))
+                item.Summary = item.Description;
+            else if (!string.IsNullOrWhiteSpace(item.AudioVisualContentSummary))
+                item.Summary = item.AudioVisualContentSummary;
 
             return item;
         }

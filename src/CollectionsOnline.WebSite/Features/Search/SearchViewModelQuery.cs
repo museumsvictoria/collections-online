@@ -208,6 +208,8 @@ namespace CollectionsOnline.WebSite.Features.Search
                 .SelectFields<CombinedSearchResult>(
                     "Id",
                     "Name",
+                    "Summary",
+                    "ThumbUrl",
                     "Type",
                     "ItemType",
                     "Tags",

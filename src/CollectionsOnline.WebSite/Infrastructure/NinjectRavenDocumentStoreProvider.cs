@@ -48,6 +48,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
             // Create indexes and store facets
             IndexCreation.CreateIndexes(typeof(CombinedSearch).Assembly, documentStore);
+
             using (var documentSession = documentStore.OpenSession())
             {
                 documentSession.Store(new CombinedSearchFacets());

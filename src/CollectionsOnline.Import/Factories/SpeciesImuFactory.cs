@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using AutoMapper;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Utilities;
+using ImageResizer;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
@@ -56,7 +61,7 @@ namespace CollectionsOnline.Import.Factories
                     "SpeWaterColumnLocation_tab",
                     "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
                     "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                    "media=MulMultiMediaRef_tab.(irn,resource,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                 };
             }
         }
@@ -220,18 +225,44 @@ namespace CollectionsOnline.Import.Factories
 
             // Media
             var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetStrings("MdaDataSets_tab").Any(y => y == "App - Field Guide")))
             {
-                media.Add(new Media
+                var irn = long.Parse(mediaMap.GetString("irn"));
+                var fileStream = mediaMap.GetMap("resource")["file"] as FileStream;
+
+                var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                var thumbResizeSettings = new ResizeSettings
                 {
-                    DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                        mediaMap.GetString("AdmTimeModified")),
-                        "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
-                    Title = mediaMap.GetString("MulTitle"),
-                    Type = mediaMap.GetString("MulMimeType")
-                });
+                    Format = FileFormatType.Jpg.ToString(),
+                    Height = 365,
+                    Width = 365,
+                    Mode = FitMode.Crop,
+                    PaddingColor = Color.White,
+                    Quality = 65
+                };
+
+                if (MediaHelper.Save(fileStream, irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                {
+                    media.Add(new Media
+                    {
+                        DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                            mediaMap.GetString("AdmTimeModified")),
+                            "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
+                        Title = mediaMap.GetString("MulTitle"),
+                        Type = mediaMap.GetString("MulMimeType"),
+                        Url = url
+                    });
+                }
             }
             species.Media = media;
+
+            // Build summary
+            if (!string.IsNullOrWhiteSpace(species.IdentifyingCharacters))
+                species.Summary = species.IdentifyingCharacters;
+            else if (!string.IsNullOrWhiteSpace(species.Biology))
+                species.Summary = species.Biology;
+            else if (!string.IsNullOrWhiteSpace(species.HigherClassification))
+                species.Summary = species.HigherClassification;
 
             return species;
         }

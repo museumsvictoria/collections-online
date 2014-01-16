@@ -8,6 +8,10 @@
         public string Name { get; set; }
 
         public object[] Content { get; set; }
+
+        public string Summary { get; set; }
+
+        public string ThumbUrl { get; set; }
         
         /* facet fields */
         

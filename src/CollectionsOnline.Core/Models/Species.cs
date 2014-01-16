@@ -5,6 +5,12 @@ namespace CollectionsOnline.Core.Models
 {
     public class Species : EmuAggregateRoot
     {
+        #region Non-Emu
+
+        public string Summary { get; set; }
+
+        #endregion
+
         public DateTime DateModified { get; set; }
 
         public string AnimalType { get; set; }

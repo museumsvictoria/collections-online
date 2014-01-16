@@ -46,6 +46,12 @@
     <Reference Include="Dapper">
       <HintPath>..\packages\Dapper.1.13\lib\net45\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer">
+      <HintPath>..\packages\ImageResizer.3.4.2\lib\ImageResizer.dll</HintPath>
+    </Reference>
     <Reference Include="imu-1.0.03">
       <HintPath>..\..\lib\IMu\imu-1.0.03.dll</HintPath>
     </Reference>
@@ -67,9 +73,12 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factories\IImuFactory.cs" />
+    <Compile Include="Factories\PathFactory.cs" />
     <Compile Include="Factories\StoryImuFactory.cs" />
     <Compile Include="Factories\SpecimenImuFactory.cs" />
     <Compile Include="Factories\SpeciesImuFactory.cs" />
@@ -80,6 +89,8 @@
     <Compile Include="Imports\IImport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\HtmlConverter.cs" />
+    <Compile Include="Utilities\MediaHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

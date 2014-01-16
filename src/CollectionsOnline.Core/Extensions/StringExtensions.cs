@@ -29,5 +29,10 @@ namespace CollectionsOnline.Core.Extensions
         {
             return Regex.Replace(input.ToLower(), @"(?<=(^|[.;:])\s*)[a-z]", (match) => match.Value.ToUpper());
         }
+
+        public static string Truncate(this string input, int maxChars)
+        {
+            return input.Length <= maxChars ? input : input.Substring(0, maxChars) + " ..";
+        }
     }
 }
