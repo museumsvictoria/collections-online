@@ -29,9 +29,13 @@
 	background: #eaf9ff;
 }
 
-.item-detailed.dl-horizontal dt {
+.record .detailed.dl-horizontal dt {
 	width: 260px;
 }
-.item-detailed.dl-horizontal dd {
+.record .detailed.dl-horizontal dd {
 	margin-left: 280px;
+}
+
+.record .detailed span:after {
+	content: ", "
 }

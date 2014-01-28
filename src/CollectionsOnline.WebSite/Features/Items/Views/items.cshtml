@@ -5,12 +5,12 @@
 <div class="container no-nav">
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default">
+            <div class="record panel panel-default">
                 <div class="panel-heading">
                     <h1 class="panel-title">@Model.Item.Name</h1>
                 </div>
                 <div class="panel-body">
-                    <div class="item-images">
+                    <div class="images">
                         @for (int i = 0; i < Model.Item.Media.Count; i++)
                         {
                             if (i == 0)
@@ -24,13 +24,13 @@
                         }
                     </div>
                     <h4>@Model.Item.RegistrationNumber</h4>
-                    <div class="item-summary">
+                    <div class="summary">
                         <p>@Model.Item.Description</p>
                         <p>@Model.Item.ObjectSummary</p>
                         <p>@Model.Item.Significance</p>
                         <p>@Model.Item.IsdDescriptionOfContent</p>
                     </div>
-                    <dl class="item-detailed dl-horizontal">
+                    <dl class="detailed dl-horizontal">
                         <dt>Date Modified</dt>
                         <dd>@Model.Item.DateModified</dd>
                         <dt>Category</dt>
@@ -175,9 +175,9 @@
                         <dt>Trade Literature Cover Title</dt>
                         <dd>@Model.Item.TradeLiteratureCoverTitle</dd>
                         <dt>Trade Literature Primary Subject</dt>
-                        <dd>@Model.Item.TradeLiteraturePrimarySubject</dd>
+                        <dd><a href="/search?itemtradeliteratureprimarysubject=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimarySubject)">@Model.Item.TradeLiteraturePrimarySubject</a></dd>
                         <dt>Trade Literature Publication Date</dt>
-                        <dd>@Model.Item.TradeLiteraturePublicationDate</dd>
+                        <dd><a href="/search?itemtradeliteraturepublicationdate=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePublicationDate)">@Model.Item.TradeLiteraturePublicationDate</a></dd>
                         <dt>Trade Literature Illustration Types</dt>
                         <dd>@Model.Item.TradeLiteratureIllustrationTypes</dd>
                         <dt>Trade Literature Printing Types</dt>
@@ -185,9 +185,9 @@
                         <dt>Trade Literature Publication Types</dt>
                         <dd>@Model.Item.TradeLiteraturePublicationTypes</dd>
                         <dt>Trade Literature Primary Role</dt>
-                        <dd>@Model.Item.TradeLiteraturePrimaryRole</dd>
+                        <dd><a href="/search?itemtradeliteratureprimaryrole=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></dd>
                         <dt>Trade Literature Primary Name</dt>
-                        <dd>@Model.Item.TradeLiteraturePrimaryName</dd>
+                        <dd><a href="/search?itemtradeliteratureprimaryname=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryName)">@Model.Item.TradeLiteraturePrimaryName</a></dd>
                         <dt>Indigenous Cultures Local Name</dt>
                         <dd>@Model.Item.IndigenousCulturesLocalName</dd>
                         <dt>Indigenous Cultures Locality</dt>
@@ -228,7 +228,6 @@
                         <dd>@Model.Item.IndigenousCulturesNamesMentioned</dd>
                     </dl>
                 </div>
-                <div class=""></div>
             </div>
         </div>
     </div>

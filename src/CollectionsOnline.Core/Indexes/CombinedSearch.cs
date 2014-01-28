@@ -79,7 +79,6 @@ namespace CollectionsOnline.Core.Indexes
                                             SpecimenDiscipline = (string)null,
                                             StoryTypes = new object[] { },
 
-
                                             Tags = new object[] { },
                                             Country = new object[] { },
                                             ItemCollectionNames = new object[] { },

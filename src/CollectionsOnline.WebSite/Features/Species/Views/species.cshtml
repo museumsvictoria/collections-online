@@ -1,0 +1,210 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Species.SpeciesViewModel>
+@{
+    Layout = "layout.cshtml";
+}
+<div class="container no-nav">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="record panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@(Model.Species.CommonNames.FirstOrDefault() ?? Model.Species.SpeciesName ?? Model.Species.Genus)</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="images">
+                        @for (int i = 0; i < Model.Species.Media.Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                <img src="@Model.Species.Media[i].Url" width="350" height="350" class="img-rounded center-block" />
+                            }
+                            else
+                            {
+                                <img src="@Model.Species.Media[i].Url" width="100" height="100" class="img-thumbnail" />
+                            }
+                        }
+                    </div>
+                    <h4>@Model.Species.ScientificName</h4>
+                    <div class="summary">
+                        <p>@Model.Species.IdentifyingCharacters</p>
+                        <p>@Model.Species.Biology</p>
+                    </div>
+                    <dl class="detailed dl-horizontal">
+                        <dt>Date Modified</dt>
+                        <dd>@Model.Species.DateModified</dd>
+                        <dt>Higher Classification</dt>
+                        <dd>@Model.Species.HigherClassification</dd>
+                        <dt>Animal Type</dt>
+                        <dd>@Model.Species.AnimalType</dd>
+                        <dt>Animal SubType</dt>
+                        <dd>@Model.Species.AnimalSubType</dd>
+                        <dt>Colours</dt>
+                        <dd>
+                            @foreach (var colour in @Model.Species.Colours)
+                            {
+                                <span>@colour</span>
+                            }
+                        </dd>
+                        <dt>Maximum Size</dt>
+                        <dd>@Model.Species.MaximumSize</dd>
+                        <dt>Habitats</dt>
+                        <dd>
+                            @foreach (var habitat in @Model.Species.Habitats)
+                            {
+                                <span>@habitat</span>
+                            }
+                        </dd>
+                        <dt>Where To Look</dt>
+                        <dd>
+                            @foreach (var whereToLook in @Model.Species.WhereToLook)
+                            {
+                                <span>@whereToLook</span>
+                            }
+                        </dd>
+                        <dt>When Active</dt>
+                        <dd>
+                            @foreach (var whenActive in @Model.Species.WhenActive)
+                            {
+                                <span>@whenActive</span>
+                            }
+                        </dd>
+                        <dt>National Parks</dt>
+                        <dd>
+                            @foreach (var nationalPark in @Model.Species.NationalParks)
+                            {
+                                <span>@nationalPark</span>
+                            }
+                        </dd>
+                        <dt>Diet</dt>
+                        <dd>@Model.Species.Diet</dd>
+                        <dt>Diet Categories</dt>
+                        <dd>
+                            @foreach (var dietCategory in @Model.Species.DietCategories)
+                            {
+                                <span>@dietCategory</span>
+                            }
+                        </dd>
+                        <dt>Fast Fact</dt>
+                        <dd>@Model.Species.FastFact</dd>
+                        <dt>Habitat</dt>
+                        <dd>@Model.Species.Habitat</dd>
+                        <dt>Distribution</dt>
+                        <dd>@Model.Species.Distribution</dd>
+                        <dt>Brief Id</dt>
+                        <dd>@Model.Species.BriefId</dd>
+                        <dt>Hazards</dt>
+                        <dd>@Model.Species.Hazards</dd>
+                        <dt>Endemicity</dt>
+                        <dd>@Model.Species.Endemicity</dd>
+                        <dt>Commercial</dt>
+                        <dd>@Model.Species.Commercial</dd>
+                        <dt>ConservationStatuses</dt>
+                        <dd>
+                            @foreach (var conservationStatus in @Model.Species.ConservationStatuses)
+                            {
+                                <span>@conservationStatus</span>
+                            }
+                        </dd>
+                        <dt>Scientific Diagnosis</dt>
+                        <dd>@Model.Species.ScientificDiagnosis</dd>
+                        <dt>Web</dt>
+                        <dd>@Model.Species.Web</dd>
+                        <dt>Plants</dt>
+                        <dd>
+                            @foreach (var plant in @Model.Species.Plants)
+                            {
+                                <span>@plant</span>
+                            }
+                        </dd>
+                        <dt>Flight Start</dt>
+                        <dd>@Model.Species.FlightStart</dd>
+                        <dt>Flight End</dt>
+                        <dd>@Model.Species.FlightEnd</dd>
+                        <dt>Depths</dt>
+                        <dd>
+                            @foreach (var depth in @Model.Species.Depths)
+                            {
+                                <span>@depth</span>
+                            }
+                        </dd>
+                        <dt>Water Column Locations</dt>
+                        <dd>
+                            @foreach (var waterColumnLocation in @Model.Species.WaterColumnLocations)
+                            {
+                                <span>@waterColumnLocation</span>
+                            }
+                        </dd>
+                        <dt>Common Names</dt>
+                        <dd>
+                            @foreach (var commonName in @Model.Species.CommonNames)
+                            {
+                                <span>@commonName</span>
+                            }
+                        </dd>
+                        <dt>Other Names</dt>
+                        <dd>
+                            @foreach (var otherName in @Model.Species.OtherNames)
+                            {
+                                <span >@otherName</span>
+                            }
+                        </dd>
+                        <dt>Phylum</dt>
+                        <dd>@Model.Species.Phylum</dd>
+                        <dt>Subphylum</dt>
+                        <dd>@Model.Species.Subphylum</dd>
+                        <dt>Superclass</dt>
+                        <dd>@Model.Species.Superclass</dd>
+                        <dt>Class</dt>
+                        <dd>@Model.Species.Class</dd>
+                        <dt>Subclass</dt>
+                        <dd>@Model.Species.Subclass</dd>
+                        <dt>Superorder</dt>
+                        <dd>@Model.Species.Superorder</dd>
+                        <dt>Order</dt>
+                        <dd>@Model.Species.Order</dd>
+                        <dt>Suborder</dt>
+                        <dd>@Model.Species.Suborder</dd>
+                        <dt>Infraorder</dt>
+                        <dd>@Model.Species.Infraorder</dd>
+                        <dt>Superfamily</dt>
+                        <dd>@Model.Species.Superfamily</dd>
+                        <dt>Family</dt>
+                        <dd>@Model.Species.Family</dd>
+                        <dt>Subfamily</dt>
+                        <dd>@Model.Species.Subfamily</dd>
+                        <dt>Genus</dt>
+                        <dd>@Model.Species.Genus</dd>
+                        <dt>Subgenus</dt>
+                        <dd>@Model.Species.Subgenus</dd>
+                        <dt>SpeciesName</dt>
+                        <dd>@Model.Species.SpeciesName</dd>
+                        <dt>Subspecies</dt>
+                        <dd>@Model.Species.Subspecies</dd>
+                        <dt>MoV</dt>
+                        <dd>@Model.Species.MoV</dd>
+                        <dt>Author</dt>
+                        <dd>@Model.Species.Author</dd>
+                        <dt>Scientific Name</dt>
+                        <dd>@Model.Species.ScientificName</dd>
+                        <dt>Specimens</dt>
+                        <dd>
+                            @foreach (var specimenId in @Model.Species.SpecimenIds)
+                            {
+                                <a href="/@specimenId">@specimenId</a>
+                            }
+                        </dd>
+                        <dt>Authors</dt>
+                        <dd>
+                            @foreach (var author in @Model.Species.Authors)
+                            {
+                                <div>
+                                    <span>@author.Name</span>
+                                    <span>@author.Biography</span>
+                                </div>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
