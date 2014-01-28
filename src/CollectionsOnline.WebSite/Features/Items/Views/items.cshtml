@@ -1,0 +1,235 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Items.ItemViewModel>
+@{
+    Layout = "layout.cshtml";
+}
+<div class="container no-nav">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@Model.Item.Name</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="item-images">
+                        @for (int i = 0; i < Model.Item.Media.Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                <img src="@Model.Item.Media[i].Url" width="350" height="350" class="img-rounded center-block" />
+                            }
+                            else
+                            {
+                                <img src="@Model.Item.Media[i].Url" width="100" height="100" class="img-thumbnail" />
+                            }
+                        }
+                    </div>
+                    <h4>@Model.Item.RegistrationNumber</h4>
+                    <div class="item-summary">
+                        <p>@Model.Item.Description</p>
+                        <p>@Model.Item.ObjectSummary</p>
+                        <p>@Model.Item.Significance</p>
+                        <p>@Model.Item.IsdDescriptionOfContent</p>
+                    </div>
+                    <dl class="item-detailed dl-horizontal">
+                        <dt>Date Modified</dt>
+                        <dd>@Model.Item.DateModified</dd>
+                        <dt>Category</dt>
+                        <dd>@Model.Item.Category</dd>
+                        <dt>Discipline</dt>
+                        <dd>@Model.Item.Discipline</dd>
+                        <dt>Type</dt>
+                        <dd>@Model.Item.Type</dd>
+                        <dt>Collection Names</dt>
+                        <dd>
+                            @foreach (var collectionName in @Model.Item.CollectionNames)
+                            {
+                                <a href="/search?itemcollectionname=@HttpUtility.UrlEncode(collectionName)">@collectionName</a>
+                            }
+                        </dd>
+                        <dt>Primary Classification</dt>
+                        <dd><a href="/search?itemprimaryclassification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></dd>
+                        <dt>Secondary Classification</dt>
+                        <dd><a href="/search?itemsecondaryclassification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a></dd>
+                        <dt>Tertiary Classification</dt>
+                        <dd><a href="/search?itemtertiaryclassification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a></dd>
+                        <dt>Inscription</dt>
+                        <dd>@Model.Item.Inscription</dd>
+                        @foreach (var association in @Model.Item.Associations)
+                        {
+                            <dt>@association.Type</dt>
+                            <dd><a href="/search?itemassociationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a>@association.Summary</dd> 
+                        }
+                        <dt>Tags</dt>
+                        <dd>
+                            @foreach (var tag in @Model.Item.Tags)
+                            {
+                                <a href="/search?tag=@HttpUtility.UrlEncode(tag)">@tag</a>
+                            }
+                        </dd>
+                        <dt>Significance</dt>
+                        <dd>@Model.Item.Significance</dd>
+                        <dt>Model Scale</dt>
+                        <dd>@Model.Item.ModelScale</dd>
+                        <dt>Shape</dt>
+                        <dd>@Model.Item.Shape</dd>
+                        <dt>Dimensions</dt>
+                        <dd>
+                            @foreach (var dimension in @Model.Item.Dimensions)
+                            {
+                                <span>@dimension</span>
+                            }
+                        </dd>
+                        <dt>References</dt>
+                        <dd>@Model.Item.References</dd>
+                        <dt>Bibliographies</dt>
+                        <dd>
+                            @foreach (var bibliography in @Model.Item.Bibliographies)
+                            {
+                                <span>@bibliography</span>
+                            }
+                        </dd>
+                        <dt>Model Names</dt>
+                        <dd>@Model.Item.ModelNames</dd>
+                        <dt>Brand Names</dt>
+                        <dd>@Model.Item.BrandNames</dd>
+                        <dt>Archeology Context Number</dt>
+                        <dd>@Model.Item.ArcheologyContextNumber</dd>
+                        <dt>Archeology Site</dt>
+                        <dd>@Model.Item.ArcheologySite</dd>
+                        <dt>Archeology Description</dt>
+                        <dd>@Model.Item.ArcheologyDescription</dd>
+                        <dt>Archeology Distinguishing Marks</dt>
+                        <dd>@Model.Item.ArcheologyDistinguishingMarks</dd>
+                        <dt>Archeology Activity</dt>
+                        <dd>@Model.Item.ArcheologyActivity</dd>
+                        <dt>Archeology Specific Activity</dt>
+                        <dd>@Model.Item.ArcheologySpecificActivity</dd>
+                        <dt>Archeology Decoration</dt>
+                        <dd>@Model.Item.ArcheologyDecoration</dd>
+                        <dt>Archeology Pattern</dt>
+                        <dd>@Model.Item.ArcheologyPattern</dd>
+                        <dt>Archeology Colour</dt>
+                        <dd>@Model.Item.ArcheologyColour</dd>
+                        <dt>Archeology Moulding</dt>
+                        <dd>@Model.Item.ArcheologyMoulding</dd>
+                        <dt>Archeology Placement</dt>
+                        <dd>@Model.Item.ArcheologyPlacement</dd>
+                        <dt>Archeology Form</dt>
+                        <dd>@Model.Item.ArcheologyForm</dd>
+                        <dt>Archeology Shape</dt>
+                        <dd>@Model.Item.ArcheologyShape</dd>
+                        <dt>Archeology Manufacture Name</dt>
+                        <dd>@Model.Item.ArcheologyManufactureName</dd>
+                        <dt>Archeology Manufacture Date</dt>
+                        <dd>@Model.Item.ArcheologyManufactureDate</dd>
+                        <dt>Archeology Technique</dt>
+                        <dd>@Model.Item.ArcheologyTechnique</dd>
+                        <dt>Archeology Provenance</dt>
+                        <dd>@Model.Item.ArcheologyProvenance</dd>
+                        <dt>Numismatics Denomination</dt>
+                        <dd>@Model.Item.NumismaticsDenomination</dd>
+                        <dt>Numismatics Date Issued</dt>
+                        <dd>@Model.Item.NumismaticsDateIssued</dd>
+                        <dt>Numismatics Series</dt>
+                        <dd>@Model.Item.NumismaticsSeries</dd>
+                        <dt>Numismatics Material</dt>
+                        <dd>@Model.Item.NumismaticsMaterial</dd>
+                        <dt>Numismatics Edge Description</dt>
+                        <dd>@Model.Item.NumismaticsEdgeDescription</dd>
+                        <dt>Numismatics Obverse Description</dt>
+                        <dd>@Model.Item.NumismaticsObverseDescription</dd>
+                        <dt>Numismatics Reverse Description</dt>
+                        <dd>@Model.Item.NumismaticsReverseDescription</dd>
+                        <dt>Philately Colour</dt>
+                        <dd>@Model.Item.PhilatelyColour</dd>
+                        <dt>Philately Denomination</dt>
+                        <dd>@Model.Item.PhilatelyDenomination</dd>
+                        <dt>Philately Imprint</dt>
+                        <dd>@Model.Item.PhilatelyImprint</dd>
+                        <dt>Philately Issue</dt>
+                        <dd>@Model.Item.PhilatelyIssue</dd>
+                        <dt>Philately Date Issued</dt>
+                        <dd>@Model.Item.PhilatelyDateIssued</dd>
+                        <dt>Philately Form</dt>
+                        <dd>@Model.Item.PhilatelyForm</dd>
+                        <dt>Philately Overprint</dt>
+                        <dd>@Model.Item.PhilatelyOverprint</dd>
+                        <dt>Philately Gibbons Number</dt>
+                        <dd>@Model.Item.PhilatelyGibbonsNumber</dd>
+                        <dt>Isd Format</dt>
+                        <dd>@Model.Item.IsdFormat</dd>
+                        <dt>Isd Language</dt>
+                        <dd>@Model.Item.IsdLanguage</dd>
+                        <dt>Isd Description Of Content</dt>
+                        <dd>@Model.Item.IsdDescriptionOfContent</dd>
+                        <dt>Isd People Depicted</dt>
+                        <dd>@Model.Item.IsdPeopleDepicted</dd>
+                        <dt>Audio Visual Recording Details</dt>
+                        <dd>@Model.Item.AudioVisualRecordingDetails</dd>
+                        <dt>Audio Visual Content Summary</dt>
+                        <dd>@Model.Item.AudioVisualContentSummary</dd>
+                        <dt>Trade Literature Number of Pages</dt>
+                        <dd>@Model.Item.TradeLiteratureNumberofPages</dd>
+                        <dt>Trade Literature Page Size Format</dt>
+                        <dd>@Model.Item.TradeLiteraturePageSizeFormat</dd>
+                        <dt>Trade Literature Cover Title</dt>
+                        <dd>@Model.Item.TradeLiteratureCoverTitle</dd>
+                        <dt>Trade Literature Primary Subject</dt>
+                        <dd>@Model.Item.TradeLiteraturePrimarySubject</dd>
+                        <dt>Trade Literature Publication Date</dt>
+                        <dd>@Model.Item.TradeLiteraturePublicationDate</dd>
+                        <dt>Trade Literature Illustration Types</dt>
+                        <dd>@Model.Item.TradeLiteratureIllustrationTypes</dd>
+                        <dt>Trade Literature Printing Types</dt>
+                        <dd>@Model.Item.TradeLiteraturePrintingTypes</dd>
+                        <dt>Trade Literature Publication Types</dt>
+                        <dd>@Model.Item.TradeLiteraturePublicationTypes</dd>
+                        <dt>Trade Literature Primary Role</dt>
+                        <dd>@Model.Item.TradeLiteraturePrimaryRole</dd>
+                        <dt>Trade Literature Primary Name</dt>
+                        <dd>@Model.Item.TradeLiteraturePrimaryName</dd>
+                        <dt>Indigenous Cultures Local Name</dt>
+                        <dd>@Model.Item.IndigenousCulturesLocalName</dd>
+                        <dt>Indigenous Cultures Locality</dt>
+                        <dd>@Model.Item.IndigenousCulturesLocality</dd>
+                        <dt>Indigenous Cultures Cultural Groups</dt>
+                        <dd>@Model.Item.IndigenousCulturesCulturalGroups</dd>
+                        <dt>Indigenous Cultures Description</dt>
+                        <dd>@Model.Item.IndigenousCulturesDescription</dd>
+                        <dt>Indigenous Cultures Date Made</dt>
+                        <dd>@Model.Item.IndigenousCulturesDateMade</dd>
+                        <dt>Indigenous Cultures Date Collected</dt>
+                        <dd>@Model.Item.IndigenousCulturesDateCollected</dd>
+                        <dt>Indigenous Cultures Caption</dt>
+                        <dd>@Model.Item.IndigenousCulturesCaption</dd>
+                        <dt>Indigenous Cultures Individuals Identified</dt>
+                        <dd>@Model.Item.IndigenousCulturesIndividualsIdentified</dd>
+                        <dt>Indigenous Cultures Title</dt>
+                        <dd>@Model.Item.IndigenousCulturesTitle</dd>
+                        <dt>Indigenous Cultures Sheets</dt>
+                        <dd>@Model.Item.IndigenousCulturesSheets</dd>
+                        <dt>Indigenous Cultures Pages</dt>
+                        <dd>@Model.Item.IndigenousCulturesPages</dd>
+                        <dt>Indigenous Cultures Letter To</dt>
+                        <dd>@Model.Item.IndigenousCulturesLetterTo</dd>
+                        <dt>Indigenous Cultures Letter From</dt>
+                        <dd>@Model.Item.IndigenousCulturesLetterFrom</dd>
+                        <dt>Indigenous Cultures Individuals Mentioned</dt>
+                        <dd>@Model.Item.IndigenousCulturesIndividualsMentioned</dd>
+                        <dt>Indigenous Cultures State Province Mentioned</dt>
+                        <dd>@Model.Item.IndigenousCulturesStateProvinceMentioned</dd>
+                        <dt>Indigenous Cultures Regions Mentioned</dt>
+                        <dd>@Model.Item.IndigenousCulturesRegionsMentioned</dd>
+                        <dt>Indigenous Cultures Country Mentioned</dt>
+                        <dd>@Model.Item.IndigenousCulturesCountryMentioned</dd>
+                        <dt>Indigenous Cultures Group Names</dt>
+                        <dd>@Model.Item.IndigenousCulturesGroupNames</dd>
+                        <dt>Indigenous Cultures Names Mentioned</dt>
+                        <dd>@Model.Item.IndigenousCulturesNamesMentioned</dd>
+                    </dl>
+                </div>
+                <div class=""></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -112,12 +112,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\Item\IItemViewModelFactory.cs" />
-    <Compile Include="Features\Item\IItemViewModelQuery.cs" />
-    <Compile Include="Features\Item\ItemModule.cs" />
-    <Compile Include="Features\Item\ItemViewModel.cs" />
-    <Compile Include="Features\Item\ItemViewModelFactory.cs" />
-    <Compile Include="Features\Item\ItemViewModelQuery.cs" />
+    <Compile Include="Features\Items\IItemViewModelFactory.cs" />
+    <Compile Include="Features\Items\IItemViewModelQuery.cs" />
+    <Compile Include="Features\Items\ItemsModule.cs" />
+    <Compile Include="Features\Items\ItemViewModel.cs" />
+    <Compile Include="Features\Items\ItemViewModelFactory.cs" />
+    <Compile Include="Features\Items\ItemViewModelQuery.cs" />
     <Compile Include="Features\Search\SearchViewModel.cs" />
     <Compile Include="Features\Search\SearchInputModel.cs" />
     <Compile Include="Features\Search\SearchModule.cs" />
@@ -149,7 +149,7 @@
     <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Item\Views\item.cshtml" />
+    <Content Include="Features\Items\Views\items.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

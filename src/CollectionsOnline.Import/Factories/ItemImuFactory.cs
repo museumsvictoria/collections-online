@@ -18,11 +18,14 @@ namespace CollectionsOnline.Import.Factories
     public class ItemImuFactory : IImuFactory<Item>
     {
         private readonly ISlugFactory _slugFactory;
+        private readonly IMediaHelper _mediaHelper;
 
         public ItemImuFactory(
-            ISlugFactory slugFactory)
+            ISlugFactory slugFactory,
+            IMediaHelper mediaHelper)
         {
-            _slugFactory = slugFactory;            
+            _slugFactory = slugFactory;
+            _mediaHelper = mediaHelper;
         }
 
         public string ModuleName
@@ -120,7 +123,7 @@ namespace CollectionsOnline.Import.Factories
                         "TLDPublicationTypes_tab",
                         "TLSPrimaryRole",
                         "TLSPrimaryName=TLSPrimaryNameRef.(NamBranch,NamDepartment,NamOrganisation,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry)",
-                        "media=MulMultiMediaRef_tab.(irn,resource,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "DesLocalName",
                         "locality=[ProSpecificLocality_tab,ProRegion_tab,ProStateProvince_tab,]",
                         "ProCountry",
@@ -407,7 +410,6 @@ namespace CollectionsOnline.Import.Factories
             foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
-                var fileStream = mediaMap.GetMap("resource")["file"] as FileStream;
 
                 var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
                 var thumbResizeSettings = new ResizeSettings
@@ -420,7 +422,7 @@ namespace CollectionsOnline.Import.Factories
                     Quality = 65
                 };
 
-                if (MediaHelper.Save(fileStream, irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
                 {
                     media.Add(new Media
                     {

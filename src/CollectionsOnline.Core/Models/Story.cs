@@ -15,26 +15,26 @@ namespace CollectionsOnline.Core.Models
 
         public string Title { get; set; }
 
-        public ICollection<string> Tags { get; set; }
+        public IList<string> Tags { get; set; }
 
         public string Content { get; set; }
 
         public string ContentSummary { get; set; }
 
-        public ICollection<string> Types { get; set; }
+        public IList<string> Types { get; set; }
 
-        public ICollection<string> GeographicTags { get; set; }        
+        public IList<string> GeographicTags { get; set; }
 
-        public ICollection<Author> Authors { get; set; }
+        public IList<Author> Authors { get; set; }
 
-        public ICollection<Media> Media { get; set; }
+        public IList<Media> Media { get; set; }
 
         public string ParentStoryId { get; set; }
 
-        public ICollection<string> ChildStoryIds { get; set; }
+        public IList<string> ChildStoryIds { get; set; }
 
-        public ICollection<string> RelatedStoryIds { get; set; }
+        public IList<string> RelatedStoryIds { get; set; }
 
-        public ICollection<string> RelatedItemIds { get; set; }        
+        public IList<string> RelatedItemIds { get; set; }        
     }
 }

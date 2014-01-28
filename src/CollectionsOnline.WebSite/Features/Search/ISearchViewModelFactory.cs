@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using CollectionsOnline.Core.Indexes;
 using Nancy;
 using Raven.Abstractions.Data;
-using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Indexes;
-using Raven.Client.Linq.Indexing;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {
@@ -105,6 +103,8 @@ namespace CollectionsOnline.WebSite.Features.Search
     public class SearchResultViewModel
     {
         public CombinedSearchResult Result { get; set; }
+
+        public string Url { get; set; }
 
         public IList<TermViewModel> Terms { get; set; }
 

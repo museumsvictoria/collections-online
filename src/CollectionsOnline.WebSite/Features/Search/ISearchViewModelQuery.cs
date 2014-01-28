@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Web;
-using Nancy;
+﻿using Nancy;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {

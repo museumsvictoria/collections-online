@@ -21,11 +21,11 @@ namespace CollectionsOnline.Core.Models
 
         public string RegistrationNumber { get; set; }
 
-        public ICollection<string> CollectionNames { get; set; }
+        public IList<string> CollectionNames { get; set; }
 
-        public string Type { get; set; }        
+        public string Type { get; set; }
 
-        public ICollection<Media> Media { get; set; }
+        public IList<Media> Media { get; set; }
 
         #region Paleontology
 

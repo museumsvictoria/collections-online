@@ -7,7 +7,7 @@ namespace CollectionsOnline.Core.Models
     {
         #region Non-Emu
 
-        public List<Comment> Comments { get; set; }
+        public IList<Comment> Comments { get; set; }
 
         public string Summary { get; set; }
 
@@ -23,7 +23,7 @@ namespace CollectionsOnline.Core.Models
 
         public string RegistrationNumber { get; set; }
 
-        public ICollection<string> CollectionNames { get; set; }
+        public IList<string> CollectionNames { get; set; }
 
         public string PrimaryClassification { get; set; }
 
@@ -39,9 +39,9 @@ namespace CollectionsOnline.Core.Models
 
         public string Inscription { get; set; }
 
-        public ICollection<Association> Associations { get; set; }
+        public IList<Association> Associations { get; set; }
 
-        public ICollection<string> Tags { get; set; }
+        public IList<string> Tags { get; set; }
 
         public string Significance { get; set; }
 
@@ -49,19 +49,19 @@ namespace CollectionsOnline.Core.Models
 
         public string Shape { get; set; }
 
-        public ICollection<string> Dimensions { get; set; }
+        public IList<string> Dimensions { get; set; }
 
         public string References { get; set; }
 
-        public ICollection<string> Bibliographies { get; set; }
+        public IList<string> Bibliographies { get; set; }
 
         public string ModelNames { get; set; }
 
         public string BrandNames { get; set; }
 
-        public ICollection<string> RelatedItemIds { get; set; }
+        public IList<string> RelatedItemIds { get; set; }
 
-        public ICollection<Media> Media { get; set; }
+        public IList<Media> Media { get; set; }
 
         #region Archeology
 

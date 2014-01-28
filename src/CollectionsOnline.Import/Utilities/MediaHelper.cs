@@ -1,59 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Factories;
 using ImageResizer;
+using IMu;
 using NLog;
 
 namespace CollectionsOnline.Import.Utilities
 {
-    public static class MediaHelper
+    public class MediaHelper : IMediaHelper
     {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
+        private readonly Module _module;
 
-        public static bool Save(FileStream fileStream, long irn, FileFormatType fileFormat, ResizeSettings resizeSettings, string derivative = null, bool reuseStream = false)
+        public MediaHelper(Session session)
         {
-            if (fileStream != null)
+            _module = new Module("emultimedia", session);
+        }
+
+        public bool Save(long irn, FileFormatType fileFormat, ResizeSettings resizeSettings, string derivative = null)
+        {
+            try
             {
-                try
+                _module.FindKey(irn);
+                var result = _module.Fetch("start", 0, -1, new[] { "resource" }).Rows[0];
+                var resource = result.GetMap("resource");
+                var fileStream = resource["file"] as FileStream;
+
+                var destPath = PathFactory.GetDestPath(irn, fileFormat, derivative);
+                var destPathDir = destPath.Remove(destPath.LastIndexOf('\\') + 1);
+
+                // Create directory
+                if (!Directory.Exists(destPathDir))
                 {
-                    var destPath = PathFactory.GetDestPath(irn, fileFormat, derivative);
-                    var destPathDir = destPath.Remove(destPath.LastIndexOf('\\') + 1);
-
-                    // Create directory
-                    if (!Directory.Exists(destPathDir))
-                    {
-                        Directory.CreateDirectory(destPathDir);
-                    }
-
-                    // Delete file if it exists as we want to ensure it is overwritten
-                    if (File.Exists(destPath))
-                    {
-                        File.Delete(destPath);
-                    }
-
-                    // Save file
-                    if (resizeSettings != null)
-                    {
-                        ImageBuilder.Current.Build(fileStream, destPath, resizeSettings, !reuseStream);
-
-                        if (reuseStream)
-                            fileStream.Seek(0, SeekOrigin.Begin);
-                    }
-                    else
-                        fileStream.CopyTo(File.Create(destPath));
-
-                    return true;
+                    Directory.CreateDirectory(destPathDir);
                 }
-                catch (Exception exception)
+
+                // Delete file if it exists as we want to ensure it is overwritten
+                if (File.Exists(destPath))
                 {
-                    // log error
-                    _log.Error("Error saving image {0}, un-recoverable error, {1}", irn, exception.ToString());
+                    File.Delete(destPath);
                 }
+
+                // Save file
+                if (resizeSettings != null)
+                {
+                    ImageBuilder.Current.Build(fileStream, destPath, resizeSettings);
+                }
+                else
+                    fileStream.CopyTo(File.Create(destPath));
+
+                return true;
+            }
+            catch (Exception exception)
+            {
+                // log error
+                _log.Error("Error saving image {0}, un-recoverable error, {1}", irn, exception.ToString());
             }
 
             return false;

@@ -16,6 +16,14 @@ namespace CollectionsOnline.Import.Factories
 {
     public class SpeciesImuFactory : IImuFactory<Species>
     {
+        private readonly IMediaHelper _mediaHelper;
+
+        public SpeciesImuFactory(
+            IMediaHelper mediaHelper)
+        {
+            _mediaHelper = mediaHelper;
+        }
+
         public string ModuleName
         {
             get { return "enarratives"; }
@@ -61,7 +69,7 @@ namespace CollectionsOnline.Import.Factories
                     "SpeWaterColumnLocation_tab",
                     "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
                     "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
-                    "media=MulMultiMediaRef_tab.(irn,resource,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                 };
             }
         }
@@ -228,7 +236,6 @@ namespace CollectionsOnline.Import.Factories
             foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetStrings("MdaDataSets_tab").Any(y => y == "App - Field Guide")))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
-                var fileStream = mediaMap.GetMap("resource")["file"] as FileStream;
 
                 var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
                 var thumbResizeSettings = new ResizeSettings
@@ -241,7 +248,7 @@ namespace CollectionsOnline.Import.Factories
                     Quality = 65
                 };
 
-                if (MediaHelper.Save(fileStream, irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
                 {
                     media.Add(new Media
                     {

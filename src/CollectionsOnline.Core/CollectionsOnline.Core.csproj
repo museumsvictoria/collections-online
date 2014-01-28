@@ -74,6 +74,7 @@
     <Compile Include="Factories\SlugFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TinyIoC.cs" />
+    <Compile Include="Utilities\Inflector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

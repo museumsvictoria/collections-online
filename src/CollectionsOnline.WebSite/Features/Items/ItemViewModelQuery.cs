@@ -1,14 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.WebSite.Features.Search;
-using Nancy;
-using Raven.Abstractions.Data;
+﻿using CollectionsOnline.Core.Models;
 using Raven.Client;
-using Constants = CollectionsOnline.Core.Config.Constants;
 
-namespace CollectionsOnline.WebSite.Features.Item
+namespace CollectionsOnline.WebSite.Features.Items
 {
     public class ItemViewModelQuery : IItemViewModelQuery
     {
@@ -23,9 +16,12 @@ namespace CollectionsOnline.WebSite.Features.Item
             _itemViewModelFactory = itemViewModelFactory;
         }
 
-        public ItemViewModel BuildItem()
+        public ItemViewModel BuildItem(string itemId)
         {
-            return _itemViewModelFactory.MakeViewModel();
+            var item = _documentSession
+                .Load<Item>(itemId);
+
+            return _itemViewModelFactory.MakeViewModel(item);
         }
     }
 }

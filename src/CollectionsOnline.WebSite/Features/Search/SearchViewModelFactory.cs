@@ -4,10 +4,9 @@ using System.Linq;
 using System.Web;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Utilities;
 using Nancy;
-using Nancy.ViewEngines;
 using Raven.Abstractions.Data;
-using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {
@@ -32,51 +31,45 @@ namespace CollectionsOnline.WebSite.Features.Search
             {
                 var facetViewModel = new FacetViewModel { Name = facet.Key };
 
-                //if (!(facet.Key == "Class" && string.IsNullOrWhiteSpace(searchInputModel.Phylum)) &&
-                //    !(facet.Key == "Order" && string.IsNullOrWhiteSpace(searchInputModel.Class)) &&
-                //    !(facet.Key == "Family" && string.IsNullOrWhiteSpace(searchInputModel.Order)) &&
-                //    !(facet.Key == "SpeciesSubType" && string.IsNullOrWhiteSpace(searchInputModel.SpeciesType)))
-                //{
-                    foreach (var facetValue in facet.Value.Values)
+                foreach (var facetValue in facet.Value.Values)
+                {
+                    if (facetValue.Range != "NULL_VALUE")
                     {
-                        if (facetValue.Range != "NULL_VALUE")
+                        var facetValueQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                        facetValueQueryString.Remove("offset");
+
+                        var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
+
+                        var facetValueViewModel = new FacetValueViewModel
                         {
-                            var facetValueQueryString = HttpUtility.ParseQueryString(request.Url.Query);
-                            facetValueQueryString.Remove("offset");
+                            Facet = facet.Key,
+                            Name = facetValue.Range,
+                            Hits = facetValue.Hits
+                        };
 
-                            var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
+                        if (facetValues != null && facetValues.Contains(facetValue.Range))
+                        {
+                            facetValueQueryString.Remove(facet.Key.ToLower());
 
-                            var facetValueViewModel = new FacetValueViewModel
+                            foreach (var value in facetValues.Where(x => x != facetValue.Range))
                             {
-                                Facet = facet.Key,
-                                Name = facetValue.Range,
-                                Hits = facetValue.Hits
-                            };
-
-                            if (facetValues != null && facetValues.Contains(facetValue.Range))
-                            {
-                                facetValueQueryString.Remove(facet.Key.ToLower());
-
-                                foreach (var value in facetValues.Where(x => x != facetValue.Range))
-                                {
-                                    facetValueQueryString.Add(facet.Key.ToLower(), value);
-                                }
-
-                                facetValueViewModel.Active = true;
-                            }
-                            else
-                            {
-                                facetValueQueryString.Add(facet.Key.ToLower(), facetValue.Range);
+                                facetValueQueryString.Add(facet.Key.ToLower(), value);
                             }
 
-                            facetValueViewModel.Url = (facetValueQueryString.Count > 0)
-                                ? String.Concat(baseUrl, "?", facetValueQueryString)
-                                : baseUrl;
-
-                            facetViewModel.Values.Add(facetValueViewModel);
+                            facetValueViewModel.Active = true;
                         }
+                        else
+                        {
+                            facetValueQueryString.Add(facet.Key.ToLower(), facetValue.Range);
+                        }
+
+                        facetValueViewModel.Url = (facetValueQueryString.Count > 0)
+                            ? String.Concat(baseUrl, "?", facetValueQueryString)
+                            : baseUrl;
+
+                        facetViewModel.Values.Add(facetValueViewModel);
                     }
-                //}
+                }
 
                 if (facetViewModel.Values.Any())
                     searchViewModel.Facets.Add(facetViewModel);
@@ -247,7 +240,11 @@ namespace CollectionsOnline.WebSite.Features.Search
             // Build results TODO: Eventually wont be featured on search results page but on object page.
             foreach (var result in results)
             {
-                var searchResultViewModel = new SearchResultViewModel { Result = result };
+                var searchResultViewModel = new SearchResultViewModel
+                {
+                    Result = result,
+                    Url = result.Id
+                };
 
                 if (result.Tags != null && result.Tags.Any())
                 {

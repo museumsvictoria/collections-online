@@ -1,6 +1,9 @@
 ﻿body {
 	padding: 0 0 15px;
 }
+.no-nav {
+	margin-top: 20px;
+}
 .search-results-header {
 	background: #F7F7F9;
 }
@@ -24,4 +27,11 @@
 }
 .search-results .species {
 	background: #eaf9ff;
+}
+
+.item-detailed.dl-horizontal dt {
+	width: 260px;
+}
+.item-detailed.dl-horizontal dd {
+	margin-left: 280px;
 }

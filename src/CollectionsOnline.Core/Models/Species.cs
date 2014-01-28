@@ -17,21 +17,21 @@ namespace CollectionsOnline.Core.Models
 
         public string AnimalSubType { get; set; }
 
-        public ICollection<string> Colours { get; set; }
+        public IList<string> Colours { get; set; }
 
         public string MaximumSize { get; set; }
 
-        public ICollection<string> Habitats { get; set; }
+        public IList<string> Habitats { get; set; }
 
-        public ICollection<string> WhereToLook { get; set; }
+        public IList<string> WhereToLook { get; set; }
 
-        public ICollection<string> WhenActive { get; set; }
+        public IList<string> WhenActive { get; set; }
 
-        public ICollection<string> NationalParks { get; set; }
+        public IList<string> NationalParks { get; set; }
 
         public string Diet { get; set; }
 
-        public ICollection<string> DietCategories { get; set; }
+        public IList<string> DietCategories { get; set; }
 
         public string FastFact { get; set; }
 
@@ -51,25 +51,25 @@ namespace CollectionsOnline.Core.Models
 
         public string Commercial { get; set; }
 
-        public ICollection<string> ConservationStatuses { get; set; }
+        public IList<string> ConservationStatuses { get; set; }
 
         public string ScientificDiagnosis { get; set; }
 
         public string Web { get; set; }
 
-        public ICollection<string> Plants { get; set; }
+        public IList<string> Plants { get; set; }
 
         public string FlightStart { get; set; }
 
         public string FlightEnd { get; set; }
 
-        public ICollection<string> Depths { get; set; }
+        public IList<string> Depths { get; set; }
 
-        public ICollection<string> WaterColumnLocations { get; set; }
+        public IList<string> WaterColumnLocations { get; set; }
 
-        public ICollection<string> CommonNames { get; set; }
+        public IList<string> CommonNames { get; set; }
 
-        public ICollection<string> OtherNames { get; set; }
+        public IList<string> OtherNames { get; set; }
 
         public string Phylum { get; set; }
 
@@ -111,10 +111,10 @@ namespace CollectionsOnline.Core.Models
 
         public string ScientificName { get; set; }
 
-        public ICollection<string> SpecimenIds { get; set; }
+        public IList<string> SpecimenIds { get; set; }
 
-        public ICollection<Author> Authors { get; set; }
+        public IList<Author> Authors { get; set; }
 
-        public ICollection<Media> Media { get; set; }
+        public IList<Media> Media { get; set; }
     }
 }

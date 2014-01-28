@@ -44,7 +44,7 @@
             </div>               
             <nav class="navbar navbar-default" role="navigation">
                 <p class="navbar-text navbar-left">
-                    <strong>@Model.TotalResults Results (Query @(Model.QueryTimeElapsed)ms, Facets @(Model.FacetTimeElapsed)ms)</strong>
+                    <strong>@Model.TotalResults Results (Query @(Model.QueryTimeElapsed)ms, Facets[@Model.TotalFacetValues] @(Model.FacetTimeElapsed)ms)</strong>
                 </p>
                 <div class="nav navbar-right search-results-pagination">
                     <span class="navbar-text navbar-left">Page @Model.CurrentPage of @Model.TotalPages </span>
@@ -79,7 +79,7 @@
                                 }
                             </div>
                             <div class="col-md-10">
-                                <h4>@result.Result.Name</h4>
+                                <h4><a href="@result.Url">@result.Result.Name</a></h4>
                                 <div class="summary">
                                     @result.Result.Summary
                                 </div>

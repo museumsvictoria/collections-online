@@ -1,4 +1,6 @@
-﻿namespace CollectionsOnline.Core.Models
+﻿using CollectionsOnline.Core.Extensions;
+
+namespace CollectionsOnline.Core.Models
 {
     public class Association
     {
@@ -19,5 +21,22 @@
         public string Date { get; set; }
 
         public string Notes { get; set; }
+
+        public string Summary
+        {
+            get
+            {
+                return new[]
+                {
+                    Street,
+                    Locality,
+                    State,
+                    Region,
+                    Country,
+                    Date,
+                    Notes
+                }.Concatenate(", ");
+            }
+        }
     }
 }
