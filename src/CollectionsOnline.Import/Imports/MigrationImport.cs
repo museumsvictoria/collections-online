@@ -22,6 +22,7 @@ namespace CollectionsOnline.Import.Imports
 
         public void Run(DateTime dateLastRun)
         {
+            // Migration only happens once when application created
             if (dateLastRun == default(DateTime))
             {
                 using (var connection = new SqlConnection(ConfigurationManager.AppSettings["SqlImportConnectionString"]))

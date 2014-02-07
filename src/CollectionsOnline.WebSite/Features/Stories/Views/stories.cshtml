@@ -1,0 +1,112 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Stories.StoryViewModel>
+@{
+    Layout = "layout.cshtml";
+}
+<div class="container no-nav">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="record panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@Model.Story.Title</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="images">
+                        @for (int i = 0; i < Model.Story.Media.Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                <img src="@Model.Story.Media[i].Url" width="350" height="350" class="img-rounded center-block" />
+                            }
+                            else
+                            {
+                                <img src="@Model.Story.Media[i].Url" width="100" height="100" class="img-thumbnail" />
+                            }
+                        }
+                    </div>
+                    <div class="summary">
+                        @if (!string.IsNullOrWhiteSpace(@Model.Story.Content))
+                        {
+                            @Html.Raw(Model.Story.Content)
+                        }
+                    </div>
+                    <dl class="detailed dl-horizontal">
+                        <dt>Date Modified</dt>
+                        <dd>@Model.Story.DateModified</dd>
+                        @if (Model.Story.Tags.Any() || Model.Story.GeographicTags.Any())
+                        {
+                            <dt>Tags</dt>
+                            <dd>
+                                @foreach (var tag in @Model.Story.Tags)
+                                {
+                                    <a href="/search?tag=@HttpUtility.UrlEncode(tag)">@tag</a>
+                                }
+                                @foreach (var geographicTag in @Model.Story.GeographicTags)
+                                {
+                                    <a href="/search?tag=@HttpUtility.UrlEncode(geographicTag)">@geographicTag</a>
+                                }
+                            </dd>
+                        }
+                        @if (Model.Story.Types.Any())
+                        {
+                            <dt>Types</dt>
+                            <dd>
+                                @foreach (var type in @Model.Story.Types)
+                                {
+                                    <span>@type</span>
+                                }
+                            </dd>
+                        }
+                        @if (Model.Story.Authors.Any())
+                        {
+                            <dt>Authors</dt>
+                            <dd>
+                                @foreach (var author in @Model.Story.Authors)
+                                {
+                                    <div>
+                                        <span>@author.Name</span>
+                                        <span>@author.Biography</span>
+                                    </div>
+                                }
+                            </dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Story.ParentStoryId))
+                        {
+                            <dt>Parent Story</dt>
+                            <dd><a href="/@Model.Story.ParentStoryId">@Model.Story.ParentStoryId</a></dd>
+                        }
+                        @if (Model.Story.ChildStoryIds.Any())
+                        {
+                            <dt>Child Stories</dt>
+                            <dd>
+                                @foreach (var childStoryId in @Model.Story.ChildStoryIds)
+                                {
+                                    <a href="/@childStoryId">@childStoryId</a>
+                                }
+                            </dd>
+                        }
+                        @if (Model.Story.RelatedStoryIds.Any())
+                        {
+                            <dt>Related Stories</dt>
+                            <dd>
+                                @foreach (var relatedStoryId in @Model.Story.RelatedStoryIds)
+                                {
+                                    <a href="/@relatedStoryId">@relatedStoryId</a>
+                                }
+                            </dd>
+                        }
+                        @if (Model.Story.RelatedItemIds.Any())
+                        {
+                            <dt>Related Items</dt>
+                            <dd>
+                                @foreach (var relatedItemId in @Model.Story.RelatedItemIds)
+                                {
+                                    <a href="/@relatedItemId">@relatedItemId</a>
+                                }
+                            </dd>
+                        }                                                             
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

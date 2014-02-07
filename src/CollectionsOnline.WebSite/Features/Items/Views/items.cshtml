@@ -57,7 +57,7 @@
                         @foreach (var association in @Model.Item.Associations)
                         {
                             <dt>@association.Type</dt>
-                            <dd><a href="/search?itemassociationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a>@association.Summary</dd> 
+                            <dd><a href="/search?itemassociationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Summary <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a></dd> 
                         }
                         <dt>Tags</dt>
                         <dd>

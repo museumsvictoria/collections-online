@@ -112,6 +112,18 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\Stories\IStoryViewModelFactory.cs" />
+    <Compile Include="Features\Stories\IStoryViewModelQuery.cs" />
+    <Compile Include="Features\Stories\StoriesModule.cs" />
+    <Compile Include="Features\Stories\StoryViewModel.cs" />
+    <Compile Include="Features\Stories\StoryViewModelFactory.cs" />
+    <Compile Include="Features\Stories\StoryViewModelQuery.cs" />
+    <Compile Include="Features\Specimens\ISpecimenViewModelFactory.cs" />
+    <Compile Include="Features\Specimens\ISpecimenViewModelQuery.cs" />
+    <Compile Include="Features\Specimens\SpecimenViewModelFactory.cs" />
+    <Compile Include="Features\Specimens\SpecimensModule.cs" />
+    <Compile Include="Features\Specimens\SpecimenViewModel.cs" />
+    <Compile Include="Features\Specimens\SpecimenViewModelQuery.cs" />
     <Compile Include="Features\Species\ISpeciesViewModelFactory.cs" />
     <Compile Include="Features\Species\ISpeciesViewModelQuery.cs" />
     <Compile Include="Features\Species\SpeciesModule.cs" />
@@ -159,6 +171,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Features\Species\Views\species.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\Specimens\Views\specimens.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\Stories\Views\stories.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

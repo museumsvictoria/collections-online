@@ -1,0 +1,561 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Specimens.SpecimenViewModel>
+@{
+    Layout = "layout.cshtml";
+}
+<div class="container no-nav">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="record panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@(Model.Specimen.ScientificName ?? Model.Specimen.AcceptedNameUsage)</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="images">
+                        @for (int i = 0; i < Model.Specimen.Media.Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                <img src="@Model.Specimen.Media[i].Url" width="350" height="350" class="img-rounded center-block" />
+                            }
+                            else
+                            {
+                                <img src="@Model.Specimen.Media[i].Url" width="100" height="100" class="img-thumbnail" />
+                            }
+                        }
+                    </div>
+                    <h4>@Model.Specimen.RegistrationNumber</h4>
+                    <div class="summary">
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Summary))
+                        {
+                            <p>@Model.Specimen.Summary</p>
+                        }
+                    </div>
+                    <dl class="detailed dl-horizontal">
+                        <dt>Date Modified</dt>
+                        <dd>@Model.Specimen.DateModified</dd>
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Category))
+                        {
+                            <dt>Category</dt>
+                            <dd>@Model.Specimen.Category</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificGroup))
+                        {
+                            <dt>Scientific Group</dt>
+                            <dd>@Model.Specimen.ScientificGroup</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Discipline))
+                        {
+                            <dt>Discipline</dt>
+                            <dd>@Model.Specimen.Discipline</dd>
+                        }
+                        @if (Model.Specimen.CollectionNames.Any())
+                        {
+                            <dt>Collection Names</dt>
+                            <dd>
+                                @foreach (var collectionName in Model.Specimen.CollectionNames)
+                                {
+                                    <span>@collectionName</span>
+                                }
+                            </dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Type))
+                        {
+                            <dt>Type</dt>
+                            <dd>@Model.Specimen.Type</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.PalaeontologyNumber))
+                        {
+                            <dt>Palaeontology Number</dt>
+                            <dd>@Model.Specimen.PalaeontologyNumber</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogySpecies))
+                        {
+                            <dt>Mineralogy Species</dt>
+                            <dd>@Model.Specimen.MineralogySpecies</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyVariety))
+                        {
+                            <dt>Mineralogy Variety</dt>
+                            <dd>@Model.Specimen.MineralogyVariety</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyGroup))
+                        {
+                            <dt>Mineralogy Group</dt>
+                            <dd>@Model.Specimen.MineralogyGroup</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyClass))
+                        {
+                            <dt>Mineralogy Class</dt>
+                            <dd>@Model.Specimen.MineralogyClass</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyAssociatedMatrix))
+                        {
+                            <dt>Mineralogy Associated Matrix</dt>
+                            <dd>@Model.Specimen.MineralogyAssociatedMatrix</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyType))
+                        {
+                            <dt>Mineralogy Type</dt>
+                            <dd>@Model.Specimen.MineralogyType</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesName))
+                        {
+                            <dt>Meteorites Name</dt>
+                            <dd>@Model.Specimen.MeteoritesName</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesClass))
+                        {
+                            <dt>Meteorites Class</dt>
+                            <dd>@Model.Specimen.MeteoritesClass</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesGroup))
+                        {
+                            <dt>Meteorites Group</dt>
+                            <dd>@Model.Specimen.MeteoritesGroup</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesType))
+                        {
+                            <dt>Meteorites Type</dt>
+                            <dd>@Model.Specimen.MeteoritesType</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesMinerals))
+                        {
+                            <dt>Meteorites Minerals</dt>
+                            <dd>@Model.Specimen.MeteoritesMinerals</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesSpecimenWeight))
+                        {
+                            <dt>Meteorites Specimen Weight</dt>
+                            <dd>@Model.Specimen.MeteoritesSpecimenWeight</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesTotalWeight))
+                        {
+                            <dt>Meteorites Total Weight</dt>
+                            <dd>@Model.Specimen.MeteoritesTotalWeight</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesDateFell))
+                        {
+                            <dt>Meteorites Date Fell</dt>
+                            <dd>@Model.Specimen.MeteoritesDateFell</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesDateFound))
+                        {
+                            <dt>Meteorites Date Found</dt>
+                            <dd>@Model.Specimen.MeteoritesDateFound</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesName))
+                        {
+                            <dt>Tektites Name</dt>
+                            <dd>@Model.Specimen.TektitesName</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesClassification))
+                        {
+                            <dt>Tektites Classification</dt>
+                            <dd>@Model.Specimen.TektitesClassification</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesShape))
+                        {
+                            <dt>Tektites Shape</dt>
+                            <dd>@Model.Specimen.TektitesShape</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesLocalStrewnfield))
+                        {
+                            <dt>Tektites Local Strewnfield</dt>
+                            <dd>@Model.Specimen.TektitesLocalStrewnfield</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesGlobalStrewnfield))
+                        {
+                            <dt>Tektites Global Strewnfield</dt>
+                            <dd>@Model.Specimen.TektitesGlobalStrewnfield</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesSurfaceUp))
+                        {
+                            <dt>Tektites Surface Up</dt>
+                            <dd>@Model.Specimen.TektitesSurfaceUp</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesDegreeOfAbrasion))
+                        {
+                            <dt>Tektites Degree Of Abrasion</dt>
+                            <dd>@Model.Specimen.TektitesDegreeOfAbrasion</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DctermsType))
+                        {
+                            <dt>Dcterms Type</dt>
+                            <dd>@Model.Specimen.DctermsType</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DctermsModified))
+                        {
+                            <dt>DctermsModified</dt>
+                            <dd>@Model.Specimen.DctermsModified</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DctermsLanguage))
+                        {
+                            <dt>Dcterms Language</dt>
+                            <dd>@Model.Specimen.DctermsLanguage</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DctermsRights))
+                        {
+                            <dt>Dcterms Rights</dt>
+                            <dd>@Model.Specimen.DctermsRights</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DctermsRightsHolder))
+                        {
+                            <dt>Dcterms Rights Holder</dt>
+                            <dd>@Model.Specimen.DctermsRightsHolder</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.InstitutionId))
+                        {
+                            <dt>Institution Id</dt>
+                            <dd>@Model.Specimen.InstitutionId</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionId))
+                        {
+                            <dt>Collection Id</dt>
+                            <dd>@Model.Specimen.CollectionId</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DatasetId))
+                        {
+                            <dt>Dataset Id</dt>
+                            <dd>@Model.Specimen.DatasetId</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.InstitutionCode))
+                        {
+                            <dt>Institution Code</dt>
+                            <dd>@Model.Specimen.InstitutionCode</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionCode))
+                        {
+                            <dt>Collection Code</dt>
+                            <dd>@Model.Specimen.CollectionCode</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DatasetName))
+                        {
+                            <dt>Dataset Name</dt>
+                            <dd>@Model.Specimen.DatasetName</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.OwnerInstitutionCode))
+                        {
+                            <dt>Owner Institution Code</dt>
+                            <dd>@Model.Specimen.OwnerInstitutionCode</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.BasisOfRecord))
+                        {
+                            <dt>Basis Of Record</dt>
+                            <dd>@Model.Specimen.BasisOfRecord</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.OccurrenceId))
+                        {
+                            <dt>Occurrence Id</dt>
+                            <dd>@Model.Specimen.OccurrenceId</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.CatalogNumber))
+                        {
+                            <dt>Catalog Number</dt>
+                            <dd>@Model.Specimen.CatalogNumber</dd>
+                        } 
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.RecordedBy))
+                        {
+                            <dt>Recorded By</dt>
+                            <dd>@Model.Specimen.RecordedBy</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.IndividualCount))
+                        {
+                            <dt>Individual Count</dt>
+                            <dd>@Model.Specimen.IndividualCount</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Sex))
+                        {
+                            <dt>Sex</dt>
+                            <dd>@Model.Specimen.Sex</dd>
+                        } 
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.LifeStage))
+                        {
+                            <dt>Life Stage</dt>
+                            <dd>@Model.Specimen.LifeStage</dd>
+                        }                        
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.OccurrenceStatus))
+                        {
+                            <dt>Occurrence Status</dt>
+                            <dd>@Model.Specimen.OccurrenceStatus</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Preparations))
+                        {
+                            <dt>Preparations</dt>
+                            <dd>@Model.Specimen.Preparations</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.OtherCatalogNumbers))
+                        {
+                            <dt>Other Catalog Numbers</dt>
+                            <dd>@Model.Specimen.OtherCatalogNumbers</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.AssociatedMedia))
+                        {
+                            <dt>Associated Media</dt>
+                            <dd>@Model.Specimen.AssociatedMedia</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.EventId))
+                        {
+                            <dt>Event Id</dt>
+                            <dd>@Model.Specimen.EventId</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.SamplingProtocol))
+                        {
+                            <dt>Sampling Protocol</dt>
+                            <dd>@Model.Specimen.SamplingProtocol</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.EventDate))
+                        {
+                            <dt>Event Date</dt>
+                            <dd>@Model.Specimen.EventDate</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.EventTime))
+                        {
+                            <dt>Event Time</dt>
+                            <dd>@Model.Specimen.EventTime</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Year))
+                        {
+                            <dt>Year</dt>
+                            <dd>@Model.Specimen.Year</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Month))
+                        {
+                            <dt>Month</dt>
+                            <dd>@Model.Specimen.Month</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Day))
+                        {
+                            <dt>Day</dt>
+                            <dd>@Model.Specimen.Day</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.VerbatimEventDate))
+                        {
+                            <dt>Verbatim Event Date</dt>
+                            <dd>@Model.Specimen.VerbatimEventDate</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.FieldNumber))
+                        {
+                            <dt>Field Number</dt>
+                            <dd>@Model.Specimen.FieldNumber</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.LocationID))
+                        {
+                            <dt>Location ID</dt>
+                            <dd>@Model.Specimen.LocationID</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.HigherGeography))
+                        {
+                            <dt>Higher Geography</dt>
+                            <dd>@Model.Specimen.HigherGeography</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Continent))
+                        {
+                            <dt>Continent</dt>
+                            <dd>@Model.Specimen.Continent</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.WaterBody))
+                        {
+                            <dt>Water Body</dt>
+                            <dd>@Model.Specimen.WaterBody</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Country))
+                        {
+                            <dt>Country</dt>
+                            <dd><a href="/search?country=@HttpUtility.UrlEncode(Model.Specimen.Country)">@Model.Specimen.Country</a></dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.StateProvince))
+                        {
+                            <dt>State Province</dt>
+                            <dd>@Model.Specimen.StateProvince</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.County))
+                        {
+                            <dt>County</dt>
+                            <dd>@Model.Specimen.County</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Municipality))
+                        {
+                            <dt>Municipality</dt>
+                            <dd>@Model.Specimen.Municipality</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Locality))
+                        {
+                            <dt>Locality</dt>
+                            <dd>@Model.Specimen.Locality</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.VerbatimLocality))
+                        {
+                            <dt>Verbatim Locality</dt>
+                            <dd>@Model.Specimen.VerbatimLocality</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MinimumElevationInMeters))
+                        {
+                            <dt>Minimum Elevation In Meters</dt>
+                            <dd>@Model.Specimen.MinimumElevationInMeters</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MaximumElevationInMeters))
+                        {
+                            <dt>Maximum Elevation In Meters</dt>
+                            <dd>@Model.Specimen.MaximumElevationInMeters</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MinimumDepthInMeters))
+                        {
+                            <dt>Minimum Depth In Meters</dt>
+                            <dd>@Model.Specimen.MinimumDepthInMeters</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.MaximumDepthInMeters))
+                        {
+                            <dt>Maximum Depth In Meters</dt>
+                            <dd>@Model.Specimen.MaximumDepthInMeters</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DecimalLatitude))
+                        {
+                            <dt>Decimal Latitude</dt>
+                            <dd>@Model.Specimen.DecimalLatitude</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DecimalLongitude))
+                        {
+                            <dt>Decimal Longitude</dt>
+                            <dd>@Model.Specimen.DecimalLongitude</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeodeticDatum))
+                        {
+                            <dt>Geodetic Datum</dt>
+                            <dd>@Model.Specimen.GeodeticDatum</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferencedBy))
+                        {
+                            <dt>Georeferenced By</dt>
+                            <dd>@Model.Specimen.GeoreferencedBy</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferencedDate))
+                        {
+                            <dt>Georeferenced Date</dt>
+                            <dd>@Model.Specimen.GeoreferencedDate</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceProtocol))
+                        {
+                            <dt>Georeference Protocol</dt>
+                            <dd>@Model.Specimen.GeoreferenceProtocol</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceSources))
+                        {
+                            <dt>Georeference Sources</dt>
+                            <dd>@Model.Specimen.GeoreferenceSources</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.IdentifiedBy))
+                        {
+                            <dt>Identified By</dt>
+                            <dd>@Model.Specimen.IdentifiedBy</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.DateIdentified))
+                        {
+                            <dt>Date Identified</dt>
+                            <dd>@Model.Specimen.DateIdentified</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.IdentificationRemarks))
+                        {
+                            <dt>Identification Remarks</dt>
+                            <dd>@Model.Specimen.IdentificationRemarks</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.IdentificationQualifier))
+                        {
+                            <dt>Identification Qualifier</dt>
+                            <dd>@Model.Specimen.IdentificationQualifier</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TypeStatus))
+                        {
+                            <dt>Type Status</dt>
+                            <dd>@Model.Specimen.TypeStatus</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificName))
+                        {
+                            <dt>Scientific Name</dt>
+                            <dd>@Model.Specimen.ScientificName</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.AcceptedNameUsage))
+                        {
+                            <dt>Accepted Name Usage</dt>
+                            <dd>@Model.Specimen.AcceptedNameUsage</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.OriginalNameUsage))
+                        {
+                            <dt>Original Name Usage</dt>
+                            <dd>@Model.Specimen.OriginalNameUsage</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.HigherClassification))
+                        {
+                            <dt>Higher Classification</dt>
+                            <dd>@Model.Specimen.HigherClassification</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Kingdom))
+                        {
+                            <dt>Kingdom</dt>
+                            <dd>@Model.Specimen.Kingdom</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Phylum))
+                        {
+                            <dt>Phylum</dt>
+                            <dd>@Model.Specimen.Phylum</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Class))
+                        {
+                            <dt>Class</dt>
+                            <dd>@Model.Specimen.Class</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Order))
+                        {
+                            <dt>Order</dt>
+                            <dd>@Model.Specimen.Order</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Family))
+                        {
+                            <dt>Family</dt>
+                            <dd>@Model.Specimen.Family</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Genus))
+                        {
+                            <dt>Genus</dt>
+                            <dd>@Model.Specimen.Genus</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Subgenus))
+                        {
+                            <dt>Subgenus</dt>
+                            <dd>@Model.Specimen.Subgenus</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.SpecificEpithet))
+                        {
+                            <dt>Specific Epithet</dt>
+                            <dd>@Model.Specimen.SpecificEpithet</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.InfraspecificEpithet))
+                        {
+                            <dt>Infraspecific Epithet</dt>
+                            <dd>@Model.Specimen.InfraspecificEpithet</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TaxonRank))
+                        {
+                            <dt>Taxon Rank</dt>
+                            <dd>@Model.Specimen.TaxonRank</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificNameAuthorship))
+                        {
+                            <dt>Scientific Name Authorship</dt>
+                            <dd>@Model.Specimen.ScientificNameAuthorship</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.VernacularName))
+                        {
+                            <dt>Vernacular Name</dt>
+                            <dd>@Model.Specimen.VernacularName</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.NomenclaturalCode))
+                        {
+                            <dt>Nomenclatural Code</dt>
+                            <dd>@Model.Specimen.NomenclaturalCode</dd>
+                        }                                                                     
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

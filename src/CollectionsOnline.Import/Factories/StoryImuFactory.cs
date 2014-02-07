@@ -170,7 +170,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(story.ContentSummary))
-                story.Summary = story.ContentSummary.Truncate(Constants.SummaryMaxChars);
+                story.Summary = story.ContentSummary;
             else if (!string.IsNullOrWhiteSpace(story.Content))
                 story.Summary = HtmlConverter.HtmlToText(story.Content);
             
