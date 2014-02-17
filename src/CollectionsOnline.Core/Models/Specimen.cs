@@ -9,6 +9,8 @@ namespace CollectionsOnline.Core.Models
 
         public string Summary { get; set; }
 
+        public string AssociatedDate { get; set; }
+
         #endregion
 
         public DateTime DateModified { get; set; }

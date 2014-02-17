@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CollectionsOnline.Core.Indexes;
@@ -69,6 +70,19 @@ namespace CollectionsOnline.WebSite.Features.Search
                 query = query.AndAlso().WhereEquals("HasImages", searchInputModel.HasImages);
                 facetQuery = facetQuery.AndAlso().WhereEquals("HasImages", searchInputModel.HasImages);
             }
+            if (!string.IsNullOrWhiteSpace(searchInputModel.Discipline))
+            {
+                query = query.AndAlso().WhereEquals("Discipline", searchInputModel.Discipline);
+                facetQuery = facetQuery.AndAlso().WhereEquals("Discipline", searchInputModel.Discipline);
+            }
+            if (searchInputModel.Dates != null && searchInputModel.Dates.Any())
+            {
+                foreach (var date in searchInputModel.Dates.Where(x => !string.IsNullOrWhiteSpace(x)))
+                {
+                    query = query.AndAlso().WhereEquals("Dates", date);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Dates", date);
+                }
+            }
             if (!string.IsNullOrWhiteSpace(searchInputModel.ItemType))
             {
                 query = query.AndAlso().WhereEquals("ItemType", searchInputModel.ItemType);
@@ -117,16 +131,6 @@ namespace CollectionsOnline.WebSite.Features.Search
             {
                 query = query.AndAlso().WhereEquals("Class", searchInputModel.Class);
                 facetQuery = facetQuery.AndAlso().WhereEquals("Class", searchInputModel.Class);
-            }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Order))
-            {
-                query = query.AndAlso().WhereEquals("Order", searchInputModel.Order);
-                facetQuery = facetQuery.AndAlso().WhereEquals("Order", searchInputModel.Order);
-            }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Family))
-            {
-                query = query.AndAlso().WhereEquals("Family", searchInputModel.Family);
-                facetQuery = facetQuery.AndAlso().WhereEquals("Family", searchInputModel.Family);
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.SpecimenScientificGroup))
             {

@@ -112,6 +112,7 @@
     <Compile Include="Fakes\FakeSpecies.cs" />
     <Compile Include="Fakes\FakeItems.cs" />
     <Compile Include="Import\ImportRunnerTests.cs" />
+    <Compile Include="Import\Utilities\NaturalDateConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
     <Compile Include="WebApi\Modules\BaseModuleTests.cs" />

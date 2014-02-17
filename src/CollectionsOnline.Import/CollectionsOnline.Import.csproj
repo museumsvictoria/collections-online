@@ -92,6 +92,7 @@
     <Compile Include="Utilities\HtmlConverter.cs" />
     <Compile Include="Utilities\IMediaHelper.cs" />
     <Compile Include="Utilities\MediaHelper.cs" />
+    <Compile Include="Utilities\NaturalDateConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

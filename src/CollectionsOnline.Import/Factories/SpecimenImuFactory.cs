@@ -282,8 +282,9 @@ namespace CollectionsOnline.Import.Factories
             }
 
             //associatedMedia
+            // TODO: Be more selective in what media we assign to item and how
             var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetStrings("MdaDataSets_tab").Contains("Website  Atlas of Living Australia")))
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetString("MulMimeType") == "image" && x.GetStrings("MdaDataSets_tab").Contains("Website  Atlas of Living Australia")))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 
@@ -575,6 +576,13 @@ namespace CollectionsOnline.Import.Factories
                         specimen.Family
                     }.Concatenate(" ")
                 }.Concatenate(Environment.NewLine);
+
+            // Build Associated date
+            var yearSpan = NaturalDateConverter.ConvertToYearSpan(specimen.Year);
+            if (!string.IsNullOrWhiteSpace(yearSpan))
+            {
+                specimen.Year = yearSpan;
+            }
             
             return specimen;
         }

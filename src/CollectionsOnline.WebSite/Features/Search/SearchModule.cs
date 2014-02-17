@@ -1,5 +1,7 @@
-﻿using Nancy;
+﻿using System;
+using Nancy;
 using Nancy.ModelBinding;
+using NLog;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {

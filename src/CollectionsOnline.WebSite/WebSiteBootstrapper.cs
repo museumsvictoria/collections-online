@@ -1,6 +1,7 @@
 ﻿using CollectionsOnline.Core.Factories;
 using CollectionsOnline.WebSite.Infrastructure;
 using Nancy;
+using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
 using Nancy.Conventions;
 using Ninject.Extensions.Conventions;
@@ -12,6 +13,8 @@ namespace CollectionsOnline.WebSite
 {
     public class WebSiteBootstrapper : NinjectNancyBootstrapper 
     {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
+
         protected override void ConfigureApplicationContainer(IKernel kernel)
         {
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
@@ -41,6 +44,16 @@ namespace CollectionsOnline.WebSite
 
             // 3 Handles: features / shared / views/ *viewname*
             nancyConventions.ViewLocationConventions.Add((viewName, model, viewLocationContext) => string.Concat("features/shared/views/", viewName));
+        }
+
+        protected override void ApplicationStartup(IKernel container, IPipelines pipelines)
+        {
+            pipelines.OnError += (ctx, ex) =>
+            {
+                _log.Error(ex);
+
+                return null;
+            };
         }
     }
 }

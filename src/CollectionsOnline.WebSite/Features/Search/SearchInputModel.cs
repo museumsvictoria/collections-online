@@ -15,6 +15,10 @@
 
         public string HasImages { get; set; }
 
+        public string Discipline { get; set; }
+
+        public string[] Dates { get; set; }
+
         public string ItemType { get; set; }
 
         public string SpeciesType { get; set; }

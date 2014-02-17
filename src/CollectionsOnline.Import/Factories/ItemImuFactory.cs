@@ -406,8 +406,9 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Media
+            // TODO: Be more selective in what media we assign to item and how
             var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetString("MulMimeType") == "image"))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 
@@ -523,6 +524,50 @@ namespace CollectionsOnline.Import.Factories
                 item.Summary = item.Description;
             else if (!string.IsNullOrWhiteSpace(item.AudioVisualContentSummary))
                 item.Summary = item.AudioVisualContentSummary;
+
+            // Build associated dates
+            var associatedDates = new List<string>();
+            string yearSpan;
+            foreach (var association in associations)
+            {
+                yearSpan = NaturalDateConverter.ConvertToYearSpan(association.Date);
+                if (!string.IsNullOrWhiteSpace(yearSpan))
+                {
+                    associatedDates.Add(yearSpan);
+                }
+            }
+
+            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.ArcheologyManufactureDate);
+            if (!string.IsNullOrWhiteSpace(yearSpan))
+            {
+                associatedDates.Add(yearSpan);
+            }
+
+            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.IndigenousCulturesDateMade);
+            if (!string.IsNullOrWhiteSpace(yearSpan))
+            {
+                associatedDates.Add(yearSpan);
+            }
+
+            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.NumismaticsDateIssued);
+            if (!string.IsNullOrWhiteSpace(yearSpan))
+            {
+                associatedDates.Add(yearSpan);
+            }
+
+            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.PhilatelyDateIssued);
+            if (!string.IsNullOrWhiteSpace(yearSpan))
+            {
+                associatedDates.Add(yearSpan);
+            }
+
+            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.TradeLiteraturePublicationDate);
+            if (!string.IsNullOrWhiteSpace(yearSpan))
+            {
+                associatedDates.Add(yearSpan);
+            }
+
+            item.AssociatedDates = associatedDates.Distinct().ToList();
 
             return item;
         }

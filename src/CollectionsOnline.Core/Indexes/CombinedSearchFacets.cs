@@ -29,6 +29,10 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedSearchResult>
                 {
+                    Name = x => x.Discipline
+                },
+                new Facet<CombinedSearchResult>
+                {
                     Name = x => x.ItemType
                 },
                 new Facet<CombinedSearchResult>
@@ -61,14 +65,6 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedSearchResult>
                 {
-                    Name = x => x.Order
-                },
-                new Facet<CombinedSearchResult>
-                {
-                    Name = x => x.Family
-                },
-                new Facet<CombinedSearchResult>
-                {
                     Name = x => x.SpecimenScientificGroup
                 },
                 new Facet<CombinedSearchResult>
@@ -78,6 +74,10 @@ namespace CollectionsOnline.Core.Indexes
                 new Facet<CombinedSearchResult>
                 {
                     Name = x => x.StoryTypes
+                },
+                new Facet<CombinedSearchResult>
+                {
+                    Name = x => x.Dates
                 }
             };
         }

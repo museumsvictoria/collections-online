@@ -11,6 +11,8 @@ namespace CollectionsOnline.Core.Models
 
         public string Summary { get; set; }
 
+        public IList<string> AssociatedDates { get; set; }
+
         #endregion
 
         public DateTime DateModified { get; set; }

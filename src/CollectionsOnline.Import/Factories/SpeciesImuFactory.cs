@@ -232,8 +232,9 @@ namespace CollectionsOnline.Import.Factories
             species.Authors = authors;
 
             // Media
+            // TODO: Be more selective in what media we assign to item and how
             var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetStrings("MdaDataSets_tab").Any(y => y == "App - Field Guide")))
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetString("MulMimeType") == "image" && x.GetStrings("MdaDataSets_tab").Any(y => y == "App - Field Guide")))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 

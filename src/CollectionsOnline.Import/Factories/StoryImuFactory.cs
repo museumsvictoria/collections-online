@@ -113,8 +113,9 @@ namespace CollectionsOnline.Import.Factories
             story.Authors = authors;
 
             // Media
+            // TODO: Be more selective in what media we assign to item and how
             var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes"))
+            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetString("MulMimeType") == "image"))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 

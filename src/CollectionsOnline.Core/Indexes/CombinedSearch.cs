@@ -1,7 +1,4 @@
 ﻿using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
@@ -25,6 +22,8 @@ namespace CollectionsOnline.Core.Indexes
                                             Type = "Item",
                                             Category = item.Category,
                                             HasImages = (item.Media.Any()) ? "Yes" : (string)null,
+                                            Discipline = item.Discipline,
+                                            Dates = item.AssociatedDates.ToArray(),
                                             ItemType = item.Type,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
@@ -33,8 +32,6 @@ namespace CollectionsOnline.Core.Indexes
                                             SpeciesWaterColumnLocations = new object[] { },
                                             Phylum = (string)null,
                                             Class = (string)null,
-                                            Order = (string)null,
-                                            Family = (string)null,
                                             SpecimenScientificGroup = (string)null,
                                             SpecimenDiscipline = (string)null,
                                             StoryTypes = new object[] { },
@@ -65,6 +62,8 @@ namespace CollectionsOnline.Core.Indexes
                                             Type = "Species",
                                             Category = "Natural Sciences",
                                             HasImages = (species.Media.Any()) ? "Yes" : (string)null,
+                                            Discipline = (string)null,
+                                            Dates = new object[] { },
                                             ItemType = (string)null,
                                             SpeciesType = species.AnimalType,
                                             SpeciesSubType = species.AnimalSubType,
@@ -73,8 +72,6 @@ namespace CollectionsOnline.Core.Indexes
                                             SpeciesWaterColumnLocations = species.WaterColumnLocations,
                                             Phylum = species.Phylum,
                                             Class = species.Class,
-                                            Order = species.Order,
-                                            Family = species.Family,
                                             SpecimenScientificGroup = (string)null,
                                             SpecimenDiscipline = (string)null,
                                             StoryTypes = new object[] { },
@@ -105,6 +102,8 @@ namespace CollectionsOnline.Core.Indexes
                                             Type = "Specimen",
                                             Category = "Natural Sciences",
                                             HasImages = (specimen.Media.Any()) ? "Yes" : (string)null,
+                                            Discipline = specimen.Discipline,
+                                            Dates = new object[] { specimen.AssociatedDate },
                                             ItemType = (string)null,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
@@ -113,8 +112,6 @@ namespace CollectionsOnline.Core.Indexes
                                             SpeciesWaterColumnLocations = new object[] { },
                                             Phylum = specimen.Phylum,
                                             Class = specimen.Class,
-                                            Order = specimen.Order,
-                                            Family = specimen.Family,
                                             SpecimenScientificGroup = specimen.ScientificGroup,
                                             SpecimenDiscipline = specimen.Discipline,
                                             StoryTypes = new object[] { },
@@ -145,6 +142,8 @@ namespace CollectionsOnline.Core.Indexes
                                             Type = "Story",
                                             Category = "History & Technology",
                                             HasImages = (story.Media.Any()) ? "Yes" : (string)null,
+                                            Discipline = (string)null,
+                                            Dates = new int[] { },
                                             ItemType = (string)null,
                                             SpeciesType = (string)null,
                                             SpeciesSubType = (string)null,
@@ -153,8 +152,6 @@ namespace CollectionsOnline.Core.Indexes
                                             SpeciesWaterColumnLocations = new object[] { },
                                             Phylum = (string)null,
                                             Class = (string)null,
-                                            Order = (string)null,
-                                            Family = (string)null,
                                             SpecimenScientificGroup = (string)null,
                                             SpecimenDiscipline = (string)null,
                                             StoryTypes = story.Types,
