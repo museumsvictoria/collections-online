@@ -4,6 +4,6 @@ namespace CollectionsOnline.Import.Imports
 {
     public interface IImport
     {
-        void Run(DateTime dateLastRun);
+        void Run(DateTime? dateLastRun);
     }
 }

@@ -83,6 +83,7 @@
     <Compile Include="Factories\SpecimenImuFactory.cs" />
     <Compile Include="Factories\SpeciesImuFactory.cs" />
     <Compile Include="Factories\ItemImuFactory.cs" />
+    <Compile Include="Imports\MediaUpdateImport.cs" />
     <Compile Include="Imports\MigrationImport.cs" />
     <Compile Include="ImportRunner.cs" />
     <Compile Include="Imports\ImuImport.cs" />

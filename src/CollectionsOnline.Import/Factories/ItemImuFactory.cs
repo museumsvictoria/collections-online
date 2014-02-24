@@ -123,7 +123,7 @@ namespace CollectionsOnline.Import.Factories
                         "TLDPublicationTypes_tab",
                         "TLSPrimaryRole",
                         "TLSPrimaryName=TLSPrimaryNameRef.(NamBranch,NamDepartment,NamOrganisation,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry)",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement),AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "DesLocalName",
                         "locality=[ProSpecificLocality_tab,ProRegion_tab,ProStateProvince_tab,]",
                         "ProCountry",
@@ -427,6 +427,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     media.Add(new Media
                     {
+                        Irn = irn,
                         DateModified =
                             DateTime.ParseExact(
                                 string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),

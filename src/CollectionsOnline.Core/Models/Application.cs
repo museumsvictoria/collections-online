@@ -5,7 +5,7 @@ namespace CollectionsOnline.Core.Models
 {
     public class Application : AggregateRoot
     {
-        public DateTime LastDataImport { get; set; }
+        public DateTime? LastDataImport { get; set; }
 
         public bool DataImportRunning { get; set; }
 

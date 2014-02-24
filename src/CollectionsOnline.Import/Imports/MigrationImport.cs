@@ -20,15 +20,15 @@ namespace CollectionsOnline.Import.Imports
             _documentStore = documentStore;
         }
 
-        public void Run(DateTime dateLastRun)
+        public void Run(DateTime? dateLastRun)
         {
             // Migration only happens once when application created
-            if (dateLastRun == default(DateTime))
+            if (!dateLastRun.HasValue)
             {
-                using (var connection = new SqlConnection(ConfigurationManager.AppSettings["SqlImportConnectionString"]))
-                {
-                    _log.Debug("Beginning Item migration");
+                _log.Debug("Beginning Item migration");
 
+                using (var connection = new SqlConnection(ConfigurationManager.AppSettings["SqlImportConnectionString"]))
+                {                    
                     const string commentsSqlQuery = @"SELECT Comment.*, ItemComment.ItemId
                     FROM Comment INNER JOIN
                         ItemComment ON Comment.CommentId = ItemComment.CommentId

@@ -27,18 +27,18 @@ namespace CollectionsOnline.Import.Imports
             _imuFactory = imuFactory;
         }
 
-        public void Run(DateTime dateLastRun)
-        {
-            _log.Debug("Beginning {0} import", typeof(T).Name);
-
+        public void Run(DateTime? dateLastRun)
+        {            
             var module = new Module(_imuFactory.ModuleName, _session);
             var terms = _imuFactory.Terms;
 
-            if (dateLastRun == default(DateTime))
+            if (!dateLastRun.HasValue)
             {
                 // Import has never run, do a fresh import
-                var hits = module.FindTerms(terms);
+                _log.Debug("Beginning {0} import", typeof(T).Name);
 
+                var hits = module.FindTerms(terms);
+                
                 _log.Debug("Finished Search. {0} Hits", hits);
 
                 var count = 0;
@@ -54,7 +54,7 @@ namespace CollectionsOnline.Import.Imports
                         }
 
                         // TODO: REMOVE IMPORT LIMIT
-                        if (count >= 100)
+                        if (count >= 3000)
                             break;
 
                         var results = module.Fetch("start", count, Constants.DataBatchSize, _imuFactory.Columns);
@@ -78,9 +78,11 @@ namespace CollectionsOnline.Import.Imports
             else
             {
                 // Import has been run before, do an update import
+                _log.Debug("Beginning {0} update import", typeof(T).Name);
+                
                 _imuFactory.RegisterAutoMapperMap();
 
-                terms.Add("AdmDateModified", dateLastRun.ToString("MMM dd yyyy"), ">=");
+                terms.Add("AdmDateModified", dateLastRun.Value.ToString("MMM dd yyyy"), ">=");
 
                 var hits = module.FindTerms(terms);
 
@@ -97,10 +99,6 @@ namespace CollectionsOnline.Import.Imports
                             _log.Debug("Canceling Data import");
                             return;
                         }
-
-                        // TODO: REMOVE IMPORT LIMIT
-                        if (count >= 100)
-                            break;
 
                         var results = module.Fetch("start", count, Constants.DataBatchSize, _imuFactory.Columns);
 
