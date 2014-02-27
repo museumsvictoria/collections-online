@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using CollectionsOnline.Core.Config;
+﻿using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
+using System.Configuration;
 using CollectionsOnline.Core.Models;
 using Ninject.Activation;
 using NLog;
@@ -13,7 +9,7 @@ using Raven.Client.Document;
 using Raven.Client.Extensions;
 using Raven.Client.Indexes;
 
-namespace CollectionsOnline.WebSite.Infrastructure
+namespace CollectionsOnline.Core.Infrastructure
 {
     public class NinjectRavenDocumentStoreProvider : Provider<IDocumentStore>
     {
@@ -39,6 +35,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
                 if (application == null)
                 {
+                    _log.Debug("Creating new application document store");
                     application = new Application();
                     documentSession.Store(application);
                 }

@@ -38,16 +38,9 @@ namespace CollectionsOnline.Import.Imports
                 _log.Debug("Beginning Media update import");
 
                 var module = new Module("emultimedia", _session);
-                
-                //var terms = new Terms();
-                //terms.Add("AdmDateModified", dateLastRun.Value.ToString("MMM dd yyyy"), ">=");
-                
-                var terms = new Terms(TermsKind.OR);
 
-                terms.Add("irn", "14797"); // item irn 734059
-                terms.Add("irn", "341327"); // specimen irn 1005339
-                terms.Add("irn", "389615"); // species irn 8037
-                terms.Add("irn", "78937"); // stories irn 1842
+                var terms = new Terms();
+                terms.Add("AdmDateModified", dateLastRun.Value.ToString("MMM dd yyyy"), ">=");
             
                 var columns = new[]
                                 {

@@ -1,5 +1,5 @@
 ﻿using CollectionsOnline.Core.Factories;
-using CollectionsOnline.WebSite.Infrastructure;
+using CollectionsOnline.Core.Infrastructure;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;

@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Models;
-using Ninject.Activation;
-using NLog;
+﻿using Ninject.Activation;
 using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Extensions;
-using Raven.Client.Indexes;
 
-namespace CollectionsOnline.WebSite.Infrastructure
+namespace CollectionsOnline.Core.Infrastructure
 {
     public class NinjectRavenDocumentSessionProvider : Provider<IDocumentSession>
     {

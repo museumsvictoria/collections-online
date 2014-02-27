@@ -32,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Abstractions">
       <HintPath>..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
@@ -40,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,6 +63,8 @@
     <Compile Include="Indexes\CombinedSearchFacets.cs" />
     <Compile Include="Indexes\CombinedSearchResult.cs" />
     <Compile Include="Indexes\CombinedSearch.cs" />
+    <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
+    <Compile Include="Infrastructure\NinjectRavenDocumentStoreProvider.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Author.cs" />
