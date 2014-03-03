@@ -53,7 +53,7 @@ namespace CollectionsOnline.Tests.Import
             var application = DocumentSession.Load<Application>(Constants.ApplicationId);
 
             application.DataImportRunning.ShouldBe(false);
-            import.Received().Run(default(DateTime));
+            import.Received().Run(null);
         }
 
         [Fact]

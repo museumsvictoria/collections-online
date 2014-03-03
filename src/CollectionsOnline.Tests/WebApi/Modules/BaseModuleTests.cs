@@ -43,7 +43,7 @@ namespace CollectionsOnline.Tests.WebApi.Modules
 
             // Then
             dynamic bodyResult = JsonConvert.DeserializeObject<ExpandoObject>(result.Body.AsString());
-            ((object)bodyResult.Response).ShouldNotBe(null);
+            ((object)bodyResult.response).ShouldNotBe(null);
         }
 
         [Fact]

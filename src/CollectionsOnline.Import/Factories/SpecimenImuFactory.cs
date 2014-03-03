@@ -105,7 +105,7 @@ namespace CollectionsOnline.Import.Factories
 
             specimen.Id = "specimens/" + map.GetString("irn");
 
-            specimen.IsHidden = map.GetString("AdmPublishWebNoPassword") == "No";
+            specimen.IsHidden = string.Equals(map.GetString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             specimen.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
@@ -284,7 +284,11 @@ namespace CollectionsOnline.Import.Factories
             //associatedMedia
             // TODO: Be more selective in what media we assign to item and how
             var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetString("MulMimeType") == "image" && x.GetStrings("MdaDataSets_tab").Contains("Website  Atlas of Living Australia")))
+            foreach (var mediaMap in map.GetMaps("media").Where(x =>
+                x != null &&
+                string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
+                x.GetString("MulMimeType") == "image" && 
+                x.GetStrings("MdaDataSets_tab").Contains("Website  Atlas of Living Australia")))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 

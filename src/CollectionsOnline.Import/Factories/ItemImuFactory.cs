@@ -181,7 +181,7 @@ namespace CollectionsOnline.Import.Factories
 
             item.Id = "items/" + map.GetString("irn");
 
-            item.IsHidden = map.GetString("AdmPublishWebNoPassword") == "No";
+            item.IsHidden = string.Equals(map.GetString("AdmPublishWebNoPassword"),"no", StringComparison.OrdinalIgnoreCase);
 
             item.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
@@ -408,7 +408,10 @@ namespace CollectionsOnline.Import.Factories
             // Media
             // TODO: Be more selective in what media we assign to item and how
             var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x => x.GetString("AdmPublishWebNoPassword") == "Yes" && x.GetString("MulMimeType") == "image"))
+            foreach (var mediaMap in map.GetMaps("media").Where(x => 
+                x != null &&
+                string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
+                x.GetString("MulMimeType") == "image"))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 
