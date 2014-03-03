@@ -1,82 +1,48 @@
 ﻿using System;
-using System.Configuration;
-using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Models;
-using NLog;
+using CollectionsOnline.Core.Factories;
+using CollectionsOnline.Core.Infrastructure;
 using Nancy;
 using Nancy.Bootstrapper;
+using Nancy.Bootstrappers.Ninject;
 using Nancy.Json;
-using Nancy.Responses.Negotiation;
-using Nancy.TinyIoc;
-using Raven.Client.Document;
-using Raven.Client.Extensions;
 using Newtonsoft.Json;
+using Ninject;
+using Ninject.Extensions.Conventions;
+using NLog;
+using Raven.Client;
 
 namespace CollectionsOnline.WebApi
 {
-    public class WebApiBootstrapper : DefaultNancyBootstrapper
+    public class WebApiBootstrapper : NinjectNancyBootstrapper
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
-        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+        protected override void ConfigureApplicationContainer(IKernel kernel)
         {
-            base.ApplicationStartup(container, pipelines);
-
-            RegisterRavenDb(container);
-            RegisterJsonNet(container);
+            kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
+            kernel.Bind<JsonSerializer>().To<WebApiJsonSerializer>();
         }
 
-        private void RegisterJsonNet(TinyIoCContainer container)
+        protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)
+        {
+            kernel.Bind<IDocumentSession>().ToProvider<NinjectRavenDocumentSessionProvider>();
+            kernel.Bind(x => x
+                .FromAssemblyContaining(typeof(WebApiBootstrapper), typeof(SlugFactory))
+                .SelectAllClasses()
+                .InNamespaces(new[] { "CollectionsOnline" })
+                .BindAllInterfaces());
+        }
+
+        protected override void ApplicationStartup(IKernel kernal, IPipelines pipelines)
         {
             JsonSettings.MaxJsonLength = Int32.MaxValue;
 
-            container.Register(typeof(JsonSerializer), typeof(WebApiJsonSerializer));
-        }
-
-        protected override NancyInternalConfiguration InternalConfiguration
-        {
-            get
+            pipelines.OnError += (ctx, ex) =>
             {
-                return NancyInternalConfiguration.WithOverrides((context) =>
-                    {
-                        // Prevent Content negotiation.
-                        context.ResponseProcessors.Remove(typeof(JsonProcessor));
-                        context.ResponseProcessors.Remove(typeof(XmlProcessor));
-                    });
-            }
-        }
+                _log.Error(ex);
 
-        private void RegisterRavenDb(TinyIoCContainer container)
-        {
-            // Connect to raven db instance
-            _log.Debug("Initializing document store");
-            var documentStore = new DocumentStore
-            {
-                Url = ConfigurationManager.AppSettings["DatabaseUrl"],
-                DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
-            }.Initialize();
-
-            // Ensure DB exists
-            documentStore.DatabaseCommands.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
-
-            // Ensure we have a application document
-            using (var documentSession = documentStore.OpenSession())
-            {
-                var application = documentSession.Load<Application>(Constants.ApplicationId);
-
-                if (application == null)
-                {
-                    application = new Application();
-                    documentSession.Store(application);
-                }
-
-                documentSession.SaveChanges();
-            }
-
-            container.Register(documentStore);
-
-            // Register IDocumentSession
-            container.Register((c,p) => documentStore.OpenSession());
+                return null;
+            };
         }
     }
 }
