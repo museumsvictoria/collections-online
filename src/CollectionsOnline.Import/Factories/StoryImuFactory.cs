@@ -67,7 +67,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var terms = new Terms();
 
-                terms.Add("DetPurpose_tab", "Website - History & Technology Collections");
+                terms.Add("DetPurpose_tab", Constants.ImuStoryQueryString);
 
                 return terms;
             }
@@ -152,24 +152,24 @@ namespace CollectionsOnline.Import.Factories
             story.Media = media;
 
             // Relationships
-            if (map.GetMap("parent") != null && map.GetMap("parent").GetStrings("DetPurpose_tab").Contains("Website - History & Technology Collections"))
+            if (map.GetMap("parent") != null && map.GetMap("parent").GetStrings("DetPurpose_tab").Contains(Constants.ImuStoryQueryString))
                 story.ParentStoryId = "stories/" + map.GetMap("parent").GetString("irn");
 
             story.ChildStoryIds = map
                 .GetMaps("children")
-                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains("Website - History & Technology Collections"))
+                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuStoryQueryString))
                 .Select(x => "stories/" + x.GetString("irn"))
                 .ToList();
             
             story.RelatedStoryIds = map
                 .GetMaps("relatedstories")
-                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains("Website - History & Technology Collections"))
+                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuStoryQueryString))
                 .Select(x => "stories/" + x.GetString("irn"))
                 .ToList();
              
             story.RelatedItemIds = map
                 .GetMaps("relateditems")
-                .Where(x => x != null && x.GetStrings("MdaDataSets_tab").Contains("History & Technology Collections Online"))
+                .Where(x => x != null && x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
                 .Select(x => "items/" + x.GetString("irn"))
                 .ToList();
 

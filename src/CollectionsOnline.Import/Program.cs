@@ -3,6 +3,7 @@ using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Imports;
+using CollectionsOnline.Import.Infrastructure;
 using IMu;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -50,7 +51,10 @@ namespace CollectionsOnline.Import
             // Raven Db Bindings
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
 
-            // Bind Generic Imports
+            // Imu Bindings
+            kernel.Bind<Session>().ToProvider<NinjectImuSessionProvider>().InSingletonScope();
+
+            // Bind Imports
             kernel.Bind<IImport>().To<ImuImport<Item>>();
             kernel.Bind<IImport>().To<ImuImport<Species>>();
             kernel.Bind<IImport>().To<ImuImport<Specimen>>();

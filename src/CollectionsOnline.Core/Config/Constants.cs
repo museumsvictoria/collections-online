@@ -13,5 +13,13 @@
         public static int SuggestionsMinResultsSize = 15;
 
         public static int SummaryMaxChars = 200;
+
+        public static string ImuItemQueryString = "History & Technology Collections Online";
+
+        public static string ImuSpeciesQueryString = "Website - Species profile";
+
+        public static string ImuSpecimenQueryString = "Website  Atlas of Living Australia";
+
+        public static string ImuStoryQueryString = "Website - History & Technology Collections";
     }
 }

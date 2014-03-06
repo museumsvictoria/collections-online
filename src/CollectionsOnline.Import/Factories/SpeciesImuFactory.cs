@@ -80,7 +80,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var terms = new Terms();
 
-                terms.Add("DetPurpose_tab", "Website - Species profile");
+                terms.Add("DetPurpose_tab", Constants.ImuSpeciesQueryString);
 
                 return terms;
             }
@@ -145,51 +145,51 @@ namespace CollectionsOnline.Import.Factories
             species.WaterColumnLocations = map.GetStrings("SpeWaterColumnLocation_tab");
 
             // Get Taxonomy
-            var taxaMap = map.GetMaps("taxa").FirstOrDefault();
-            if (taxaMap != null)
+            var taxonomy = map.GetMaps("taxa").FirstOrDefault();
+            if (taxonomy != null)
             {
-                var namesMap = taxaMap.GetMaps("names");
+                var names = taxonomy.GetMaps("names");
                 var commonNames = new List<string>();
                 var otherNames = new List<string>();
-                foreach (var nameMap in namesMap)
+                foreach (var name in names)
                 {
-                    var status = nameMap.GetString("ComStatus_tab");
-                    var name = nameMap.GetString("ComName_tab");
+                    var status = name.GetString("ComStatus_tab");
+                    var vernacularName = name.GetString("ComName_tab");
 
                     if (status != null && status.ToLower() == "preferred")
                     {
-                        commonNames.Add(name);
+                        commonNames.Add(vernacularName);
                     }
                     else if (status != null && status.ToLower() == "other")
                     {
-                        otherNames.Add(name);
+                        otherNames.Add(vernacularName);
                     }
                 }
                 species.CommonNames = commonNames;
                 species.OtherNames = otherNames;
 
-                species.Phylum = taxaMap.GetString("ClaPhylum");
-                species.Subphylum = taxaMap.GetString("ClaSubphylum");
-                species.Superclass = taxaMap.GetString("ClaSuperclass");
-                species.Class = taxaMap.GetString("ClaClass");
-                species.Subclass = taxaMap.GetString("ClaSubclass");
-                species.Superorder = taxaMap.GetString("ClaSuperorder");
-                species.Order = taxaMap.GetString("ClaOrder");
-                species.Suborder = taxaMap.GetString("ClaSuborder");
-                species.Infraorder = taxaMap.GetString("ClaInfraorder");
-                species.Superfamily = taxaMap.GetString("ClaSuperfamily");
-                species.Family = taxaMap.GetString("ClaFamily");
-                species.Subfamily = taxaMap.GetString("ClaSubfamily");
-                species.Genus = taxaMap.GetString("ClaGenus");
-                species.Subgenus = taxaMap.GetString("ClaSubgenus");
-                species.SpeciesName = taxaMap.GetString("ClaSpecies");
-                species.Subspecies = taxaMap.GetString("ClaSubspecies");
+                species.Phylum = taxonomy.GetString("ClaPhylum");
+                species.Subphylum = taxonomy.GetString("ClaSubphylum");
+                species.Superclass = taxonomy.GetString("ClaSuperclass");
+                species.Class = taxonomy.GetString("ClaClass");
+                species.Subclass = taxonomy.GetString("ClaSubclass");
+                species.Superorder = taxonomy.GetString("ClaSuperorder");
+                species.Order = taxonomy.GetString("ClaOrder");
+                species.Suborder = taxonomy.GetString("ClaSuborder");
+                species.Infraorder = taxonomy.GetString("ClaInfraorder");
+                species.Superfamily = taxonomy.GetString("ClaSuperfamily");
+                species.Family = taxonomy.GetString("ClaFamily");
+                species.Subfamily = taxonomy.GetString("ClaSubfamily");
+                species.Genus = taxonomy.GetString("ClaGenus");
+                species.Subgenus = taxonomy.GetString("ClaSubgenus");
+                species.SpeciesName = taxonomy.GetString("ClaSpecies");
+                species.Subspecies = taxonomy.GetString("ClaSubspecies");
 
-                var othersMap = taxaMap.GetMaps("others");
-                foreach (var otherMap in othersMap)
+                var others = taxonomy.GetMaps("others");
+                foreach (var other in others)
                 {
-                    var rank = otherMap.GetString("ClaOtherRank_tab");
-                    var value = otherMap.GetString("ClaOtherValue_tab");
+                    var rank = other.GetString("ClaOtherRank_tab");
+                    var value = other.GetString("ClaOtherValue_tab");
 
                     if (rank.ToLower() == "mov")
                     {
@@ -197,7 +197,7 @@ namespace CollectionsOnline.Import.Factories
                     }
                 }
 
-                species.Author = taxaMap.GetString("AutAuthorString");
+                species.Author = taxonomy.GetString("AutAuthorString");
                 species.HigherClassification = new[]
                 {
                     species.Phylum,
@@ -214,9 +214,9 @@ namespace CollectionsOnline.Import.Factories
                     species.Author
                 }.Concatenate(" ");
 
-                // Relationships
+                // Relationships TODO: add filter to get only specimens added in specimen import
                 species.SpecimenIds =
-                    taxaMap.GetMaps("specimens")
+                    taxonomy.GetMaps("specimens")
                         .Where(x => x != null)
                         .Select(x => "specimens/" + x.GetString("irn"))
                         .ToList();
@@ -233,14 +233,14 @@ namespace CollectionsOnline.Import.Factories
 
             // Media
             // TODO: Be more selective in what media we assign to item and how
-            var media = new List<Media>();
-            foreach (var mediaMap in map.GetMaps("media").Where(x =>
+            var medias = new List<Media>();
+            foreach (var media in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
                 x.GetString("MulMimeType") == "image" && 
                 x.GetStrings("MdaDataSets_tab").Any(y => y == "App - Field Guide")))
             {
-                var irn = long.Parse(mediaMap.GetString("irn"));
+                var irn = long.Parse(media.GetString("irn"));
 
                 var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
                 var thumbResizeSettings = new ResizeSettings
@@ -255,19 +255,19 @@ namespace CollectionsOnline.Import.Factories
 
                 if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
                 {
-                    media.Add(new Media
+                    medias.Add(new Media
                     {
                         Irn = irn,
-                        DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                            mediaMap.GetString("AdmTimeModified")),
+                        DateModified = DateTime.ParseExact(string.Format("{0} {1}", media.GetString("AdmDateModified"),
+                            media.GetString("AdmTimeModified")),
                             "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
-                        Title = mediaMap.GetString("MulTitle"),
-                        Type = mediaMap.GetString("MulMimeType"),
+                        Title = media.GetString("MulTitle"),
+                        Type = media.GetString("MulMimeType"),
                         Url = url
                     });
                 }
             }
-            species.Media = media;
+            species.Media = medias;
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(species.IdentifyingCharacters))

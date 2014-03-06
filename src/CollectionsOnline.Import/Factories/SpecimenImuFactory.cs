@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Utilities;
@@ -92,8 +93,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var terms = new Terms();
 
-                terms.Add("ColCategory", "Natural Sciences");
-                terms.Add("MdaDataSets_tab", "Website - Atlas of Living Australia");
+                terms.Add("MdaDataSets_tab", Constants.ImuSpecimenQueryString);
 
                 return terms;
             }
@@ -287,8 +287,8 @@ namespace CollectionsOnline.Import.Factories
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
-                x.GetString("MulMimeType") == "image" && 
-                x.GetStrings("MdaDataSets_tab").Contains("Website  Atlas of Living Australia")))
+                x.GetString("MulMimeType") == "image" &&
+                x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString)))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 

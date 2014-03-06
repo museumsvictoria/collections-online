@@ -40,7 +40,7 @@ namespace CollectionsOnline.Import.Imports
                 var module = new Module("emultimedia", _session);
 
                 var terms = new Terms();
-                terms.Add("AdmDateModified", dateLastRun.Value.ToString("MMM dd yyyy"), ">=");
+                terms.Add("AdmDateModified", dateLastRun.Value.ToString("MMM dd yyyy"), ">=");                
             
                 var columns = new[]
                                 {
@@ -115,7 +115,9 @@ namespace CollectionsOnline.Import.Imports
                             {
                                 var catalogueIrn = long.Parse(catalogue.GetString("irn"));
                                 var sets = catalogue.GetStrings("sets");
-                                if (sets.Any(x => x == "History & Technology Collections Online" || x == "Collections Online -  Indigenous Cultures" || x == "Collections Online - Natural Sciences"))
+
+                                // TODO: update once we have consistent flag values for items in emu
+                                if (sets.Any(x => x == Constants.ImuItemQueryString || x == "Collections Online -  Indigenous Cultures" || x == "Collections Online - Natural Sciences"))
                                 {
                                     // Item Media
                                     var item = documentSession.Load<Item>(catalogueIrn);
@@ -134,7 +136,7 @@ namespace CollectionsOnline.Import.Imports
                                         }
                                     }
                                 }
-                                if (sets.Any(x => x == "Website - Atlas of Living Australia"))
+                                if (sets.Any(x => x == Constants.ImuSpecimenQueryString))
                                 {
                                     // Specimen media
                                     var specimen = documentSession.Load<Specimen>(catalogueIrn);
@@ -160,7 +162,7 @@ namespace CollectionsOnline.Import.Imports
                             {
                                 var narrativeIrn = long.Parse(narrative.GetString("irn"));
                                 var sets = narrative.GetStrings("sets");
-                                if (sets.Any(x => x == "Website - Species profile"))
+                                if (sets.Any(x => x == Constants.ImuSpeciesQueryString))
                                 {
                                     // Species Media
                                     var species = documentSession.Load<Species>(narrativeIrn);
@@ -179,7 +181,7 @@ namespace CollectionsOnline.Import.Imports
                                         }
                                     }
                                 }
-                                if (sets.Any(x => x == "Website - History & Technology Collections"))
+                                if (sets.Any(x => x == Constants.ImuStoryQueryString))
                                 {
                                     // Story media
                                     var story = documentSession.Load<Story>(narrativeIrn);

@@ -5,6 +5,7 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import;
 using CollectionsOnline.Import.Imports;
+using CollectionsOnline.Import.Infrastructure;
 using NSubstitute;
 using Shouldly;
 using WorldDomination.Raven.Tests.Helpers;

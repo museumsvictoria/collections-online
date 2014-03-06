@@ -166,7 +166,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var terms = new Terms();
 
-                terms.Add("MdaDataSets_tab", "History & Technology Collections Online");                
+                terms.Add("MdaDataSets_tab", Constants.ImuItemQueryString);
 
                 return terms;
             }

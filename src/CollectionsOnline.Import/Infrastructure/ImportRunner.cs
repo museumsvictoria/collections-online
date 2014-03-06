@@ -6,7 +6,7 @@ using CollectionsOnline.Import.Imports;
 using NLog;
 using Raven.Client;
 
-namespace CollectionsOnline.Import
+namespace CollectionsOnline.Import.Infrastructure
 {
     public class ImportRunner
     {
