@@ -227,6 +227,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                     "ItemTradeLiteraturePublicationDate",
                     "ItemTradeLiteraturePrimaryRole",
                     "ItemTradeLiteraturePrimaryName")
+                .OrderByDescending(x => x.Quality)
                 .ToList();
             queryStopwatch.Stop();
 

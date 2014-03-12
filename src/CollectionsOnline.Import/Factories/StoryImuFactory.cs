@@ -114,7 +114,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Media
             // TODO: Be more selective in what media we assign to item and how
-            var media = new List<Media>();
+            story.Media = new List<Media>();
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) && 
@@ -135,7 +135,7 @@ namespace CollectionsOnline.Import.Factories
 
                 if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
                 {
-                    media.Add(new Media
+                    story.Media.Add(new Media
                     {
                         Irn = irn,
                         DateModified =
@@ -149,7 +149,6 @@ namespace CollectionsOnline.Import.Factories
                     });
                 }
             }
-            story.Media = media;
 
             // Relationships
             if (map.GetMap("parent") != null && map.GetMap("parent").GetStrings("DetPurpose_tab").Contains(Constants.ImuStoryQueryString))

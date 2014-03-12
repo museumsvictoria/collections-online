@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CollectionsOnline.Core.Models
 {
@@ -8,6 +9,37 @@ namespace CollectionsOnline.Core.Models
         #region Non-Emu
 
         public string Summary { get; set; }
+
+        public int Quality
+        {
+            get
+            {
+                var qualityCount = 0;
+
+                if (Tags.Any())
+                    qualityCount += Tags.Count;
+                if (Types.Any())
+                    qualityCount += Types.Count;
+                if (GeographicTags.Any())
+                    qualityCount += GeographicTags.Count;
+                if (Authors.Any())
+                    qualityCount += Authors.Count;
+                if (Media.Any())
+                    qualityCount += Media.Count * 2;
+                if (Authors.Any())
+                    qualityCount += Authors.Count;
+                if (ChildStoryIds.Any())
+                    qualityCount += ChildStoryIds.Count;
+                if (!string.IsNullOrWhiteSpace(ParentStoryId))
+                    qualityCount += 1;
+                if (RelatedStoryIds.Any())
+                    qualityCount += RelatedStoryIds.Count;
+                if (RelatedItemIds.Any())
+                    qualityCount += RelatedItemIds.Count;
+
+                return qualityCount;
+            }
+        }
 
         #endregion
 

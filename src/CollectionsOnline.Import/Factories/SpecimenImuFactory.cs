@@ -118,7 +118,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.RegistrationNumber = map["ColRegPart"] != null
                              ? string.Format("{0}{1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
                              : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
-            specimen.CollectionNames = map.GetStrings("ColCollectionName_tab");
+            specimen.CollectionNames = map.GetStrings("ColCollectionName_tab") ?? new string[] { };
             specimen.Type = map.GetString("ColTypeOfItem");
 
             // Discipline specific fields
@@ -283,7 +283,7 @@ namespace CollectionsOnline.Import.Factories
 
             //associatedMedia
             // TODO: Be more selective in what media we assign to item and how
-            var media = new List<Media>();
+            specimen.Media = new List<Media>();
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
@@ -305,7 +305,7 @@ namespace CollectionsOnline.Import.Factories
 
                 if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
                 {
-                    media.Add(new Media
+                    specimen.Media.Add(new Media
                     {
                         Irn = irn,
                         DateModified =
@@ -318,8 +318,7 @@ namespace CollectionsOnline.Import.Factories
                     });
                 }
             }
-            specimen.Media = media;
-            specimen.AssociatedMedia = media.Select(x => x.Title).Concatenate(";");
+            specimen.AssociatedMedia = specimen.Media.Select(x => x.Title).Concatenate(";");
 
             #endregion
 

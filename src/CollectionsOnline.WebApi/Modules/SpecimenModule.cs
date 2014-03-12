@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using Nancy;
 using Raven.Client;
@@ -13,7 +14,7 @@ namespace CollectionsOnline.WebApi.Modules
             Get["/"] = parameters =>
                 {
                     var specimens = documentSession
-                        .Query<Specimen>()
+                        .Query<Specimen, SpecimensNotHidden>()
                         .Statistics(out Statistics)
                         .Skip(Offset)
                         .Take(Limit)

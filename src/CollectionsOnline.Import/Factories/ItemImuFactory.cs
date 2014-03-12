@@ -193,7 +193,7 @@ namespace CollectionsOnline.Import.Factories
             item.RegistrationNumber = map["ColRegPart"] != null
                                          ? string.Format("{0}{1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
                                          : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
-            item.CollectionNames = map.GetStrings("ColCollectionName_tab");
+            item.CollectionNames = map.GetStrings("ColCollectionName_tab") ?? new string[] {};
 
             item.PrimaryClassification = map.GetString("ClaPrimaryClassification").ToSentenceCase();
             if (map.GetString("ClaSecondaryClassification") != null && !map.GetString("ClaSecondaryClassification").ToLower().Contains("to be classified"))
@@ -207,7 +207,7 @@ namespace CollectionsOnline.Import.Factories
             item.Inscription = map.GetString("DesInscriptions");
 
             // Associations
-            var associations = new List<Association>();
+            item.Associations = new List<Association>();
             foreach (var associationMap in map.GetMaps("associations"))
             {
                 var association = new Association
@@ -228,9 +228,8 @@ namespace CollectionsOnline.Import.Factories
                     association.Name = nameMap.GetString("NamFullName");
                 }
 
-                associations.Add(association);
+                item.Associations.Add(association);
             }
-            item.Associations = associations;
 
             // Tags
             var tags = new List<string>();
@@ -243,7 +242,7 @@ namespace CollectionsOnline.Import.Factories
             item.Shape = map.GetString("DimShape");
 
             // Dimensions
-            var dimensions = new List<string>();
+            item.Dimensions = new List<string>();
             foreach (var dimensionMap in map.GetMaps("dimensions"))
             {
                 var dimension = new List<string>();
@@ -273,14 +272,13 @@ namespace CollectionsOnline.Import.Factories
 
                 var notes = dimensionMap.GetString("DimDimensionComments0");
 
-                dimensions.Add(string.Format("{0}: {1}. {2}", configuration, dimension.Concatenate(", "), notes));
+                item.Dimensions.Add(string.Format("{0}: {1}. {2}", configuration, dimension.Concatenate(", "), notes));
             }
-            item.Dimensions = dimensions;
-
+            
             item.References = map.GetString("SupReferences");
 
             // Bibliographys
-            var bibliographies = new List<string>();
+            item.Bibliographies = new List<string>();
             foreach (var bibliographyMap in map.GetMaps("bibliography"))
             {
                 var bibliography = new List<string>();
@@ -295,16 +293,19 @@ namespace CollectionsOnline.Import.Factories
                 if (!string.IsNullOrWhiteSpace(bibliographyMap.GetString("BibPages_tab")))
                     bibliography.Add(string.Format("{0} Pages", bibliographyMap.GetString("BibPages_tab")));
 
-                bibliographies.Add(bibliography.Concatenate(", "));
+                item.Bibliographies.Add(bibliography.Concatenate(", "));
             }
-            item.Bibliographies = bibliographies;
 
             // Brand/Model names
             item.ModelNames = map.GetStrings("Pro2ModelNameNumber_tab").Concatenate("; ");
             item.BrandNames = map.GetStrings("Pro2BrandName_tab").Concatenate("; ");
 
             // Related items
-            item.RelatedItemIds = map.GetMaps("related").Where(x => x != null).Select(x => "items/" + x.GetString("irn")).ToList();
+            item.RelatedItemIds = new List<string>();
+            foreach (var relatedItem in map.GetMaps("related"))
+            {
+                item.RelatedItemIds.Add("items/" + relatedItem.GetString("irn"));
+            }
 
             // Archeology fields
             item.ArcheologyContextNumber = map.GetString("ArcContextNumber");
@@ -407,7 +408,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Media
             // TODO: Be more selective in what media we assign to item and how
-            var media = new List<Media>();
+            item.Media = new List<Media>();
             foreach (var mediaMap in map.GetMaps("media").Where(x => 
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
@@ -428,7 +429,7 @@ namespace CollectionsOnline.Import.Factories
 
                 if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
                 {
-                    media.Add(new Media
+                    item.Media.Add(new Media
                     {
                         Irn = irn,
                         DateModified =
@@ -442,7 +443,6 @@ namespace CollectionsOnline.Import.Factories
                     });
                 }
             }
-            item.Media = media;
 
             // Indigenous Cultures
             item.IndigenousCulturesLocalName = map.GetString("DesLocalName");
@@ -532,7 +532,7 @@ namespace CollectionsOnline.Import.Factories
             // Build associated dates
             var associatedDates = new List<string>();
             string yearSpan;
-            foreach (var association in associations)
+            foreach (var association in item.Associations)
             {
                 yearSpan = NaturalDateConverter.ConvertToYearSpan(association.Date);
                 if (!string.IsNullOrWhiteSpace(yearSpan))

@@ -2,7 +2,7 @@
 {
     public class CombinedSearchResult
     {
-        /* Content fields */
+        /* Content/Order fields */
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -12,6 +12,8 @@
         public string Summary { get; set; }
 
         public string ThumbUrl { get; set; }
+
+        public int Quality { get; set; }
         
         /* facet fields */
         

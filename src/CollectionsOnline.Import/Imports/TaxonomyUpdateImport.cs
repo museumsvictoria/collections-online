@@ -266,10 +266,11 @@ namespace CollectionsOnline.Import.Imports
                                         }.Concatenate(" ");
 
                                         // Relationships TODO: add filter to get only specimens added in specimen import
-                                        species.SpecimenIds = catalogues
-                                            .Where(x => x != null)
-                                            .Select(x => "specimens/" + x.GetString("irn"))
-                                            .ToList();
+                                        species.SpecimenIds = new List<string>();
+                                        foreach (var specimen in catalogues)
+                                        {
+                                            species.SpecimenIds.Add("specimens/" + specimen.GetString("irn"));
+                                        }
                                     }
                                 }
                             }

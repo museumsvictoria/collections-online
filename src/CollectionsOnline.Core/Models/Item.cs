@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CollectionsOnline.Core.Models
 {
@@ -12,6 +13,55 @@ namespace CollectionsOnline.Core.Models
         public string Summary { get; set; }
 
         public IList<string> AssociatedDates { get; set; }
+
+        public int Quality
+        {
+            get
+            {
+                var qualityCount = 0;
+
+                if (CollectionNames.Any())
+                    qualityCount += CollectionNames.Count;
+                if (!string.IsNullOrWhiteSpace(PrimaryClassification))
+                    qualityCount += 1;
+                if (!string.IsNullOrWhiteSpace(SecondaryClassification))
+                    qualityCount += 1;
+                if (!string.IsNullOrWhiteSpace(TertiaryClassification))
+                    qualityCount += 1;
+                if (!string.IsNullOrWhiteSpace(ObjectSummary))
+                    qualityCount += 5;
+                if (!string.IsNullOrWhiteSpace(Description))
+                    qualityCount += 5;
+                if (!string.IsNullOrWhiteSpace(Inscription))
+                    qualityCount += 3;
+                if (Associations.Any())
+                    qualityCount += Associations.Count;
+                if (Tags.Any())
+                    qualityCount += Tags.Count;
+                if (!string.IsNullOrWhiteSpace(Significance))
+                    qualityCount += 3;
+                if (!string.IsNullOrWhiteSpace(ModelScale))
+                    qualityCount += 1;
+                if (!string.IsNullOrWhiteSpace(Shape))
+                    qualityCount += 1;
+                if (Dimensions.Any())
+                    qualityCount += 1;
+                if (!string.IsNullOrWhiteSpace(References))
+                    qualityCount += 1;
+                if (Bibliographies.Any())
+                    qualityCount += Bibliographies.Count;
+                if (!string.IsNullOrWhiteSpace(ModelNames))
+                    qualityCount += 1;
+                if (!string.IsNullOrWhiteSpace(BrandNames))
+                    qualityCount += 1;
+                if (RelatedItemIds.Any())
+                    qualityCount += RelatedItemIds.Count;
+                if (Media.Any())
+                    qualityCount += Media.Count * 2;
+
+                return qualityCount;
+            }
+        }
 
         #endregion
 
