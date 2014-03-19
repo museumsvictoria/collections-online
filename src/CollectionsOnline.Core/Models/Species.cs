@@ -16,72 +16,12 @@ namespace CollectionsOnline.Core.Models
             {
                 var qualityCount = 0;
 
-                if (!string.IsNullOrWhiteSpace(AnimalType))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(AnimalSubType))
-                    qualityCount += 1;
-                if (Colours.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(MaximumSize))
-                    qualityCount += 1;
-                if (Habitats.Any())
-                    qualityCount += 1;
-                if (WhereToLook.Any())
-                    qualityCount += 1;
-                if (WhenActive.Any())
-                    qualityCount += 1;
-                if (NationalParks.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Diet))
-                    qualityCount += 1;
-                if (DietCategories.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(FastFact))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Habitat))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Distribution))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Biology))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(IdentifyingCharacters))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(BriefId))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Hazards))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Endemicity))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Commercial))
-                    qualityCount += 1;
-                if (ConservationStatuses.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(ScientificDiagnosis))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Web))
-                    qualityCount += 1;
-                if (Plants.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(FlightStart) || !string.IsNullOrWhiteSpace(FlightEnd))
-                    qualityCount += 1;
-                if (Depths.Any())
-                    qualityCount += 1;
-                if (WaterColumnLocations.Any())
-                    qualityCount += 1;
-                if (CommonNames.Any())
-                    qualityCount += 1;
-                if (OtherNames.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(SpeciesName))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Author))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(ScientificName))
+                if (!string.IsNullOrWhiteSpace(IdentifyingCharacters) || !string.IsNullOrWhiteSpace(Biology))
                     qualityCount += 1;
                 if (SpecimenIds.Any())
-                    qualityCount += SpecimenIds.Count;
-                if (Authors.Any())
-                    qualityCount += Authors.Count;
+                    qualityCount += 1;
+                if (!string.IsNullOrWhiteSpace(BriefId) || !string.IsNullOrWhiteSpace(Hazards) || !string.IsNullOrWhiteSpace(Habitat) || !string.IsNullOrWhiteSpace(Endemicity) || !string.IsNullOrWhiteSpace(Diet) || !string.IsNullOrWhiteSpace(Endemicity))
+                    qualityCount += 1;
                 if (Media.Any())
                     qualityCount += Media.Count * 2;
 

@@ -20,42 +20,12 @@ namespace CollectionsOnline.Core.Models
             {
                 var qualityCount = 0;
 
-                if (CollectionNames.Any())
-                    qualityCount += CollectionNames.Count;
-                if (!string.IsNullOrWhiteSpace(PrimaryClassification))
+                if (!string.IsNullOrWhiteSpace(Description) || !string.IsNullOrWhiteSpace(ObjectSummary) || !string.IsNullOrWhiteSpace(Significance) || !string.IsNullOrWhiteSpace(IsdDescriptionOfContent))
                     qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(SecondaryClassification))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(TertiaryClassification))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(ObjectSummary))
-                    qualityCount += 5;
-                if (!string.IsNullOrWhiteSpace(Description))
-                    qualityCount += 5;
-                if (!string.IsNullOrWhiteSpace(Inscription))
-                    qualityCount += 3;
                 if (Associations.Any())
-                    qualityCount += Associations.Count;
+                    qualityCount += 1;
                 if (Tags.Any())
-                    qualityCount += Tags.Count;
-                if (!string.IsNullOrWhiteSpace(Significance))
-                    qualityCount += 3;
-                if (!string.IsNullOrWhiteSpace(ModelScale))
                     qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Shape))
-                    qualityCount += 1;
-                if (Dimensions.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(References))
-                    qualityCount += 1;
-                if (Bibliographies.Any())
-                    qualityCount += Bibliographies.Count;
-                if (!string.IsNullOrWhiteSpace(ModelNames))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(BrandNames))
-                    qualityCount += 1;
-                if (RelatedItemIds.Any())
-                    qualityCount += RelatedItemIds.Count;
                 if (Media.Any())
                     qualityCount += Media.Count * 2;
 

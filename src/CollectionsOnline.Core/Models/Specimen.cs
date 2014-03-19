@@ -18,50 +18,14 @@ namespace CollectionsOnline.Core.Models
             {
                 var qualityCount = 0;
 
-                if (!string.IsNullOrWhiteSpace(Category))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(ScientificGroup))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Discipline))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(RegistrationNumber))
-                    qualityCount += 1;
-                if (CollectionNames.Any())
-                    qualityCount += CollectionNames.Count;
-                if (!string.IsNullOrWhiteSpace(Type))
-                    qualityCount += 1;
-                if (Media.Any())
-                    qualityCount += Media.Count * 2;
-                if (!string.IsNullOrWhiteSpace(RecordedBy))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(LifeStage))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(SamplingProtocol))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(VerbatimEventDate))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(FieldNumber))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(HigherGeography))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(Locality))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(MinimumDepthInMeters) || !string.IsNullOrWhiteSpace(MaximumDepthInMeters))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(MinimumElevationInMeters) || !string.IsNullOrWhiteSpace(MaximumElevationInMeters))
+                if (!string.IsNullOrWhiteSpace(Year) || !string.IsNullOrWhiteSpace(RecordedBy) || !string.IsNullOrWhiteSpace(TypeStatus)) 
                     qualityCount += 1;
                 if (!string.IsNullOrWhiteSpace(DecimalLatitude) || !string.IsNullOrWhiteSpace(DecimalLongitude))
                     qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(GeodeticDatum))
+                if (!string.IsNullOrWhiteSpace(ScientificName))
                     qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(IdentificationRemarks))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(VernacularName))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(ScientificNameAuthorship))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(NomenclaturalCode))
-                    qualityCount += 1;
+                if (Media.Any())
+                    qualityCount += Media.Count * 2;
 
                 return qualityCount;
             }

@@ -16,26 +16,14 @@ namespace CollectionsOnline.Core.Models
             {
                 var qualityCount = 0;
 
+                if (RelatedItemIds.Count > 1)
+                    qualityCount += 1;
                 if (Tags.Any())
-                    qualityCount += Tags.Count;
-                if (Types.Any())
-                    qualityCount += Types.Count;
-                if (GeographicTags.Any())
-                    qualityCount += GeographicTags.Count;
-                if (Authors.Any())
-                    qualityCount += Authors.Count;
+                    qualityCount += 1;
                 if (Media.Any())
                     qualityCount += Media.Count * 2;
-                if (Authors.Any())
-                    qualityCount += Authors.Count;
                 if (ChildStoryIds.Any())
-                    qualityCount += ChildStoryIds.Count;
-                if (!string.IsNullOrWhiteSpace(ParentStoryId))
                     qualityCount += 1;
-                if (RelatedStoryIds.Any())
-                    qualityCount += RelatedStoryIds.Count;
-                if (RelatedItemIds.Any())
-                    qualityCount += RelatedItemIds.Count;
 
                 return qualityCount;
             }

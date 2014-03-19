@@ -302,7 +302,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Related items
             item.RelatedItemIds = new List<string>();
-            foreach (var relatedItem in map.GetMaps("related"))
+            foreach (var relatedItem in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
             {
                 item.RelatedItemIds.Add("items/" + relatedItem.GetString("irn"));
             }
