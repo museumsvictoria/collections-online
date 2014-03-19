@@ -236,153 +236,34 @@ namespace CollectionsOnline.WebSite.Features.Search
                 });
             }
 
-
-            // Build results TODO: Eventually wont be featured on search results page but on object page.
+            // Build results
             foreach (var result in results)
             {
-                var searchResultViewModel = new SearchResultViewModel
-                {
-                    Result = result,
-                    Url = result.Id
-                };
-
-                if (result.Tags != null && result.Tags.Any())
-                {
-                    foreach (var tag in result.Tags.Where(x => !string.IsNullOrWhiteSpace(x as string)))
-                    {
-                        searchResultViewModel.Terms.Add(new TermViewModel
-                        {
-                            Name = tag as string,
-                            Term = "Tag",
-                            Url = String.Concat(baseUrl, "?tag=", tag)
-                        });
-                    }
-                }
-                if (result.Country != null && result.Country.Any())
-                {
-                    foreach (var country in result.Country.Where(x => !string.IsNullOrWhiteSpace(x as string)))
-                    {
-                        searchResultViewModel.Terms.Add(new TermViewModel
-                        {
-                            Name = country as string,
-                            Term = "Country",
-                            Url = String.Concat(baseUrl, "?country=", HttpUtility.UrlEncode(country as string))
-                        });
-                    }
-                }
-                if (result.ItemCollectionNames != null && result.ItemCollectionNames.Any())
-                {
-                    foreach (var itemCollectionName in result.ItemCollectionNames.Where(x => !string.IsNullOrWhiteSpace(x as string)))
-                    {
-                        searchResultViewModel.Terms.Add(new TermViewModel
-                        {
-                            Name = itemCollectionName as string,
-                            Term = "ItemCollectionName",
-                            Url = String.Concat(baseUrl, "?itemcollectionname=", HttpUtility.UrlEncode(itemCollectionName as string))
-                        });
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(result.ItemPrimaryClassification))
-                {
-                    searchResultViewModel.Terms.Add(new TermViewModel
-                    {
-                        Name = result.ItemPrimaryClassification,
-                        Term = "ItemPrimaryClassification",
-                        Url = String.Concat(baseUrl, "?itemprimaryclassification=", HttpUtility.UrlEncode(result.ItemPrimaryClassification))
-                    });
-                }
-                if (!string.IsNullOrWhiteSpace(result.ItemSecondaryClassification))
-                {
-                    searchResultViewModel.Terms.Add(new TermViewModel
-                    {
-                        Name = result.ItemSecondaryClassification,
-                        Term = "ItemSecondaryClassification",
-                        Url = String.Concat(baseUrl, "?itemsecondaryclassification=", HttpUtility.UrlEncode(result.ItemSecondaryClassification))
-                    });
-                }
-                if (!string.IsNullOrWhiteSpace(result.ItemTertiaryClassification))
-                {
-                    searchResultViewModel.Terms.Add(new TermViewModel
-                    {
-                        Name = result.ItemTertiaryClassification,
-                        Term = "ItemTertiaryClassification",
-                        Url = String.Concat(baseUrl, "?itemtertiaryclassification=", HttpUtility.UrlEncode(result.ItemTertiaryClassification))
-                    });
-                }
-                if (result.ItemAssociationNames != null && result.ItemAssociationNames.Any())
-                {
-                    foreach (var itemAssociationName in result.ItemAssociationNames.Where(x => !string.IsNullOrWhiteSpace(x as string)))
-                    {
-                        searchResultViewModel.Terms.Add(new TermViewModel
-                        {
-                            Name = itemAssociationName as string,
-                            Term = "ItemCollectionName",
-                            Url = String.Concat(baseUrl, "?itemassociationname=", HttpUtility.UrlEncode(itemAssociationName as string))
-                        });
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePrimarySubject))
-                {
-                    searchResultViewModel.Terms.Add(new TermViewModel
-                    {
-                        Name = result.ItemTradeLiteraturePrimarySubject,
-                        Term = "ItemTradeLiteraturePrimarySubject",
-                        Url = String.Concat(baseUrl, "?itemtradeliteratureprimarysubject=", HttpUtility.UrlEncode(result.ItemTradeLiteraturePrimarySubject))
-                    });
-                }
-                if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePublicationDate))
-                {
-                    searchResultViewModel.Terms.Add(new TermViewModel
-                    {
-                        Name = result.ItemTradeLiteraturePublicationDate,
-                        Term = "ItemTradeLiteraturePublicationDate",
-                        Url = String.Concat(baseUrl, "?itemtradeliteraturepublicationdate=", HttpUtility.UrlEncode(result.ItemTradeLiteraturePublicationDate))
-                    });
-                }
-                if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePrimaryRole))
-                {
-                    searchResultViewModel.Terms.Add(new TermViewModel
-                    {
-                        Name = result.ItemTradeLiteraturePrimaryRole,
-                        Term = "ItemTradeLiteraturePrimaryRole",
-                        Url = String.Concat(baseUrl, "?itemtradeliteratureprimaryrole=", HttpUtility.UrlEncode(result.ItemTradeLiteraturePrimaryRole))
-                    });
-                }
-                if (!string.IsNullOrWhiteSpace(result.ItemTradeLiteraturePrimaryName))
-                {
-                    searchResultViewModel.Terms.Add(new TermViewModel
-                    {
-                        Name = result.ItemTradeLiteraturePrimaryName,
-                        Term = "ItemTradeLiteraturePrimaryName",
-                        Url = String.Concat(baseUrl, "?itemtradeliteratureprimaryname=", HttpUtility.UrlEncode(result.ItemTradeLiteraturePrimaryName))
-                    });
-                }
-
                 // Trim summary to fit
-                if (searchResultViewModel.Result.Summary != null)
-                    searchResultViewModel.Result.Summary = searchResultViewModel.Result.Summary.Truncate(Core.Config.Constants.SummaryMaxChars);
+                if (result.Summary != null)
+                    result.Summary = result.Summary.Truncate(Core.Config.Constants.SummaryMaxChars);
 
-                searchViewModel.Results.Add(searchResultViewModel);
+                searchViewModel.Results.Add(result);
+            }
 
-                // Build next prev page links
-                var queryString = HttpUtility.ParseQueryString(request.Url.Query);
-                if ((searchInputModel.Offset + searchInputModel.Limit) < totalResults)
+            // Build next prev page links
+            var queryString = HttpUtility.ParseQueryString(request.Url.Query);
+            if ((searchInputModel.Offset + searchInputModel.Limit) < totalResults)
+            {
+                queryString.Set("offset", (searchInputModel.Offset + searchInputModel.Limit).ToString());
+
+                searchViewModel.NextPageUrl = String.Concat(baseUrl, "?", queryString);
+            }
+
+            if ((searchInputModel.Offset - searchInputModel.Limit) >= 0)
+            {
+                queryString.Set("offset", (searchInputModel.Offset - searchInputModel.Limit).ToString());
+                if ((searchInputModel.Offset - searchInputModel.Limit) == 0)
                 {
-                    queryString.Set("offset", (searchInputModel.Offset + searchInputModel.Limit).ToString());
-
-                    searchViewModel.NextPageUrl = String.Concat(baseUrl, "?", queryString);
+                    queryString.Remove("offset");
                 }
 
-                if ((searchInputModel.Offset - searchInputModel.Limit) >= 0)
-                {
-                    queryString.Set("offset", (searchInputModel.Offset - searchInputModel.Limit).ToString());
-                    if ((searchInputModel.Offset - searchInputModel.Limit) == 0)
-                    {
-                        queryString.Remove("offset");
-                    }
-
-                    searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(baseUrl, "?", queryString) : baseUrl;
-                }
+                searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(baseUrl, "?", queryString) : baseUrl;
             }
 
             // Build suggestions

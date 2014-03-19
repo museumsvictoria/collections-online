@@ -14,18 +14,21 @@ namespace CollectionsOnline.Core.Indexes
                 where item.IsHidden == false
                 select new
                 {
+                    // Content fields
                     Id = item.Id,
                     Name = item.Name,
                     Content = new object[] { item.Name, item.Discipline, item.RegistrationNumber },
                     Summary = item.Summary,
                     ThumbUrl = item.Media.FirstOrDefault() != null ? item.Media.FirstOrDefault().Url : (string)null,
+
+                    // Sort fields
                     Quality = item.Quality,
 
+                    // Facet fields
                     Type = "Item",
                     Category = item.Category,
                     HasImages = (item.Media.Any()) ? "Yes" : (string)null,
-                    Discipline = item.Discipline,
-                    Dates = item.AssociatedDates.ToArray(),
+                    Discipline = item.Discipline,                    
                     ItemType = item.Type,
                     SpeciesType = (string)null,
                     SpeciesSubType = (string)null,
@@ -37,7 +40,9 @@ namespace CollectionsOnline.Core.Indexes
                     SpecimenScientificGroup = (string)null,
                     SpecimenDiscipline = (string)null,
                     StoryTypes = new object[] { },
-                                            
+                    Dates = item.AssociatedDates.ToArray(),
+
+                    // Term fields
                     Tags = item.Tags,
                     Country = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country).ToArray(),
                     ItemCollectionNames = item.CollectionNames,
@@ -56,20 +61,21 @@ namespace CollectionsOnline.Core.Indexes
                 where species.IsHidden == false
                 select new
                 {
+                    // Content fields
                     Id = species.Id,
                     Name = species.CommonNames.FirstOrDefault() ?? species.SpeciesName ?? species.Genus,
-                    Content =
-                        new object[]
-                        {species.AnimalType, species.AnimalSubType, species.HigherClassification, species.CommonNames},
+                    Content = new object[] {species.AnimalType, species.AnimalSubType, species.HigherClassification, species.CommonNames},
                     Summary = species.Summary,
-                    ThumbUrl =
-                        species.Media.FirstOrDefault() != null ? species.Media.FirstOrDefault().Url : (string) null,
+                    ThumbUrl = species.Media.FirstOrDefault() != null ? species.Media.FirstOrDefault().Url : (string) null,
+
+                    // Sort fields
                     Quality = species.Quality,
+
+                    // Facet fields
                     Type = "Species",
                     Category = "Natural Sciences",
                     HasImages = (species.Media.Any()) ? "Yes" : (string) null,
-                    Discipline = (string) null,
-                    Dates = new object[] {},
+                    Discipline = (string) null,                    
                     ItemType = (string) null,
                     SpeciesType = species.AnimalType,
                     SpeciesSubType = species.AnimalSubType,
@@ -81,6 +87,9 @@ namespace CollectionsOnline.Core.Indexes
                     SpecimenScientificGroup = (string) null,
                     SpecimenDiscipline = (string) null,
                     StoryTypes = new object[] {},
+                    Dates = new object[] { },
+
+                    // Term fields
                     Tags = new object[] {},
                     Country = new object[] {},
                     ItemCollectionNames = new object[] {},
@@ -99,23 +108,21 @@ namespace CollectionsOnline.Core.Indexes
                 where specimen.IsHidden == false
                 select new
                 {
+                    // Content fields
                     Id = specimen.Id,
                     Name = specimen.ScientificName ?? specimen.AcceptedNameUsage,
-                    Content =
-                        new object[]
-                        {
-                            specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline,
-                            specimen.Country
-                        },
+                    Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
-                    ThumbUrl =
-                        specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string) null,
+                    ThumbUrl = specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string) null,
+
+                    // Sort fields
                     Quality = specimen.Quality,
+
+                    // Facet fields
                     Type = "Specimen",
                     Category = "Natural Sciences",
                     HasImages = (specimen.Media.Any()) ? "Yes" : (string) null,
-                    Discipline = specimen.Discipline,
-                    Dates = new object[] {specimen.AssociatedDate},
+                    Discipline = specimen.Discipline,                    
                     ItemType = (string) null,
                     SpeciesType = (string) null,
                     SpeciesSubType = (string) null,
@@ -127,6 +134,9 @@ namespace CollectionsOnline.Core.Indexes
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     SpecimenDiscipline = specimen.Discipline,
                     StoryTypes = new object[] {},
+                    Dates = new object[] { specimen.AssociatedDate },
+
+                    // Term fields
                     Tags = new object[] {},
                     Country = new object[] {specimen.Country},
                     ItemCollectionNames = new object[] {},
@@ -145,17 +155,21 @@ namespace CollectionsOnline.Core.Indexes
                 where story.IsHidden == false
                 select new
                 {
+                    // Content fields
                     Id = story.Id,
                     Name = story.Title,
                     Content = new object[] {story.Content, story.ContentSummary},
                     Summary = story.Summary,
                     ThumbUrl = story.Media.FirstOrDefault() != null ? story.Media.FirstOrDefault().Url : (string) null,
+
+                    // Sort fields
                     Quality = story.Quality,
+
+                    // Facet fields
                     Type = "Story",
                     Category = "History & Technology",
                     HasImages = (story.Media.Any()) ? "Yes" : (string) null,
-                    Discipline = (string) null,
-                    Dates = new int[] {},
+                    Discipline = (string) null,                    
                     ItemType = (string) null,
                     SpeciesType = (string) null,
                     SpeciesSubType = (string) null,
@@ -167,6 +181,9 @@ namespace CollectionsOnline.Core.Indexes
                     SpecimenScientificGroup = (string) null,
                     SpecimenDiscipline = (string) null,
                     StoryTypes = story.Types,
+                    Dates = new int[] { },
+
+                    // Term fields
                     Tags = new object[] {story.Tags, story.GeographicTags},
                     Country = new object[] {},
                     ItemCollectionNames = new object[] {},
@@ -182,11 +199,10 @@ namespace CollectionsOnline.Core.Indexes
 
             Index(x => x.Id, FieldIndexing.No);
             Index(x => x.Name, FieldIndexing.No);
+            Index(x => x.Content, FieldIndexing.Analyzed);
             Index(x => x.Summary, FieldIndexing.No);
             Index(x => x.ThumbUrl, FieldIndexing.No);
-            Index(x => x.Type, FieldIndexing.NotAnalyzed);
-            Index(x => x.Content, FieldIndexing.Analyzed);
-
+            
             Index(x => x.Tags, FieldIndexing.NotAnalyzed);
             Index(x => x.Country, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemCollectionNames, FieldIndexing.NotAnalyzed);
@@ -195,25 +211,34 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.ItemTertiaryClassification, FieldIndexing.NotAnalyzed);
             Index(x => x.ItemAssociationNames, FieldIndexing.NotAnalyzed);
 
-            Store(x => x.Id, FieldStorage.Yes);            
+            Store(x => x.Id, FieldStorage.Yes);
             Store(x => x.Name, FieldStorage.Yes);
             Store(x => x.Summary, FieldStorage.Yes);
             Store(x => x.ThumbUrl, FieldStorage.Yes);
             Store(x => x.Type, FieldStorage.Yes);
-            Store(x => x.Content, FieldStorage.No);
-
-            Store(x => x.Tags, FieldStorage.Yes);
-            Store(x => x.Country, FieldStorage.Yes);
-            Store(x => x.ItemCollectionNames, FieldStorage.Yes);
-            Store(x => x.ItemPrimaryClassification, FieldStorage.Yes);
-            Store(x => x.ItemSecondaryClassification, FieldStorage.Yes);
-            Store(x => x.ItemTertiaryClassification, FieldStorage.Yes);
-            Store(x => x.ItemAssociationNames, FieldStorage.Yes);
-
+            
             Sort(x => x.Quality, SortOptions.Int);
 
             Analyzers.Add(x => x.Content, "SimpleAnalyzer");
+
             Suggestion(x => x.Content);
+
+            TermVector(x => x.Type, FieldTermVector.Yes);
+            TermVector(x => x.Category, FieldTermVector.Yes);
+            TermVector(x => x.HasImages, FieldTermVector.Yes);
+            TermVector(x => x.Discipline, FieldTermVector.Yes);
+            TermVector(x => x.ItemType, FieldTermVector.Yes);
+            TermVector(x => x.SpeciesType, FieldTermVector.Yes);
+            TermVector(x => x.SpeciesSubType, FieldTermVector.Yes);
+            TermVector(x => x.SpeciesHabitats, FieldTermVector.Yes);
+            TermVector(x => x.SpeciesDepths, FieldTermVector.Yes);
+            TermVector(x => x.SpeciesWaterColumnLocations, FieldTermVector.Yes);
+            TermVector(x => x.Phylum, FieldTermVector.Yes);
+            TermVector(x => x.Class, FieldTermVector.Yes);
+            TermVector(x => x.SpecimenScientificGroup, FieldTermVector.Yes);
+            TermVector(x => x.SpecimenDiscipline, FieldTermVector.Yes);
+            TermVector(x => x.StoryTypes, FieldTermVector.Yes);
+            TermVector(x => x.Dates, FieldTermVector.Yes);
         }
     }
 }

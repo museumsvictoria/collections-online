@@ -214,19 +214,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                     "Name",
                     "Summary",
                     "ThumbUrl",
-                    "Type",
-                    "ItemType",
-                    "Tags",
-                    "Country",
-                    "ItemCollectionNames",
-                    "ItemPrimaryClassification",
-                    "ItemSecondaryClassification",
-                    "ItemTertiaryClassification",
-                    "ItemAssociationNames",
-                    "ItemTradeLiteraturePrimarySubject",
-                    "ItemTradeLiteraturePublicationDate",
-                    "ItemTradeLiteraturePrimaryRole",
-                    "ItemTradeLiteraturePrimaryName")
+                    "Type")
                 .OrderByDescending(x => x.Quality)
                 .ToList();
             queryStopwatch.Stop();
