@@ -7,8 +7,6 @@ namespace CollectionsOnline.Import.Utilities
 {
     public static class HtmlConverter
     {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
-
         public static string HtmlToText(string html)
         {
             if (html == null)
@@ -48,14 +46,7 @@ namespace CollectionsOnline.Import.Utilities
                     // check the text is meaningful and not a bunch of whitespaces
                     if (html.Trim().Length > 0)
                     {
-                        try
-                        {
-                            outText.Write(HtmlEntity.DeEntitize(html));
-                        }
-                        catch (Exception e)
-                        {
-                            _log.Error("Exception occured converting html to text, html:{0}, exception:{1}", html, e);
-                        }
+                            outText.Write(HtmlEntity.DeEntitize(html));                            
                     }
                     break;
 

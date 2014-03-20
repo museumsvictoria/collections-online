@@ -54,8 +54,17 @@ namespace CollectionsOnline.Import.Utilities
             }
             catch (Exception exception)
             {
-                // log error
-                _log.Error("Error saving image {0}, un-recoverable error, {1}", irn, exception.ToString());
+                if (exception is IMuException && ((IMuException) exception).ID == "MultimediaResolutionNotFound")
+                {
+                    // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
+                    _log.Warn("Unable to save image at this time {0}, {1}", irn, exception.ToString());
+                }
+                else
+                {
+                    // Error is unexpected therefore we want the entire import to fail, re-throw the error.
+                    _log.Error("Error saving image {0}, un-recoverable error, {1}", irn, exception.ToString());
+                    throw;
+                }
             }
 
             return false;

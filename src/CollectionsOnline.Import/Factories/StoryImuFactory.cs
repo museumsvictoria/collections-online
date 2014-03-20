@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Utilities;
 using ImageResizer;
 using IMu;
+using NLog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class StoryImuFactory : IImuFactory<Story>
     {
+        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+
         private readonly ISlugFactory _slugFactory;
         private readonly IMediaHelper _mediaHelper;
 
@@ -176,8 +176,17 @@ namespace CollectionsOnline.Import.Factories
             if (!string.IsNullOrWhiteSpace(story.ContentSummary))
                 story.Summary = story.ContentSummary;
             else if (!string.IsNullOrWhiteSpace(story.Content))
-                story.Summary = HtmlConverter.HtmlToText(story.Content);
-            
+            {
+                try
+                {
+                    story.Summary = HtmlConverter.HtmlToText(story.Content);
+                }
+                catch (Exception e)
+                {
+                    _log.Warn("Unable to convert story content html to text, irn:{0}, html:{0}, exception:{1}", map.GetString("irn"), story.Content, e);
+                }
+            }
+
             return story;
         }
 
