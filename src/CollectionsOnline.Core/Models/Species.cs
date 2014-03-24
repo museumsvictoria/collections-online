@@ -10,25 +10,6 @@ namespace CollectionsOnline.Core.Models
 
         public string Summary { get; set; }
 
-        public int Quality
-        {
-            get
-            {
-                var qualityCount = 0;
-
-                if (!string.IsNullOrWhiteSpace(IdentifyingCharacters) || !string.IsNullOrWhiteSpace(Biology))
-                    qualityCount += 1;
-                if (SpecimenIds.Any())
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(BriefId) || !string.IsNullOrWhiteSpace(Hazards) || !string.IsNullOrWhiteSpace(Habitat) || !string.IsNullOrWhiteSpace(Endemicity) || !string.IsNullOrWhiteSpace(Diet) || !string.IsNullOrWhiteSpace(Endemicity))
-                    qualityCount += 1;
-                if (Media.Any())
-                    qualityCount += Media.Count * 2;
-
-                return qualityCount;
-            }
-        }
-
         #endregion
 
         public DateTime DateModified { get; set; }

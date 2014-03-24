@@ -1,4 +1,5 @@
-﻿using Ninject.Activation;
+﻿using System;
+using Ninject.Activation;
 using Raven.Client;
 
 namespace CollectionsOnline.Core.Infrastructure
@@ -14,7 +15,11 @@ namespace CollectionsOnline.Core.Infrastructure
 
         protected override IDocumentSession CreateInstance(IContext context)
         {
-            return _documentStore.OpenSession();
+            var documentSession = _documentStore.OpenSession();
+
+            documentSession.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromMinutes(10));
+
+            return documentSession;
         }
     }
 }

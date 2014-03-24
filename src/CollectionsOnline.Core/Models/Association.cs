@@ -22,6 +22,7 @@ namespace CollectionsOnline.Core.Models
 
         public string Notes { get; set; }
 
+        // TODO: fix formatting
         public string Summary
         {
             get

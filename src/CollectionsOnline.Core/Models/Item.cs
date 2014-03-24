@@ -14,25 +14,6 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> AssociatedDates { get; set; }
 
-        public int Quality
-        {
-            get
-            {
-                var qualityCount = 0;
-
-                if (!string.IsNullOrWhiteSpace(Description) || !string.IsNullOrWhiteSpace(ObjectSummary) || !string.IsNullOrWhiteSpace(Significance) || !string.IsNullOrWhiteSpace(IsdDescriptionOfContent))
-                    qualityCount += 1;
-                if (Associations.Any())
-                    qualityCount += 1;
-                if (Tags.Any())
-                    qualityCount += 1;
-                if (Media.Any())
-                    qualityCount += Media.Count * 2;
-
-                return qualityCount;
-            }
-        }
-
         #endregion
 
         public DateTime DateModified { get; set; }

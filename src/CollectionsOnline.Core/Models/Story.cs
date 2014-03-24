@@ -10,25 +10,6 @@ namespace CollectionsOnline.Core.Models
 
         public string Summary { get; set; }
 
-        public int Quality
-        {
-            get
-            {
-                var qualityCount = 0;
-
-                if (RelatedItemIds.Count > 1)
-                    qualityCount += 1;
-                if (Tags.Any())
-                    qualityCount += 1;
-                if (Media.Any())
-                    qualityCount += Media.Count * 2;
-                if (ChildStoryIds.Any())
-                    qualityCount += 1;
-
-                return qualityCount;
-            }
-        }
-
         #endregion
 
         public DateTime DateModified { get; set; }

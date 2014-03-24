@@ -12,25 +12,6 @@ namespace CollectionsOnline.Core.Models
 
         public string AssociatedDate { get; set; }
 
-        public int Quality
-        {
-            get
-            {
-                var qualityCount = 0;
-
-                if (!string.IsNullOrWhiteSpace(Year) || !string.IsNullOrWhiteSpace(RecordedBy) || !string.IsNullOrWhiteSpace(TypeStatus)) 
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(DecimalLatitude) || !string.IsNullOrWhiteSpace(DecimalLongitude))
-                    qualityCount += 1;
-                if (!string.IsNullOrWhiteSpace(ScientificName))
-                    qualityCount += 1;
-                if (Media.Any())
-                    qualityCount += Media.Count * 2;
-
-                return qualityCount;
-            }
-        }
-
         #endregion
 
         public DateTime DateModified { get; set; }

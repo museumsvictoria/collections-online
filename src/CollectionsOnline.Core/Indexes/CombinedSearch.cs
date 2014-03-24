@@ -22,7 +22,10 @@ namespace CollectionsOnline.Core.Indexes
                     ThumbUrl = item.Media.FirstOrDefault() != null ? item.Media.FirstOrDefault().Url : (string)null,
 
                     // Sort fields
-                    Quality = item.Quality,
+                    Quality = 
+                        ((!string.IsNullOrWhiteSpace(item.Description) || !string.IsNullOrWhiteSpace(item.ObjectSummary) || !string.IsNullOrWhiteSpace(item.Significance) || !string.IsNullOrWhiteSpace(item.IsdDescriptionOfContent)) ? 1 : 0) + 
+                        (item.Media.Count * 2) +
+                        ((item.Associations.Any()) ? 1 : 0),
 
                     // Facet fields
                     Type = "Item",
@@ -69,7 +72,11 @@ namespace CollectionsOnline.Core.Indexes
                     ThumbUrl = species.Media.FirstOrDefault() != null ? species.Media.FirstOrDefault().Url : (string) null,
 
                     // Sort fields
-                    Quality = species.Quality,
+                    Quality =
+                        ((!string.IsNullOrWhiteSpace(species.IdentifyingCharacters) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet)) ? 1 : 0) +
+                        ((!string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
+                        (species.Media.Count * 2) +
+                        ((species.SpecimenIds.Any()) ? 1 : 0),
 
                     // Facet fields
                     Type = "Species",
@@ -116,7 +123,11 @@ namespace CollectionsOnline.Core.Indexes
                     ThumbUrl = specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string) null,
 
                     // Sort fields
-                    Quality = specimen.Quality,
+                    Quality =
+                        ((!string.IsNullOrWhiteSpace(specimen.Year) || !string.IsNullOrWhiteSpace(specimen.RecordedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
+                        ((!string.IsNullOrWhiteSpace(specimen.DecimalLatitude) || !string.IsNullOrWhiteSpace(specimen.DecimalLongitude)) ? 1 : 0) +
+                        (specimen.Media.Count * 2) +
+                        ((!string.IsNullOrWhiteSpace(specimen.ScientificName)) ? 1 : 0),
 
                     // Facet fields
                     Type = "Specimen",
@@ -163,7 +174,11 @@ namespace CollectionsOnline.Core.Indexes
                     ThumbUrl = story.Media.FirstOrDefault() != null ? story.Media.FirstOrDefault().Url : (string) null,
 
                     // Sort fields
-                    Quality = story.Quality,
+                    Quality =
+                        ((story.RelatedItemIds.Count > 1) ? 1 : 0) +
+                        ((story.Tags.Any()) ? 1 : 0) +
+                        (story.Media.Count * 2) +
+                        ((story.ChildStoryIds.Any()) ? 1 : 0),
 
                     // Facet fields
                     Type = "Story",
