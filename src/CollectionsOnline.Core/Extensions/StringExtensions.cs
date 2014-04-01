@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -33,6 +34,14 @@ namespace CollectionsOnline.Core.Extensions
         public static string Truncate(this string input, int maxChars)
         {
             return input.Length <= maxChars ? input : input.Substring(0, maxChars) + " ..";
+        }
+
+        public static bool Contains(this string input, string valueToCheck, StringComparison comparisonType)
+        {
+            if (string.IsNullOrWhiteSpace(valueToCheck))
+                return false;
+
+            return input.IndexOf(valueToCheck, comparisonType) >= 0;
         }
     }
 }

@@ -52,6 +52,8 @@
 
         public string ItemCollectionName { get; set; }
 
+        public string ItemCollectionPlan { get; set; }
+
         public string ItemPrimaryClassification { get; set; }
 
         public string ItemSecondaryClassification { get; set; }

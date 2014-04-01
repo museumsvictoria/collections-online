@@ -6,6 +6,11 @@ namespace CollectionsOnline.Core.Models
 {
     public class Item : EmuAggregateRoot
     {
+        public Item()
+        {
+            InitializeCollections();
+        }
+
         #region Non-Emu
 
         public IList<Comment> Comments { get; set; }
@@ -27,6 +32,8 @@ namespace CollectionsOnline.Core.Models
         public string RegistrationNumber { get; set; }
 
         public IList<string> CollectionNames { get; set; }
+
+        public IList<string> CollectionPlans { get; set; }
 
         public string PrimaryClassification { get; set; }
 
@@ -52,7 +59,7 @@ namespace CollectionsOnline.Core.Models
 
         public string Shape { get; set; }
 
-        public IList<string> Dimensions { get; set; }
+        public IList<Dimension> Dimensions { get; set; }
 
         public string References { get; set; }
 
@@ -65,6 +72,10 @@ namespace CollectionsOnline.Core.Models
         public IList<string> RelatedItemIds { get; set; }
 
         public IList<Media> Media { get; set; }
+
+        public string AcquisitionInformation { get; set; }
+
+        public string Acknowledgement { get; set; }
 
         #region Archeology
 
@@ -114,6 +125,8 @@ namespace CollectionsOnline.Core.Models
 
         public string NumismaticsMaterial { get; set; }
 
+        public string NumismaticsAxis { get; set; }
+
         public string NumismaticsEdgeDescription { get; set; }
 
         public string NumismaticsObverseDescription { get; set; }
@@ -158,7 +171,7 @@ namespace CollectionsOnline.Core.Models
 
         public string AudioVisualRecordingDetails { get; set; }
 
-        public string AudioVisualContentSummary { get; set; }
+        public IList<string> AudioVisualContentSummaries { get; set; }
 
         #endregion
 
@@ -188,19 +201,27 @@ namespace CollectionsOnline.Core.Models
 
         #region Indigenous Cultures
 
-        public string IndigenousCulturesLocalName { get; set; }
-
-        public string IndigenousCulturesLocality { get; set; }
+        public string IndigenousCulturesLocality { get; set; }        
 
         public string IndigenousCulturesCulturalGroups { get; set; }
 
+        public string IndigenousCulturesMedium { get; set; }
+
         public string IndigenousCulturesDescription { get; set; }
 
-        public string IndigenousCulturesDateMade { get; set; }
+        public string IndigenousCulturesPhotographer { get; set; }
+
+        public string IndigenousCulturesAuthor { get; set; }
+
+        public string IndigenousCulturesIllustrator { get; set; }
+
+        public string IndigenousCulturesMaker { get; set; }
+
+        public string IndigenousCulturesDate { get; set; }
+
+        public string IndigenousCulturesCollector { get; set; }
 
         public string IndigenousCulturesDateCollected { get; set; }
-
-        public string IndigenousCulturesCaption { get; set; }
 
         public string IndigenousCulturesIndividualsIdentified { get; set; }
 
@@ -214,20 +235,43 @@ namespace CollectionsOnline.Core.Models
 
         public string IndigenousCulturesLetterFrom { get; set; }
 
-        public string IndigenousCulturesIndividualsMentioned { get; set; }
+        #endregion
 
-        public string IndigenousCulturesLocalitiesMentioned { get; set; }
+        #region Artwork
 
-        public string IndigenousCulturesStateProvinceMentioned { get; set; }
+        public string ArtworkTechnique { get; set; }
 
-        public string IndigenousCulturesRegionsMentioned { get; set; }
+        public string ArtworkSupport { get; set; }
 
-        public string IndigenousCulturesCountryMentioned { get; set; }
+        public string ArtworkPlateNumber { get; set; }
 
-        public string IndigenousCulturesGroupNames { get; set; }
+        public string ArtworkDrawingNumber { get; set; }
 
-        public string IndigenousCulturesNamesMentioned { get; set; }        
+        public string ArtworkState { get; set; }
+
+        public string ArtworkPublisher { get; set; }
+
+        public string ArtworkPrimaryInscriptions { get; set; }
+
+        public string ArtworkSecondaryInscriptions { get; set; }
+
+        public string ArtworkTertiaryInscriptions { get; set; }        
 
         #endregion
+
+        private void InitializeCollections()
+        {
+            Comments = new List<Comment>();
+            AssociatedDates = new List<string>();
+            CollectionNames = new List<string>();
+            CollectionPlans = new List<string>();
+            Associations = new List<Association>();
+            Tags = new List<string>();
+            Dimensions = new List<Dimension>();
+            Bibliographies = new List<string>();
+            RelatedItemIds = new List<string>();
+            Media = new List<Media>();
+            AudioVisualContentSummaries = new List<string>();
+        }
     }
 }

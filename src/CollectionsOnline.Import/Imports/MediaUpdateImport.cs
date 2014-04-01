@@ -54,7 +54,6 @@ namespace CollectionsOnline.Import.Imports
                                     "MdaQualifier_tab",
                                     "MdaFreeText_tab",
                                     "ChaRepository_tab",
-                                    "rights=<erights:MulMultiMediaRef_tab>.(RigType,RigAcknowledgement)",
                                     "AdmPublishWebNoPassword",
                                     "AdmDateModified",
                                     "AdmTimeModified",

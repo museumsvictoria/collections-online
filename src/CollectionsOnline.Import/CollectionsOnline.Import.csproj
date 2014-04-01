@@ -103,7 +103,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HtmlConverter.cs" />
+    <Compile Include="Factories\IPartiesNameFactory.cs" />
     <Compile Include="Utilities\IMediaHelper.cs" />
+    <Compile Include="Factories\PartiesNameFactory.cs" />
     <Compile Include="Utilities\MediaHelper.cs" />
     <Compile Include="Utilities\NaturalDateConverter.cs" />
   </ItemGroup>

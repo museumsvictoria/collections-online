@@ -1,4 +1,6 @@
-﻿namespace CollectionsOnline.Core.Config
+﻿using System;
+
+namespace CollectionsOnline.Core.Config
 {
     public static class Constants
     {
@@ -14,12 +16,16 @@
 
         public static int SummaryMaxChars = 200;
 
-        public static string ImuItemQueryString = "History & Technology Collections Online";
+        public static string ImuItemQueryString = "Collections Online - Humanities";
 
         public static string ImuSpeciesQueryString = "Website - Species profile";
 
         public static string ImuSpecimenQueryString = "Website  Atlas of Living Australia";
 
         public static string ImuStoryQueryString = "Website - History & Technology Collections";
+
+        public static string ImuMultimediaQueryString = "Website - Collections Online";
+
+        public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(1);
     }
 }

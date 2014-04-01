@@ -57,6 +57,8 @@
 
         public object[] ItemCollectionNames { get; set; }
 
+        public object[] ItemCollectionPlans { get; set; }
+
         public string ItemPrimaryClassification { get; set; }
 
         public string ItemSecondaryClassification { get; set; }

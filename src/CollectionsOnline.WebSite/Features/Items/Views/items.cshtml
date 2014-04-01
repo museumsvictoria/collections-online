@@ -46,6 +46,13 @@
                                 <a href="/search?itemcollectionname=@HttpUtility.UrlEncode(collectionName)">@collectionName</a>
                             }
                         </dd>
+                        <dt>Collection Plans</dt>
+                        <dd>
+                            @foreach (var collectionPlans in @Model.Item.CollectionPlans)
+                            {
+                                <a href="/search?itemcollectionplan=@HttpUtility.UrlEncode(collectionPlans)">@collectionPlans</a>
+                            }
+                        </dd>
                         <dt>Primary Classification</dt>
                         <dd><a href="/search?itemprimaryclassification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></dd>
                         <dt>Secondary Classification</dt>
@@ -57,7 +64,13 @@
                         @foreach (var association in @Model.Item.Associations)
                         {
                             <dt>@association.Type</dt>
-                            <dd><a href="/search?itemassociationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Summary <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a></dd> 
+                            <dd>
+                                <a href="/search?itemassociationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Street, @association.Locality, @association.Region, @association.State, <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br/>
+                                @if (!string.IsNullOrWhiteSpace(association.Comments))
+                                {
+                                    @association.Comments<br />
+                                }
+                            </dd>
                         }
                         <dt>Tags</dt>
                         <dd>
@@ -76,7 +89,11 @@
                         <dd>
                             @foreach (var dimension in @Model.Item.Dimensions)
                             {
-                                <span>@dimension</span>
+                                <span>@dimension.Configuration: @dimension.Dimensions</span><br/>
+                                if (!string.IsNullOrWhiteSpace(dimension.Comments))
+                                {
+                                     <span>@dimension.Comments</span><br/>
+                                }
                             }
                         </dd>
                         <dt>References</dt>
@@ -167,7 +184,12 @@
                         <dt>Audio Visual Recording Details</dt>
                         <dd>@Model.Item.AudioVisualRecordingDetails</dd>
                         <dt>Audio Visual Content Summary</dt>
-                        <dd>@Model.Item.AudioVisualContentSummary</dd>
+                        <dd>
+                            @foreach (var summary in @Model.Item.AudioVisualContentSummaries)
+                            {
+                                <span>@summary</span><br />
+                            }
+                        </dd>
                         <dt>Trade Literature Number of Pages</dt>
                         <dd>@Model.Item.TradeLiteratureNumberofPages</dd>
                         <dt>Trade Literature Page Size Format</dt>
@@ -184,9 +206,7 @@
                         <dd>@Model.Item.TradeLiteraturePrintingTypes</dd>
                         <dt>Trade Literature Publication Types</dt>
                         <dd>@Model.Item.TradeLiteraturePublicationTypes</dd>
-                        <dt>Trade Literature Primary Role</dt>
-                        <dd><a href="/search?itemtradeliteratureprimaryrole=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></dd>
-                        <dt>Trade Literature Primary Name</dt>
+                        <dt><a href="/search?itemtradeliteratureprimaryrole=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></dt>
                         <dd><a href="/search?itemtradeliteratureprimaryname=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryName)">@Model.Item.TradeLiteraturePrimaryName</a></dd>
                         <dt>Indigenous Cultures Local Name</dt>
                         <dd>@Model.Item.IndigenousCulturesLocalName</dd>

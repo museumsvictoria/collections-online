@@ -131,6 +131,19 @@ namespace CollectionsOnline.WebSite.Features.Search
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
+            if (!string.IsNullOrWhiteSpace(searchInputModel.ItemCollectionPlan))
+            {
+                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+
+                termQueryString.Remove("itemcollectionplan");
+
+                searchViewModel.ActiveTerms.Add(new TermViewModel
+                {
+                    Name = searchInputModel.ItemCollectionPlan,
+                    Term = "ItemCollectionPlan",
+                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                });
+            }
             if (!string.IsNullOrWhiteSpace(searchInputModel.ItemPrimaryClassification))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
