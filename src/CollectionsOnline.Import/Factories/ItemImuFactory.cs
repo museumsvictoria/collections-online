@@ -177,12 +177,6 @@ namespace CollectionsOnline.Import.Factories
 
                 terms.Add("MdaDataSets_tab", Constants.ImuItemQueryString);
 
-                var ass = terms.AddOr();
-                ass.Add("irn", "250643");
-                ass.Add("irn", "250453");
-                ass.Add("irn", "227889");
-                ass.Add("irn", "221231");
-
                 return terms;
             }
         }
