@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Utilities;
 using ImageResizer;
@@ -16,12 +16,18 @@ namespace CollectionsOnline.Import.Factories
 {
     public class SpecimenImuFactory : IImuFactory<Specimen>
     {
+        private readonly ISlugFactory _slugFactory;
         private readonly IMediaHelper _mediaHelper;
+        private readonly IPartiesNameFactory _partiesNameFactory;
 
         public SpecimenImuFactory(
-            IMediaHelper mediaHelper)
+            ISlugFactory slugFactory,
+            IMediaHelper mediaHelper,
+            IPartiesNameFactory partiesNameFactory)
         {
+            _slugFactory = slugFactory;
             _mediaHelper = mediaHelper;
+            _partiesNameFactory = partiesNameFactory;
         }
 
         public string ModuleName
@@ -43,7 +49,6 @@ namespace CollectionsOnline.Import.Factories
                         "ColTypeOfItem",
                         "AdmDateModified",
                         "AdmTimeModified",
-                        "ColDiscipline",
                         "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(SummaryData))",
                         "SpeNoSpecimens",
                         "SpeSex_tab",
@@ -60,6 +65,19 @@ namespace CollectionsOnline.Import.Factories
                         "ColScientificGroup",
                         "ColDiscipline",
                         "ColCollectionName_tab",
+                        "ClaPrimaryClassification",
+                        "ClaSecondaryClassification",
+                        "ClaTertiaryClassification",
+                        "ClaObjectName",
+                        "ClaObjectSummary",
+                        "Con1Description",
+                        "SubHistoryTechSignificance",
+                        "SubThemes_tab",
+                        "SubSubjects_tab",
+                        "associations=[AssAssociationType_tab,party=AssAssociationNameRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),AssAssociationCountry_tab,AssAssociationState_tab,AssAssociationRegion_tab,AssAssociationLocality_tab,AssAssociationStreetAddress_tab,AssAssociationDate_tab,AssAssociationComments0]",
+                        "related=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
+                        "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),AcqSourceRole_tab])",
+                        "RigText0",
                         "SpeNoSpecimens",
                         "MinSpecies",
                         "MinVariety",
@@ -120,6 +138,93 @@ namespace CollectionsOnline.Import.Factories
                              : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
             specimen.CollectionNames = map.GetStrings("ColCollectionName_tab") ?? new string[] { };
             specimen.Type = map.GetString("ColTypeOfItem");
+
+            // Classifications
+            if (map.GetString("ClaPrimaryClassification") != null && !map.GetString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                specimen.PrimaryClassification = map.GetString("ClaPrimaryClassification").ToSentenceCase();
+            if (map.GetString("ClaSecondaryClassification") != null && !map.GetString("ClaSecondaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                specimen.SecondaryClassification = map.GetString("ClaSecondaryClassification").ToSentenceCase();
+            if (map.GetString("ClaTertiaryClassification") != null && !map.GetString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                specimen.TertiaryClassification = map.GetString("ClaTertiaryClassification").ToSentenceCase();
+
+            specimen.ObjectName = map.GetString("ClaObjectName");
+            specimen.ObjectSummary = map.GetString("ClaObjectSummary");
+            specimen.IsdDescriptionOfContent = map.GetString("Con1Description");
+            specimen.Significance = map.GetString("SubHistoryTechSignificance");
+
+            // Tags
+            if (map.GetStrings("SubSubjects_tab") != null)
+                specimen.Tags = map.GetStrings("SubSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
+
+            // Collection plans
+            specimen.CollectionPlans = map.GetStrings("SubThemes_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+            // Associations
+            foreach (var associationMap in map.GetMaps("associations"))
+            {
+                var association = new Association
+                {
+                    Type = associationMap.GetString("AssAssociationType_tab"),
+                    Country = associationMap.GetString("AssAssociationCountry_tab"),
+                    State = associationMap.GetString("AssAssociationState_tab"),
+                    Region = associationMap.GetString("AssAssociationRegion_tab"),
+                    Locality = associationMap.GetString("AssAssociationLocality_tab"),
+                    Street = associationMap.GetString("AssAssociationStreetAddress_tab"),
+                    Date = associationMap.GetString("AssAssociationDate_tab"),
+                    Comments = associationMap.GetString("AssAssociationComments0")
+                };
+
+                association.Name = _partiesNameFactory.MakePartiesName(associationMap.GetMap("party"));
+
+                specimen.Associations.Add(association);
+            }
+
+            // Related items/specimens
+            foreach (var related in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            {
+                if (related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuItemQueryString, StringComparison.OrdinalIgnoreCase)))
+                    specimen.RelatedIds.Add("items/" + related.GetString("irn"));
+                if (related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuSpecimenQueryString, StringComparison.OrdinalIgnoreCase)))
+                    specimen.RelatedIds.Add("specimens/" + related.GetString("irn"));
+            }
+
+            // Acquisition information
+            var accessionMap = map.GetMap("accession");
+            if (accessionMap != null)
+            {
+                var method = accessionMap.GetString("AcqAcquisitionMethod");
+
+                if (!string.IsNullOrWhiteSpace(method))
+                {
+                    var sources = accessionMap.GetMaps("source")
+                    .Where(x => string.IsNullOrWhiteSpace(x.GetString("AcqSourceRole_tab")) ||
+                        (!x.GetString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
+                         !x.GetString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
+                         !x.GetString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
+                    .Select(x => _partiesNameFactory.MakePartiesName(x.GetMap("name"))).ToList();
+
+                    if (sources.Any())
+                    {
+                        if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqDateReceived")))
+                            sources.Add(accessionMap.GetString("AcqDateReceived"));
+                        else if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqDateOwnership")))
+                            sources.Add(accessionMap.GetString("AcqDateOwnership"));
+
+                        specimen.AcquisitionInformation = string.Format("{0} from {1}", method, sources.Concatenate(", "));
+                    }
+                    else
+                    {
+                        specimen.AcquisitionInformation = method;
+                    }
+                }
+
+                var rights = map.GetStrings("RigText0").FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqCreditLine")))
+                    specimen.Acknowledgement = accessionMap.GetString("AcqCreditLine");
+                else if (!string.IsNullOrWhiteSpace(rights))
+                    specimen.Acknowledgement = rights;
+            }
 
             // Discipline specific fields
             switch (specimen.Discipline)
@@ -283,7 +388,6 @@ namespace CollectionsOnline.Import.Factories
 
             //associatedMedia
             // TODO: Be more selective in what media we assign to item and how
-            specimen.Media = new List<Media>();
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&

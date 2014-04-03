@@ -41,7 +41,7 @@ namespace CollectionsOnline.Core.Models
 
         public string TertiaryClassification { get; set; }
 
-        public string Name { get; set; }
+        public string ObjectName { get; set; }
 
         public string ObjectSummary { get; set; }
 
@@ -69,7 +69,7 @@ namespace CollectionsOnline.Core.Models
 
         public string BrandNames { get; set; }
 
-        public IList<string> RelatedItemIds { get; set; }
+        public IList<string> RelatedIds { get; set; }
 
         public IList<Media> Media { get; set; }
 
@@ -269,7 +269,7 @@ namespace CollectionsOnline.Core.Models
             Tags = new List<string>();
             Dimensions = new List<Dimension>();
             Bibliographies = new List<string>();
-            RelatedItemIds = new List<string>();
+            RelatedIds = new List<string>();
             Media = new List<Media>();
             AudioVisualContentSummaries = new List<string>();
         }

@@ -72,7 +72,7 @@ namespace CollectionsOnline.Import.Factories
                         "bibliography=[summary=BibBibliographyRef_tab.(SummaryData),BibIssuedDate_tab,BibPages_tab]",
                         "Pro2ModelNameNumber_tab",
                         "brand=[Pro2BrandName_tab,Pro2ProductType_tab]",
-                        "related=ColRelatedRecordsRef_tab.(irn)",
+                        "related=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
                         "ArcContextNumber",
                         "arcsitename=ArcSiteNameRef.(SummaryData)",
                         "ArcDescription",
@@ -164,7 +164,7 @@ namespace CollectionsOnline.Import.Factories
                         "ArtSecondaryInscriptions",
                         "ArtTertiaryInscriptions",
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),AcqSourceRole_tab])",
-                        "rights=[RigText0]"
+                        "RigText0"
                     };
             }
         }
@@ -214,7 +214,7 @@ namespace CollectionsOnline.Import.Factories
             if (map.GetString("ClaTertiaryClassification") != null && !map.GetString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
                 item.TertiaryClassification = map.GetString("ClaTertiaryClassification").ToSentenceCase();
 
-            item.Name = map.GetString("ClaObjectName");
+            item.ObjectName = map.GetString("ClaObjectName");
             item.ObjectSummary = map.GetString("ClaObjectSummary");
             item.Description = map.GetString("DesPhysicalDescription");
             item.Inscription = map.GetString("DesInscriptions");
@@ -313,10 +313,13 @@ namespace CollectionsOnline.Import.Factories
                         : x.GetString("Pro2BrandName_tab"))
                 .Concatenate("; ");
 
-            // Related items
-            foreach (var relatedItem in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            // Related items/specimens
+            foreach (var related in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
             {
-                item.RelatedItemIds.Add("items/" + relatedItem.GetString("irn"));
+                if(related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuItemQueryString, StringComparison.OrdinalIgnoreCase)))
+                    item.RelatedIds.Add("items/" + related.GetString("irn"));
+                if (related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuSpecimenQueryString, StringComparison.OrdinalIgnoreCase)))
+                    item.RelatedIds.Add("specimens/" + related.GetString("irn"));
             }
 
             // Archeology fields
@@ -511,7 +514,7 @@ namespace CollectionsOnline.Import.Factories
             
             if (string.Equals(map.GetString("ColCategory"), "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
             {
-                item.Name = new[]
+                item.ObjectName = new[]
                     {
                         item.IndigenousCulturesMedium,
                         item.IndigenousCulturesCulturalGroups,
@@ -561,7 +564,7 @@ namespace CollectionsOnline.Import.Factories
                     }
                 }
 
-                var rights = map.GetMaps("rights").Select(x => x.GetString("RigText0")).FirstOrDefault();
+                var rights = map.GetStrings("RigText0").FirstOrDefault();
 
                 if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqCreditLine")))
                     item.Acknowledgement = accessionMap.GetString("AcqCreditLine");

@@ -13,12 +13,13 @@ namespace CollectionsOnline.WebApi.Modules
         {
             Get["/"] = parameters =>
                 {
-                    var species = documentSession
-                        .Query<Species, SpeciesNotHidden>()
+                    var species = documentSession.Advanced
+                        .LuceneQuery<Species, CombinedSearch>()
+                        .WhereEquals("Type", "Species")
                         .Statistics(out Statistics)
                         .Skip(Offset)
                         .Take(Limit)
-                        .ToList();
+                        .ToList();                    
 
                     return BuildResponse(species);
                 };

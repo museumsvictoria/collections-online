@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="record panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">@(Model.Specimen.ScientificName ?? Model.Specimen.AcceptedNameUsage)</h1>
+                    <h1 class="panel-title">@(Model.Specimen.ObjectName ?? Model.Specimen.ScientificName ?? Model.Specimen.AcceptedNameUsage)</h1>
                 </div>
                 <div class="panel-body">
                     <div class="images">
@@ -28,6 +28,14 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Summary))
                         {
                             <p>@Model.Specimen.Summary</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.ObjectSummary))
+                        {
+                            <p>@Model.Specimen.ObjectSummary</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Significance))
+                        {
+                            <p>@Model.Specimen.Significance</p>
                         }
                     </div>
                     <dl class="detailed dl-horizontal">
@@ -58,10 +66,66 @@
                                 }
                             </dd>
                         }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.PrimaryClassification))
+                        { 
+                            <dt>Primary Classification</dt>
+                            <dd><a href="/search?primaryclassification=@HttpUtility.UrlEncode(Model.Specimen.PrimaryClassification)">@Model.Specimen.PrimaryClassification</a></dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.SecondaryClassification))
+                        {
+                            <dt>Secondary Classification</dt>
+                            <dd><a href="/search?secondaryclassification=@HttpUtility.UrlEncode(Model.Specimen.SecondaryClassification)">@Model.Specimen.SecondaryClassification</a></dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TertiaryClassification))
+                        {
+                            <dt>Tertiary Classification</dt>
+                            <dd><a href="/search?tertiaryclassification=@HttpUtility.UrlEncode(Model.Specimen.TertiaryClassification)">@Model.Specimen.TertiaryClassification</a></dd>
+                        }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Type))
                         {
                             <dt>Type</dt>
                             <dd>@Model.Specimen.Type</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.IsdDescriptionOfContent))
+                        {
+                            <dt>Isd Description Of Content</dt>
+                            <dd>@Model.Specimen.IsdDescriptionOfContent</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Significance))
+                        {
+                            <dt>Significance</dt>
+                            <dd>@Model.Specimen.Significance</dd>
+                        }
+                        @if (Model.Specimen.Tags.Any())
+                        {
+                            <dt>Tags</dt>
+                            <dd>
+                                @foreach (var tag in Model.Specimen.Tags)
+                                {
+                                    <a href="/search?tag=@HttpUtility.UrlEncode(tag)">@tag</a>
+                                }
+                            </dd>
+                        }
+                        @if (Model.Specimen.CollectionPlans.Any())
+                        {
+                            <dt>Collection Plans</dt>
+                            <dd>
+                                @foreach (var collectionPlans in @Model.Specimen.CollectionPlans)
+                                {
+                                    <a href="/search?collectionplan=@HttpUtility.UrlEncode(collectionPlans)">@collectionPlans</a>
+                                }
+                            </dd>
+                        }
+                        @foreach (var association in @Model.Specimen.Associations)
+                        {
+                            <dt>@association.Type</dt>
+                            <dd>
+                                <a href="/search?associationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Street, @association.Locality, @association.Region, @association.State, <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br />
+                                @if (!string.IsNullOrWhiteSpace(association.Comments))
+                                {
+                                    @association.Comments<br />
+                                }
+                            </dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.PalaeontologyNumber))
                         {
@@ -552,6 +616,16 @@
                         {
                             <dt>Nomenclatural Code</dt>
                             <dd>@Model.Specimen.NomenclaturalCode</dd>
+                        }
+                        @if (Model.Specimen.RelatedIds.Any())
+                        {
+                            <dt>RelatedIds</dt>
+                            <dd>
+                                @foreach (var relatedId in @Model.Specimen.RelatedIds)
+                                {
+                                    <a href="/@relatedId">@relatedId</a>
+                                }
+                            </dd>
                         }                                                                     
                     </dl>
                 </div>

@@ -6,6 +6,11 @@ namespace CollectionsOnline.Core.Models
 {
     public class Specimen : EmuAggregateRoot
     {
+        public Specimen()
+        {
+            InitializeCollections();
+        }
+
         #region Non-Emu
 
         public string Summary { get; set; }
@@ -27,6 +32,32 @@ namespace CollectionsOnline.Core.Models
         public IList<string> CollectionNames { get; set; }
 
         public string Type { get; set; }
+
+        public string PrimaryClassification { get; set; }
+
+        public string SecondaryClassification { get; set; }
+
+        public string TertiaryClassification { get; set; }
+
+        public string ObjectName { get; set; }
+
+        public string ObjectSummary { get; set; }
+
+        public string IsdDescriptionOfContent { get; set; }
+
+        public string Significance { get; set; }
+
+        public IList<string> Tags { get; set; }
+
+        public IList<string> CollectionPlans { get; set; }
+
+        public IList<Association> Associations { get; set; }
+
+        public IList<string> RelatedIds { get; set; }
+
+        public string AcquisitionInformation { get; set; }
+
+        public string Acknowledgement { get; set; }
 
         public IList<Media> Media { get; set; }
 
@@ -272,5 +303,15 @@ namespace CollectionsOnline.Core.Models
         #endregion
 
         #endregion
+
+        private void InitializeCollections()
+        {
+            CollectionNames = new List<string>();
+            CollectionPlans = new List<string>();
+            Associations = new List<Association>();
+            Tags = new List<string>();
+            RelatedIds = new List<string>();
+            Media = new List<Media>();
+        }
     }
 }

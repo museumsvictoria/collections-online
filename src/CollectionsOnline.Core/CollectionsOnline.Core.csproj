@@ -58,10 +58,6 @@
     <Compile Include="Indexes\CombinedSearchFacets.cs" />
     <Compile Include="Indexes\CombinedSearchResult.cs" />
     <Compile Include="Indexes\CombinedSearch.cs" />
-    <Compile Include="Indexes\SpeciesNotHidden.cs" />
-    <Compile Include="Indexes\StoriesNotHidden.cs" />
-    <Compile Include="Indexes\SpecimensNotHidden.cs" />
-    <Compile Include="Indexes\ItemsNotHidden.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentStoreProvider.cs" />
     <Compile Include="Models\Application.cs" />

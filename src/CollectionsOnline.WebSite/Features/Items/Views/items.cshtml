@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="record panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">@Model.Item.Name</h1>
+                    <h1 class="panel-title">@Model.Item.ObjectName</h1>
                 </div>
                 <div class="panel-body">
                     <div class="images">
@@ -43,29 +43,29 @@
                         <dd>
                             @foreach (var collectionName in @Model.Item.CollectionNames)
                             {
-                                <a href="/search?itemcollectionname=@HttpUtility.UrlEncode(collectionName)">@collectionName</a>
+                                <a href="/search?collectionname=@HttpUtility.UrlEncode(collectionName)">@collectionName</a>
                             }
                         </dd>
                         <dt>Collection Plans</dt>
                         <dd>
                             @foreach (var collectionPlans in @Model.Item.CollectionPlans)
                             {
-                                <a href="/search?itemcollectionplan=@HttpUtility.UrlEncode(collectionPlans)">@collectionPlans</a>
+                                <a href="/search?collectionplan=@HttpUtility.UrlEncode(collectionPlans)">@collectionPlans</a>
                             }
                         </dd>
                         <dt>Primary Classification</dt>
-                        <dd><a href="/search?itemprimaryclassification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></dd>
+                        <dd><a href="/search?primaryclassification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></dd>
                         <dt>Secondary Classification</dt>
-                        <dd><a href="/search?itemsecondaryclassification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a></dd>
+                        <dd><a href="/search?secondaryclassification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a></dd>
                         <dt>Tertiary Classification</dt>
-                        <dd><a href="/search?itemtertiaryclassification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a></dd>
+                        <dd><a href="/search?tertiaryclassification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a></dd>
                         <dt>Inscription</dt>
                         <dd>@Model.Item.Inscription</dd>
                         @foreach (var association in @Model.Item.Associations)
                         {
                             <dt>@association.Type</dt>
                             <dd>
-                                <a href="/search?itemassociationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Street, @association.Locality, @association.Region, @association.State, <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br/>
+                                <a href="/search?associationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Street, @association.Locality, @association.Region, @association.State, <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br/>
                                 @if (!string.IsNullOrWhiteSpace(association.Comments))
                                 {
                                     @association.Comments<br />
@@ -244,6 +244,16 @@
                         <dd>@Model.Item.IndigenousCulturesLetterTo</dd>
                         <dt>Indigenous Cultures Letter From</dt>
                         <dd>@Model.Item.IndigenousCulturesLetterFrom</dd>
+                        @if (Model.Item.RelatedIds.Any())
+                        {
+                            <dt>RelatedIds</dt>
+                            <dd>
+                                @foreach (var relatedId in @Model.Item.RelatedIds)
+                                {
+                                    <a href="/@relatedId">@relatedId</a>
+                                }
+                            </dd>
+                        }
                     </dl>
                 </div>
             </div>

@@ -13,8 +13,9 @@ namespace CollectionsOnline.WebApi.Modules
         {
             Get["/"] = parameters =>
                 {
-                    var specimens = documentSession
-                        .Query<Specimen, SpecimensNotHidden>()
+                    var specimens = documentSession.Advanced
+                        .LuceneQuery<Specimen, CombinedSearch>()
+                        .WhereEquals("Type", "Specimen")
                         .Statistics(out Statistics)
                         .Skip(Offset)
                         .Take(Limit)

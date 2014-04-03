@@ -55,17 +55,17 @@
 
         public object[] Country { get; set; }
 
-        public object[] ItemCollectionNames { get; set; }
+        public object[] CollectionNames { get; set; }
 
-        public object[] ItemCollectionPlans { get; set; }
+        public object[] CollectionPlans { get; set; }
 
-        public string ItemPrimaryClassification { get; set; }
+        public string PrimaryClassification { get; set; }
 
-        public string ItemSecondaryClassification { get; set; }
+        public string SecondaryClassification { get; set; }
 
-        public string ItemTertiaryClassification { get; set; }
+        public string TertiaryClassification { get; set; }
 
-        public object[] ItemAssociationNames { get; set; }
+        public object[] AssociationNames { get; set; }
 
         public string ItemTradeLiteraturePrimarySubject { get; set; }
 

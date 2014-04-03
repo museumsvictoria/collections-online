@@ -175,44 +175,44 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("Country", searchInputModel.Country);
                     facetQuery = facetQuery.AndAlso().WhereEquals("Country", searchInputModel.Country);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemCollectionName))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.CollectionName))
                 {
-                    query = query.AndAlso().WhereEquals("ItemCollectionNames", searchInputModel.ItemCollectionName);
+                    query = query.AndAlso().WhereEquals("CollectionNames", searchInputModel.CollectionName);
                     facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemCollectionNames", searchInputModel.ItemCollectionName);
+                        .WhereEquals("CollectionNames", searchInputModel.CollectionName);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemCollectionPlan))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.CollectionPlan))
                 {
-                    query = query.AndAlso().WhereEquals("ItemCollectionPlans", searchInputModel.ItemCollectionPlan);
+                    query = query.AndAlso().WhereEquals("CollectionPlans", searchInputModel.CollectionPlan);
                     facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemCollectionPlans", searchInputModel.ItemCollectionPlan);
+                        .WhereEquals("CollectionPlans", searchInputModel.CollectionPlan);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemPrimaryClassification))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.PrimaryClassification))
                 {
                     query = query.AndAlso()
-                        .WhereEquals("ItemPrimaryClassification", searchInputModel.ItemPrimaryClassification);
+                        .WhereEquals("PrimaryClassification", searchInputModel.PrimaryClassification);
                     facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemPrimaryClassification", searchInputModel.ItemPrimaryClassification);
+                        .WhereEquals("PrimaryClassification", searchInputModel.PrimaryClassification);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemSecondaryClassification))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.SecondaryClassification))
                 {
                     query = query.AndAlso()
-                        .WhereEquals("ItemSecondaryClassification", searchInputModel.ItemSecondaryClassification);
+                        .WhereEquals("SecondaryClassification", searchInputModel.SecondaryClassification);
                     facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemSecondaryClassification", searchInputModel.ItemSecondaryClassification);
+                        .WhereEquals("SecondaryClassification", searchInputModel.SecondaryClassification);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemTertiaryClassification))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.TertiaryClassification))
                 {
                     query = query.AndAlso()
-                        .WhereEquals("ItemTertiaryClassification", searchInputModel.ItemTertiaryClassification);
+                        .WhereEquals("TertiaryClassification", searchInputModel.TertiaryClassification);
                     facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemTertiaryClassification", searchInputModel.ItemTertiaryClassification);
+                        .WhereEquals("TertiaryClassification", searchInputModel.TertiaryClassification);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemAssociationName))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.AssociationName))
                 {
-                    query = query.AndAlso().WhereEquals("ItemAssociationNames", searchInputModel.ItemAssociationName);
+                    query = query.AndAlso().WhereEquals("AssociationNames", searchInputModel.AssociationName);
                     facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemAssociationNames", searchInputModel.ItemAssociationName);
+                        .WhereEquals("AssociationNames", searchInputModel.AssociationName);
                 }
                 if (!string.IsNullOrWhiteSpace(searchInputModel.ItemTradeLiteraturePrimarySubject))
                 {

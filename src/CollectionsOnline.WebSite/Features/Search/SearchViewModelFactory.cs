@@ -118,81 +118,81 @@ namespace CollectionsOnline.WebSite.Features.Search
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.ItemCollectionName))
+            if (!string.IsNullOrWhiteSpace(searchInputModel.CollectionName))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
 
-                termQueryString.Remove("itemcollectionName");
+                termQueryString.Remove("collectionname");
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.ItemCollectionName,
-                    Term = "ItemCollectionName",
+                    Name = searchInputModel.CollectionName,
+                    Term = "CollectionName",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.ItemCollectionPlan))
+            if (!string.IsNullOrWhiteSpace(searchInputModel.CollectionPlan))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
 
-                termQueryString.Remove("itemcollectionplan");
+                termQueryString.Remove("collectionplan");
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.ItemCollectionPlan,
-                    Term = "ItemCollectionPlan",
+                    Name = searchInputModel.CollectionPlan,
+                    Term = "CollectionPlan",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.ItemPrimaryClassification))
+            if (!string.IsNullOrWhiteSpace(searchInputModel.PrimaryClassification))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
 
-                termQueryString.Remove("itemprimaryclassification");
+                termQueryString.Remove("primaryclassification");
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.ItemPrimaryClassification,
-                    Term = "ItemPrimaryClassification",
+                    Name = searchInputModel.PrimaryClassification,
+                    Term = "PrimaryClassification",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.ItemSecondaryClassification))
+            if (!string.IsNullOrWhiteSpace(searchInputModel.SecondaryClassification))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
 
-                termQueryString.Remove("itemsecondaryclassification");
+                termQueryString.Remove("secondaryclassification");
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.ItemSecondaryClassification,
-                    Term = "ItemSecondaryClassification",
+                    Name = searchInputModel.SecondaryClassification,
+                    Term = "SecondaryClassification",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.ItemTertiaryClassification))
+            if (!string.IsNullOrWhiteSpace(searchInputModel.TertiaryClassification))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
 
-                termQueryString.Remove("itemtertiaryclassification");
+                termQueryString.Remove("tertiaryclassification");
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.ItemTertiaryClassification,
-                    Term = "ItemTertiaryClassification",
+                    Name = searchInputModel.TertiaryClassification,
+                    Term = "TertiaryClassification",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.ItemAssociationName))
+            if (!string.IsNullOrWhiteSpace(searchInputModel.AssociationName))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
 
-                termQueryString.Remove("itemassociationname");
+                termQueryString.Remove("associationname");
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.ItemAssociationName,
-                    Term = "ItemAssociationName",
+                    Name = searchInputModel.AssociationName,
+                    Term = "AssociationName",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }

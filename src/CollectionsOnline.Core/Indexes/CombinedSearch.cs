@@ -16,8 +16,8 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Content fields
                     Id = item.Id,
-                    Name = item.Name,
-                    Content = new object[] { item.Name, item.Discipline, item.RegistrationNumber },
+                    Name = item.ObjectName,
+                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber },
                     Summary = item.Summary,
                     ThumbUrl = item.Media.FirstOrDefault() != null ? item.Media.FirstOrDefault().Url : (string)null,
 
@@ -48,12 +48,12 @@ namespace CollectionsOnline.Core.Indexes
                     // Term fields
                     Tags = item.Tags,
                     Country = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country).ToArray(),
-                    ItemCollectionNames = item.CollectionNames,
-                    ItemCollectionPlans = item.CollectionPlans,
-                    ItemPrimaryClassification = item.PrimaryClassification,
-                    ItemSecondaryClassification = item.SecondaryClassification,
-                    ItemTertiaryClassification = item.TertiaryClassification,
-                    ItemAssociationNames = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name).ToArray(),
+                    CollectionNames = item.CollectionNames,
+                    CollectionPlans = item.CollectionPlans,
+                    PrimaryClassification = item.PrimaryClassification,
+                    SecondaryClassification = item.SecondaryClassification,
+                    TertiaryClassification = item.TertiaryClassification,
+                    AssociationNames = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name).ToArray(),
                     ItemTradeLiteraturePrimarySubject = item.TradeLiteraturePrimarySubject,
                     ItemTradeLiteraturePublicationDate = item.TradeLiteraturePublicationDate,
                     ItemTradeLiteraturePrimaryRole = item.TradeLiteraturePrimaryRole,
@@ -100,12 +100,12 @@ namespace CollectionsOnline.Core.Indexes
                     // Term fields
                     Tags = new object[] {},
                     Country = new object[] {},
-                    ItemCollectionNames = new object[] {},
-                    ItemCollectionPlans = new object[] { },
-                    ItemPrimaryClassification = (string) null,
-                    ItemSecondaryClassification = (string) null,
-                    ItemTertiaryClassification = (string) null,
-                    ItemAssociationNames = new object[] {},
+                    CollectionNames = new object[] {},
+                    CollectionPlans = new object[] { },
+                    PrimaryClassification = (string) null,
+                    SecondaryClassification = (string) null,
+                    TertiaryClassification = (string) null,
+                    AssociationNames = new object[] {},
                     ItemTradeLiteraturePrimarySubject = (string) null,
                     ItemTradeLiteraturePublicationDate = (string) null,
                     ItemTradeLiteraturePrimaryRole = (string) null,
@@ -119,7 +119,7 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Content fields
                     Id = specimen.Id,
-                    Name = specimen.ScientificName ?? specimen.AcceptedNameUsage,
+                    Name = specimen.ObjectName ?? specimen.ScientificName ?? specimen.AcceptedNameUsage,
                     Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
                     ThumbUrl = specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string) null,
@@ -150,14 +150,14 @@ namespace CollectionsOnline.Core.Indexes
                     Dates = new object[] { specimen.AssociatedDate },
 
                     // Term fields
-                    Tags = new object[] {},
+                    Tags = specimen.Tags,
                     Country = new object[] {specimen.Country},
-                    ItemCollectionNames = new object[] {},
-                    ItemCollectionPlans = new object[] { },
-                    ItemPrimaryClassification = (string) null,
-                    ItemSecondaryClassification = (string) null,
-                    ItemTertiaryClassification = (string) null,
-                    ItemAssociationNames = new object[] {},
+                    CollectionNames = specimen.CollectionNames,
+                    CollectionPlans = specimen.CollectionPlans,
+                    PrimaryClassification = specimen.PrimaryClassification,
+                    SecondaryClassification = specimen.SecondaryClassification,
+                    TertiaryClassification = specimen.TertiaryClassification,
+                    AssociationNames = specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name).ToArray(),
                     ItemTradeLiteraturePrimarySubject = (string) null,
                     ItemTradeLiteraturePublicationDate = (string) null,
                     ItemTradeLiteraturePrimaryRole = (string) null,
@@ -204,12 +204,12 @@ namespace CollectionsOnline.Core.Indexes
                     // Term fields
                     Tags = new object[] {story.Tags, story.GeographicTags},
                     Country = new object[] {},
-                    ItemCollectionNames = new object[] {},
-                    ItemCollectionPlans = new object[] { },
-                    ItemPrimaryClassification = (string) null,
-                    ItemSecondaryClassification = (string) null,
-                    ItemTertiaryClassification = (string) null,
-                    ItemAssociationNames = new object[] {},
+                    CollectionNames = new object[] {},
+                    CollectionPlans = new object[] { },
+                    PrimaryClassification = (string) null,
+                    SecondaryClassification = (string) null,
+                    TertiaryClassification = (string) null,
+                    AssociationNames = new object[] {},
                     ItemTradeLiteraturePrimarySubject = (string) null,
                     ItemTradeLiteraturePublicationDate = (string) null,
                     ItemTradeLiteraturePrimaryRole = (string) null,
@@ -224,11 +224,11 @@ namespace CollectionsOnline.Core.Indexes
             
             Index(x => x.Tags, FieldIndexing.NotAnalyzed);
             Index(x => x.Country, FieldIndexing.NotAnalyzed);
-            Index(x => x.ItemCollectionNames, FieldIndexing.NotAnalyzed);
-            Index(x => x.ItemPrimaryClassification, FieldIndexing.NotAnalyzed);
-            Index(x => x.ItemSecondaryClassification, FieldIndexing.NotAnalyzed);
-            Index(x => x.ItemTertiaryClassification, FieldIndexing.NotAnalyzed);
-            Index(x => x.ItemAssociationNames, FieldIndexing.NotAnalyzed);
+            Index(x => x.CollectionNames, FieldIndexing.NotAnalyzed);
+            Index(x => x.PrimaryClassification, FieldIndexing.NotAnalyzed);
+            Index(x => x.SecondaryClassification, FieldIndexing.NotAnalyzed);
+            Index(x => x.TertiaryClassification, FieldIndexing.NotAnalyzed);
+            Index(x => x.AssociationNames, FieldIndexing.NotAnalyzed);
 
             Store(x => x.Id, FieldStorage.Yes);
             Store(x => x.Name, FieldStorage.Yes);

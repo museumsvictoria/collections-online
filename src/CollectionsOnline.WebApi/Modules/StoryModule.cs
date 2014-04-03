@@ -13,8 +13,9 @@ namespace CollectionsOnline.WebApi.Modules
         {
             Get["/"] = parameters =>
                 {
-                    var stories = documentSession
-                        .Query<Story, StoriesNotHidden>()
+                    var stories = documentSession.Advanced
+                        .LuceneQuery<Story, CombinedSearch>()
+                        .WhereEquals("Type", "Story")
                         .Statistics(out Statistics)
                         .Skip(Offset)
                         .Take(Limit)

@@ -50,17 +50,17 @@
 
         public string Country { get; set; }
 
-        public string ItemCollectionName { get; set; }
+        public string CollectionName { get; set; }
 
-        public string ItemCollectionPlan { get; set; }
+        public string CollectionPlan { get; set; }
 
-        public string ItemPrimaryClassification { get; set; }
+        public string PrimaryClassification { get; set; }
 
-        public string ItemSecondaryClassification { get; set; }
+        public string SecondaryClassification { get; set; }
 
-        public string ItemTertiaryClassification { get; set; }
+        public string TertiaryClassification { get; set; }
 
-        public string ItemAssociationName { get; set; }
+        public string AssociationName { get; set; }
 
         public string ItemTradeLiteraturePrimarySubject { get; set; }
 
