@@ -159,7 +159,7 @@ namespace CollectionsOnline.Import.Imports
                                                     row.GetString("ClaSubgenus"),
                                                     row.GetString("ClaSpecies"),
                                                     row.GetString("ClaSubspecies")
-                                                }.Concatenate(";");
+                                                }.Concatenate("; ");
 
                                                 //vernacularName
                                                 var vernacularName = row.GetMaps("names").FirstOrDefault(x => string.Equals(x.GetString("ComStatus_tab"), "preferred", StringComparison.OrdinalIgnoreCase));

@@ -49,7 +49,7 @@ namespace CollectionsOnline.Import.Factories
                         "ColTypeOfItem",
                         "AdmDateModified",
                         "AdmTimeModified",
-                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(SummaryData))",
+                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry))",
                         "SpeNoSpecimens",
                         "SpeSex_tab",
                         "SpeStageAge_tab",
@@ -58,8 +58,8 @@ namespace CollectionsOnline.Import.Factories
                         "DarYearCollected",
                         "DarMonthCollected",
                         "DarDayCollected",
-                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(SummaryData),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
-                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(SummaryData),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
+                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
                         "ColScientificGroup",
@@ -332,25 +332,17 @@ namespace CollectionsOnline.Import.Factories
             //recordedBy
             if (colevent != null && colevent.GetMaps("collectors") != null)
             {
-                specimen.RecordedBy = colevent.GetMaps("collectors").Where(x => x != null).Select(x => x.GetString("SummaryData")).Concatenate(";");
+                specimen.RecordedBy = colevent.GetMaps("collectors").Where(x => x != null).Select(x => _partiesNameFactory.MakePartiesName(x)).Concatenate("; ");
             }
 
             //individualCount
             specimen.IndividualCount = map.GetString("SpeNoSpecimens");
 
             //sex
-            var sex = map.GetStrings("SpeSex_tab");
-            if (sex.Any())
-            {
-                specimen.Sex = sex.Concatenate(";");
-            }
+            specimen.Sex = map.GetStrings("SpeSex_tab").Concatenate("; ");
 
             //lifeStage
-            var lifeStage = map.GetStrings("SpeStageAge_tab");
-            if (lifeStage.Any())
-            {
-                specimen.LifeStage = lifeStage.Concatenate(";");
-            }
+            specimen.LifeStage = map.GetStrings("SpeStageAge_tab").Concatenate("; ");
 
             //occurrenceStatus
             specimen.OccurrenceStatus = "present";
@@ -380,11 +372,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             //otherCatalogNumbers
-            var otherCatalogNumbers = map.GetStrings("ManPreviousNumbers_tab");
-            if (otherCatalogNumbers.Any())
-            {
-                specimen.OtherCatalogNumbers = otherCatalogNumbers.Concatenate(";");
-            }
+            specimen.OtherCatalogNumbers = map.GetStrings("ManPreviousNumbers_tab").Concatenate("; ");
 
             //associatedMedia
             // TODO: Be more selective in what media we assign to item and how
@@ -422,7 +410,7 @@ namespace CollectionsOnline.Import.Factories
                     });
                 }
             }
-            specimen.AssociatedMedia = specimen.Media.Select(x => x.Title).Concatenate(";");
+            specimen.AssociatedMedia = specimen.Media.Select(x => x.Title).Concatenate("; ");
 
             #endregion
 
@@ -446,7 +434,7 @@ namespace CollectionsOnline.Import.Factories
 
             //eventTime
             if (colevent != null)
-                specimen.EventDate = colevent.GetString("ColTimeVisitedTo");
+                specimen.EventTime = colevent.GetString("ColTimeVisitedTo");
 
             //year
             specimen.Year = map.GetString("DarYearCollected");
@@ -532,11 +520,7 @@ namespace CollectionsOnline.Import.Factories
 
                     specimen.GeodeticDatum = (string.IsNullOrWhiteSpace(latlong.GetString("LatDatum_tab"))) ? "WGS84" : latlong.GetString("LatDatum_tab");
 
-                    var determinedBy = latlong.GetMap("determinedBy");
-                    if (determinedBy != null)
-                    {
-                        specimen.GeoreferencedBy = determinedBy.GetString("SummaryData");
-                    }
+                    specimen.GeoreferencedBy = _partiesNameFactory.MakePartiesName(latlong.GetMap("determinedBy"));
 
                     DateTime georeferencedDate;
                     if (DateTime.TryParseExact(latlong.GetString("LatDetDate0"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out georeferencedDate))
@@ -569,10 +553,9 @@ namespace CollectionsOnline.Import.Factories
                 specimen.TypeStatus = identification.GetString("IdeTypeStatus_tab");
 
                 //identifiedBy
-                var identifiers = identification.GetMaps("identifiers");
-                if (identifiers != null && identifiers.Any())
+                if (identification.GetMaps("identifiers") != null)
                 {
-                    specimen.IdentifiedBy = identifiers.Where(x => x != null).Select(x => x.GetString("SummaryData")).Concatenate(";");
+                    specimen.IdentifiedBy = identification.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.MakePartiesName(x)).Concatenate("; ");
                 }
 
                 //dateIdentified
@@ -634,7 +617,7 @@ namespace CollectionsOnline.Import.Factories
                             taxonomy.GetString("ClaSubgenus"),
                             taxonomy.GetString("ClaSpecies"),
                             taxonomy.GetString("ClaSubspecies")
-                        }.Concatenate(";");
+                        }.Concatenate("; ");
 
                     //vernacularName
                     var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => x.GetString("ComStatus_tab") != null && x.GetString("ComStatus_tab").Trim().ToLower() == "preferred");

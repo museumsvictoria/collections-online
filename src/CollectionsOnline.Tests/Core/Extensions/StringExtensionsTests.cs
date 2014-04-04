@@ -1,4 +1,5 @@
-﻿using CollectionsOnline.Core.Extensions;
+﻿using System.Collections.Generic;
+using CollectionsOnline.Core.Extensions;
 using Shouldly;
 using Xunit;
 
@@ -32,6 +33,19 @@ namespace CollectionsOnline.Tests.Core.Extensions
                 "",
                 "   "
             }.Concatenate(" ");
+
+            // Then
+            result.ShouldBe(null);
+        }
+
+        [Fact]
+        public void GivenNull_Concatenate_ReturnsNull()
+        {
+            // Given 
+            IEnumerable<string> result = null;
+            
+            // When
+            result.Concatenate(" ");
 
             // Then
             result.ShouldBe(null);

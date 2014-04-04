@@ -12,14 +12,17 @@ namespace CollectionsOnline.Core.Extensions
         {
             var s = new StringBuilder();
 
-            foreach (var item in input)
+            if (input != null)
             {
-                if (!string.IsNullOrWhiteSpace(item))
+                foreach (var item in input)
                 {
-                    if (s.Length != 0)
-                        s.Append(delimiter);
+                    if (!string.IsNullOrWhiteSpace(item))
+                    {
+                        if (s.Length != 0)
+                            s.Append(delimiter);
 
-                    s.Append(item);
+                        s.Append(item);
+                    }
                 }
             }
 
