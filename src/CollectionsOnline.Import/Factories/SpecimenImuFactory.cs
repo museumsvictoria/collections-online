@@ -49,7 +49,7 @@ namespace CollectionsOnline.Import.Factories
                         "ColTypeOfItem",
                         "AdmDateModified",
                         "AdmTimeModified",
-                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry))",
+                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry))",
                         "SpeNoSpecimens",
                         "SpeSex_tab",
                         "SpeStageAge_tab",
@@ -58,7 +58,7 @@ namespace CollectionsOnline.Import.Factories
                         "DarYearCollected",
                         "DarMonthCollected",
                         "DarDayCollected",
-                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
+                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
@@ -79,11 +79,15 @@ namespace CollectionsOnline.Import.Factories
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry),AcqSourceRole_tab])",
                         "RigText0",
                         "SpeNoSpecimens",
+                        "LocDateCollectedFrom",
+                        "LocDateCollectedTo",
+                        "LocSamplingMethod",
                         "MinSpecies",
                         "MinVariety",
                         "MinGroup",
                         "MinClass",
                         "MinAssociatedMatrix",
+                        "MinType",
                         "MinTypeType",
                         "MetName",
                         "MetClass",
@@ -227,40 +231,39 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Discipline specific fields
-            switch (specimen.Discipline)
-            {
-                case "Palaeontology":
-                    specimen.PalaeontologyNumber = map.GetString("SpeNoSpecimens");
-                    break;
-                case "Mineralogy":
-                    specimen.MineralogySpecies = map.GetString("MinSpecies");
-                    specimen.MineralogyVariety = map.GetString("MinVariety");
-                    specimen.MineralogyGroup = map.GetString("MinGroup");
-                    specimen.MineralogyClass = map.GetString("MinClass");
-                    specimen.MineralogyAssociatedMatrix = map.GetString("MinAssociatedMatrix");
-                    specimen.MineralogyType = map.GetString("MinTypeType");
-                    break;
-                case "Meteorites":
-                    specimen.MeteoritesName = map.GetString("MetName");
-                    specimen.MeteoritesClass = map.GetString("MetClass");
-                    specimen.MeteoritesGroup = map.GetString("MetGroup");
-                    specimen.MeteoritesType = map.GetString("MetType");
-                    specimen.MeteoritesMinerals = map.GetString("MetMainMineralsPresent");
-                    specimen.MeteoritesSpecimenWeight = map.GetString("MetSpecimenWeight");
-                    specimen.MeteoritesTotalWeight = map.GetString("MetTotalWeight");
-                    specimen.MeteoritesDateFell = map.GetString("MetDateSpecimenFell");
-                    specimen.MeteoritesDateFound = map.GetString("MetDateSpecimenFound");
-                    break;
-                case "Tektites":
-                    specimen.TektitesName = map.GetString("TekName");
-                    specimen.TektitesClassification = map.GetString("TekClassification");
-                    specimen.TektitesShape = map.GetString("TekShape");
-                    specimen.TektitesLocalStrewnfield = map.GetString("TekLocalStrewnfield");
-                    specimen.TektitesGlobalStrewnfield = map.GetString("TekGlobalStrewnfield");
-                    specimen.TektitesSurfaceUp = map.GetString("TekSurfaceUp");
-                    specimen.TektitesDegreeOfAbrasion = map.GetString("TekDegreeOfAbrasion");
-                    break;
-            }
+            // Palaeontology
+            specimen.PaleontologyDateCollectedFrom = map.GetString("LocDateCollectedFrom");
+            specimen.PaleontologyDateCollectedTo = map.GetString("LocDateCollectedTo");
+            specimen.PaleontologyCollectingMethod = map.GetString("LocSamplingMethod");
+            
+            // Mineralogy
+            specimen.MineralogySpecies = map.GetString("MinSpecies");
+            specimen.MineralogyVariety = map.GetString("MinVariety");
+            specimen.MineralogyGroup = map.GetString("MinGroup");
+            specimen.MineralogyClass = map.GetString("MinClass");
+            specimen.MineralogyAssociatedMatrix = map.GetString("MinAssociatedMatrix");
+            specimen.MineralogyIsType = map.GetString("MinType");
+            specimen.MineralogyType = map.GetString("MinTypeType");
+            
+            // Meteorites
+            specimen.MeteoritesName = map.GetString("MetName");
+            specimen.MeteoritesClass = map.GetString("MetClass");
+            specimen.MeteoritesGroup = map.GetString("MetGroup");
+            specimen.MeteoritesType = map.GetString("MetType");
+            specimen.MeteoritesMinerals = map.GetString("MetMainMineralsPresent");
+            specimen.MeteoritesSpecimenWeight = map.GetString("MetSpecimenWeight");
+            specimen.MeteoritesTotalWeight = map.GetString("MetTotalWeight");
+            specimen.MeteoritesDateFell = map.GetString("MetDateSpecimenFell");
+            specimen.MeteoritesDateFound = map.GetString("MetDateSpecimenFound");
+            
+            // Tektites
+            specimen.TektitesName = map.GetString("TekName");
+            specimen.TektitesClassification = map.GetString("TekClassification");
+            specimen.TektitesShape = map.GetString("TekShape");
+            specimen.TektitesLocalStrewnfield = map.GetString("TekLocalStrewnfield");
+            specimen.TektitesGlobalStrewnfield = map.GetString("TekGlobalStrewnfield");
+            specimen.TektitesSurfaceUp = map.GetString("TekSurfaceUp");
+            specimen.TektitesDegreeOfAbrasion = map.GetString("TekDegreeOfAbrasion");
 
             #region DwC Fields
 
@@ -502,6 +505,7 @@ namespace CollectionsOnline.Import.Factories
                     specimen.StateProvince = geo.GetString("LocProvinceStateTerritory_tab");
                     specimen.County = geo.GetString("LocDistrictCountyShire_tab");
                     specimen.Municipality = geo.GetString("LocTownship_tab");
+                    specimen.NearestNamedPlace = geo.GetString("LocNearestNamedPlace_tab");
                 }
 
                 var latlong = site.GetMaps("latlong").FirstOrDefault();
@@ -529,6 +533,12 @@ namespace CollectionsOnline.Import.Factories
                     specimen.GeoreferenceProtocol = latlong.GetString("LatLatLongDetermination_tab");
                     specimen.GeoreferenceSources = latlong.GetString("LatDetSource_tab");
                 }
+
+                // Palaeontology site fields
+                specimen.PaleontologyEra = site.GetString("EraEra");
+                specimen.PaleontologyPeriod = site.GetString("EraAge1");
+                specimen.PaleontologyEpoch = site.GetString("EraAge2");
+                specimen.PaleontologyStage = site.GetString("EraMvStage");
             }
 
             //minimumDepthInMeters

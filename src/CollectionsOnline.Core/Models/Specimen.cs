@@ -63,7 +63,19 @@ namespace CollectionsOnline.Core.Models
 
         #region Paleontology
 
-        public string PalaeontologyNumber { get; set; }
+        public string PaleontologyDateCollectedFrom { get; set; }
+
+        public string PaleontologyDateCollectedTo { get; set; }
+
+        public string PaleontologyCollectingMethod { get; set; }
+
+        public string PaleontologyEra { get; set; }
+
+        public string PaleontologyPeriod { get; set; }
+
+        public string PaleontologyEpoch { get; set; }
+
+        public string PaleontologyStage { get; set; }
 
         #endregion
 
@@ -78,6 +90,8 @@ namespace CollectionsOnline.Core.Models
         public string MineralogyClass { get; set; }
 
         public string MineralogyAssociatedMatrix { get; set; }
+
+        public string MineralogyIsType { get; set; }
 
         public string MineralogyType { get; set; }
 
@@ -221,6 +235,8 @@ namespace CollectionsOnline.Core.Models
         public string County { get; set; }
 
         public string Municipality { get; set; }
+
+        public string NearestNamedPlace { get; set; }
 
         public string Locality { get; set; }
 
