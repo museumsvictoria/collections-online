@@ -20,10 +20,10 @@ namespace CollectionsOnline.Import.Imports
             _documentStore = documentStore;
         }
 
-        public void Run(DateTime? dateLastRun)
+        public void Run(DateTime? previousDateRun)
         {
             // Migration only happens once when application created
-            if (!dateLastRun.HasValue)
+            if (!previousDateRun.HasValue)
             {
                 _log.Debug("Beginning Item migration");
 
@@ -47,7 +47,6 @@ namespace CollectionsOnline.Import.Imports
                         {
                             if (Program.ImportCanceled)
                             {
-                                _log.Debug("Canceling Item migration");
                                 return;
                             }
 

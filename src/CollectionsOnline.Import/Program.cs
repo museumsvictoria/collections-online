@@ -1,7 +1,7 @@
-﻿using CollectionsOnline.Core.Config;
+﻿using System;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using IMu;
@@ -9,10 +9,6 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
 using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Extensions;
-using System;
-using System.Configuration;
 
 namespace CollectionsOnline.Import
 {
@@ -25,12 +21,14 @@ namespace CollectionsOnline.Import
 
         static void Main(string[] args)
         {
-            // Set up Ctrl+C handling TODO: Add ability to cancel import
-            //Console.CancelKeyPress += (sender, eventArgs) =>
-            //{
-            //    eventArgs.Cancel = true;
-            //    ImportCanceled = true;
-            //};
+            // Set up Ctrl+C handling 
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                _log.Warn("Canceling all imports");
+
+                eventArgs.Cancel = true;
+                ImportCanceled = true;
+            };
 
             _kernel = CreateKernel();
 

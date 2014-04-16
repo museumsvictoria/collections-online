@@ -91,6 +91,7 @@
     <Compile Include="Factories\SpecimenImuFactory.cs" />
     <Compile Include="Factories\SpeciesImuFactory.cs" />
     <Compile Include="Factories\ItemImuFactory.cs" />
+    <Compile Include="Imports\IImport.cs" />
     <Compile Include="Imports\MediaUpdateImport.cs" />
     <Compile Include="Imports\MigrationImport.cs" />
     <Compile Include="Imports\TaxonomyUpdateImport.cs">
@@ -98,7 +99,6 @@
     </Compile>
     <Compile Include="Infrastructure\ImportRunner.cs" />
     <Compile Include="Imports\ImuImport.cs" />
-    <Compile Include="Imports\IImport.cs" />
     <Compile Include="Infrastructure\NinjectImuSessionProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
@@ -32,24 +33,27 @@ namespace CollectionsOnline.Import.Infrastructure
             var documentSession = _documentStore.OpenSession();
             var application = documentSession.Load<Application>(Constants.ApplicationId);
 
-            if (!application.DataImportRunning)
+            if (!application.ImportsRunning)
             {
-                application.RunDataImport();
+                application.RunAllImports();
                 documentSession.SaveChanges();
                 documentSession.Dispose();
 
                 try
                 {
-                    // Run Imports
+                    // Run all imports
                     foreach (var import in _imports)
                     {
-                        import.Run(application.LastDataImport);
+                        if(Program.ImportCanceled)
+                            break;
+
+                        import.Run(application.PreviousDateRun);
                     }
                 }
                 catch (Exception exception)
                 {
                     hasFailed = true;
-                    _log.Debug(exception.ToString);
+                    _log.Error(exception.ToString);
                 }
 
                 // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.
@@ -58,14 +62,17 @@ namespace CollectionsOnline.Import.Infrastructure
 
                 if (Program.ImportCanceled || hasFailed)
                 {
-                    _log.Debug("Data import finished (cancelled or failed)");
-                    application.DataImportFinished();
+                    _log.Debug("All imports finished (cancelled or failed)");
+                    application.AllImportsFinished();
                 }
                 else
                 {
-                    _log.Debug("Data import finished succesfully");
-                    application.DataImportSuccess(dateRun);
+                    _log.Debug("All imports finished succesfully");
+                    application.AllImportsFinishedSuccessfully(dateRun);
                 }
+
+                // Force aggressive cache check
+                _documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
 
                 documentSession.SaveChanges();
                 documentSession.Dispose();

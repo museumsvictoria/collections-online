@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using NSubstitute;
@@ -21,7 +20,7 @@ namespace CollectionsOnline.Tests.Import
             // Given
             DataToBeSeeded = new List<IEnumerable>
                 {
-                    new[] { new Application { DataImportRunning = true }}
+                    new[] { new Application { ImportsRunning = true }}
                 };
             var import = Substitute.For<IImport>();
             var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import });
@@ -32,7 +31,7 @@ namespace CollectionsOnline.Tests.Import
             // Then
             var application = DocumentSession.Load<Application>(Constants.ApplicationId);
 
-            application.DataImportRunning.ShouldBe(true);
+            application.ImportsRunning.ShouldBe(true);
             import.DidNotReceive().Run(Arg.Any<DateTime>());
         }
 
@@ -53,18 +52,18 @@ namespace CollectionsOnline.Tests.Import
             // Then
             var application = DocumentSession.Load<Application>(Constants.ApplicationId);
 
-            application.DataImportRunning.ShouldBe(false);
+            application.ImportsRunning.ShouldBe(false);
             import.Received().Run(null);
         }
 
         [Fact]
-        public void GivenImportThrowsException_RunImport_DoesNotUpdateLastDataImportDate()
+        public void GivenImportThrowsException_RunImport_DoesNotUpdatePreviousDataImportDate()
         {
             // Given
-            var lastDataImport = DateTime.Now.AddDays(-2);
+            var previousDateRun = DateTime.Now.AddDays(-2);
             DataToBeSeeded = new List<IEnumerable>
                 {
-                    new[] { new Application { LastDataImport = lastDataImport } }
+                    new[] { new Application { PreviousDateRun = previousDateRun } }
                 };
             var import = Substitute.For<IImport>();
             import.When(x => x.Run(Arg.Any<DateTime>())).Do(x => { throw new Exception(); });
@@ -77,8 +76,8 @@ namespace CollectionsOnline.Tests.Import
             // Then
             var application = DocumentSession.Load<Application>(Constants.ApplicationId);
 
-            application.DataImportRunning.ShouldBe(false);
-            application.LastDataImport.ShouldBe(lastDataImport);
+            application.ImportsRunning.ShouldBe(false);
+            application.PreviousDateRun.ShouldBe(previousDateRun);
         }
     }
 }

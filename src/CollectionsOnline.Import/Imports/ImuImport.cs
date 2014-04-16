@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
@@ -6,6 +7,7 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
+using Raven.Abstractions.Extensions;
 using Raven.Client;
 
 namespace CollectionsOnline.Import.Imports
@@ -27,40 +29,109 @@ namespace CollectionsOnline.Import.Imports
             _imuFactory = imuFactory;
         }
 
-        public void Run(DateTime? dateLastRun)
+        public void Run(DateTime? previousDateRun)
         {            
             var module = new Module(_imuFactory.ModuleName, _session);
             var terms = _imuFactory.Terms;
+            int currentOffset;
+            IList<long> cachedResult;
 
-            if (!dateLastRun.HasValue)
+            // Check for existing import in case we need to resume.
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                var importProgress = documentSession.Load<Application>(Constants.ApplicationId).GetImportProgress(GetType().ToString());
+
+                // Exit current import if it had completed previous time it was run.
+                if (importProgress.IsFinished)
+                {
+                    return;
+                }
+
+                currentOffset = importProgress.CurrentOffset;
+                cachedResult = importProgress.CachedResult;
+                terms.Add("AdmDateModified", importProgress.DateRun.ToString("MMM dd yyyy"), "<");
+
+                documentSession.SaveChanges();
+            }
+
+            if (!previousDateRun.HasValue)
             {
                 // Import has never run, do a fresh import
                 _log.Debug("Beginning {0} import", typeof(T).Name);
 
                 var hits = module.FindTerms(terms);
                 
-                _log.Debug("Finished Search. {0} Hits", hits);
+                _log.Debug("Finished search. {0} Hits", hits);
 
-                var count = 0;
+                if (!cachedResult.Any())
+                {
+                    // Cache the results from the search to ensure consistency
+                    var cachedCurrentOffset = 0;
+                    
+                    _log.Debug("Caching results from search to ensure consistency");
+
+                    while (true)
+                    {
+                        if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
+                        {
+                            _log.Warn("Imu about to go offline, canceling all imports");
+                            Program.ImportCanceled = true;
+                        }
+
+                        if (Program.ImportCanceled)
+                        {
+                            return;
+                        }
+
+                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize,
+                            new[] {"irn"});
+
+                        if (results.Count == 0)
+                            break;
+
+                        cachedResult.AddRange(results.Rows.Select(x => long.Parse(x.GetString("irn"))));
+
+                        cachedCurrentOffset += results.Count;
+
+                        _log.Debug("{0} cache import progress... {1}/{2}", typeof (T).Name, cachedCurrentOffset, hits);
+                    }
+
+                    // Store cached result
+                    using (var documentSession = _documentStore.OpenSession())
+                    {
+                        documentSession.Load<Application>(Constants.ApplicationId)
+                            .GetImportProgress(GetType().ToString())
+                            .CachedResult = cachedResult;
+                        documentSession.SaveChanges();
+                    }
+                }
 
                 while (true)
                 {
                     using (var documentSession = _documentStore.OpenSession())
                     {
+                        if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
+                        {
+                            _log.Warn("Imu about to go offline, canceling all imports");
+                            Program.ImportCanceled = true;
+                        }
+
                         if (Program.ImportCanceled)
                         {
-                            _log.Debug("Canceling Data import");
                             return;
                         }
 
-                        // TODO: REMOVE IMPORT LIMIT
-                        if (count >= 3000)
+                        var cachedResultBatch = cachedResult
+                            .Skip(currentOffset)
+                            .Take(Constants.DataBatchSize)
+                            .ToList();
+
+                        if (cachedResultBatch.Count == 0)
                             break;
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, _imuFactory.Columns);
+                        module.FindKeys(cachedResultBatch);
 
-                        if (results.Count == 0)
-                            break;
+                        var results = module.Fetch("start", 0, -1, _imuFactory.Columns);
 
                         // Create and store documents
                         results.Rows
@@ -68,10 +139,12 @@ namespace CollectionsOnline.Import.Imports
                             .ToList()
                             .ForEach(documentSession.Store);
 
-                        // Save any changes
+                        currentOffset += results.Count;
+
+                        documentSession.Load<Application>(Constants.ApplicationId).UpdateImportCurrentOffset(GetType().ToString(), currentOffset);
+
+                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, currentOffset, hits);
                         documentSession.SaveChanges();
-                        count += results.Count;
-                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, count, hits);
                     }
                 }
             }
@@ -82,25 +155,28 @@ namespace CollectionsOnline.Import.Imports
                 
                 _imuFactory.RegisterAutoMapperMap();
 
-                terms.Add("AdmDateModified", dateLastRun.Value.ToString("MMM dd yyyy"), ">=");
+                terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
 
                 var hits = module.FindTerms(terms);
 
                 _log.Debug("Finished Search. {0} Hits", hits);
 
-                var count = 0;
-
                 while (true)
                 {
                     using (var documentSession = _documentStore.OpenSession())
                     {
+                        if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
+                        {
+                            _log.Warn("Imu about to go offline, canceling all imports");
+                            Program.ImportCanceled = true;
+                        }
+
                         if (Program.ImportCanceled)
                         {
-                            _log.Debug("Canceling Data import");
                             return;
                         }
 
-                        var results = module.Fetch("start", count, Constants.DataBatchSize, _imuFactory.Columns);
+                        var results = module.Fetch("start", currentOffset, Constants.DataBatchSize, _imuFactory.Columns);
 
                         if (results.Count == 0)
                             break;
@@ -113,22 +189,30 @@ namespace CollectionsOnline.Import.Imports
                         {
                             if (existingDocuments[i] != null)
                             {
-                                // Update existing story
+                                // Update existing
                                 Mapper.Map(newDocuments[i], existingDocuments[i]);
                             }
                             else
                             {
-                                // Create new story
+                                // Create new
                                 documentSession.Store(newDocuments[i]);
                             }
                         }
 
-                        // Save any changes
+                        currentOffset += results.Count;
+
+                        documentSession.Load<Application>(Constants.ApplicationId).UpdateImportCurrentOffset(GetType().ToString(), currentOffset);
+
+                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, currentOffset, hits);
                         documentSession.SaveChanges();
-                        count += results.Count;
-                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, count, hits);
                     }
                 }
+            }
+
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString());
+                documentSession.SaveChanges();
             }
         }
     }

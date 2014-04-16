@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Factories;
-using CollectionsOnline.Import.Utilities;
-using ImageResizer;
 using IMu;
 using NLog;
 using Raven.Client;
@@ -29,18 +24,17 @@ namespace CollectionsOnline.Import.Imports
             _session = session;
         }
 
-        public void Run(DateTime? dateLastRun)
+        public void Run(DateTime? previousDateRun)
         {
             // Taxonomy update only happens if import has been run before
-            if (dateLastRun.HasValue)
+            if (previousDateRun.HasValue)
             {
                 _log.Debug("Beginning Taxonomy update import");
 
                 var module = new Module("etaxonomy", _session);
-
                 var terms = new Terms();
-                terms.Add("AdmDateModified", dateLastRun.Value.ToString("MMM dd yyyy"), ">=");
-
+                terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
+                int currentOffset;
                 var columns = new[]
                                 {
                                     "irn",
@@ -72,23 +66,42 @@ namespace CollectionsOnline.Import.Imports
                                     "catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,taxa=TaxTaxonomyRef_tab.(irn)])",
                                     "narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
                                 };
-
                 var types = new[] { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
+
+                // Check for existing import in case we need to resume.
+                using (var documentSession = _documentStore.OpenSession())
+                {
+                    var importProgress = documentSession.Load<Application>(Constants.ApplicationId).GetImportProgress(GetType().ToString());
+
+                    // Exit current import if it had completed last time it was run.
+                    if (importProgress.IsFinished)
+                    {
+                        return;
+                    }
+
+                    currentOffset = importProgress.CurrentOffset;
+                    terms.Add("AdmDateModified", importProgress.DateRun.ToString("MMM dd yyyy"), "<");
+
+                    documentSession.SaveChanges();
+                }
 
                 var hits = module.FindTerms(terms);
                 _log.Debug("Finished Search. {0} Hits", hits);
 
-                var count = 0;
-
                 while (true)
                 {
+                    if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
+                    {
+                        _log.Warn("Imu about to go offline, canceling all imports");
+                        Program.ImportCanceled = true;
+                    }
+
                     if (Program.ImportCanceled)
                     {
-                        _log.Debug("Canceling Data import");
                         return;
                     }
 
-                    var results = module.Fetch("start", count, Constants.DataBatchSize, columns);
+                    var results = module.Fetch("start", currentOffset, Constants.DataBatchSize, columns);
 
                     if (results.Count == 0)
                         break;
@@ -279,8 +292,15 @@ namespace CollectionsOnline.Import.Imports
                         }
                     }
 
-                    count += results.Count;
-                    _log.Debug("import progress... {0}/{1}", count, hits);
+                    currentOffset += results.Count;
+
+                    using (var documentSession = _documentStore.OpenSession())
+                    {
+                        documentSession.Load<Application>(Constants.ApplicationId).UpdateImportCurrentOffset(GetType().ToString(), currentOffset);
+
+                        _log.Debug("import progress... {0}/{1}", currentOffset, hits);
+                        documentSession.SaveChanges();
+                    }
                 }
             }
         }
