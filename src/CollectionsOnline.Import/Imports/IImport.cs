@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace CollectionsOnline.Import.Imports
+﻿namespace CollectionsOnline.Import.Imports
 {
     public interface IImport
     {
-        void Run(DateTime? previousDateRun);
+        void Run();
     }
 }

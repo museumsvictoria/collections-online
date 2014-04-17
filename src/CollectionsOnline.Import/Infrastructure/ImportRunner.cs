@@ -47,7 +47,7 @@ namespace CollectionsOnline.Import.Infrastructure
                         if(Program.ImportCanceled)
                             break;
 
-                        import.Run(application.PreviousDateRun);
+                        import.Run();
                     }
                 }
                 catch (Exception exception)
@@ -63,14 +63,14 @@ namespace CollectionsOnline.Import.Infrastructure
                 if (Program.ImportCanceled || hasFailed)
                 {
                     _log.Debug("All imports finished (cancelled or failed)");
-                    application.AllImportsFinished();
+                    application.FinishedAllImports();
                 }
                 else
                 {
                     _log.Debug("All imports finished succesfully");
-                    application.AllImportsFinishedSuccessfully(dateRun);
+                    application.FinishedAllImportsSuccessfully();
                 }
-
+                
                 // Force aggressive cache check
                 _documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
 

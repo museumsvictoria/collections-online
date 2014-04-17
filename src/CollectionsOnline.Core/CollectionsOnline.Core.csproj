@@ -67,7 +67,7 @@
     <Compile Include="Models\Association.cs" />
     <Compile Include="Models\EmuAggregateRoot.cs" />
     <Compile Include="Models\FileFormatType.cs" />
-    <Compile Include="Models\ImportProgress.cs" />
+    <Compile Include="Models\ImportStatus.cs" />
     <Compile Include="Models\Specimen.cs" />
     <Compile Include="Models\Species.cs" />
     <Compile Include="Models\Media.cs" />

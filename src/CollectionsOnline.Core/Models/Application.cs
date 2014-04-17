@@ -8,11 +8,9 @@ namespace CollectionsOnline.Core.Models
 {
     public class Application : AggregateRoot
     {
-        public DateTime? PreviousDateRun { get; set; }
-
         public bool ImportsRunning { get; set; }
 
-        public IList<ImportProgress> ImportProgresses { get; set; }
+        public IList<ImportStatus> ImportStatuses { get; set; }
 
         public Application()
         {
@@ -23,56 +21,55 @@ namespace CollectionsOnline.Core.Models
 
         public void RunAllImports()
         {
-            if (!ImportsRunning)
+            ImportsRunning = true;
+        }
+
+        public void FinishedAllImports()
+        {
+            ImportsRunning = false;
+        }
+
+        public void FinishedAllImportsSuccessfully()
+        {
+            ImportsRunning = false;
+
+            foreach (var importStatus in ImportStatuses)
             {
-                ImportsRunning = true;
+                importStatus.IsFinished = false;
+                importStatus.CachedResult = null;
+                importStatus.CurrentOffset = 0;
+                importStatus.CachedResultDate = null;
             }
-        }
-
-        public void AllImportsFinished()
-        {
-            ImportsRunning = false;
-        }
-
-        public void AllImportsFinishedSuccessfully(DateTime dateRun)
-        {
-            ImportsRunning = false;
-            PreviousDateRun = dateRun;
-            ImportProgresses.Clear();
         }
 
         public void ImportFinished(string importType)
         {
-            GetImportProgress(importType).IsFinished = true;
+            var importStatus = ImportStatuses.First(x => x.ImportType == importType);
+
+            importStatus.IsFinished = true;
+            importStatus.PreviousDateRun = importStatus.CachedResultDate;
         }
 
-        public ImportProgress GetImportProgress(string importType)
+        public ImportStatus GetImportStatus(string importType)
         {
-            var importProgress = ImportProgresses.FirstOrDefault(x => x.ImportType == importType);
+            var importStatus = ImportStatuses.FirstOrDefault(x => x.ImportType == importType);
 
-            if (importProgress == null)
+            if (importStatus == null)
             {
-                importProgress = new ImportProgress
+                importStatus = new ImportStatus
                 {
-                    ImportType = importType,
-                    CurrentOffset = 0,
-                    IsFinished = false
+                    ImportType = importType
                 };
 
-                ImportProgresses.Add(importProgress);
+                ImportStatuses.Add(importStatus);
             }
             
-            return importProgress;
-        }
-
-        public void UpdateImportCurrentOffset(string importType, int currentOffset)
-        {
-            GetImportProgress(importType).CurrentOffset = currentOffset;
+            return importStatus;
         }
 
         private void InitializeCollections()
         {
-            ImportProgresses = new List<ImportProgress>();
+            ImportStatuses = new List<ImportStatus>();
         }
     }
 }

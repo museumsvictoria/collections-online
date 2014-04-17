@@ -29,159 +29,92 @@ namespace CollectionsOnline.Import.Imports
             _imuFactory = imuFactory;
         }
 
-        public void Run(DateTime? previousDateRun)
+        public void Run()
         {            
             var module = new Module(_imuFactory.ModuleName, _session);
-            var terms = _imuFactory.Terms;
-            int currentOffset;
-            IList<long> cachedResult;
+            var terms = _imuFactory.Terms;            
 
             // Check for existing import in case we need to resume.
             using (var documentSession = _documentStore.OpenSession())
             {
-                var importProgress = documentSession.Load<Application>(Constants.ApplicationId).GetImportProgress(GetType().ToString());
+                var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
                 // Exit current import if it had completed previous time it was run.
-                if (importProgress.IsFinished)
+                if (importStatus.IsFinished)
                 {
                     return;
                 }
 
-                currentOffset = importProgress.CurrentOffset;
-                cachedResult = importProgress.CachedResult;
-                terms.Add("AdmDateModified", importProgress.DateRun.ToString("MMM dd yyyy"), "<");
+                _log.Debug("Starting {0} import", typeof(T).Name);
 
-                documentSession.SaveChanges();
-            }
-
-            if (!previousDateRun.HasValue)
-            {
-                // Import has never run, do a fresh import
-                _log.Debug("Beginning {0} import", typeof(T).Name);
-
-                var hits = module.FindTerms(terms);
-                
-                _log.Debug("Finished search. {0} Hits", hits);
-
-                if (!cachedResult.Any())
+                // Cache the search results
+                if (importStatus.CachedResult == null)
                 {
-                    // Cache the results from the search to ensure consistency
-                    var cachedCurrentOffset = 0;
-                    
-                    _log.Debug("Caching results from search to ensure consistency");
+                    importStatus.CachedResult = new List<long>();
 
+                    if (importStatus.PreviousDateRun.HasValue)
+                        terms.Add("AdmDateModified", importStatus.PreviousDateRun.Value.ToString("MMM dd yyyy"), ">=");
+
+                    importStatus.CachedResultDate = DateTime.Now;
+
+                    var hits = module.FindTerms(terms);
+
+                    _log.Debug("Caching {0} search results. {1} Hits", typeof(T).Name, hits);
+
+                    var cachedCurrentOffset = 0;
                     while (true)
                     {
-                        if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
-                        {
-                            _log.Warn("Imu about to go offline, canceling all imports");
-                            Program.ImportCanceled = true;
-                        }
-
-                        if (Program.ImportCanceled)
-                        {
+                        if (ImportCanceled())
                             return;
-                        }
 
-                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize,
-                            new[] {"irn"});
+                        var results = module.Fetch("start", cachedCurrentOffset, Constants.DataBatchSize, new[] { "irn" });
 
                         if (results.Count == 0)
                             break;
 
-                        cachedResult.AddRange(results.Rows.Select(x => long.Parse(x.GetString("irn"))));
+                        importStatus.CachedResult.AddRange(results.Rows.Select(x => long.Parse(x.GetString("irn"))));
 
                         cachedCurrentOffset += results.Count;
 
-                        _log.Debug("{0} cache import progress... {1}/{2}", typeof (T).Name, cachedCurrentOffset, hits);
+                        _log.Debug("{0} cache progress... {1}/{2}", typeof(T).Name, cachedCurrentOffset, hits);
                     }
 
                     // Store cached result
-                    using (var documentSession = _documentStore.OpenSession())
-                    {
-                        documentSession.Load<Application>(Constants.ApplicationId)
-                            .GetImportProgress(GetType().ToString())
-                            .CachedResult = cachedResult;
-                        documentSession.SaveChanges();
-                    }
+                    documentSession.SaveChanges();
+
+                    _log.Debug("Caching of {0} search results complete, beginning import.", typeof(T).Name);
                 }
-
-                while (true)
+                else
                 {
-                    using (var documentSession = _documentStore.OpenSession())
-                    {
-                        if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
-                        {
-                            _log.Warn("Imu about to go offline, canceling all imports");
-                            Program.ImportCanceled = true;
-                        }
-
-                        if (Program.ImportCanceled)
-                        {
-                            return;
-                        }
-
-                        var cachedResultBatch = cachedResult
-                            .Skip(currentOffset)
-                            .Take(Constants.DataBatchSize)
-                            .ToList();
-
-                        if (cachedResultBatch.Count == 0)
-                            break;
-
-                        module.FindKeys(cachedResultBatch);
-
-                        var results = module.Fetch("start", 0, -1, _imuFactory.Columns);
-
-                        // Create and store documents
-                        results.Rows
-                            .Select(_imuFactory.MakeDocument)
-                            .ToList()
-                            .ForEach(documentSession.Store);
-
-                        currentOffset += results.Count;
-
-                        documentSession.Load<Application>(Constants.ApplicationId).UpdateImportCurrentOffset(GetType().ToString(), currentOffset);
-
-                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, currentOffset, hits);
-                        documentSession.SaveChanges();
-                    }
+                    _log.Debug("Cached search results found, resuming {0} import.", typeof(T).Name);
                 }
             }
-            else
+
+            // Perform import
+            while (true)
             {
-                // Import has been run before, do an update import
-                _log.Debug("Beginning {0} update import", typeof(T).Name);
-                
-                _imuFactory.RegisterAutoMapperMap();
-
-                terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
-
-                var hits = module.FindTerms(terms);
-
-                _log.Debug("Finished Search. {0} Hits", hits);
-
-                while (true)
+                using (var documentSession = _documentStore.OpenSession())
                 {
-                    using (var documentSession = _documentStore.OpenSession())
+                    if (ImportCanceled())
+                        return;
+
+                    var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
+
+                    var cachedResultBatch = importStatus.CachedResult
+                        .Skip(importStatus.CurrentOffset)
+                        .Take(Constants.DataBatchSize)
+                        .ToList();
+
+                    if (cachedResultBatch.Count == 0)
+                        break;
+
+                    module.FindKeys(cachedResultBatch);
+
+                    var results = module.Fetch("start", 0, -1, _imuFactory.Columns);
+
+                    // If import has run before, update existing documents, otherwise simply store new documents.
+                    if (importStatus.PreviousDateRun.HasValue)
                     {
-                        if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
-                        {
-                            _log.Warn("Imu about to go offline, canceling all imports");
-                            Program.ImportCanceled = true;
-                        }
-
-                        if (Program.ImportCanceled)
-                        {
-                            return;
-                        }
-
-                        var results = module.Fetch("start", currentOffset, Constants.DataBatchSize, _imuFactory.Columns);
-
-                        if (results.Count == 0)
-                            break;
-
-                        // Update documents
                         var newDocuments = results.Rows.Select(_imuFactory.MakeDocument).ToList();
                         var existingDocuments = documentSession.Load<T>(newDocuments.Select(x => x.Id));
 
@@ -198,14 +131,19 @@ namespace CollectionsOnline.Import.Imports
                                 documentSession.Store(newDocuments[i]);
                             }
                         }
-
-                        currentOffset += results.Count;
-
-                        documentSession.Load<Application>(Constants.ApplicationId).UpdateImportCurrentOffset(GetType().ToString(), currentOffset);
-
-                        _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, currentOffset, hits);
-                        documentSession.SaveChanges();
                     }
+                    else
+                    {
+                        results.Rows
+                            .Select(_imuFactory.MakeDocument)
+                            .ToList()
+                            .ForEach(documentSession.Store);
+                    }
+
+                    importStatus.CurrentOffset += results.Count;
+
+                    _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
+                    documentSession.SaveChanges();
                 }
             }
 
@@ -214,6 +152,17 @@ namespace CollectionsOnline.Import.Imports
                 documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString());
                 documentSession.SaveChanges();
             }
+        }
+
+        private bool ImportCanceled()
+        {
+            if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
+            {
+                _log.Warn("Imu about to go offline, canceling all imports");
+                Program.ImportCanceled = true;
+            }
+
+            return Program.ImportCanceled;
         }
     }
 }
