@@ -38,16 +38,14 @@ namespace CollectionsOnline.Core.Models
                 importStatus.IsFinished = false;
                 importStatus.CachedResult = null;
                 importStatus.CurrentOffset = 0;
+                importStatus.PreviousDateRun = importStatus.CachedResultDate;
                 importStatus.CachedResultDate = null;
             }
         }
 
         public void ImportFinished(string importType)
         {
-            var importStatus = ImportStatuses.First(x => x.ImportType == importType);
-
-            importStatus.IsFinished = true;
-            importStatus.PreviousDateRun = importStatus.CachedResultDate;
+            ImportStatuses.First(x => x.ImportType == importType).IsFinished = true;
         }
 
         public ImportStatus GetImportStatus(string importType)

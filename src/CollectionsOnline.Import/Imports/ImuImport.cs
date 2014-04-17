@@ -32,8 +32,7 @@ namespace CollectionsOnline.Import.Imports
         public void Run()
         {            
             var module = new Module(_imuFactory.ModuleName, _session);
-            var terms = _imuFactory.Terms;            
-
+            
             // Check for existing import in case we need to resume.
             using (var documentSession = _documentStore.OpenSession())
             {
@@ -50,6 +49,7 @@ namespace CollectionsOnline.Import.Imports
                 // Cache the search results
                 if (importStatus.CachedResult == null)
                 {
+                    var terms = _imuFactory.Terms;
                     importStatus.CachedResult = new List<long>();
 
                     if (importStatus.PreviousDateRun.HasValue)
@@ -67,7 +67,7 @@ namespace CollectionsOnline.Import.Imports
                         if (ImportCanceled())
                             return;
 
-                        var results = module.Fetch("start", cachedCurrentOffset, Constants.DataBatchSize, new[] { "irn" });
+                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
 
                         if (results.Count == 0)
                             break;
