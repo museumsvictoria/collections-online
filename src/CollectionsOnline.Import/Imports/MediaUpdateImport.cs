@@ -65,6 +65,7 @@ namespace CollectionsOnline.Import.Imports
                     .OrderBy(x => x)
                     .FirstOrDefault(x => x.HasValue);
 
+                // Exit current import if it has never run.
                 if(!previousDateRun.HasValue)
                     return;
 
@@ -119,7 +120,6 @@ namespace CollectionsOnline.Import.Imports
                     _log.Debug("Cached search results found, resuming {0} import.", GetType().Name);
                 }
             }
-
 
             // Perform import
             while (true)

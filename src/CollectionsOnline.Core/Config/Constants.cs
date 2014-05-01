@@ -30,6 +30,6 @@ namespace CollectionsOnline.Core.Config
 
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(1);
 
-        public static TimeSpan ImuOfflineTimeSpan = new TimeSpan(19, 50, 0); // 7:50pm
+        public static TimeSpan ImuOfflineTimeSpan = new TimeSpan(19, 00, 0); // 7:00pm
     }
 }

@@ -1,308 +1,363 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using CollectionsOnline.Core.Config;
-//using CollectionsOnline.Core.Extensions;
-//using CollectionsOnline.Core.Models;
-//using IMu;
-//using NLog;
-//using Raven.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
+using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Models;
+using IMu;
+using NLog;
+using Raven.Abstractions.Extensions;
+using Raven.Client;
 
-//namespace CollectionsOnline.Import.Imports
-//{
-//    public class TaxonomyUpdateImport : IImport
-//    {
-//        private readonly Logger _log = LogManager.GetCurrentClassLogger();
-//        private readonly IDocumentStore _documentStore;
-//        private readonly Session _session;
+namespace CollectionsOnline.Import.Imports
+{
+    public class TaxonomyUpdateImport : IImport
+    {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
+        private readonly IDocumentStore _documentStore;
+        private readonly Session _session;
 
-//        public TaxonomyUpdateImport(
-//            IDocumentStore documentStore,
-//            Session session)
-//        {
-//            _documentStore = documentStore;
-//            _session = session;
-//        }
+        public TaxonomyUpdateImport(
+            IDocumentStore documentStore,
+            Session session)
+        {
+            _documentStore = documentStore;
+            _session = session;
+        }
 
-//        public void Run(DateTime? previousDateRun)
-//        {
-//            // Taxonomy update only happens if import has been run before
-//            if (previousDateRun.HasValue)
-//            {
-//                _log.Debug("Beginning Taxonomy update import");
+        public void Run()
+        {
+            var module = new Module("etaxonomy", _session);
+            var columns = new[]
+                                {
+                                    "irn",
+                                    "ClaScientificName",
+                                    "ClaKingdom",
+                                    "ClaPhylum",
+                                    "ClaSubphylum",
+                                    "ClaSuperclass",
+                                    "ClaClass",
+                                    "ClaSubclass",
+                                    "ClaSuperorder",
+                                    "ClaOrder",
+                                    "ClaSuborder",
+                                    "ClaInfraorder",
+                                    "ClaSuperfamily",
+                                    "ClaFamily",
+                                    "ClaSubfamily",
+                                    "ClaTribe",
+                                    "ClaSubtribe",
+                                    "ClaGenus",
+                                    "ClaSubgenus",
+                                    "ClaSpecies",
+                                    "ClaSubspecies",
+                                    "ClaRank",
+                                    "AutAuthorString",
+                                    "ClaApplicableCode",
+                                    "names=[ComName_tab,ComStatus_tab]",
+                                    "others=[ClaOtherRank_tab,ClaOtherValue_tab]",
+                                    "catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,taxa=TaxTaxonomyRef_tab.(irn)])",
+                                    "narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
+                                };
+            var types = new[] { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
 
-//                var module = new Module("etaxonomy", _session);
-//                var terms = new Terms();
-//                terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
-//                int currentOffset;
-//                var columns = new[]
-//                                {
-//                                    "irn",
-//                                    "ClaScientificName",
-//                                    "ClaKingdom",
-//                                    "ClaPhylum",
-//                                    "ClaSubphylum",
-//                                    "ClaSuperclass",
-//                                    "ClaClass",
-//                                    "ClaSubclass",
-//                                    "ClaSuperorder",
-//                                    "ClaOrder",
-//                                    "ClaSuborder",
-//                                    "ClaInfraorder",
-//                                    "ClaSuperfamily",
-//                                    "ClaFamily",
-//                                    "ClaSubfamily",
-//                                    "ClaTribe",
-//                                    "ClaSubtribe",
-//                                    "ClaGenus",
-//                                    "ClaSubgenus",
-//                                    "ClaSpecies",
-//                                    "ClaSubspecies",
-//                                    "ClaRank",
-//                                    "AutAuthorString",
-//                                    "ClaApplicableCode",
-//                                    "names=[ComName_tab,ComStatus_tab]",
-//                                    "others=[ClaOtherRank_tab,ClaOtherValue_tab]",
-//                                    "catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,taxa=TaxTaxonomyRef_tab.(irn)])",
-//                                    "narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
-//                                };
-//                var types = new[] { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                // Check to see whether we need to run import, so grab the previous date run of any imports that utilize taxonomy.
+                var previousDateRun = documentSession
+                    .Load<Application>(Constants.ApplicationId)
+                    .ImportStatuses.Where(x => x.ImportType.Contains("species", StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains("specimen", StringComparison.OrdinalIgnoreCase))
+                    .Select(x => x.PreviousDateRun)
+                    .OrderBy(x => x)
+                    .FirstOrDefault(x => x.HasValue);
 
-//                // Check for existing import in case we need to resume.
-//                using (var documentSession = _documentStore.OpenSession())
-//                {
-//                    var importProgress = documentSession.Load<Application>(Constants.ApplicationId).GetImportProgress(GetType().ToString());
+                // Exit current import if it has never run.
+                if (!previousDateRun.HasValue)
+                    return;
 
-//                    // Exit current import if it had completed last time it was run.
-//                    if (importProgress.IsFinished)
-//                    {
-//                        return;
-//                    }
+                // Check for existing import in case we need to resume.
+                var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
-//                    currentOffset = importProgress.CurrentOffset;
-//                    terms.Add("AdmDateModified", importProgress.DateRun.ToString("MMM dd yyyy"), "<");
+                // Exit current import if it had completed previous time it was run.
+                if (importStatus.IsFinished)
+                {
+                    return;
+                }
 
-//                    documentSession.SaveChanges();
-//                }
+                _log.Debug("Starting {0} import", GetType().Name);
 
-//                var hits = module.FindTerms(terms);
-//                _log.Debug("Finished Search. {0} Hits", hits);
+                // Cache the search results
+                if (importStatus.CachedResult == null)
+                {
+                    var terms = new Terms();
+                    terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
+                    importStatus.CachedResult = new List<long>();
+                    importStatus.CachedResultDate = DateTime.Now;
 
-//                while (true)
-//                {
-//                    if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
-//                    {
-//                        _log.Warn("Imu about to go offline, canceling all imports");
-//                        Program.ImportCanceled = true;
-//                    }
+                    var hits = module.FindTerms(terms);
 
-//                    if (Program.ImportCanceled)
-//                    {
-//                        return;
-//                    }
+                    _log.Debug("Caching {0} search results. {1} Hits", GetType().Name, hits);
 
-//                    var results = module.Fetch("start", currentOffset, Constants.DataBatchSize, columns);
+                    var cachedCurrentOffset = 0;
+                    while (true)
+                    {
+                        if (ImportCanceled())
+                            return;
 
-//                    if (results.Count == 0)
-//                        break;
+                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
 
-//                    foreach (var row in results.Rows)
-//                    {
-//                        // Update specimens
-//                        var catalogues = row.GetMaps("catalogue");
-//                        using (var documentSession = _documentStore.OpenSession())
-//                        {
-//                            foreach (var catalogue in catalogues)
-//                            {
-//                                var catalogueIrn = long.Parse(catalogue.GetString("irn"));
-//                                var sets = catalogue.GetStrings("sets");
+                        if (results.Count == 0)
+                            break;
 
-//                                // Check to see whether it is a specimen record.
-//                                if (sets.Any(x => x == Constants.ImuSpecimenQueryString))
-//                                {
-//                                    var specimen = documentSession.Load<Specimen>(catalogueIrn);
+                        importStatus.CachedResult.AddRange(results.Rows.Select(x => long.Parse(x.GetString("irn"))));
 
-//                                    if (specimen != null)
-//                                    {
-//                                        // Find the taxonomy record associated with this specimen and get the indentification tab so we know which fields to update on specimen record.
-//                                        var identification = catalogue
-//                                            .GetMaps("identification")
-//                                            .FirstOrDefault(x => x.GetMap("taxa") != null && x.GetMap("taxa").GetString("irn") == row.GetString("irn"));
+                        cachedCurrentOffset += results.Count;
 
-//                                        if (identification != null)
-//                                        {
-//                                            var currentName = identification.GetString("IdeCurrentNameLocal_tab");
-//                                            var typeStatus = identification.GetString("IdeTypeStatus_tab");
+                        _log.Debug("{0} cache progress... {1}/{2}", GetType().Name, cachedCurrentOffset, hits);
+                    }
 
-//                                            if (types.Any(x => string.Equals(x, typeStatus, StringComparison.OrdinalIgnoreCase)) || string.Equals(currentName, "yes", StringComparison.OrdinalIgnoreCase))
-//                                            {
-//                                                specimen.ScientificName = row.GetString("ClaScientificName");
-//                                                specimen.Kingdom = row.GetString("ClaKingdom");
-//                                                specimen.Phylum = row.GetString("ClaPhylum");
-//                                                specimen.Class = row.GetString("ClaClass");
-//                                                specimen.Order = row.GetString("ClaOrder");
-//                                                specimen.Family = row.GetString("ClaFamily");
-//                                                specimen.Genus = row.GetString("ClaGenus");
-//                                                specimen.Subgenus = row.GetString("ClaSubgenus");
-//                                                specimen.SpecificEpithet = row.GetString("ClaSpecies");
-//                                                specimen.InfraspecificEpithet = row.GetString("ClaSubspecies");
-//                                                specimen.TaxonRank = row.GetString("ClaRank");
-//                                                specimen.ScientificNameAuthorship = row.GetString("AutAuthorString");
-//                                                specimen.NomenclaturalCode = row.GetString("ClaApplicableCode");
+                    // Store cached result
+                    documentSession.SaveChanges();
 
-//                                                //higherClassification
-//                                                specimen.HigherClassification = new[]
-//                                                {
-//                                                    row.GetString("ClaKingdom"), 
-//                                                    row.GetString("ClaPhylum"),
-//                                                    row.GetString("ClaSubphylum"),
-//                                                    row.GetString("ClaSuperclass"),
-//                                                    row.GetString("ClaClass"),
-//                                                    row.GetString("ClaSubclass"),
-//                                                    row.GetString("ClaSuperorder"),
-//                                                    row.GetString("ClaOrder"),
-//                                                    row.GetString("ClaSuborder"),
-//                                                    row.GetString("ClaInfraorder"),
-//                                                    row.GetString("ClaSuperfamily"),
-//                                                    row.GetString("ClaFamily"),
-//                                                    row.GetString("ClaSubfamily"),
-//                                                    row.GetString("ClaTribe"),
-//                                                    row.GetString("ClaSubtribe"),
-//                                                    row.GetString("ClaGenus"),
-//                                                    row.GetString("ClaSubgenus"),
-//                                                    row.GetString("ClaSpecies"),
-//                                                    row.GetString("ClaSubspecies")
-//                                                }.Concatenate("; ");
+                    _log.Debug("Caching of {0} search results complete, beginning import.", GetType().Name);
+                }
+                else
+                {
+                    _log.Debug("Cached search results found, resuming {0} import.", GetType().Name);
+                }
+            }
 
-//                                                //vernacularName
-//                                                var vernacularName = row.GetMaps("names").FirstOrDefault(x => string.Equals(x.GetString("ComStatus_tab"), "preferred", StringComparison.OrdinalIgnoreCase));
-//                                                if (vernacularName != null)
-//                                                    specimen.VernacularName = vernacularName.GetString("ComName_tab");
-//                                            }
 
-//                                            if (string.Equals(currentName, "yes", StringComparison.OrdinalIgnoreCase))
-//                                            {
-//                                                specimen.AcceptedNameUsage = row.GetString("ClaScientificName");
-//                                            }
+            // Perform import
+            while (true)
+            {
+                using (var tx = new TransactionScope())
+                using (var documentSession = _documentStore.OpenSession())
+                {
+                    if (ImportCanceled())
+                        return;
 
-//                                            if (types.Any(x => string.Equals(x, typeStatus, StringComparison.OrdinalIgnoreCase)))
-//                                            {
-//                                                specimen.OriginalNameUsage = row.GetString("ClaScientificName");
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
+                    var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
-//                            documentSession.SaveChanges();
-//                        }
+                    var cachedResultBatch = importStatus.CachedResult
+                        .Skip(importStatus.CurrentOffset)
+                        .Take(Constants.DataBatchSize)
+                        .ToList();
 
-//                        // Update species
-//                        var narratives = row.GetMaps("narrative");
-//                        using (var documentSession = _documentStore.OpenSession())
-//                        {
-//                            foreach (var narrative in narratives)
-//                            {
-//                                var narrativeIrn = long.Parse(narrative.GetString("irn"));
-//                                var sets = narrative.GetStrings("sets");
+                    if (cachedResultBatch.Count == 0)
+                        break;
 
-//                                if (sets.Any(x => x == Constants.ImuSpeciesQueryString))
-//                                {
-//                                    var species = documentSession.Load<Species>(narrativeIrn);
+                    module.FindKeys(cachedResultBatch);
 
-//                                    if (species != null)
-//                                    {
-//                                        var names = row.GetMaps("names");
-//                                        var commonNames = new List<string>();
-//                                        var otherNames = new List<string>();
-//                                        foreach (var name in names)
-//                                        {
-//                                            var status = name.GetString("ComStatus_tab");
-//                                            var vernacularName = name.GetString("ComName_tab");
+                    var results = module.Fetch("start", 0, -1, columns);
 
-//                                            if (string.Equals(status, "preferred", StringComparison.OrdinalIgnoreCase))
-//                                            {
-//                                                commonNames.Add(vernacularName);
-//                                            }
-//                                            else if (string.Equals(status, "other", StringComparison.OrdinalIgnoreCase))
-//                                            {
-//                                                otherNames.Add(vernacularName);
-//                                            }
-//                                        }
-//                                        species.CommonNames = commonNames;
-//                                        species.OtherNames = otherNames;
+                    foreach (var row in results.Rows)
+                    {
+                        // Update specimens
+                        var catalogs = row.GetMaps("catalogue");
+                        using (var specimenDocumentSession = _documentStore.OpenSession())
+                        {
+                            foreach (var catalogue in catalogs)
+                            {
+                                var catalogueIrn = long.Parse(catalogue.GetString("irn"));
+                                var sets = catalogue.GetStrings("sets");
 
-//                                        species.Phylum = row.GetString("ClaPhylum");
-//                                        species.Subphylum = row.GetString("ClaSubphylum");
-//                                        species.Superclass = row.GetString("ClaSuperclass");
-//                                        species.Class = row.GetString("ClaClass");
-//                                        species.Subclass = row.GetString("ClaSubclass");
-//                                        species.Superorder = row.GetString("ClaSuperorder");
-//                                        species.Order = row.GetString("ClaOrder");
-//                                        species.Suborder = row.GetString("ClaSuborder");
-//                                        species.Infraorder = row.GetString("ClaInfraorder");
-//                                        species.Superfamily = row.GetString("ClaSuperfamily");
-//                                        species.Family = row.GetString("ClaFamily");
-//                                        species.Subfamily = row.GetString("ClaSubfamily");
-//                                        species.Genus = row.GetString("ClaGenus");
-//                                        species.Subgenus = row.GetString("ClaSubgenus");
-//                                        species.SpeciesName = row.GetString("ClaSpecies");
-//                                        species.Subspecies = row.GetString("ClaSubspecies");
+                                // Check to see whether it is a specimen record.
+                                if (sets.Any(x => x == Constants.ImuSpecimenQueryString))
+                                {
+                                    var specimen = specimenDocumentSession.Load<Specimen>(catalogueIrn);
 
-//                                        var others = row.GetMaps("others");
-//                                        foreach (var other in others)
-//                                        {
-//                                            var rank = other.GetString("ClaOtherRank_tab");
-//                                            var value = other.GetString("ClaOtherValue_tab");
+                                    if (specimen != null)
+                                    {
+                                        // Find the taxonomy record associated with this specimen and get the indentification tab so we know which fields to update on specimen record.
+                                        var identification = catalogue
+                                            .GetMaps("identification")
+                                            .FirstOrDefault(x => x.GetMap("taxa") != null && x.GetMap("taxa").GetString("irn") == row.GetString("irn"));
 
-//                                            if (string.Equals(rank, "mov", StringComparison.OrdinalIgnoreCase))
-//                                            {
-//                                                species.MoV = string.Format("MoV {0}", value);
-//                                            }
-//                                        }
+                                        if (identification != null)
+                                        {
+                                            var currentName = identification.GetString("IdeCurrentNameLocal_tab");
+                                            var typeStatus = identification.GetString("IdeTypeStatus_tab");
 
-//                                        species.Author = row.GetString("AutAuthorString");
-//                                        species.HigherClassification = new[]
-//                                        {
-//                                            species.Phylum,
-//                                            species.Class,
-//                                            species.Order,
-//                                            species.Family
-//                                        }.Concatenate(" ");
+                                            if (types.Any(x => string.Equals(x, typeStatus, StringComparison.OrdinalIgnoreCase)) || string.Equals(currentName, "yes", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                specimen.ScientificName = row.GetString("ClaScientificName");
+                                                specimen.Kingdom = row.GetString("ClaKingdom");
+                                                specimen.Phylum = row.GetString("ClaPhylum");
+                                                specimen.Class = row.GetString("ClaClass");
+                                                specimen.Order = row.GetString("ClaOrder");
+                                                specimen.Family = row.GetString("ClaFamily");
+                                                specimen.Genus = row.GetString("ClaGenus");
+                                                specimen.Subgenus = row.GetString("ClaSubgenus");
+                                                specimen.SpecificEpithet = row.GetString("ClaSpecies");
+                                                specimen.InfraspecificEpithet = row.GetString("ClaSubspecies");
+                                                specimen.TaxonRank = row.GetString("ClaRank");
+                                                specimen.ScientificNameAuthorship = row.GetString("AutAuthorString");
+                                                specimen.NomenclaturalCode = row.GetString("ClaApplicableCode");
 
-//                                        species.ScientificName = new[]
-//                                        {
-//                                            species.Genus,
-//                                            species.SpeciesName,
-//                                            species.MoV,
-//                                            species.Author
-//                                        }.Concatenate(" ");
+                                                //higherClassification
+                                                specimen.HigherClassification = new[]
+                                                            {
+                                                                row.GetString("ClaKingdom"), 
+                                                                row.GetString("ClaPhylum"),
+                                                                row.GetString("ClaSubphylum"),
+                                                                row.GetString("ClaSuperclass"),
+                                                                row.GetString("ClaClass"),
+                                                                row.GetString("ClaSubclass"),
+                                                                row.GetString("ClaSuperorder"),
+                                                                row.GetString("ClaOrder"),
+                                                                row.GetString("ClaSuborder"),
+                                                                row.GetString("ClaInfraorder"),
+                                                                row.GetString("ClaSuperfamily"),
+                                                                row.GetString("ClaFamily"),
+                                                                row.GetString("ClaSubfamily"),
+                                                                row.GetString("ClaTribe"),
+                                                                row.GetString("ClaSubtribe"),
+                                                                row.GetString("ClaGenus"),
+                                                                row.GetString("ClaSubgenus"),
+                                                                row.GetString("ClaSpecies"),
+                                                                row.GetString("ClaSubspecies")
+                                                            }.Concatenate("; ");
 
-//                                        // Relationships TODO: add filter to get only specimens added in specimen import
-//                                        species.SpecimenIds = new List<string>();
-//                                        foreach (var specimen in catalogues)
-//                                        {
-//                                            species.SpecimenIds.Add("specimens/" + specimen.GetString("irn"));
-//                                        }
-//                                    }
-//                                }
-//                            }
+                                                //vernacularName
+                                                var vernacularName = row.GetMaps("names").FirstOrDefault(x => string.Equals(x.GetString("ComStatus_tab"), "preferred", StringComparison.OrdinalIgnoreCase));
+                                                if (vernacularName != null)
+                                                    specimen.VernacularName = vernacularName.GetString("ComName_tab");
+                                            }
 
-//                            documentSession.SaveChanges();
-//                        }
-//                    }
+                                            if (string.Equals(currentName, "yes", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                specimen.AcceptedNameUsage = row.GetString("ClaScientificName");
+                                            }
 
-//                    currentOffset += results.Count;
+                                            if (types.Any(x => string.Equals(x, typeStatus, StringComparison.OrdinalIgnoreCase)))
+                                            {
+                                                specimen.OriginalNameUsage = row.GetString("ClaScientificName");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-//                    using (var documentSession = _documentStore.OpenSession())
-//                    {
-//                        documentSession.Load<Application>(Constants.ApplicationId).UpdateImportCurrentOffset(GetType().ToString(), currentOffset);
+                            specimenDocumentSession.SaveChanges();
+                        }
 
-//                        _log.Debug("import progress... {0}/{1}", currentOffset, hits);
-//                        documentSession.SaveChanges();
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
+                        // Update species
+                        var narratives = row.GetMaps("narrative");
+                        using (var speciesDocumentSession = _documentStore.OpenSession())
+                        {
+                            foreach (var narrative in narratives)
+                            {
+                                var narrativeIrn = long.Parse(narrative.GetString("irn"));
+                                var sets = narrative.GetStrings("sets");
+
+                                if (sets.Any(x => x == Constants.ImuSpeciesQueryString))
+                                {
+                                    var species = speciesDocumentSession.Load<Species>(narrativeIrn);
+
+                                    if (species != null)
+                                    {
+                                        var names = row.GetMaps("names");
+                                        var commonNames = new List<string>();
+                                        var otherNames = new List<string>();
+                                        foreach (var name in names)
+                                        {
+                                            var status = name.GetString("ComStatus_tab");
+                                            var vernacularName = name.GetString("ComName_tab");
+
+                                            if (string.Equals(status, "preferred", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                commonNames.Add(vernacularName);
+                                            }
+                                            else if (string.Equals(status, "other", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                otherNames.Add(vernacularName);
+                                            }
+                                        }
+                                        species.CommonNames = commonNames;
+                                        species.OtherNames = otherNames;
+
+                                        species.Phylum = row.GetString("ClaPhylum");
+                                        species.Subphylum = row.GetString("ClaSubphylum");
+                                        species.Superclass = row.GetString("ClaSuperclass");
+                                        species.Class = row.GetString("ClaClass");
+                                        species.Subclass = row.GetString("ClaSubclass");
+                                        species.Superorder = row.GetString("ClaSuperorder");
+                                        species.Order = row.GetString("ClaOrder");
+                                        species.Suborder = row.GetString("ClaSuborder");
+                                        species.Infraorder = row.GetString("ClaInfraorder");
+                                        species.Superfamily = row.GetString("ClaSuperfamily");
+                                        species.Family = row.GetString("ClaFamily");
+                                        species.Subfamily = row.GetString("ClaSubfamily");
+                                        species.Genus = row.GetString("ClaGenus");
+                                        species.Subgenus = row.GetString("ClaSubgenus");
+                                        species.SpeciesName = row.GetString("ClaSpecies");
+                                        species.Subspecies = row.GetString("ClaSubspecies");
+
+                                        var others = row.GetMaps("others");
+                                        foreach (var other in others)
+                                        {
+                                            var rank = other.GetString("ClaOtherRank_tab");
+                                            var value = other.GetString("ClaOtherValue_tab");
+
+                                            if (string.Equals(rank, "mov", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                species.MoV = string.Format("MoV {0}", value);
+                                            }
+                                        }
+
+                                        species.Author = row.GetString("AutAuthorString");
+                                        species.HigherClassification = new[]
+                                                    {
+                                                        species.Phylum,
+                                                        species.Class,
+                                                        species.Order,
+                                                        species.Family
+                                                    }.Concatenate(" ");
+
+                                        species.ScientificName = new[]
+                                                    {
+                                                        species.Genus,
+                                                        species.SpeciesName,
+                                                        species.MoV,
+                                                        species.Author
+                                                    }.Concatenate(" ");
+
+                                        // Relationships TODO: add filter to get only specimens added in specimen import
+                                        species.SpecimenIds = new List<string>();
+                                        foreach (var specimen in catalogs)
+                                        {
+                                            species.SpecimenIds.Add("specimens/" + specimen.GetString("irn"));
+                                        }
+                                    }
+                                }
+                            }
+
+                            speciesDocumentSession.SaveChanges();
+                        }
+                    }
+
+                    importStatus.CurrentOffset += results.Count;
+
+                    _log.Debug("{0} import progress... {1}/{2}", GetType().Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
+                    documentSession.SaveChanges();
+
+                    tx.Complete();
+                }
+
+            }
+        }
+
+        private bool ImportCanceled()
+        {
+            if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
+            {
+                _log.Warn("Imu about to go offline, canceling all imports");
+                Program.ImportCanceled = true;
+            }
+
+            return Program.ImportCanceled;
+        }
+    }
+}

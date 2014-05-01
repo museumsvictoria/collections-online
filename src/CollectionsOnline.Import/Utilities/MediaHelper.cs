@@ -25,6 +25,10 @@ namespace CollectionsOnline.Import.Utilities
                 _module.FindKey(irn);
                 var result = _module.Fetch("start", 0, -1, new[] { "resource" }).Rows[0];
                 var resource = result.GetMap("resource");
+
+                if(resource == null)
+                    throw new IMuException("MultimediaResourceNotFound");
+
                 var fileStream = resource["file"] as FileStream;
 
                 var destPath = PathFactory.GetDestPath(irn, fileFormat, derivative);
@@ -57,7 +61,12 @@ namespace CollectionsOnline.Import.Utilities
                 if (exception is IMuException && ((IMuException) exception).ID == "MultimediaResolutionNotFound")
                 {
                     // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
-                    _log.Warn("Unable to save image at this time {0}, {1}", irn, exception.ToString());
+                    _log.Warn("Multimedia resolution was not found, Unable to save image at this time {0}, {1}", irn, exception.ToString());
+                }
+                else if (exception is IMuException && ((IMuException)exception).ID == "MultimediaResourceNotFound")
+                {
+                    // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
+                    _log.Warn("Multimedia resource was not found, unable to save image at this time {0}, {1}", irn, exception.ToString());
                 }
                 else
                 {
