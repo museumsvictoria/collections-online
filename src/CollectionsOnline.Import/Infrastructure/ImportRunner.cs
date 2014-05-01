@@ -25,7 +25,6 @@ namespace CollectionsOnline.Import.Infrastructure
 
         public void Run()
         {
-            var dateRun = DateTime.Now;
             var hasFailed = false;
 
             _log.Debug("Data Import begining");

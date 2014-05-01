@@ -30,6 +30,9 @@ namespace CollectionsOnline.Import
                 ImportCanceled = true;
             };
 
+            // Log any exceptions that are not handled
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) => _log.Error(eventArgs.ExceptionObject);
+
             _kernel = CreateKernel();
 
             _kernel.Get<ImportRunner>().Run();
