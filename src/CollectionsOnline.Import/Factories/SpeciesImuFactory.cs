@@ -68,7 +68,7 @@ namespace CollectionsOnline.Import.Factories
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
                     "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
-                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
+                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                     "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
                 };
             }
@@ -196,7 +196,7 @@ namespace CollectionsOnline.Import.Factories
                     }
                 }
 
-                species.Author = taxonomy.GetString("AutAuthorString");
+                species.TaxonomyAuthor = taxonomy.GetString("AutAuthorString");
                 species.HigherClassification = new[]
                 {
                     species.Phylum,
@@ -210,7 +210,7 @@ namespace CollectionsOnline.Import.Factories
                     species.Genus,
                     species.SpeciesName,
                     species.MoV,
-                    species.Author
+                    species.TaxonomyAuthor
                 }.Concatenate(" ");
 
                 // Relationships TODO: add filter to get only specimens added in specimen import                
@@ -222,13 +222,49 @@ namespace CollectionsOnline.Import.Factories
 
             // Authors
             var authors = new List<Author>();
-            authors.AddRange(map.GetMaps("authors").Select(x => new Author
+            foreach (var authorMap in map.GetMaps("authors"))
             {
-                Name = x.GetString("NamFullName"),
-                Biography = x.GetString("BioLabel")
-            }));
-            species.Authors = authors;
+                var author = new Author
+                {
+                    Name = authorMap.GetString("NamFullName"),
+                    Biography = authorMap.GetString("BioLabel")
+                };
 
+                var mediaMap = authorMap.GetMaps("media").FirstOrDefault(x => x != null &&
+                    string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
+                    x.GetString("MulMimeType") == "image");
+                if (mediaMap != null)
+                {
+                    var irn = long.Parse(mediaMap.GetString("irn"));
+
+                    var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                    var thumbResizeSettings = new ResizeSettings
+                    {
+                        Format = FileFormatType.Jpg.ToString(),
+                        Height = 365,
+                        Width = 365,
+                        Mode = FitMode.Crop,
+                        PaddingColor = Color.White,
+                        Quality = 65
+                    };
+
+                    if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                    {
+                        author.Media = new Media
+                        {
+                            Irn = irn,
+                            DateModified =
+                                DateTime.ParseExact(
+                                    string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                                                  mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
+                                    new CultureInfo("en-AU")),
+                            Title = mediaMap.GetString("MulTitle"),
+                            Type = mediaMap.GetString("MulMimeType"),
+                            Url = url
+                        };
+                    }
+                }
+            }
             // Media
             // TODO: Be more selective in what media we assign to item and how
             species.Media = new List<Media>();

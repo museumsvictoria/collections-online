@@ -13,7 +13,10 @@ namespace CollectionsOnline.Import.Factories
                 switch (map.GetString("NamPartyType"))
                 {
                     case "Collaboration":
-                        break;
+                        return new[]
+                        {
+                            map.GetString("ColCollaborationName")
+                        }.Concatenate(", ");
                     case "Cutter Number":
                         return new[]
                         {

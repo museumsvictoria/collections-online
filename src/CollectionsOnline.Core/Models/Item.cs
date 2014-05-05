@@ -77,6 +77,8 @@ namespace CollectionsOnline.Core.Models
 
         public string Acknowledgement { get; set; }
 
+        public string ObjectLocation { get; set; }
+
         #region Archeology
 
         public string ArcheologyContextNumber { get; set; }

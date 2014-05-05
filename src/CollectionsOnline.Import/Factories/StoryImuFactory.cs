@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Utilities;
@@ -50,8 +51,8 @@ namespace CollectionsOnline.Import.Factories
                         "NarNarrativeSummary",
                         "DesType_tab",
                         "DesGeographicLocation_tab",
-                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword))",
-                        "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,AdmPublishWebNoPassword)),NarContributorRole_tab]",
+                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
+                        "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel),NarContributorRole_tab]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
@@ -92,18 +93,60 @@ namespace CollectionsOnline.Import.Factories
             story.Types = map.GetStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
             story.GeographicTags = map.GetStrings("DesGeographicLocation_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToArray();
 
+            // Authors
             var authors = new List<Author>();
-            authors.AddRange(map.GetMaps("authors").Select(x => new Author
+            foreach (var authorMap in map.GetMaps("authors"))
             {
-                Name = x.GetString("NamFullName"),
-                Biography = x.GetString("BioLabel")
-            }));
+                var author = new Author
+                {
+                    Name = authorMap.GetString("NamFullName"),
+                    Biography = authorMap.GetString("BioLabel")
+                };
+
+                var mediaMap = authorMap.GetMaps("media").FirstOrDefault(x => x != null &&
+                    string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
+                    x.GetString("MulMimeType") == "image");
+                if (mediaMap != null)
+                {
+                    var irn = long.Parse(mediaMap.GetString("irn"));
+
+                    var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                    var thumbResizeSettings = new ResizeSettings
+                    {
+                        Format = FileFormatType.Jpg.ToString(),
+                        Height = 365,
+                        Width = 365,
+                        Mode = FitMode.Crop,
+                        PaddingColor = Color.White,
+                        Quality = 65
+                    };
+
+                    if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                    {
+                        author.Media = new Media
+                        {
+                            Irn = irn,
+                            DateModified =
+                                DateTime.ParseExact(
+                                    string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                                                  mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
+                                    new CultureInfo("en-AU")),
+                            Title = mediaMap.GetString("MulTitle"),
+                            Type = mediaMap.GetString("MulMimeType"),
+                            Url = url
+                        };
+                    }
+                }
+            }
+
+            // Contributors
             authors.AddRange(
                 map.GetMaps("contributors")
                    .Where(
                        x =>
-                       x.GetString("NarContributorRole_tab") == "Contributor of content" ||
-                       x.GetString("NarContributorRole_tab") == "Author of quoted text")
+                       x.GetString("NarContributorRole_tab").Contains("contributor of content", StringComparison.OrdinalIgnoreCase) ||
+                       x.GetString("NarContributorRole_tab").Contains("author of quoted text", StringComparison.OrdinalIgnoreCase) ||
+                       x.GetString("NarContributorRole_tab").Contains("researcher", StringComparison.OrdinalIgnoreCase))
                    .Select(x => x.GetMap("contributor"))
                    .Select(x => new Author
                    {

@@ -106,7 +106,7 @@ namespace CollectionsOnline.Core.Models
 
         public string MoV { get; set; }
 
-        public string Author { get; set; }
+        public string TaxonomyAuthor { get; set; }
 
         public string HigherClassification { get; set; }
 

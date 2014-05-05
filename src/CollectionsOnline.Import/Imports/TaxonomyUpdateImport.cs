@@ -307,7 +307,7 @@ namespace CollectionsOnline.Import.Imports
                                             }
                                         }
 
-                                        species.Author = row.GetString("AutAuthorString");
+                                        species.TaxonomyAuthor = row.GetString("AutAuthorString");
                                         species.HigherClassification = new[]
                                                     {
                                                         species.Phylum,
@@ -321,7 +321,7 @@ namespace CollectionsOnline.Import.Imports
                                                         species.Genus,
                                                         species.SpeciesName,
                                                         species.MoV,
-                                                        species.Author
+                                                        species.TaxonomyAuthor
                                                     }.Concatenate(" ");
 
                                         // Relationships TODO: add filter to get only specimens added in specimen import
