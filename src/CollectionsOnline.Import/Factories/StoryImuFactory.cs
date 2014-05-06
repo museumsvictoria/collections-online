@@ -135,9 +135,12 @@ namespace CollectionsOnline.Import.Factories
                             Type = mediaMap.GetString("MulMimeType"),
                             Url = url
                         };
+
+                        authors.Add(author);
                     }
                 }
             }
+            story.Authors = authors;
 
             // Contributors
             authors.AddRange(

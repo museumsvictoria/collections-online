@@ -233,6 +233,7 @@ namespace CollectionsOnline.Import.Factories
                 var mediaMap = authorMap.GetMaps("media").FirstOrDefault(x => x != null &&
                     string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
                     x.GetString("MulMimeType") == "image");
+                
                 if (mediaMap != null)
                 {
                     var irn = long.Parse(mediaMap.GetString("irn"));
@@ -262,9 +263,13 @@ namespace CollectionsOnline.Import.Factories
                             Type = mediaMap.GetString("MulMimeType"),
                             Url = url
                         };
+
+                        authors.Add(author);
                     }
                 }
             }
+            species.Authors = authors;
+
             // Media
             // TODO: Be more selective in what media we assign to item and how
             species.Media = new List<Media>();
