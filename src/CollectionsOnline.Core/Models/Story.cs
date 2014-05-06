@@ -6,6 +6,11 @@ namespace CollectionsOnline.Core.Models
 {
     public class Story : EmuAggregateRoot
     {
+        public Story()
+        {
+            InitializeCollections();
+        }
+
         #region Non-Emu
 
         public string Summary { get; set; }
@@ -36,6 +41,18 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedStoryIds { get; set; }
 
-        public IList<string> RelatedItemIds { get; set; }        
+        public IList<string> RelatedItemIds { get; set; }
+
+        private void InitializeCollections()
+        {
+            Tags = new List<string>();
+            Types = new List<string>();
+            GeographicTags = new List<string>();
+            Authors = new List<Author>();
+            Media = new List<Media>();
+            ChildStoryIds = new List<string>();
+            RelatedStoryIds = new List<string>();
+            RelatedItemIds = new List<string>();
+        }
     }
 }

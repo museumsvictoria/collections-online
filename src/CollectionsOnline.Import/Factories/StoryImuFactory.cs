@@ -12,6 +12,7 @@ using CollectionsOnline.Import.Utilities;
 using ImageResizer;
 using IMu;
 using NLog;
+using Raven.Abstractions.Extensions;
 
 namespace CollectionsOnline.Import.Factories
 {
@@ -87,14 +88,13 @@ namespace CollectionsOnline.Import.Factories
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
             story.Title = map.GetString("NarTitle");
-            story.Tags = map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToArray();
+            story.Tags = map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
             story.Content = map.GetString("NarNarrative");
             story.ContentSummary = map.GetString("NarNarrativeSummary");
-            story.Types = map.GetStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-            story.GeographicTags = map.GetStrings("DesGeographicLocation_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToArray();
+            story.Types = map.GetStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            story.GeographicTags = map.GetStrings("DesGeographicLocation_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
 
             // Authors
-            var authors = new List<Author>();
             foreach (var authorMap in map.GetMaps("authors"))
             {
                 var author = new Author
@@ -136,14 +136,13 @@ namespace CollectionsOnline.Import.Factories
                             Url = url
                         };
 
-                        authors.Add(author);
+                        story.Authors.Add(author);
                     }
                 }
-            }
-            story.Authors = authors;
+            }            
 
             // Contributors
-            authors.AddRange(
+            story.Authors.AddRange(
                 map.GetMaps("contributors")
                    .Where(
                        x =>
@@ -156,11 +155,9 @@ namespace CollectionsOnline.Import.Factories
                        Name = x.GetString("NamFullName"),
                        Biography = x.GetString("BioLabel")
                    }));
-            story.Authors = authors;
 
             // Media
             // TODO: Be more selective in what media we assign to item and how
-            story.Media = new List<Media>();
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) && 

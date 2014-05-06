@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CollectionsOnline.Core.Models
 {
     public class Species : EmuAggregateRoot
     {
+        public Species()
+        {
+            InitializeCollections();
+        }
+
         #region Non-Emu
 
         public string Summary { get; set; }
@@ -117,5 +121,24 @@ namespace CollectionsOnline.Core.Models
         public IList<Author> Authors { get; set; }
 
         public IList<Media> Media { get; set; }
+
+        private void InitializeCollections()
+        {
+            Colours = new List<string>();
+            Habitats = new List<string>();
+            WhereToLook = new List<string>();
+            WhenActive = new List<string>();
+            NationalParks = new List<string>();
+            DietCategories = new List<string>();
+            ConservationStatuses = new List<string>();
+            Plants = new List<string>();
+            Depths = new List<string>();
+            WaterColumnLocations = new List<string>();
+            CommonNames = new List<string>();
+            OtherNames = new List<string>();
+            SpecimenIds = new List<string>();
+            Authors = new List<Author>();
+            Media = new List<Media>();
+        }
     }
 }

@@ -124,7 +124,6 @@ namespace CollectionsOnline.Import.Factories
             species.Commercial = map.GetString("SpeCommercialSpecies");
 
             // Get Conservation Status
-            species.ConservationStatuses = new List<string>();
             foreach (var conservationMap in map.GetMaps("conservation"))
             {
                 var authority = conservationMap.GetString("SpeConservationList_tab");
@@ -144,10 +143,6 @@ namespace CollectionsOnline.Import.Factories
             species.WaterColumnLocations = map.GetStrings("SpeWaterColumnLocation_tab") ?? new string[] { };
 
             // Get Taxonomy
-            species.CommonNames = new List<string>();
-            species.OtherNames = new List<string>();
-            species.SpecimenIds = new List<string>();
-
             var taxonomy = map.GetMaps("taxa").FirstOrDefault();
             if (taxonomy != null)
             {
@@ -221,7 +216,6 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Authors
-            var authors = new List<Author>();
             foreach (var authorMap in map.GetMaps("authors"))
             {
                 var author = new Author
@@ -264,15 +258,13 @@ namespace CollectionsOnline.Import.Factories
                             Url = url
                         };
 
-                        authors.Add(author);
+                        species.Authors.Add(author);
                     }
                 }
             }
-            species.Authors = authors;
 
             // Media
-            // TODO: Be more selective in what media we assign to item and how
-            species.Media = new List<Media>();
+            // TODO: Be more selective in what media we assign to item and how             
             foreach (var media in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
