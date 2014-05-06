@@ -52,7 +52,8 @@ namespace CollectionsOnline.Import.Imports
                                     "AdmDateModified",
                                     "AdmTimeModified",
                                     "catalogue=<ecatalogue:MulMultiMediaRef_tab>.(irn,sets=MdaDataSets_tab)",
-                                    "narrative=<enarratives:MulMultiMediaRef_tab>.(irn,sets=DetPurpose_tab)"
+                                    "narrative=<enarratives:MulMultiMediaRef_tab>.(irn,sets=DetPurpose_tab)",
+                                    "parties=<eparties:MulMultiMediaRef_tab>.(narrative=<enarratives:NarAuthorsRef_tab>.(irn,sets=DetPurpose_tab))"
                                 };
                        
             using (var documentSession = _documentStore.OpenSession())
@@ -171,8 +172,8 @@ namespace CollectionsOnline.Import.Imports
                             Quality = 65
                         };
 
-                        var catalogues = row.GetMaps("catalogue");
-                        foreach (var catalogue in catalogues)
+                        // Check if we need to update media on Items and Specimens
+                        foreach (var catalogue in row.GetMaps("catalogue"))
                         {
                             var catalogueIrn = long.Parse(catalogue.GetString("irn"));
                             var sets = catalogue.GetStrings("sets");
@@ -218,8 +219,8 @@ namespace CollectionsOnline.Import.Imports
                             }
                         }
 
-                        var narratives = row.GetMaps("narrative");
-                        foreach (var narrative in narratives)
+                        // Check if we need to update media on Stories and Species
+                        foreach (var narrative in row.GetMaps("narrative"))
                         {
                             var narrativeIrn = long.Parse(narrative.GetString("irn"));
                             var sets = narrative.GetStrings("sets");
@@ -258,6 +259,46 @@ namespace CollectionsOnline.Import.Imports
                                             story.Media.Remove(existingMedia);
 
                                         story.Media.Add(media);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Check if we need to update media on Authors attached to Stories and Species
+                        foreach (var narrative in row.GetMaps("parties").SelectMany(x => x.GetMaps("narrative")))
+                        {
+                            var narrativeIrn = long.Parse(narrative.GetString("irn"));
+                            var sets = narrative.GetStrings("sets");
+                            if (sets.Any(x => x == Constants.ImuSpeciesQueryString))
+                            {
+                                var species = documentSession.Load<Species>(narrativeIrn);
+
+                                if (species != null)
+                                {
+                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                    {
+                                        hasBeenSaved = true;
+                                        // Find and replace existing media
+                                        var author = species.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
+                                        if (author != null)
+                                            author.Media = media;
+                                    }
+                                }
+                            }
+                            if (sets.Any(x => x == Constants.ImuStoryQueryString))
+                            {
+                                // Story media
+                                var story = documentSession.Load<Story>(narrativeIrn);
+
+                                if (story != null)
+                                {
+                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                    {
+                                        hasBeenSaved = true;
+                                        // Find and replace existing media
+                                        var author = story.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
+                                        if (author != null)
+                                            author.Media = media;
                                     }
                                 }
                             }

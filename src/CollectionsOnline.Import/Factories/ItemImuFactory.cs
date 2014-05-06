@@ -128,7 +128,7 @@ namespace CollectionsOnline.Import.Factories
                         "TLDPublicationTypes_tab",
                         "TLSPrimaryRole",
                         "tlparty=TLSPrimaryNameRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "iclocality=[ProStateProvince_tab,ProRegion_tab,ProSpecificLocality_tab]",
                         "ProCountry",
                         "ProCulturalGroups_tab",
@@ -438,6 +438,7 @@ namespace CollectionsOnline.Import.Factories
                                     mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
                                 new CultureInfo("en-AU")),
                         Title = mediaMap.GetString("MulTitle"),
+                        AlternateText = mediaMap.GetString("DetAlternateText"),
                         Type = mediaMap.GetString("MulMimeType"),
                         Url = url
                     });

@@ -68,8 +68,8 @@ namespace CollectionsOnline.Import.Factories
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
                     "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
-                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
-                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
+                    "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
+                    "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
                 };
             }
         }
@@ -254,6 +254,7 @@ namespace CollectionsOnline.Import.Factories
                                                   mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
                                     new CultureInfo("en-AU")),
                             Title = mediaMap.GetString("MulTitle"),
+                            AlternateText = mediaMap.GetString("DetAlternateText"),
                             Type = mediaMap.GetString("MulMimeType"),
                             Url = url
                         };
@@ -265,13 +266,13 @@ namespace CollectionsOnline.Import.Factories
 
             // Media
             // TODO: Be more selective in what media we assign to item and how             
-            foreach (var media in map.GetMaps("media").Where(x =>
+            foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
                 x.GetString("MulMimeType") == "image" && 
                 x.GetStrings("MdaDataSets_tab").Any(y => y == "App - Field Guide")))
             {
-                var irn = long.Parse(media.GetString("irn"));
+                var irn = long.Parse(mediaMap.GetString("irn"));
 
                 var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
                 var thumbResizeSettings = new ResizeSettings
@@ -289,11 +290,12 @@ namespace CollectionsOnline.Import.Factories
                     species.Media.Add(new Media
                     {
                         Irn = irn,
-                        DateModified = DateTime.ParseExact(string.Format("{0} {1}", media.GetString("AdmDateModified"),
-                            media.GetString("AdmTimeModified")),
+                        DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
+                            mediaMap.GetString("AdmTimeModified")),
                             "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
-                        Title = media.GetString("MulTitle"),
-                        Type = media.GetString("MulMimeType"),
+                        Title = mediaMap.GetString("MulTitle"),
+                        AlternateText = mediaMap.GetString("DetAlternateText"),
+                        Type = mediaMap.GetString("MulMimeType"),
                         Url = url
                     });
                 }

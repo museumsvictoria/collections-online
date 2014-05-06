@@ -52,9 +52,9 @@ namespace CollectionsOnline.Import.Factories
                         "NarNarrativeSummary",
                         "DesType_tab",
                         "DesGeographicLocation_tab",
-                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
+                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                         "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel),NarContributorRole_tab]",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
                         "relatedstories=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
@@ -132,6 +132,7 @@ namespace CollectionsOnline.Import.Factories
                                                   mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
                                     new CultureInfo("en-AU")),
                             Title = mediaMap.GetString("MulTitle"),
+                            AlternateText = mediaMap.GetString("DetAlternateText"),
                             Type = mediaMap.GetString("MulMimeType"),
                             Url = url
                         };
@@ -187,6 +188,7 @@ namespace CollectionsOnline.Import.Factories
                                               mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
                                 new CultureInfo("en-AU")),
                         Title = mediaMap.GetString("MulTitle"),
+                        AlternateText = mediaMap.GetString("DetAlternateText"),
                         Type = mediaMap.GetString("MulMimeType"),
                         Url = url
                     });
