@@ -407,7 +407,6 @@ namespace CollectionsOnline.Import.Factories
             item.TradeLiteraturePrimaryName = _partiesNameFactory.MakePartiesName(map.GetMap("tlparty"));
 
             // Media
-            // TODO: add in MdaDataSets_tab check for "Website - Collections Online" when added to data.
             foreach (var mediaMap in map.GetMaps("media").Where(x => 
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&

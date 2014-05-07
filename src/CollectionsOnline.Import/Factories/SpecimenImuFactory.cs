@@ -378,7 +378,6 @@ namespace CollectionsOnline.Import.Factories
             specimen.OtherCatalogNumbers = map.GetStrings("ManPreviousNumbers_tab").Concatenate("; ");
 
             //associatedMedia
-            // TODO: Be more selective in what media we assign to item and how
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
                 string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&

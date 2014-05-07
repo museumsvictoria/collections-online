@@ -103,8 +103,10 @@ namespace CollectionsOnline.Import.Factories
                     Biography = authorMap.GetString("BioLabel")
                 };
 
-                var mediaMap = authorMap.GetMaps("media").FirstOrDefault(x => x != null &&
+                var mediaMap = authorMap.GetMaps("media").FirstOrDefault(x => 
+                    x != null &&
                     string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
+                    x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuMultimediaQueryString) &&
                     x.GetString("MulMimeType") == "image");
                 if (mediaMap != null)
                 {
@@ -157,11 +159,11 @@ namespace CollectionsOnline.Import.Factories
                        Biography = x.GetString("BioLabel")
                    }));
 
-            // Media
-            // TODO: Be more selective in what media we assign to item and how
+            // Media           
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
-                string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) && 
+                string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
+                x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuMultimediaQueryString) &&
                 x.GetString("MulMimeType") == "image"))
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
