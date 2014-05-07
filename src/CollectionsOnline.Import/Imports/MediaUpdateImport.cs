@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Transactions;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Extensions;
@@ -125,6 +126,7 @@ namespace CollectionsOnline.Import.Imports
             // Perform import
             while (true)
             {
+                using (var tx = new TransactionScope())
                 using (var documentSession = _documentStore.OpenSession())
                 {
                     if (ImportCanceled())
@@ -173,134 +175,208 @@ namespace CollectionsOnline.Import.Imports
                         };
 
                         // Check if we need to update media on Items and Specimens
-                        foreach (var catalogue in row.GetMaps("catalogue"))
+                        var count = 0;
+                        var catalogues = row.GetMaps("catalogue");
+                        while (true)
                         {
-                            var catalogueIrn = long.Parse(catalogue.GetString("irn"));
-                            var sets = catalogue.GetStrings("sets");
-
-                            // TODO: update once we have consistent flag values for items in emu
-                            if (sets.Any(x => x == Constants.ImuItemQueryString || x == "Collections Online -  Indigenous Cultures" || x == "Collections Online - Natural Sciences"))
+                            using (var catalogueDocumentSession = _documentStore.OpenSession())
                             {
-                                // Item Media
-                                var item = documentSession.Load<Item>(catalogueIrn);
+                                if (ImportCanceled())
+                                    return;
 
-                                if (item != null)
+                                var catalogueBatch = catalogues
+                                    .Skip(count)
+                                    .Take(Constants.DataBatchSize)
+                                    .ToList();
+
+                                if (catalogueBatch.Count == 0)
+                                    break;
+
+                                foreach (var catalogue in catalogueBatch)
                                 {
-                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                    var catalogueIrn = long.Parse(catalogue.GetString("irn"));
+                                    var sets = catalogue.GetStrings("sets");
+
+                                    // Item Media
+                                    if (sets.Contains(Constants.ImuItemQueryString))
                                     {
-                                        hasBeenSaved = true;
-                                        // Find and delete existing media
-                                        var existingMedia = item.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-                                        if (existingMedia != null)
-                                            item.Media.Remove(existingMedia);
+                                        var item = catalogueDocumentSession.Load<Item>(catalogueIrn);
 
-                                        item.Media.Add(media);
+                                        if (item != null)
+                                        {
+                                            if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                            {
+                                                hasBeenSaved = true;
+                                                // Find and delete existing media
+                                                var existingMedia = item.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                                if (existingMedia != null)
+                                                    item.Media.Remove(existingMedia);
+
+                                                item.Media.Add(media);
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                            if (sets.Any(x => x == Constants.ImuSpecimenQueryString))
-                            {
-                                // Specimen media
-                                var specimen = documentSession.Load<Specimen>(catalogueIrn);
-
-                                if (specimen != null)
-                                {
-                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                    // Specimen Media
+                                    if (sets.Contains(Constants.ImuSpecimenQueryString))
                                     {
-                                        hasBeenSaved = true;
-                                        // Find and delete existing media
-                                        var existingMedia = specimen.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-                                        if (existingMedia != null)
-                                            specimen.Media.Remove(existingMedia);
+                                        var specimen = catalogueDocumentSession.Load<Specimen>(catalogueIrn);
 
-                                        specimen.Media.Add(media);
+                                        if (specimen != null)
+                                        {
+                                            if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                            {
+                                                hasBeenSaved = true;
+                                                // Find and delete existing media
+                                                var existingMedia = specimen.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                                if (existingMedia != null)
+                                                    specimen.Media.Remove(existingMedia);
+
+                                                specimen.Media.Add(media);
+                                            }
+                                        }
                                     }
+
                                 }
+
+                                // Save any changes
+                                catalogueDocumentSession.SaveChanges();
+                                count += catalogueBatch.Count;
                             }
                         }
 
                         // Check if we need to update media on Stories and Species
-                        foreach (var narrative in row.GetMaps("narrative"))
+                        count = 0;
+                        var narratives = row.GetMaps("narrative");
+                        while (true)
                         {
-                            var narrativeIrn = long.Parse(narrative.GetString("irn"));
-                            var sets = narrative.GetStrings("sets");
-                            if (sets.Any(x => x == Constants.ImuSpeciesQueryString))
+                            using (var narrativeDocumentSession = _documentStore.OpenSession())
                             {
-                                // Species Media
-                                var species = documentSession.Load<Species>(narrativeIrn);
+                                if (ImportCanceled())
+                                    return;
 
-                                if (species != null)
+                                var narrativeBatch = narratives
+                                    .Skip(count)
+                                    .Take(Constants.DataBatchSize)
+                                    .ToList();
+
+                                if (narrativeBatch.Count == 0)
+                                    break;
+
+                                foreach (var narrative in narrativeBatch)
                                 {
-                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                                    {
-                                        hasBeenSaved = true;
-                                        // Find and delete existing media
-                                        var existingMedia = species.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-                                        if (existingMedia != null)
-                                            species.Media.Remove(existingMedia);
+                                    var narrativeIrn = long.Parse(narrative.GetString("irn"));
+                                    var sets = narrative.GetStrings("sets");
 
-                                        species.Media.Add(media);
+                                    // Species Media
+                                    if (sets.Contains(Constants.ImuSpeciesQueryString))
+                                    {
+                                        var species = narrativeDocumentSession.Load<Species>(narrativeIrn);
+
+                                        if (species != null)
+                                        {
+                                            if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                            {
+                                                hasBeenSaved = true;
+                                                // Find and delete existing media
+                                                var existingMedia = species.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                                if (existingMedia != null)
+                                                    species.Media.Remove(existingMedia);
+
+                                                species.Media.Add(media);
+                                            }
+                                        }
+                                    }
+
+                                    // Story media
+                                    if (sets.Any(x => x == Constants.ImuStoryQueryString))
+                                    {
+                                        var story = narrativeDocumentSession.Load<Story>(narrativeIrn);
+
+                                        if (story != null)
+                                        {
+                                            if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                            {
+                                                hasBeenSaved = true;
+                                                // Find and delete existing media
+                                                var existingMedia = story.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                                if (existingMedia != null)
+                                                    story.Media.Remove(existingMedia);
+
+                                                story.Media.Add(media);
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            if (sets.Any(x => x == Constants.ImuStoryQueryString))
-                            {
-                                // Story media
-                                var story = documentSession.Load<Story>(narrativeIrn);
 
-                                if (story != null)
-                                {
-                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                                    {
-                                        hasBeenSaved = true;
-                                        // Find and delete existing media
-                                        var existingMedia = story.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-                                        if (existingMedia != null)
-                                            story.Media.Remove(existingMedia);
-
-                                        story.Media.Add(media);
-                                    }
-                                }
+                                // Save any changes
+                                narrativeDocumentSession.SaveChanges();
+                                count += narrativeBatch.Count;
                             }
                         }
 
                         // Check if we need to update media on Authors attached to Stories and Species
-                        foreach (var narrative in row.GetMaps("parties").SelectMany(x => x.GetMaps("narrative")))
+                        count = 0;
+                        var partyNarratives = row.GetMaps("parties").SelectMany(x => x.GetMaps("narrative"));
+                        while (true)
                         {
-                            var narrativeIrn = long.Parse(narrative.GetString("irn"));
-                            var sets = narrative.GetStrings("sets");
-                            if (sets.Any(x => x == Constants.ImuSpeciesQueryString))
+                            using (var partyNarrativeDocumentSession = _documentStore.OpenSession())
                             {
-                                var species = documentSession.Load<Species>(narrativeIrn);
+                                if (ImportCanceled())
+                                    return;
 
-                                if (species != null)
+                                var partyNarrativeBatch = partyNarratives
+                                    .Skip(count)
+                                    .Take(Constants.DataBatchSize)
+                                    .ToList();
+
+                                if (partyNarrativeBatch.Count == 0)
+                                    break;
+
+                                foreach (var partyNarrative in partyNarrativeBatch)
                                 {
-                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                    var narrativeIrn = long.Parse(partyNarrative.GetString("irn"));
+                                    var sets = partyNarrative.GetStrings("sets");
+
+                                    // Species Author media
+                                    if (sets.Contains(Constants.ImuSpeciesQueryString))
                                     {
-                                        hasBeenSaved = true;
-                                        // Find and replace existing media
-                                        var author = species.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
-                                        if (author != null)
-                                            author.Media = media;
+                                        var species = partyNarrativeDocumentSession.Load<Species>(narrativeIrn);
+
+                                        if (species != null)
+                                        {
+                                            if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                            {
+                                                hasBeenSaved = true;
+                                                // Find and replace existing media
+                                                var author = species.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
+                                                if (author != null)
+                                                    author.Media = media;
+                                            }
+                                        }
+                                    }
+
+                                    // Story Author media
+                                    if (sets.Contains(Constants.ImuStoryQueryString))
+                                    {
+                                        var story = partyNarrativeDocumentSession.Load<Story>(narrativeIrn);
+
+                                        if (story != null)
+                                        {
+                                            if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
+                                            {
+                                                hasBeenSaved = true;
+                                                // Find and replace existing media
+                                                var author = story.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
+                                                if (author != null)
+                                                    author.Media = media;
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            if (sets.Any(x => x == Constants.ImuStoryQueryString))
-                            {
-                                // Story media
-                                var story = documentSession.Load<Story>(narrativeIrn);
 
-                                if (story != null)
-                                {
-                                    if (hasBeenSaved || _mediaHelper.Save(mediaIrn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                                    {
-                                        hasBeenSaved = true;
-                                        // Find and replace existing media
-                                        var author = story.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
-                                        if (author != null)
-                                            author.Media = media;
-                                    }
-                                }
+                                // Save any changes
+                                partyNarrativeDocumentSession.SaveChanges();
+                                count += partyNarrativeBatch.Count;
                             }
                         }
                     }
@@ -309,6 +385,8 @@ namespace CollectionsOnline.Import.Imports
 
                     _log.Debug("{0} import progress... {1}/{2}", GetType().Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
                     documentSession.SaveChanges();
+
+                    tx.Complete();
                 }
             }
 

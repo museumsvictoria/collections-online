@@ -67,7 +67,7 @@ namespace CollectionsOnline.Import.Factories
                     "SpeFlightEnd",
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
-                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn))",
+                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab))",
                     "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                     "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
                 };
@@ -208,11 +208,12 @@ namespace CollectionsOnline.Import.Factories
                     species.TaxonomyAuthor
                 }.Concatenate(" ");
 
-                // Relationships TODO: add filter to get only specimens added in specimen import                
-                foreach (var specimen in taxonomy.GetMaps("specimens"))
-                {
-                    species.SpecimenIds.Add("specimens/" + specimen.GetString("irn"));
-                }
+                // Relationships
+                species.SpecimenIds = taxonomy
+                    .GetMaps("specimens")
+                    .Where(x => x != null && x.GetStrings("sets").Contains(Constants.ImuSpecimenQueryString))
+                    .Select(x => "specimens/" + x.GetString("irn"))
+                    .ToList();
             }
 
             // Authors
