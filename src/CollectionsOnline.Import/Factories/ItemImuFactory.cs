@@ -21,15 +21,18 @@ namespace CollectionsOnline.Import.Factories
         private readonly ISlugFactory _slugFactory;
         private readonly IMediaHelper _mediaHelper;
         private readonly IPartiesNameFactory _partiesNameFactory;
+        private readonly ILocationFactory _locationFactory;
 
         public ItemImuFactory(
             ISlugFactory slugFactory,
             IMediaHelper mediaHelper,
-            IPartiesNameFactory partiesNameFactory)
+            IPartiesNameFactory partiesNameFactory,
+            ILocationFactory locationFactory)
         {
             _slugFactory = slugFactory;
             _mediaHelper = mediaHelper;
             _partiesNameFactory = partiesNameFactory;
+            _locationFactory = locationFactory;
         }
 
         public string ModuleName
@@ -165,7 +168,8 @@ namespace CollectionsOnline.Import.Factories
                         "ArtTertiaryInscriptions",
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
                         "RigText0",
-                        "location=LocCurrentLocationRef.(LocLocationType,location2=LocHolderLocationRef.(LocLocationType,location3=LocHolderLocationRef.(LocLocationType,LocLevel1),LocLevel1),LocLevel1)"
+                        "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]"
                     };
             }
         }
@@ -535,6 +539,89 @@ namespace CollectionsOnline.Import.Factories
             item.ArtworkSecondaryInscriptions = map.GetString("ArtSecondaryInscriptions");
             item.ArtworkTertiaryInscriptions = map.GetString("ArtTertiaryInscriptions");
 
+            var types = new[] { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
+            var identification = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && types.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
+                                 map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeCurrentNameLocal_tab") != null && x.GetString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));
+
+            if (identification != null)
+            {
+                //typeStatus
+                item.ArtworkTypeStatus = identification.GetString("IdeTypeStatus_tab");
+
+                //identifiedBy
+                if (identification.GetMaps("identifiers") != null)
+                {
+                    item.ArtworkIdentifiedBy = identification.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.MakePartiesName(x)).Concatenate("; ");
+                }
+
+                //dateIdentified
+                //identificationRemarks
+                //identificationQualifier
+                item.ArtworkDateIdentified = identification.GetString("IdeDateIdentified0");
+                item.ArtworkIdentificationRemarks = identification.GetString("IdeAccuracyNotes_tab");
+                item.ArtworkIdentificationQualifier = identification.GetString("IdeQualifier_tab");
+
+                var taxonomy = identification.GetMap("taxa");
+                if (taxonomy != null)
+                {
+                    //scientificName
+                    //kingdom
+                    //phylum
+                    //class
+                    //order
+                    //family
+                    //genus
+                    //subgenus
+                    //specificEpithet
+                    //infraspecificEpithet
+                    //taxonRank
+                    //scientificNameAuthorship
+                    //nomenclaturalCode
+                    item.ArtworkScientificName = taxonomy.GetString("ClaScientificName");
+                    item.ArtworkKingdom = taxonomy.GetString("ClaKingdom");
+                    item.ArtworkPhylum = taxonomy.GetString("ClaPhylum");
+                    item.ArtworkClass = taxonomy.GetString("ClaClass");
+                    item.ArtworkOrder = taxonomy.GetString("ClaOrder");
+                    item.ArtworkFamily = taxonomy.GetString("ClaFamily");
+                    item.ArtworkGenus = taxonomy.GetString("ClaGenus");
+                    item.ArtworkSubgenus = taxonomy.GetString("ClaSubgenus");
+                    item.ArtworkSpecificEpithet = taxonomy.GetString("ClaSpecies");
+                    item.ArtworkInfraspecificEpithet = taxonomy.GetString("ClaSubspecies");
+                    item.ArtworkTaxonRank = taxonomy.GetString("ClaRank");
+                    item.ArtworkScientificNameAuthorship = taxonomy.GetString("AutAuthorString");
+                    item.ArtworkNomenclaturalCode = taxonomy.GetString("ClaApplicableCode");
+
+                    //higherClassification
+                    item.ArtworkHigherClassification = new[]
+                        {
+                            taxonomy.GetString("ClaKingdom"), 
+                            taxonomy.GetString("ClaPhylum"),
+                            taxonomy.GetString("ClaSubphylum"),
+                            taxonomy.GetString("ClaSuperclass"),
+                            taxonomy.GetString("ClaClass"),
+                            taxonomy.GetString("ClaSubclass"),
+                            taxonomy.GetString("ClaSuperorder"),
+                            taxonomy.GetString("ClaOrder"),
+                            taxonomy.GetString("ClaSuborder"),
+                            taxonomy.GetString("ClaInfraorder"),
+                            taxonomy.GetString("ClaSuperfamily"),
+                            taxonomy.GetString("ClaFamily"),
+                            taxonomy.GetString("ClaSubfamily"),
+                            taxonomy.GetString("ClaTribe"),
+                            taxonomy.GetString("ClaSubtribe"),
+                            taxonomy.GetString("ClaGenus"),
+                            taxonomy.GetString("ClaSubgenus"),
+                            taxonomy.GetString("ClaSpecies"),
+                            taxonomy.GetString("ClaSubspecies")
+                        }.Concatenate("; ");
+
+                    //vernacularName
+                    var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => x.GetString("ComStatus_tab") != null && x.GetString("ComStatus_tab").Trim().ToLower() == "preferred");
+                    if (vernacularName != null)
+                        item.ArtworkVernacularName = vernacularName.GetString("ComName_tab");
+                }
+            }
+
             // Acquisition information
             var accessionMap = map.GetMap("accession");
             if (accessionMap != null)
@@ -574,7 +661,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Object Location
-            var locationMap = map.GetMap("location");
+            item.ObjectLocation = _locationFactory.GetLocation(map.GetMap("location"));
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(item.ObjectSummary))

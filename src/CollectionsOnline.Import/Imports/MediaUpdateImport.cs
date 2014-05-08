@@ -235,7 +235,6 @@ namespace CollectionsOnline.Import.Imports
                                             }
                                         }
                                     }
-
                                 }
 
                                 // Save any changes

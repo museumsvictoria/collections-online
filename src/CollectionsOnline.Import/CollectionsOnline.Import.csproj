@@ -87,6 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factories\IImuFactory.cs" />
+    <Compile Include="Factories\ILocationFactory.cs" />
+    <Compile Include="Factories\LocationFactory.cs" />
     <Compile Include="Factories\PathFactory.cs" />
     <Compile Include="Factories\StoryImuFactory.cs" />
     <Compile Include="Factories\SpecimenImuFactory.cs" />
