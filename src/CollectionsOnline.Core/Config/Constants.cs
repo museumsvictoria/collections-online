@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Models;
 
 namespace CollectionsOnline.Core.Config
 {
@@ -31,5 +34,38 @@ namespace CollectionsOnline.Core.Config
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(1);
 
         public static TimeSpan ImuOfflineTimeSpan = new TimeSpan(19, 00, 0); // 7:00pm
+
+        public static Dictionary<Tuple<string, string, string, string>, MuseumLocation> MuseumLocations = new Dictionary
+            <Tuple<string, string, string, string>, MuseumLocation>(new OrdinalIgnoreCaseTupleComparer())
+        {
+            {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Ground Level", "West", "Administration"),
+                new MuseumLocation { Gallery = "Administration", MuseumVenue = "Melbourne Museum" }
+            },
+            {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Level One", "West", "Balcony"),
+                new MuseumLocation { Gallery = "Balcony", MuseumVenue = "Melbourne Museum" }
+            },
+            {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Level One", "Central", "Balcony"),
+                new MuseumLocation { Gallery = "Balcony", MuseumVenue = "Melbourne Museum" }
+            },
+            {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Level One", "East", "Balcony"),
+                new MuseumLocation { Gallery = "Balcony", MuseumVenue = "Melbourne Museum" }
+            },
+            {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Ground Level", "West", "Gallery 3"),
+                new MuseumLocation { Gallery = "Children's Museum", MuseumVenue = "Melbourne Museum" }
+            },
+            {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Ground Level", "East", "Gallery 8"),
+                new MuseumLocation { Gallery = "Bunjilaka", MuseumVenue = "Melbourne Museum" }
+            },
+            {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground Level", "Central", null),
+                new MuseumLocation { Gallery = "Public Spaces Lower Ground Floor", MuseumVenue = "Melbourne Museum" }
+            }
+        };
     }
 }

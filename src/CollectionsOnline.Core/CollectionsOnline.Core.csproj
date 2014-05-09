@@ -55,12 +55,14 @@
     <Compile Include="DesignByContract\Checks.cs" />
     <Compile Include="DesignByContract\Requires.cs" />
     <Compile Include="DesignByContract\Ensures.cs" />
+    <Compile Include="Extensions\OrdinalIgnoreCaseTupleComparer.cs" />
     <Compile Include="Indexes\CombinedSearchFacets.cs" />
     <Compile Include="Indexes\CombinedSearchResult.cs" />
     <Compile Include="Indexes\CombinedSearch.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentStoreProvider.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\MuseumLocation.cs" />
     <Compile Include="Models\Dimension.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Author.cs" />

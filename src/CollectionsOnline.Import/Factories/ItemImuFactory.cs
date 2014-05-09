@@ -21,13 +21,13 @@ namespace CollectionsOnline.Import.Factories
         private readonly ISlugFactory _slugFactory;
         private readonly IMediaHelper _mediaHelper;
         private readonly IPartiesNameFactory _partiesNameFactory;
-        private readonly ILocationFactory _locationFactory;
+        private readonly IMuseumLocationFactory _locationFactory;
 
         public ItemImuFactory(
             ISlugFactory slugFactory,
             IMediaHelper mediaHelper,
             IPartiesNameFactory partiesNameFactory,
-            ILocationFactory locationFactory)
+            IMuseumLocationFactory locationFactory)
         {
             _slugFactory = slugFactory;
             _mediaHelper = mediaHelper;
@@ -661,7 +661,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Object Location
-            item.ObjectLocation = _locationFactory.GetLocation(map.GetMap("location"));
+            item.MuseumLocation = _locationFactory.GetMuseumLocation(map.GetMap("location"));
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(item.ObjectSummary))
