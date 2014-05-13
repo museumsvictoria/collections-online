@@ -55,27 +55,41 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedIds { get; set; }
 
+        public IList<string> AttachedIds { get; set; }
+
         public string AcquisitionInformation { get; set; }
 
         public string Acknowledgement { get; set; }
 
+        public string SpecimenForm { get; set; }
+
         public IList<Media> Media { get; set; }
 
-        #region Paleontology
+        #region Geology
 
-        public string PaleontologyDateCollectedFrom { get; set; }
+        public string GeologyEra { get; set; }
 
-        public string PaleontologyDateCollectedTo { get; set; }
+        public string GeologyPeriod { get; set; }
 
-        public string PaleontologyCollectingMethod { get; set; }
+        public string GeologyEpoch { get; set; }
 
-        public string PaleontologyEra { get; set; }
+        public string GeologyStage { get; set; }
 
-        public string PaleontologyPeriod { get; set; }
+        public string GeologyGroup { get; set; }
 
-        public string PaleontologyEpoch { get; set; }
+        public string GeologyFormation { get; set; }
 
-        public string PaleontologyStage { get; set; }
+        public string GeologyMember { get; set; }
+
+        public string GeologyRockType { get; set; }
+
+        #endregion
+
+        #region Palaeontology
+
+        public string PalaeontologyDateCollectedFrom { get; set; }
+
+        public string PalaeontologyDateCollectedTo { get; set; }
 
         #endregion
 
@@ -131,9 +145,17 @@ namespace CollectionsOnline.Core.Models
 
         public string TektitesGlobalStrewnfield { get; set; }
 
-        public string TektitesSurfaceUp { get; set; }
+        #endregion
 
-        public string TektitesDegreeOfAbrasion { get; set; }
+        #region Petrology
+
+        public string PetrologyRockClass { get; set; }
+
+        public string PetrologyRockGroup { get; set; }
+
+        public string PetrologyRockName { get; set; }
+
+        public string PetrologyRockDescription { get; set; }
 
         #endregion
 
@@ -327,6 +349,7 @@ namespace CollectionsOnline.Core.Models
             Associations = new List<Association>();
             Tags = new List<string>();
             RelatedIds = new List<string>();
+            AttachedIds = new List<string>();
             Media = new List<Media>();
         }
     }

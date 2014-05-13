@@ -10,7 +10,7 @@ namespace CollectionsOnline.Import.Factories
     {
         public MuseumLocation GetMuseumLocation(Map map)
         {
-            if (map == null)
+            if (map == null || map.GetString("LocLocationType") == null)
                 return null;
 
             if(map.GetString("LocLocationType").Contains("holder", StringComparison.OrdinalIgnoreCase))
@@ -19,7 +19,7 @@ namespace CollectionsOnline.Import.Factories
             var locationKey = new Tuple<string, string, string, string>(
                 map.GetString("LocLevel1"), 
                 map.GetString("LocLevel2"),
-                map.GetString("LocLevel3"), 
+                map.GetString("LocLevel3"),
                 map.GetString("LocLevel4"));
 
             return Constants.MuseumLocations.ContainsKey(locationKey) ? Constants.MuseumLocations[locationKey] : null;

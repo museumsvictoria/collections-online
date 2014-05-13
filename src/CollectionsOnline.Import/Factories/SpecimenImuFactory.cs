@@ -49,7 +49,7 @@ namespace CollectionsOnline.Import.Factories
                         "ColTypeOfItem",
                         "AdmDateModified",
                         "AdmTimeModified",
-                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName))",
+                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedTo,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab]),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName))",
                         "SpeNoSpecimens",
                         "SpeSex_tab",
                         "SpeStageAge_tab",
@@ -58,7 +58,7 @@ namespace CollectionsOnline.Import.Factories
                         "DarYearCollected",
                         "DarMonthCollected",
                         "DarDayCollected",
-                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
+                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
@@ -76,6 +76,7 @@ namespace CollectionsOnline.Import.Factories
                         "SubSubjects_tab",
                         "associations=[AssAssociationType_tab,party=AssAssociationNameRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AssAssociationCountry_tab,AssAssociationState_tab,AssAssociationRegion_tab,AssAssociationLocality_tab,AssAssociationStreetAddress_tab,AssAssociationDate_tab,AssAssociationComments0]",
                         "related=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
+                        "attached=ColPhysicallyAttachedToRef.(irn,MdaDataSets_tab)",
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
                         "RigText0",
                         "SpeNoSpecimens",
@@ -103,8 +104,10 @@ namespace CollectionsOnline.Import.Factories
                         "TekShape",
                         "TekLocalStrewnfield",
                         "TekGlobalStrewnfield",
-                        "TekSurfaceUp",
-                        "TekDegreeOfAbrasion"
+                        "RocClass",
+                        "RocGroup",
+                        "RocRockName",
+                        "RocRockDescription",
                     };
             }
         }
@@ -184,12 +187,22 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Related items/specimens
-            foreach (var related in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            foreach (var related in map.GetMaps("related").Where(x => x != null))
             {
-                if (related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuItemQueryString, StringComparison.OrdinalIgnoreCase)))
+                if (related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
                     specimen.RelatedIds.Add("items/" + related.GetString("irn"));
-                if (related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuSpecimenQueryString, StringComparison.OrdinalIgnoreCase)))
+                if (related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
                     specimen.RelatedIds.Add("specimens/" + related.GetString("irn"));
+            }
+
+            // Physically attached
+            var attachedMap = map.GetMap("attached");
+            if (attachedMap != null)
+            {
+                if (attachedMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    specimen.AttachedIds.Add("items/" + attachedMap.GetString("irn"));
+                if (attachedMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    specimen.AttachedIds.Add("specimens/" + attachedMap.GetString("irn"));
             }
 
             // Acquisition information
@@ -230,11 +243,17 @@ namespace CollectionsOnline.Import.Factories
                     specimen.Acknowledgement = rights;
             }
 
+            // Specimen form
+            specimen.SpecimenForm = map
+                .GetMaps("preparations")
+                .Where(x => x != null)
+                .Select(x => x.GetString("StrSpecimenForm_tab"))
+                .Concatenate(", ");
+
             // Discipline specific fields
             // Palaeontology
-            specimen.PaleontologyDateCollectedFrom = map.GetString("LocDateCollectedFrom");
-            specimen.PaleontologyDateCollectedTo = map.GetString("LocDateCollectedTo");
-            specimen.PaleontologyCollectingMethod = map.GetString("LocSamplingMethod");
+            specimen.PalaeontologyDateCollectedFrom = map.GetString("LocDateCollectedFrom");
+            specimen.PalaeontologyDateCollectedTo = map.GetString("LocDateCollectedTo");
             
             // Mineralogy
             specimen.MineralogySpecies = map.GetString("MinSpecies");
@@ -262,8 +281,12 @@ namespace CollectionsOnline.Import.Factories
             specimen.TektitesShape = map.GetString("TekShape");
             specimen.TektitesLocalStrewnfield = map.GetString("TekLocalStrewnfield");
             specimen.TektitesGlobalStrewnfield = map.GetString("TekGlobalStrewnfield");
-            specimen.TektitesSurfaceUp = map.GetString("TekSurfaceUp");
-            specimen.TektitesDegreeOfAbrasion = map.GetString("TekDegreeOfAbrasion");
+
+            // Petrology
+            specimen.PetrologyRockClass = map.GetString("RocClass");
+            specimen.PetrologyRockGroup = map.GetString("RocGroup");
+            specimen.PetrologyRockName = map.GetString("RocRockName");
+            specimen.PetrologyRockDescription = map.GetString("RocRockDescription");
 
             #region DwC Fields
 
@@ -488,7 +511,7 @@ namespace CollectionsOnline.Import.Factories
                 //country
                 //stateProvince
                 //county
-                //municipality                        
+                //municipality
                 if (geo != null)
                 {
                     specimen.HigherGeography = new[]
@@ -534,11 +557,18 @@ namespace CollectionsOnline.Import.Factories
                     specimen.GeoreferenceSources = latlong.GetString("LatDetSource_tab");
                 }
 
-                // Palaeontology site fields
-                specimen.PaleontologyEra = site.GetString("EraEra");
-                specimen.PaleontologyPeriod = site.GetString("EraAge1");
-                specimen.PaleontologyEpoch = site.GetString("EraAge2");
-                specimen.PaleontologyStage = site.GetString("EraMvStage");
+                // Geology site fields
+                specimen.GeologyEra = site.GetString("EraEra");
+                specimen.GeologyPeriod = site.GetString("EraAge1");
+                specimen.GeologyEpoch = site.GetString("EraAge2");
+                specimen.GeologyStage = site.GetString("EraMvStage");
+                if (specimen.Discipline != "Tektites" && specimen.Discipline != "Meteorites")
+                {
+                    specimen.GeologyGroup = site.GetStrings("EraMvGroup_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
+                    specimen.GeologyFormation = site.GetStrings("EraMvRockUnit_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
+                    specimen.GeologyMember = site.GetStrings("EraMvMember_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
+                    specimen.GeologyRockType = site.GetStrings("EraLithology_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
+                }
             }
 
             //minimumDepthInMeters

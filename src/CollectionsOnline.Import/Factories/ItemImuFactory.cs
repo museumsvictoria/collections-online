@@ -13,6 +13,7 @@ using CollectionsOnline.Import.Utilities;
 using ImageResizer;
 using IMu;
 using Raven.Abstractions.Extensions;
+using Raven.Client.Linq;
 
 namespace CollectionsOnline.Import.Factories
 {
@@ -168,7 +169,7 @@ namespace CollectionsOnline.Import.Factories
                         "ArtTertiaryInscriptions",
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
                         "RigText0",
-                        "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
+                        "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]"
                     };
             }
@@ -321,9 +322,9 @@ namespace CollectionsOnline.Import.Factories
             // Related items/specimens
             foreach (var related in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
             {
-                if(related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuItemQueryString, StringComparison.OrdinalIgnoreCase)))
+                if(related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
                     item.RelatedIds.Add("items/" + related.GetString("irn"));
-                if (related.GetStrings("MdaDataSets_tab").Any(x => string.Equals(x, Constants.ImuSpecimenQueryString, StringComparison.OrdinalIgnoreCase)))
+                if (related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
                     item.RelatedIds.Add("specimens/" + related.GetString("irn"));
             }
 
