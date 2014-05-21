@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -45,6 +46,19 @@ namespace CollectionsOnline.Core.Extensions
                 return false;
 
             return input.IndexOf(valueToCheck, comparisonType) >= 0;
+        }
+
+        public static string Remove(this string input, IEnumerable<string> values)
+        {
+            if (values != null && !string.IsNullOrWhiteSpace(input))
+            {
+                foreach (var value in values)
+                {
+                    input = Regex.Replace(input, value, "", RegexOptions.IgnoreCase).Trim();
+                }
+            }
+
+            return input;
         }
     }
 }

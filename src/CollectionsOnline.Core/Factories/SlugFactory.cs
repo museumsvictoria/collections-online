@@ -11,6 +11,8 @@ namespace CollectionsOnline.Core.Factories
     {
         public string MakeSlug(string value)
         {
+            if (value == null) return value;
+
             // 1 - Strip diacritical marks using Michael Kaplan's function or equivalent
             value = RemoveDiacritics(value);
 

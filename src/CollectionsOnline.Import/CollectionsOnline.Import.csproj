@@ -48,6 +48,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Dapper.1.23\lib\net45\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Geocoding">
+      <HintPath>..\packages\Geocoding.net.3.1.0\lib\net40\Geocoding.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
@@ -99,6 +102,7 @@
     <Compile Include="Factories\ItemImuFactory.cs" />
     <Compile Include="Imports\IImport.cs" />
     <Compile Include="Imports\MediaUpdateImport.cs" />
+    <Compile Include="Imports\GeocodeImport.cs" />
     <Compile Include="Imports\MigrationImport.cs" />
     <Compile Include="Imports\TaxonomyUpdateImport.cs">
       <SubType>Code</SubType>

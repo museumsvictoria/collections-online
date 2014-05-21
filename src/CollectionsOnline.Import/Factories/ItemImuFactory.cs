@@ -182,7 +182,7 @@ namespace CollectionsOnline.Import.Factories
                 var terms = new Terms();
 
                 terms.Add("MdaDataSets_tab", Constants.ImuItemQueryString);
-
+                
                 return terms;
             }
         }
@@ -228,19 +228,27 @@ namespace CollectionsOnline.Import.Factories
             // Associations
             foreach (var associationMap in map.GetMaps("associations"))
             {
-                var association = new Association
-                {
-                    Type = associationMap.GetString("AssAssociationType_tab"),
-                    Country = associationMap.GetString("AssAssociationCountry_tab"),
-                    State = associationMap.GetString("AssAssociationState_tab"),
-                    Region = associationMap.GetString("AssAssociationRegion_tab"),
-                    Locality = associationMap.GetString("AssAssociationLocality_tab"),
-                    Street = associationMap.GetString("AssAssociationStreetAddress_tab"),
-                    Date = associationMap.GetString("AssAssociationDate_tab"),
-                    Comments = associationMap.GetString("AssAssociationComments0")
-                };
+                var association = new Association();
 
+                association.Type = associationMap.GetString("AssAssociationType_tab");
                 association.Name = _partiesNameFactory.MakePartiesName(associationMap.GetMap("party"));
+                association.Date = associationMap.GetString("AssAssociationDate_tab");
+                association.Comments = associationMap.GetString("AssAssociationComments0");
+
+                var place = new[]
+                {
+                    associationMap.GetString("AssAssociationStreetAddress_tab"),
+                    associationMap.GetString("AssAssociationLocality_tab"),
+                    associationMap.GetString("AssAssociationRegion_tab").Remove(new[] { "greater", "district" }),
+                    associationMap.GetString("AssAssociationState_tab"),
+                    associationMap.GetString("AssAssociationCountry_tab")
+                }.Distinct();
+                
+                association.Place = place.Concatenate(", ");
+                association.PlaceKey = _slugFactory.MakeSlug(association.Place);
+
+                if(string.IsNullOrWhiteSpace(association.PlaceKey))
+                    association.GeocodeStatus = GeocodeStatus.Failure;
 
                 item.Associations.Add(association);
             }

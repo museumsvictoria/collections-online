@@ -65,6 +65,7 @@
     <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentStoreProvider.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\GeocodeStatus.cs" />
     <Compile Include="Models\MuseumLocation.cs" />
     <Compile Include="Models\Dimension.cs" />
     <Compile Include="Models\Comment.cs" />
