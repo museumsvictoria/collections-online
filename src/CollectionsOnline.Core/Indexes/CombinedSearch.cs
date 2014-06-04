@@ -119,7 +119,7 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Content fields
                     Id = specimen.Id,
-                    Name = specimen.ObjectName ?? specimen.ScientificName ?? specimen.AcceptedNameUsage,
+                    Name = specimen.ObjectName ?? specimen.ScientificName,
                     Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
                     ThumbUrl = specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string) null,

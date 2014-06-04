@@ -54,12 +54,11 @@ namespace CollectionsOnline.Import.Factories
                         "SpeSex_tab",
                         "SpeStageAge_tab",
                         "preparations=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab]",
-                        "ManPreviousNumbers_tab",
                         "DarYearCollected",
                         "DarMonthCollected",
                         "DarDayCollected",
                         "site=SitSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
-                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaScientificName,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaRank,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
                         "ColScientificGroup",
@@ -402,9 +401,6 @@ namespace CollectionsOnline.Import.Factories
                 }
             }
 
-            //otherCatalogNumbers
-            specimen.OtherCatalogNumbers = map.GetStrings("ManPreviousNumbers_tab").Concatenate("; ");
-
             //associatedMedia
             foreach (var mediaMap in map.GetMaps("media").Where(x =>
                 x != null &&
@@ -623,10 +619,17 @@ namespace CollectionsOnline.Import.Factories
                     //subgenus
                     //specificEpithet
                     //infraspecificEpithet
-                    //taxonRank
                     //scientificNameAuthorship
                     //nomenclaturalCode
-                    specimen.ScientificName = taxonomy.GetString("ClaScientificName");
+                    specimen.ScientificName = new[]
+                        {
+                            taxonomy.GetString("ClaGenus"),
+                            string.IsNullOrWhiteSpace(taxonomy.GetString("ClaSubgenus")) ? null : string.Format("({0})", taxonomy.GetString("ClaSubgenus")),
+                            taxonomy.GetString("ClaSpecies"),
+                            taxonomy.GetString("ClaSubspecies"),
+                            taxonomy.GetString("AutAuthorString")
+                        }.Concatenate(" ");
+
                     specimen.Kingdom = taxonomy.GetString("ClaKingdom");
                     specimen.Phylum = taxonomy.GetString("ClaPhylum");
                     specimen.Class = taxonomy.GetString("ClaClass");
@@ -635,65 +638,41 @@ namespace CollectionsOnline.Import.Factories
                     specimen.Genus = taxonomy.GetString("ClaGenus");
                     specimen.Subgenus = taxonomy.GetString("ClaSubgenus");
                     specimen.SpecificEpithet = taxonomy.GetString("ClaSpecies");
-                    specimen.InfraspecificEpithet = taxonomy.GetString("ClaSubspecies");
-                    specimen.TaxonRank = taxonomy.GetString("ClaRank");
+                    specimen.InfraspecificEpithet = taxonomy.GetString("ClaSubspecies");                    
                     specimen.ScientificNameAuthorship = taxonomy.GetString("AutAuthorString");
                     specimen.NomenclaturalCode = taxonomy.GetString("ClaApplicableCode");
 
                     //higherClassification
-                    specimen.HigherClassification = new[]
+                    var higherClassification = new Dictionary<string, string>
                         {
-                            taxonomy.GetString("ClaKingdom"), 
-                            taxonomy.GetString("ClaPhylum"),
-                            taxonomy.GetString("ClaSubphylum"),
-                            taxonomy.GetString("ClaSuperclass"),
-                            taxonomy.GetString("ClaClass"),
-                            taxonomy.GetString("ClaSubclass"),
-                            taxonomy.GetString("ClaSuperorder"),
-                            taxonomy.GetString("ClaOrder"),
-                            taxonomy.GetString("ClaSuborder"),
-                            taxonomy.GetString("ClaInfraorder"),
-                            taxonomy.GetString("ClaSuperfamily"),
-                            taxonomy.GetString("ClaFamily"),
-                            taxonomy.GetString("ClaSubfamily"),
-                            taxonomy.GetString("ClaTribe"),
-                            taxonomy.GetString("ClaSubtribe"),
-                            taxonomy.GetString("ClaGenus"),
-                            taxonomy.GetString("ClaSubgenus"),
-                            taxonomy.GetString("ClaSpecies"),
-                            taxonomy.GetString("ClaSubspecies")
-                        }.Concatenate("; ");
+                            { "Kingdom", taxonomy.GetString("ClaKingdom") },
+                            { "Phylum", taxonomy.GetString("ClaPhylum") },
+                            { "Subphylum", taxonomy.GetString("ClaSubphylum") },
+                            { "Superclass", taxonomy.GetString("ClaSuperclass") },
+                            { "Class", taxonomy.GetString("ClaClass") },
+                            { "Subclass", taxonomy.GetString("ClaSubclass") },
+                            { "Superorder", taxonomy.GetString("ClaSuperorder") },
+                            { "Order", taxonomy.GetString("ClaOrder") },
+                            { "Suborder", taxonomy.GetString("ClaSuborder") },
+                            { "Infraorder", taxonomy.GetString("ClaInfraorder") },
+                            { "Superfamily", taxonomy.GetString("ClaSuperfamily") },
+                            { "Family", taxonomy.GetString("ClaFamily") },
+                            { "Subfamily", taxonomy.GetString("ClaSubfamily") },
+                            { "Tribe", taxonomy.GetString("ClaTribe") },
+                            { "Subtribe", taxonomy.GetString("ClaSubtribe") },
+                            { "Genus", taxonomy.GetString("ClaGenus") },
+                            { "Subgenus", taxonomy.GetString("ClaSubgenus") },
+                            { "Species", taxonomy.GetString("ClaSpecies") },
+                            { "Subspecies", taxonomy.GetString("ClaSubspecies") }
+                        };
+
+                    specimen.HigherClassification = higherClassification.Select(x => x.Value).Concatenate("; ");
+                    specimen.TaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
 
                     //vernacularName
-                    var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => x.GetString("ComStatus_tab") != null && x.GetString("ComStatus_tab").Trim().ToLower() == "preferred");
+                    var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => string.Equals(x.GetString("ComStatus_tab"), "preferred", StringComparison.OrdinalIgnoreCase));
                     if (vernacularName != null)
                         specimen.VernacularName = vernacularName.GetString("ComName_tab");
-                }
-            }
-
-            // acceptedNameUsage
-            var acceptedNameIdentification = map.GetMaps("identifications").FirstOrDefault(x => x.GetString("IdeCurrentNameLocal_tab") != null && x.GetString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes");
-
-            if (acceptedNameIdentification != null)
-            {
-                var taxonomy = acceptedNameIdentification.GetMap("taxa");
-
-                if (taxonomy != null)
-                {
-                    specimen.AcceptedNameUsage = taxonomy.GetString("ClaScientificName");
-                }
-            }
-
-            // originalNameUsage
-            var originalNameIdentification = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && types.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower())));
-
-            if (originalNameIdentification != null)
-            {
-                var taxonomy = originalNameIdentification.GetMap("taxa");
-
-                if (taxonomy != null)
-                {
-                    specimen.OriginalNameUsage = taxonomy.GetString("ClaScientificName");
                 }
             }
 

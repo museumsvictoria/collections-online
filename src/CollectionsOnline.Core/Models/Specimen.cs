@@ -212,8 +212,6 @@ namespace CollectionsOnline.Core.Models
 
         public string Preparations { get; set; }
 
-        public string OtherCatalogNumbers { get; set; }
-
         public string AssociatedMedia { get; set; }
 
         #endregion
@@ -305,10 +303,6 @@ namespace CollectionsOnline.Core.Models
         #region Taxon
 
         public string ScientificName { get; set; }
-
-        public string AcceptedNameUsage { get; set; }
-
-        public string OriginalNameUsage { get; set; }
 
         public string HigherClassification { get; set; }
 

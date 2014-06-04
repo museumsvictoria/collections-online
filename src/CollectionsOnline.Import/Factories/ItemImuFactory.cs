@@ -583,10 +583,17 @@ namespace CollectionsOnline.Import.Factories
                     //subgenus
                     //specificEpithet
                     //infraspecificEpithet
-                    //taxonRank
                     //scientificNameAuthorship
                     //nomenclaturalCode
-                    item.ArtworkScientificName = taxonomy.GetString("ClaScientificName");
+                    item.ArtworkScientificName = new[]
+                        {
+                            taxonomy.GetString("ClaGenus"),
+                            string.IsNullOrWhiteSpace(taxonomy.GetString("ClaSubgenus")) ? null : string.Format("({0})", taxonomy.GetString("ClaSubgenus")),
+                            taxonomy.GetString("ClaSpecies"),
+                            taxonomy.GetString("ClaSubspecies"),
+                            taxonomy.GetString("AutAuthorString")
+                        }.Concatenate(" ");
+
                     item.ArtworkKingdom = taxonomy.GetString("ClaKingdom");
                     item.ArtworkPhylum = taxonomy.GetString("ClaPhylum");
                     item.ArtworkClass = taxonomy.GetString("ClaClass");
@@ -596,36 +603,38 @@ namespace CollectionsOnline.Import.Factories
                     item.ArtworkSubgenus = taxonomy.GetString("ClaSubgenus");
                     item.ArtworkSpecificEpithet = taxonomy.GetString("ClaSpecies");
                     item.ArtworkInfraspecificEpithet = taxonomy.GetString("ClaSubspecies");
-                    item.ArtworkTaxonRank = taxonomy.GetString("ClaRank");
                     item.ArtworkScientificNameAuthorship = taxonomy.GetString("AutAuthorString");
                     item.ArtworkNomenclaturalCode = taxonomy.GetString("ClaApplicableCode");
 
                     //higherClassification
-                    item.ArtworkHigherClassification = new[]
+                    var higherClassification = new Dictionary<string, string>
                         {
-                            taxonomy.GetString("ClaKingdom"), 
-                            taxonomy.GetString("ClaPhylum"),
-                            taxonomy.GetString("ClaSubphylum"),
-                            taxonomy.GetString("ClaSuperclass"),
-                            taxonomy.GetString("ClaClass"),
-                            taxonomy.GetString("ClaSubclass"),
-                            taxonomy.GetString("ClaSuperorder"),
-                            taxonomy.GetString("ClaOrder"),
-                            taxonomy.GetString("ClaSuborder"),
-                            taxonomy.GetString("ClaInfraorder"),
-                            taxonomy.GetString("ClaSuperfamily"),
-                            taxonomy.GetString("ClaFamily"),
-                            taxonomy.GetString("ClaSubfamily"),
-                            taxonomy.GetString("ClaTribe"),
-                            taxonomy.GetString("ClaSubtribe"),
-                            taxonomy.GetString("ClaGenus"),
-                            taxonomy.GetString("ClaSubgenus"),
-                            taxonomy.GetString("ClaSpecies"),
-                            taxonomy.GetString("ClaSubspecies")
-                        }.Concatenate("; ");
+                            { "Kingdom", taxonomy.GetString("ClaKingdom") },
+                            { "Phylum", taxonomy.GetString("ClaPhylum") },
+                            { "Subphylum", taxonomy.GetString("ClaSubphylum") },
+                            { "Superclass", taxonomy.GetString("ClaSuperclass") },
+                            { "Class", taxonomy.GetString("ClaClass") },
+                            { "Subclass", taxonomy.GetString("ClaSubclass") },
+                            { "Superorder", taxonomy.GetString("ClaSuperorder") },
+                            { "Order", taxonomy.GetString("ClaOrder") },
+                            { "Suborder", taxonomy.GetString("ClaSuborder") },
+                            { "Infraorder", taxonomy.GetString("ClaInfraorder") },
+                            { "Superfamily", taxonomy.GetString("ClaSuperfamily") },
+                            { "Family", taxonomy.GetString("ClaFamily") },
+                            { "Subfamily", taxonomy.GetString("ClaSubfamily") },
+                            { "Tribe", taxonomy.GetString("ClaTribe") },
+                            { "Subtribe", taxonomy.GetString("ClaSubtribe") },
+                            { "Genus", taxonomy.GetString("ClaGenus") },
+                            { "Subgenus", taxonomy.GetString("ClaSubgenus") },
+                            { "Species", taxonomy.GetString("ClaSpecies") },
+                            { "Subspecies", taxonomy.GetString("ClaSubspecies") }
+                        };
+
+                    item.ArtworkHigherClassification = higherClassification.Select(x => x.Value).Concatenate("; ");
+                    item.ArtworkTaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
 
                     //vernacularName
-                    var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => x.GetString("ComStatus_tab") != null && x.GetString("ComStatus_tab").Trim().ToLower() == "preferred");
+                    var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => string.Equals(x.GetString("ComStatus_tab"), "preferred", StringComparison.OrdinalIgnoreCase));
                     if (vernacularName != null)
                         item.ArtworkVernacularName = vernacularName.GetString("ComName_tab");
                 }

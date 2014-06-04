@@ -56,7 +56,6 @@ namespace CollectionsOnline.Import.Imports
                                     "AutAuthorString",
                                     "ClaApplicableCode",
                                     "names=[ComName_tab,ComStatus_tab]",
-                                    "others=[ClaOtherRank_tab,ClaOtherValue_tab]",
                                     "catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,taxa=TaxTaxonomyRef_tab.(irn)])",
                                     "narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
                                 };
@@ -196,7 +195,15 @@ namespace CollectionsOnline.Import.Imports
 
                                                 if (types.Any(x => string.Equals(x, typeStatus, StringComparison.OrdinalIgnoreCase)) || string.Equals(currentName, "yes", StringComparison.OrdinalIgnoreCase))
                                                 {
-                                                    specimen.ScientificName = row.GetString("ClaScientificName");
+                                                    specimen.ScientificName = new[]
+                                                        {
+                                                            row.GetString("ClaGenus"),
+                                                            string.IsNullOrWhiteSpace(row.GetString("ClaSubgenus")) ? null : string.Format("({0})", row.GetString("ClaSubgenus")),
+                                                            row.GetString("ClaSpecies"),
+                                                            row.GetString("ClaSubspecies"),
+                                                            row.GetString("AutAuthorString")
+                                                        }.Concatenate(" ");
+
                                                     specimen.Kingdom = row.GetString("ClaKingdom");
                                                     specimen.Phylum = row.GetString("ClaPhylum");
                                                     specimen.Class = row.GetString("ClaClass");
@@ -206,49 +213,41 @@ namespace CollectionsOnline.Import.Imports
                                                     specimen.Subgenus = row.GetString("ClaSubgenus");
                                                     specimen.SpecificEpithet = row.GetString("ClaSpecies");
                                                     specimen.InfraspecificEpithet = row.GetString("ClaSubspecies");
-                                                    specimen.TaxonRank = row.GetString("ClaRank");
                                                     specimen.ScientificNameAuthorship = row.GetString("AutAuthorString");
                                                     specimen.NomenclaturalCode = row.GetString("ClaApplicableCode");
 
                                                     //higherClassification
-                                                    specimen.HigherClassification = new[]
-                                                                        {
-                                                                            row.GetString("ClaKingdom"), 
-                                                                            row.GetString("ClaPhylum"),
-                                                                            row.GetString("ClaSubphylum"),
-                                                                            row.GetString("ClaSuperclass"),
-                                                                            row.GetString("ClaClass"),
-                                                                            row.GetString("ClaSubclass"),
-                                                                            row.GetString("ClaSuperorder"),
-                                                                            row.GetString("ClaOrder"),
-                                                                            row.GetString("ClaSuborder"),
-                                                                            row.GetString("ClaInfraorder"),
-                                                                            row.GetString("ClaSuperfamily"),
-                                                                            row.GetString("ClaFamily"),
-                                                                            row.GetString("ClaSubfamily"),
-                                                                            row.GetString("ClaTribe"),
-                                                                            row.GetString("ClaSubtribe"),
-                                                                            row.GetString("ClaGenus"),
-                                                                            row.GetString("ClaSubgenus"),
-                                                                            row.GetString("ClaSpecies"),
-                                                                            row.GetString("ClaSubspecies")
-                                                                        }.Concatenate("; ");
+                                                    var higherClassification = new Dictionary<string, string>
+                                                        {
+                                                            { "Kingdom", row.GetString("ClaKingdom") },
+                                                            { "Phylum", row.GetString("ClaPhylum") },
+                                                            { "Subphylum", row.GetString("ClaSubphylum") },
+                                                            { "Superclass", row.GetString("ClaSuperclass") },
+                                                            { "Class", row.GetString("ClaClass") },
+                                                            { "Subclass", row.GetString("ClaSubclass") },
+                                                            { "Superorder", row.GetString("ClaSuperorder") },
+                                                            { "Order", row.GetString("ClaOrder") },
+                                                            { "Suborder", row.GetString("ClaSuborder") },
+                                                            { "Infraorder", row.GetString("ClaInfraorder") },
+                                                            { "Superfamily", row.GetString("ClaSuperfamily") },
+                                                            { "Family", row.GetString("ClaFamily") },
+                                                            { "Subfamily", row.GetString("ClaSubfamily") },
+                                                            { "Tribe", row.GetString("ClaTribe") },
+                                                            { "Subtribe", row.GetString("ClaSubtribe") },
+                                                            { "Genus", row.GetString("ClaGenus") },
+                                                            { "Subgenus", row.GetString("ClaSubgenus") },
+                                                            { "Species", row.GetString("ClaSpecies") },
+                                                            { "Subspecies", row.GetString("ClaSubspecies") }
+                                                        };
+
+                                                    specimen.HigherClassification = higherClassification.Select(x => x.Value).Concatenate("; ");
+                                                    specimen.TaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
 
                                                     //vernacularName
                                                     var vernacularName = row.GetMaps("names").FirstOrDefault(x => string.Equals(x.GetString("ComStatus_tab"), "preferred", StringComparison.OrdinalIgnoreCase));
                                                     if (vernacularName != null)
                                                         specimen.VernacularName = vernacularName.GetString("ComName_tab");
-                                                }
-
-                                                if (string.Equals(currentName, "yes", StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    specimen.AcceptedNameUsage = row.GetString("ClaScientificName");
-                                                }
-
-                                                if (types.Any(x => string.Equals(x, typeStatus, StringComparison.OrdinalIgnoreCase)))
-                                                {
-                                                    specimen.OriginalNameUsage = row.GetString("ClaScientificName");
-                                                }
+                                                }                                               
                                             }
                                         }
                                     }
@@ -326,34 +325,23 @@ namespace CollectionsOnline.Import.Imports
                                             species.SpeciesName = row.GetString("ClaSpecies");
                                             species.Subspecies = row.GetString("ClaSubspecies");
 
-                                            var others = row.GetMaps("others");
-                                            foreach (var other in others)
-                                            {
-                                                var rank = other.GetString("ClaOtherRank_tab");
-                                                var value = other.GetString("ClaOtherValue_tab");
-
-                                                if (string.Equals(rank, "mov", StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    species.MoV = string.Format("MoV {0}", value);
-                                                }
-                                            }
-
                                             species.TaxonomyAuthor = row.GetString("AutAuthorString");
                                             species.HigherClassification = new[]
-                                                                {
-                                                                    species.Phylum,
-                                                                    species.Class,
-                                                                    species.Order,
-                                                                    species.Family
-                                                                }.Concatenate(" ");
+                                                {
+                                                    species.Phylum,
+                                                    species.Class,
+                                                    species.Order,
+                                                    species.Family
+                                                }.Concatenate(" ");
 
                                             species.ScientificName = new[]
-                                                                {
-                                                                    species.Genus,
-                                                                    species.SpeciesName,
-                                                                    species.MoV,
-                                                                    species.TaxonomyAuthor
-                                                                }.Concatenate(" ");
+                                                {
+                                                    row.GetString("ClaGenus"),
+                                                    string.IsNullOrWhiteSpace(row.GetString("ClaSubgenus")) ? null : string.Format("({0})", row.GetString("ClaSubgenus")),
+                                                    row.GetString("ClaSpecies"),
+                                                    row.GetString("ClaSubspecies"),
+                                                    row.GetString("AutAuthorString")
+                                                }.Concatenate(" ");
 
                                             // Relationships
                                             species.SpecimenIds = catalogues

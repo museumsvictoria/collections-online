@@ -67,7 +67,7 @@ namespace CollectionsOnline.Import.Factories
                     "SpeFlightEnd",
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
-                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,ClaScientificName,others=[ClaOtherRank_tab,ClaOtherValue_tab],AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab))",
+                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab))",
                     "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                     "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
                 };
@@ -179,18 +179,6 @@ namespace CollectionsOnline.Import.Factories
                 species.SpeciesName = taxonomy.GetString("ClaSpecies");
                 species.Subspecies = taxonomy.GetString("ClaSubspecies");
 
-                var others = taxonomy.GetMaps("others");
-                foreach (var other in others)
-                {
-                    var rank = other.GetString("ClaOtherRank_tab");
-                    var value = other.GetString("ClaOtherValue_tab");
-
-                    if (rank.ToLower() == "mov")
-                    {
-                        species.MoV = string.Format("MoV {0}", value);
-                    }
-                }
-
                 species.TaxonomyAuthor = taxonomy.GetString("AutAuthorString");
                 species.HigherClassification = new[]
                 {
@@ -201,12 +189,13 @@ namespace CollectionsOnline.Import.Factories
                 }.Concatenate(" ");
 
                 species.ScientificName = new[]
-                {
-                    species.Genus,
-                    species.SpeciesName,
-                    species.MoV,
-                    species.TaxonomyAuthor
-                }.Concatenate(" ");
+                    {
+                        taxonomy.GetString("ClaGenus"),
+                        string.IsNullOrWhiteSpace(taxonomy.GetString("ClaSubgenus")) ? null : string.Format("({0})", taxonomy.GetString("ClaSubgenus")),
+                        taxonomy.GetString("ClaSpecies"),
+                        taxonomy.GetString("ClaSubspecies"),
+                        taxonomy.GetString("AutAuthorString")
+                    }.Concatenate(" ");
 
                 // Relationships
                 species.SpecimenIds = taxonomy

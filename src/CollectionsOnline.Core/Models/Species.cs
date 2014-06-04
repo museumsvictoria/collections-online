@@ -108,8 +108,6 @@ namespace CollectionsOnline.Core.Models
 
         public string Subspecies { get; set; }
 
-        public string MoV { get; set; }
-
         public string TaxonomyAuthor { get; set; }
 
         public string HigherClassification { get; set; }

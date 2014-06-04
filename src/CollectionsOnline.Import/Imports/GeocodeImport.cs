@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using Geocoding;
 using Geocoding.Google;
@@ -27,7 +28,12 @@ namespace CollectionsOnline.Import.Imports
             _log.Debug("Beginning Geocoding of associations");
 
             var associationCount = 0;
-            var geocodeCount = 0;
+            var geocodeQueryCount = 0;
+
+            var assNotFoundGeocodeSuccess = 0;
+            var assNotFoundGeocodeFailure = 0;
+            var assFoundGeocodeSuccess = 0;
+            var assFoundGeocodeFailure = 0;
 
             while (true)
             {
@@ -44,8 +50,12 @@ namespace CollectionsOnline.Import.Imports
                     if (item == null)
                         break;
 
+                    _log.Debug("GeocodingItemPlaceAssociations. item-id:{0}, associations-count:{1}", item.Id, item.Associations.Count);
+
                     foreach (var association in item.Associations.Where(x => x.GeocodeStatus == GeocodeStatus.UnAttempted))
                     {
+                        associationCount++;
+
                         // Try find item association that has the same place key and geocoding has been attempted
                         var similarItem = documentSession
                             .Query<Item>()
@@ -59,45 +69,30 @@ namespace CollectionsOnline.Import.Imports
                             {
                                 var addresses = _geocoder.Geocode(association.Place);
 
-                                geocodeCount++;
+                                geocodeQueryCount++;
 
+                                // Only try and find street level geocoded locations
                                 var address = addresses.FirstOrDefault(x =>
-                                    ((GoogleAddress)x).Type == GoogleAddressType.Locality ||
-                                    ((GoogleAddress)x).Type == GoogleAddressType.SubLocality ||
-                                    ((GoogleAddress)x).Type == GoogleAddressType.Neighborhood ||
-                                    ((GoogleAddress)x).Type == GoogleAddressType.NaturalFeature ||
-                                    ((GoogleAddress)x).Type == GoogleAddressType.Park) as GoogleAddress;
+                                    ((GoogleAddress)x).Type == GoogleAddressType.StreetAddress ||
+                                    ((GoogleAddress)x).Type == GoogleAddressType.Premise ||
+                                    ((GoogleAddress)x).Type == GoogleAddressType.Subpremise ||
+                                    ((GoogleAddress)x).Type == GoogleAddressType.Route) as GoogleAddress;
 
                                 if (address != null)
                                 {
-                                    // Find locality
-                                    var locality = address.Components.FirstOrDefault(x => x.Types.Any(y =>
-                                        y == GoogleAddressType.Locality ||
-                                        y == GoogleAddressType.SubLocality ||
-                                        y == GoogleAddressType.Neighborhood ||
-                                        y == GoogleAddressType.NaturalFeature ||
-                                        y == GoogleAddressType.Park));
-
-                                    if (locality != null)
-                                        association.Locality = locality.LongName;
-
-                                    var country = address.Components.FirstOrDefault(x => x.Types.Any(y => y == GoogleAddressType.Country));
-
-                                    if (country != null)
-                                        association.Country = country.LongName;
-
-                                    association.Latitude = address.Coordinates.Latitude;
-                                    association.Longitude = address.Coordinates.Longitude;
                                     association.GeocodeStatus = GeocodeStatus.Success;
+                                    association.GeocodePlace = address.FormattedAddress;
 
-                                    _log.Debug("Similar association was not found, queried geocoder successfully. placeKey:{0}, geocoded Location:{1}, {2}", association.PlaceKey, association.Locality, association.Country);
+                                    _log.Debug("AssociationNotFound-GeocoderSuccess. association-place:{0}, geocoded-address:{1}", association.Place, address.FormattedAddress);
+                                    assNotFoundGeocodeSuccess++;
 
                                     // updated association, continue on
                                     documentSession.SaveChanges();
                                     continue;
                                 }
-
-                                _log.Debug("Similar association not found, queried geocoder un-successfully. placeKey:{0}", association.PlaceKey);
+                                
+                                _log.Debug("AssociationNotFound-GeocoderFailure. association-place:{0}, geocoded-address:{1}", association.Place, (addresses != null && addresses.FirstOrDefault() != null) ? addresses.FirstOrDefault().FormattedAddress : string.Empty);
+                                assNotFoundGeocodeFailure++;
                             }
                             catch (Exception e)
                             {
@@ -124,30 +119,34 @@ namespace CollectionsOnline.Import.Imports
 
                             if (similarAssociation.GeocodeStatus == GeocodeStatus.Success)
                             {
-                                association.Locality = similarAssociation.Locality;
-                                association.Country = similarAssociation.Country;
-                                association.Latitude = similarAssociation.Latitude;
-                                association.Longitude = similarAssociation.Longitude;
+                                association.GeocodePlace = similarAssociation.GeocodePlace;
                                 association.GeocodeStatus = similarAssociation.GeocodeStatus;
 
-                                _log.Debug("Similar association found that queried geocoder successfully. placeKey:{0}, geocoded Location:{1}, {2}", association.PlaceKey, association.Locality, association.Country);
+                                _log.Debug("AssociationFound-GeocoderSuccess. association-place:{0}, geocoded-address:{1}", association.Place, association.GeocodePlace);
+                                assFoundGeocodeSuccess++;
 
                                 // updated association, continue on
                                 documentSession.SaveChanges();
                                 continue;
                             }
 
-                            _log.Debug("Similar association found that queried geocoder un-successfully. placeKey:{0}", association.PlaceKey);
+                            _log.Debug("AssociationFound-GeocoderFailure. association-place:{0}", association.Place);
+                            assFoundGeocodeFailure++;
                         }
 
                         association.GeocodeStatus = GeocodeStatus.Failure;
-                        documentSession.SaveChanges();
-                        associationCount++;
+                        documentSession.SaveChanges();                        
                     }                    
                 }
             }
 
-            _log.Debug("Geocoding of {0} associations complete, queried geocoder {1} times", associationCount, geocodeCount);
+            _log.Debug("Geocoding of {0} associations complete, queried geocoder {1} times, associations-not-found-geocode-success:{2}, associations-not-found-geocode-failure:{3}, associations-found-geocode-success:{4}, associations-found-geocode-failure:{5}", 
+                associationCount, 
+                geocodeQueryCount, 
+                assNotFoundGeocodeSuccess, 
+                assNotFoundGeocodeFailure, 
+                assFoundGeocodeSuccess, 
+                assFoundGeocodeFailure);
         }
 
         private bool ImportCanceled()
