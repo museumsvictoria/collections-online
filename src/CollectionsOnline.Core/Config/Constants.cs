@@ -25,7 +25,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string ImuSpeciesQueryString = "Website - Species profile";
 
-        public static string ImuSpecimenQueryString = "Website  Atlas of Living Australia";
+        public static string ImuSpecimenQueryString = "Website - Atlas of Living Australia";
 
         public static string ImuStoryQueryString = "Website - History & Technology Collections";
 
@@ -67,5 +67,7 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Public Spaces Lower Ground Floor", MuseumVenue = "Melbourne Museum" }
             }
         };
+
+        public static string[] TaxonomyTypeStatuses = { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
     }
 }

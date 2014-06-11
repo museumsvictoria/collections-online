@@ -162,7 +162,7 @@ namespace CollectionsOnline.Import.Imports
                                     new CultureInfo("en-AU")),
                             Title = row.GetString("MulTitle"),
                             Type = row.GetString("MulMimeType"),
-                            Url = PathFactory.GetUrlPath(mediaIrn, FileFormatType.Jpg, "thumb")
+                            Url = PathFactory.MakeUrlPath(mediaIrn, FileFormatType.Jpg, "thumb")
                         };
                         var thumbResizeSettings = new ResizeSettings
                         {

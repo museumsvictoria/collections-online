@@ -92,14 +92,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factories\IImuFactory.cs" />
+    <Compile Include="Factories\IEmuAggregateRootFactory.cs" />
     <Compile Include="Factories\IMuseumLocationFactory.cs" />
     <Compile Include="Factories\MuseumLocationFactory.cs" />
+    <Compile Include="Factories\ITaxonomyFactory.cs" />
+    <Compile Include="Factories\TaxonomyFactory.cs" />
     <Compile Include="Factories\PathFactory.cs" />
-    <Compile Include="Factories\StoryImuFactory.cs" />
-    <Compile Include="Factories\SpecimenImuFactory.cs" />
-    <Compile Include="Factories\SpeciesImuFactory.cs" />
-    <Compile Include="Factories\ItemImuFactory.cs" />
+    <Compile Include="Factories\StoryFactory.cs" />
+    <Compile Include="Factories\SpecimenFactory.cs" />
+    <Compile Include="Factories\SpeciesFactory.cs" />
+    <Compile Include="Factories\ItemFactory.cs" />
     <Compile Include="Imports\IImport.cs" />
     <Compile Include="Imports\MediaUpdateImport.cs" />
     <Compile Include="Imports\GeocodeImport.cs" />

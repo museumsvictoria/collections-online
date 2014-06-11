@@ -269,35 +269,7 @@ namespace CollectionsOnline.Core.Models
 
         public string ArtworkIdentificationQualifier { get; set; }
 
-        public string ArtworkScientificName { get; set; }
-
-        public string ArtworkKingdom { get; set; }
-
-        public string ArtworkPhylum { get; set; }
-
-        public string ArtworkClass { get; set; }
-
-        public string ArtworkOrder { get; set; }
-
-        public string ArtworkFamily { get; set; }
-
-        public string ArtworkGenus { get; set; }
-
-        public string ArtworkSubgenus { get; set; }
-
-        public string ArtworkSpecificEpithet { get; set; }
-
-        public string ArtworkInfraspecificEpithet { get; set; }
-
-        public string ArtworkTaxonRank { get; set; }
-
-        public string ArtworkScientificNameAuthorship { get; set; }
-
-        public string ArtworkNomenclaturalCode { get; set; }
-
-        public string ArtworkHigherClassification { get; set; }
-
-        public string ArtworkVernacularName { get; set; }
+        public Taxonomy ArtworkTaxonomy { get; set; }
 
         #endregion
 

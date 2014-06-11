@@ -6,7 +6,7 @@ namespace CollectionsOnline.Import.Factories
 {
     public class PartiesNameFactory : IPartiesNameFactory
     {
-        public string MakePartiesName(Map map)
+        public string Make(Map map)
         {
             if (map != null)
             {

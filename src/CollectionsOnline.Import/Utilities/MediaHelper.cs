@@ -31,7 +31,7 @@ namespace CollectionsOnline.Import.Utilities
 
                 var fileStream = resource["file"] as FileStream;
 
-                var destPath = PathFactory.GetDestPath(irn, fileFormat, derivative);
+                var destPath = PathFactory.MakeDestPath(irn, fileFormat, derivative);
                 var destPathDir = destPath.Remove(destPath.LastIndexOf('\\') + 1);
 
                 // Create directory

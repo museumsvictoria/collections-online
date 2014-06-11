@@ -14,20 +14,23 @@ using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public class SpecimenImuFactory : IImuFactory<Specimen>
+    public class SpecimenFactory : IEmuAggregateRootFactory<Specimen>
     {
         private readonly ISlugFactory _slugFactory;
         private readonly IMediaHelper _mediaHelper;
         private readonly IPartiesNameFactory _partiesNameFactory;
+        private readonly ITaxonomyFactory _taxonomyFactory;
 
-        public SpecimenImuFactory(
+        public SpecimenFactory(
             ISlugFactory slugFactory,
             IMediaHelper mediaHelper,
-            IPartiesNameFactory partiesNameFactory)
+            IPartiesNameFactory partiesNameFactory,
+            ITaxonomyFactory taxonomyFactory)
         {
             _slugFactory = slugFactory;
             _mediaHelper = mediaHelper;
             _partiesNameFactory = partiesNameFactory;
+            _taxonomyFactory = taxonomyFactory;
         }
 
         public string ModuleName
@@ -58,7 +61,7 @@ namespace CollectionsOnline.Import.Factories
                         "DarMonthCollected",
                         "DarDayCollected",
                         "site=SitSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatCentroidLongitudeDec_tab,LatCentroidLatitudeDec_tab,LatDatum_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
-                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaTribe,ClaSubtribe,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
                         "ColScientificGroup",
@@ -171,7 +174,7 @@ namespace CollectionsOnline.Import.Factories
                 var association = new Association();
 
                 association.Type = associationMap.GetString("AssAssociationType_tab");
-                association.Name = _partiesNameFactory.MakePartiesName(associationMap.GetMap("party"));
+                association.Name = _partiesNameFactory.Make(associationMap.GetMap("party"));
                 association.Date = associationMap.GetString("AssAssociationDate_tab");
                 association.Comments = associationMap.GetString("AssAssociationComments0");
 
@@ -222,7 +225,7 @@ namespace CollectionsOnline.Import.Factories
                         (!x.GetString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
                          !x.GetString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
                          !x.GetString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
-                    .Select(x => _partiesNameFactory.MakePartiesName(x.GetMap("name"))).ToList();
+                    .Select(x => _partiesNameFactory.Make(x.GetMap("name"))).ToList();
 
                     if (sources.Any())
                     {
@@ -362,7 +365,7 @@ namespace CollectionsOnline.Import.Factories
             //recordedBy
             if (colevent != null && colevent.GetMaps("collectors") != null)
             {
-                specimen.RecordedBy = colevent.GetMaps("collectors").Where(x => x != null).Select(x => _partiesNameFactory.MakePartiesName(x)).Concatenate("; ");
+                specimen.RecordedBy = colevent.GetMaps("collectors").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
             }
 
             //individualCount
@@ -410,7 +413,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 
-                var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
                 var thumbResizeSettings = new ResizeSettings
                 {
                     Format = FileFormatType.Jpg.ToString(),
@@ -548,7 +551,7 @@ namespace CollectionsOnline.Import.Factories
 
                     specimen.GeodeticDatum = (string.IsNullOrWhiteSpace(latlong.GetString("LatDatum_tab"))) ? "WGS84" : latlong.GetString("LatDatum_tab");
 
-                    specimen.GeoreferencedBy = _partiesNameFactory.MakePartiesName(latlong.GetMap("determinedBy"));
+                    specimen.GeoreferencedBy = _partiesNameFactory.Make(latlong.GetMap("determinedBy"));
 
                     DateTime georeferencedDate;
                     if (DateTime.TryParseExact(latlong.GetString("LatDetDate0"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out georeferencedDate))
@@ -584,8 +587,7 @@ namespace CollectionsOnline.Import.Factories
 
             #region Identification
 
-            var types = new[] { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
-            var identification = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && types.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
+            var identification = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
                                  map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeCurrentNameLocal_tab") != null && x.GetString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));
 
             if (identification != null)
@@ -596,7 +598,7 @@ namespace CollectionsOnline.Import.Factories
                 //identifiedBy
                 if (identification.GetMaps("identifiers") != null)
                 {
-                    specimen.IdentifiedBy = identification.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.MakePartiesName(x)).Concatenate("; ");
+                    specimen.IdentifiedBy = identification.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
                 }
 
                 //dateIdentified
@@ -606,74 +608,7 @@ namespace CollectionsOnline.Import.Factories
                 specimen.IdentificationRemarks = identification.GetString("IdeAccuracyNotes_tab");
                 specimen.IdentificationQualifier = identification.GetString("IdeQualifier_tab");
 
-                var taxonomy = identification.GetMap("taxa");
-                if (taxonomy != null)
-                {
-                    //scientificName
-                    //kingdom
-                    //phylum
-                    //class
-                    //order
-                    //family
-                    //genus
-                    //subgenus
-                    //specificEpithet
-                    //infraspecificEpithet
-                    //scientificNameAuthorship
-                    //nomenclaturalCode
-                    specimen.ScientificName = new[]
-                        {
-                            taxonomy.GetString("ClaGenus"),
-                            string.IsNullOrWhiteSpace(taxonomy.GetString("ClaSubgenus")) ? null : string.Format("({0})", taxonomy.GetString("ClaSubgenus")),
-                            taxonomy.GetString("ClaSpecies"),
-                            taxonomy.GetString("ClaSubspecies"),
-                            taxonomy.GetString("AutAuthorString")
-                        }.Concatenate(" ");
-
-                    specimen.Kingdom = taxonomy.GetString("ClaKingdom");
-                    specimen.Phylum = taxonomy.GetString("ClaPhylum");
-                    specimen.Class = taxonomy.GetString("ClaClass");
-                    specimen.Order = taxonomy.GetString("ClaOrder");
-                    specimen.Family = taxonomy.GetString("ClaFamily");
-                    specimen.Genus = taxonomy.GetString("ClaGenus");
-                    specimen.Subgenus = taxonomy.GetString("ClaSubgenus");
-                    specimen.SpecificEpithet = taxonomy.GetString("ClaSpecies");
-                    specimen.InfraspecificEpithet = taxonomy.GetString("ClaSubspecies");                    
-                    specimen.ScientificNameAuthorship = taxonomy.GetString("AutAuthorString");
-                    specimen.NomenclaturalCode = taxonomy.GetString("ClaApplicableCode");
-
-                    //higherClassification
-                    var higherClassification = new Dictionary<string, string>
-                        {
-                            { "Kingdom", taxonomy.GetString("ClaKingdom") },
-                            { "Phylum", taxonomy.GetString("ClaPhylum") },
-                            { "Subphylum", taxonomy.GetString("ClaSubphylum") },
-                            { "Superclass", taxonomy.GetString("ClaSuperclass") },
-                            { "Class", taxonomy.GetString("ClaClass") },
-                            { "Subclass", taxonomy.GetString("ClaSubclass") },
-                            { "Superorder", taxonomy.GetString("ClaSuperorder") },
-                            { "Order", taxonomy.GetString("ClaOrder") },
-                            { "Suborder", taxonomy.GetString("ClaSuborder") },
-                            { "Infraorder", taxonomy.GetString("ClaInfraorder") },
-                            { "Superfamily", taxonomy.GetString("ClaSuperfamily") },
-                            { "Family", taxonomy.GetString("ClaFamily") },
-                            { "Subfamily", taxonomy.GetString("ClaSubfamily") },
-                            { "Tribe", taxonomy.GetString("ClaTribe") },
-                            { "Subtribe", taxonomy.GetString("ClaSubtribe") },
-                            { "Genus", taxonomy.GetString("ClaGenus") },
-                            { "Subgenus", taxonomy.GetString("ClaSubgenus") },
-                            { "Species", taxonomy.GetString("ClaSpecies") },
-                            { "Subspecies", taxonomy.GetString("ClaSubspecies") }
-                        };
-
-                    specimen.HigherClassification = higherClassification.Select(x => x.Value).Concatenate("; ");
-                    specimen.TaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
-
-                    //vernacularName
-                    var vernacularName = taxonomy.GetMaps("comname").FirstOrDefault(x => string.Equals(x.GetString("ComStatus_tab"), "preferred", StringComparison.OrdinalIgnoreCase));
-                    if (vernacularName != null)
-                        specimen.VernacularName = vernacularName.GetString("ComName_tab");
-                }
+                specimen.Taxonomy = _taxonomyFactory.Make(identification.GetMap("taxa"));
             }
 
             #endregion
@@ -681,16 +616,17 @@ namespace CollectionsOnline.Import.Factories
             #endregion
 
             // Build summary
-            specimen.Summary = new[]
-                {
-                    specimen.VernacularName,
-                    new[] {
-                        specimen.Phylum,
-                        specimen.Class,
-                        specimen.Order,
-                        specimen.Family
-                    }.Concatenate(" ")
-                }.Concatenate(Environment.NewLine);
+            if(specimen.Taxonomy != null)
+                specimen.Summary = new[]
+                    {
+                        specimen.Taxonomy.CommonName,
+                        new[] {
+                            specimen.Taxonomy.Phylum,
+                            specimen.Taxonomy.Class,
+                            specimen.Taxonomy.Order,
+                            specimen.Taxonomy.Family
+                        }.Concatenate(" ")
+                    }.Concatenate(Environment.NewLine);
 
             // Build Associated date
             var yearSpan = NaturalDateConverter.ConvertToYearSpan(specimen.Year);

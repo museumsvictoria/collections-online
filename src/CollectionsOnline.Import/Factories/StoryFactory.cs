@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -16,14 +15,14 @@ using Raven.Abstractions.Extensions;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public class StoryImuFactory : IImuFactory<Story>
+    public class StoryFactory : IEmuAggregateRootFactory<Story>
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
         private readonly ISlugFactory _slugFactory;
         private readonly IMediaHelper _mediaHelper;
 
-        public StoryImuFactory(
+        public StoryFactory(
             ISlugFactory slugFactory,
             IMediaHelper mediaHelper)
         {
@@ -112,7 +111,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     var irn = long.Parse(mediaMap.GetString("irn"));
 
-                    var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                    var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
                     var thumbResizeSettings = new ResizeSettings
                     {
                         Format = FileFormatType.Jpg.ToString(),
@@ -168,7 +167,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 
-                var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
                 var thumbResizeSettings = new ResizeSettings
                 {
                     Format = FileFormatType.Jpg.ToString(),

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
@@ -14,14 +12,17 @@ using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public class SpeciesImuFactory : IImuFactory<Species>
+    public class SpeciesFactory : IEmuAggregateRootFactory<Species>
     {
         private readonly IMediaHelper _mediaHelper;
+        private readonly ITaxonomyFactory _taxonomyFactory;
 
-        public SpeciesImuFactory(
-            IMediaHelper mediaHelper)
+        public SpeciesFactory(
+            IMediaHelper mediaHelper,
+            ITaxonomyFactory taxonomyFactory)
         {
             _mediaHelper = mediaHelper;
+            _taxonomyFactory = taxonomyFactory;
         }
 
         public string ModuleName
@@ -67,7 +68,8 @@ namespace CollectionsOnline.Import.Factories
                     "SpeFlightEnd",
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
-                    "taxa=TaxTaxaRef_tab.(irn,names=[ComName_tab,ComStatus_tab],ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab))",
+                    "taxa=TaxTaxaRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])",
+                    "specimens=TaxTaxaRef_tab.(specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab))",
                     "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                     "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
                 };
@@ -143,67 +145,19 @@ namespace CollectionsOnline.Import.Factories
             species.WaterColumnLocations = map.GetStrings("SpeWaterColumnLocation_tab") ?? new string[] { };
 
             // Get Taxonomy
-            var taxonomy = map.GetMaps("taxa").FirstOrDefault();
-            if (taxonomy != null)
-            {
-                var names = taxonomy.GetMaps("names");
-                foreach (var name in names)
-                {
-                    var status = name.GetString("ComStatus_tab");
-                    var vernacularName = name.GetString("ComName_tab");
+            species.Taxonomy = _taxonomyFactory.Make(map.GetMaps("taxa").FirstOrDefault());
+            
+            // Relationships
+            var specimensMap = map
+                .GetMaps("specimens")
+                .FirstOrDefault();
 
-                    if (status != null && status.ToLower() == "preferred")
-                    {
-                        species.CommonNames.Add(vernacularName);
-                    }
-                    else if (status != null && status.ToLower() == "other")
-                    {
-                        species.OtherNames.Add(vernacularName);
-                    }
-                }
-
-                species.Phylum = taxonomy.GetString("ClaPhylum");
-                species.Subphylum = taxonomy.GetString("ClaSubphylum");
-                species.Superclass = taxonomy.GetString("ClaSuperclass");
-                species.Class = taxonomy.GetString("ClaClass");
-                species.Subclass = taxonomy.GetString("ClaSubclass");
-                species.Superorder = taxonomy.GetString("ClaSuperorder");
-                species.Order = taxonomy.GetString("ClaOrder");
-                species.Suborder = taxonomy.GetString("ClaSuborder");
-                species.Infraorder = taxonomy.GetString("ClaInfraorder");
-                species.Superfamily = taxonomy.GetString("ClaSuperfamily");
-                species.Family = taxonomy.GetString("ClaFamily");
-                species.Subfamily = taxonomy.GetString("ClaSubfamily");
-                species.Genus = taxonomy.GetString("ClaGenus");
-                species.Subgenus = taxonomy.GetString("ClaSubgenus");
-                species.SpeciesName = taxonomy.GetString("ClaSpecies");
-                species.Subspecies = taxonomy.GetString("ClaSubspecies");
-
-                species.TaxonomyAuthor = taxonomy.GetString("AutAuthorString");
-                species.HigherClassification = new[]
-                {
-                    species.Phylum,
-                    species.Class,
-                    species.Order,
-                    species.Family
-                }.Concatenate(" ");
-
-                species.ScientificName = new[]
-                    {
-                        taxonomy.GetString("ClaGenus"),
-                        string.IsNullOrWhiteSpace(taxonomy.GetString("ClaSubgenus")) ? null : string.Format("({0})", taxonomy.GetString("ClaSubgenus")),
-                        taxonomy.GetString("ClaSpecies"),
-                        taxonomy.GetString("ClaSubspecies"),
-                        taxonomy.GetString("AutAuthorString")
-                    }.Concatenate(" ");
-
-                // Relationships
-                species.SpecimenIds = taxonomy
+            if (specimensMap != null)
+                species.SpecimenIds = specimensMap
                     .GetMaps("specimens")
                     .Where(x => x != null && x.GetStrings("sets").Contains(Constants.ImuSpecimenQueryString))
                     .Select(x => "specimens/" + x.GetString("irn"))
                     .ToList();
-            }
 
             // Authors
             foreach (var authorMap in map.GetMaps("authors"))
@@ -224,7 +178,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     var irn = long.Parse(mediaMap.GetString("irn"));
 
-                    var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                    var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
                     var thumbResizeSettings = new ResizeSettings
                     {
                         Format = FileFormatType.Jpg.ToString(),
@@ -266,7 +220,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var irn = long.Parse(mediaMap.GetString("irn"));
 
-                var url = PathFactory.GetUrlPath(irn, FileFormatType.Jpg, "thumb");
+                var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
                 var thumbResizeSettings = new ResizeSettings
                 {
                     Format = FileFormatType.Jpg.ToString(),
@@ -298,9 +252,7 @@ namespace CollectionsOnline.Import.Factories
                 species.Summary = species.IdentifyingCharacters;
             else if (!string.IsNullOrWhiteSpace(species.Biology))
                 species.Summary = species.Biology;
-            else if (!string.IsNullOrWhiteSpace(species.HigherClassification))
-                species.Summary = species.HigherClassification;
-
+            
             return species;
         }
 

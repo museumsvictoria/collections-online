@@ -17,12 +17,12 @@ namespace CollectionsOnline.Import.Imports
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly Session _session;
-        private readonly IImuFactory<T> _imuFactory;
+        private readonly IEmuAggregateRootFactory<T> _imuFactory;
 
         public ImuImport(
             IDocumentStore documentStore,
             Session session,
-            IImuFactory<T> imuFactory)
+            IEmuAggregateRootFactory<T> imuFactory)
         {
             _documentStore = documentStore;
             _session = session;

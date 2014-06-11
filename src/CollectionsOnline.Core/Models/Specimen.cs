@@ -65,6 +65,8 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Media> Media { get; set; }
 
+        public Taxonomy Taxonomy { get; set; }
+
         #region Geology
 
         public string GeologyEra { get; set; }
@@ -297,40 +299,6 @@ namespace CollectionsOnline.Core.Models
         public string IdentificationQualifier { get; set; }
 
         public string TypeStatus { get; set; }
-
-        #endregion
-
-        #region Taxon
-
-        public string ScientificName { get; set; }
-
-        public string HigherClassification { get; set; }
-
-        public string Kingdom { get; set; }
-
-        public string Phylum { get; set; }
-
-        public string Class { get; set; }
-
-        public string Order { get; set; }
-
-        public string Family { get; set; }
-
-        public string Genus { get; set; }
-
-        public string Subgenus { get; set; }
-
-        public string SpecificEpithet { get; set; }
-
-        public string InfraspecificEpithet { get; set; }
-
-        public string TaxonRank { get; set; }
-
-        public string ScientificNameAuthorship { get; set; }
-
-        public string VernacularName { get; set; }
-
-        public string NomenclaturalCode { get; set; }        
 
         #endregion
 

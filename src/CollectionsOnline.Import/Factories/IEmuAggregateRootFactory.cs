@@ -3,7 +3,7 @@ using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public interface IImuFactory<out T> where T : EmuAggregateRoot
+    public interface IEmuAggregateRootFactory<out T> where T : EmuAggregateRoot
     {
         string ModuleName { get; }
 

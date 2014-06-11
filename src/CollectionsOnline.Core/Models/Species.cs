@@ -72,53 +72,13 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> WaterColumnLocations { get; set; }
 
-        public IList<string> CommonNames { get; set; }
-
-        public IList<string> OtherNames { get; set; }
-
-        public string Phylum { get; set; }
-
-        public string Subphylum { get; set; }
-
-        public string Superclass { get; set; }
-
-        public string Class { get; set; }
-
-        public string Subclass { get; set; }
-
-        public string Superorder { get; set; }
-
-        public string Order { get; set; }
-
-        public string Suborder { get; set; }
-
-        public string Infraorder { get; set; }
-
-        public string Superfamily { get; set; }
-
-        public string Family { get; set; }
-
-        public string Subfamily { get; set; }
-
-        public string Genus { get; set; }
-
-        public string Subgenus { get; set; }
-
-        public string SpeciesName { get; set; }
-
-        public string Subspecies { get; set; }
-
-        public string TaxonomyAuthor { get; set; }
-
-        public string HigherClassification { get; set; }
-
-        public string ScientificName { get; set; }
-
         public IList<string> SpecimenIds { get; set; }
 
         public IList<Author> Authors { get; set; }
 
         public IList<Media> Media { get; set; }
+
+        public Taxonomy Taxonomy { get; set; }
 
         private void InitializeCollections()
         {
@@ -132,8 +92,6 @@ namespace CollectionsOnline.Core.Models
             Plants = new List<string>();
             Depths = new List<string>();
             WaterColumnLocations = new List<string>();
-            CommonNames = new List<string>();
-            OtherNames = new List<string>();
             SpecimenIds = new List<string>();
             Authors = new List<Author>();
             Media = new List<Media>();

@@ -3,8 +3,8 @@ using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public interface IMuseumLocationFactory
+    public interface ITaxonomyFactory
     {
-        MuseumLocation Make(Map map);
+        Taxonomy Make(Map map);
     }
 }

@@ -4,6 +4,6 @@ namespace CollectionsOnline.Import.Factories
 {
     public interface IPartiesNameFactory
     {
-        string MakePartiesName(Map map);
+        string Make(Map map);
     }
 }

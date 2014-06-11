@@ -67,8 +67,8 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Content fields
                     Id = species.Id,
-                    Name = species.CommonNames.FirstOrDefault() ?? species.SpeciesName ?? species.Genus,
-                    Content = new object[] {species.AnimalType, species.AnimalSubType, species.HigherClassification, species.CommonNames},
+                    Name = species.Taxonomy.CommonName ?? species.Taxonomy.Species ?? species.Taxonomy.Genus,
+                    Content = new object[] { species.AnimalType, species.AnimalSubType, species.Taxonomy.CommonName, species.Taxonomy.Species, species.Taxonomy.Genus, species.Taxonomy.Family, species.Taxonomy.Order, species.Taxonomy.Class, species.Taxonomy.Phylum },
                     Summary = species.Summary,
                     ThumbUrl = species.Media.FirstOrDefault() != null ? species.Media.FirstOrDefault().Url : (string) null,
 
@@ -90,8 +90,8 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesHabitats = species.Habitats,
                     SpeciesDepths = species.Depths,
                     SpeciesWaterColumnLocations = species.WaterColumnLocations,
-                    Phylum = species.Phylum,
-                    Class = species.Class,
+                    Phylum = species.Taxonomy.Phylum,
+                    Class = species.Taxonomy.Class,
                     SpecimenScientificGroup = (string) null,
                     SpecimenDiscipline = (string) null,
                     StoryTypes = new object[] {},
@@ -119,7 +119,7 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Content fields
                     Id = specimen.Id,
-                    Name = specimen.ObjectName ?? specimen.ScientificName,
+                    Name = specimen.ObjectName ?? specimen.Taxonomy.ScientificName,
                     Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
                     ThumbUrl = specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string) null,
@@ -129,7 +129,7 @@ namespace CollectionsOnline.Core.Indexes
                         ((!string.IsNullOrWhiteSpace(specimen.Year) || !string.IsNullOrWhiteSpace(specimen.RecordedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
                         ((!string.IsNullOrWhiteSpace(specimen.DecimalLatitude) || !string.IsNullOrWhiteSpace(specimen.DecimalLongitude)) ? 1 : 0) +
                         (specimen.Media.Count * 2) +
-                        ((!string.IsNullOrWhiteSpace(specimen.ScientificName)) ? 1 : 0),
+                        ((!string.IsNullOrWhiteSpace(specimen.Taxonomy.ScientificName)) ? 1 : 0),
 
                     // Facet fields
                     Type = "Specimen",
@@ -142,8 +142,8 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesHabitats = new object[] {},
                     SpeciesDepths = new object[] {},
                     SpeciesWaterColumnLocations = new object[] {},
-                    Phylum = specimen.Phylum,
-                    Class = specimen.Class,
+                    Phylum = specimen.Taxonomy.Phylum,
+                    Class = specimen.Taxonomy.Class,
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     SpecimenDiscipline = specimen.Discipline,
                     StoryTypes = new object[] {},
