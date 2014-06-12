@@ -188,7 +188,10 @@ namespace CollectionsOnline.Import.Factories
                 }.Distinct();
 
                 association.Place = place.Concatenate(", ");
-                association.PlaceKey = place.Concatenate("-").ToLower();
+                
+                var placeKey = place.Concatenate("-");
+                if (!string.IsNullOrWhiteSpace(placeKey))
+                    association.PlaceKey = placeKey.ToLower();
 
                 specimen.Associations.Add(association);
             }
