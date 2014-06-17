@@ -7,75 +7,75 @@ using Raven.Abstractions.Data;
 
 namespace CollectionsOnline.Core.Indexes
 {
-    public class CombinedSearchFacets : FacetSetup
+    public class CombinedFacets : FacetSetup
     {
-        public CombinedSearchFacets()
+        public CombinedFacets()
         {
             Id = "facets/combinedFacets";
 
             Facets = new List<Facet>
             {
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.Type
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.Category
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.HasImages
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.Discipline
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.ItemType
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.SpeciesType
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.SpeciesSubType
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.SpeciesHabitats
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.SpeciesDepths
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.SpeciesWaterColumnLocations
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.Phylum
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.Class
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.SpecimenScientificGroup
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.SpecimenDiscipline
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.StoryTypes
                 },
-                new Facet<CombinedSearchResult>
+                new Facet<CombinedResult>
                 {
                     Name = x => x.Dates
                 }

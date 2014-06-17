@@ -44,11 +44,11 @@ namespace CollectionsOnline.Core.Infrastructure
             }
 
             // Create indexes and store facets
-            IndexCreation.CreateIndexes(typeof(CombinedSearch).Assembly, documentStore);
+            IndexCreation.CreateIndexes(typeof(Combined).Assembly, documentStore);
 
             using (var documentSession = documentStore.OpenSession())
             {
-                documentSession.Store(new CombinedSearchFacets());
+                documentSession.Store(new CombinedFacets());
                 documentSession.SaveChanges();
             }
 

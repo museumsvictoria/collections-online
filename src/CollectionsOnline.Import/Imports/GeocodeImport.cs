@@ -149,6 +149,11 @@ namespace CollectionsOnline.Import.Imports
                 assFoundGeocodeFailure);
         }
 
+        public int Order
+        {
+            get { return 20; }
+        }
+
         private bool ImportCanceled()
         {
             return Program.ImportCanceled;

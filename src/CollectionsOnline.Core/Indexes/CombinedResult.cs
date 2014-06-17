@@ -1,7 +1,10 @@
 ﻿namespace CollectionsOnline.Core.Indexes
 {
-    public class CombinedSearchResult
+    public class CombinedResult
     {
+        /* Update fields */
+        public long[] MediaIrns { get; set; }
+
         /* Content/Order fields */
         public string Id { get; set; }
 
@@ -14,9 +17,9 @@
         public string ThumbUrl { get; set; }
 
         public int Quality { get; set; }
-        
+
         /* facet fields */
-        
+
         public string Type { get; set; }
 
         public string Category { get; set; }
@@ -48,7 +51,7 @@
         public string SpecimenDiscipline { get; set; }
 
         public object[] StoryTypes { get; set; }
-        
+
         /* term fields */
 
         public object[] Tags { get; set; }

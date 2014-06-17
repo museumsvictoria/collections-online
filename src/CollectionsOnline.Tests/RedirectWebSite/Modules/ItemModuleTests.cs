@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using CollectionsOnline.Core.Models;
-using CollectionsOnline.RedirectWebSite.Modules;
-using CollectionsOnline.Tests.Fakes;
-using CollectionsOnline.WebApi.Modules;
+﻿using CollectionsOnline.RedirectWebSite.Modules;
 using Nancy;
 using Nancy.Testing;
 using Shouldly;

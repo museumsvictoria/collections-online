@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="record panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">@(Model.Species.CommonNames.FirstOrDefault() ?? Model.Species.SpeciesName ?? Model.Species.Genus)</h1>
+                    <h1 class="panel-title">@(Model.Species.Taxonomy.CommonName ?? Model.Species.Taxonomy.ScientificName ?? Model.Species.Taxonomy.Genus)</h1>
                 </div>
                 <div class="panel-body">
                     <div class="images">
@@ -23,7 +23,7 @@
                             }
                         }
                     </div>
-                    <h4>@Model.Species.ScientificName</h4>
+                    <h4>@Model.Species.Taxonomy.ScientificName</h4>
                     <div class="summary">
                         @if (!string.IsNullOrWhiteSpace(Model.Species.IdentifyingCharacters))
                         {
@@ -37,11 +37,6 @@
                     <dl class="detailed dl-horizontal">
                         <dt>Date Modified</dt>
                         <dd>@Model.Species.DateModified</dd>
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.HigherClassification))
-                        {
-                            <dt>Higher Classification</dt>
-                            <dd>@Model.Species.HigherClassification</dd>
-                        }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.AnimalType))
                         {
                             <dt>Animal Type</dt>
@@ -217,120 +212,110 @@
                                 }
                             </dd>
                         }
-                        @if (Model.Species.CommonNames.Any())
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.CommonName))
                         {
-                            <dt>Common Names</dt>
-                            <dd>
-                                @foreach (var commonName in @Model.Species.CommonNames)
-                                {
-                                    <span>@commonName</span>
-                                }
-                            </dd>
+                            <dt>Common Name</dt>
+                            <dd>@Model.Species.Taxonomy.CommonName</dd>
                         }
-                        @if (Model.Species.OtherNames.Any())
+                        @if (Model.Species.Taxonomy.OtherCommonNames.Any())
                         {
                             <dt>Other Names</dt>
                             <dd>
-                                @foreach (var otherName in @Model.Species.OtherNames)
+                                @foreach (var otherCommonNames in @Model.Species.Taxonomy.OtherCommonNames)
                                 {
-                                    <span >@otherName</span>
+                                    <span >@otherCommonNames</span>
                                 }
                             </dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Phylum))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Phylum))
                         {
                             <dt>Phylum</dt>
-                            <dd>@Model.Species.Phylum</dd>
+                            <dd>@Model.Species.Taxonomy.Phylum</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Subphylum))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subphylum))
                         {
                             <dt>Subphylum</dt>
-                            <dd>@Model.Species.Subphylum</dd>
+                            <dd>@Model.Species.Taxonomy.Subphylum</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Superclass))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superclass))
                         {
                             <dt>Superclass</dt>
-                            <dd>@Model.Species.Superclass</dd>
+                            <dd>@Model.Species.Taxonomy.Superclass</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Class))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Class))
                         {
                             <dt>Class</dt>
-                            <dd>@Model.Species.Class</dd>
+                            <dd>@Model.Species.Taxonomy.Class</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Subclass))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subclass))
                         {
                             <dt>Subclass</dt>
-                            <dd>@Model.Species.Subclass</dd>
+                            <dd>@Model.Species.Taxonomy.Subclass</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Superorder))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superorder))
                         {
                             <dt>Superorder</dt>
-                            <dd>@Model.Species.Superorder</dd>
+                            <dd>@Model.Species.Taxonomy.Superorder</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Order))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Order))
                         {
                             <dt>Order</dt>
-                            <dd>@Model.Species.Order</dd>
+                            <dd>@Model.Species.Taxonomy.Order</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Suborder))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Suborder))
                         {
                             <dt>Suborder</dt>
-                            <dd>@Model.Species.Suborder</dd>
+                            <dd>@Model.Species.Taxonomy.Suborder</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Infraorder))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Infraorder))
                         {
                             <dt>Infraorder</dt>
-                            <dd>@Model.Species.Infraorder</dd>
+                            <dd>@Model.Species.Taxonomy.Infraorder</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Superfamily))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superfamily))
                         {
                             <dt>Superfamily</dt>
-                            <dd>@Model.Species.Superfamily</dd>
+                            <dd>@Model.Species.Taxonomy.Superfamily</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Family))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Family))
                         {
                             <dt>Family</dt>
-                            <dd>@Model.Species.Family</dd>
+                            <dd>@Model.Species.Taxonomy.Family</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Subfamily))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subfamily))
                         {
                             <dt>Subfamily</dt>
-                            <dd>@Model.Species.Subfamily</dd>
+                            <dd>@Model.Species.Taxonomy.Subfamily</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Genus))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Genus))
                         {
                             <dt>Genus</dt>
-                            <dd>@Model.Species.Genus</dd>
+                            <dd>@Model.Species.Taxonomy.Genus</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Subgenus))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subgenus))
                         {
                             <dt>Subgenus</dt>
-                            <dd>@Model.Species.Subgenus</dd>
+                            <dd>@Model.Species.Taxonomy.Subgenus</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.SpeciesName))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Species))
                         {
                             <dt>SpeciesName</dt>
-                            <dd>@Model.Species.SpeciesName</dd>
+                            <dd>@Model.Species.Taxonomy.Species</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Subspecies))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subspecies))
                         {
                             <dt>Subspecies</dt>
-                            <dd>@Model.Species.Subspecies</dd>
+                            <dd>@Model.Species.Taxonomy.Subspecies</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.MoV))
-                        {
-                            <dt>MoV</dt>
-                            <dd>@Model.Species.MoV</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Author))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Author))
                         {
                             <dt>Author</dt>
-                            <dd>@Model.Species.Author</dd>
+                            <dd>@Model.Species.Taxonomy.Author</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.ScientificName))
+                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.ScientificName))
                         {
                             <dt>Scientific Name</dt>
-                            <dd>@Model.Species.ScientificName</dd>
+                            <dd>@Model.Species.Taxonomy.ScientificName</dd>
                         }
                         @if (Model.Species.SpecimenIds.Any())
                         {

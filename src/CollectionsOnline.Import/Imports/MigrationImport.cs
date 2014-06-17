@@ -28,7 +28,7 @@ namespace CollectionsOnline.Import.Imports
                 // Check to see whether we need to run import, so grab the previous date run of any item imports.
                 var previousDateRun = documentSession
                     .Load<Application>(Constants.ApplicationId)
-                    .ImportStatuses.Where(x => x.ImportType.Contains("item", StringComparison.OrdinalIgnoreCase))
+                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(Item).Name, StringComparison.OrdinalIgnoreCase))
                     .Select(x => x.PreviousDateRun)
                     .OrderBy(x => x)
                     .FirstOrDefault(x => x.HasValue);
@@ -94,6 +94,11 @@ namespace CollectionsOnline.Import.Imports
                     }
                 }
             }
+        }
+
+        public int Order
+        {
+            get { return 20; }
         }
 
         private bool ImportCanceled()

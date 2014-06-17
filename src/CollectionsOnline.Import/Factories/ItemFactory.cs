@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -9,7 +8,6 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Utilities;
-using ImageResizer;
 using IMu;
 using Raven.Abstractions.Extensions;
 
@@ -17,24 +15,24 @@ namespace CollectionsOnline.Import.Factories
 {
     public class ItemFactory : IEmuAggregateRootFactory<Item>
     {
-        private readonly ISlugFactory _slugFactory;
-        private readonly IMediaHelper _mediaHelper;
+        private readonly ISlugFactory _slugFactory;        
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly IMuseumLocationFactory _locationFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
+        private readonly IMediaFactory _mediaFactory;
 
         public ItemFactory(
             ISlugFactory slugFactory,
-            IMediaHelper mediaHelper,
             IPartiesNameFactory partiesNameFactory,
             IMuseumLocationFactory locationFactory,
-            ITaxonomyFactory taxonomyFactory)
+            ITaxonomyFactory taxonomyFactory,
+            IMediaFactory mediaFactory)
         {
             _slugFactory = slugFactory;
-            _mediaHelper = mediaHelper;
             _partiesNameFactory = partiesNameFactory;
             _locationFactory = locationFactory;
             _taxonomyFactory = taxonomyFactory;
+            _mediaFactory = mediaFactory;
         }
 
         public string ModuleName
@@ -421,43 +419,8 @@ namespace CollectionsOnline.Import.Factories
             item.TradeLiteraturePrimaryName = _partiesNameFactory.Make(map.GetMap("tlparty"));
 
             // Media
-            foreach (var mediaMap in map.GetMaps("media").Where(x => 
-                x != null &&
-                string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
-                x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuMultimediaQueryString) &&
-                x.GetString("MulMimeType") == "image"))
-            {
-                var irn = long.Parse(mediaMap.GetString("irn"));
-
-                var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
-                var thumbResizeSettings = new ResizeSettings
-                {
-                    Format = FileFormatType.Jpg.ToString(),
-                    Height = 365,
-                    Width = 365,
-                    Mode = FitMode.Crop,
-                    PaddingColor = Color.White,
-                    Quality = 65
-                };
-
-                if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                {
-                    item.Media.Add(new Media
-                    {
-                        Irn = irn,
-                        DateModified =
-                            DateTime.ParseExact(
-                                string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                                    mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
-                                new CultureInfo("en-AU")),
-                        Title = mediaMap.GetString("MulTitle"),
-                        AlternateText = mediaMap.GetString("DetAlternateText"),
-                        Type = mediaMap.GetString("MulMimeType"),
-                        Url = url
-                    });
-                }
-            }
-
+            item.Media = _mediaFactory.Make(map.GetMaps("media"));
+            
             // Indigenous Cultures Fields
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();
             if (iclocalityMap != null)

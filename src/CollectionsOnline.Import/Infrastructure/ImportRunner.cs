@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
@@ -16,7 +17,7 @@ namespace CollectionsOnline.Import.Infrastructure
         private readonly IEnumerable<IImport> _imports;
 
         public ImportRunner(
-            IDocumentStore documentStore, 
+            IDocumentStore documentStore,
             IEnumerable<IImport> imports)
         {
             _documentStore = documentStore;
@@ -41,7 +42,7 @@ namespace CollectionsOnline.Import.Infrastructure
                 try
                 {
                     // Run all imports
-                    foreach (var import in _imports)
+                    foreach (var import in _imports.OrderBy(x => x.Order))
                     {
                         if(Program.ImportCanceled)
                             break;

@@ -5,15 +5,18 @@ using Raven.Client.Indexes;
 
 namespace CollectionsOnline.Core.Indexes
 {
-    public class CombinedSearch : AbstractMultiMapIndexCreationTask<CombinedSearchResult>
+    public class Combined : AbstractMultiMapIndexCreationTask<CombinedResult>
     {
-        public CombinedSearch()
+        public Combined()
         {
             AddMap<Item>(items => 
                 from item in items
                 where item.IsHidden == false
                 select new
                 {
+                    // Update fields
+                    MediaIrns = item.Media.Select(x => x.Irn),
+
                     // Content fields
                     Id = item.Id,
                     Name = item.ObjectName,
@@ -65,6 +68,9 @@ namespace CollectionsOnline.Core.Indexes
                 where species.IsHidden == false
                 select new
                 {
+                    // Update fields
+                    MediaIrns = new object[] { species.Media.Select(x => x.Irn), species.Authors.Select(x => x.Media.Irn) },
+
                     // Content fields
                     Id = species.Id,
                     Name = species.Taxonomy.CommonName ?? species.Taxonomy.Species ?? species.Taxonomy.Genus,
@@ -117,6 +123,9 @@ namespace CollectionsOnline.Core.Indexes
                 where specimen.IsHidden == false
                 select new
                 {
+                    // Update fields
+                    MediaIrns = specimen.Media.Select(x => x.Irn),
+
                     // Content fields
                     Id = specimen.Id,
                     Name = specimen.ObjectName ?? specimen.Taxonomy.ScientificName,
@@ -169,6 +178,9 @@ namespace CollectionsOnline.Core.Indexes
                 where story.IsHidden == false
                 select new
                 {
+                    // Update fields
+                    MediaIrns = new object[] { story.Media.Select(x => x.Irn), story.Authors.Select(x => x.Media.Irn) },
+
                     // Content fields
                     Id = story.Id,
                     Name = story.Title,
@@ -221,7 +233,8 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.Content, FieldIndexing.Analyzed);
             Index(x => x.Summary, FieldIndexing.No);
             Index(x => x.ThumbUrl, FieldIndexing.No);
-            
+
+            Index(x => x.MediaIrns, FieldIndexing.NotAnalyzed);
             Index(x => x.Tags, FieldIndexing.NotAnalyzed);
             Index(x => x.Country, FieldIndexing.NotAnalyzed);
             Index(x => x.CollectionNames, FieldIndexing.NotAnalyzed);

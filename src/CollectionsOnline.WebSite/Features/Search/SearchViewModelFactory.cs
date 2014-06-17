@@ -12,7 +12,7 @@ namespace CollectionsOnline.WebSite.Features.Search
 {
     public class SearchViewModelFactory : ISearchViewModelFactory
     {
-        public SearchViewModel MakeViewModel(IList<CombinedSearchResult> results, FacetResults facets, List<string> suggestions, Request request, int totalResults, SearchInputModel searchInputModel, long queryTimeElapsed, long facetTimeElapsed)
+        public SearchViewModel MakeViewModel(IList<CombinedResult> results, FacetResults facets, List<string> suggestions, Request request, int totalResults, SearchInputModel searchInputModel, long queryTimeElapsed, long facetTimeElapsed)
         {
             var searchViewModel = new SearchViewModel
             {

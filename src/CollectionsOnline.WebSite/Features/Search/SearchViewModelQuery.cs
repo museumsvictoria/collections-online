@@ -41,14 +41,14 @@ namespace CollectionsOnline.WebSite.Features.Search
                 // perform query
                 queryStopwatch.Start();
                 var query = _documentSession.Advanced
-                    .LuceneQuery<CombinedSearchResult, CombinedSearch>()
+                    .LuceneQuery<CombinedResult, Combined>()
                     .Skip(searchInputModel.Offset)
                     .Take(searchInputModel.Limit);
 
                 // get facets
                 facetStopwatch.Start();
                 var facetQuery = _documentSession.Advanced
-                    .LuceneQuery<CombinedSearchResult, CombinedSearch>();
+                    .LuceneQuery<CombinedResult, Combined>();
 
                 // search query
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
@@ -248,7 +248,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                 }
 
                 var results = query
-                    .SelectFields<CombinedSearchResult>(
+                    .SelectFields<CombinedResult>(
                         "Id",
                         "Name",
                         "Summary",
@@ -267,7 +267,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                     results.Count <= Constants.SuggestionsMinResultsSize)
                 {
                     suggestions = _documentSession
-                        .Query<CombinedSearchResult, CombinedSearch>()
+                        .Query<CombinedResult, Combined>()
                         .Suggest(new SuggestionQuery()
                         {
                             Field = "Content",

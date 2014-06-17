@@ -36,7 +36,6 @@ namespace CollectionsOnline.Import.Imports
             var columns = new[]
                                 {
                                     "irn",
-                                    "ClaScientificName",
                                     "ClaKingdom",
                                     "ClaPhylum",
                                     "ClaSubphylum",
@@ -50,26 +49,23 @@ namespace CollectionsOnline.Import.Imports
                                     "ClaSuperfamily",
                                     "ClaFamily",
                                     "ClaSubfamily",
-                                    "ClaTribe",
-                                    "ClaSubtribe",
                                     "ClaGenus",
                                     "ClaSubgenus",
                                     "ClaSpecies",
                                     "ClaSubspecies",
-                                    "ClaRank",
                                     "AutAuthorString",
                                     "ClaApplicableCode",
                                     "comname=[ComName_tab,ComStatus_tab]",
                                     "catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[taxa=TaxTaxonomyRef_tab.(irn)])",
                                     "narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
-                                };            
+                                };
 
             using (var documentSession = _documentStore.OpenSession())
             {
                 // Check to see whether we need to run import, so grab the previous date run of any imports that utilize taxonomy.
                 var previousDateRun = documentSession
                     .Load<Application>(Constants.ApplicationId)
-                    .ImportStatuses.Where(x => x.ImportType.Contains("species", StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains("specimen", StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains("item", StringComparison.OrdinalIgnoreCase))
+                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(Species).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Specimen).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Item).Name, StringComparison.OrdinalIgnoreCase))
                     .Select(x => x.PreviousDateRun)
                     .OrderBy(x => x)
                     .FirstOrDefault(x => x.HasValue);
@@ -92,7 +88,7 @@ namespace CollectionsOnline.Import.Imports
                 // Cache the search results
                 if (importStatus.CachedResult == null)
                 {
-                    var terms = new Terms();
+                    var terms = new Terms();                    
                     terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
                     importStatus.CachedResult = new List<long>();
                     importStatus.CachedResultDate = DateTime.Now;
@@ -264,6 +260,11 @@ namespace CollectionsOnline.Import.Imports
                 }
 
             }
+        }
+
+        public int Order
+        {
+            get { return 10; }
         }
 
         private bool ImportCanceled()

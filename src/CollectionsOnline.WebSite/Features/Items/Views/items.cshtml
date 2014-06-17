@@ -65,7 +65,7 @@
                         {
                             <dt>@association.Type</dt>
                             <dd>
-                                <a href="/search?associationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Street, @association.Locality, @association.Region, @association.State, <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br/>
+                                <a href="/search?associationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Place <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br/>
                                 @if (!string.IsNullOrWhiteSpace(association.Comments))
                                 {
                                     @association.Comments<br />

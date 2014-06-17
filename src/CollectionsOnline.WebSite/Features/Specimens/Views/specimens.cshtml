@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="record panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">@(Model.Specimen.ObjectName ?? Model.Specimen.ScientificName ?? Model.Specimen.AcceptedNameUsage)</h1>
+                    <h1 class="panel-title">@(Model.Specimen.ObjectName ?? Model.Specimen.Taxonomy.ScientificName ?? Model.Specimen.Taxonomy.CommonName)</h1>
                 </div>
                 <div class="panel-body">
                     <div class="images">
@@ -120,17 +120,12 @@
                         {
                             <dt>@association.Type</dt>
                             <dd>
-                                <a href="/search?associationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Street, @association.Locality, @association.Region, @association.State, <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br />
+                                <a href="/search?associationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Place, <a href="/search?country=@HttpUtility.UrlEncode(association.Country)">@association.Country</a> @association.Date<br />
                                 @if (!string.IsNullOrWhiteSpace(association.Comments))
                                 {
                                     @association.Comments<br />
                                 }
                             </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.PalaeontologyNumber))
-                        {
-                            <dt>Palaeontology Number</dt>
-                            <dd>@Model.Specimen.PalaeontologyNumber</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogySpecies))
                         {
@@ -231,16 +226,6 @@
                         {
                             <dt>Tektites Global Strewnfield</dt>
                             <dd>@Model.Specimen.TektitesGlobalStrewnfield</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesSurfaceUp))
-                        {
-                            <dt>Tektites Surface Up</dt>
-                            <dd>@Model.Specimen.TektitesSurfaceUp</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesDegreeOfAbrasion))
-                        {
-                            <dt>Tektites Degree Of Abrasion</dt>
-                            <dd>@Model.Specimen.TektitesDegreeOfAbrasion</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.DctermsType))
                         {
@@ -346,11 +331,6 @@
                         {
                             <dt>Preparations</dt>
                             <dd>@Model.Specimen.Preparations</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.OtherCatalogNumbers))
-                        {
-                            <dt>Other Catalog Numbers</dt>
-                            <dd>@Model.Specimen.OtherCatalogNumbers</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.AssociatedMedia))
                         {
@@ -532,90 +512,80 @@
                             <dt>Type Status</dt>
                             <dd>@Model.Specimen.TypeStatus</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificName))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.ScientificName))
                         {
                             <dt>Scientific Name</dt>
-                            <dd>@Model.Specimen.ScientificName</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.AcceptedNameUsage))
-                        {
-                            <dt>Accepted Name Usage</dt>
-                            <dd>@Model.Specimen.AcceptedNameUsage</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.OriginalNameUsage))
-                        {
-                            <dt>Original Name Usage</dt>
-                            <dd>@Model.Specimen.OriginalNameUsage</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.HigherClassification))
-                        {
-                            <dt>Higher Classification</dt>
-                            <dd>@Model.Specimen.HigherClassification</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Kingdom))
+                            <dd>@Model.Specimen.Taxonomy.ScientificName</dd>
+                        }                                                
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Kingdom))
                         {
                             <dt>Kingdom</dt>
-                            <dd>@Model.Specimen.Kingdom</dd>
+                            <dd>@Model.Specimen.Taxonomy.Kingdom</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Phylum))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Phylum))
                         {
                             <dt>Phylum</dt>
-                            <dd>@Model.Specimen.Phylum</dd>
+                            <dd>@Model.Specimen.Taxonomy.Phylum</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Class))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Class))
                         {
                             <dt>Class</dt>
-                            <dd>@Model.Specimen.Class</dd>
+                            <dd>@Model.Specimen.Taxonomy.Class</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Order))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Order))
                         {
                             <dt>Order</dt>
-                            <dd>@Model.Specimen.Order</dd>
+                            <dd>@Model.Specimen.Taxonomy.Order</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Family))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Family))
                         {
                             <dt>Family</dt>
-                            <dd>@Model.Specimen.Family</dd>
+                            <dd>@Model.Specimen.Taxonomy.Family</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Genus))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Genus))
                         {
                             <dt>Genus</dt>
-                            <dd>@Model.Specimen.Genus</dd>
+                            <dd>@Model.Specimen.Taxonomy.Genus</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Subgenus))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subgenus))
                         {
                             <dt>Subgenus</dt>
-                            <dd>@Model.Specimen.Subgenus</dd>
+                            <dd>@Model.Specimen.Taxonomy.Subgenus</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.SpecificEpithet))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Species))
                         {
-                            <dt>Specific Epithet</dt>
-                            <dd>@Model.Specimen.SpecificEpithet</dd>
+                            <dt>Species</dt>
+                            <dd>@Model.Specimen.Taxonomy.Species</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.InfraspecificEpithet))
-                        {
-                            <dt>Infraspecific Epithet</dt>
-                            <dd>@Model.Specimen.InfraspecificEpithet</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.TaxonRank))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.TaxonRank))
                         {
                             <dt>Taxon Rank</dt>
-                            <dd>@Model.Specimen.TaxonRank</dd>
+                            <dd>@Model.Specimen.Taxonomy.TaxonRank</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificNameAuthorship))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Author))
                         {
-                            <dt>Scientific Name Authorship</dt>
-                            <dd>@Model.Specimen.ScientificNameAuthorship</dd>
+                            <dt>Scientific Name Author</dt>
+                            <dd>@Model.Specimen.Taxonomy.Author</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.VernacularName))
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.CommonName))
                         {
-                            <dt>Vernacular Name</dt>
-                            <dd>@Model.Specimen.VernacularName</dd>
+                            <dt>Common Name</dt>
+                            <dd>@Model.Specimen.Taxonomy.CommonName</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.NomenclaturalCode))
+                        @if (Model.Specimen.Taxonomy.OtherCommonNames.Any())
                         {
-                            <dt>Nomenclatural Code</dt>
-                            <dd>@Model.Specimen.NomenclaturalCode</dd>
+                            <dt>Other Common Names</dt>
+                            <dd>
+                                @foreach (var otherCommonNames in @Model.Specimen.Taxonomy.OtherCommonNames)
+                                {
+                                    <span>@otherCommonNames</span>
+                                }
+                            </dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Code))
+                        {
+                            <dt>Taxonomy Code</dt>
+                            <dd>@Model.Specimen.Taxonomy.Code</dd>
                         }
                         @if (Model.Specimen.RelatedIds.Any())
                         {

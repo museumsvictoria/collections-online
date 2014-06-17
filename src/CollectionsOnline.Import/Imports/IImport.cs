@@ -3,5 +3,7 @@
     public interface IImport
     {
         void Run();
+
+        int Order { get; }
     }
 }

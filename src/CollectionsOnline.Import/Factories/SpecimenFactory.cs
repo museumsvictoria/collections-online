@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -9,7 +8,6 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Utilities;
-using ImageResizer;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
@@ -17,20 +15,20 @@ namespace CollectionsOnline.Import.Factories
     public class SpecimenFactory : IEmuAggregateRootFactory<Specimen>
     {
         private readonly ISlugFactory _slugFactory;
-        private readonly IMediaHelper _mediaHelper;
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
+        private readonly IMediaFactory _mediaFactory;
 
         public SpecimenFactory(
             ISlugFactory slugFactory,
-            IMediaHelper mediaHelper,
             IPartiesNameFactory partiesNameFactory,
-            ITaxonomyFactory taxonomyFactory)
+            ITaxonomyFactory taxonomyFactory,
+            IMediaFactory mediaFactory)
         {
             _slugFactory = slugFactory;
-            _mediaHelper = mediaHelper;
             _partiesNameFactory = partiesNameFactory;
             _taxonomyFactory = taxonomyFactory;
+            _mediaFactory = mediaFactory;
         }
 
         public string ModuleName
@@ -188,11 +186,8 @@ namespace CollectionsOnline.Import.Factories
                 }.Distinct();
 
                 association.Place = place.Concatenate(", ");
+                association.PlaceKey = _slugFactory.MakeSlug(association.Place);
                 
-                var placeKey = place.Concatenate("-");
-                if (!string.IsNullOrWhiteSpace(placeKey))
-                    association.PlaceKey = placeKey.ToLower();
-
                 specimen.Associations.Add(association);
             }
 
@@ -408,41 +403,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             //associatedMedia
-            foreach (var mediaMap in map.GetMaps("media").Where(x =>
-                x != null &&
-                string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
-                x.GetString("MulMimeType") == "image" &&
-                x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString)))
-            {
-                var irn = long.Parse(mediaMap.GetString("irn"));
-
-                var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
-                var thumbResizeSettings = new ResizeSettings
-                {
-                    Format = FileFormatType.Jpg.ToString(),
-                    Height = 365,
-                    Width = 365,
-                    Mode = FitMode.Crop,
-                    PaddingColor = Color.White,
-                    Quality = 65
-                };
-
-                if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                {
-                    specimen.Media.Add(new Media
-                    {
-                        Irn = irn,
-                        DateModified =
-                            DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                                mediaMap.GetString("AdmTimeModified")),
-                                "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
-                        Title = mediaMap.GetString("MulTitle"),
-                        AlternateText = mediaMap.GetString("DetAlternateText"),
-                        Type = mediaMap.GetString("MulMimeType"),
-                        Url = url
-                    });
-                }
-            }
+            specimen.Media = _mediaFactory.Make(map.GetMaps("media"));
             specimen.AssociatedMedia = specimen.Media.Select(x => x.Title).Concatenate("; ");
 
             #endregion

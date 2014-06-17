@@ -30,7 +30,7 @@ namespace CollectionsOnline.Import.Imports
         }
 
         public void Run()
-        {            
+        {
             var module = new Module(_imuFactory.ModuleName, _session);
             
             // Check for existing import in case we need to resume.
@@ -152,6 +152,11 @@ namespace CollectionsOnline.Import.Imports
                 documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString());
                 documentSession.SaveChanges();
             }
+        }
+
+        public int Order
+        {
+            get { return 0; }
         }
 
         private bool ImportCanceled()

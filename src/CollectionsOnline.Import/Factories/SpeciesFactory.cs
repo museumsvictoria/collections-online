@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Utilities;
-using ImageResizer;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class SpeciesFactory : IEmuAggregateRootFactory<Species>
     {
-        private readonly IMediaHelper _mediaHelper;
         private readonly ITaxonomyFactory _taxonomyFactory;
+        private readonly IMediaFactory _mediaFactory;
 
         public SpeciesFactory(
-            IMediaHelper mediaHelper,
-            ITaxonomyFactory taxonomyFactory)
+            ITaxonomyFactory taxonomyFactory,
+            IMediaFactory mediaFactory)
         {
-            _mediaHelper = mediaHelper;
             _taxonomyFactory = taxonomyFactory;
+            _mediaFactory = mediaFactory;
         }
 
         public string ModuleName
@@ -160,92 +156,17 @@ namespace CollectionsOnline.Import.Factories
                     .ToList();
 
             // Authors
-            foreach (var authorMap in map.GetMaps("authors"))
-            {
-                var author = new Author
+            species.Authors = map.GetMaps("authors")
+                .Where(x => x != null)
+                .Select(x => new Author
                 {
-                    Name = authorMap.GetString("NamFullName"),
-                    Biography = authorMap.GetString("BioLabel")
-                };
-
-                var mediaMap = authorMap.GetMaps("media").FirstOrDefault(x => 
-                    x != null &&
-                    string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
-                    x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuMultimediaQueryString) &&
-                    x.GetString("MulMimeType") == "image");
-                
-                if (mediaMap != null)
-                {
-                    var irn = long.Parse(mediaMap.GetString("irn"));
-
-                    var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
-                    var thumbResizeSettings = new ResizeSettings
-                    {
-                        Format = FileFormatType.Jpg.ToString(),
-                        Height = 365,
-                        Width = 365,
-                        Mode = FitMode.Crop,
-                        PaddingColor = Color.White,
-                        Quality = 65
-                    };
-
-                    if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                    {
-                        author.Media = new Media
-                        {
-                            Irn = irn,
-                            DateModified =
-                                DateTime.ParseExact(
-                                    string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                                                  mediaMap.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
-                                    new CultureInfo("en-AU")),
-                            Title = mediaMap.GetString("MulTitle"),
-                            AlternateText = mediaMap.GetString("DetAlternateText"),
-                            Type = mediaMap.GetString("MulMimeType"),
-                            Url = url
-                        };
-
-                        species.Authors.Add(author);
-                    }
-                }
-            }
+                    Name = x.GetString("NamFullName"),
+                    Biography = x.GetString("BioLabel"),
+                    Media = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault())
+                }).ToList();
 
             // Media
-            // TODO: Be more selective in what media we assign to item and how (change metadataset check)
-            foreach (var mediaMap in map.GetMaps("media").Where(x =>
-                x != null &&
-                string.Equals(x.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
-                x.GetString("MulMimeType") == "image" && 
-                x.GetStrings("MdaDataSets_tab").Any(y => y == "App - Field Guide")))
-            {
-                var irn = long.Parse(mediaMap.GetString("irn"));
-
-                var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
-                var thumbResizeSettings = new ResizeSettings
-                {
-                    Format = FileFormatType.Jpg.ToString(),
-                    Height = 365,
-                    Width = 365,
-                    Mode = FitMode.Crop,
-                    PaddingColor = Color.White,
-                    Quality = 65
-                };
-
-                if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                {
-                    species.Media.Add(new Media
-                    {
-                        Irn = irn,
-                        DateModified = DateTime.ParseExact(string.Format("{0} {1}", mediaMap.GetString("AdmDateModified"),
-                            mediaMap.GetString("AdmTimeModified")),
-                            "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
-                        Title = mediaMap.GetString("MulTitle"),
-                        AlternateText = mediaMap.GetString("DetAlternateText"),
-                        Type = mediaMap.GetString("MulMimeType"),
-                        Url = url
-                    });
-                }
-            }
+            species.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(species.IdentifyingCharacters))

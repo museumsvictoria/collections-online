@@ -94,8 +94,10 @@
   <ItemGroup>
     <Compile Include="Factories\IEmuAggregateRootFactory.cs" />
     <Compile Include="Factories\IMuseumLocationFactory.cs" />
+    <Compile Include="Factories\IMediaFactory.cs" />
     <Compile Include="Factories\MuseumLocationFactory.cs" />
     <Compile Include="Factories\ITaxonomyFactory.cs" />
+    <Compile Include="Factories\MediaFactory.cs" />
     <Compile Include="Factories\TaxonomyFactory.cs" />
     <Compile Include="Factories\PathFactory.cs" />
     <Compile Include="Factories\StoryFactory.cs" />
