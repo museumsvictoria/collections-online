@@ -5,6 +5,8 @@
         /* Update fields */
         public long[] MediaIrns { get; set; }
 
+        public long TaxonomyIrn { get; set; }
+
         /* Content/Order fields */
         public string Id { get; set; }
 

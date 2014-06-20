@@ -512,28 +512,30 @@ namespace CollectionsOnline.Import.Factories
             item.ArtworkSecondaryInscriptions = map.GetString("ArtSecondaryInscriptions");
             item.ArtworkTertiaryInscriptions = map.GetString("ArtTertiaryInscriptions");
 
+
+            // Identification
             var identification = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
                                  map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeCurrentNameLocal_tab") != null && x.GetString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));
 
             if (identification != null)
             {
                 //typeStatus
-                item.ArtworkTypeStatus = identification.GetString("IdeTypeStatus_tab");
+                item.TypeStatus = identification.GetString("IdeTypeStatus_tab");
 
                 //identifiedBy
                 if (identification.GetMaps("identifiers") != null)
                 {
-                    item.ArtworkIdentifiedBy = identification.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
+                    item.IdentifiedBy = identification.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
                 }
 
                 //dateIdentified
                 //identificationRemarks
                 //identificationQualifier
-                item.ArtworkDateIdentified = identification.GetString("IdeDateIdentified0");
-                item.ArtworkIdentificationRemarks = identification.GetString("IdeAccuracyNotes_tab");
-                item.ArtworkIdentificationQualifier = identification.GetString("IdeQualifier_tab");
+                item.DateIdentified = identification.GetString("IdeDateIdentified0");
+                item.IdentificationRemarks = identification.GetString("IdeAccuracyNotes_tab");
+                item.IdentificationQualifier = identification.GetString("IdeQualifier_tab");
 
-                item.ArtworkTaxonomy = _taxonomyFactory.Make(identification.GetMap("taxa"));
+                item.Taxonomy = _taxonomyFactory.Make(identification.GetMap("taxa"));
             }
 
             // Acquisition information

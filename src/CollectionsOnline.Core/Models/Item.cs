@@ -259,17 +259,17 @@ namespace CollectionsOnline.Core.Models
 
         public string ArtworkTertiaryInscriptions { get; set; }
 
-        public string ArtworkTypeStatus { get; set; }
+        public string IdentifiedBy { get; set; }
 
-        public string ArtworkIdentifiedBy { get; set; }
+        public string DateIdentified { get; set; }
 
-        public string ArtworkDateIdentified { get; set; }
+        public string IdentificationRemarks { get; set; }
 
-        public string ArtworkIdentificationRemarks { get; set; }
+        public string IdentificationQualifier { get; set; }
 
-        public string ArtworkIdentificationQualifier { get; set; }
+        public string TypeStatus { get; set; }
 
-        public Taxonomy ArtworkTaxonomy { get; set; }
+        public Taxonomy Taxonomy { get; set; }
 
         #endregion
 

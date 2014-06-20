@@ -16,6 +16,7 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     MediaIrns = item.Media.Select(x => x.Irn),
+                    TaxonomyIrn = item.Taxonomy.Irn,
 
                     // Content fields
                     Id = item.Id,
@@ -70,6 +71,7 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     MediaIrns = new object[] { species.Media.Select(x => x.Irn), species.Authors.Select(x => x.Media.Irn) },
+                    TaxonomyIrn = species.Taxonomy.Irn,
 
                     // Content fields
                     Id = species.Id,
@@ -125,6 +127,7 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     MediaIrns = specimen.Media.Select(x => x.Irn),
+                    TaxonomyIrn = specimen.Taxonomy.Irn,
 
                     // Content fields
                     Id = specimen.Id,
@@ -180,6 +183,7 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     MediaIrns = new object[] { story.Media.Select(x => x.Irn), story.Authors.Select(x => x.Media.Irn) },
+                    TaxonomyIrn = 0,
 
                     // Content fields
                     Id = story.Id,
@@ -235,6 +239,7 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.ThumbUrl, FieldIndexing.No);
 
             Index(x => x.MediaIrns, FieldIndexing.NotAnalyzed);
+            Index(x => x.TaxonomyIrn, FieldIndexing.NotAnalyzed);
             Index(x => x.Tags, FieldIndexing.NotAnalyzed);
             Index(x => x.Country, FieldIndexing.NotAnalyzed);
             Index(x => x.CollectionNames, FieldIndexing.NotAnalyzed);

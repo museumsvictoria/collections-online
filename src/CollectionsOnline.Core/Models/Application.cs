@@ -38,7 +38,8 @@ namespace CollectionsOnline.Core.Models
                 importStatus.IsFinished = false;
                 importStatus.CachedResult = null;
                 importStatus.CurrentOffset = 0;
-                importStatus.PreviousDateRun = importStatus.CachedResultDate;
+                if(importStatus.CachedResultDate.HasValue)
+                    importStatus.PreviousDateRun = importStatus.CachedResultDate;
                 importStatus.CachedResultDate = null;
             }
         }

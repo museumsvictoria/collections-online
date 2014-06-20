@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
+using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using Raven.Json.Linq;
+using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Imports
 {
@@ -56,8 +58,8 @@ namespace CollectionsOnline.Import.Imports
                                     "AutAuthorString",
                                     "ClaApplicableCode",
                                     "comname=[ComName_tab,ComStatus_tab]",
-                                    "catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[taxa=TaxTaxonomyRef_tab.(irn)])",
-                                    "narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
+                                    //"catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[taxa=TaxTaxonomyRef_tab.(irn)])",
+                                    //"narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
                                 };
 
             using (var documentSession = _documentStore.OpenSession())
@@ -130,7 +132,6 @@ namespace CollectionsOnline.Import.Imports
             // Perform import
             while (true)
             {
-                using (var tx = new TransactionScope())
                 using (var documentSession = _documentStore.OpenSession())
                 {
                     if (ImportCanceled())
@@ -152,111 +153,24 @@ namespace CollectionsOnline.Import.Imports
 
                     foreach (var row in results.Rows)
                     {
-                        // Update linked specimens
-                        var count = 0;
-                        var catalogues = row.GetMaps("catalogue");
-                        var taxonomyIrn = long.Parse(row.GetString("irn"));
-                        while (true)
-                        {
-                            using (var catalogueDocumentSession = _documentStore.OpenSession())
+                        _documentStore.DatabaseCommands.UpdateByIndex(
+                            "Combined",
+                            new IndexQuery {Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn"))},
+                            new[]
                             {
-                                if (ImportCanceled())
-                                    return;
-
-                                var catalogueBatch = catalogues
-                                    .Skip(count)
-                                    .Take(Constants.DataBatchSize)
-                                    .ToList();
-
-                                if (catalogueBatch.Count == 0)
-                                    break;
-
-                                foreach (var catalogue in catalogueBatch)
+                                new PatchRequest
                                 {
-                                    var catalogueIrn = long.Parse(catalogue.GetString("irn"));
-                                    var sets = catalogue.GetStrings("sets");
-
-                                    // Check to see whether it is a specimen record.
-                                    if (sets.Any(x => x == Constants.ImuSpecimenQueryString))
-                                    {
-                                        var specimen = catalogueDocumentSession.Load<Specimen>(catalogueIrn);
-
-                                        if (specimen != null && specimen.Taxonomy.Irn == taxonomyIrn)
-                                        {
-                                            specimen.Taxonomy = _taxonomyFactory.Make(row);
-                                        }
-                                    }
-                                    // Check to see whether it is an item record.
-                                    if (sets.Any(x => x == Constants.ImuItemQueryString))
-                                    {
-                                        var item = catalogueDocumentSession.Load<Item>(catalogueIrn);
-
-                                        if (item != null && item.ArtworkTaxonomy.Irn == taxonomyIrn)
-                                        {
-                                            item.ArtworkTaxonomy = _taxonomyFactory.Make(row);
-                                        }
-                                    }
+                                    Type = PatchCommandType.Set,
+                                    Name = "Taxonomy",
+                                    Value = RavenJObject.FromObject(_taxonomyFactory.Make(row))
                                 }
-
-                                // Save any changes
-                                catalogueDocumentSession.SaveChanges();
-                                count += catalogueBatch.Count;
-                            }
-                        }
-
-                        // Update linked species
-                        count = 0;
-                        var narratives = row.GetMaps("narrative");
-                        while (true)
-                        {
-                            using (var narrativeDocumentSession = _documentStore.OpenSession())
-                            {
-                                if (ImportCanceled())
-                                    return;
-
-                                var narrativesBatch = narratives
-                                    .Skip(count)
-                                    .Take(Constants.DataBatchSize)
-                                    .ToList();
-
-                                if (narrativesBatch.Count == 0)
-                                    break;
-
-                                foreach (var narrative in narrativesBatch)
-                                {
-                                    var narrativeIrn = long.Parse(narrative.GetString("irn"));
-                                    var sets = narrative.GetStrings("sets");
-
-                                    if (sets.Any(x => x == Constants.ImuSpeciesQueryString))
-                                    {
-                                        var species = narrativeDocumentSession.Load<Species>(narrativeIrn);
-
-                                        if (species != null && species.Taxonomy.Irn == taxonomyIrn)
-                                        {
-                                            species.Taxonomy = _taxonomyFactory.Make(row);
-
-                                            // Relationships
-                                            species.SpecimenIds = catalogues
-                                                .Where(x => x != null && x.GetStrings("sets").Contains(Constants.ImuSpecimenQueryString))
-                                                .Select(x => "specimens/" + x.GetString("irn"))
-                                                .ToList();
-                                        }
-                                    }
-                                }
-
-                                // Save any changes
-                                narrativeDocumentSession.SaveChanges();
-                                count += narrativesBatch.Count;
-                            }
-                        }
+                            });
                     }
 
                     importStatus.CurrentOffset += results.Count;
 
                     _log.Debug("{0} import progress... {1}/{2}", GetType().Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
                     documentSession.SaveChanges();
-
-                    tx.Complete();
                 }
 
             }
