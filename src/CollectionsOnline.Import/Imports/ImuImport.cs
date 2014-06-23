@@ -147,6 +147,8 @@ namespace CollectionsOnline.Import.Imports
                 }
             }
 
+            _log.Debug("{0} import complete", typeof(T).Name);
+
             using (var documentSession = _documentStore.OpenSession())
             {
                 documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString());

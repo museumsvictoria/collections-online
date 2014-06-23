@@ -55,7 +55,7 @@ namespace CollectionsOnline.Import.Imports
 
             using (var documentSession = _documentStore.OpenSession())
             {
-                // Check to see whether we need to run import, so grab the previous date run of any imports that utilize multimedia.
+                // Check to see whether we need to run import, so grab the earliest previous date run of any imports that utilize multimedia.
                 var previousDateRun = documentSession
                     .Load<Application>(Constants.ApplicationId)
                     .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
@@ -238,7 +238,7 @@ namespace CollectionsOnline.Import.Imports
                 }                
             }
 
-            _log.Debug("MediaUpdateImport complete, updated {0} associated documents", associatedDocumentCount);
+            _log.Debug("{0} import complete, updated {1} associated documents", GetType().Name, associatedDocumentCount);
 
             using (var documentSession = _documentStore.OpenSession())
             {

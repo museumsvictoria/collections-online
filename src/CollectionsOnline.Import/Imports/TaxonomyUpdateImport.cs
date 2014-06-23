@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Factories;
@@ -58,8 +57,7 @@ namespace CollectionsOnline.Import.Imports
                                     "AutAuthorString",
                                     "ClaApplicableCode",
                                     "comname=[ComName_tab,ComStatus_tab]",
-                                    //"catalogue=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab,identification=[taxa=TaxTaxonomyRef_tab.(irn)])",
-                                    //"narrative=<enarratives:TaxTaxaRef_tab>.(irn,sets=DetPurpose_tab)"
+                                    "specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab)"
                                 };
 
             using (var documentSession = _documentStore.OpenSession())
@@ -153,9 +151,10 @@ namespace CollectionsOnline.Import.Imports
 
                     foreach (var row in results.Rows)
                     {
+                        // Update taxonomy on items, species and specimens
                         _documentStore.DatabaseCommands.UpdateByIndex(
                             "Combined",
-                            new IndexQuery {Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn"))},
+                            new IndexQuery { Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn")) },
                             new[]
                             {
                                 new PatchRequest
@@ -163,6 +162,25 @@ namespace CollectionsOnline.Import.Imports
                                     Type = PatchCommandType.Set,
                                     Name = "Taxonomy",
                                     Value = RavenJObject.FromObject(_taxonomyFactory.Make(row))
+                                }
+                            });                      
+
+                        // Update linked specimens on species only
+                        _documentStore.DatabaseCommands.UpdateByIndex(
+                            "Combined",
+                            new IndexQuery { Query = string.Format("TaxonomyIrn:{0} AND Type:{1}", row.GetString("irn"), typeof (Species).Name) },
+                            new[]
+                            {
+                                new PatchRequest
+                                {
+                                    Type = PatchCommandType.Set,
+                                    Name = "SpecimenIds",
+                                    Value = RavenJArray.FromObject(row
+                                        .GetMaps("specimens")
+                                        .Where(x =>
+                                            x != null &&
+                                            x.GetStrings("sets").Contains(Constants.ImuSpecimenQueryString))
+                                        .Select(x => "specimens/" + x.GetString("irn")))
                                 }
                             });
                     }
@@ -172,7 +190,14 @@ namespace CollectionsOnline.Import.Imports
                     _log.Debug("{0} import progress... {1}/{2}", GetType().Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
                     documentSession.SaveChanges();
                 }
+            }
 
+            _log.Debug("{0} import complete", GetType().Name);
+
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString());
+                documentSession.SaveChanges();
             }
         }
 
