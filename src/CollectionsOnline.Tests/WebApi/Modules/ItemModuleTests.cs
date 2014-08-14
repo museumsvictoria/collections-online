@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Tests.Fakes;
 using CollectionsOnline.WebApi.Modules;
@@ -19,6 +21,11 @@ namespace CollectionsOnline.Tests.WebApi.Modules
             DataToBeSeeded = new List<IEnumerable>
                 {
                     FakeItems.CreateFakeItems(5)
+                };
+
+            IndexesToExecute = new List<Type>
+                {
+                    typeof(Combined)
                 };
 
             Browser = new Browser(with =>

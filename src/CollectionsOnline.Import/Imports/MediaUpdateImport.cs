@@ -188,7 +188,7 @@ namespace CollectionsOnline.Import.Imports
                                         if (existingMedia != null)
                                             species.Media[species.Media.IndexOf(existingMedia)] = media;
 
-                                        var author = species.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
+                                        var author = species.Authors.SingleOrDefault(x => x.Media != null && x.Media.Irn == mediaIrn);
                                         if (author != null)
                                             author.Media = media;
 
@@ -214,7 +214,7 @@ namespace CollectionsOnline.Import.Imports
                                         if (existingMedia != null)
                                             story.Media[story.Media.IndexOf(existingMedia)] = media;
 
-                                        var author = story.Authors.SingleOrDefault(x => x.Media.Irn == mediaIrn);
+                                        var author = story.Authors.SingleOrDefault(x => x.Media != null && x.Media.Irn == mediaIrn);
                                         if (author != null)
                                             author.Media = media;
 
