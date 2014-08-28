@@ -15,15 +15,6 @@ namespace CollectionsOnline.Import.Factories
                 var taxonomy = new Taxonomy();
 
                 taxonomy.Irn = long.Parse(map.GetString("irn"));
-                taxonomy.ScientificName = new[]
-                        {
-                            map.GetString("ClaGenus"),
-                            string.IsNullOrWhiteSpace(map.GetString("ClaSubgenus")) ? null : string.Format("({0})", map.GetString("ClaSubgenus")),
-                            map.GetString("ClaSpecies"),
-                            map.GetString("ClaSubspecies"),
-                            map.GetString("AutAuthorString")
-                        }.Concatenate(" ");
-
                 taxonomy.Kingdom = map.GetString("ClaKingdom");
                 taxonomy.Phylum = map.GetString("ClaPhylum");
                 taxonomy.Subphylum = map.GetString("ClaSubphylum");

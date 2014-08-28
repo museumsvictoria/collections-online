@@ -15,24 +15,27 @@ namespace CollectionsOnline.Import.Factories
 {
     public class ItemFactory : IEmuAggregateRootFactory<Item>
     {
-        private readonly ISlugFactory _slugFactory;        
+        private readonly ISlugFactory _slugFactory;
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly IMuseumLocationFactory _locationFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
+        private readonly IAssociationFactory _associationFactory;
 
         public ItemFactory(
             ISlugFactory slugFactory,
             IPartiesNameFactory partiesNameFactory,
             IMuseumLocationFactory locationFactory,
             ITaxonomyFactory taxonomyFactory,
-            IMediaFactory mediaFactory)
+            IMediaFactory mediaFactory,
+            IAssociationFactory associationFactory)
         {
             _slugFactory = slugFactory;
             _partiesNameFactory = partiesNameFactory;
             _locationFactory = locationFactory;
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
+            _associationFactory = associationFactory;
         }
 
         public string ModuleName
@@ -157,6 +160,7 @@ namespace CollectionsOnline.Import.Factories
                         "ManPages",
                         "icletterto=ManLetterToRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
                         "icletterfrom=ManLetterFromRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "ArtMedium",
                         "ArtTechnique",
                         "ArtSupport",
                         "ArtPlateNumber",
@@ -169,7 +173,7 @@ namespace CollectionsOnline.Import.Factories
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
                         "RigText0",
                         "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
-                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]"
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]"
                     };
             }
         }
@@ -225,32 +229,7 @@ namespace CollectionsOnline.Import.Factories
             item.Inscription = map.GetString("DesInscriptions");
 
             // Associations
-            foreach (var associationMap in map.GetMaps("associations"))
-            {
-                var association = new Association();
-
-                association.Type = associationMap.GetString("AssAssociationType_tab");
-                association.Name = _partiesNameFactory.Make(associationMap.GetMap("party"));
-                association.Date = associationMap.GetString("AssAssociationDate_tab");
-                association.Comments = associationMap.GetString("AssAssociationComments0");
-
-                var place = new[]
-                {
-                    associationMap.GetString("AssAssociationStreetAddress_tab"),
-                    associationMap.GetString("AssAssociationLocality_tab"),
-                    associationMap.GetString("AssAssociationRegion_tab").Remove(new[] { "greater", "district" }),
-                    associationMap.GetString("AssAssociationState_tab"),
-                    associationMap.GetString("AssAssociationCountry_tab")
-                }.Distinct();
-                
-                association.Place = place.Concatenate(", ");
-                association.PlaceKey = _slugFactory.MakeSlug(association.Place);
-
-                if(string.IsNullOrWhiteSpace(association.PlaceKey))
-                    association.GeocodeStatus = GeocodeStatus.Failure;
-
-                item.Associations.Add(association);
-            }
+            item.Associations = _associationFactory.Make(map.GetMaps("associations"));
 
             // Tags
             if (map.GetStrings("SubSubjects_tab") != null)
@@ -326,13 +305,14 @@ namespace CollectionsOnline.Import.Factories
                         : x.GetString("Pro2BrandName_tab"))
                 .Concatenate("; ");
 
-            // Related items/specimens
+            // Relationships (Related items/specimens)
+            // TODO: Add import to check for these relationships
             foreach (var related in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
             {
                 if(related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    item.RelatedIds.Add("items/" + related.GetString("irn"));
+                    item.RelatedIds.Add(string.Format("items/{0}", related.GetString("irn")));
                 if (related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    item.RelatedIds.Add("specimens/" + related.GetString("irn"));
+                    item.RelatedIds.Add(string.Format("specimens/{0}", related.GetString("irn")));
             }
 
             // Archeology fields
@@ -502,6 +482,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Artwork fields
+            item.ArtworkMedium = map.GetString("ArtMedium");
             item.ArtworkTechnique = map.GetString("ArtTechnique");
             item.ArtworkSupport = map.GetString("ArtSupport");
             item.ArtworkPlateNumber = map.GetString("ArtPlateNumber");
@@ -512,30 +493,49 @@ namespace CollectionsOnline.Import.Factories
             item.ArtworkSecondaryInscriptions = map.GetString("ArtSecondaryInscriptions");
             item.ArtworkTertiaryInscriptions = map.GetString("ArtTertiaryInscriptions");
 
-
-            // Identification
-            var identification = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
+            // Taxonomy
+            // TODO: make factory method as code duplicated in SpecimenFactory
+            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
                                  map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeCurrentNameLocal_tab") != null && x.GetString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));
-
-            if (identification != null)
+            if (identificationMap != null)
             {
-                //typeStatus
-                item.TypeStatus = identification.GetString("IdeTypeStatus_tab");
-
-                //identifiedBy
-                if (identification.GetMaps("identifiers") != null)
+                // Type Status
+                item.TypeStatus = identificationMap.GetString("IdeTypeStatus_tab");
+                // Identified By
+                if (identificationMap.GetMaps("identifiers") != null)
                 {
-                    item.IdentifiedBy = identification.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
+                    item.IdentifiedBy = identificationMap.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
                 }
+                // Date Identified
+                item.DateIdentified = identificationMap.GetString("IdeDateIdentified0");
 
-                //dateIdentified
-                //identificationRemarks
-                //identificationQualifier
-                item.DateIdentified = identification.GetString("IdeDateIdentified0");
-                item.IdentificationRemarks = identification.GetString("IdeAccuracyNotes_tab");
-                item.IdentificationQualifier = identification.GetString("IdeQualifier_tab");
+                // Identification Qualifier and Rank
+                item.Qualifier = identificationMap.GetString("IdeQualifier_tab");
+                if (string.Equals(identificationMap.GetString("IdeQualifierRank_tab"), "Genus", StringComparison.OrdinalIgnoreCase))
+                    item.QualifierRank = QualifierRankType.Genus;
+                else if (string.Equals(identificationMap.GetString("IdeQualifierRank_tab"), "species", StringComparison.OrdinalIgnoreCase))
+                    item.QualifierRank = QualifierRankType.Species;
 
-                item.Taxonomy = _taxonomyFactory.Make(identification.GetMap("taxa"));
+                // Taxonomy
+                var taxonomyMap = identificationMap.GetMap("taxa");
+                item.Taxonomy = _taxonomyFactory.Make(taxonomyMap);
+
+                if (taxonomyMap != null)
+                {
+                    // Scientific Name
+                    item.ScientificName = new[]
+                    {
+                        item.QualifierRank != QualifierRankType.Genus ? null : item.Qualifier,
+                        taxonomyMap.GetString("ClaGenus"),
+                        string.IsNullOrWhiteSpace(taxonomyMap.GetString("ClaSubgenus"))
+                            ? null
+                            : string.Format("({0})", taxonomyMap.GetString("ClaSubgenus")),
+                        item.QualifierRank != QualifierRankType.Species ? null : item.Qualifier,
+                        taxonomyMap.GetString("ClaSpecies"),
+                        taxonomyMap.GetString("ClaSubspecies"),
+                        taxonomyMap.GetString("AutAuthorString")
+                    }.Concatenate(" ");
+                }
             }
 
             // Acquisition information

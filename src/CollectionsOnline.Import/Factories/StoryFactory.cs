@@ -55,7 +55,8 @@ namespace CollectionsOnline.Import.Factories
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
                         "relatedstories=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
-                        "relateditems=ObjObjectsRef_tab.(irn,MdaDataSets_tab)"
+                        "relateditems=ObjObjectsRef_tab.(irn,MdaDataSets_tab)",
+                        "partyitems=ParPartiesRef_tab.(partyitems=<ecatalogue:AssAssociationNameRef_tab>.(irn,sets=MdaDataSets_tab))"
                     };
             }
         }
@@ -99,10 +100,10 @@ namespace CollectionsOnline.Import.Factories
                     Name = x.GetString("NamFullName"),
                     Biography = x.GetString("BioLabel"),
                     Media = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault())
-                }).ToList();  
+                }).ToList();
 
             // Contributors
-            story.Authors.AddRange(
+            story.Contributors.AddRange(
                 map.GetMaps("contributors")
                    .Where(
                        x =>
@@ -120,26 +121,43 @@ namespace CollectionsOnline.Import.Factories
             story.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Relationships
+            // TODO: Add import to check for these relationships
+
+            // parent story
             if (map.GetMap("parent") != null && map.GetMap("parent").GetStrings("DetPurpose_tab").Contains(Constants.ImuStoryQueryString))
                 story.ParentStoryId = "stories/" + map.GetMap("parent").GetString("irn");
 
+            // child story
             story.ChildStoryIds = map
                 .GetMaps("children")
                 .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuStoryQueryString))
                 .Select(x => "stories/" + x.GetString("irn"))
                 .ToList();
-            
+
+            // sibling story
             story.RelatedStoryIds = map
                 .GetMaps("relatedstories")
                 .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuStoryQueryString))
                 .Select(x => "stories/" + x.GetString("irn"))
                 .ToList();
-             
+
+            // related items
             story.RelatedItemIds = map
                 .GetMaps("relateditems")
                 .Where(x => x != null && x.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
                 .Select(x => "items/" + x.GetString("irn"))
                 .ToList();
+
+            // related party items
+            var partyItemsMap = map
+                .GetMaps("partyitems")
+                .FirstOrDefault();
+            if (partyItemsMap != null)
+                story.RelatedPartyItemIds = partyItemsMap
+                    .GetMaps("partyitems")
+                    .Where(x => x != null && x.GetStrings("sets").Contains(Constants.ImuItemQueryString))
+                    .Select(x => "items/" + x.GetString("irn"))
+                    .ToList();
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(story.ContentSummary))

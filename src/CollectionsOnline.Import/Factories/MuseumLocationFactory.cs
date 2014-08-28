@@ -17,10 +17,10 @@ namespace CollectionsOnline.Import.Factories
                 return Make(map.GetMap("location"));
             
             var locationKey = new Tuple<string, string, string, string>(
-                map.GetString("LocLevel1"), 
-                map.GetString("LocLevel2"),
-                map.GetString("LocLevel3"),
-                map.GetString("LocLevel4"));
+                map.GetString("LocLevel1") ?? string.Empty,
+                map.GetString("LocLevel2") ?? string.Empty,
+                map.GetString("LocLevel3") ?? string.Empty,
+                map.GetString("LocLevel4") ?? string.Empty);
 
             return Constants.MuseumLocations.ContainsKey(locationKey) ? Constants.MuseumLocations[locationKey] : null;
         }

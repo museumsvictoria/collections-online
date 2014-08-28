@@ -54,17 +54,89 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedIds { get; set; }
 
-        public IList<string> AttachedIds { get; set; }
-
         public string AcquisitionInformation { get; set; }
 
         public string Acknowledgement { get; set; }
 
-        public string SpecimenForm { get; set; }
-
         public IList<Media> Media { get; set; }
+        
+        public string NumberOfSpecimens { get; set; }
+
+        public string ClutchSize { get; set; }
+
+        public string Sex { get; set; }
+
+        public string StageOrAge { get; set; }
+
+        public IList<Storage> Storages { get; set; }
+
+        public string TypeStatus { get; set; }
+
+        public string IdentifiedBy { get; set; }
+        
+        public string DateIdentified { get; set; }
+
+        public string Qualifier { get; set; }
+
+        public QualifierRankType QualifierRank { get; set; }
 
         public Taxonomy Taxonomy { get; set; }
+
+        public string ScientificName { get; set; }
+
+        public string ExpeditionName { get; set; }
+
+        public string CollectionEventCode { get; set; }
+
+        public string SamplingMethod { get; set; }
+
+        public DateTime? DateVisitedFrom { get; set; }
+
+        public DateTime? DateVisitedTo { get; set; }
+
+        public string DepthTo { get; set; }
+
+        public string DepthFrom { get; set; }
+
+        public string CollectedBy { get; set; }
+
+        public string SiteCode { get; set; }
+
+        public string Ocean { get; set; }
+
+        public string Continent { get; set; }
+
+        public string Country { get; set; }
+
+        public string State { get; set; }
+
+        public string District { get; set; }
+
+        public string Town { get; set; }
+
+        public string NearestNamedPlace { get; set; }
+
+        public string PreciseLocation { get; set; }
+
+        public string MinimumElevation { get; set; }
+
+        public string MaximumElevation { get; set; }
+
+        public string Latitude { get; set; }
+
+        public string Longitude { get; set; }
+
+        public string GeodeticDatum { get; set; }
+
+        public string SiteRadius { get; set; }
+
+        public string GeoreferenceBy { get; set; }
+
+        public string GeoreferenceDate { get; set; }
+
+        public string GeoreferenceProtocol { get; set; }
+
+        public string GeoreferenceSource { get; set; }
 
         #region Geology
 
@@ -106,9 +178,9 @@ namespace CollectionsOnline.Core.Models
 
         public string MineralogyAssociatedMatrix { get; set; }
 
-        public string MineralogyIsType { get; set; }
-
         public string MineralogyType { get; set; }
+
+        public string MineralogyTypeOfType { get; set; }
 
         #endregion
 
@@ -160,149 +232,6 @@ namespace CollectionsOnline.Core.Models
 
         #endregion
 
-        #region DwC Fields
-
-        #region Record-level Terms
-
-        public string DctermsType { get; set; }
-
-        public string DctermsModified 
-        {
-            get { return DateModified.ToString("s"); }
-        }
-
-        public string DctermsLanguage { get; set; }
-
-        public string DctermsRights { get; set; }
-
-        public string DctermsRightsHolder { get; set; }
-
-        public string InstitutionId { get; set; }
-
-        public string CollectionId { get; set; }
-        
-        public string DatasetId { get; set; }
-
-        public string InstitutionCode { get; set; }
-
-        public string CollectionCode { get; set; }
-
-        public string DatasetName { get; set; }
-
-        public string OwnerInstitutionCode { get; set; }
-
-        public string BasisOfRecord { get; set; }
-
-        #endregion
-
-        #region Occurrence
-
-        public string OccurrenceId { get; set; }
-
-        public string CatalogNumber { get; set; }
-
-        public string RecordedBy { get; set; }
-
-        public string IndividualCount { get; set; }
-
-        public string Sex { get; set; }
-
-        public string LifeStage { get; set; }
-
-        public string OccurrenceStatus { get; set; }
-
-        public string Preparations { get; set; }
-
-        public string AssociatedMedia { get; set; }
-
-        #endregion
-
-        #region Event
-
-        public string EventId { get; set; }
-
-        public string SamplingProtocol { get; set; }
-
-        public string EventDate { get; set; }
-
-        public string EventTime { get; set; }
-
-        public string Year { get; set; }
-
-        public string Month { get; set; }
-
-        public string Day { get; set; }
-
-        public string VerbatimEventDate { get; set; }
-
-        public string FieldNumber { get; set; }
-
-        #endregion
-
-        #region Location
-
-        public string LocationID { get; set; }
-
-        public string HigherGeography { get; set; }
-
-        public string Continent { get; set; }
-
-        public string WaterBody { get; set; }
-
-        public string Country { get; set; }
-
-        public string StateProvince { get; set; }
-
-        public string County { get; set; }
-
-        public string Municipality { get; set; }
-
-        public string NearestNamedPlace { get; set; }
-
-        public string Locality { get; set; }
-
-        public string VerbatimLocality { get; set; }
-
-        public string MinimumElevationInMeters { get; set; }
-
-        public string MaximumElevationInMeters { get; set; }
-
-        public string MinimumDepthInMeters { get; set; }
-
-        public string MaximumDepthInMeters { get; set; }
-
-        public string DecimalLatitude { get; set; }
-
-        public string DecimalLongitude { get; set; }
-
-        public string GeodeticDatum { get; set; }
-
-        public string GeoreferencedBy { get; set; }
-
-        public string GeoreferencedDate { get; set; }
-
-        public string GeoreferenceProtocol { get; set; }
-
-        public string GeoreferenceSources { get; set; }
-
-        #endregion
-
-        #region Identification
-
-        public string IdentifiedBy { get; set; }
-
-        public string DateIdentified { get; set; }
-
-        public string IdentificationRemarks { get; set; }
-
-        public string IdentificationQualifier { get; set; }
-
-        public string TypeStatus { get; set; }
-
-        #endregion
-
-        #endregion
-
         private void InitializeCollections()
         {
             CollectionNames = new List<string>();
@@ -310,8 +239,8 @@ namespace CollectionsOnline.Core.Models
             Associations = new List<Association>();
             Tags = new List<string>();
             RelatedIds = new List<string>();
-            AttachedIds = new List<string>();
             Media = new List<Media>();
+            Storages = new List<Storage>();
         }
     }
 }

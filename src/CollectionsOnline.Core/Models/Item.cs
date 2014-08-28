@@ -241,6 +241,8 @@ namespace CollectionsOnline.Core.Models
 
         #region Artwork
 
+        public string ArtworkMedium { get; set; }
+
         public string ArtworkTechnique { get; set; }
 
         public string ArtworkSupport { get; set; }
@@ -259,17 +261,19 @@ namespace CollectionsOnline.Core.Models
 
         public string ArtworkTertiaryInscriptions { get; set; }
 
+        public string TypeStatus { get; set; }
+
         public string IdentifiedBy { get; set; }
 
         public string DateIdentified { get; set; }
 
-        public string IdentificationRemarks { get; set; }
+        public string Qualifier { get; set; }
 
-        public string IdentificationQualifier { get; set; }
-
-        public string TypeStatus { get; set; }
+        public QualifierRankType QualifierRank { get; set; }
 
         public Taxonomy Taxonomy { get; set; }
+
+        public string ScientificName { get; set; }
 
         #endregion
 

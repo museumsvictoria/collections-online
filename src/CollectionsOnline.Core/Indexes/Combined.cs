@@ -82,7 +82,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Sort fields
                     Quality =
-                        ((!string.IsNullOrWhiteSpace(species.IdentifyingCharacters) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet)) ? 1 : 0) +
+                        ((!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet)) ? 1 : 0) +
                         ((!string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
                         (species.Media.Count * 2) +
                         ((species.SpecimenIds.Any()) ? 1 : 0),
@@ -131,17 +131,17 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Content fields
                     Id = specimen.Id,
-                    Name = specimen.ObjectName ?? specimen.Taxonomy.ScientificName,
+                    Name = specimen.ObjectName ?? specimen.ScientificName,
                     Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
                     ThumbUrl = specimen.Media.FirstOrDefault() != null ? specimen.Media.FirstOrDefault().Url : (string) null,
 
                     // Sort fields
                     Quality =
-                        ((!string.IsNullOrWhiteSpace(specimen.Year) || !string.IsNullOrWhiteSpace(specimen.RecordedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
-                        ((!string.IsNullOrWhiteSpace(specimen.DecimalLatitude) || !string.IsNullOrWhiteSpace(specimen.DecimalLongitude)) ? 1 : 0) +
+                        ((specimen.DateVisitedFrom.HasValue || !string.IsNullOrWhiteSpace(specimen.CollectedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
+                        ((!string.IsNullOrWhiteSpace(specimen.Latitude) || !string.IsNullOrWhiteSpace(specimen.Longitude)) ? 1 : 0) +
                         (specimen.Media.Count * 2) +
-                        ((!string.IsNullOrWhiteSpace(specimen.Taxonomy.ScientificName)) ? 1 : 0),
+                        ((!string.IsNullOrWhiteSpace(specimen.ScientificName)) ? 1 : 0),
 
                     // Facet fields
                     Type = "Specimen",

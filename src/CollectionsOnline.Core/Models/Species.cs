@@ -46,7 +46,7 @@ namespace CollectionsOnline.Core.Models
 
         public string Biology { get; set; }
 
-        public string IdentifyingCharacters { get; set; }
+        public string GeneralDescription { get; set; }
 
         public string BriefId { get; set; }
 
@@ -79,6 +79,8 @@ namespace CollectionsOnline.Core.Models
         public IList<Media> Media { get; set; }
 
         public Taxonomy Taxonomy { get; set; }
+
+        public string ScientificName { get; set; }
 
         private void InitializeCollections()
         {

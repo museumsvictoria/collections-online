@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
 
@@ -105,7 +106,7 @@ namespace CollectionsOnline.Import.Factories
 
             species.Habitats = map.GetStrings("SpeHabitat_tab") ?? new string[] { };
             species.WhereToLook = map.GetStrings("SpeWhereToLook_tab") ?? new string[] { };
-            species.WhenActive = map.GetStrings("SpeWhereToLook_tab") ?? new string[] { };
+            species.WhenActive = map.GetStrings("SpeWhenActive_tab") ?? new string[] { };
             species.NationalParks = map.GetStrings("SpeNationalParks_tab") ?? new string[] { };
 
             species.Diet = map.GetString("SpeDiet");
@@ -115,7 +116,7 @@ namespace CollectionsOnline.Import.Factories
             species.Habitat = map.GetString("SpeHabitatNotes");
             species.Distribution = map.GetString("SpeDistribution");
             species.Biology = map.GetString("SpeBiology");
-            species.IdentifyingCharacters = map.GetString("SpeIdentifyingCharacters");
+            species.GeneralDescription = map.GetString("SpeIdentifyingCharacters");
             species.BriefId = map.GetString("SpeBriefID");
             species.Hazards = map.GetString("SpeHazards");
             species.Endemicity = map.GetString("SpeEndemicity");
@@ -140,10 +141,27 @@ namespace CollectionsOnline.Import.Factories
             species.Depths = map.GetStrings("SpeDepth_tab") ?? new string[] { };
             species.WaterColumnLocations = map.GetStrings("SpeWaterColumnLocation_tab") ?? new string[] { };
 
-            // Get Taxonomy
-            species.Taxonomy = _taxonomyFactory.Make(map.GetMaps("taxa").FirstOrDefault());
-            
-            // Relationships
+            // Taxonomy
+            var taxonomyMap = map.GetMaps("taxa").FirstOrDefault();
+            species.Taxonomy = _taxonomyFactory.Make(taxonomyMap);
+
+            if (taxonomyMap != null)
+            {
+                // Scientific Name
+                species.ScientificName = new[]
+                {
+                    species.Taxonomy.Genus,
+                    string.IsNullOrWhiteSpace(species.Taxonomy.Subgenus)
+                        ? null
+                        : string.Format("({0})", species.Taxonomy.Subgenus),
+                    species.Taxonomy.Species,
+                    species.Taxonomy.Subspecies,
+                    species.Taxonomy.Author
+                }.Concatenate(" ");
+            }
+
+            // Relationships (specimen occurrences for species)
+            // TODO: Add import to check for these relationships
             var specimensMap = map
                 .GetMaps("specimens")
                 .FirstOrDefault();
@@ -169,8 +187,8 @@ namespace CollectionsOnline.Import.Factories
             species.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Build summary
-            if (!string.IsNullOrWhiteSpace(species.IdentifyingCharacters))
-                species.Summary = species.IdentifyingCharacters;
+            if (!string.IsNullOrWhiteSpace(species.GeneralDescription))
+                species.Summary = species.GeneralDescription;
             else if (!string.IsNullOrWhiteSpace(species.Biology))
                 species.Summary = species.Biology;
             

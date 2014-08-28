@@ -33,6 +33,8 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Author> Authors { get; set; }
 
+        public IList<Author> Contributors { get; set; }
+
         public IList<Media> Media { get; set; }
 
         public string ParentStoryId { get; set; }
@@ -43,16 +45,20 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedItemIds { get; set; }
 
+        public IList<string> RelatedPartyItemIds { get; set; }
+
         private void InitializeCollections()
         {
             Tags = new List<string>();
             Types = new List<string>();
             GeographicTags = new List<string>();
             Authors = new List<Author>();
+            Contributors = new List<Author>();
             Media = new List<Media>();
             ChildStoryIds = new List<string>();
             RelatedStoryIds = new List<string>();
             RelatedItemIds = new List<string>();
+            RelatedPartyItemIds = new List<string>();
         }
     }
 }
