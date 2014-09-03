@@ -203,10 +203,6 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Planetarium", MuseumVenue = "Scienceworks" }
             },
             {
-                new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "Ground Level", "South", "Gallery"),
-                new MuseumLocation { Gallery = "Sportsworks", MuseumVenue = "Scienceworks" }
-            },
-            {
                 new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "Ground Level", "North", "Gallery"),
                 new MuseumLocation { Gallery = "Touring Hall", MuseumVenue = "Scienceworks" }
             },
@@ -248,10 +244,6 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Level 2", "West", "Gallery 6"),
-                new MuseumLocation { Gallery = "West Wing Gallery", MuseumVenue = "Immigration Museum" }
-            },
-            {
-                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Level 2", "West", "Gallery 7"),
                 new MuseumLocation { Gallery = "West Wing Gallery", MuseumVenue = "Immigration Museum" }
             },
             {

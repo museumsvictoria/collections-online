@@ -16,7 +16,7 @@
 
         public string Summary { get; set; }
 
-        public string ThumbUrl { get; set; }
+        public string ThumbUri { get; set; }
 
         public int Quality { get; set; }
 

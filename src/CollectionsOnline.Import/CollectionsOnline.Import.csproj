@@ -54,9 +54,9 @@
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
-    <Reference Include="ImageResizer, Version=3.4.3.103, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ImageProcessor, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageResizer.3.4.3\lib\ImageResizer.dll</HintPath>
+      <HintPath>..\packages\ImageProcessor.2.0.0.0\lib\net45\ImageProcessor.dll</HintPath>
     </Reference>
     <Reference Include="imu-1.0.03">
       <HintPath>..\..\lib\IMu\imu-1.0.03.dll</HintPath>
@@ -115,14 +115,15 @@
     </Compile>
     <Compile Include="Infrastructure\ImportRunner.cs" />
     <Compile Include="Imports\ImuImport.cs" />
+    <Compile Include="Infrastructure\MacTiffFormat.cs" />
     <Compile Include="Infrastructure\NinjectImuSessionProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HtmlConverter.cs" />
     <Compile Include="Factories\IPartiesNameFactory.cs" />
-    <Compile Include="Utilities\IMediaHelper.cs" />
+    <Compile Include="Factories\IImageMediaFactory.cs" />
     <Compile Include="Factories\PartiesNameFactory.cs" />
-    <Compile Include="Utilities\MediaHelper.cs" />
+    <Compile Include="Factories\ImageMediaFactory.cs" />
     <Compile Include="Utilities\NaturalDateConverter.cs" />
   </ItemGroup>
   <ItemGroup>

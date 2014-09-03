@@ -1,60 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Utilities;
-using ImageResizer;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class MediaFactory : IMediaFactory
     {
-        private readonly IMediaHelper _mediaHelper;
+        private readonly IImageMediaFactory _imageMediaFactory;
 
-        public MediaFactory(IMediaHelper mediaHelper)
+        public MediaFactory(IImageMediaFactory imageMediaFactory)
         {
-            _mediaHelper = mediaHelper;
+            _imageMediaFactory = imageMediaFactory;
         }
 
         public Media Make(Map map)
         {
             if (map != null &&
                 string.Equals(map.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
-                map.GetStrings("MdaDataSets_tab").Contains(Constants.ImuMultimediaQueryString) &&
-                string.Equals(map.GetString("MulMimeType"), "image", StringComparison.OrdinalIgnoreCase))
+                map.GetStrings("MdaDataSets_tab").Contains(Constants.ImuMultimediaQueryString))
             {
                 var irn = long.Parse(map.GetString("irn"));
 
-                var url = PathFactory.MakeUrlPath(irn, FileFormatType.Jpg, "thumb");
-                var thumbResizeSettings = new ResizeSettings
+                // Handle images
+                if (string.Equals(map.GetString("MulMimeType"), "image", StringComparison.OrdinalIgnoreCase))
                 {
-                    Format = FileFormatType.Jpg.ToString(),
-                    Height = 365,
-                    Width = 365,
-                    Mode = FitMode.Crop,
-                    PaddingColor = Color.White,
-                    Quality = 65
-                };
-
-                if (_mediaHelper.Save(irn, FileFormatType.Jpg, thumbResizeSettings, "thumb"))
-                {
-                    return new Media
+                    var imageMedia = new ImageMedia
                     {
                         Irn = irn,
-                        DateModified =
-                            DateTime.ParseExact(
-                                string.Format("{0} {1}", map.GetString("AdmDateModified"),
-                                    map.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm",
-                                new CultureInfo("en-AU")),
+                        DateModified = DateTime.ParseExact(string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")), "dd/MM/yyyy HH:mm", new CultureInfo("en-AU")),
                         Title = map.GetString("MulTitle"),
                         AlternateText = map.GetString("DetAlternateText"),
-                        Type = map.GetString("MulMimeType"),
-                        Url = url
                     };
+
+                    if (_imageMediaFactory.Make(ref imageMedia))
+                    {
+                        return imageMedia;
+                    }                    
                 }
             }
 
