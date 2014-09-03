@@ -252,7 +252,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                         "Id",
                         "Name",
                         "Summary",
-                        "ThumbUrl",
+                        "ThumbnailUri",
                         "Type")
                     .OrderByDescending(x => x.Quality)
                     .ToList();
