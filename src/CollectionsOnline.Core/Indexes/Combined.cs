@@ -23,8 +23,7 @@ namespace CollectionsOnline.Core.Indexes
                     Name = item.ObjectName,
                     Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber },
                     Summary = item.Summary,
-                    //ThumbUri = item.Media.FirstOrDefault(x => x is ImageMedia) != null ? ((ImageMedia)item.Media.FirstOrDefault(x => x is ImageMedia)).Thumbnail.Uri : (string)null,
-                    ThumbUri = string.Empty,
+                    ThumbnailUri = item.ThumbnailUri,
 
                     // Sort fields
                     Quality = 
@@ -79,8 +78,7 @@ namespace CollectionsOnline.Core.Indexes
                     Name = species.Taxonomy.CommonName ?? species.Taxonomy.Species ?? species.Taxonomy.Genus,
                     Content = new object[] { species.AnimalType, species.AnimalSubType, species.Taxonomy.CommonName, species.Taxonomy.Species, species.Taxonomy.Genus, species.Taxonomy.Family, species.Taxonomy.Order, species.Taxonomy.Class, species.Taxonomy.Phylum },
                     Summary = species.Summary,
-                    //ThumbUri = species.Media.FirstOrDefault(x => x is ImageMedia) != null ? ((ImageMedia)species.Media.FirstOrDefault(x => x is ImageMedia)).Thumbnail.Uri : (string)null,
-                    ThumbUri = string.Empty,
+                    ThumbnailUri = species.ThumbnailUri,
 
                     // Sort fields
                     Quality =
@@ -136,8 +134,7 @@ namespace CollectionsOnline.Core.Indexes
                     Name = specimen.ObjectName ?? specimen.ScientificName,
                     Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
-                    //ThumbUri = specimen.Media.FirstOrDefault(x => x is ImageMedia) != null ? ((ImageMedia)specimen.Media.FirstOrDefault(x => x is ImageMedia)).Thumbnail.Uri : (string)null,
-                    ThumbUri = string.Empty,
+                    ThumbnailUri = specimen.ThumbnailUri,
 
                     // Sort fields
                     Quality =
@@ -193,8 +190,7 @@ namespace CollectionsOnline.Core.Indexes
                     Name = story.Title,
                     Content = new object[] {story.Content, story.ContentSummary},
                     Summary = story.Summary,
-                    //ThumbUri = story.Media.FirstOrDefault(x => x is ImageMedia) != null ? ((ImageMedia)story.Media.FirstOrDefault(x => x is ImageMedia)).Thumbnail.Uri : (string)null,
-                    ThumbUri = string.Empty,
+                    ThumbnailUri = story.ThumbnailUri,
 
                     // Sort fields
                     Quality =
@@ -240,7 +236,7 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.Name, FieldIndexing.No);
             Index(x => x.Content, FieldIndexing.Analyzed);
             Index(x => x.Summary, FieldIndexing.No);
-            Index(x => x.ThumbUri, FieldIndexing.No);
+            Index(x => x.ThumbnailUri, FieldIndexing.No);
 
             Index(x => x.MediaIrns, FieldIndexing.NotAnalyzed);
             Index(x => x.TaxonomyIrn, FieldIndexing.NotAnalyzed);
@@ -255,7 +251,7 @@ namespace CollectionsOnline.Core.Indexes
             Store(x => x.Id, FieldStorage.Yes);
             Store(x => x.Name, FieldStorage.Yes);
             Store(x => x.Summary, FieldStorage.Yes);
-            Store(x => x.ThumbUri, FieldStorage.Yes);
+            Store(x => x.ThumbnailUri, FieldStorage.Yes);
             Store(x => x.Type, FieldStorage.Yes);
             
             Sort(x => x.Quality, SortOptions.Int);

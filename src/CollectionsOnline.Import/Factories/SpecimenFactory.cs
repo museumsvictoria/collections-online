@@ -448,6 +448,10 @@ namespace CollectionsOnline.Import.Factories
             // Media
             specimen.Media = _mediaFactory.Make(map.GetMaps("media"));
 
+            var thumbnail = specimen.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            if (thumbnail != null)
+                specimen.ThumbnailUri = thumbnail.Thumbnail.Uri;
+
             // Build summary
             if(specimen.Taxonomy != null)
                 specimen.Summary = new[]

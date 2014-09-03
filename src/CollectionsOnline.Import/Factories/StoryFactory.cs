@@ -120,6 +120,10 @@ namespace CollectionsOnline.Import.Factories
             // Media           
             story.Media = _mediaFactory.Make(map.GetMaps("media"));
 
+            var thumbnail = story.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            if (thumbnail != null)
+                story.ThumbnailUri = thumbnail.Thumbnail.Uri;
+
             // Relationships
             // TODO: Add import to check for these relationships
 

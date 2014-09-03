@@ -186,6 +186,10 @@ namespace CollectionsOnline.Import.Factories
             // Media
             species.Media = _mediaFactory.Make(map.GetMaps("media"));
 
+            var thumbnail = species.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            if (thumbnail != null)
+                species.ThumbnailUri = thumbnail.Thumbnail.Uri;
+
             // Build summary
             if (!string.IsNullOrWhiteSpace(species.GeneralDescription))
                 species.Summary = species.GeneralDescription;

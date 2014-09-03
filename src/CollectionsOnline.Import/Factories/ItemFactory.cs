@@ -400,6 +400,10 @@ namespace CollectionsOnline.Import.Factories
 
             // Media
             item.Media = _mediaFactory.Make(map.GetMaps("media"));
+
+            var thumbnail = item.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            if (thumbnail != null)
+                item.ThumbnailUri = thumbnail.Thumbnail.Uri;
             
             // Indigenous Cultures Fields
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();
