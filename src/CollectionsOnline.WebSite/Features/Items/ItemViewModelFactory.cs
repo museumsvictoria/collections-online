@@ -1,4 +1,5 @@
-﻿using CollectionsOnline.Core.Models;
+﻿using System.Linq;
+using CollectionsOnline.Core.Models;
 
 namespace CollectionsOnline.WebSite.Features.Items
 {
@@ -8,10 +9,11 @@ namespace CollectionsOnline.WebSite.Features.Items
         {
             var itemViewModel = new ItemViewModel
                 {
-                    Item = item
+                    Item = item,
+                    ImageMedia = item.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList(),
                 };
 
             return itemViewModel;
         }
     }
-}
+} 

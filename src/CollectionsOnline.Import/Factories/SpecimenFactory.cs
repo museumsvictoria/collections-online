@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -7,7 +6,7 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Utilities;
+using CollectionsOnline.Core.Utilities;
 using IMu;
 using Raven.Abstractions.Extensions;
 

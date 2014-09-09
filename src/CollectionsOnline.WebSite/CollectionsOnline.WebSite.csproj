@@ -125,6 +125,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ExpandoObjectExtensions.cs" />
     <Compile Include="Features\Stories\IStoryViewModelFactory.cs" />
     <Compile Include="Features\Stories\IStoryViewModelQuery.cs" />
     <Compile Include="Features\Stories\StoriesModule.cs" />

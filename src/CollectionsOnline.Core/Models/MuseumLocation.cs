@@ -2,7 +2,7 @@
 {
     public class MuseumLocation
     {
-        public string MuseumVenue { get; set; }
+        public string Venue { get; set; }
 
         public string Gallery { get; set; }
     }

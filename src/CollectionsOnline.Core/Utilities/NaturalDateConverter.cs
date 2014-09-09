@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace CollectionsOnline.Import.Utilities
+namespace CollectionsOnline.Core.Utilities
 {
     public static class NaturalDateConverter
     {

@@ -90,6 +90,7 @@
     <Compile Include="Factories\SlugFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Inflector.cs" />
+    <Compile Include="Utilities\NaturalDateConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

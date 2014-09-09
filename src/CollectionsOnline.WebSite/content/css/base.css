@@ -35,7 +35,3 @@
 .record .detailed.dl-horizontal dd {
 	margin-left: 280px;
 }
-
-.record .detailed span:after {
-	content: ", "
-}

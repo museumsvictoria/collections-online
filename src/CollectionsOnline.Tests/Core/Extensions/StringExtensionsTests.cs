@@ -24,6 +24,22 @@ namespace CollectionsOnline.Tests.Core.Extensions
         }
 
         [Fact]
+        public void Concatenate_ReturnsCommaConcatenatedString()
+        {
+            // Given When
+            var result = new[]
+            {
+                "Arthropoda",
+                "Malacostraca",
+                "Tanaidacea",
+                "Metapseudidae"
+            }.Concatenate(", ");
+
+            // Then
+            result.ShouldBe("Arthropoda, Malacostraca, Tanaidacea, Metapseudidae");
+        }
+
+        [Fact]
         public void GivenEmptyStrings_Concatenate_ReturnsNull()
         {
             // Given When
