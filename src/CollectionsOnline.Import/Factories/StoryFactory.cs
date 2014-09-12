@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -16,7 +17,6 @@ namespace CollectionsOnline.Import.Factories
     public class StoryFactory : IEmuAggregateRootFactory<Story>
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
-
         private readonly ISlugFactory _slugFactory;
         private readonly IMediaFactory _mediaFactory;
 
@@ -75,6 +75,8 @@ namespace CollectionsOnline.Import.Factories
 
         public Story MakeDocument(Map map)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             var story = new Story();
 
             story.Id = "stories/" + map.GetString("irn");
@@ -177,6 +179,9 @@ namespace CollectionsOnline.Import.Factories
                     _log.Warn("Unable to convert story content html to text, irn:{0}, html:{0}, exception:{1}", map.GetString("irn"), story.Content, e);
                 }
             }
+
+            stopwatch.Stop();
+            _log.Trace("Completed story creation for narrative record with irn {0}, elapsed time {1} ms", map.GetString("irn"), stopwatch.ElapsedMilliseconds);
 
             return story;
         }

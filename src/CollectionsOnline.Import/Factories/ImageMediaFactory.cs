@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using CollectionsOnline.Core.Models;
@@ -24,8 +25,11 @@ namespace CollectionsOnline.Import.Factories
         {
             try
             {
+                var stopwatch = Stopwatch.StartNew();
+
                 _module.FindKey(imageMedia.Irn);
                 var result = _module.Fetch("start", 0, -1, new[] { "resource" }).Rows[0];
+
                 var resource = result.GetMap("resource");
 
                 if (resource == null)
@@ -37,7 +41,14 @@ namespace CollectionsOnline.Import.Factories
                 {
                     // Original
                     imageFactory
-                        .Load(fileStream)
+                        .Load(fileStream);
+
+                    stopwatch.Stop();
+                    _log.Trace("Loaded media resource FileStream in {0} ms ({1} kbytes)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"));
+                    stopwatch.Reset();
+                    stopwatch.Start();
+
+                    imageFactory
                         .Format(new JpegFormat())
                         .Quality(90)
                         .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "original"));
@@ -109,6 +120,9 @@ namespace CollectionsOnline.Import.Factories
                         Width = imageFactory.Image.Width,
                         Height = imageFactory.Image.Height
                     };
+
+                    stopwatch.Stop();
+                    _log.Trace("Created all derivative image media in {0} ms", stopwatch.ElapsedMilliseconds);
                 }
               
                 return true;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
@@ -9,12 +11,14 @@ using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using IMu;
+using NLog;
 using Raven.Abstractions.Extensions;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class ItemFactory : IEmuAggregateRootFactory<Item>
     {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly ISlugFactory _slugFactory;
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly IMuseumLocationFactory _locationFactory;
@@ -192,6 +196,8 @@ namespace CollectionsOnline.Import.Factories
 
         public Item MakeDocument(Map map)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             var item = new Item();
 
             item.Id = "items/" + map.GetString("irn");
@@ -399,7 +405,9 @@ namespace CollectionsOnline.Import.Factories
             item.TradeLiteraturePrimaryName = _partiesNameFactory.Make(map.GetMap("tlparty"));
 
             // Media
+            var mediaStopwatch = Stopwatch.StartNew();
             item.Media = _mediaFactory.Make(map.GetMaps("media"));
+            mediaStopwatch.Stop();
 
             var thumbnail = item.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
             if (thumbnail != null)
@@ -638,6 +646,9 @@ namespace CollectionsOnline.Import.Factories
             }
 
             item.AssociatedDates = associatedDates.Distinct().ToList();
+
+            stopwatch.Stop();
+            _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);
 
             return item;
         }

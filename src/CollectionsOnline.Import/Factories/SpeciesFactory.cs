@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -6,11 +7,13 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
+using NLog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class SpeciesFactory : IEmuAggregateRootFactory<Species>
     {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
 
@@ -87,6 +90,8 @@ namespace CollectionsOnline.Import.Factories
 
         public Species MakeDocument(Map map)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             var species = new Species();
 
             species.Id = "species/" + map.GetString("irn");
@@ -195,6 +200,9 @@ namespace CollectionsOnline.Import.Factories
                 species.Summary = species.GeneralDescription;
             else if (!string.IsNullOrWhiteSpace(species.Biology))
                 species.Summary = species.Biology;
+
+            stopwatch.Stop();
+            _log.Trace("Completed species creation for narrative record with irn {0}, elapsed time {1} ms", map.GetString("irn"), stopwatch.ElapsedMilliseconds);
             
             return species;
         }

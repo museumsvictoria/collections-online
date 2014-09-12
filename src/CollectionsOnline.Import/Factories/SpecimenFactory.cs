@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -8,12 +9,14 @@ using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using IMu;
+using NLog;
 using Raven.Abstractions.Extensions;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class SpecimenFactory : IEmuAggregateRootFactory<Specimen>
     {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly ISlugFactory _slugFactory;
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
@@ -127,6 +130,8 @@ namespace CollectionsOnline.Import.Factories
 
         public Specimen MakeDocument(Map map)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             var specimen = new Specimen();
 
             specimen.Id = "specimens/" + map.GetString("irn");
@@ -471,6 +476,9 @@ namespace CollectionsOnline.Import.Factories
                 if(!string.IsNullOrWhiteSpace(yearSpan))
                     specimen.AssociatedDate = yearSpan;
             }
+
+            stopwatch.Stop();
+            _log.Trace("Completed specimen creation for catalog record with irn {0}, elapsed time {1} ms", map.GetString("irn"), stopwatch.ElapsedMilliseconds);
             
             return specimen;
         }

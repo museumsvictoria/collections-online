@@ -115,7 +115,6 @@
     </Compile>
     <Compile Include="Infrastructure\ImportRunner.cs" />
     <Compile Include="Imports\ImuImport.cs" />
-    <Compile Include="Infrastructure\MacTiffFormat.cs" />
     <Compile Include="Infrastructure\NinjectImuSessionProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
