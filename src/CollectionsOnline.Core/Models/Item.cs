@@ -71,7 +71,9 @@ namespace CollectionsOnline.Core.Models
 
         public string BrandNames { get; set; }
 
-        public IList<string> RelatedIds { get; set; }
+        public IList<string> RelatedItemSpecimenIds { get; set; }
+
+        public IList<string> RelatedArticleIds { get; set; }
 
         public IList<Media> Media { get; set; }
 
@@ -289,7 +291,8 @@ namespace CollectionsOnline.Core.Models
             Tags = new List<string>();
             Dimensions = new List<Dimension>();
             Bibliographies = new List<string>();
-            RelatedIds = new List<string>();
+            RelatedItemSpecimenIds = new List<string>();
+            RelatedArticleIds = new List<string>();
             Media = new List<Media>();
             AudioVisualContentSummaries = new List<string>();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
@@ -67,7 +68,7 @@ namespace CollectionsOnline.Import.Imports
                         if (ImportCanceled())
                             return;
 
-                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
+                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });                        
 
                         if (results.Count == 0)
                             break;
@@ -108,9 +109,14 @@ namespace CollectionsOnline.Import.Imports
                     if (cachedResultBatch.Count == 0)
                         break;
 
+                    var stopwatch = Stopwatch.StartNew();
+
                     module.FindKeys(cachedResultBatch);
 
                     var results = module.Fetch("start", 0, -1, _imuFactory.Columns);
+
+                    stopwatch.Stop();
+                    _log.Trace("Found and fetched {0} {1} records in {2} ms",cachedResultBatch.Count, typeof(T).Name, stopwatch.ElapsedMilliseconds);
 
                     // If import has run before, update existing documents, otherwise simply store new documents.
                     if (importStatus.PreviousDateRun.HasValue)

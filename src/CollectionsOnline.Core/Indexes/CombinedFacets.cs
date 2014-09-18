@@ -73,7 +73,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedResult>
                 {
-                    Name = x => x.StoryTypes
+                    Name = x => x.ArticleTypes
                 },
                 new Facet<CombinedResult>
                 {

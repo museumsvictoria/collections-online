@@ -207,14 +207,14 @@ namespace CollectionsOnline.Import.Imports
                                         continue;
                                     }
 
-                                    var story = document as Story;
-                                    if (story != null)
+                                    var article = document as Article;
+                                    if (article != null)
                                     {
-                                        var existingMedia = story.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        var existingMedia = article.Media.SingleOrDefault(x => x.Irn == mediaIrn);
                                         if (existingMedia != null)
-                                            story.Media[story.Media.IndexOf(existingMedia)] = media;
+                                            article.Media[article.Media.IndexOf(existingMedia)] = media;
 
-                                        var author = story.Authors.SingleOrDefault(x => x.Media != null && x.Media.Irn == mediaIrn);
+                                        var author = article.Authors.SingleOrDefault(x => x.Media != null && x.Media.Irn == mediaIrn);
                                         if (author != null)
                                             author.Media = media;
 

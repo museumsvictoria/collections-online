@@ -46,7 +46,7 @@ namespace CollectionsOnline.Core.Indexes
                     Class = (string)null,
                     SpecimenScientificGroup = (string)null,
                     SpecimenDiscipline = (string)null,
-                    StoryTypes = new object[] { },
+                    ArticleTypes = new object[] { },
                     Dates = item.AssociatedDates.ToArray(),
 
                     // Term fields
@@ -85,7 +85,7 @@ namespace CollectionsOnline.Core.Indexes
                         ((!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet)) ? 1 : 0) +
                         ((!string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
                         (species.Media.Count * 2) +
-                        ((species.SpecimenIds.Any()) ? 1 : 0),
+                        ((species.RelatedItemSpecimenIds.Any()) ? 1 : 0),
 
                     // Facet fields
                     Type = "Species",
@@ -102,7 +102,7 @@ namespace CollectionsOnline.Core.Indexes
                     Class = species.Taxonomy.Class,
                     SpecimenScientificGroup = (string) null,
                     SpecimenDiscipline = (string) null,
-                    StoryTypes = new object[] {},
+                    ArticleTypes = new object[] {},
                     Dates = new object[] { },
 
                     // Term fields
@@ -158,7 +158,7 @@ namespace CollectionsOnline.Core.Indexes
                     Class = specimen.Taxonomy.Class,
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     SpecimenDiscipline = specimen.Discipline,
-                    StoryTypes = new object[] {},
+                    ArticleTypes = new object[] {},
                     Dates = new object[] { specimen.AssociatedDate },
 
                     // Term fields
@@ -176,33 +176,33 @@ namespace CollectionsOnline.Core.Indexes
                     ItemTradeLiteraturePrimaryName = (string) null,
                 });
 
-            AddMap<Story>(stories =>
-                from story in stories
-                where story.IsHidden == false
+            AddMap<Article>(articles =>
+                from article in articles
+                where article.IsHidden == false
                 select new
                 {
                     // Update fields
-                    MediaIrns = new object[] { story.Media.Select(x => x.Irn), story.Authors.Select(x => x.Media.Irn) },
+                    MediaIrns = new object[] { article.Media.Select(x => x.Irn), article.Authors.Select(x => x.Media.Irn) },
                     TaxonomyIrn = 0,
 
                     // Content fields
-                    Id = story.Id,
-                    Name = story.Title,
-                    Content = new object[] {story.Content, story.ContentSummary},
-                    Summary = story.Summary,
-                    ThumbnailUri = story.ThumbnailUri,
+                    Id = article.Id,
+                    Name = article.Title,
+                    Content = new object[] {article.Content, article.ContentSummary},
+                    Summary = article.Summary,
+                    ThumbnailUri = article.ThumbnailUri,
 
                     // Sort fields
                     Quality =
-                        ((story.RelatedItemIds.Count > 1) ? 1 : 0) +
-                        ((story.Tags.Any()) ? 1 : 0) +
-                        (story.Media.Count * 2) +
-                        ((story.ChildStoryIds.Any()) ? 1 : 0),
+                        ((article.RelatedItemSpecimenIds.Count > 1) ? 1 : 0) +
+                        ((article.Tags.Any()) ? 1 : 0) +
+                        (article.Media.Count * 2) +
+                        ((article.ChildArticleIds.Any()) ? 1 : 0),
 
                     // Facet fields
-                    Type = "Story",
+                    Type = "Article",
                     Category = "History & Technology",
-                    HasImages = (story.Media.Any()) ? "Yes" : (string) null,
+                    HasImages = (article.Media.Any()) ? "Yes" : (string) null,
                     Discipline = (string) null,                    
                     ItemType = (string) null,
                     SpeciesType = (string) null,
@@ -214,11 +214,11 @@ namespace CollectionsOnline.Core.Indexes
                     Class = (string) null,
                     SpecimenScientificGroup = (string) null,
                     SpecimenDiscipline = (string) null,
-                    StoryTypes = story.Types,
+                    ArticleTypes = article.Types,
                     Dates = new int[] { },
 
                     // Term fields
-                    Tags = new object[] {story.Tags, story.GeographicTags},
+                    Tags = new object[] {article.Tags, article.GeographicTags},
                     Country = new object[] {},
                     CollectionNames = new object[] {},
                     CollectionPlans = new object[] { },
@@ -274,7 +274,7 @@ namespace CollectionsOnline.Core.Indexes
             TermVector(x => x.Class, FieldTermVector.Yes);
             TermVector(x => x.SpecimenScientificGroup, FieldTermVector.Yes);
             TermVector(x => x.SpecimenDiscipline, FieldTermVector.Yes);
-            TermVector(x => x.StoryTypes, FieldTermVector.Yes);
+            TermVector(x => x.ArticleTypes, FieldTermVector.Yes);
             TermVector(x => x.Dates, FieldTermVector.Yes);
         }
     }

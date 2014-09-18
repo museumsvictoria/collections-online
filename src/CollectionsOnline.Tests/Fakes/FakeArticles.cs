@@ -6,29 +6,29 @@ using FizzWare.NBuilder.Generators;
 
 namespace CollectionsOnline.Tests.Fakes
 {
-    public class FakeStories
+    public class FakeArticles
     {
-        public static Story CreateFakeStory(string id = null)
+        public static Article CreateFakeArticle(string id = null)
         {
             if (id == null)
             {
-                id = "stories/" + GetRandom.Int(1, 1500000);
+                id = "articles/" + GetRandom.Int(1, 1500000);
             }
 
-            return Builder<Story>
+            return Builder<Article>
                 .CreateNew()
                 .With(x => x.Id = id)
                 .With(x => x.DateModified = GetRandom.DateTime(DateTime.Now.AddYears(-2), DateTime.Now.AddDays(-1)))
                 .Build();
         }
 
-        public static IList<Story> CreateFakeStories(int count = 50)
+        public static IList<Article> CreateFakeArticles(int count = 50)
         {
-            var fakeSpecimens = new List<Story>();
+            var fakeSpecimens = new List<Article>();
 
             for (int i = 1; i < count+1; i++)
             {
-                fakeSpecimens.Add(CreateFakeStory("stories/" + i));
+                fakeSpecimens.Add(CreateFakeArticle("articles/" + i));
             }
 
             return fakeSpecimens;

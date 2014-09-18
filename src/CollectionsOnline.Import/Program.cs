@@ -62,10 +62,9 @@ namespace CollectionsOnline.Import
             kernel.Bind<IImport>().To<ImuImport<Item>>();
             kernel.Bind<IImport>().To<ImuImport<Species>>();
             kernel.Bind<IImport>().To<ImuImport<Specimen>>();
-            kernel.Bind<IImport>().To<ImuImport<Story>>();
+            kernel.Bind<IImport>().To<ImuImport<Article>>();
 
-            // Bind Geocoder
-            kernel.Bind<IGeocoder>().ToMethod(x => new GoogleGeocoder()
+            kernel.Bind<IGeocoder>().ToMethod(x => new GoogleGeocoder
             {
                 ApiKey = ConfigurationManager.AppSettings["GoogleApiKey"]
             });

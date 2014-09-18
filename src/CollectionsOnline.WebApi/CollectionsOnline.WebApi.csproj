@@ -117,7 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WebApiBootstrapper.cs" />
-    <Compile Include="Modules\StoryModule.cs" />
+    <Compile Include="Modules\ArticleModule.cs" />
     <Compile Include="Modules\SpecimenModule.cs" />
     <Compile Include="Modules\SpeciesModule.cs" />
     <Compile Include="WebApiJsonSerializer.cs" />

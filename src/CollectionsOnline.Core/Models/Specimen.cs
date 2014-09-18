@@ -54,7 +54,11 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Association> Associations { get; set; }
 
-        public IList<string> RelatedIds { get; set; }
+        public IList<string> RelatedItemSpecimenIds { get; set; }
+
+        public IList<string> RelatedArticleIds { get; set; }
+
+        public IList<string> RelatedSpeciesIds { get; set; }
 
         public string AcquisitionInformation { get; set; }
 
@@ -239,8 +243,11 @@ namespace CollectionsOnline.Core.Models
             CollectionNames = new List<string>();
             CollectionPlans = new List<string>();
             Associations = new List<Association>();
+            RelatedItemSpecimenIds = new List<string>();
+            RelatedArticleIds = new List<string>();
+            RelatedSpeciesIds = new List<string>();
             Tags = new List<string>();
-            RelatedIds = new List<string>();
+            RelatedItemSpecimenIds = new List<string>();
             Media = new List<Media>();
             Storages = new List<Storage>();
         }

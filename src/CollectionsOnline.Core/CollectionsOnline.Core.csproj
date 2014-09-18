@@ -59,6 +59,8 @@
     <Compile Include="DesignByContract\Checks.cs" />
     <Compile Include="DesignByContract\Requires.cs" />
     <Compile Include="DesignByContract\Ensures.cs" />
+    <Compile Include="Extensions\ExpandoObjectExtensions.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\OrdinalIgnoreCaseTupleComparer.cs" />
     <Compile Include="Indexes\CombinedFacets.cs" />
     <Compile Include="Indexes\Combined.cs" />
@@ -83,7 +85,7 @@
     <Compile Include="Models\Species.cs" />
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\Item.cs" />
-    <Compile Include="Models\Story.cs" />
+    <Compile Include="Models\Article.cs" />
     <Compile Include="Models\AggregateRoot.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\ISlugFactory.cs" />

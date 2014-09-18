@@ -69,7 +69,7 @@ namespace CollectionsOnline.Import.Factories
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
                     "taxa=TaxTaxaRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])",
-                    "specimens=TaxTaxaRef_tab.(specimens=<ecatalogue:TaxTaxonomyRef_tab>.(irn,sets=MdaDataSets_tab))",
+                    "relateditemspecimens=ObjObjectsRef_tab.(irn,MdaDataSets_tab)",
                     "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                     "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)"
                 };
@@ -165,18 +165,16 @@ namespace CollectionsOnline.Import.Factories
                 }.Concatenate(" ");
             }
 
-            // Relationships (specimen occurrences for species)
-            // TODO: Add import to check for these relationships
-            var specimensMap = map
-                .GetMaps("specimens")
-                .FirstOrDefault();
+            // Relationships          
 
-            if (specimensMap != null)
-                species.SpecimenIds = specimensMap
-                    .GetMaps("specimens")
-                    .Where(x => x != null && x.GetStrings("sets").Contains(Constants.ImuSpecimenQueryString))
-                    .Select(x => "specimens/" + x.GetString("irn"))
-                    .ToList();
+            // Related items/specimens (directly related)
+            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            {
+                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    species.RelatedItemSpecimenIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
+                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    species.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+            }
 
             // Authors
             species.Authors = map.GetMaps("authors")

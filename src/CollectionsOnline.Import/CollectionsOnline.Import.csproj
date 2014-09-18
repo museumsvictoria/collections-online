@@ -102,11 +102,12 @@
     <Compile Include="Factories\MediaFactory.cs" />
     <Compile Include="Factories\TaxonomyFactory.cs" />
     <Compile Include="Factories\PathFactory.cs" />
-    <Compile Include="Factories\StoryFactory.cs" />
+    <Compile Include="Factories\ArticleFactory.cs" />
     <Compile Include="Factories\SpecimenFactory.cs" />
     <Compile Include="Factories\SpeciesFactory.cs" />
     <Compile Include="Factories\ItemFactory.cs" />
     <Compile Include="Imports\IImport.cs" />
+    <Compile Include="Imports\RelationshipImport.cs" />
     <Compile Include="Imports\MediaUpdateImport.cs" />
     <Compile Include="Imports\GeocodeImport.cs" />
     <Compile Include="Imports\MigrationImport.cs" />

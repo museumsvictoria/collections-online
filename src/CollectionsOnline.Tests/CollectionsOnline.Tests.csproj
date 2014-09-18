@@ -120,7 +120,7 @@
   <ItemGroup>
     <Compile Include="Core\Extensions\StringExtensionsTests.cs" />
     <Compile Include="Core\Factories\SlugFactoryTests.cs" />
-    <Compile Include="Fakes\FakeStories.cs" />
+    <Compile Include="Fakes\FakeArticles.cs" />
     <Compile Include="Fakes\FakeSpecimens.cs" />
     <Compile Include="Fakes\FakeSpecies.cs" />
     <Compile Include="Fakes\FakeItems.cs" />
@@ -129,7 +129,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
     <Compile Include="WebApi\Modules\BaseModuleTests.cs" />
-    <Compile Include="WebApi\Modules\StoryModuleTests.cs" />
+    <Compile Include="WebApi\Modules\ArticleModuleTests.cs" />
     <Compile Include="WebApi\Modules\SpecimenModuleTests.cs" />
     <Compile Include="WebApi\Modules\SpeciesModuleTests.cs" />
     <Compile Include="WebApi\Modules\ItemModuleTests.cs" />

@@ -63,7 +63,7 @@ namespace CollectionsOnline.Import.Factories
                         "SpeStageAge_tab",
                         "storage=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab]",
                         "site=SitSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab])",
-                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab],relatedspecies=<enarratives:TaxTaxaRef_tab>.(irn,DetPurpose_tab))]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
                         "ColScientificGroup",
@@ -79,9 +79,9 @@ namespace CollectionsOnline.Import.Factories
                         "SubThemes_tab",
                         "SubSubjects_tab",
                         "associations=[AssAssociationType_tab,party=AssAssociationNameRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AssAssociationCountry_tab,AssAssociationState_tab,AssAssociationRegion_tab,AssAssociationLocality_tab,AssAssociationStreetAddress_tab,AssAssociationDate_tab,AssAssociationComments0]",
-                        "related=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
-                        "attached=ColPhysicallyAttachedToRef.(irn,MdaDataSets_tab)",
-                        "parent=ColParentRecordRef.(irn,MdaDataSets_tab)",
+                        "relateditemspecimens=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
+                        "attacheditemspecimens=ColPhysicallyAttachedToRef.(irn,MdaDataSets_tab)",
+                        "parentitemspecimens=ColParentRecordRef.(irn,MdaDataSets_tab)",
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
                         "RigText0",
                         "LocDateCollectedFrom",
@@ -112,6 +112,10 @@ namespace CollectionsOnline.Import.Factories
                         "RocGroup",
                         "RocRockName",
                         "RocRockDescription",
+                        "relatednarratives=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
+                        "relatedpartyarticles=AssAssociationNameRef_tab.(relatedarticles=<enarratives:ParPartiesRef_tab>.(irn,DetPurpose_tab))",
+                        "relatedsitearticles=ArcSiteNameRef.(relatedarticles=<enarratives:SitSitesRef_tab>.(irn,DetPurpose_tab))",
+                        "relatedcolleventarticles=ColCollectionEventRef.(relatedarticles=<enarratives:ColCollectionEventsRef_tab>.(irn,DetPurpose_tab))"
                     };
             }
         }
@@ -174,35 +178,6 @@ namespace CollectionsOnline.Import.Factories
 
             // Associations
             specimen.Associations = _associationFactory.Make(map.GetMaps("associations"));
-
-            // Relationships
-            // TODO: Add import to check for these relationships
-            // Related items/specimens
-            foreach (var related in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
-            {
-                if (related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedIds.Add(string.Format("items/{0}", related.GetString("irn")));
-                if (related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedIds.Add(string.Format("specimens/{0}", related.GetString("irn")));
-            }
-            // Physically attached
-            var attachedMap = map.GetMap("attached");
-            if (attachedMap != null)
-            {
-                if (attachedMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedIds.Add(string.Format("items/{0}", attachedMap.GetString("irn")));
-                if (attachedMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedIds.Add(string.Format("specimens/{0}", attachedMap.GetString("irn")));
-            }
-            // Parent record
-            var parentMap = map.GetMap("parent");
-            if (parentMap != null)
-            {
-                if (parentMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedIds.Add(string.Format("items/{0}", parentMap.GetString("irn")));
-                if (parentMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedIds.Add(string.Format("specimens/{0}", parentMap.GetString("irn")));
-            }
 
             // Acquisition information
             var accessionMap = map.GetMap("accession");
@@ -304,6 +279,14 @@ namespace CollectionsOnline.Import.Factories
                         specimen.Taxonomy.Subspecies,
                         specimen.Taxonomy.Author
                     }.Concatenate(" ");
+
+                    // Species profile Relationship
+                    var relatedSpeciesMap = taxonomyMap.GetMaps("relatedspecies").FirstOrDefault();
+                    if (relatedSpeciesMap != null &&
+                        relatedSpeciesMap.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                    {
+                        specimen.RelatedSpeciesIds.Add(string.Format("species/{0}", relatedSpeciesMap.GetString("irn")));
+                    }
                 }
             }
 
@@ -455,6 +438,80 @@ namespace CollectionsOnline.Import.Factories
             var thumbnail = specimen.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
             if (thumbnail != null)
                 specimen.ThumbnailUri = thumbnail.Thumbnail.Uri;
+
+            // Relationships
+
+            // Related items/specimens (directly related)
+            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            {
+                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    specimen.RelatedItemSpecimenIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
+                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    specimen.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+            }
+            // Physically attached
+            var attachedItemSpecimenMap = map.GetMap("attacheditemspecimens");
+            if (attachedItemSpecimenMap != null)
+            {
+                if (attachedItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    specimen.RelatedItemSpecimenIds.Add(string.Format("items/{0}", attachedItemSpecimenMap.GetString("irn")));
+                if (attachedItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    specimen.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", attachedItemSpecimenMap.GetString("irn")));
+            }
+            // Parent record
+            var parentItemSpecimenMap = map.GetMap("parentitemspecimens");
+            if (parentItemSpecimenMap != null)
+            {
+                if (parentItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    specimen.RelatedItemSpecimenIds.Add(string.Format("items/{0}", parentItemSpecimenMap.GetString("irn")));
+                if (parentItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    specimen.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", parentItemSpecimenMap.GetString("irn")));
+            }
+
+            // Related articles/species (direct attached)
+            var relatedNarrativesMap = map.GetMaps("relatednarratives");
+            if (relatedNarrativesMap != null)
+            {
+                specimen.RelatedArticleIds.AddRangeUnique(relatedNarrativesMap
+                    .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                    .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+
+                // TODO: Is this needed? either remove or rename property so more descriptive (i.e. holds species as well as articles)
+                specimen.RelatedArticleIds.AddRangeUnique(relatedNarrativesMap
+                    .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                    .Select(x => string.Format("species/{0}", x.GetString("irn"))));
+            }
+
+            // Related articles (via party relationship)
+            var relatedPartyArticlesMap = map.GetMaps("relatedpartyarticles");
+            if (relatedPartyArticlesMap != null)
+            {
+                specimen.RelatedArticleIds.AddRangeUnique(relatedPartyArticlesMap
+                        .Where(x => x != null)
+                        .SelectMany(x => x.GetMaps("relatedarticles"))
+                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+            }
+
+            // Related articles (via sites relationship)
+            var relatedSiteArticlesMap = map.GetMap("relatedsitearticles");
+            if (relatedSiteArticlesMap != null)
+            {
+                specimen.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
+                        .GetMaps("relatedarticles")
+                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+            }
+
+            // Related articles (via collection event relationship)
+            var relatedCollectionEventArticlesMap = map.GetMap("relatedcolleventarticles");
+            if (relatedCollectionEventArticlesMap != null)
+            {
+                specimen.RelatedArticleIds.AddRangeUnique(relatedCollectionEventArticlesMap
+                        .GetMaps("relatedarticles")
+                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+            }
 
             // Build summary
             if(specimen.Taxonomy != null)

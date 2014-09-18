@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace CollectionsOnline.Core.Models
 {
-    public class Story : EmuAggregateRoot
+    public class Article : EmuAggregateRoot
     {
-        public Story()
+        public Article()
         {
             InitializeCollections();
         }
@@ -39,13 +39,13 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Media> Media { get; set; }
 
-        public string ParentStoryId { get; set; }
+        public string ParentArticleId { get; set; }
 
-        public IList<string> ChildStoryIds { get; set; }
+        public IList<string> ChildArticleIds { get; set; }
 
-        public IList<string> RelatedStoryIds { get; set; }
+        public IList<string> RelatedArticleIds { get; set; }
 
-        public IList<string> RelatedItemIds { get; set; }
+        public IList<string> RelatedItemSpecimenIds { get; set; }
 
         public IList<string> RelatedPartyItemIds { get; set; }
 
@@ -57,9 +57,9 @@ namespace CollectionsOnline.Core.Models
             Authors = new List<Author>();
             Contributors = new List<Author>();
             Media = new List<Media>();
-            ChildStoryIds = new List<string>();
-            RelatedStoryIds = new List<string>();
-            RelatedItemIds = new List<string>();
+            ChildArticleIds = new List<string>();
+            RelatedArticleIds = new List<string>();
+            RelatedItemSpecimenIds = new List<string>();
             RelatedPartyItemIds = new List<string>();
         }
     }

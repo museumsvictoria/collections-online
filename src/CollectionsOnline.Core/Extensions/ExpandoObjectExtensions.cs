@@ -6,18 +6,18 @@ namespace CollectionsOnline.WebSite.Extensions
 {
     public static class ExpandoObjectExtensions
     {
-        public static dynamic[] ToExpandoObject(this object[] items)
+        public static dynamic[] ToExpandoObject(this object[] self)
         {
-            return items.Select(item => item.ToExpandoObject()).ToArray();
+            return self.Select(item => item.ToExpandoObject()).ToArray();
         }
 
-        public static dynamic ToExpandoObject(this object item)
+        public static dynamic ToExpandoObject(this object self)
         {
             var dictionary = new ExpandoObject() as IDictionary<string, object>;
 
-            foreach (var propertyInfo in item.GetType().GetProperties())
+            foreach (var propertyInfo in self.GetType().GetProperties())
             {
-                dictionary.Add(propertyInfo.Name, propertyInfo.GetValue(item, null));
+                dictionary.Add(propertyInfo.Name, propertyInfo.GetValue(self, null));
             }
 
             return dictionary;

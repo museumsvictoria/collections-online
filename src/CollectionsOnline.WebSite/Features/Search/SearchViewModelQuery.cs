@@ -155,12 +155,12 @@ namespace CollectionsOnline.WebSite.Features.Search
                     facetQuery = facetQuery.AndAlso()
                         .WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
                 }
-                if (searchInputModel.StoryTypes != null && searchInputModel.StoryTypes.Any())
+                if (searchInputModel.ArticleTypes != null && searchInputModel.ArticleTypes.Any())
                 {
-                    foreach (var storyType in searchInputModel.StoryTypes.Where(x => !string.IsNullOrWhiteSpace(x)))
+                    foreach (var articleType in searchInputModel.ArticleTypes.Where(x => !string.IsNullOrWhiteSpace(x)))
                     {
-                        query = query.AndAlso().WhereEquals("StoryTypes", storyType);
-                        facetQuery = facetQuery.AndAlso().WhereEquals("StoryTypes", storyType);
+                        query = query.AndAlso().WhereEquals("ArticleTypes", articleType);
+                        facetQuery = facetQuery.AndAlso().WhereEquals("ArticleTypes", articleType);
                     }
                 }
 

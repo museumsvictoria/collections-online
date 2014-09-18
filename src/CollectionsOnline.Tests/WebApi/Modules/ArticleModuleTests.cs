@@ -14,13 +14,13 @@ using Xunit;
 
 namespace CollectionsOnline.Tests.WebApi.Modules
 {
-    public class StoryModuleTests : RavenDbTestBase
+    public class ArticleModuleTests : RavenDbTestBase
     {
-        public StoryModuleTests()
+        public ArticleModuleTests()
         {
             DataToBeSeeded = new List<IEnumerable>
                 {
-                    FakeStories.CreateFakeStories(5)
+                    FakeArticles.CreateFakeArticles(5)
                 };
 
             IndexesToExecute = new List<Type>
@@ -30,7 +30,7 @@ namespace CollectionsOnline.Tests.WebApi.Modules
 
             Browser = new Browser(with =>
                 {
-                    with.Module<StoryModule>();
+                    with.Module<ArticleModule>();
                     with.Dependency(DocumentSession);
                 });
         }
@@ -38,20 +38,20 @@ namespace CollectionsOnline.Tests.WebApi.Modules
         protected Browser Browser { get; set; }
 
         [Fact]
-        public void GetSpecimens_ReturnsSpecimens()
+        public void GetArticles_ReturnsArticles()
         {
             // Given When
-            var result = Browser.Get("/v1/stories", with => with.HttpRequest());
+            var result = Browser.Get("/v1/articles", with => with.HttpRequest());
 
             // Then
-            result.Body.DeserializeJson<IEnumerable<Story>>().Count().ShouldBe(5);
+            result.Body.DeserializeJson<IEnumerable<Article>>().Count().ShouldBe(5);
         }
 
         [Fact]
-        public void GivenAnInvalidId_GetSpecies_ReturnsNotFound()
+        public void GivenAnInvalidId_GetArticles_ReturnsNotFound()
         {
             // Given When
-            var result = Browser.Get("/v1/stories/6", with => with.HttpRequest());
+            var result = Browser.Get("/v1/articles/6", with => with.HttpRequest());
 
             // Then
             result.StatusCode.ShouldBe(HttpStatusCode.NotFound);

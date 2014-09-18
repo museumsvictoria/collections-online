@@ -125,13 +125,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ExpandoObjectExtensions.cs" />
-    <Compile Include="Features\Stories\IStoryViewModelFactory.cs" />
-    <Compile Include="Features\Stories\IStoryViewModelQuery.cs" />
-    <Compile Include="Features\Stories\StoriesModule.cs" />
-    <Compile Include="Features\Stories\StoryViewModel.cs" />
-    <Compile Include="Features\Stories\StoryViewModelFactory.cs" />
-    <Compile Include="Features\Stories\StoryViewModelQuery.cs" />
+    <Compile Include="Features\Articles\IArticleViewModelFactory.cs" />
+    <Compile Include="Features\Articles\IArticleViewModelQuery.cs" />
+    <Compile Include="Features\Articles\ArticlesModule.cs" />
+    <Compile Include="Features\Articles\ArticleViewModelFactory.cs" />
+    <Compile Include="Features\Articles\ArticleViewModelQuery.cs" />
     <Compile Include="Features\Specimens\ISpecimenViewModelFactory.cs" />
     <Compile Include="Features\Specimens\ISpecimenViewModelQuery.cs" />
     <Compile Include="Features\Specimens\SpecimenViewModelFactory.cs" />
@@ -157,6 +155,7 @@
     <Compile Include="Features\Search\ISearchViewModelFactory.cs" />
     <Compile Include="Features\Search\SearchViewModelQuery.cs" />
     <Compile Include="Features\Search\SearchViewModelFactory.cs" />
+    <Compile Include="Features\Articles\ArticleViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebSiteBootstrapper.cs" />
   </ItemGroup>
@@ -188,8 +187,9 @@
     <Content Include="Features\Specimens\Views\specimens.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Stories\Views\stories.cshtml" />
+    <Content Include="Features\Articles\Views\articles.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

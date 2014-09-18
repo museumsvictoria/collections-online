@@ -82,7 +82,7 @@ namespace CollectionsOnline.Import.Factories
                         "bibliography=[summary=BibBibliographyRef_tab.(SummaryData),BibIssuedDate_tab,BibPages_tab]",
                         "Pro2ModelNameNumber_tab",
                         "brand=[Pro2BrandName_tab,Pro2ProductType_tab]",
-                        "related=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
+                        "relateditemspecimens=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
                         "ArcContextNumber",
                         "arcsitename=ArcSiteNameRef.(SummaryData)",
                         "ArcDescription",
@@ -177,7 +177,10 @@ namespace CollectionsOnline.Import.Factories
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
                         "RigText0",
                         "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
-                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]"
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
+                        "relatedarticles=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
+                        "relatedpartyarticles=AssAssociationNameRef_tab.(relatedarticles=<enarratives:ParPartiesRef_tab>.(irn,DetPurpose_tab))",
+                        "relatedsitearticles=ArcSiteNameRef.(relatedarticles=<enarratives:SitSitesRef_tab>.(irn,DetPurpose_tab))"
                     };
             }
         }
@@ -310,16 +313,6 @@ namespace CollectionsOnline.Import.Factories
                         ? string.Format("{0} ({1})", x.GetString("Pro2BrandName_tab"), x.GetString("Pro2ProductType_tab"))
                         : x.GetString("Pro2BrandName_tab"))
                 .Concatenate("; ");
-
-            // Relationships (Related items/specimens)
-            // TODO: Add import to check for these relationships
-            foreach (var related in map.GetMaps("related").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
-            {
-                if(related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    item.RelatedIds.Add(string.Format("items/{0}", related.GetString("irn")));
-                if (related.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    item.RelatedIds.Add(string.Format("specimens/{0}", related.GetString("irn")));
-            }
 
             // Archeology fields
             item.ArcheologyContextNumber = map.GetString("ArcContextNumber");
@@ -590,6 +583,47 @@ namespace CollectionsOnline.Import.Factories
 
             // Object Location
             item.MuseumLocation = _locationFactory.Make(map.GetMap("location"));
+
+            // Relationships
+
+            // Related items/specimens (directly related)
+            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            {
+                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    item.RelatedItemSpecimenIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
+                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    item.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+            }
+
+            // Related articles (direct attached)
+            var relatedArticlesMap = map.GetMaps("relatedarticles");
+            if (relatedArticlesMap != null)
+            {
+                item.RelatedArticleIds.AddRangeUnique(relatedArticlesMap
+                    .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                    .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+            }
+
+            // Related articles (via party relationship)
+            var relatedPartyArticlesMap = map.GetMaps("relatedpartyarticles");
+            if (relatedPartyArticlesMap != null)
+            {
+                item.RelatedArticleIds.AddRangeUnique(relatedPartyArticlesMap
+                        .Where(x => x != null)
+                        .SelectMany(x => x.GetMaps("relatedarticles"))
+                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+            }
+
+            // Related articles (via sites relationship)
+            var relatedSiteArticlesMap = map.GetMap("relatedsitearticles");
+            if (relatedSiteArticlesMap != null)
+            {
+                item.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
+                        .GetMaps("relatedarticles")
+                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+            }
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(item.ObjectSummary))

@@ -52,7 +52,7 @@
 
         public string SpecimenDiscipline { get; set; }
 
-        public object[] StoryTypes { get; set; }
+        public object[] ArticleTypes { get; set; }
 
         /* term fields */
 
