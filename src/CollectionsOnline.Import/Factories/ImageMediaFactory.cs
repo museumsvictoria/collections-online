@@ -50,6 +50,7 @@ namespace CollectionsOnline.Import.Factories
 
                     imageFactory
                         .Format(new JpegFormat())
+                        .Resize(new ResizeLayer(new Size(5000, 5000), ResizeMode.Max, upscale:false))
                         .Quality(90)
                         .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "original"));
 
@@ -94,7 +95,7 @@ namespace CollectionsOnline.Import.Factories
                     // Medium
                     imageFactory
                         .Reset()
-                        .Resize(new ResizeLayer(new Size(800, 800), ResizeMode.Max))
+                        .Resize(new ResizeLayer(new Size(800, 800), ResizeMode.Max, upscale: false))
                         .Format(new JpegFormat())
                         .Quality(70)
                         .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "medium"));
@@ -109,7 +110,7 @@ namespace CollectionsOnline.Import.Factories
                     // Large
                     imageFactory
                         .Reset()
-                        .Resize(new ResizeLayer(new Size(1200, 1200), ResizeMode.Max))
+                        .Resize(new ResizeLayer(new Size(1200, 1200), ResizeMode.Max, upscale: false))
                         .Format(new JpegFormat())
                         .Quality(70)
                         .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "large"));

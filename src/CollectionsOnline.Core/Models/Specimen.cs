@@ -56,7 +56,7 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedItemSpecimenIds { get; set; }
 
-        public IList<string> RelatedArticleIds { get; set; }
+        public IList<string> RelatedArticleSpeciesIds { get; set; }
 
         public IList<string> RelatedSpeciesIds { get; set; }
 
@@ -244,7 +244,7 @@ namespace CollectionsOnline.Core.Models
             CollectionPlans = new List<string>();
             Associations = new List<Association>();
             RelatedItemSpecimenIds = new List<string>();
-            RelatedArticleIds = new List<string>();
+            RelatedArticleSpeciesIds = new List<string>();
             RelatedSpeciesIds = new List<string>();
             Tags = new List<string>();
             RelatedItemSpecimenIds = new List<string>();

@@ -112,7 +112,7 @@ namespace CollectionsOnline.Import.Factories
                         "RocGroup",
                         "RocRockName",
                         "RocRockDescription",
-                        "relatednarratives=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
+                        "relatedarticlespecies=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
                         "relatedpartyarticles=AssAssociationNameRef_tab.(relatedarticles=<enarratives:ParPartiesRef_tab>.(irn,DetPurpose_tab))",
                         "relatedsitearticles=ArcSiteNameRef.(relatedarticles=<enarratives:SitSitesRef_tab>.(irn,DetPurpose_tab))",
                         "relatedcolleventarticles=ColCollectionEventRef.(relatedarticles=<enarratives:ColCollectionEventsRef_tab>.(irn,DetPurpose_tab))"
@@ -469,15 +469,14 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Related articles/species (direct attached)
-            var relatedNarrativesMap = map.GetMaps("relatednarratives");
-            if (relatedNarrativesMap != null)
+            var relatedArticleSpeciesMap = map.GetMaps("relatedarticlespecies");
+            if (relatedArticleSpeciesMap != null)
             {
-                specimen.RelatedArticleIds.AddRangeUnique(relatedNarrativesMap
+                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                     .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
 
-                // TODO: Is this needed? either remove or rename property so more descriptive (i.e. holds species as well as articles)
-                specimen.RelatedArticleIds.AddRangeUnique(relatedNarrativesMap
+                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
                     .Select(x => string.Format("species/{0}", x.GetString("irn"))));
             }
@@ -486,7 +485,7 @@ namespace CollectionsOnline.Import.Factories
             var relatedPartyArticlesMap = map.GetMaps("relatedpartyarticles");
             if (relatedPartyArticlesMap != null)
             {
-                specimen.RelatedArticleIds.AddRangeUnique(relatedPartyArticlesMap
+                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedPartyArticlesMap
                         .Where(x => x != null)
                         .SelectMany(x => x.GetMaps("relatedarticles"))
                         .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
@@ -497,7 +496,7 @@ namespace CollectionsOnline.Import.Factories
             var relatedSiteArticlesMap = map.GetMap("relatedsitearticles");
             if (relatedSiteArticlesMap != null)
             {
-                specimen.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
+                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedSiteArticlesMap
                         .GetMaps("relatedarticles")
                         .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                         .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
@@ -507,7 +506,7 @@ namespace CollectionsOnline.Import.Factories
             var relatedCollectionEventArticlesMap = map.GetMap("relatedcolleventarticles");
             if (relatedCollectionEventArticlesMap != null)
             {
-                specimen.RelatedArticleIds.AddRangeUnique(relatedCollectionEventArticlesMap
+                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedCollectionEventArticlesMap
                         .GetMaps("relatedarticles")
                         .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                         .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
