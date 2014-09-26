@@ -21,7 +21,7 @@ namespace CollectionsOnline.Import.Factories
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly ISlugFactory _slugFactory;
         private readonly IPartiesNameFactory _partiesNameFactory;
-        private readonly IMuseumLocationFactory _locationFactory;
+        private readonly IMuseumLocationFactory _museumLocationFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
         private readonly IAssociationFactory _associationFactory;
@@ -29,14 +29,14 @@ namespace CollectionsOnline.Import.Factories
         public ItemFactory(
             ISlugFactory slugFactory,
             IPartiesNameFactory partiesNameFactory,
-            IMuseumLocationFactory locationFactory,
+            IMuseumLocationFactory museumLocationFactory,
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory,
             IAssociationFactory associationFactory)
         {
             _slugFactory = slugFactory;
             _partiesNameFactory = partiesNameFactory;
-            _locationFactory = locationFactory;
+            _museumLocationFactory = museumLocationFactory;
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
@@ -242,7 +242,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Tags
             if (map.GetStrings("SubSubjects_tab") != null)
-                item.Tags = map.GetStrings("SubSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
+                item.Keywords = map.GetStrings("SubSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
 
             item.Significance = map.GetString("SubHistoryTechSignificance");
             item.ModelScale = map.GetString("DimModelScale");
@@ -303,7 +303,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Model names
-            item.ModelNames = map.GetStrings("Pro2ModelNameNumber_tab").Concatenate("; ");
+            item.ModelNames = map.GetStrings("Pro2ModelNameNumber_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 
             // Brand names
             item.BrandNames = map.GetMaps("brand")
@@ -311,8 +311,7 @@ namespace CollectionsOnline.Import.Factories
                 .Select(
                     x => !string.IsNullOrWhiteSpace(x.GetString("Pro2ProductType_tab")) 
                         ? string.Format("{0} ({1})", x.GetString("Pro2BrandName_tab"), x.GetString("Pro2ProductType_tab"))
-                        : x.GetString("Pro2BrandName_tab"))
-                .Concatenate("; ");
+                        : x.GetString("Pro2BrandName_tab")).ToList();
 
             // Archeology fields
             item.ArcheologyContextNumber = map.GetString("ArcContextNumber");
@@ -393,7 +392,7 @@ namespace CollectionsOnline.Import.Factories
             item.TradeLiteraturePublicationDate = map.GetString("TLSPublicationDate");
             item.TradeLiteratureIllustrationTypes = map.GetStrings("TLDIllustraionTypes_tab").Concatenate("; ");
             item.TradeLiteraturePrintingTypes = map.GetStrings("TLDPrintingTypes_tab").Concatenate("; ");
-            item.TradeLiteraturePublicationTypes = map.GetStrings("TLDPublicationTypes_tab").Concatenate("; ");            
+            item.TradeLiteraturePublicationTypes = map.GetStrings("TLDPublicationTypes_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             item.TradeLiteraturePrimaryRole = map.GetString("TLSPrimaryRole");
             item.TradeLiteraturePrimaryName = _partiesNameFactory.Make(map.GetMap("tlparty"));
 
@@ -410,21 +409,18 @@ namespace CollectionsOnline.Import.Factories
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();
             if (iclocalityMap != null)
             {
-                item.IndigenousCulturesLocality = new[]
-                    {
-                        iclocalityMap.GetString("ProSpecificLocality_tab"),
-                        iclocalityMap.GetString("ProRegion_tab"),
-                        iclocalityMap.GetString("ProStateProvince_tab"),
-                        map.GetString("ProCountry")
-                    }.Concatenate(", ");
+                item.IndigenousCulturesLocality = iclocalityMap.GetString("ProSpecificLocality_tab");
+                item.IndigenousCulturesRegion = iclocalityMap.GetString("ProRegion_tab");
+                item.IndigenousCulturesState = iclocalityMap.GetString("ProStateProvince_tab");
+                item.IndigenousCulturesCountry = map.GetString("ProCountry");
             }
 
-            item.IndigenousCulturesCulturalGroups = map.GetStrings("ProCulturalGroups_tab").Concatenate(", ");
+            item.IndigenousCulturesCulturalGroups = map.GetStrings("ProCulturalGroups_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             item.IndigenousCulturesMedium = map.GetStrings("DesObjectMedium_tab").Concatenate(", ");
             item.IndigenousCulturesDescription = map.GetString("DesObjectDescription");
 
             if (map.GetStrings("DesSubjects_tab") != null)
-                item.Tags.AddRange(map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)));
+                item.Keywords.AddRange(map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)));
 
             item.IndigenousCulturesPhotographer = _partiesNameFactory.Make(map.GetMap("icphotographer"));
             item.IndigenousCulturesAuthor = _partiesNameFactory.Make(map.GetMap("icauthor"));
@@ -480,8 +476,14 @@ namespace CollectionsOnline.Import.Factories
                 item.ObjectName = new[]
                     {
                         item.IndigenousCulturesMedium,
-                        item.IndigenousCulturesCulturalGroups,
-                        item.IndigenousCulturesLocality,
+                        item.IndigenousCulturesCulturalGroups.Concatenate(", "),
+                        new []
+                        {
+                            item.IndigenousCulturesLocality,
+                            item.IndigenousCulturesRegion,
+                            item.IndigenousCulturesState,
+                            item.IndigenousCulturesCountry
+                        }.Concatenate(", "),
                         item.IndigenousCulturesDate
                     }.Concatenate(", ");
             }
@@ -582,7 +584,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Object Location
-            item.MuseumLocation = _locationFactory.Make(map.GetMap("location"));
+            item.MuseumLocation = _museumLocationFactory.Make(map.GetMap("location"));
 
             // Relationships
 
@@ -590,9 +592,9 @@ namespace CollectionsOnline.Import.Factories
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
             {
                 if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    item.RelatedItemSpecimenIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
+                    item.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
                 if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    item.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+                    item.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
             }
 
             // Related articles (direct attached)
@@ -630,57 +632,7 @@ namespace CollectionsOnline.Import.Factories
                 item.Summary = item.ObjectSummary;
             else if (!string.IsNullOrWhiteSpace(item.Description))
                 item.Summary = item.Description;
-
-            // Build associated dates
-            var associatedDates = new List<string>();
-            string yearSpan;
-            foreach (var association in item.Associations)
-            {
-                yearSpan = NaturalDateConverter.ConvertToYearSpan(association.Date);
-                if (!string.IsNullOrWhiteSpace(yearSpan))
-                {
-                    associatedDates.Add(yearSpan);
-                }
-            }
-
-            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.ArcheologyManufactureDate);
-            if (!string.IsNullOrWhiteSpace(yearSpan))
-            {
-                associatedDates.Add(yearSpan);
-            }
-
-            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.IndigenousCulturesDate);
-            if (!string.IsNullOrWhiteSpace(yearSpan))
-            {
-                associatedDates.Add(yearSpan);
-            }
-
-            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.IndigenousCulturesDateCollected);
-            if (!string.IsNullOrWhiteSpace(yearSpan))
-            {
-                associatedDates.Add(yearSpan);
-            }
-
-            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.NumismaticsDateIssued);
-            if (!string.IsNullOrWhiteSpace(yearSpan))
-            {
-                associatedDates.Add(yearSpan);
-            }
-
-            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.PhilatelyDateIssued);
-            if (!string.IsNullOrWhiteSpace(yearSpan))
-            {
-                associatedDates.Add(yearSpan);
-            }
-
-            yearSpan = NaturalDateConverter.ConvertToYearSpan(item.TradeLiteraturePublicationDate);
-            if (!string.IsNullOrWhiteSpace(yearSpan))
-            {
-                associatedDates.Add(yearSpan);
-            }
-
-            item.AssociatedDates = associatedDates.Distinct().ToList();
-
+            
             stopwatch.Stop();
             _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);
 

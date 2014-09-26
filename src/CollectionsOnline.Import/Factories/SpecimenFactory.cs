@@ -22,19 +22,22 @@ namespace CollectionsOnline.Import.Factories
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
         private readonly IAssociationFactory _associationFactory;
+        private readonly IMuseumLocationFactory _museumLocationFactory;
 
         public SpecimenFactory(
             ISlugFactory slugFactory,
             IPartiesNameFactory partiesNameFactory,
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory,
-            IAssociationFactory associationFactory)
+            IAssociationFactory associationFactory,
+            IMuseumLocationFactory museumLocationFactory)
         {
             _slugFactory = slugFactory;
             _partiesNameFactory = partiesNameFactory;
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
+            _museumLocationFactory = museumLocationFactory;
         }
 
         public string ModuleName
@@ -84,6 +87,7 @@ namespace CollectionsOnline.Import.Factories
                         "parentitemspecimens=ColParentRecordRef.(irn,MdaDataSets_tab)",
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
                         "RigText0",
+                        "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
                         "LocDateCollectedFrom",
                         "LocDateCollectedTo",
                         "LocSamplingMethod",
@@ -171,7 +175,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Tags
             if (map.GetStrings("SubSubjects_tab") != null)
-                specimen.Tags = map.GetStrings("SubSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
+                specimen.Keywords = map.GetStrings("SubSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
 
             // Collection plans
             specimen.CollectionPlans = map.GetStrings("SubThemes_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
@@ -216,6 +220,9 @@ namespace CollectionsOnline.Import.Factories
                 else if (!string.IsNullOrWhiteSpace(rights))
                     specimen.Acknowledgement = rights;
             }
+
+            // Object Location
+            specimen.MuseumLocation = _museumLocationFactory.Make(map.GetMap("location"));
 
             // Number Of Specimens
             specimen.NumberOfSpecimens = map.GetString("SpeNoSpecimens");
@@ -445,38 +452,38 @@ namespace CollectionsOnline.Import.Factories
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
             {
                 if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemSpecimenIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
+                    specimen.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
                 if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
             }
             // Physically attached
             var attachedItemSpecimenMap = map.GetMap("attacheditemspecimens");
             if (attachedItemSpecimenMap != null)
             {
                 if (attachedItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemSpecimenIds.Add(string.Format("items/{0}", attachedItemSpecimenMap.GetString("irn")));
+                    specimen.RelatedItemIds.Add(string.Format("items/{0}", attachedItemSpecimenMap.GetString("irn")));
                 if (attachedItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", attachedItemSpecimenMap.GetString("irn")));
+                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", attachedItemSpecimenMap.GetString("irn")));
             }
             // Parent record
             var parentItemSpecimenMap = map.GetMap("parentitemspecimens");
             if (parentItemSpecimenMap != null)
             {
                 if (parentItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemSpecimenIds.Add(string.Format("items/{0}", parentItemSpecimenMap.GetString("irn")));
+                    specimen.RelatedItemIds.Add(string.Format("items/{0}", parentItemSpecimenMap.GetString("irn")));
                 if (parentItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", parentItemSpecimenMap.GetString("irn")));
+                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", parentItemSpecimenMap.GetString("irn")));
             }
 
             // Related articles/species (direct attached)
             var relatedArticleSpeciesMap = map.GetMaps("relatedarticlespecies");
             if (relatedArticleSpeciesMap != null)
             {
-                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
+                specimen.RelatedArticleIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                     .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
 
-                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
+                specimen.RelatedSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
                     .Select(x => string.Format("species/{0}", x.GetString("irn"))));
             }
@@ -485,7 +492,7 @@ namespace CollectionsOnline.Import.Factories
             var relatedPartyArticlesMap = map.GetMaps("relatedpartyarticles");
             if (relatedPartyArticlesMap != null)
             {
-                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedPartyArticlesMap
+                specimen.RelatedArticleIds.AddRangeUnique(relatedPartyArticlesMap
                         .Where(x => x != null)
                         .SelectMany(x => x.GetMaps("relatedarticles"))
                         .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
@@ -496,7 +503,7 @@ namespace CollectionsOnline.Import.Factories
             var relatedSiteArticlesMap = map.GetMap("relatedsitearticles");
             if (relatedSiteArticlesMap != null)
             {
-                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedSiteArticlesMap
+                specimen.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
                         .GetMaps("relatedarticles")
                         .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                         .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
@@ -506,7 +513,7 @@ namespace CollectionsOnline.Import.Factories
             var relatedCollectionEventArticlesMap = map.GetMap("relatedcolleventarticles");
             if (relatedCollectionEventArticlesMap != null)
             {
-                specimen.RelatedArticleSpeciesIds.AddRangeUnique(relatedCollectionEventArticlesMap
+                specimen.RelatedArticleIds.AddRangeUnique(relatedCollectionEventArticlesMap
                         .GetMaps("relatedarticles")
                         .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                         .Select(x => string.Format("articles/{0}", x.GetString("irn"))));

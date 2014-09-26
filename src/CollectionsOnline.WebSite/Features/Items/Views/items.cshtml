@@ -31,7 +31,7 @@
                 @if (Model.Item.MuseumLocation != null)
                 {
                     <div class="on-display">
-                        See this at @Model.Item.MuseumLocation.Venue, @Model.Item.MuseumLocation.Gallery
+                        On display <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a>, <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
                     </div>
                 }
                 <div class="main-content">
@@ -94,17 +94,17 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyDenomination))
                         {
                             <dt>Denomination</dt>
-                            <dd>@Model.Item.PhilatelyDenomination</dd>
+                            <dd><a href="/search?denomination=@HttpUtility.UrlEncode(Model.Item.PhilatelyDenomination)">@Model.Item.PhilatelyDenomination</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimarySubject))
                         {
                             <dt>Primary Subject</dt>
-                            <dd><a href="/search?itemtradeliteratureprimarysubject=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimarySubject)">@Model.Item.TradeLiteraturePrimarySubject</a></dd>
+                            <dd><a href="/search?keywords=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimarySubject)">@Model.Item.TradeLiteraturePrimarySubject</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePublicationDate))
                         {
                             <dt>Publication Date</dt>
-                            <dd><a href="/search?itemtradeliteraturepublicationdate=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePublicationDate)">@Model.Item.TradeLiteraturePublicationDate</a></dd>
+                            <dd>@Model.Item.TradeLiteraturePublicationDate</dd>
                         }
                     </dl>
                 </div>
@@ -116,7 +116,7 @@
                             <dd>
                                 @for (int i = 0; i < Model.Item.CollectionNames.Count; i++)
                                 {
-                                    <a href="/search?collectionname=@HttpUtility.UrlEncode(Model.Item.CollectionNames[i])">@Model.Item.CollectionNames[i]</a>@(i != Model.Item.CollectionNames.Count - 1 ? "," : "")
+                                    <a href="/search?collection=@HttpUtility.UrlEncode(Model.Item.CollectionNames[i])">@Model.Item.CollectionNames[i]</a>@(i != Model.Item.CollectionNames.Count - 1 ? "," : "")
                                 }
                             </dd>
                         }
@@ -126,7 +126,7 @@
                             <dd>
                                 @for (int i = 0; i < Model.Item.CollectionPlans.Count; i++)
                                 {
-                                    <a href="/search?collectionplan=@HttpUtility.UrlEncode(Model.Item.CollectionPlans[i])">@Model.Item.CollectionPlans[i]</a>@(i != Model.Item.CollectionPlans.Count - 1 ? "," : "")
+                                    <a href="/search?collection=@HttpUtility.UrlEncode(Model.Item.CollectionPlans[i])">@Model.Item.CollectionPlans[i]</a>@(i != Model.Item.CollectionPlans.Count - 1 ? "," : "")
                                 }
                             </dd>
                         }
@@ -134,15 +134,34 @@
                         {
                             <dt>@association.Type</dt>
                             <dd>
-                                <a href="/search?associationname=@HttpUtility.UrlEncode(association.Name)">@association.Name</a> @association.Place
-                                @if (!string.IsNullOrWhiteSpace(NaturalDateConverter.ConvertToYearSpan(@association.Date)))
+                                @if (!string.IsNullOrWhiteSpace(association.Name))
                                 {
-                                    <a href="/search?dates=@HttpUtility.UrlEncode(NaturalDateConverter.ConvertToYearSpan(@association.Date))">@association.Date</a>
+                                    <a href="/search?name=@HttpUtility.UrlEncode(association.Name)">@association.Name</a>
                                 }
-                                else
+                                @if (!string.IsNullOrWhiteSpace(association.StreetAddress))
+                                {
+                                    @association.StreetAddress
+                                }
+                                @if (!string.IsNullOrWhiteSpace(association.Locality))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.Locality)">@association.Locality</a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(association.Region))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.Region)">@association.Region</a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(association.State))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.State)">@association.State</a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(association.Country))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.Country)">@association.Country</a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(association.Date))
                                 {
                                     @association.Date
-                                }
+                                }                               
                                 <br />
                                 @if (!string.IsNullOrWhiteSpace(association.Comments))
                                 {
@@ -206,7 +225,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.AudioVisualRecordingDetails))
                         {
                             <dt>Recording Details</dt>
-                            <dd>@Model.Item.AudioVisualRecordingDetails</dd>
+                            <dd><a href="/search?keywords=@HttpUtility.UrlEncode(Model.Item.AudioVisualRecordingDetails)">@Model.Item.AudioVisualRecordingDetails</a></dd>
                         }
                         @if (@Model.Item.AudioVisualContentSummaries.Any())
                         {
@@ -221,12 +240,34 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLocality))
                         {
                             <dt>Locality</dt>
-                            <dd>@Model.Item.IndigenousCulturesLocality</dd>
+                            <dd>
+                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLocality))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLocality)">@Model.Item.IndigenousCulturesLocality</a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesRegion))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesRegion)">@Model.Item.IndigenousCulturesRegion</a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesState))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesState)">@Model.Item.IndigenousCulturesState</a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesCountry))
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCountry)">@Model.Item.IndigenousCulturesCountry</a>
+                                }
+                            </dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesCulturalGroups))
+                        @if (@Model.Item.IndigenousCulturesCulturalGroups.Any())
                         {
                             <dt>Cultural Groups</dt>
-                            <dd>@Model.Item.IndigenousCulturesCulturalGroups</dd>
+                            <dd>
+                                @for (int i = 0; i < Model.Item.IndigenousCulturesCulturalGroups.Count; i++)
+                                {
+                                    <a href="/search?culturalgroup=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCulturalGroups[i])">@Model.Item.IndigenousCulturesCulturalGroups[i]</a>@(i != Model.Item.IndigenousCulturesCulturalGroups.Count - 1 ? ", " : "")
+                                }
+                            </dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesMedium))
                         {
@@ -236,55 +277,37 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesPhotographer))
                         {
                             <dt>Photographer</dt>
-                            <dd>@Model.Item.IndigenousCulturesPhotographer</dd>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesPhotographer)">@Model.Item.IndigenousCulturesPhotographer</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesAuthor))
                         {
                             <dt>Author</dt>
-                            <dd>@Model.Item.IndigenousCulturesAuthor</dd>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesAuthor)">@Model.Item.IndigenousCulturesAuthor</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesIllustrator))
                         {
                             <dt>Illustrator</dt>
-                            <dd>@Model.Item.IndigenousCulturesIllustrator</dd>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesIllustrator)">@Model.Item.IndigenousCulturesIllustrator</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesMaker))
                         {
                             <dt>Maker</dt>
-                            <dd>@Model.Item.IndigenousCulturesMaker</dd>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesMaker)">@Model.Item.IndigenousCulturesMaker</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDate))
                         {
                             <dt>Date</dt>
-                            <dd>
-                                @if (!string.IsNullOrWhiteSpace(NaturalDateConverter.ConvertToYearSpan(Model.Item.IndigenousCulturesDate)))
-                                {
-                                    <a href="/search?dates=@HttpUtility.UrlEncode(NaturalDateConverter.ConvertToYearSpan(Model.Item.IndigenousCulturesDate))">@Model.Item.IndigenousCulturesDate</a>
-                                }
-                                else
-                                {
-                                    @Model.Item.IndigenousCulturesDate
-                                }
-                            </dd>
+                            <dd>@Model.Item.IndigenousCulturesDate</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesCollector))
                         {
                             <dt>Collector</dt>
-                            <dd>@Model.Item.IndigenousCulturesCollector</dd>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCollector)">@Model.Item.IndigenousCulturesCollector</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDateCollected))
                         {
                             <dt>Date Collected</dt>
-                            <dd>
-                                @if (!string.IsNullOrWhiteSpace(NaturalDateConverter.ConvertToYearSpan(Model.Item.IndigenousCulturesDateCollected)))
-                                {
-                                    <a href="/search?dates=@HttpUtility.UrlEncode(NaturalDateConverter.ConvertToYearSpan(Model.Item.IndigenousCulturesDateCollected))">@Model.Item.IndigenousCulturesDateCollected</a>
-                                }
-                                else
-                                {
-                                    @Model.Item.IndigenousCulturesDateCollected
-                                }
-                            </dd>
+                            <dd>@Model.Item.IndigenousCulturesDateCollected</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesIndividualsIdentified))
                         {
@@ -303,13 +326,18 @@
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesPages))
                         {
-                            <dt>Letter From</dt>
+                            <dt>Number of Pages</dt>
                             <dd>@Model.Item.IndigenousCulturesPages</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLetterTo))
+                        {
+                            <dt>Letter To</dt>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLetterTo)">@Model.Item.IndigenousCulturesLetterTo</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLetterFrom))
                         {
-                            <dt>Individuals Identified</dt>
-                            <dd>@Model.Item.IndigenousCulturesLetterFrom</dd>
+                            <dt>Letter From</dt>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLetterTo)">@Model.Item.IndigenousCulturesLetterFrom</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IsdFormat))
                         {
@@ -331,15 +359,25 @@
                             <dt>Inscriptions</dt>
                             <dd>@Model.Item.Inscription</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.ModelNames))
+                        @if (@Model.Item.ModelNames.Any())
                         {
                             <dt>Model Name/No.</dt>
-                            <dd>@Model.Item.ModelNames</dd>
+                            <dd>
+                                @for (int i = 0; i < Model.Item.ModelNames.Count; i++)
+                                {
+                                    <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.ModelNames[i])">@Model.Item.ModelNames[i]</a>@(i != Model.Item.ModelNames.Count - 1 ? ", " : "")
+                                }
+                            </dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.BrandNames))
+                        @if (@Model.Item.BrandNames.Any())
                         {
                             <dt>Brand Names</dt>
-                            <dd>@Model.Item.BrandNames</dd>
+                            <dd>
+                                @for (int i = 0; i < Model.Item.BrandNames.Count; i++)
+                                {
+                                    <a href="/search?name=@HttpUtility.UrlEncode(Model.Item.BrandNames[i])">@Model.Item.BrandNames[i]</a>@(i != Model.Item.BrandNames.Count - 1 ? ", " : "")
+                                }
+                            </dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyContextNumber))
                         {
@@ -364,17 +402,17 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyActivity))
                         {
                             <dt>Activity</dt>
-                            <dd>@Model.Item.ArcheologyActivity</dd>
+                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.ArcheologyActivity)">@Model.Item.ArcheologyActivity</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologySpecificActivity))
                         {
                             <dt>Specific Activity</dt>
-                            <dd>@Model.Item.ArcheologySpecificActivity</dd>
+                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.ArcheologySpecificActivity)">@Model.Item.ArcheologySpecificActivity</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyDecoration))
                         {
                             <dt>Archeology Decoration</dt>
-                            <dd>@Model.Item.ArcheologyDecoration</dd>
+                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.ArcheologyDecoration)">@Model.Item.ArcheologyDecoration</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyPattern))
                         {
@@ -409,26 +447,17 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyManufactureName))
                         {
                             <dt>Manufacture Name</dt>
-                            <dd>@Model.Item.ArcheologyManufactureName</dd>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.ArcheologyManufactureName)">@Model.Item.ArcheologyManufactureName</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyManufactureDate))
                         {
                             <dt>Manufacture Date</dt>
-                            <dd>
-                                @if (!string.IsNullOrWhiteSpace(NaturalDateConverter.ConvertToYearSpan(Model.Item.ArcheologyManufactureDate)))
-                                {
-                                    <a href="/search?dates=@HttpUtility.UrlEncode(NaturalDateConverter.ConvertToYearSpan(Model.Item.ArcheologyManufactureDate))">@Model.Item.ArcheologyManufactureDate</a>
-                                }
-                                else
-                                {
-                                    @Model.Item.ArcheologyManufactureDate
-                                }
-                            </dd>
+                            <dd>@Model.Item.ArcheologyManufactureDate</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyTechnique))
                         {
                             <dt>Technique</dt>
-                            <dd>@Model.Item.ArcheologyTechnique</dd>
+                            <dd><a href="/search?technique=@HttpUtility.UrlEncode(Model.Item.ArcheologyTechnique)">@Model.Item.ArcheologyTechnique</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyProvenance))
                         {
@@ -438,26 +467,17 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsDenomination))
                         {
                             <dt>Denomination</dt>
-                            <dd>@Model.Item.NumismaticsDenomination</dd>
+                            <dd><a href="/search?denomination=@HttpUtility.UrlEncode(Model.Item.NumismaticsDenomination)">@Model.Item.NumismaticsDenomination</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsDateIssued))
                         {
                             <dt>Date Issued</dt>
-                            <dd>
-                                @if (!string.IsNullOrWhiteSpace(NaturalDateConverter.ConvertToYearSpan(Model.Item.NumismaticsDateIssued)))
-                                {
-                                    <a href="/search?dates=@HttpUtility.UrlEncode(NaturalDateConverter.ConvertToYearSpan(Model.Item.NumismaticsDateIssued))">@Model.Item.NumismaticsDateIssued</a>
-                                }
-                                else
-                                {
-                                    @Model.Item.NumismaticsDateIssued
-                                }
-                            </dd>
+                            <dd>@Model.Item.NumismaticsDateIssued</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsSeries))
                         {
                             <dt>Series</dt>
-                            <dd>@Model.Item.NumismaticsSeries</dd>
+                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.NumismaticsSeries)">@Model.Item.NumismaticsSeries</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsMaterial))
                         {
@@ -482,16 +502,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyDateIssued))
                         {
                             <dt>Issue Date</dt>
-                            <dd>
-                                @if (!string.IsNullOrWhiteSpace(NaturalDateConverter.ConvertToYearSpan(Model.Item.PhilatelyDateIssued)))
-                                {
-                                    <a href="/search?dates=@HttpUtility.UrlEncode(NaturalDateConverter.ConvertToYearSpan(Model.Item.PhilatelyDateIssued))">@Model.Item.PhilatelyDateIssued</a>
-                                }
-                                else
-                                {
-                                    @Model.Item.PhilatelyDateIssued
-                                }
-                            </dd>
+                            <dd>@Model.Item.PhilatelyDateIssued</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyForm))
                         {
@@ -528,15 +539,20 @@
                             <dt>Printing Types</dt>
                             <dd>@Model.Item.TradeLiteraturePrintingTypes</dd>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePublicationTypes))
+                        @if (Model.Item.TradeLiteraturePublicationTypes.Any())
                         {
                             <dt>Publication Types</dt>
-                            <dd>@Model.Item.TradeLiteraturePublicationTypes</dd>
+                            <dd>
+                                @for (int i = 0; i < Model.Item.TradeLiteraturePublicationTypes.Count; i++)
+                                {
+                                    <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePublicationTypes[i])">@Model.Item.TradeLiteraturePublicationTypes[i]</a>@(i != Model.Item.TradeLiteraturePublicationTypes.Count - 1 ? ", " : "")
+                                }
+                            </dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimaryRole))
                         {
-                            <dt><a href="/search?itemtradeliteratureprimaryrole=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></dt>
-                            <dd><a href="/search?itemtradeliteratureprimaryname=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryName)">@Model.Item.TradeLiteraturePrimaryName</a></dd>
+                            <dt><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></dt>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryName)">@Model.Item.TradeLiteraturePrimaryName</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkMedium))
                         {
@@ -566,7 +582,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkPublisher))
                         {
                             <dt>Publisher</dt>
-                            <dd>@Model.Item.ArtworkPublisher</dd>
+                            <dd><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.ArtworkPublisher)">@Model.Item.ArtworkPublisher</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkPrimaryInscriptions))
                         {
@@ -596,28 +612,54 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.PrimaryClassification))
                         {
                             <dt>Primary Classification</dt>
-                            <dd><a href="/search?primaryclassification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></dd>
+                            <dd><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.SecondaryClassification))
                         {
                             <dt>Secondary Classification</dt>
-                            <dd><a href="/search?secondaryclassification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a></dd>
+                            <dd><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.TertiaryClassification))
                         {
                             <dt>Tertiary Classification</dt>
-                            <dd><a href="/search?tertiaryclassification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a></dd>
+                            <dd><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a></dd>
                         }
                     </dl>
                 </div>
+                
+                @if (Model.Item.RelatedItemIds.Any() || Model.Item.RelatedSpecimenIds.Any())
+                {
+                    <div class="related-items">
+                        <h4>Related Items</h4>
+                        @foreach (var relatedItemId in Model.Item.RelatedItemIds)
+                        {
+                            <a class="label label-info" href="/@relatedItemId">@relatedItemId</a>
+                        }
+                        @foreach (var relatedSpecimenId in Model.Item.RelatedSpecimenIds)
+                        {
+                            <a class="label label-info" href="/@relatedSpecimenId">@relatedSpecimenId</a>
+                        }
+                    </div>
+                }
+                
+                @if (Model.Item.RelatedArticleIds.Any())
+                {
+                    <div class="related-articles">
+                        <h4>Related Articles</h4>
+                        @foreach (var relatedArticleId in Model.Item.RelatedArticleIds)
+                        {
+                            <a class="label label-info" href="/@relatedArticleId">@relatedArticleId</a>
+                        }
+                    </div>
+                }
 
-                @if (Model.Item.Tags.Any())
+                @if (Model.Item.Keywords.Any())
                 {
                     <div class="keywords">
                         <h4>Keywords</h4>
-                        @foreach (var tag in @Model.Item.Tags)
+                        @foreach (var tag in @Model.Item.Keywords)
                         {
-                            <a class="label label-warning" href="/search?tag=@HttpUtility.UrlEncode(tag)">@tag</a>
+                            <a class="label label-warning" href="/search?keyword=@HttpUtility.UrlEncode(tag)">@tag</a>
                         }
                     </div>
                 }

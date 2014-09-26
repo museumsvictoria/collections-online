@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CollectionsOnline.Core.Models;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
@@ -39,29 +40,62 @@ namespace CollectionsOnline.Core.Indexes
                     ItemType = item.Type,
                     SpeciesType = (string)null,
                     SpeciesSubType = (string)null,
-                    SpeciesHabitats = new object[] { },
-                    SpeciesDepths = new object[] { },
-                    SpeciesWaterColumnLocations = new object[] { },
+                    SpeciesEndemicity = new object[] { },
+                    SpecimenScientificGroup = (string)null,
+                    ArticleTypes = new object[] {},
+                    
+                    // Term fields
+                    Keywords = new object[] { item.Keywords,
+                        item.AudioVisualRecordingDetails, 
+                        item.ModelNames, 
+                        item.ArcheologyActivity, 
+                        item.ArcheologySpecificActivity, 
+                        item.ArcheologyDecoration,
+                        item.NumismaticsSeries,
+                        item.TradeLiteraturePrimarySubject,
+                        item.TradeLiteraturePublicationTypes,
+                        item.TradeLiteraturePrimaryRole },
+                    Localities = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Locality)).Select(x => x.Locality), 
+                        item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
+                        item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
+                        item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country), 
+                        item.IndigenousCulturesLocality, 
+                        item.IndigenousCulturesRegion, 
+                        item.IndigenousCulturesState, 
+                        item.IndigenousCulturesCountry },
+                    Collections = new object[] { item.CollectionNames, item.CollectionPlans },
+                    Dates = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date), 
+                        item.IndigenousCulturesDate, 
+                        item.IndigenousCulturesDateCollected,
+                        item.ArcheologyManufactureDate,
+                        item.PhilatelyDateIssued,
+                        item.TradeLiteraturePublicationDate },
+                    CulturalGroups = item.IndigenousCulturesCulturalGroups,
+                    Classifications = new object[] { item.PrimaryClassification, item.SecondaryClassification, item.TertiaryClassification },
+                    Names = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name), 
+                        item.IndigenousCulturesPhotographer, 
+                        item.IndigenousCulturesAuthor, 
+                        item.IndigenousCulturesIllustrator, 
+                        item.IndigenousCulturesMaker, 
+                        item.IndigenousCulturesCollector,
+                        item.IndigenousCulturesLetterTo,
+                        item.IndigenousCulturesLetterFrom,
+                        item.BrandNames,
+                        item.ArcheologyManufactureName,
+                        item.TradeLiteraturePrimaryName,
+                        item.ArtworkPublisher },
+                    Technique = item.ArcheologyTechnique,
+                    Denominations = new object[] { item.NumismaticsDenomination, item.PhilatelyDenomination },
+                    Habitats = new object[] { },
                     Phylum = (string)null,
                     Class = (string)null,
-                    SpecimenScientificGroup = (string)null,
-                    SpecimenDiscipline = (string)null,
-                    ArticleTypes = new object[] { },
-                    Dates = item.AssociatedDates.ToArray(),
-
-                    // Term fields
-                    Tags = item.Tags,
-                    Country = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country).ToArray(),
-                    CollectionNames = item.CollectionNames,
-                    CollectionPlans = item.CollectionPlans,
-                    PrimaryClassification = item.PrimaryClassification,
-                    SecondaryClassification = item.SecondaryClassification,
-                    TertiaryClassification = item.TertiaryClassification,
-                    AssociationNames = item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name).ToArray(),
-                    ItemTradeLiteraturePrimarySubject = item.TradeLiteraturePrimarySubject,
-                    ItemTradeLiteraturePublicationDate = item.TradeLiteraturePublicationDate,
-                    ItemTradeLiteraturePrimaryRole = item.TradeLiteraturePrimaryRole,
-                    ItemTradeLiteraturePrimaryName = item.TradeLiteraturePrimaryName,
+                    Order = (string)null,
+                    Family = (string)null,
+                    TypeStatus = (string)null,
+                    GeoTypes = new object[] { },
+                    MuseumLocations = new object[] { item.MuseumLocation.Gallery, item.MuseumLocation.Venue },
+                    Articles = item.RelatedArticleIds,
+                    Species = new object[] { }
                 });
 
             AddMap<Species>(speciesDocs =>
@@ -85,7 +119,7 @@ namespace CollectionsOnline.Core.Indexes
                         ((!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet)) ? 1 : 0) +
                         ((!string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
                         (species.Media.Count * 2) +
-                        ((species.RelatedItemSpecimenIds.Any()) ? 1 : 0),
+                        ((species.RelatedItemIds.Any() || species.RelatedSpecimenIds.Any()) ? 1 : 0),
 
                     // Facet fields
                     Type = "Species",
@@ -95,29 +129,30 @@ namespace CollectionsOnline.Core.Indexes
                     ItemType = (string) null,
                     SpeciesType = species.AnimalType,
                     SpeciesSubType = species.AnimalSubType,
-                    SpeciesHabitats = species.Habitats,
-                    SpeciesDepths = species.Depths,
-                    SpeciesWaterColumnLocations = species.WaterColumnLocations,
-                    Phylum = species.Taxonomy.Phylum,
-                    Class = species.Taxonomy.Class,
+                    SpeciesEndemicity = species.Endemicity,
                     SpecimenScientificGroup = (string) null,
-                    SpecimenDiscipline = (string) null,
                     ArticleTypes = new object[] {},
-                    Dates = new object[] { },
 
                     // Term fields
-                    Tags = new object[] {},
-                    Country = new object[] {},
-                    CollectionNames = new object[] {},
-                    CollectionPlans = new object[] { },
-                    PrimaryClassification = (string) null,
-                    SecondaryClassification = (string) null,
-                    TertiaryClassification = (string) null,
-                    AssociationNames = new object[] {},
-                    ItemTradeLiteraturePrimarySubject = (string) null,
-                    ItemTradeLiteraturePublicationDate = (string) null,
-                    ItemTradeLiteraturePrimaryRole = (string) null,
-                    ItemTradeLiteraturePrimaryName = (string) null,
+                    Keywords = new object[] { species.ConservationStatuses },
+                    Localities = new object[] { species.NationalParks },
+                    Collections = new object[] { },
+                    Dates = new object[] {},
+                    CulturalGroups = new object[] {},
+                    Classifications = new object[] { },
+                    Names = new object[] { },
+                    Technique = (string)null,
+                    Denominations = (string)null,
+                    Habitats = new object[] { species.Habitats, species.WhereToLook },
+                    Phylum = species.Taxonomy.Phylum,
+                    Class = species.Taxonomy.Class,
+                    Order = species.Taxonomy.Order,
+                    Family = species.Taxonomy.Family,
+                    TypeStatus = (string)null,
+                    GeoTypes = new object[] { },
+                    MuseumLocations = new object[] { },
+                    Articles = new object[] { },
+                    Species = new object[] { }
                 });
 
             AddMap<Specimen>(specimens =>
@@ -151,29 +186,49 @@ namespace CollectionsOnline.Core.Indexes
                     ItemType = (string) null,
                     SpeciesType = (string) null,
                     SpeciesSubType = (string) null,
-                    SpeciesHabitats = new object[] {},
-                    SpeciesDepths = new object[] {},
-                    SpeciesWaterColumnLocations = new object[] {},
-                    Phylum = specimen.Taxonomy.Phylum,
-                    Class = specimen.Taxonomy.Class,
+                    SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = specimen.ScientificGroup,
-                    SpecimenDiscipline = specimen.Discipline,
                     ArticleTypes = new object[] {},
-                    Dates = new object[] { specimen.AssociatedDate },
 
                     // Term fields
-                    Tags = specimen.Tags,
-                    Country = new object[] {specimen.Country},
-                    CollectionNames = specimen.CollectionNames,
-                    CollectionPlans = specimen.CollectionPlans,
-                    PrimaryClassification = specimen.PrimaryClassification,
-                    SecondaryClassification = specimen.SecondaryClassification,
-                    TertiaryClassification = specimen.TertiaryClassification,
-                    AssociationNames = specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name).ToArray(),
-                    ItemTradeLiteraturePrimarySubject = (string) null,
-                    ItemTradeLiteraturePublicationDate = (string) null,
-                    ItemTradeLiteraturePrimaryRole = (string) null,
-                    ItemTradeLiteraturePrimaryName = (string) null,
+                    Keywords = new object[] { specimen.Keywords, specimen.ExpeditionName },
+                    Localities = new object[] { specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Locality)).Select(x => x.Locality), 
+                        specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
+                        specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
+                        specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country),
+                        specimen.Ocean,
+                        specimen.Continent,
+                        specimen.Country,
+                        specimen.State,
+                        specimen.District,
+                        specimen.Town,
+                        specimen.NearestNamedPlace,
+                        specimen.TektitesLocalStrewnfield, 
+                        specimen.TektitesGlobalStrewnfield },
+                    Collections = new object[] { specimen.CollectionNames, specimen.CollectionPlans },
+                    Dates = new object[] { specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date) },
+                    CulturalGroups = new object[] { },
+                    Classifications = new object[] { specimen.PrimaryClassification, specimen.SecondaryClassification, specimen.TertiaryClassification },
+                    Names = new object[] { specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name) },
+                    Technique = (string)null,
+                    Denominations = new object[] { },
+                    Habitats = new object[] { },
+                    Phylum = specimen.Taxonomy.Phylum,
+                    Class = specimen.Taxonomy.Class,
+                    Order = specimen.Taxonomy.Order,
+                    Family = specimen.Taxonomy.Family,
+                    TypeStatus = specimen.TypeStatus,
+                    GeoTypes = new object[] { specimen.PetrologyRockClass, 
+                        specimen.PetrologyRockGroup, 
+                        specimen.MineralogyVariety, 
+                        specimen.MineralogyGroup, 
+                        specimen.MineralogyClass,
+                        specimen.MeteoritesClass,
+                        specimen.MeteoritesGroup,
+                        specimen.TektitesClassification },
+                    MuseumLocations = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
+                    Articles = specimen.RelatedArticleIds,
+                    Species = specimen.RelatedSpeciesIds,
                 });
 
             AddMap<Article>(articles =>
@@ -194,7 +249,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Sort fields
                     Quality =
-                        ((article.RelatedItemSpecimenIds.Count > 1) ? 1 : 0) +
+                        ((article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any()) ? 1 : 0) +
                         ((article.Tags.Any()) ? 1 : 0) +
                         (article.Media.Count * 2) +
                         ((article.ChildArticleIds.Any()) ? 1 : 0),
@@ -207,31 +262,32 @@ namespace CollectionsOnline.Core.Indexes
                     ItemType = (string) null,
                     SpeciesType = (string) null,
                     SpeciesSubType = (string) null,
-                    SpeciesHabitats = new object[] {},
-                    SpeciesDepths = new object[] {},
-                    SpeciesWaterColumnLocations = new object[] {},
-                    Phylum = (string) null,
-                    Class = (string) null,
+                    SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = (string) null,
-                    SpecimenDiscipline = (string) null,
                     ArticleTypes = article.Types,
-                    Dates = new int[] { },
 
                     // Term fields
-                    Tags = new object[] {article.Tags, article.GeographicTags},
-                    Country = new object[] {},
-                    CollectionNames = new object[] {},
-                    CollectionPlans = new object[] { },
-                    PrimaryClassification = (string) null,
-                    SecondaryClassification = (string) null,
-                    TertiaryClassification = (string) null,
-                    AssociationNames = new object[] {},
-                    ItemTradeLiteraturePrimarySubject = (string) null,
-                    ItemTradeLiteraturePublicationDate = (string) null,
-                    ItemTradeLiteraturePrimaryRole = (string) null,
-                    ItemTradeLiteraturePrimaryName = (string) null,
+                    Keywords = new object[] { article.Tags, article.GeographicTags },
+                    Localities = new object[] { },
+                    Collections = new object[] { },
+                    Dates = new object[] { },
+                    CulturalGroups = new object[] { },
+                    Classifications = new object[] { },
+                    Names = new object[] { },
+                    Technique = (string) null,
+                    Denominations = new object[] { },
+                    Habitats = new object[] { },
+                    Phylum = (string)null,
+                    Class = (string)null,
+                    Order = (string)null,
+                    Family = (string)null,
+                    TypeStatus = (string)null,
+                    GeoTypes = new object[] { },
+                    MuseumLocations = new object[] { },
+                    Articles = new object[] { },
+                    Species = new object[] { }
                 });
-
+            
             Index(x => x.Id, FieldIndexing.No);
             Index(x => x.Name, FieldIndexing.No);
             Index(x => x.Content, FieldIndexing.Analyzed);
@@ -240,13 +296,25 @@ namespace CollectionsOnline.Core.Indexes
 
             Index(x => x.MediaIrns, FieldIndexing.NotAnalyzed);
             Index(x => x.TaxonomyIrn, FieldIndexing.NotAnalyzed);
-            Index(x => x.Tags, FieldIndexing.NotAnalyzed);
-            Index(x => x.Country, FieldIndexing.NotAnalyzed);
-            Index(x => x.CollectionNames, FieldIndexing.NotAnalyzed);
-            Index(x => x.PrimaryClassification, FieldIndexing.NotAnalyzed);
-            Index(x => x.SecondaryClassification, FieldIndexing.NotAnalyzed);
-            Index(x => x.TertiaryClassification, FieldIndexing.NotAnalyzed);
-            Index(x => x.AssociationNames, FieldIndexing.NotAnalyzed);
+            Index(x => x.Keywords, FieldIndexing.NotAnalyzed);
+            Index(x => x.Localities, FieldIndexing.NotAnalyzed);
+            Index(x => x.Collections, FieldIndexing.NotAnalyzed);
+            Index(x => x.Dates, FieldIndexing.NotAnalyzed);
+            Index(x => x.CulturalGroups, FieldIndexing.NotAnalyzed);
+            Index(x => x.Classifications, FieldIndexing.NotAnalyzed);
+            Index(x => x.Names, FieldIndexing.NotAnalyzed);
+            Index(x => x.Technique, FieldIndexing.NotAnalyzed);
+            Index(x => x.Denominations, FieldIndexing.NotAnalyzed);
+            Index(x => x.Habitats, FieldIndexing.NotAnalyzed);
+            Index(x => x.Phylum, FieldIndexing.NotAnalyzed);
+            Index(x => x.Class, FieldIndexing.NotAnalyzed);
+            Index(x => x.Order, FieldIndexing.NotAnalyzed);
+            Index(x => x.Family, FieldIndexing.NotAnalyzed);
+            Index(x => x.TypeStatus, FieldIndexing.NotAnalyzed);
+            Index(x => x.GeoTypes, FieldIndexing.NotAnalyzed);
+            Index(x => x.MuseumLocations, FieldIndexing.NotAnalyzed);
+            Index(x => x.Articles, FieldIndexing.NotAnalyzed);
+            Index(x => x.Species, FieldIndexing.NotAnalyzed);
 
             Store(x => x.Id, FieldStorage.Yes);
             Store(x => x.Name, FieldStorage.Yes);
@@ -267,15 +335,9 @@ namespace CollectionsOnline.Core.Indexes
             TermVector(x => x.ItemType, FieldTermVector.Yes);
             TermVector(x => x.SpeciesType, FieldTermVector.Yes);
             TermVector(x => x.SpeciesSubType, FieldTermVector.Yes);
-            TermVector(x => x.SpeciesHabitats, FieldTermVector.Yes);
-            TermVector(x => x.SpeciesDepths, FieldTermVector.Yes);
-            TermVector(x => x.SpeciesWaterColumnLocations, FieldTermVector.Yes);
-            TermVector(x => x.Phylum, FieldTermVector.Yes);
-            TermVector(x => x.Class, FieldTermVector.Yes);
+            TermVector(x => x.SpeciesEndemicity, FieldTermVector.Yes);
             TermVector(x => x.SpecimenScientificGroup, FieldTermVector.Yes);
-            TermVector(x => x.SpecimenDiscipline, FieldTermVector.Yes);
             TermVector(x => x.ArticleTypes, FieldTermVector.Yes);
-            TermVector(x => x.Dates, FieldTermVector.Yes);
         }
     }
 }

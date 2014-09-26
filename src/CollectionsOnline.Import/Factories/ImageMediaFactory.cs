@@ -50,7 +50,7 @@ namespace CollectionsOnline.Import.Factories
 
                     imageFactory
                         .Format(new JpegFormat())
-                        .Resize(new ResizeLayer(new Size(5000, 5000), ResizeMode.Max, upscale:false))
+                        .Resize(new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false))
                         .Quality(90)
                         .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "original"));
 

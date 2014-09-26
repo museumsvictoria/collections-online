@@ -215,9 +215,10 @@ pip-log.txt
 .mr.developer.cfg
 
 ############
-## DigitalLabels
+## CollectionsOnline
 ############
 env/
 packages/
 logs/
 **/content/media/
+git-update-index-hide-files.ps1

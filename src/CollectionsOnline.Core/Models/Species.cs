@@ -74,9 +74,9 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> WaterColumnLocations { get; set; }
 
-        public IList<string> RelatedItemSpecimenIds { get; set; }
+        public IList<string> RelatedItemIds { get; set; }
 
-        public IList<string> ItemIds { get; set; }
+        public IList<string> RelatedSpecimenIds { get; set; }
 
         public IList<Author> Authors { get; set; }
 
@@ -98,7 +98,8 @@ namespace CollectionsOnline.Core.Models
             Plants = new List<string>();
             Depths = new List<string>();
             WaterColumnLocations = new List<string>();
-            RelatedItemSpecimenIds = new List<string>();
+            RelatedItemIds = new List<string>();
+            RelatedSpecimenIds = new List<string>();
             Authors = new List<Author>();
             Media = new List<Media>();
         }

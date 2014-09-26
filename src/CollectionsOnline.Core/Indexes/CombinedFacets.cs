@@ -45,23 +45,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedResult>
                 {
-                    Name = x => x.SpeciesHabitats
-                },
-                new Facet<CombinedResult>
-                {
-                    Name = x => x.SpeciesDepths
-                },
-                new Facet<CombinedResult>
-                {
-                    Name = x => x.SpeciesWaterColumnLocations
-                },
-                new Facet<CombinedResult>
-                {
-                    Name = x => x.Phylum
-                },
-                new Facet<CombinedResult>
-                {
-                    Name = x => x.Class
+                    Name = x => x.SpeciesEndemicity
                 },
                 new Facet<CombinedResult>
                 {
@@ -69,15 +53,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedResult>
                 {
-                    Name = x => x.SpecimenDiscipline
-                },
-                new Facet<CombinedResult>
-                {
                     Name = x => x.ArticleTypes
-                },
-                new Facet<CombinedResult>
-                {
-                    Name = x => x.Dates
                 }
             };
         }

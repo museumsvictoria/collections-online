@@ -17,8 +17,6 @@ namespace CollectionsOnline.Core.Models
 
         public string Summary { get; set; }
 
-        public IList<string> AssociatedDates { get; set; }
-
         public string ThumbnailUri { get; set; }
 
         #endregion
@@ -53,7 +51,7 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Association> Associations { get; set; }
 
-        public IList<string> Tags { get; set; }
+        public IList<string> Keywords { get; set; }
 
         public string Significance { get; set; }
 
@@ -67,11 +65,13 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> Bibliographies { get; set; }
 
-        public string ModelNames { get; set; }
+        public IList<string> ModelNames { get; set; }
 
-        public string BrandNames { get; set; }
+        public IList<string> BrandNames { get; set; }
 
-        public IList<string> RelatedItemSpecimenIds { get; set; }
+        public IList<string> RelatedItemIds { get; set; }
+
+        public IList<string> RelatedSpecimenIds { get; set; }
 
         public IList<string> RelatedArticleIds { get; set; }
 
@@ -197,7 +197,7 @@ namespace CollectionsOnline.Core.Models
 
         public string TradeLiteraturePrintingTypes { get; set; }
 
-        public string TradeLiteraturePublicationTypes { get; set; }
+        public IList<string> TradeLiteraturePublicationTypes { get; set; }
 
         public string TradeLiteraturePrimaryRole { get; set; }
 
@@ -207,9 +207,15 @@ namespace CollectionsOnline.Core.Models
 
         #region Indigenous Cultures
 
-        public string IndigenousCulturesLocality { get; set; }        
+        public string IndigenousCulturesLocality { get; set; }
 
-        public string IndigenousCulturesCulturalGroups { get; set; }
+        public string IndigenousCulturesRegion { get; set; }
+
+        public string IndigenousCulturesState { get; set; }
+
+        public string IndigenousCulturesCountry { get; set; }
+
+        public IList<string> IndigenousCulturesCulturalGroups { get; set; }
 
         public string IndigenousCulturesMedium { get; set; }
 
@@ -284,17 +290,21 @@ namespace CollectionsOnline.Core.Models
         private void InitializeCollections()
         {
             Comments = new List<Comment>();
-            AssociatedDates = new List<string>();
             CollectionNames = new List<string>();
             CollectionPlans = new List<string>();
             Associations = new List<Association>();
-            Tags = new List<string>();
+            Keywords = new List<string>();
             Dimensions = new List<Dimension>();
             Bibliographies = new List<string>();
-            RelatedItemSpecimenIds = new List<string>();
+            ModelNames = new List<string>();
+            BrandNames = new List<string>();
+            RelatedItemIds = new List<string>();
+            RelatedSpecimenIds = new List<string>();
             RelatedArticleIds = new List<string>();
             Media = new List<Media>();
             AudioVisualContentSummaries = new List<string>();
+            TradeLiteraturePublicationTypes = new List<string>();
+            IndigenousCulturesCulturalGroups = new List<string>();
         }
     }
 }

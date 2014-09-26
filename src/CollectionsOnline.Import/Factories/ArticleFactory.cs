@@ -55,7 +55,7 @@ namespace CollectionsOnline.Import.Factories
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
                         "relatedarticles=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
-                        "relatedcatalogues=ObjObjectsRef_tab.(irn,MdaDataSets_tab)"
+                        "relateditemspecimens=ObjObjectsRef_tab.(irn,MdaDataSets_tab)"
                     };
             }
         }
@@ -149,9 +149,9 @@ namespace CollectionsOnline.Import.Factories
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
             {
                 if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    article.RelatedItemSpecimenIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
+                    article.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
                 if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    article.RelatedItemSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+                    article.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
             }
             // Build summary
             if (!string.IsNullOrWhiteSpace(article.ContentSummary))

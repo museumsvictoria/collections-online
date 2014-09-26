@@ -45,9 +45,9 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedArticleIds { get; set; }
 
-        public IList<string> RelatedItemSpecimenIds { get; set; }
+        public IList<string> RelatedItemIds { get; set; }
 
-        public IList<string> RelatedPartyItemIds { get; set; }
+        public IList<string> RelatedSpecimenIds { get; set; }
 
         private void InitializeCollections()
         {
@@ -59,8 +59,8 @@ namespace CollectionsOnline.Core.Models
             Media = new List<Media>();
             ChildArticleIds = new List<string>();
             RelatedArticleIds = new List<string>();
-            RelatedItemSpecimenIds = new List<string>();
-            RelatedPartyItemIds = new List<string>();
+            RelatedItemIds = new List<string>();
+            RelatedSpecimenIds = new List<string>();
         }
     }
 }

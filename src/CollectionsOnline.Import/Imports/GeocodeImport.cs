@@ -81,7 +81,9 @@ namespace CollectionsOnline.Import.Imports
                                 if (address != null)
                                 {
                                     association.GeocodeStatus = GeocodeStatus.Success;
-                                    association.GeocodePlace = address.FormattedAddress;
+                                    association.GeocodedPlace = address.FormattedAddress;
+                                    association.Latitude = address.Coordinates.Latitude;
+                                    association.Longitude = address.Coordinates.Longitude;
 
                                     _log.Debug("AssociationNotFound-GeocoderSuccess. association-place:{0}, geocoded-address:{1}", association.Place, address.FormattedAddress);
                                     assNotFoundGeocodeSuccess++;
@@ -119,10 +121,10 @@ namespace CollectionsOnline.Import.Imports
 
                             if (similarAssociation.GeocodeStatus == GeocodeStatus.Success)
                             {
-                                association.GeocodePlace = similarAssociation.GeocodePlace;
+                                association.GeocodedPlace = similarAssociation.GeocodedPlace;
                                 association.GeocodeStatus = similarAssociation.GeocodeStatus;
 
-                                _log.Debug("AssociationFound-GeocoderSuccess. association-place:{0}, geocoded-address:{1}", association.Place, association.GeocodePlace);
+                                _log.Debug("AssociationFound-GeocoderSuccess. association-place:{0}, geocoded-address:{1}", association.Place, association.GeocodedPlace);
                                 assFoundGeocodeSuccess++;
 
                                 // updated association, continue on

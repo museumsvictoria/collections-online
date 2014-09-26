@@ -17,19 +17,38 @@
 
         public string Discipline { get; set; }
 
-        public string[] Dates { get; set; }
-
         public string ItemType { get; set; }
 
         public string SpeciesType { get; set; }
 
         public string SpeciesSubType { get; set; }
 
-        public string[] SpeciesHabitats { get; set; }
+        public string SpeciesEndemicity { get; set; }
 
-        public string[] SpeciesDepths { get; set; }
+        public string SpecimenScientificGroup { get; set; }
 
-        public string[] SpeciesWaterColumnLocations { get; set; }
+        public string SpecimenDiscipline { get; set; }
+
+        public string ArticleType { get; set; }
+
+        /* term fields */
+        public string Keyword { get; set; }
+
+        public string Locality { get; set; }
+
+        public string Collection { get; set; }
+
+        public string CulturalGroup { get; set; }
+
+        public string Classification { get; set; }
+
+        public string Name { get; set; }
+
+        public string Technique { get; set; }
+
+        public string Denomination { get; set; }
+
+        public string Habitat { get; set; }
 
         public string Phylum { get; set; }
 
@@ -39,35 +58,14 @@
 
         public string Family { get; set; }
 
-        public string SpecimenScientificGroup { get; set; }
+        public string TypeStatus { get; set; }
 
-        public string SpecimenDiscipline { get; set; }
+        public string GeoType { get; set; }
 
-        public string[] ArticleTypes { get; set; }
+        public string MuseumLocation { get; set; }
 
-        /* term fields */
-        public string Tag { get; set; }
+        public string Article { get; set; }
 
-        public string Country { get; set; }
-
-        public string CollectionName { get; set; }
-
-        public string CollectionPlan { get; set; }
-
-        public string PrimaryClassification { get; set; }
-
-        public string SecondaryClassification { get; set; }
-
-        public string TertiaryClassification { get; set; }
-
-        public string AssociationName { get; set; }
-
-        public string ItemTradeLiteraturePrimarySubject { get; set; }
-
-        public string ItemTradeLiteraturePublicationDate { get; set; }
-
-        public string ItemTradeLiteraturePrimaryRole { get; set; }
-
-        public string ItemTradeLiteraturePrimaryName { get; set; }
+        public string Species { get; set; }
     }
 }

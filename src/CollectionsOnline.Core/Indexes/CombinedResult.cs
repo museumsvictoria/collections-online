@@ -28,9 +28,7 @@
 
         public string HasImages { get; set; }
 
-        public string Discipline { get; set; }
-
-        public object[] Dates { get; set; }
+        public string Discipline { get; set; }        
 
         public string ItemType { get; set; }
 
@@ -38,46 +36,50 @@
 
         public string SpeciesSubType { get; set; }
 
-        public object[] SpeciesHabitats { get; set; }
-
-        public object[] SpeciesDepths { get; set; }
-
-        public object[] SpeciesWaterColumnLocations { get; set; }
-
-        public string Phylum { get; set; }
-
-        public string Class { get; set; }
+        public string SpeciesEndemicity { get; set; }
 
         public string SpecimenScientificGroup { get; set; }
-
-        public string SpecimenDiscipline { get; set; }
 
         public object[] ArticleTypes { get; set; }
 
         /* term fields */
 
-        public object[] Tags { get; set; }
+        public object[] Keywords { get; set; }
 
-        public object[] Country { get; set; }
+        public object[] Localities { get; set; }
 
-        public object[] CollectionNames { get; set; }
+        public object[] Collections { get; set; }
 
-        public object[] CollectionPlans { get; set; }
+        public object[] Dates { get; set; }
 
-        public string PrimaryClassification { get; set; }
+        public object[] CulturalGroups { get; set; }
 
-        public string SecondaryClassification { get; set; }
+        public object[] Classifications { get; set; }
 
-        public string TertiaryClassification { get; set; }
+        public object[] Names { get; set; }
 
-        public object[] AssociationNames { get; set; }
+        public string Technique { get; set; }
 
-        public string ItemTradeLiteraturePrimarySubject { get; set; }
+        public object[] Denominations { get; set; }
 
-        public string ItemTradeLiteraturePublicationDate { get; set; }
+        public object[] Habitats { get; set; }
 
-        public string ItemTradeLiteraturePrimaryRole { get; set; }
+        public string Phylum { get; set; }
 
-        public string ItemTradeLiteraturePrimaryName { get; set; }
+        public string Class { get; set; }
+
+        public string Order { get; set; }
+
+        public string Family { get; set; }
+
+        public string TypeStatus { get; set; }
+
+        public object[] GeoTypes { get; set; }
+
+        public object[] MuseumLocations { get; set; }
+
+        public object[] Articles { get; set; }
+
+        public object[] Species { get; set; }
     }
 }

@@ -48,21 +48,25 @@ namespace CollectionsOnline.Core.Models
 
         public string Significance { get; set; }
 
-        public IList<string> Tags { get; set; }
+        public IList<string> Keywords { get; set; }
 
         public IList<string> CollectionPlans { get; set; }
 
         public IList<Association> Associations { get; set; }
 
-        public IList<string> RelatedItemSpecimenIds { get; set; }
+        public IList<string> RelatedItemIds { get; set; }
 
-        public IList<string> RelatedArticleSpeciesIds { get; set; }
+        public IList<string> RelatedSpecimenIds { get; set; }
+
+        public IList<string> RelatedArticleIds { get; set; }
 
         public IList<string> RelatedSpeciesIds { get; set; }
 
         public string AcquisitionInformation { get; set; }
 
         public string Acknowledgement { get; set; }
+
+        public MuseumLocation MuseumLocation { get; set; }
 
         public IList<Media> Media { get; set; }
         
@@ -243,11 +247,11 @@ namespace CollectionsOnline.Core.Models
             CollectionNames = new List<string>();
             CollectionPlans = new List<string>();
             Associations = new List<Association>();
-            RelatedItemSpecimenIds = new List<string>();
-            RelatedArticleSpeciesIds = new List<string>();
+            RelatedItemIds = new List<string>();
+            RelatedSpecimenIds = new List<string>();
+            RelatedArticleIds = new List<string>();
             RelatedSpeciesIds = new List<string>();
-            Tags = new List<string>();
-            RelatedItemSpecimenIds = new List<string>();
+            Keywords = new List<string>();
             Media = new List<Media>();
             Storages = new List<Storage>();
         }

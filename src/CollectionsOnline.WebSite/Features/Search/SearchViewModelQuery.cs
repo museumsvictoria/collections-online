@@ -57,7 +57,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                     facetQuery = facetQuery.Search("Content", searchInputModel.Query);
                 }
 
-                // facet queries TODO: REFACTOR this
+                // facet queries
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Type))
                 {
                     query = query.AndAlso().WhereEquals("Type", searchInputModel.Type);
@@ -78,14 +78,6 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("Discipline", searchInputModel.Discipline);
                     facetQuery = facetQuery.AndAlso().WhereEquals("Discipline", searchInputModel.Discipline);
                 }
-                if (searchInputModel.Dates != null && searchInputModel.Dates.Any())
-                {
-                    foreach (var date in searchInputModel.Dates.Where(x => !string.IsNullOrWhiteSpace(x)))
-                    {
-                        query = query.AndAlso().WhereEquals("Dates", date);
-                        facetQuery = facetQuery.AndAlso().WhereEquals("Dates", date);
-                    }
-                }
                 if (!string.IsNullOrWhiteSpace(searchInputModel.ItemType))
                 {
                     query = query.AndAlso().WhereEquals("ItemType", searchInputModel.ItemType);
@@ -101,36 +93,72 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("SpeciesSubType", searchInputModel.SpeciesSubType);
                     facetQuery = facetQuery.AndAlso().WhereEquals("SpeciesSubType", searchInputModel.SpeciesSubType);
                 }
-                if (searchInputModel.SpeciesHabitats != null && searchInputModel.SpeciesHabitats.Any())
+                if (!string.IsNullOrWhiteSpace(searchInputModel.SpeciesEndemicity))
                 {
-                    foreach (
-                        var speciesHabitat in searchInputModel.SpeciesHabitats.Where(x => !string.IsNullOrWhiteSpace(x))
-                        )
-                    {
-                        query = query.AndAlso().WhereEquals("SpeciesHabitats", speciesHabitat);
-                        facetQuery = facetQuery.AndAlso().WhereEquals("SpeciesHabitats", speciesHabitat);
-                    }
+                    query = query.AndAlso().WhereEquals("SpeciesEndemicity", searchInputModel.SpeciesEndemicity);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("SpeciesEndemicity", searchInputModel.SpeciesEndemicity);
                 }
-                if (searchInputModel.SpeciesDepths != null && searchInputModel.SpeciesDepths.Any())
+                if (!string.IsNullOrWhiteSpace(searchInputModel.SpecimenScientificGroup))
                 {
-                    foreach (
-                        var speciesDepth in searchInputModel.SpeciesDepths.Where(x => !string.IsNullOrWhiteSpace(x)))
-                    {
-                        query = query.AndAlso().WhereEquals("SpeciesDepths", speciesDepth);
-                        facetQuery = facetQuery.AndAlso().WhereEquals("SpeciesDepths", speciesDepth);
-                    }
+                    query = query.AndAlso().WhereEquals("SpecimenScientificGroup", searchInputModel.SpecimenScientificGroup);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("SpecimenScientificGroup", searchInputModel.SpecimenScientificGroup);
                 }
-                if (searchInputModel.SpeciesWaterColumnLocations != null &&
-                    searchInputModel.SpeciesWaterColumnLocations.Any())
+                if (!string.IsNullOrWhiteSpace(searchInputModel.SpecimenDiscipline))
                 {
-                    foreach (
-                        var speciesWaterColumnLocation in
-                            searchInputModel.SpeciesWaterColumnLocations.Where(x => !string.IsNullOrWhiteSpace(x)))
-                    {
-                        query = query.AndAlso().WhereEquals("SpeciesWaterColumnLocations", speciesWaterColumnLocation);
-                        facetQuery = facetQuery.AndAlso()
-                            .WhereEquals("SpeciesWaterColumnLocations", speciesWaterColumnLocation);
-                    }
+                    query = query.AndAlso().WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.ArticleType))
+                {
+                    query = query.AndAlso().WhereEquals("ArticleTypes", searchInputModel.ArticleType);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("ArticleTypes", searchInputModel.ArticleType);
+                }
+
+                // Term queries
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Keyword))
+                {
+                    query = query.AndAlso().WhereEquals("Keywords", searchInputModel.Keyword);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Keywords", searchInputModel.Keyword);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Locality))
+                {
+                    query = query.AndAlso().WhereEquals("Localities", searchInputModel.Locality);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Localities", searchInputModel.Locality);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Collection))
+                {
+                    query = query.AndAlso().WhereEquals("Collections", searchInputModel.Collection);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Collections", searchInputModel.Collection);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.CulturalGroup))
+                {
+                    query = query.AndAlso().WhereEquals("CulturalGroups", searchInputModel.CulturalGroup);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("CulturalGroups", searchInputModel.CulturalGroup);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Classification))
+                {
+                    query = query.AndAlso().WhereEquals("Classifications", searchInputModel.Classification);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Classifications", searchInputModel.Classification);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Name))
+                {
+                    query = query.AndAlso().WhereEquals("Names", searchInputModel.Name);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Names", searchInputModel.Name);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Technique))
+                {
+                    query = query.AndAlso().WhereEquals("Technique", searchInputModel.Technique);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Technique", searchInputModel.Technique);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Denomination))
+                {
+                    query = query.AndAlso().WhereEquals("Denominations", searchInputModel.Denomination);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Denominations", searchInputModel.Denomination);
+                }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Habitat))
+                {
+                    query = query.AndAlso().WhereEquals("Habitats", searchInputModel.Habitat);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Habitats", searchInputModel.Habitat);
                 }
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Phylum))
                 {
@@ -142,109 +170,40 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("Class", searchInputModel.Class);
                     facetQuery = facetQuery.AndAlso().WhereEquals("Class", searchInputModel.Class);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.SpecimenScientificGroup))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Order))
                 {
-                    query = query.AndAlso()
-                        .WhereEquals("SpecimenScientificGroup", searchInputModel.SpecimenScientificGroup);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("SpecimenScientificGroup", searchInputModel.SpecimenScientificGroup);
+                    query = query.AndAlso().WhereEquals("Order", searchInputModel.Order);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Order", searchInputModel.Order);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.SpecimenDiscipline))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Family))
                 {
-                    query = query.AndAlso().WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
+                    query = query.AndAlso().WhereEquals("Family", searchInputModel.Family);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Family", searchInputModel.Family);
                 }
-                if (searchInputModel.ArticleTypes != null && searchInputModel.ArticleTypes.Any())
+                if (!string.IsNullOrWhiteSpace(searchInputModel.TypeStatus))
                 {
-                    foreach (var articleType in searchInputModel.ArticleTypes.Where(x => !string.IsNullOrWhiteSpace(x)))
-                    {
-                        query = query.AndAlso().WhereEquals("ArticleTypes", articleType);
-                        facetQuery = facetQuery.AndAlso().WhereEquals("ArticleTypes", articleType);
-                    }
+                    query = query.AndAlso().WhereEquals("TypeStatus", searchInputModel.TypeStatus);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("TypeStatus", searchInputModel.TypeStatus);
                 }
-
-                /* Term queries */
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Tag))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.GeoType))
                 {
-                    query = query.AndAlso().WhereEquals("Tags", searchInputModel.Tag);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Tags", searchInputModel.Tag);
+                    query = query.AndAlso().WhereEquals("GeoTypes", searchInputModel.GeoType);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("GeoTypes", searchInputModel.GeoType);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Country))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.MuseumLocation))
                 {
-                    query = query.AndAlso().WhereEquals("Country", searchInputModel.Country);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Country", searchInputModel.Country);
+                    query = query.AndAlso().WhereEquals("MuseumLocations", searchInputModel.MuseumLocation);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("MuseumLocations", searchInputModel.MuseumLocation);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.CollectionName))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Article))
                 {
-                    query = query.AndAlso().WhereEquals("CollectionNames", searchInputModel.CollectionName);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("CollectionNames", searchInputModel.CollectionName);
+                    query = query.AndAlso().WhereEquals("Articles", searchInputModel.Article);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Articles", searchInputModel.Article);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.CollectionPlan))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Species))
                 {
-                    query = query.AndAlso().WhereEquals("CollectionPlans", searchInputModel.CollectionPlan);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("CollectionPlans", searchInputModel.CollectionPlan);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.PrimaryClassification))
-                {
-                    query = query.AndAlso()
-                        .WhereEquals("PrimaryClassification", searchInputModel.PrimaryClassification);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("PrimaryClassification", searchInputModel.PrimaryClassification);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.SecondaryClassification))
-                {
-                    query = query.AndAlso()
-                        .WhereEquals("SecondaryClassification", searchInputModel.SecondaryClassification);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("SecondaryClassification", searchInputModel.SecondaryClassification);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.TertiaryClassification))
-                {
-                    query = query.AndAlso()
-                        .WhereEquals("TertiaryClassification", searchInputModel.TertiaryClassification);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("TertiaryClassification", searchInputModel.TertiaryClassification);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.AssociationName))
-                {
-                    query = query.AndAlso().WhereEquals("AssociationNames", searchInputModel.AssociationName);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("AssociationNames", searchInputModel.AssociationName);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemTradeLiteraturePrimarySubject))
-                {
-                    query = query.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePrimarySubject",
-                            searchInputModel.ItemTradeLiteraturePrimarySubject);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePrimarySubject",
-                            searchInputModel.ItemTradeLiteraturePrimarySubject);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemTradeLiteraturePublicationDate))
-                {
-                    query = query.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePublicationDate",
-                            searchInputModel.ItemTradeLiteraturePublicationDate);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePublicationDate",
-                            searchInputModel.ItemTradeLiteraturePublicationDate);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemTradeLiteraturePrimaryRole))
-                {
-                    query = query.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePrimaryRole", searchInputModel.ItemTradeLiteraturePrimaryRole);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePrimaryRole", searchInputModel.ItemTradeLiteraturePrimaryRole);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ItemTradeLiteraturePrimaryName))
-                {
-                    query = query.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePrimaryName", searchInputModel.ItemTradeLiteraturePrimaryName);
-                    facetQuery = facetQuery.AndAlso()
-                        .WhereEquals("ItemTradeLiteraturePrimaryName", searchInputModel.ItemTradeLiteraturePrimaryName);
+                    query = query.AndAlso().WhereEquals("Species", searchInputModel.Species);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Species", searchInputModel.Species);
                 }
 
                 var results = query

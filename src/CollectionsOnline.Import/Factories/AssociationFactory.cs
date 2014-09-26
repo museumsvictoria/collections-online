@@ -27,7 +27,12 @@ namespace CollectionsOnline.Import.Factories
                 Type = map.GetString("AssAssociationType_tab"),
                 Name = _partiesNameFactory.Make(map.GetMap("party")),
                 Date = map.GetString("AssAssociationDate_tab"),
-                Comments = map.GetString("AssAssociationComments0")
+                Comments = map.GetString("AssAssociationComments0"),
+                StreetAddress = map.GetString("AssAssociationStreetAddress_tab"),
+                Locality = map.GetString("AssAssociationLocality_tab"),
+                Region = map.GetString("AssAssociationRegion_tab"),
+                State = map.GetString("AssAssociationState_tab"),
+                Country = map.GetString("AssAssociationCountry_tab")
             };
 
             var place = new[]
