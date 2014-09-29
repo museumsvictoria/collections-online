@@ -608,23 +608,21 @@
                 </div>
 
                 <div class="classification">
-                    <dl>
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.PrimaryClassification))
-                        {
-                            <dt>Primary Classification</dt>
-                            <dd><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.SecondaryClassification))
-                        {
-                            <dt>Secondary Classification</dt>
-                            <dd><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.TertiaryClassification))
-                        {
-                            <dt>Tertiary Classification</dt>
-                            <dd><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a></dd>
-                        }
-                    </dl>
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.PrimaryClassification))
+                    {
+                        <h4>Primary Classification</h4>
+                        <a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.SecondaryClassification))
+                    {
+                        <h4>Secondary Classification</h4>
+                        <a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.TertiaryClassification))
+                    {
+                        <h4>Tertiary Classification</h4>
+                        <a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a>
+                    }
                 </div>
                 
                 @if (Model.Item.RelatedItemIds.Any() || Model.Item.RelatedSpecimenIds.Any())
@@ -657,9 +655,9 @@
                 {
                     <div class="keywords">
                         <h4>Keywords</h4>
-                        @foreach (var tag in @Model.Item.Keywords)
+                        @foreach (var keyword in @Model.Item.Keywords)
                         {
-                            <a class="label label-warning" href="/search?keyword=@HttpUtility.UrlEncode(tag)">@tag</a>
+                            <a class="label label-warning" href="/search?keyword=@HttpUtility.UrlEncode(keyword)">@keyword</a>
                         }
                     </div>
                 }

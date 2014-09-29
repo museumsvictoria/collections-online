@@ -29,7 +29,7 @@
 
         public string SpecimenDiscipline { get; set; }
 
-        public string ArticleType { get; set; }
+        public string[] ArticleTypes { get; set; }
 
         /* term fields */
         public string Keyword { get; set; }

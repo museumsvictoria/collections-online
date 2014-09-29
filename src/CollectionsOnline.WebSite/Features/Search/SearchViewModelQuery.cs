@@ -108,10 +108,13 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
                     facetQuery = facetQuery.AndAlso().WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.ArticleType))
+                if (searchInputModel.ArticleTypes != null && searchInputModel.ArticleTypes.Any())
                 {
-                    query = query.AndAlso().WhereEquals("ArticleTypes", searchInputModel.ArticleType);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("ArticleTypes", searchInputModel.ArticleType);
+                    foreach (var articleType in searchInputModel.ArticleTypes)
+                    {
+                        query = query.AndAlso().WhereEquals("ArticleTypes", articleType);
+                        facetQuery = facetQuery.AndAlso().WhereEquals("ArticleTypes", articleType);
+                    }
                 }
 
                 // Term queries

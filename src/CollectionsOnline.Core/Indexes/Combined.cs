@@ -42,7 +42,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesSubType = (string)null,
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = (string)null,
-                    ArticleTypes = new object[] {},
+                    ArticleTypes = new object[] { },
                     
                     // Term fields
                     Keywords = new object[] { item.Keywords,
@@ -131,7 +131,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesSubType = species.AnimalSubType,
                     SpeciesEndemicity = species.Endemicity,
                     SpecimenScientificGroup = (string) null,
-                    ArticleTypes = new object[] {},
+                    ArticleTypes = new object[] { },
 
                     // Term fields
                     Keywords = new object[] { species.ConservationStatuses },
@@ -188,7 +188,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesSubType = (string) null,
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = specimen.ScientificGroup,
-                    ArticleTypes = new object[] {},
+                    ArticleTypes = new object[] { },
 
                     // Term fields
                     Keywords = new object[] { specimen.Keywords, specimen.ExpeditionName },
@@ -250,7 +250,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Sort fields
                     Quality =
                         ((article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any()) ? 1 : 0) +
-                        ((article.Tags.Any()) ? 1 : 0) +
+                        ((article.Keywords.Any()) ? 1 : 0) +
                         (article.Media.Count * 2) +
                         ((article.ChildArticleIds.Any()) ? 1 : 0),
 
@@ -267,7 +267,7 @@ namespace CollectionsOnline.Core.Indexes
                     ArticleTypes = article.Types,
 
                     // Term fields
-                    Keywords = new object[] { article.Tags, article.GeographicTags },
+                    Keywords = article.Keywords,
                     Localities = new object[] { },
                     Collections = new object[] { },
                     Dates = new object[] { },

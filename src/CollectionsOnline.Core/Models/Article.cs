@@ -23,15 +23,13 @@ namespace CollectionsOnline.Core.Models
 
         public string Title { get; set; }
 
-        public IList<string> Tags { get; set; }
+        public IList<string> Keywords { get; set; }
 
         public string Content { get; set; }
 
         public string ContentSummary { get; set; }
 
         public IList<string> Types { get; set; }
-
-        public IList<string> GeographicTags { get; set; }
 
         public IList<Author> Authors { get; set; }
 
@@ -51,9 +49,8 @@ namespace CollectionsOnline.Core.Models
 
         private void InitializeCollections()
         {
-            Tags = new List<string>();
+            Keywords = new List<string>();
             Types = new List<string>();
-            GeographicTags = new List<string>();
             Authors = new List<Author>();
             Contributors = new List<Author>();
             Media = new List<Media>();

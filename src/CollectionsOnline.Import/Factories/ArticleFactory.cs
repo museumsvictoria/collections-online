@@ -87,11 +87,11 @@ namespace CollectionsOnline.Import.Factories
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
             article.Title = map.GetString("NarTitle");
-            article.Tags = map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
+            article.Keywords.AddRange(map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)));
             article.Content = map.GetString("NarNarrative");
             article.ContentSummary = map.GetString("NarNarrativeSummary");
             article.Types = map.GetStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-            article.GeographicTags = map.GetStrings("DesGeographicLocation_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
+            article.Keywords.AddRange(map.GetStrings("DesGeographicLocation_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)));
 
             // Authors
             article.Authors = map.GetMaps("authors")
