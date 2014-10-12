@@ -288,12 +288,10 @@ namespace CollectionsOnline.Import.Factories
                     }.Concatenate(" ");
 
                     // Species profile Relationship
-                    var relatedSpeciesMap = taxonomyMap.GetMaps("relatedspecies").FirstOrDefault();
-                    if (relatedSpeciesMap != null &&
-                        relatedSpeciesMap.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                    {
-                        specimen.RelatedSpeciesIds.Add(string.Format("species/{0}", relatedSpeciesMap.GetString("irn")));
-                    }
+                    var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
+                    specimen.RelatedSpeciesIds.AddRange(relatedSpeciesMaps
+                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                        .Select(x => string.Format("species/{0}", x.GetString("irn"))));
                 }
             }
 

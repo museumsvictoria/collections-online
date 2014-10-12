@@ -209,6 +209,13 @@ namespace CollectionsOnline.WebSite.Features.Search
                     facetQuery = facetQuery.AndAlso().WhereEquals("Species", searchInputModel.Species);
                 }
 
+                //TODO: temp term query
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Taxonomy))
+                {
+                    query = query.AndAlso().WhereEquals("TaxonomyIrn", searchInputModel.Taxonomy);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("TaxonomyIrn", searchInputModel.Taxonomy);
+                }
+
                 var results = query
                     .SelectFields<CombinedResult>(
                         "Id",

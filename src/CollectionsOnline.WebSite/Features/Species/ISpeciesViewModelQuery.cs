@@ -2,6 +2,6 @@
 {
     public interface ISpeciesViewModelQuery
     {
-        SpeciesViewModel BuildSpecies(string speciesId);
+        SpeciesViewTransformerResult BuildSpecies(string speciesId);
     }
 }

@@ -1,5 +1,5 @@
-﻿@using CollectionsOnline.Core.Utilities
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Items.ItemViewModel>
+﻿@using CollectionsOnline.Core.Models
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Items.ItemViewTransformerResult>
 @{
     Layout = "layout.cshtml";
 }
@@ -15,25 +15,31 @@
                         @Model.Item.TradeLiteratureCoverTitle
                     </h1>
                 </div>
+
                 <div class="images">
-                    @for (int i = 0; i < Model.Item.Media.Count; i++)
-                    {
-                        if (i == 0)
+                    @{
+                        var imageMedia = Model.Item.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
+                        for (int i = 0; i < imageMedia.Count; i++)
                         {
-                            <img src="@Model.ImageMedia[i].Medium.Uri" width="@Model.ImageMedia[i].Medium.Width" height="@Model.ImageMedia[i].Medium.Height" class="img-rounded center-block" />
-                        }
-                        else
-                        {
-                            <img src="@Model.ImageMedia[i].Thumbnail.Uri" width="100" height="100" class="img-thumbnail" />
+                            if (i == 0)
+                            {
+                                <img src="@imageMedia[i].Medium.Uri" width="@imageMedia[i].Medium.Width" height="@imageMedia[i].Medium.Height" class="img-rounded center-block" />
+                            }
+                            else
+                            {
+                                <img src="@imageMedia[i].Thumbnail.Uri" width="100" height="100" class="img-thumbnail" />
+                            }
                         }
                     }
                 </div>
+
                 @if (Model.Item.MuseumLocation != null)
                 {
                     <div class="on-display">
                         On display <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a>, <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
                     </div>
                 }
+                
                 <div class="main-content">
                     <dl>
                         @if (!string.IsNullOrWhiteSpace(Model.Item.Summary))
@@ -99,7 +105,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimarySubject))
                         {
                             <dt>Primary Subject</dt>
-                            <dd><a href="/search?keywords=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimarySubject)">@Model.Item.TradeLiteraturePrimarySubject</a></dd>
+                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimarySubject)">@Model.Item.TradeLiteraturePrimarySubject</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePublicationDate))
                         {
@@ -108,6 +114,7 @@
                         }
                     </dl>
                 </div>
+
                 <div class="detailed dl-horizontal">
                     <dl>
                         @if (@Model.Item.CollectionNames.Any())
@@ -225,7 +232,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Item.AudioVisualRecordingDetails))
                         {
                             <dt>Recording Details</dt>
-                            <dd><a href="/search?keywords=@HttpUtility.UrlEncode(Model.Item.AudioVisualRecordingDetails)">@Model.Item.AudioVisualRecordingDetails</a></dd>
+                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.AudioVisualRecordingDetails)">@Model.Item.AudioVisualRecordingDetails</a></dd>
                         }
                         @if (@Model.Item.AudioVisualContentSummaries.Any())
                         {
@@ -604,6 +611,16 @@
                             <dt>Acquisition Information</dt>
                             <dd>@Model.Item.AcquisitionInformation</dd>
                         }
+                        @if (Model.Item.Keywords.Any())
+                        {
+                            <dt>Keywords</dt>
+                            <dd>
+                                @for (int i = 0; i < Model.Item.Keywords.Count; i++)
+                                {
+                                    <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.Keywords[i])">@Model.Item.Keywords[i]</a>@(i != Model.Item.Keywords.Count - 1 ? ", " : "")
+                                }
+                            </dd>
+                        }                        
                     </dl>
                 </div>
 
@@ -625,39 +642,49 @@
                     }
                 </div>
                 
-                @if (Model.Item.RelatedItemIds.Any() || Model.Item.RelatedSpecimenIds.Any())
+                @if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
                 {
                     <div class="related-items">
                         <h4>Related Items</h4>
-                        @foreach (var relatedItemId in Model.Item.RelatedItemIds)
+                        @foreach (var relatedItem in Model.RelatedItems)
                         {
-                            <a class="label label-info" href="/@relatedItemId">@relatedItemId</a>
+                            <a href="/@relatedItem.Id">
+                                @if (!string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
+                                {
+                                    <img src="@relatedItem.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
+                                }
+                                <span>@relatedItem.Title</span>
+                            </a>
+                            <br/>
                         }
-                        @foreach (var relatedSpecimenId in Model.Item.RelatedSpecimenIds)
+                        @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                         {
-                            <a class="label label-info" href="/@relatedSpecimenId">@relatedSpecimenId</a>
+                            <a href="/@relatedSpecimen.Id">
+                                @if (!string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
+                                {
+                                    <img src="@relatedSpecimen.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
+                                }
+                                <span>@relatedSpecimen.Title</span>
+                            </a>
+                            <br/>
                         }
                     </div>
                 }
                 
-                @if (Model.Item.RelatedArticleIds.Any())
+                @if (Model.RelatedArticles.Any())
                 {
                     <div class="related-articles">
                         <h4>Related Articles</h4>
-                        @foreach (var relatedArticleId in Model.Item.RelatedArticleIds)
+                        @foreach (var relatedArticle in Model.RelatedArticles)
                         {
-                            <a class="label label-info" href="/@relatedArticleId">@relatedArticleId</a>
-                        }
-                    </div>
-                }
-
-                @if (Model.Item.Keywords.Any())
-                {
-                    <div class="keywords">
-                        <h4>Keywords</h4>
-                        @foreach (var keyword in @Model.Item.Keywords)
-                        {
-                            <a class="label label-warning" href="/search?keyword=@HttpUtility.UrlEncode(keyword)">@keyword</a>
+                            <a href="/@relatedArticle.Id">
+                                @if (!string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
+                                {
+                                    <img src="@relatedArticle.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
+                                }
+                                <span>@relatedArticle.Title</span>
+                            </a>
+                            <br/>
                         }
                     </div>
                 }

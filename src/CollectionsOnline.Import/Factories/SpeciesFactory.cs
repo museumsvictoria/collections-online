@@ -8,6 +8,7 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using IMu;
 using NLog;
+using Raven.Abstractions.Extensions;
 
 namespace CollectionsOnline.Import.Factories
 {
@@ -106,7 +107,8 @@ namespace CollectionsOnline.Import.Factories
             species.AnimalType = map.GetString("SpeTaxonGroup");
             species.AnimalSubType = map.GetString("SpeTaxonSubGroup");
 
-            species.Colours = map.GetStrings("SpeColour_tab") ?? new string[] { };
+            species.Colours.AddRange(map.GetStrings("SpeColour_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Distinct());
+
             species.MaximumSize = string.Format("{0} {1}", map.GetString("SpeMaximumSize"), map.GetString("SpeUnit")).Trim();
 
             species.Habitats = map.GetStrings("SpeHabitat_tab") ?? new string[] { };
@@ -183,7 +185,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     Name = x.GetString("NamFullName"),
                     Biography = x.GetString("BioLabel"),
-                    Media = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault())
+                    ProfileImage = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault()) as ImageMedia
                 }).ToList();
 
             // Media

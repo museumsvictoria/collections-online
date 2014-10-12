@@ -6,6 +6,6 @@
 
         public string Biography { get; set; }
 
-        public Media Media { get; set; }
+        public ImageMedia ProfileImage { get; set; }
     }
 }

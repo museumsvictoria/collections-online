@@ -2,6 +2,6 @@
 {
     public interface IItemViewModelQuery
     {
-        ItemViewModel BuildItem(string itemId);
+        ItemViewTransformerResult BuildItem(string itemId);
     }
 }

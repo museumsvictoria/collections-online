@@ -328,6 +328,20 @@ namespace CollectionsOnline.WebSite.Features.Search
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
+            //TODO: temp term query
+            if (!string.IsNullOrWhiteSpace(searchInputModel.Taxonomy))
+            {
+                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+
+                termQueryString.Remove("taxonomy");
+
+                searchViewModel.ActiveTerms.Add(new TermViewModel
+                {
+                    Name = searchInputModel.Taxonomy,
+                    Term = "Taxonomy",
+                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                });
+            }
 
             // Build results
             foreach (var result in results)

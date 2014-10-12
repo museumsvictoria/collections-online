@@ -1,27 +1,32 @@
-﻿using CollectionsOnline.Core.Models;
+﻿using System.Linq;
+using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
 using Raven.Client;
+using Raven.Client.Linq;
 
 namespace CollectionsOnline.WebSite.Features.Articles
 {
     public class ArticleViewModelQuery : IArticleViewModelQuery
     {
         private readonly IDocumentSession _documentSession;
-        private readonly IArticleViewModelFactory _articleViewModelFactory;
 
         public ArticleViewModelQuery(
-            IDocumentSession documentSession,
-            IArticleViewModelFactory articleViewModelFactory)
+            IDocumentSession documentSession)
         {
             _documentSession = documentSession;
-            _articleViewModelFactory = articleViewModelFactory;
         }
 
-        public ArticleViewModel BuildArticle(string articleId)
+        public ArticleViewTransformerResult BuildArticle(string articleId)
         {
-            var article = _documentSession
-                .Load<Article>(articleId);
+            var result = _documentSession.Load<ArticleViewTransformer, ArticleViewTransformerResult>(articleId);
 
-            return _articleViewModelFactory.MakeViewModel(article);
+            var query = _documentSession.Advanced
+                .LuceneQuery<CombinedResult, Combined>()
+                .WhereEquals("Articles", articleId);
+
+            result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
+
+            return result;
         }
     }
 }

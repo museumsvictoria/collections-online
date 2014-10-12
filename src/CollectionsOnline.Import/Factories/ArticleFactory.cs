@@ -100,7 +100,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     Name = x.GetString("NamFullName"),
                     Biography = x.GetString("BioLabel"),
-                    Media = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault())
+                    ProfileImage = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault()) as ImageMedia
                 }).ToList();
 
             // Contributors

@@ -188,9 +188,9 @@ namespace CollectionsOnline.Import.Imports
                                         if (existingMedia != null)
                                             species.Media[species.Media.IndexOf(existingMedia)] = media;
 
-                                        var author = species.Authors.SingleOrDefault(x => x.Media != null && x.Media.Irn == mediaIrn);
+                                        var author = species.Authors.SingleOrDefault(x => x.ProfileImage != null && x.ProfileImage.Irn == mediaIrn);
                                         if (author != null)
-                                            author.Media = media;
+                                            author.ProfileImage = media as ImageMedia;
 
                                         associatedDocumentCount++;
                                         continue;
@@ -214,9 +214,9 @@ namespace CollectionsOnline.Import.Imports
                                         if (existingMedia != null)
                                             article.Media[article.Media.IndexOf(existingMedia)] = media;
 
-                                        var author = article.Authors.SingleOrDefault(x => x.Media != null && x.Media.Irn == mediaIrn);
+                                        var author = article.Authors.SingleOrDefault(x => x.ProfileImage != null && x.ProfileImage.Irn == mediaIrn);
                                         if (author != null)
-                                            author.Media = media;
+                                            author.ProfileImage = media as ImageMedia;
 
                                         associatedDocumentCount++;
                                     }

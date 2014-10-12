@@ -1,7 +1,9 @@
-﻿namespace CollectionsOnline.WebSite.Features.Specimens
+﻿using CollectionsOnline.WebSite.Features.Items;
+
+namespace CollectionsOnline.WebSite.Features.Specimens
 {
     public interface ISpecimenViewModelQuery
     {
-        SpecimenViewModel BuildSpecimen(string specimenId);
+        SpecimenViewTransformerResult BuildSpecimen(string specimenId);
     }
 }

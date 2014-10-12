@@ -2,6 +2,6 @@
 {
     public interface IArticleViewModelQuery
     {
-        ArticleViewModel BuildArticle(string articleId);
+        ArticleViewTransformerResult BuildArticle(string articleId);
     }
 }

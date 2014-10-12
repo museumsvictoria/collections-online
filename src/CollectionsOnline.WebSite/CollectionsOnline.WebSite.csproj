@@ -125,28 +125,22 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\Articles\IArticleViewModelFactory.cs" />
     <Compile Include="Features\Articles\IArticleViewModelQuery.cs" />
     <Compile Include="Features\Articles\ArticlesModule.cs" />
-    <Compile Include="Features\Articles\ArticleViewModelFactory.cs" />
     <Compile Include="Features\Articles\ArticleViewModelQuery.cs" />
-    <Compile Include="Features\Specimens\ISpecimenViewModelFactory.cs" />
+    <Compile Include="Features\Articles\ArticleViewTransformer.cs" />
+    <Compile Include="Features\Items\ItemViewTransformer.cs" />
+    <Compile Include="Features\Shared\RelatedDocumentViewModel.cs" />
+    <Compile Include="Features\Species\SpeciesViewTransformer.cs" />
     <Compile Include="Features\Specimens\ISpecimenViewModelQuery.cs" />
-    <Compile Include="Features\Specimens\SpecimenViewModelFactory.cs" />
+    <Compile Include="Features\Specimens\SpecimenViewTransformer.cs" />
     <Compile Include="Features\Specimens\SpecimensModule.cs" />
-    <Compile Include="Features\Specimens\SpecimenViewModel.cs" />
     <Compile Include="Features\Specimens\SpecimenViewModelQuery.cs" />
-    <Compile Include="Features\Species\ISpeciesViewModelFactory.cs" />
     <Compile Include="Features\Species\ISpeciesViewModelQuery.cs" />
     <Compile Include="Features\Species\SpeciesModule.cs" />
-    <Compile Include="Features\Species\SpeciesViewModel.cs" />
-    <Compile Include="Features\Species\SpeciesViewModelFactory.cs" />
     <Compile Include="Features\Species\SpeciesViewModelQuery.cs" />
-    <Compile Include="Features\Items\IItemViewModelFactory.cs" />
     <Compile Include="Features\Items\IItemViewModelQuery.cs" />
     <Compile Include="Features\Items\ItemsModule.cs" />
-    <Compile Include="Features\Items\ItemViewModel.cs" />
-    <Compile Include="Features\Items\ItemViewModelFactory.cs" />
     <Compile Include="Features\Items\ItemViewModelQuery.cs" />
     <Compile Include="Features\Search\SearchViewModel.cs" />
     <Compile Include="Features\Search\SearchInputModel.cs" />
@@ -155,7 +149,6 @@
     <Compile Include="Features\Search\ISearchViewModelFactory.cs" />
     <Compile Include="Features\Search\SearchViewModelQuery.cs" />
     <Compile Include="Features\Search\SearchViewModelFactory.cs" />
-    <Compile Include="Features\Articles\ArticleViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebSiteBootstrapper.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
+using CollectionsOnline.WebSite.Features.Items;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
@@ -8,6 +9,7 @@ using Ninject.Extensions.Conventions;
 using Ninject;
 using NLog;
 using Raven.Client;
+using Raven.Client.Indexes;
 
 namespace CollectionsOnline.WebSite
 {
@@ -18,6 +20,8 @@ namespace CollectionsOnline.WebSite
         protected override void ConfigureApplicationContainer(IKernel kernel)
         {
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
+
+            IndexCreation.CreateIndexes(typeof(ItemViewTransformer).Assembly, kernel.Get<IDocumentStore>());
         }
 
         protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)

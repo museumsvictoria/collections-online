@@ -67,5 +67,8 @@
         public string Article { get; set; }
 
         public string Species { get; set; }
+
+        //TODO: temp term query
+        public string Taxonomy { get; set; }
     }
 }

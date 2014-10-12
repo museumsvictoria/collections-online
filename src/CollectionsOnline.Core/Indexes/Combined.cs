@@ -104,7 +104,7 @@ namespace CollectionsOnline.Core.Indexes
                 select new
                 {
                     // Update fields
-                    MediaIrns = new object[] { species.Media.Select(x => x.Irn), species.Authors.Select(x => x.Media.Irn) },
+                    MediaIrns = new object[] { species.Media.Select(x => x.Irn), species.Authors.Select(x => x.ProfileImage.Irn) },
                     TaxonomyIrn = species.Taxonomy.Irn,
 
                     // Content fields
@@ -180,10 +180,10 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Facet fields
                     Type = "Specimen",
-                    Category = "Natural Sciences",
+                    Category = specimen.Category,
                     HasImages = (specimen.Media.Any()) ? "Yes" : (string) null,
                     Discipline = specimen.Discipline,                    
-                    ItemType = (string) null,
+                    ItemType = specimen.Type,
                     SpeciesType = (string) null,
                     SpeciesSubType = (string) null,
                     SpeciesEndemicity = new object[] { },
@@ -228,7 +228,7 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.TektitesClassification },
                     MuseumLocations = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
                     Articles = specimen.RelatedArticleIds,
-                    Species = specimen.RelatedSpeciesIds,
+                    Species = specimen.RelatedSpeciesIds
                 });
 
             AddMap<Article>(articles =>
@@ -237,7 +237,7 @@ namespace CollectionsOnline.Core.Indexes
                 select new
                 {
                     // Update fields
-                    MediaIrns = new object[] { article.Media.Select(x => x.Irn), article.Authors.Select(x => x.Media.Irn) },
+                    MediaIrns = new object[] { article.Media.Select(x => x.Irn), article.Authors.Select(x => x.ProfileImage.Irn) },
                     TaxonomyIrn = 0,
 
                     // Content fields

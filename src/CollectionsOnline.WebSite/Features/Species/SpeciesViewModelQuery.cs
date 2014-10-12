@@ -1,26 +1,32 @@
-﻿using Raven.Client;
+﻿using System.Linq;
+using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
+using Raven.Client;
+using Raven.Client.Linq;
 
 namespace CollectionsOnline.WebSite.Features.Species
 {
     public class SpeciesViewModelQuery : ISpeciesViewModelQuery
     {
         private readonly IDocumentSession _documentSession;
-        private readonly ISpeciesViewModelFactory _speciesViewModelFactory;
 
         public SpeciesViewModelQuery(
-            IDocumentSession documentSession,
-            ISpeciesViewModelFactory speciesViewModelFactory)
+            IDocumentSession documentSession)
         {
             _documentSession = documentSession;
-            _speciesViewModelFactory = speciesViewModelFactory;
         }
 
-        public SpeciesViewModel BuildSpecies(string speciesId)
+        public SpeciesViewTransformerResult BuildSpecies(string speciesId)
         {
-            var species = _documentSession
-                .Load<Core.Models.Species>(speciesId);
+            var result = _documentSession.Load<SpeciesViewTransformer, SpeciesViewTransformerResult>(speciesId);
 
-            return _speciesViewModelFactory.MakeViewModel(species);
+            var query = _documentSession.Advanced
+                .LuceneQuery<CombinedResult, Combined>()
+                .WhereEquals("Species", speciesId);
+
+            result.RelatedSpecimenCount = query.QueryResult.TotalResults;
+
+            return result;
         }
     }
 }

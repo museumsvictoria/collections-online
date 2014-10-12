@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Extensions;
 using NLog;
@@ -51,10 +52,10 @@ namespace CollectionsOnline.Import.Imports
                     foreach (var item in items.Where(x => x != null))
                     {
                         item.RelatedArticleIds.AddRangeUnique(documentSession
-                            .Query<Article>()
-                            .Where(x => x.Title.In(item.CollectionNames))
+                            .Query<object, Combined>()
+                            .Where(x => ((CombinedResult)x).Name.In(item.CollectionNames))
                             .ToList()
-                            .Select(x => x.Id));
+                            .Select(x => ((CombinedResult)x).Id));
                     }
 
                     currentOffset += items.Count;
