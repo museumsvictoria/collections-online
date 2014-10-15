@@ -73,6 +73,11 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("HasImages", searchInputModel.HasImages);
                     facetQuery = facetQuery.AndAlso().WhereEquals("HasImages", searchInputModel.HasImages);
                 }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.OnDisplay))
+                {
+                    query = query.AndAlso().WhereEquals("OnDisplay", searchInputModel.OnDisplay);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("OnDisplay", searchInputModel.OnDisplay);
+                }
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Discipline))
                 {
                     query = query.AndAlso().WhereEquals("Discipline", searchInputModel.Discipline);

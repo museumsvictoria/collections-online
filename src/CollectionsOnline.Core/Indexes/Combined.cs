@@ -36,6 +36,7 @@ namespace CollectionsOnline.Core.Indexes
                     Type = "Item",
                     Category = item.Category,
                     HasImages = (item.Media.Any()) ? "Yes" : (string)null,
+                    OnDisplay = item.MuseumLocation != null ? "Yes" : (string)null,
                     Discipline = item.Discipline,                    
                     ItemType = item.Type,
                     SpeciesType = (string)null,
@@ -125,7 +126,8 @@ namespace CollectionsOnline.Core.Indexes
                     Type = "Species",
                     Category = "Natural Sciences",
                     HasImages = (species.Media.Any()) ? "Yes" : (string) null,
-                    Discipline = (string) null,                    
+                    OnDisplay = (string)null,
+                    Discipline = (string) null,
                     ItemType = (string) null,
                     SpeciesType = species.AnimalType,
                     SpeciesSubType = species.AnimalSubType,
@@ -182,6 +184,7 @@ namespace CollectionsOnline.Core.Indexes
                     Type = "Specimen",
                     Category = specimen.Category,
                     HasImages = (specimen.Media.Any()) ? "Yes" : (string) null,
+                    OnDisplay = specimen.MuseumLocation != null ? "Yes" : (string)null,
                     Discipline = specimen.Discipline,                    
                     ItemType = specimen.Type,
                     SpeciesType = (string) null,
@@ -258,6 +261,7 @@ namespace CollectionsOnline.Core.Indexes
                     Type = "Article",
                     Category = "History & Technology",
                     HasImages = (article.Media.Any()) ? "Yes" : (string) null,
+                    OnDisplay = (string)null,
                     Discipline = (string) null,                    
                     ItemType = (string) null,
                     SpeciesType = (string) null,
@@ -331,6 +335,7 @@ namespace CollectionsOnline.Core.Indexes
             TermVector(x => x.Type, FieldTermVector.Yes);
             TermVector(x => x.Category, FieldTermVector.Yes);
             TermVector(x => x.HasImages, FieldTermVector.Yes);
+            TermVector(x => x.OnDisplay, FieldTermVector.Yes);
             TermVector(x => x.Discipline, FieldTermVector.Yes);
             TermVector(x => x.ItemType, FieldTermVector.Yes);
             TermVector(x => x.SpeciesType, FieldTermVector.Yes);

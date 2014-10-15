@@ -29,6 +29,10 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedResult>
                 {
+                    Name = x => x.OnDisplay
+                },
+                new Facet<CombinedResult>
+                {
                     Name = x => x.Discipline
                 },
                 new Facet<CombinedResult>
@@ -39,10 +43,10 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     Name = x => x.SpeciesType
                 },
-                new Facet<CombinedResult>
-                {
-                    Name = x => x.SpeciesSubType
-                },
+                //new Facet<CombinedResult>
+                //{
+                //    Name = x => x.SpeciesSubType
+                //},
                 new Facet<CombinedResult>
                 {
                     Name = x => x.SpeciesEndemicity

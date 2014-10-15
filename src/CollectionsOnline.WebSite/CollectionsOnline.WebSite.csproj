@@ -125,6 +125,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
     <Compile Include="Features\Articles\IArticleViewModelQuery.cs" />
     <Compile Include="Features\Articles\ArticlesModule.cs" />
     <Compile Include="Features\Articles\ArticleViewModelQuery.cs" />

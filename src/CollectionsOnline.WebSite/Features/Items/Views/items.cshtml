@@ -1,4 +1,5 @@
 ﻿@using CollectionsOnline.Core.Models
+@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Items.ItemViewTransformerResult>
 @{
     Layout = "layout.cshtml";
@@ -140,41 +141,7 @@
                         @foreach (var association in @Model.Item.Associations)
                         {
                             <dt>@association.Type</dt>
-                            <dd>
-                                @if (!string.IsNullOrWhiteSpace(association.Name))
-                                {
-                                    <a href="/search?name=@HttpUtility.UrlEncode(association.Name)">@association.Name</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(association.StreetAddress))
-                                {
-                                    @association.StreetAddress
-                                }
-                                @if (!string.IsNullOrWhiteSpace(association.Locality))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.Locality)">@association.Locality</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(association.Region))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.Region)">@association.Region</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(association.State))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.State)">@association.State</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(association.Country))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(association.Country)">@association.Country</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(association.Date))
-                                {
-                                    @association.Date
-                                }                               
-                                <br />
-                                @if (!string.IsNullOrWhiteSpace(association.Comments))
-                                {
-                                    @association.Comments<br />
-                                }
-                            </dd>
+                            <dd>@Html.RenderAssociationDescription(association)</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.ModelScale))
                         {
