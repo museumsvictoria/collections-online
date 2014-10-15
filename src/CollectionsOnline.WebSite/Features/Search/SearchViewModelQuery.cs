@@ -216,6 +216,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                     facetQuery = facetQuery.AndAlso().WhereEquals("TaxonomyIrn", searchInputModel.Taxonomy);
                 }
 
+                RavenQueryStatistics statistics;
                 var results = query
                     .SelectFields<CombinedResult>(
                         "Id",
@@ -224,6 +225,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                         "ThumbnailUri",
                         "Type")
                     .OrderByDescending(x => x.Quality)
+                    .Statistics(out statistics)
                     .ToList();
                 queryStopwatch.Stop();
 
@@ -253,7 +255,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                     facets,
                     suggestions,
                     request,
-                    query.QueryResult.TotalResults,
+                    statistics.TotalResults,
                     searchInputModel,
                     queryStopwatch.ElapsedMilliseconds,
                     facetStopwatch.ElapsedMilliseconds);

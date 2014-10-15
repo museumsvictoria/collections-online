@@ -232,7 +232,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Species.ScientificName))
                         {
                             <dt>Scientific Name</dt>
-                            <dd><a href="/search?scientificname=@HttpUtility.UrlEncode(Model.Species.ScientificName)">@Model.Species.ScientificName</a></dd>
+                            <dd>@Model.Species.ScientificName</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Author))
                         {
