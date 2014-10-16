@@ -1,4 +1,5 @@
-﻿using CollectionsOnline.Core.Factories;
+﻿using System;
+using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.WebSite.Features.Items;
 using Nancy;
@@ -10,6 +11,8 @@ using Ninject;
 using NLog;
 using Raven.Client;
 using Raven.Client.Indexes;
+using StackExchange.Profiling;
+using StackExchange.Profiling.RavenDb;
 
 namespace CollectionsOnline.WebSite
 {
@@ -20,8 +23,13 @@ namespace CollectionsOnline.WebSite
         protected override void ConfigureApplicationContainer(IKernel kernel)
         {
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
+            var documentStore = kernel.Get<IDocumentStore>();
 
-            IndexCreation.CreateIndexes(typeof(ItemViewTransformer).Assembly, kernel.Get<IDocumentStore>());
+            // Register view transformers
+            IndexCreation.CreateIndexes(typeof(ItemViewTransformer).Assembly, documentStore);
+
+            // Bind ravendb miniprofiler
+            MiniProfilerRaven.InitializeFor(documentStore);
         }
 
         protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)
@@ -57,6 +65,19 @@ namespace CollectionsOnline.WebSite
                 _log.Error(ex);
 
                 return null;
+            };
+
+            pipelines.BeforeRequest += ctx =>
+            {
+                MiniProfiler.Start();
+
+                return null;
+            };
+
+            pipelines.AfterRequest += ctx =>
+            {
+                MiniProfiler.Stop();
+                _log.Trace(MiniProfiler.Current.RenderPlainText);
             };
         }
     }
