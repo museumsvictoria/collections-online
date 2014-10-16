@@ -39,27 +39,33 @@ namespace CollectionsOnline.Import.Factories
 
                 using (var imageFactory = new ImageFactory())
                 {
-                    // Original
+                    
                     imageFactory
                         .Load(fileStream);
 
                     stopwatch.Stop();
-                    _log.Trace("Loaded media resource FileStream in {0} ms ({1} kbytes)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"));
+                    _log.Trace("Loaded media resource FileStream in {0} ms ({1} kbytes, {2} width, {3} height)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"), imageFactory.Image.Width, imageFactory.Image.Height);
                     stopwatch.Reset();
                     stopwatch.Start();
 
-                    imageFactory
-                        .Format(new JpegFormat())
-                        .Resize(new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false))
-                        .Quality(90)
-                        .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "original"));
+                    //// Original
 
-                    imageMedia.Original = new ImageMediaFile
-                    {
-                        Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "original"),
-                        Width = imageFactory.Image.Width,
-                        Height = imageFactory.Image.Height
-                    };
+                    //// Perform a graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
+                    //if (imageFactory.Image.Width < 4000 || imageFactory.Image.Height < 4000)
+                    //    imageFactory.Brightness(0);
+
+                    //imageFactory
+                    //    .Format(new JpegFormat())
+                    //    .Resize(new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false))
+                    //    .Quality(90)
+                    //    .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "original"));
+
+                    //imageMedia.Original = new ImageMediaFile
+                    //{
+                    //    Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "original"),
+                    //    Width = imageFactory.Image.Width,
+                    //    Height = imageFactory.Image.Height
+                    //};
 
                     // Thumbnail
                     imageFactory
@@ -77,25 +83,25 @@ namespace CollectionsOnline.Import.Factories
                         Height = imageFactory.Image.Height
                     };
 
-                    // Small
-                    imageFactory
-                        .Reset()
-                        .Resize(new ResizeLayer(new Size(500, 500), ResizeMode.Max))
-                        .Format(new JpegFormat())
-                        .Quality(70)
-                        .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "small"));
+                    //// Small
+                    //imageFactory
+                    //    .Reset()
+                    //    .Resize(new ResizeLayer(new Size(500, 500), ResizeMode.Max))
+                    //    .Format(new JpegFormat())
+                    //    .Quality(70)
+                    //    .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "small"));
 
-                    imageMedia.Small = new ImageMediaFile
-                    {
-                        Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "small"),
-                        Width = imageFactory.Image.Width,
-                        Height = imageFactory.Image.Height
-                    };
+                    //imageMedia.Small = new ImageMediaFile
+                    //{
+                    //    Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "small"),
+                    //    Width = imageFactory.Image.Width,
+                    //    Height = imageFactory.Image.Height
+                    //};
 
                     // Medium
                     imageFactory
                         .Reset()
-                        .Resize(new ResizeLayer(new Size(800, 800), ResizeMode.Max, upscale: false))
+                        .Resize(new ResizeLayer(new Size(800, 800), ResizeMode.Max))
                         .Format(new JpegFormat())
                         .Quality(70)
                         .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "medium"));
@@ -107,20 +113,20 @@ namespace CollectionsOnline.Import.Factories
                         Height = imageFactory.Image.Height
                     };
 
-                    // Large
-                    imageFactory
-                        .Reset()
-                        .Resize(new ResizeLayer(new Size(1200, 1200), ResizeMode.Max, upscale: false))
-                        .Format(new JpegFormat())
-                        .Quality(70)
-                        .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "large"));
+                    //// Large
+                    //imageFactory
+                    //    .Reset()
+                    //    .Resize(new ResizeLayer(new Size(1200, 1200), ResizeMode.Max))
+                    //    .Format(new JpegFormat())
+                    //    .Quality(70)
+                    //    .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "large"));
 
-                    imageMedia.Large = new ImageMediaFile
-                    {
-                        Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "large"),
-                        Width = imageFactory.Image.Width,
-                        Height = imageFactory.Image.Height
-                    };
+                    //imageMedia.Large = new ImageMediaFile
+                    //{
+                    //    Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "large"),
+                    //    Width = imageFactory.Image.Width,
+                    //    Height = imageFactory.Image.Height
+                    //};
 
                     stopwatch.Stop();
                     _log.Trace("Created all derivative image media in {0} ms", stopwatch.ElapsedMilliseconds);
