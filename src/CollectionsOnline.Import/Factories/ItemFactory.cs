@@ -4,12 +4,14 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
+using CollectionsOnline.Import.Extensions;
 using IMu;
 using NLog;
 using Raven.Abstractions.Extensions;
@@ -203,86 +205,85 @@ namespace CollectionsOnline.Import.Factories
 
             var item = new Item();
 
-            item.Id = "items/" + map.GetString("irn");
+            item.Id = "items/" + map.GetEncodedString("irn");
 
-            item.IsHidden = string.Equals(map.GetString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
+            item.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             item.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
+                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
-            item.Category = map.GetString("ColCategory");
-            item.Discipline = map.GetString("ColDiscipline");
-            item.Type = map.GetString("ColTypeOfItem");
-            item.RegistrationNumber = !string.IsNullOrWhiteSpace(map.GetString("ColRegPart"))
-                                         ? string.Format("{0}{1}.{2}", map.GetString("ColRegPrefix"), map.GetString("ColRegNumber"), map.GetString("ColRegPart"))
-                                         : string.Format("{0}{1}", map.GetString("ColRegPrefix"), map.GetString("ColRegNumber"));
+            item.Category = map.GetEncodedString("ColCategory");
+            item.Discipline = map.GetEncodedString("ColDiscipline");
+            item.Type = map.GetEncodedString("ColTypeOfItem");
+            item.RegistrationNumber = !string.IsNullOrWhiteSpace(map.GetEncodedString("ColRegPart"))
+                                         ? string.Format("{0}{1}.{2}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"), map.GetEncodedString("ColRegPart"))
+                                         : string.Format("{0}{1}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"));
             
             // Collection names
-            item.CollectionNames = map.GetStrings("ColCollectionName_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            item.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
 
             // Collection plans
-            item.CollectionPlans = map.GetStrings("SubThemes_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            item.CollectionPlans = map.GetEncodedStrings("SubThemes_tab");
 
             // Classifications
-            if (map.GetString("ClaPrimaryClassification") != null && !map.GetString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                item.PrimaryClassification = map.GetString("ClaPrimaryClassification").ToSentenceCase();
-            if (map.GetString("ClaSecondaryClassification") != null && !map.GetString("ClaSecondaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                item.SecondaryClassification = map.GetString("ClaSecondaryClassification").ToSentenceCase();
-            if (map.GetString("ClaTertiaryClassification") != null && !map.GetString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                item.TertiaryClassification = map.GetString("ClaTertiaryClassification").ToSentenceCase();
+            if (map.GetEncodedString("ClaPrimaryClassification") != null && !map.GetEncodedString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                item.PrimaryClassification = map.GetEncodedString("ClaPrimaryClassification").ToSentenceCase();
+            if (map.GetEncodedString("ClaSecondaryClassification") != null && !map.GetEncodedString("ClaSecondaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                item.SecondaryClassification = map.GetEncodedString("ClaSecondaryClassification").ToSentenceCase();
+            if (map.GetEncodedString("ClaTertiaryClassification") != null && !map.GetEncodedString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                item.TertiaryClassification = map.GetEncodedString("ClaTertiaryClassification").ToSentenceCase();
 
-            item.ObjectName = map.GetString("ClaObjectName");
-            item.ObjectSummary = map.GetString("ClaObjectSummary");
-            item.Description = map.GetString("DesPhysicalDescription");
-            item.Inscription = map.GetString("DesInscriptions");
+            item.ObjectName = map.GetEncodedString("ClaObjectName");
+            item.ObjectSummary = map.GetEncodedString("ClaObjectSummary");
+            item.Description = map.GetEncodedString("DesPhysicalDescription");
+            item.Inscription = map.GetEncodedString("DesInscriptions");
 
             // Associations
             item.Associations = _associationFactory.Make(map.GetMaps("associations"));
 
             // Tags
-            if (map.GetStrings("SubSubjects_tab") != null)
-                item.Keywords = map.GetStrings("SubSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
+            item.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab").Select(x => _slugFactory.MakeSlug(x)));
 
-            item.Significance = map.GetString("SubHistoryTechSignificance");
-            item.ModelScale = map.GetString("DimModelScale");
-            item.Shape = map.GetString("DimShape");
+            item.Significance = map.GetEncodedString("SubHistoryTechSignificance");
+            item.ModelScale = map.GetEncodedString("DimModelScale");
+            item.Shape = map.GetEncodedString("DimShape");
 
             // Dimensions
             foreach (var dimensionMap in map.GetMaps("dimensions"))
             {
                 var dimensions = new List<string>();
 
-                var lengthUnit = dimensionMap.GetString("DimLengthUnit_tab");
-                var weightUnit = dimensionMap.GetString("DimWeightUnit_tab");
+                var lengthUnit = dimensionMap.GetEncodedString("DimLengthUnit_tab");
+                var weightUnit = dimensionMap.GetEncodedString("DimWeightUnit_tab");
 
-                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimLength_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Length)", dimensionMap.GetString("DimLength_tab"), lengthUnit));
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimLength_tab")))
+                    dimensions.Add(string.Format("{0} {1} (Length)", dimensionMap.GetEncodedString("DimLength_tab"), lengthUnit));
 
-                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimWidth_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Width)", dimensionMap.GetString("DimWidth_tab"), lengthUnit));
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimWidth_tab")))
+                    dimensions.Add(string.Format("{0} {1} (Width)", dimensionMap.GetEncodedString("DimWidth_tab"), lengthUnit));
 
-                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimDepth_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Depth)", dimensionMap.GetString("DimDepth_tab"), lengthUnit));
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimDepth_tab")))
+                    dimensions.Add(string.Format("{0} {1} (Depth)", dimensionMap.GetEncodedString("DimDepth_tab"), lengthUnit));
 
-                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimHeight_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Height)", dimensionMap.GetString("DimHeight_tab"), lengthUnit));
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimHeight_tab")))
+                    dimensions.Add(string.Format("{0} {1} (Height)", dimensionMap.GetEncodedString("DimHeight_tab"), lengthUnit));
 
-                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimCircumference_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Circumference)", dimensionMap.GetString("DimCircumference_tab"), lengthUnit));
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimCircumference_tab")))
+                    dimensions.Add(string.Format("{0} {1} (Circumference)", dimensionMap.GetEncodedString("DimCircumference_tab"), lengthUnit));
 
-                if (!string.IsNullOrWhiteSpace(dimensionMap.GetString("DimWeight_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Weight)", dimensionMap.GetString("DimWeight_tab"), weightUnit));
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimWeight_tab")))
+                    dimensions.Add(string.Format("{0} {1} (Weight)", dimensionMap.GetEncodedString("DimWeight_tab"), weightUnit));
 
                 item.Dimensions.Add(new Dimension
                 {
-                    Configuration = dimensionMap.GetString("DimConfiguration_tab"),
+                    Configuration = dimensionMap.GetEncodedString("DimConfiguration_tab"),
                     Dimensions = dimensions.Concatenate(", "),
-                    Comments = dimensionMap.GetString("DimDimensionComments0")
+                    Comments = dimensionMap.GetEncodedString("DimDimensionComments0")
                 });
             }
             
-            item.References = map.GetString("SupReferences");
+            item.References = map.GetEncodedString("SupReferences");
 
             // Bibliographies
             foreach (var bibliographyMap in map.GetMaps("bibliography"))
@@ -290,110 +291,110 @@ namespace CollectionsOnline.Import.Factories
                 var bibliography = new List<string>();
 
                 var summaryMap = bibliographyMap.GetMap("summary");
-                if (summaryMap != null && !string.IsNullOrWhiteSpace(summaryMap.GetString("SummaryData")))
-                    bibliography.Add(summaryMap.GetString("SummaryData"));
+                if (summaryMap != null && !string.IsNullOrWhiteSpace(summaryMap.GetEncodedString("SummaryData")))
+                    bibliography.Add(summaryMap.GetEncodedString("SummaryData"));
 
-                if (!string.IsNullOrWhiteSpace(bibliographyMap.GetString("BibIssuedDate_tab")))
-                    bibliography.Add(bibliographyMap.GetString("BibIssuedDate_tab"));
+                if (!string.IsNullOrWhiteSpace(bibliographyMap.GetEncodedString("BibIssuedDate_tab")))
+                    bibliography.Add(bibliographyMap.GetEncodedString("BibIssuedDate_tab"));
 
-                if (!string.IsNullOrWhiteSpace(bibliographyMap.GetString("BibPages_tab")))
-                    bibliography.Add(string.Format("{0} Pages", bibliographyMap.GetString("BibPages_tab")));
+                if (!string.IsNullOrWhiteSpace(bibliographyMap.GetEncodedString("BibPages_tab")))
+                    bibliography.Add(string.Format("{0} Pages", bibliographyMap.GetEncodedString("BibPages_tab")));
 
                 item.Bibliographies.Add(bibliography.Concatenate(", "));
             }
 
             // Model names
-            item.ModelNames = map.GetStrings("Pro2ModelNameNumber_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            item.ModelNames = map.GetEncodedStrings("Pro2ModelNameNumber_tab");
 
             // Brand names
             item.BrandNames = map.GetMaps("brand")
-                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("Pro2BrandName_tab")))
+                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("Pro2BrandName_tab")))
                 .Select(
-                    x => !string.IsNullOrWhiteSpace(x.GetString("Pro2ProductType_tab")) 
-                        ? string.Format("{0} ({1})", x.GetString("Pro2BrandName_tab"), x.GetString("Pro2ProductType_tab"))
-                        : x.GetString("Pro2BrandName_tab")).ToList();
+                    x => !string.IsNullOrWhiteSpace(x.GetEncodedString("Pro2ProductType_tab")) 
+                        ? string.Format("{0} ({1})", x.GetEncodedString("Pro2BrandName_tab"), x.GetEncodedString("Pro2ProductType_tab"))
+                        : x.GetEncodedString("Pro2BrandName_tab")).ToList();
 
             // Archeology fields
-            item.ArcheologyContextNumber = map.GetString("ArcContextNumber");
+            item.ArcheologyContextNumber = map.GetEncodedString("ArcContextNumber");
             if (map.GetMap("arcsitename") != null)
-                item.ArcheologySite = map.GetMap("arcsitename").GetString("SummaryData");
-            item.ArcheologyDescription = map.GetString("ArcDescription");
-            item.ArcheologyDistinguishingMarks = map.GetString("ArcDistinguishingMarks");
-            item.ArcheologyActivity = map.GetString("ArcActivity");
-            item.ArcheologySpecificActivity = map.GetString("ArcSpecificActivity");
-            item.ArcheologyDecoration = map.GetString("ArcDecoration");
-            item.ArcheologyPattern = map.GetString("ArcPattern");
-            item.ArcheologyColour = map.GetString("ArcColour");
-            item.ArcheologyMoulding = map.GetString("ArcMoulding");
-            item.ArcheologyPlacement = map.GetString("ArcPlacement");
-            item.ArcheologyForm = map.GetString("ArcForm");
-            item.ArcheologyShape = map.GetString("ArcShape");
+                item.ArcheologySite = map.GetMap("arcsitename").GetEncodedString("SummaryData");
+            item.ArcheologyDescription = map.GetEncodedString("ArcDescription");
+            item.ArcheologyDistinguishingMarks = map.GetEncodedString("ArcDistinguishingMarks");
+            item.ArcheologyActivity = map.GetEncodedString("ArcActivity");
+            item.ArcheologySpecificActivity = map.GetEncodedString("ArcSpecificActivity");
+            item.ArcheologyDecoration = map.GetEncodedString("ArcDecoration");
+            item.ArcheologyPattern = map.GetEncodedString("ArcPattern");
+            item.ArcheologyColour = map.GetEncodedString("ArcColour");
+            item.ArcheologyMoulding = map.GetEncodedString("ArcMoulding");
+            item.ArcheologyPlacement = map.GetEncodedString("ArcPlacement");
+            item.ArcheologyForm = map.GetEncodedString("ArcForm");
+            item.ArcheologyShape = map.GetEncodedString("ArcShape");
             item.ArcheologyManufactureName = _partiesNameFactory.Make(map.GetMap("arcmanname"));
-            item.ArcheologyManufactureDate = map.GetString("ArcManufactureDate");
-            item.ArcheologyTechnique = map.GetString("ArcTechnique");
-            item.ArcheologyProvenance = map.GetString("ArcProvenance");
+            item.ArcheologyManufactureDate = map.GetEncodedString("ArcManufactureDate");
+            item.ArcheologyTechnique = map.GetEncodedString("ArcTechnique");
+            item.ArcheologyProvenance = map.GetEncodedString("ArcProvenance");
 
             // Numismatics fields
-            item.NumismaticsDenomination = map.GetString("NumDenomination");
-            item.NumismaticsDateIssued = map.GetString("NumDateEra");
-            item.NumismaticsSeries = map.GetString("NumSeries");
-            item.NumismaticsMaterial = map.GetString("NumMaterial");
-            item.NumismaticsAxis = map.GetString("NumAxis");
-            item.NumismaticsEdgeDescription = map.GetString("NumEdgeDescription");
-            item.NumismaticsObverseDescription = map.GetString("NumObverseDescription");
-            item.NumismaticsReverseDescription = map.GetString("NumReverseDescription");
+            item.NumismaticsDenomination = map.GetEncodedString("NumDenomination");
+            item.NumismaticsDateIssued = map.GetEncodedString("NumDateEra");
+            item.NumismaticsSeries = map.GetEncodedString("NumSeries");
+            item.NumismaticsMaterial = map.GetEncodedString("NumMaterial");
+            item.NumismaticsAxis = map.GetEncodedString("NumAxis");
+            item.NumismaticsEdgeDescription = map.GetEncodedString("NumEdgeDescription");
+            item.NumismaticsObverseDescription = map.GetEncodedString("NumObverseDescription");
+            item.NumismaticsReverseDescription = map.GetEncodedString("NumReverseDescription");
 
             // Philately Fields
-            item.PhilatelyColour = map.GetString("PhiColour");
-            item.PhilatelyDenomination = map.GetString("PhiDenomination");
-            item.PhilatelyImprint = map.GetString("PhiImprint");
-            item.PhilatelyIssue = map.GetString("PhiIssue");
-            item.PhilatelyDateIssued = map.GetString("PhiIssueDate");
-            item.PhilatelyForm = map.GetString("PhiItemForm");
-            item.PhilatelyOverprint = map.GetString("PhiOverprint");
-            item.PhilatelyGibbonsNumber = map.GetString("PhiGibbonsNo");
+            item.PhilatelyColour = map.GetEncodedString("PhiColour");
+            item.PhilatelyDenomination = map.GetEncodedString("PhiDenomination");
+            item.PhilatelyImprint = map.GetEncodedString("PhiImprint");
+            item.PhilatelyIssue = map.GetEncodedString("PhiIssue");
+            item.PhilatelyDateIssued = map.GetEncodedString("PhiIssueDate");
+            item.PhilatelyForm = map.GetEncodedString("PhiItemForm");
+            item.PhilatelyOverprint = map.GetEncodedString("PhiOverprint");
+            item.PhilatelyGibbonsNumber = map.GetEncodedString("PhiGibbonsNo");
 
             // ISD Fields
             item.IsdFormat = new[]
                 {
-                    map.GetString("GenMedium"), 
-                    map.GetString("GenFormat"), 
-                    map.GetString("GenColour")
+                    map.GetEncodedString("GenMedium"), 
+                    map.GetEncodedString("GenFormat"), 
+                    map.GetEncodedString("GenColour")
                 }.Concatenate(", ");
-            item.IsdLanguage = map.GetString("GenLanguage");
-            item.IsdDescriptionOfContent = map.GetString("Con1Description");
-            item.IsdPeopleDepicted = map.GetStrings("Con3PeopleDepicted_tab").Concatenate("; ");
+            item.IsdLanguage = map.GetEncodedString("GenLanguage");
+            item.IsdDescriptionOfContent = map.GetEncodedString("Con1Description");
+            item.IsdPeopleDepicted = map.GetEncodedStrings("Con3PeopleDepicted_tab").Concatenate("; ");
 
             // Audiovisual Fields
             item.AudioVisualRecordingDetails = new[]
                 {
-                    map.GetString("AudRecordingType"),
-                    string.Format("{0} {1}", map.GetString("AudTotalLengthOfRecording"), map.GetString("AudUnits")).Trim(),
-                    map.GetString("AudAudibilityRating"),
-                    map.GetString("AudComments")
+                    map.GetEncodedString("AudRecordingType"),
+                    string.Format("{0} {1}", map.GetEncodedString("AudTotalLengthOfRecording"), map.GetEncodedString("AudUnits")).Trim(),
+                    map.GetEncodedString("AudAudibilityRating"),
+                    map.GetEncodedString("AudComments")
                 }.Concatenate(", ");
 
             foreach (var audioContentMap in map.GetMaps("audiocontent"))
             {
                 var audioContent = new List<string>();
 
-                audioContent.Add(audioContentMap.GetString("AudItemNumber_tab"));
-                audioContent.Add(string.Format("{0} {1}", audioContentMap.GetString("AudSegmentPosition_tab"), audioContentMap.GetString("AudContentUnits_tab")).Trim());
-                audioContent.Add(audioContentMap.GetString("AudSegmentContent_tab"));
+                audioContent.Add(audioContentMap.GetEncodedString("AudItemNumber_tab"));
+                audioContent.Add(string.Format("{0} {1}", audioContentMap.GetEncodedString("AudSegmentPosition_tab"), audioContentMap.GetEncodedString("AudContentUnits_tab")).Trim());
+                audioContent.Add(audioContentMap.GetEncodedString("AudSegmentContent_tab"));
 
                 item.AudioVisualContentSummaries.Add(audioContent.Concatenate(", "));
             }
 
             // Trade Literature Fields
-            item.TradeLiteratureNumberofPages = map.GetString("TLDNumberOfPages");
-            item.TradeLiteraturePageSizeFormat = map.GetString("TLDPageSizeFormat");
-            item.TradeLiteratureCoverTitle = map.GetString("TLSCoverTitle");
-            item.TradeLiteraturePrimarySubject = map.GetString("TLSPrimarySubject");
-            item.TradeLiteraturePublicationDate = map.GetString("TLSPublicationDate");
-            item.TradeLiteratureIllustrationTypes = map.GetStrings("TLDIllustraionTypes_tab").Concatenate("; ");
-            item.TradeLiteraturePrintingTypes = map.GetStrings("TLDPrintingTypes_tab").Concatenate("; ");
-            item.TradeLiteraturePublicationTypes = map.GetStrings("TLDPublicationTypes_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-            item.TradeLiteraturePrimaryRole = map.GetString("TLSPrimaryRole");
+            item.TradeLiteratureNumberofPages = map.GetEncodedString("TLDNumberOfPages");
+            item.TradeLiteraturePageSizeFormat = map.GetEncodedString("TLDPageSizeFormat");
+            item.TradeLiteratureCoverTitle = map.GetEncodedString("TLSCoverTitle");
+            item.TradeLiteraturePrimarySubject = map.GetEncodedString("TLSPrimarySubject");
+            item.TradeLiteraturePublicationDate = map.GetEncodedString("TLSPublicationDate");
+            item.TradeLiteratureIllustrationTypes = map.GetEncodedStrings("TLDIllustraionTypes_tab").Concatenate("; ");
+            item.TradeLiteraturePrintingTypes = map.GetEncodedStrings("TLDPrintingTypes_tab").Concatenate("; ");
+            item.TradeLiteraturePublicationTypes = map.GetEncodedStrings("TLDPublicationTypes_tab").ToList();
+            item.TradeLiteraturePrimaryRole = map.GetEncodedString("TLSPrimaryRole");
             item.TradeLiteraturePrimaryName = _partiesNameFactory.Make(map.GetMap("tlparty"));
 
             // Media
@@ -409,69 +410,68 @@ namespace CollectionsOnline.Import.Factories
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();
             if (iclocalityMap != null)
             {
-                item.IndigenousCulturesLocality = iclocalityMap.GetString("ProSpecificLocality_tab");
-                item.IndigenousCulturesRegion = iclocalityMap.GetString("ProRegion_tab");
-                item.IndigenousCulturesState = iclocalityMap.GetString("ProStateProvince_tab");
-                item.IndigenousCulturesCountry = map.GetString("ProCountry");
+                item.IndigenousCulturesLocality = iclocalityMap.GetEncodedString("ProSpecificLocality_tab");
+                item.IndigenousCulturesRegion = iclocalityMap.GetEncodedString("ProRegion_tab");
+                item.IndigenousCulturesState = iclocalityMap.GetEncodedString("ProStateProvince_tab");
+                item.IndigenousCulturesCountry = map.GetEncodedString("ProCountry");
             }
 
-            item.IndigenousCulturesCulturalGroups = map.GetStrings("ProCulturalGroups_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-            item.IndigenousCulturesMedium = map.GetStrings("DesObjectMedium_tab").Concatenate(", ");
-            item.IndigenousCulturesDescription = map.GetString("DesObjectDescription");
+            item.IndigenousCulturesCulturalGroups = map.GetEncodedStrings("ProCulturalGroups_tab");
+            item.IndigenousCulturesMedium = map.GetEncodedStrings("DesObjectMedium_tab").Concatenate(", ");
+            item.IndigenousCulturesDescription = map.GetEncodedString("DesObjectDescription");
 
-            if (map.GetStrings("DesSubjects_tab") != null)
-                item.Keywords.AddRange(map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)));
+            item.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab").Select(x => _slugFactory.MakeSlug(x)));
 
             item.IndigenousCulturesPhotographer = _partiesNameFactory.Make(map.GetMap("icphotographer"));
             item.IndigenousCulturesAuthor = _partiesNameFactory.Make(map.GetMap("icauthor"));
             item.IndigenousCulturesIllustrator = _partiesNameFactory.Make(map.GetMap("icillustrator"));
             item.IndigenousCulturesMaker = _partiesNameFactory.Make(map.GetMap("icmaker"));
 
-            if (!string.IsNullOrWhiteSpace(map.GetString("SouDateProduced")))
+            if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouDateProduced")))
             {
-                item.IndigenousCulturesDate = map.GetString("SouDateProduced");
+                item.IndigenousCulturesDate = map.GetEncodedString("SouDateProduced");
             }
-            else if (!string.IsNullOrWhiteSpace(map.GetString("SouDateProducedCirca")))
+            else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouDateProducedCirca")))
             {
-                item.IndigenousCulturesDate = map.GetString("SouDateProducedCirca");
+                item.IndigenousCulturesDate = map.GetEncodedString("SouDateProducedCirca");
             }
-            else if (!string.IsNullOrWhiteSpace(map.GetString("SouProducedEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouProducedLatestDate")))
+            else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouProducedEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetEncodedString("SouProducedLatestDate")))
             {
                 item.IndigenousCulturesDate = new[]
                     {
-                        map.GetString("SouProducedEarliestDate"),
-                        map.GetString("SouProducedLatestDate")
+                        map.GetEncodedString("SouProducedEarliestDate"),
+                        map.GetEncodedString("SouProducedLatestDate")
                     }.Concatenate(" - ");
             }
 
             item.IndigenousCulturesCollector = _partiesNameFactory.Make(map.GetMap("iccollector"));
 
-            if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionDate")))
+            if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionDate")))
             {
-                item.IndigenousCulturesDateCollected = map.GetString("SouCollectionDate");
+                item.IndigenousCulturesDateCollected = map.GetEncodedString("SouCollectionDate");
             }
-            else if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionDateCirca")))
+            else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionDateCirca")))
             {
-                item.IndigenousCulturesDateCollected = map.GetString("SouCollectionDateCirca");
+                item.IndigenousCulturesDateCollected = map.GetEncodedString("SouCollectionDateCirca");
             }
-            else if (!string.IsNullOrWhiteSpace(map.GetString("SouCollectionEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetString("SouCollectionLatestDate")))
+            else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionLatestDate")))
             {
                 item.IndigenousCulturesDateCollected = new[]
                     {
-                        map.GetString("SouCollectionEarliestDate"),
-                        map.GetString("SouCollectionLatestDate")
+                        map.GetEncodedString("SouCollectionEarliestDate"),
+                        map.GetEncodedString("SouCollectionLatestDate")
                     }.Concatenate(" - ");
             }
 
-            item.IndigenousCulturesIndividualsIdentified = map.GetString("DesIndividualsIdentified");
+            item.IndigenousCulturesIndividualsIdentified = map.GetEncodedString("DesIndividualsIdentified");
 
-            item.IndigenousCulturesTitle = map.GetString("ManTitle");
-            item.IndigenousCulturesSheets = map.GetString("ManSheets");
-            item.IndigenousCulturesPages = map.GetString("ManPages");
+            item.IndigenousCulturesTitle = map.GetEncodedString("ManTitle");
+            item.IndigenousCulturesSheets = map.GetEncodedString("ManSheets");
+            item.IndigenousCulturesPages = map.GetEncodedString("ManPages");
             item.IndigenousCulturesLetterTo = _partiesNameFactory.Make(map.GetMap("icletterto"));
             item.IndigenousCulturesLetterFrom = _partiesNameFactory.Make(map.GetMap("icletterfrom"));
             
-            if (string.Equals(map.GetString("ColCategory"), "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(map.GetEncodedString("ColCategory"), "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
             {
                 item.ObjectName = new[]
                     {
@@ -489,38 +489,38 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Artwork fields
-            item.ArtworkMedium = map.GetString("ArtMedium");
-            item.ArtworkTechnique = map.GetString("ArtTechnique");
-            item.ArtworkSupport = map.GetString("ArtSupport");
-            item.ArtworkPlateNumber = map.GetString("ArtPlateNumber");
-            item.ArtworkDrawingNumber = map.GetString("ArtDrawingNumber");
-            item.ArtworkState = map.GetString("ArtState");
+            item.ArtworkMedium = map.GetEncodedString("ArtMedium");
+            item.ArtworkTechnique = map.GetEncodedString("ArtTechnique");
+            item.ArtworkSupport = map.GetEncodedString("ArtSupport");
+            item.ArtworkPlateNumber = map.GetEncodedString("ArtPlateNumber");
+            item.ArtworkDrawingNumber = map.GetEncodedString("ArtDrawingNumber");
+            item.ArtworkState = map.GetEncodedString("ArtState");
             item.ArtworkPublisher = _partiesNameFactory.Make(map.GetMap("artpublisher"));
-            item.ArtworkPrimaryInscriptions = map.GetString("ArtPrimaryInscriptions");
-            item.ArtworkSecondaryInscriptions = map.GetString("ArtSecondaryInscriptions");
-            item.ArtworkTertiaryInscriptions = map.GetString("ArtTertiaryInscriptions");
+            item.ArtworkPrimaryInscriptions = map.GetEncodedString("ArtPrimaryInscriptions");
+            item.ArtworkSecondaryInscriptions = map.GetEncodedString("ArtSecondaryInscriptions");
+            item.ArtworkTertiaryInscriptions = map.GetEncodedString("ArtTertiaryInscriptions");
 
             // Taxonomy
             // TODO: make factory method as code duplicated in SpecimenFactory
-            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
-                                 map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeCurrentNameLocal_tab") != null && x.GetString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));
+            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => (x.GetEncodedString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab").Trim().ToLower()))) ??
+                                 map.GetMaps("identifications").FirstOrDefault(x => (x.GetEncodedString("IdeCurrentNameLocal_tab") != null && x.GetEncodedString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));
             if (identificationMap != null)
             {
                 // Type Status
-                item.TypeStatus = identificationMap.GetString("IdeTypeStatus_tab");
+                item.TypeStatus = identificationMap.GetEncodedString("IdeTypeStatus_tab");
                 // Identified By
                 if (identificationMap.GetMaps("identifiers") != null)
                 {
                     item.IdentifiedBy = identificationMap.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
                 }
                 // Date Identified
-                item.DateIdentified = identificationMap.GetString("IdeDateIdentified0");
+                item.DateIdentified = identificationMap.GetEncodedString("IdeDateIdentified0");
 
                 // Identification Qualifier and Rank
-                item.Qualifier = identificationMap.GetString("IdeQualifier_tab");
-                if (string.Equals(identificationMap.GetString("IdeQualifierRank_tab"), "Genus", StringComparison.OrdinalIgnoreCase))
+                item.Qualifier = identificationMap.GetEncodedString("IdeQualifier_tab");
+                if (string.Equals(identificationMap.GetEncodedString("IdeQualifierRank_tab"), "Genus", StringComparison.OrdinalIgnoreCase))
                     item.QualifierRank = QualifierRankType.Genus;
-                else if (string.Equals(identificationMap.GetString("IdeQualifierRank_tab"), "species", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(identificationMap.GetEncodedString("IdeQualifierRank_tab"), "species", StringComparison.OrdinalIgnoreCase))
                     item.QualifierRank = QualifierRankType.Species;
 
                 // Taxonomy
@@ -533,14 +533,14 @@ namespace CollectionsOnline.Import.Factories
                     item.ScientificName = new[]
                     {
                         item.QualifierRank != QualifierRankType.Genus ? null : item.Qualifier,
-                        taxonomyMap.GetString("ClaGenus"),
-                        string.IsNullOrWhiteSpace(taxonomyMap.GetString("ClaSubgenus"))
+                        item.Taxonomy.Genus,
+                        string.IsNullOrWhiteSpace(item.Taxonomy.Subgenus)
                             ? null
-                            : string.Format("({0})", taxonomyMap.GetString("ClaSubgenus")),
+                            : string.Format("({0})", item.Taxonomy.Subgenus),
                         item.QualifierRank != QualifierRankType.Species ? null : item.Qualifier,
-                        taxonomyMap.GetString("ClaSpecies"),
-                        taxonomyMap.GetString("ClaSubspecies"),
-                        taxonomyMap.GetString("AutAuthorString")
+                        item.Taxonomy.Species,
+                        item.Taxonomy.Subspecies,
+                        item.Taxonomy.Author
                     }.Concatenate(" ");
                 }
             }
@@ -549,23 +549,23 @@ namespace CollectionsOnline.Import.Factories
             var accessionMap = map.GetMap("accession");
             if (accessionMap != null)
             {
-                var method = accessionMap.GetString("AcqAcquisitionMethod");
+                var method = accessionMap.GetEncodedString("AcqAcquisitionMethod");
 
                 if (!string.IsNullOrWhiteSpace(method))
                 {
                     var sources = accessionMap.GetMaps("source")
-                    .Where(x => string.IsNullOrWhiteSpace(x.GetString("AcqSourceRole_tab")) ||
-                        (!x.GetString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
+                    .Where(x => string.IsNullOrWhiteSpace(x.GetEncodedString("AcqSourceRole_tab")) ||
+                        (!x.GetEncodedString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
+                         !x.GetEncodedString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
+                         !x.GetEncodedString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
                     .Select(x => _partiesNameFactory.Make(x.GetMap("name"))).ToList();
 
                     if (sources.Any())
                     {
-                        if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqDateReceived")))
-                            sources.Add(accessionMap.GetString("AcqDateReceived"));
-                        else if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqDateOwnership")))
-                            sources.Add(accessionMap.GetString("AcqDateOwnership"));
+                        if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqDateReceived")))
+                            sources.Add(accessionMap.GetEncodedString("AcqDateReceived"));
+                        else if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqDateOwnership")))
+                            sources.Add(accessionMap.GetEncodedString("AcqDateOwnership"));
 
                         item.AcquisitionInformation = string.Format("{0} from {1}", method, sources.Concatenate(", "));
                     }
@@ -575,10 +575,10 @@ namespace CollectionsOnline.Import.Factories
                     }
                 }
 
-                var rights = map.GetStrings("RigText0").FirstOrDefault();
+                var rights = map.GetEncodedStrings("RigText0").FirstOrDefault();
 
-                if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqCreditLine")))
-                    item.Acknowledgement = accessionMap.GetString("AcqCreditLine");
+                if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqCreditLine")))
+                    item.Acknowledgement = accessionMap.GetEncodedString("AcqCreditLine");
                 else if (!string.IsNullOrWhiteSpace(rights))
                     item.Acknowledgement = rights;
             }
@@ -589,12 +589,12 @@ namespace CollectionsOnline.Import.Factories
             // Relationships
 
             // Related items/specimens (directly related)
-            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    item.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    item.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    item.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    item.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
             }
 
             // Related articles (direct attached)
@@ -602,8 +602,8 @@ namespace CollectionsOnline.Import.Factories
             if (relatedArticlesMap != null)
             {
                 item.RelatedArticleIds.AddRangeUnique(relatedArticlesMap
-                    .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                    .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+                    .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                    .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
             }
 
             // Related articles (via party relationship)
@@ -613,8 +613,8 @@ namespace CollectionsOnline.Import.Factories
                 item.RelatedArticleIds.AddRangeUnique(relatedPartyArticlesMap
                         .Where(x => x != null)
                         .SelectMany(x => x.GetMaps("relatedarticles"))
-                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
             }
 
             // Related articles (via sites relationship)
@@ -623,8 +623,8 @@ namespace CollectionsOnline.Import.Factories
             {
                 item.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
                         .GetMaps("relatedarticles")
-                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
             }
 
             // Build summary
@@ -634,7 +634,7 @@ namespace CollectionsOnline.Import.Factories
                 item.Summary = item.Description;
             
             stopwatch.Stop();
-            _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);
+            _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);
 
             return item;
         }

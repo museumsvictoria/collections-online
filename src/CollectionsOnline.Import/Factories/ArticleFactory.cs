@@ -7,6 +7,7 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Utilities;
 using IMu;
 using NLog;
@@ -78,28 +79,28 @@ namespace CollectionsOnline.Import.Factories
 
             var article = new Article();
 
-            article.Id = "articles/" + map.GetString("irn");
+            article.Id = "articles/" + map.GetEncodedString("irn");
 
-            article.IsHidden = string.Equals(map.GetString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
+            article.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             article.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
+                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
-            article.Title = map.GetString("NarTitle");
-            article.Keywords.AddRange(map.GetStrings("DesSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)));
-            article.Content = map.GetString("NarNarrative");
-            article.ContentSummary = map.GetString("NarNarrativeSummary");
-            article.Types = map.GetStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-            article.Keywords.AddRange(map.GetStrings("DesGeographicLocation_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)));
+            article.Title = map.GetEncodedString("NarTitle");
+            article.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab").Select(x => _slugFactory.MakeSlug(x)));
+            article.Content = map.GetEncodedString("NarNarrative");
+            article.ContentSummary = map.GetEncodedString("NarNarrativeSummary");
+            article.Types.AddRange(map.GetEncodedStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)));
+            article.Keywords.AddRange(map.GetEncodedStrings("DesGeographicLocation_tab").Select(x => _slugFactory.MakeSlug(x)));
 
             // Authors
             article.Authors = map.GetMaps("authors")
                 .Where(x => x != null)
                 .Select(x => new Author
                 {
-                    Name = x.GetString("NamFullName"),
-                    Biography = x.GetString("BioLabel"),
+                    Name = x.GetEncodedString("NamFullName"),
+                    Biography = x.GetEncodedString("BioLabel"),
                     ProfileImage = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault()) as ImageMedia
                 }).ToList();
 
@@ -108,14 +109,14 @@ namespace CollectionsOnline.Import.Factories
                 map.GetMaps("contributors")
                    .Where(
                        x =>
-                       x.GetString("NarContributorRole_tab").Contains("contributor of content", StringComparison.OrdinalIgnoreCase) ||
-                       x.GetString("NarContributorRole_tab").Contains("author of quoted text", StringComparison.OrdinalIgnoreCase) ||
-                       x.GetString("NarContributorRole_tab").Contains("researcher", StringComparison.OrdinalIgnoreCase))
+                       x.GetEncodedString("NarContributorRole_tab").Contains("contributor of content", StringComparison.OrdinalIgnoreCase) ||
+                       x.GetEncodedString("NarContributorRole_tab").Contains("author of quoted text", StringComparison.OrdinalIgnoreCase) ||
+                       x.GetEncodedString("NarContributorRole_tab").Contains("researcher", StringComparison.OrdinalIgnoreCase))
                    .Select(x => x.GetMap("contributor"))
                    .Select(x => new Author
                    {
-                       Name = x.GetString("NamFullName"),
-                       Biography = x.GetString("BioLabel")
+                       Name = x.GetEncodedString("NamFullName"),
+                       Biography = x.GetEncodedString("BioLabel")
                    }));
 
             // Media           
@@ -128,30 +129,30 @@ namespace CollectionsOnline.Import.Factories
             // Relationships
 
             // parent article
-            if (map.GetMap("parent") != null && map.GetMap("parent").GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                article.ParentArticleId = "articles/" + map.GetMap("parent").GetString("irn");
+            if (map.GetMap("parent") != null && map.GetMap("parent").GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                article.ParentArticleId = "articles/" + map.GetMap("parent").GetEncodedString("irn");
 
             // child article
             article.ChildArticleIds = map
                 .GetMaps("children")
-                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                .Select(x => "articles/" + x.GetString("irn"))
+                .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                .Select(x => "articles/" + x.GetEncodedString("irn"))
                 .ToList();
 
             // sibling article
             article.RelatedArticleIds = map
                 .GetMaps("relatedarticles")
-                .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                .Select(x => "articles/" + x.GetString("irn"))
+                .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                .Select(x => "articles/" + x.GetEncodedString("irn"))
                 .ToList();
 
             // Related items/specimens (directly related)
-            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    article.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    article.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    article.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    article.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
             }
             // Build summary
             if (!string.IsNullOrWhiteSpace(article.ContentSummary))
@@ -164,12 +165,12 @@ namespace CollectionsOnline.Import.Factories
                 }
                 catch (Exception e)
                 {
-                    _log.Warn("Unable to convert article content html to text, irn:{0}, html:{0}, exception:{1}", map.GetString("irn"), article.Content, e);
+                    _log.Warn("Unable to convert article content html to text, irn:{0}, html:{0}, exception:{1}", map.GetEncodedString("irn"), article.Content, e);
                 }
             }
 
             stopwatch.Stop();
-            _log.Trace("Completed article creation for narrative record with irn {0}, elapsed time {1} ms", map.GetString("irn"), stopwatch.ElapsedMilliseconds);
+            _log.Trace("Completed article creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
 
             return article;
         }

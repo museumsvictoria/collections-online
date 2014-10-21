@@ -88,10 +88,10 @@
                         {
                             <dt>Colours</dt>
                             <dd>
-                                @foreach (var colour in Model.Species.Colours)
+                                @for (int i = 0; i < Model.Species.Colours.Count; i++)
                                 {
-                                    <span>@colour</span>
-                                }
+                                    <span>@Model.Species.Colours[i]</span>@(i != Model.Species.Colours.Count - 1 ? ", " : "")
+                                }                                
                             </dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.MaximumSize))
@@ -103,9 +103,9 @@
                         {
                             <dt>Habitats</dt>
                             <dd>
-                                @foreach (var habitat in @Model.Species.Habitats)
+                                @for (int i = 0; i < Model.Species.Habitats.Count; i++)
                                 {
-                                    <a href="/search?habitat=@HttpUtility.UrlEncode(habitat)">@habitat</a>
+                                    <a href="/search?habitat=@HttpUtility.UrlEncode(Model.Species.Habitats[i])">@Model.Species.Habitats[i]</a>@(i != Model.Species.Habitats.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -113,9 +113,9 @@
                         {
                             <dt>Where To Look</dt>
                             <dd>
-                                @foreach (var whereToLook in @Model.Species.WhereToLook)
+                                @for (int i = 0; i < Model.Species.WhereToLook.Count; i++)
                                 {
-                                    <a href="/search?habitat=@HttpUtility.UrlEncode(whereToLook)">@whereToLook</a>
+                                    <a href="/search?habitat=@HttpUtility.UrlEncode(Model.Species.WhereToLook[i])">@Model.Species.WhereToLook[i]</a>@(i != Model.Species.WhereToLook.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -123,9 +123,9 @@
                         {
                             <dt>When Active</dt>
                             <dd>
-                                @foreach (var whenActive in @Model.Species.WhenActive)
+                                @for (int i = 0; i < Model.Species.WhenActive.Count; i++)
                                 {
-                                    <span>@whenActive</span>
+                                    <span>@Model.Species.WhenActive[i]</span>@(i != Model.Species.WhenActive.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -133,9 +133,9 @@
                         {
                             <dt>National Parks</dt>
                             <dd>
-                                @foreach (var nationalPark in @Model.Species.NationalParks)
+                                @for (int i = 0; i < Model.Species.NationalParks.Count; i++)
                                 {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(nationalPark)">@nationalPark</a>
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Species.NationalParks[i])">@Model.Species.NationalParks[i]</a>@(i != Model.Species.NationalParks.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -148,9 +148,9 @@
                         {
                             <dt>Diet Categories</dt>
                             <dd>
-                                @foreach (var dietCategory in @Model.Species.DietCategories)
+                                @for (int i = 0; i < Model.Species.DietCategories.Count; i++)
                                 {
-                                    <span>@dietCategory</span>
+                                    <span>@Model.Species.DietCategories[i]</span>@(i != Model.Species.DietCategories.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -173,9 +173,9 @@
                         {
                             <dt>Conservation Statuses</dt>
                             <dd>
-                                @foreach (var conservationStatus in @Model.Species.ConservationStatuses)
+                                @for (int i = 0; i < Model.Species.ConservationStatuses.Count; i++)
                                 {
-                                    <a href="/search?keyword=@HttpUtility.UrlEncode(conservationStatus)">@conservationStatus</a>
+                                    <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Species.ConservationStatuses[i])">@Model.Species.ConservationStatuses[i]</a>@(i != Model.Species.ConservationStatuses.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -193,9 +193,9 @@
                         {
                             <dt>Plants</dt>
                             <dd>
-                                @foreach (var plant in @Model.Species.Plants)
+                                @for (int i = 0; i < Model.Species.Plants.Count; i++)
                                 {
-                                    <span>@plant</span>
+                                    <span>@Model.Species.Plants[i]</span>@(i != Model.Species.Plants.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -213,9 +213,9 @@
                         {
                             <dt>Depths</dt>
                             <dd>
-                                @foreach (var depth in @Model.Species.Depths)
+                                @for (int i = 0; i < Model.Species.Depths.Count; i++)
                                 {
-                                    <span>@depth</span>
+                                    <span>@Model.Species.Depths[i]</span>@(i != Model.Species.Depths.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -223,9 +223,9 @@
                         {
                             <dt>Water Column Locations</dt>
                             <dd>
-                                @foreach (var waterColumnLocation in @Model.Species.WaterColumnLocations)
+                                @for (int i = 0; i < Model.Species.WaterColumnLocations.Count; i++)
                                 {
-                                    <span>@waterColumnLocation</span>
+                                    <span>@Model.Species.WaterColumnLocations[i]</span>@(i != Model.Species.WaterColumnLocations.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }
@@ -248,9 +248,9 @@
                         {
                             <dt>Other Names</dt>
                             <dd>
-                                @foreach (var otherCommonNames in @Model.Species.Taxonomy.OtherCommonNames)
+                                @for (int i = 0; i < Model.Species.Taxonomy.OtherCommonNames.Count; i++)
                                 {
-                                    <span>@otherCommonNames</span>
+                                    <span>@Model.Species.Taxonomy.OtherCommonNames[i]</span>@(i != Model.Species.Taxonomy.OtherCommonNames.Count - 1 ? ", " : "")
                                 }
                             </dd>
                         }

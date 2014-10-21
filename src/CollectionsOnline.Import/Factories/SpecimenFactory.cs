@@ -8,6 +8,7 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
+using CollectionsOnline.Import.Extensions;
 using IMu;
 using NLog;
 using Raven.Abstractions.Extensions;
@@ -142,43 +143,42 @@ namespace CollectionsOnline.Import.Factories
 
             var specimen = new Specimen();
 
-            specimen.Id = "specimens/" + map.GetString("irn");
+            specimen.Id = "specimens/" + map.GetEncodedString("irn");
 
-            specimen.IsHidden = string.Equals(map.GetString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
+            specimen.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             specimen.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
+                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
 
-            specimen.Category = map.GetString("ColCategory");
-            specimen.ScientificGroup = map.GetString("ColScientificGroup");
-            specimen.Discipline = map.GetString("ColDiscipline");
+            specimen.Category = map.GetEncodedString("ColCategory");
+            specimen.ScientificGroup = map.GetEncodedString("ColScientificGroup");
+            specimen.Discipline = map.GetEncodedString("ColDiscipline");
             specimen.RegistrationNumber = map["ColRegPart"] != null
                              ? string.Format("{0}{1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
                              : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
-            specimen.CollectionNames = map.GetStrings("ColCollectionName_tab") ?? new string[] { };
-            specimen.Type = map.GetString("ColTypeOfItem");
+            specimen.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
+            specimen.Type = map.GetEncodedString("ColTypeOfItem");
 
             // Classifications
-            if (map.GetString("ClaPrimaryClassification") != null && !map.GetString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                specimen.PrimaryClassification = map.GetString("ClaPrimaryClassification").ToSentenceCase();
-            if (map.GetString("ClaSecondaryClassification") != null && !map.GetString("ClaSecondaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                specimen.SecondaryClassification = map.GetString("ClaSecondaryClassification").ToSentenceCase();
-            if (map.GetString("ClaTertiaryClassification") != null && !map.GetString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                specimen.TertiaryClassification = map.GetString("ClaTertiaryClassification").ToSentenceCase();
+            if (map.GetEncodedString("ClaPrimaryClassification") != null && !map.GetEncodedString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                specimen.PrimaryClassification = map.GetEncodedString("ClaPrimaryClassification").ToSentenceCase();
+            if (map.GetEncodedString("ClaSecondaryClassification") != null && !map.GetEncodedString("ClaSecondaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                specimen.SecondaryClassification = map.GetEncodedString("ClaSecondaryClassification").ToSentenceCase();
+            if (map.GetEncodedString("ClaTertiaryClassification") != null && !map.GetEncodedString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
+                specimen.TertiaryClassification = map.GetEncodedString("ClaTertiaryClassification").ToSentenceCase();
 
-            specimen.ObjectName = map.GetString("ClaObjectName");
-            specimen.ObjectSummary = map.GetString("ClaObjectSummary");
-            specimen.IsdDescriptionOfContent = map.GetString("Con1Description");
-            specimen.Significance = map.GetString("SubHistoryTechSignificance");
+            specimen.ObjectName = map.GetEncodedString("ClaObjectName");
+            specimen.ObjectSummary = map.GetEncodedString("ClaObjectSummary");
+            specimen.IsdDescriptionOfContent = map.GetEncodedString("Con1Description");
+            specimen.Significance = map.GetEncodedString("SubHistoryTechSignificance");
 
             // Tags
-            if (map.GetStrings("SubSubjects_tab") != null)
-                specimen.Keywords = map.GetStrings("SubSubjects_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => _slugFactory.MakeSlug(x)).ToList();
+            specimen.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab").Select(x => _slugFactory.MakeSlug(x)));
 
             // Collection plans
-            specimen.CollectionPlans = map.GetStrings("SubThemes_tab").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            specimen.CollectionPlans = map.GetEncodedStrings("SubThemes_tab");
 
             // Associations
             specimen.Associations = _associationFactory.Make(map.GetMaps("associations"));
@@ -187,23 +187,23 @@ namespace CollectionsOnline.Import.Factories
             var accessionMap = map.GetMap("accession");
             if (accessionMap != null)
             {
-                var method = accessionMap.GetString("AcqAcquisitionMethod");
+                var method = accessionMap.GetEncodedString("AcqAcquisitionMethod");
 
                 if (!string.IsNullOrWhiteSpace(method))
                 {
                     var sources = accessionMap.GetMaps("source")
-                    .Where(x => string.IsNullOrWhiteSpace(x.GetString("AcqSourceRole_tab")) ||
-                        (!x.GetString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
+                    .Where(x => string.IsNullOrWhiteSpace(x.GetEncodedString("AcqSourceRole_tab")) ||
+                        (!x.GetEncodedString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
+                         !x.GetEncodedString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
+                         !x.GetEncodedString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
                     .Select(x => _partiesNameFactory.Make(x.GetMap("name"))).ToList();
 
                     if (sources.Any())
                     {
-                        if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqDateReceived")))
-                            sources.Add(accessionMap.GetString("AcqDateReceived"));
-                        else if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqDateOwnership")))
-                            sources.Add(accessionMap.GetString("AcqDateOwnership"));
+                        if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqDateReceived")))
+                            sources.Add(accessionMap.GetEncodedString("AcqDateReceived"));
+                        else if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqDateOwnership")))
+                            sources.Add(accessionMap.GetEncodedString("AcqDateOwnership"));
 
                         specimen.AcquisitionInformation = string.Format("{0} from {1}", method, sources.Concatenate(", "));
                     }
@@ -213,10 +213,10 @@ namespace CollectionsOnline.Import.Factories
                     }
                 }
 
-                var rights = map.GetStrings("RigText0").FirstOrDefault();
+                var rights = map.GetEncodedStrings("RigText0").FirstOrDefault();
 
-                if (!string.IsNullOrWhiteSpace(accessionMap.GetString("AcqCreditLine")))
-                    specimen.Acknowledgement = accessionMap.GetString("AcqCreditLine");
+                if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqCreditLine")))
+                    specimen.Acknowledgement = accessionMap.GetEncodedString("AcqCreditLine");
                 else if (!string.IsNullOrWhiteSpace(rights))
                     specimen.Acknowledgement = rights;
             }
@@ -225,46 +225,46 @@ namespace CollectionsOnline.Import.Factories
             specimen.MuseumLocation = _museumLocationFactory.Make(map.GetMap("location"));
 
             // Number Of Specimens
-            specimen.NumberOfSpecimens = map.GetString("SpeNoSpecimens");
+            specimen.NumberOfSpecimens = map.GetEncodedString("SpeNoSpecimens");
             // Clutch Size
-            specimen.ClutchSize = map.GetString("BirTotalClutchSize");
+            specimen.ClutchSize = map.GetEncodedString("BirTotalClutchSize");
             // Sex
-            specimen.Sex = map.GetStrings("SpeSex_tab").Concatenate(", ");
+            specimen.Sex = map.GetEncodedStrings("SpeSex_tab").Concatenate(", ");
             // Stage Or Age
-            specimen.StageOrAge = map.GetStrings("SpeStageAge_tab").Concatenate(", ");
+            specimen.StageOrAge = map.GetEncodedStrings("SpeStageAge_tab").Concatenate(", ");
             // Storages
             specimen.Storages.AddRange(
                 map.GetMaps("storage")
                     .Select(x => new Storage
                     {
-                        Nature = x.GetString("StrSpecimenNature_tab"),
-                        Form = x.GetString("StrSpecimenForm_tab"),
-                        FixativeTreatment = x.GetString("StrFixativeTreatment_tab"),
-                        Medium = x.GetString("StrStorageMedium_tab")
+                        Nature = x.GetEncodedString("StrSpecimenNature_tab"),
+                        Form = x.GetEncodedString("StrSpecimenForm_tab"),
+                        FixativeTreatment = x.GetEncodedString("StrFixativeTreatment_tab"),
+                        Medium = x.GetEncodedString("StrStorageMedium_tab")
                     })
                     .Where(x => x != null));
 
             // Taxonomy
             // TODO: make factory method as code duplicated in ItemFactory
-            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetString("IdeTypeStatus_tab").Trim().ToLower()))) ??
-                                    map.GetMaps("identifications").FirstOrDefault(x => (x.GetString("IdeCurrentNameLocal_tab") != null && x.GetString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));            
+            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => (x.GetEncodedString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab").Trim().ToLower()))) ??
+                                    map.GetMaps("identifications").FirstOrDefault(x => (x.GetEncodedString("IdeCurrentNameLocal_tab") != null && x.GetEncodedString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));            
             if (identificationMap != null)
             {
                 // Type Status
-                specimen.TypeStatus = identificationMap.GetString("IdeTypeStatus_tab");
+                specimen.TypeStatus = identificationMap.GetEncodedString("IdeTypeStatus_tab");
                 // Identified By
                 if (identificationMap.GetMaps("identifiers") != null)
                 {
                     specimen.IdentifiedBy = identificationMap.GetMaps("identifiers").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate("; ");
                 }
                 // Date Identified
-                specimen.DateIdentified = identificationMap.GetString("IdeDateIdentified0");
+                specimen.DateIdentified = identificationMap.GetEncodedString("IdeDateIdentified0");
                 
                 // Identification Qualifier and Rank
-                specimen.Qualifier = identificationMap.GetString("IdeQualifier_tab");
-                if (string.Equals(identificationMap.GetString("IdeQualifierRank_tab"), "Genus", StringComparison.OrdinalIgnoreCase))
+                specimen.Qualifier = identificationMap.GetEncodedString("IdeQualifier_tab");
+                if (string.Equals(identificationMap.GetEncodedString("IdeQualifierRank_tab"), "Genus", StringComparison.OrdinalIgnoreCase))
                     specimen.QualifierRank = QualifierRankType.Genus;
-                else if (string.Equals(identificationMap.GetString("IdeQualifierRank_tab"), "species", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(identificationMap.GetEncodedString("IdeQualifierRank_tab"), "species", StringComparison.OrdinalIgnoreCase))
                     specimen.QualifierRank = QualifierRankType.Species;
 
                 // Taxonomy
@@ -290,8 +290,8 @@ namespace CollectionsOnline.Import.Factories
                     // Species profile Relationship
                     var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
                     specimen.RelatedSpeciesIds.AddRange(relatedSpeciesMaps
-                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                        .Select(x => string.Format("species/{0}", x.GetString("irn"))));
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                        .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
                 }
             }
 
@@ -299,15 +299,15 @@ namespace CollectionsOnline.Import.Factories
             var collectionEventMap = map.GetMap("colevent");
             if (collectionEventMap != null)
             {
-                specimen.ExpeditionName = collectionEventMap.GetString("ExpExpeditionName");
-                specimen.CollectionEventCode = collectionEventMap.GetString("ColCollectionEventCode");
-                specimen.SamplingMethod = collectionEventMap.GetString("ColCollectionMethod");
+                specimen.ExpeditionName = collectionEventMap.GetEncodedString("ExpExpeditionName");
+                specimen.CollectionEventCode = collectionEventMap.GetEncodedString("ColCollectionEventCode");
+                specimen.SamplingMethod = collectionEventMap.GetEncodedString("ColCollectionMethod");
 
                 DateTime dateVisitedFrom;
-                if (DateTime.TryParseExact(collectionEventMap.GetString("ColDateVisitedFrom"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out dateVisitedFrom))
+                if (DateTime.TryParseExact(collectionEventMap.GetEncodedString("ColDateVisitedFrom"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out dateVisitedFrom))
                 {
                     TimeSpan timeVisitedFrom;
-                    if (TimeSpan.TryParseExact(collectionEventMap.GetString("ColTimeVisitedFrom"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedFrom))
+                    if (TimeSpan.TryParseExact(collectionEventMap.GetEncodedString("ColTimeVisitedFrom"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedFrom))
                     {
                         dateVisitedFrom += timeVisitedFrom;
                     }
@@ -316,10 +316,10 @@ namespace CollectionsOnline.Import.Factories
                 }
 
                 DateTime dateVisitedTo;
-                if (DateTime.TryParseExact(collectionEventMap.GetString("ColDateVisitedTo"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out dateVisitedTo))
+                if (DateTime.TryParseExact(collectionEventMap.GetEncodedString("ColDateVisitedTo"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out dateVisitedTo))
                 {
                     TimeSpan timeVisitedTo;
-                    if (TimeSpan.TryParseExact(collectionEventMap.GetString("ColTimeVisitedTo"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedTo))
+                    if (TimeSpan.TryParseExact(collectionEventMap.GetEncodedString("ColTimeVisitedTo"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedTo))
                     {
                         dateVisitedTo += timeVisitedTo;
                     }
@@ -327,8 +327,8 @@ namespace CollectionsOnline.Import.Factories
                     specimen.DateVisitedTo = dateVisitedTo;
                 }
 
-                specimen.DepthTo = collectionEventMap.GetString("AquDepthToMet");
-                specimen.DepthFrom = collectionEventMap.GetString("AquDepthFromMet");
+                specimen.DepthTo = collectionEventMap.GetEncodedString("AquDepthToMet");
+                specimen.DepthFrom = collectionEventMap.GetEncodedString("AquDepthFromMet");
 
                 specimen.CollectedBy = collectionEventMap.GetMaps("collectors").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate(", ");
             }
@@ -343,26 +343,26 @@ namespace CollectionsOnline.Import.Factories
                 // Site Code
                 specimen.SiteCode = new[]
                 {
-                    siteMap.GetString("SitSiteCode"),
-                    siteMap.GetString("SitSiteNumber")
+                    siteMap.GetEncodedString("SitSiteCode"),
+                    siteMap.GetEncodedString("SitSiteNumber")
                 }.Concatenate("");
 
                 // Locality
                 var geoMap = siteMap.GetMaps("geo").FirstOrDefault();
                 if (geoMap != null)
                 {
-                    specimen.Ocean = geoMap.GetString("LocOcean_tab");
-                    specimen.Continent = geoMap.GetString("LocContinent_tab");
-                    specimen.Country = geoMap.GetString("LocCountry_tab");
-                    specimen.State = geoMap.GetString("LocProvinceStateTerritory_tab");
-                    specimen.District = geoMap.GetString("LocDistrictCountyShire_tab");
-                    specimen.Town = geoMap.GetString("LocTownship_tab");
-                    specimen.NearestNamedPlace = geoMap.GetString("LocNearestNamedPlace_tab");
+                    specimen.Ocean = geoMap.GetEncodedString("LocOcean_tab");
+                    specimen.Continent = geoMap.GetEncodedString("LocContinent_tab");
+                    specimen.Country = geoMap.GetEncodedString("LocCountry_tab");
+                    specimen.State = geoMap.GetEncodedString("LocProvinceStateTerritory_tab");
+                    specimen.District = geoMap.GetEncodedString("LocDistrictCountyShire_tab");
+                    specimen.Town = geoMap.GetEncodedString("LocTownship_tab");
+                    specimen.NearestNamedPlace = geoMap.GetEncodedString("LocNearestNamedPlace_tab");
                 }
 
-                specimen.PreciseLocation = siteMap.GetString("LocPreciseLocation");
-                specimen.MinimumElevation = siteMap.GetString("LocElevationASLFromMt");
-                specimen.MaximumElevation = siteMap.GetString("LocElevationASLToMt");
+                specimen.PreciseLocation = siteMap.GetEncodedString("LocPreciseLocation");
+                specimen.MinimumElevation = siteMap.GetEncodedString("LocElevationASLFromMt");
+                specimen.MaximumElevation = siteMap.GetEncodedString("LocElevationASLToMt");
 
                 // Lat/Long
                 var latlongMap = siteMap.GetMaps("latlong").FirstOrDefault();
@@ -376,66 +376,66 @@ namespace CollectionsOnline.Import.Factories
                     if (decimalLongitude != null)
                         specimen.Longitude = decimalLongitude.Where(x => x != null).FirstOrDefault() as string;
 
-                    specimen.GeodeticDatum = (string.IsNullOrWhiteSpace(latlongMap.GetString("LatDatum_tab"))) ? "WGS84" : latlongMap.GetString("LatDatum_tab");
-                    specimen.SiteRadius = latlongMap.GetString("LatRadiusNumeric_tab");
+                    specimen.GeodeticDatum = (string.IsNullOrWhiteSpace(latlongMap.GetEncodedString("LatDatum_tab"))) ? "WGS84" : latlongMap.GetEncodedString("LatDatum_tab");
+                    specimen.SiteRadius = latlongMap.GetEncodedString("LatRadiusNumeric_tab");
                     specimen.GeoreferenceBy = _partiesNameFactory.Make(latlongMap.GetMap("determinedBy"));
 
                     DateTime georeferenceDate;
-                    if (DateTime.TryParseExact(latlongMap.GetString("LatDetDate0"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out georeferenceDate))
+                    if (DateTime.TryParseExact(latlongMap.GetEncodedString("LatDetDate0"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out georeferenceDate))
                         specimen.GeoreferenceDate = georeferenceDate.ToString("s");
 
-                    specimen.GeoreferenceProtocol = latlongMap.GetString("LatLatLongDetermination_tab");
-                    specimen.GeoreferenceSource = latlongMap.GetString("LatDetSource_tab");
+                    specimen.GeoreferenceProtocol = latlongMap.GetEncodedString("LatLatLongDetermination_tab");
+                    specimen.GeoreferenceSource = latlongMap.GetEncodedString("LatDetSource_tab");
                 }
 
                 // Geology site fields
                 if (!string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase))
                 {
-                    specimen.GeologyEra = siteMap.GetString("EraEra");
-                    specimen.GeologyPeriod = siteMap.GetString("EraAge1");
-                    specimen.GeologyEpoch = siteMap.GetString("EraAge2");
-                    specimen.GeologyStage = siteMap.GetString("EraMvStage");
-                    specimen.GeologyGroup = siteMap.GetStrings("EraMvGroup_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
-                    specimen.GeologyFormation = siteMap.GetStrings("EraMvRockUnit_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
-                    specimen.GeologyMember = siteMap.GetStrings("EraMvMember_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
-                    specimen.GeologyRockType = siteMap.GetStrings("EraLithology_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Concatenate(", ");
+                    specimen.GeologyEra = siteMap.GetEncodedString("EraEra");
+                    specimen.GeologyPeriod = siteMap.GetEncodedString("EraAge1");
+                    specimen.GeologyEpoch = siteMap.GetEncodedString("EraAge2");
+                    specimen.GeologyStage = siteMap.GetEncodedString("EraMvStage");
+                    specimen.GeologyGroup = siteMap.GetEncodedStrings("EraMvGroup_tab").Concatenate(", ");
+                    specimen.GeologyFormation = siteMap.GetEncodedStrings("EraMvRockUnit_tab").Concatenate(", ");
+                    specimen.GeologyMember = siteMap.GetEncodedStrings("EraMvMember_tab").Concatenate(", ");
+                    specimen.GeologyRockType = siteMap.GetEncodedStrings("EraLithology_tab").Concatenate(", ");
                 }
             }
                 
             // Discipline specific fields
             // Palaeontology
-            specimen.PalaeontologyDateCollectedFrom = map.GetString("LocDateCollectedFrom");
-            specimen.PalaeontologyDateCollectedTo = map.GetString("LocDateCollectedTo");
+            specimen.PalaeontologyDateCollectedFrom = map.GetEncodedString("LocDateCollectedFrom");
+            specimen.PalaeontologyDateCollectedTo = map.GetEncodedString("LocDateCollectedTo");
             
             // Geology
-            specimen.MineralogySpecies = map.GetString("MinSpecies");
-            specimen.MineralogyVariety = map.GetString("MinVariety");
-            specimen.MineralogyGroup = map.GetString("MinGroup");
-            specimen.MineralogyClass = map.GetString("MinClass");
-            specimen.MineralogyAssociatedMatrix = map.GetString("MinAssociatedMatrix");
-            specimen.MineralogyType = map.GetString("MinType");
-            specimen.MineralogyTypeOfType = map.GetString("MinTypeType");
+            specimen.MineralogySpecies = map.GetEncodedString("MinSpecies");
+            specimen.MineralogyVariety = map.GetEncodedString("MinVariety");
+            specimen.MineralogyGroup = map.GetEncodedString("MinGroup");
+            specimen.MineralogyClass = map.GetEncodedString("MinClass");
+            specimen.MineralogyAssociatedMatrix = map.GetEncodedString("MinAssociatedMatrix");
+            specimen.MineralogyType = map.GetEncodedString("MinType");
+            specimen.MineralogyTypeOfType = map.GetEncodedString("MinTypeType");
             
-            specimen.MeteoritesName = map.GetString("MetName");
-            specimen.MeteoritesClass = map.GetString("MetClass");
-            specimen.MeteoritesGroup = map.GetString("MetGroup");
-            specimen.MeteoritesType = map.GetString("MetType");
-            specimen.MeteoritesMinerals = map.GetString("MetMainMineralsPresent");
-            specimen.MeteoritesSpecimenWeight = map.GetString("MetSpecimenWeight");
-            specimen.MeteoritesTotalWeight = map.GetString("MetTotalWeight");
-            specimen.MeteoritesDateFell = map.GetString("MetDateSpecimenFell");
-            specimen.MeteoritesDateFound = map.GetString("MetDateSpecimenFound");
+            specimen.MeteoritesName = map.GetEncodedString("MetName");
+            specimen.MeteoritesClass = map.GetEncodedString("MetClass");
+            specimen.MeteoritesGroup = map.GetEncodedString("MetGroup");
+            specimen.MeteoritesType = map.GetEncodedString("MetType");
+            specimen.MeteoritesMinerals = map.GetEncodedString("MetMainMineralsPresent");
+            specimen.MeteoritesSpecimenWeight = map.GetEncodedString("MetSpecimenWeight");
+            specimen.MeteoritesTotalWeight = map.GetEncodedString("MetTotalWeight");
+            specimen.MeteoritesDateFell = map.GetEncodedString("MetDateSpecimenFell");
+            specimen.MeteoritesDateFound = map.GetEncodedString("MetDateSpecimenFound");
             
-            specimen.TektitesName = map.GetString("TekName");
-            specimen.TektitesClassification = map.GetString("TekClassification");
-            specimen.TektitesShape = map.GetString("TekShape");
-            specimen.TektitesLocalStrewnfield = map.GetString("TekLocalStrewnfield");
-            specimen.TektitesGlobalStrewnfield = map.GetString("TekGlobalStrewnfield");
+            specimen.TektitesName = map.GetEncodedString("TekName");
+            specimen.TektitesClassification = map.GetEncodedString("TekClassification");
+            specimen.TektitesShape = map.GetEncodedString("TekShape");
+            specimen.TektitesLocalStrewnfield = map.GetEncodedString("TekLocalStrewnfield");
+            specimen.TektitesGlobalStrewnfield = map.GetEncodedString("TekGlobalStrewnfield");
 
-            specimen.PetrologyRockClass = map.GetString("RocClass");
-            specimen.PetrologyRockGroup = map.GetString("RocGroup");
-            specimen.PetrologyRockName = map.GetString("RocRockName");
-            specimen.PetrologyRockDescription = map.GetString("RocRockDescription");
+            specimen.PetrologyRockClass = map.GetEncodedString("RocClass");
+            specimen.PetrologyRockGroup = map.GetEncodedString("RocGroup");
+            specimen.PetrologyRockName = map.GetEncodedString("RocRockName");
+            specimen.PetrologyRockDescription = map.GetEncodedString("RocRockDescription");
 
             // Media
             specimen.Media = _mediaFactory.Make(map.GetMaps("media"));
@@ -447,30 +447,30 @@ namespace CollectionsOnline.Import.Factories
             // Relationships
 
             // Related items/specimens (directly related)
-            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    specimen.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
             }
             // Physically attached
             var attachedItemSpecimenMap = map.GetMap("attacheditemspecimens");
             if (attachedItemSpecimenMap != null)
             {
-                if (attachedItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemIds.Add(string.Format("items/{0}", attachedItemSpecimenMap.GetString("irn")));
-                if (attachedItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", attachedItemSpecimenMap.GetString("irn")));
+                if (attachedItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    specimen.RelatedItemIds.Add(string.Format("items/{0}", attachedItemSpecimenMap.GetEncodedString("irn")));
+                if (attachedItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", attachedItemSpecimenMap.GetEncodedString("irn")));
             }
             // Parent record
             var parentItemSpecimenMap = map.GetMap("parentitemspecimens");
             if (parentItemSpecimenMap != null)
             {
-                if (parentItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemIds.Add(string.Format("items/{0}", parentItemSpecimenMap.GetString("irn")));
-                if (parentItemSpecimenMap.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", parentItemSpecimenMap.GetString("irn")));
+                if (parentItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    specimen.RelatedItemIds.Add(string.Format("items/{0}", parentItemSpecimenMap.GetEncodedString("irn")));
+                if (parentItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", parentItemSpecimenMap.GetEncodedString("irn")));
             }
 
             // Related articles/species (direct attached)
@@ -478,12 +478,12 @@ namespace CollectionsOnline.Import.Factories
             if (relatedArticleSpeciesMap != null)
             {
                 specimen.RelatedArticleIds.AddRangeUnique(relatedArticleSpeciesMap
-                    .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                    .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+                    .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                    .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
 
                 specimen.RelatedSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
-                    .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                    .Select(x => string.Format("species/{0}", x.GetString("irn"))));
+                    .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                    .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
             }
 
             // Related articles (via party relationship)
@@ -493,8 +493,8 @@ namespace CollectionsOnline.Import.Factories
                 specimen.RelatedArticleIds.AddRangeUnique(relatedPartyArticlesMap
                         .Where(x => x != null)
                         .SelectMany(x => x.GetMaps("relatedarticles"))
-                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
             }
 
             // Related articles (via sites relationship)
@@ -503,8 +503,8 @@ namespace CollectionsOnline.Import.Factories
             {
                 specimen.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
                         .GetMaps("relatedarticles")
-                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
             }
 
             // Related articles (via collection event relationship)
@@ -513,8 +513,8 @@ namespace CollectionsOnline.Import.Factories
             {
                 specimen.RelatedArticleIds.AddRangeUnique(relatedCollectionEventArticlesMap
                         .GetMaps("relatedarticles")
-                        .Where(x => x != null && x.GetStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetString("irn"))));
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
             }
 
             // Build summary
@@ -539,7 +539,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             stopwatch.Stop();
-            _log.Trace("Completed specimen creation for catalog record with irn {0}, elapsed time {1} ms", map.GetString("irn"), stopwatch.ElapsedMilliseconds);
+            _log.Trace("Completed specimen creation for catalog record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
             
             return specimen;
         }

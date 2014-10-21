@@ -6,6 +6,7 @@ using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Extensions;
 using IMu;
 using NLog;
 using Raven.Abstractions.Extensions;
@@ -95,58 +96,58 @@ namespace CollectionsOnline.Import.Factories
 
             var species = new Species();
 
-            species.Id = "species/" + map.GetString("irn");
+            species.Id = "species/" + map.GetEncodedString("irn");
 
-            species.IsHidden = string.Equals(map.GetString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
+            species.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             species.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetString("AdmDateModified"), map.GetString("AdmTimeModified")),
+                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
 
-            species.AnimalType = map.GetString("SpeTaxonGroup");
-            species.AnimalSubType = map.GetString("SpeTaxonSubGroup");
+            species.AnimalType = map.GetEncodedString("SpeTaxonGroup");
+            species.AnimalSubType = map.GetEncodedString("SpeTaxonSubGroup");
 
-            species.Colours.AddRange(map.GetStrings("SpeColour_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Distinct());
+            species.Colours.AddRange(map.GetEncodedStrings("SpeColour_tab").Distinct());
 
-            species.MaximumSize = string.Format("{0} {1}", map.GetString("SpeMaximumSize"), map.GetString("SpeUnit")).Trim();
+            species.MaximumSize = string.Format("{0} {1}", map.GetEncodedString("SpeMaximumSize"), map.GetEncodedString("SpeUnit")).Trim();
 
-            species.Habitats = map.GetStrings("SpeHabitat_tab") ?? new string[] { };
-            species.WhereToLook = map.GetStrings("SpeWhereToLook_tab") ?? new string[] { };
-            species.WhenActive = map.GetStrings("SpeWhenActive_tab") ?? new string[] { };
-            species.NationalParks = map.GetStrings("SpeNationalParks_tab") ?? new string[] { };
+            species.Habitats = map.GetEncodedStrings("SpeHabitat_tab");
+            species.WhereToLook = map.GetEncodedStrings("SpeWhereToLook_tab");
+            species.WhenActive = map.GetEncodedStrings("SpeWhenActive_tab");
+            species.NationalParks = map.GetEncodedStrings("SpeNationalParks_tab");
 
-            species.Diet = map.GetString("SpeDiet");
-            species.DietCategories = map.GetStrings("SpeDietCategories_tab") ?? new string[] { };
+            species.Diet = map.GetEncodedString("SpeDiet");
+            species.DietCategories = map.GetEncodedStrings("SpeDietCategories_tab");
 
-            species.FastFact = map.GetString("SpeFastFact");
-            species.Habitat = map.GetString("SpeHabitatNotes");
-            species.Distribution = map.GetString("SpeDistribution");
-            species.Biology = map.GetString("SpeBiology");
-            species.GeneralDescription = map.GetString("SpeIdentifyingCharacters");
-            species.BriefId = map.GetString("SpeBriefID");
-            species.Hazards = map.GetString("SpeHazards");
-            species.Endemicity = map.GetString("SpeEndemicity");
-            species.Commercial = map.GetString("SpeCommercialSpecies");
+            species.FastFact = map.GetEncodedString("SpeFastFact");
+            species.Habitat = map.GetEncodedString("SpeHabitatNotes");
+            species.Distribution = map.GetEncodedString("SpeDistribution");
+            species.Biology = map.GetEncodedString("SpeBiology");
+            species.GeneralDescription = map.GetEncodedString("SpeIdentifyingCharacters");
+            species.BriefId = map.GetEncodedString("SpeBriefID");
+            species.Hazards = map.GetEncodedString("SpeHazards");
+            species.Endemicity = map.GetEncodedString("SpeEndemicity");
+            species.Commercial = map.GetEncodedString("SpeCommercialSpecies");
 
             // Get Conservation Status
             foreach (var conservationMap in map.GetMaps("conservation"))
             {
-                var authority = conservationMap.GetString("SpeConservationList_tab");
-                var status = conservationMap.GetString("SpeStatus_tab");
+                var authority = conservationMap.GetEncodedString("SpeConservationList_tab");
+                var status = conservationMap.GetEncodedString("SpeStatus_tab");
 
                 species.ConservationStatuses.Add(string.Format("{0} {1}", authority, status));
             }
 
-            species.ScientificDiagnosis = map.GetString("SpeScientificDiagnosis");
+            species.ScientificDiagnosis = map.GetEncodedString("SpeScientificDiagnosis");
 
             // Animal specific fields (spider/butterflies) 
-            species.Web = map.GetString("SpeWeb");
-            species.Plants = map.GetStrings("SpePlant_tab") ?? new string[] { };
-            species.FlightStart = map.GetString("SpeFlightStart");
-            species.FlightEnd = map.GetString("SpeFlightEnd");
-            species.Depths = map.GetStrings("SpeDepth_tab") ?? new string[] { };
-            species.WaterColumnLocations = map.GetStrings("SpeWaterColumnLocation_tab") ?? new string[] { };
+            species.Web = map.GetEncodedString("SpeWeb");
+            species.Plants = map.GetEncodedStrings("SpePlant_tab");
+            species.FlightStart = map.GetEncodedString("SpeFlightStart");
+            species.FlightEnd = map.GetEncodedString("SpeFlightEnd");
+            species.Depths = map.GetEncodedStrings("SpeDepth_tab");
+            species.WaterColumnLocations = map.GetEncodedStrings("SpeWaterColumnLocation_tab");
 
             // Taxonomy
             var taxonomyMap = map.GetMaps("taxa").FirstOrDefault();
@@ -170,12 +171,12 @@ namespace CollectionsOnline.Import.Factories
             // Relationships          
 
             // Related items/specimens (directly related)
-            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetString("irn"))))
+            foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    species.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetString("irn")));
-                if (relatedItemSpecimen.GetStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    species.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                    species.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                    species.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
             }
 
             // Authors
@@ -183,8 +184,8 @@ namespace CollectionsOnline.Import.Factories
                 .Where(x => x != null)
                 .Select(x => new Author
                 {
-                    Name = x.GetString("NamFullName"),
-                    Biography = x.GetString("BioLabel"),
+                    Name = x.GetEncodedString("NamFullName"),
+                    Biography = x.GetEncodedString("BioLabel"),
                     ProfileImage = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault()) as ImageMedia
                 }).ToList();
 
@@ -202,7 +203,7 @@ namespace CollectionsOnline.Import.Factories
                 species.Summary = species.Biology;
 
             stopwatch.Stop();
-            _log.Trace("Completed species creation for narrative record with irn {0}, elapsed time {1} ms", map.GetString("irn"), stopwatch.ElapsedMilliseconds);
+            _log.Trace("Completed species creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
             
             return species;
         }
