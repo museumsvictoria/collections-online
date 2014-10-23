@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using CollectionsOnline.Core.Models;
 using ImageProcessor;
 using ImageProcessor.Imaging;
@@ -16,17 +18,86 @@ namespace CollectionsOnline.Import.Factories
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly Module _module;
 
+        private IList<ImageMediaJob> imageMediaJobs;
+
         public ImageMediaFactory(Session session)
         {
             _module = new Module("emultimedia", session);
+
+            // Build a list the various image conversions used in the application
+            imageMediaJobs = new List<ImageMediaJob>
+            {
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Original,
+                    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
+                    Quality = 90
+                },
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Thumbnail,
+                    ResizeLayer = new ResizeLayer(new Size(350, 350)),
+                    BackgroundColor = Color.White,
+                    Quality = 60
+                },
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Small,
+                    ResizeLayer = new ResizeLayer(new Size(500, 500), ResizeMode.Max),
+                    Quality = 70
+                },
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Medium,
+                    ResizeLayer = new ResizeLayer(new Size(800, 800), ResizeMode.Max),
+                    Quality = 70
+                },
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Medium,
+                    ResizeLayer = new ResizeLayer(new Size(1200, 1200), ResizeMode.Max),
+                    Quality = 70
+                }
+            };
         }
 
         public bool Make(ref ImageMedia imageMedia)
         {
+            var stopwatch = Stopwatch.StartNew();
+            var imageMediaIrn = imageMedia.Irn;
+
             try
             {
-                var stopwatch = Stopwatch.StartNew();
+                // Dont fetch mmr if we find existing files matching all image media jobs
+                if (imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, x.FileDerivativeType))))
+                {
+                    foreach (var imageMediaJob in imageMediaJobs)
+                    {
+                        using (var imageFactory = new ImageFactory())
+                        {
+                            var destPath = PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
+                            var uriPath = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
 
+                            imageFactory.Load(destPath);
+
+                            // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
+                            typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
+                                .SetValue(imageMedia, new ImageMediaFile
+                                {
+                                    Uri = uriPath,
+                                    Width = imageFactory.Image.Width,
+                                    Height = imageFactory.Image.Height
+                                });
+                        }
+                    }
+
+                    stopwatch.Stop();
+                    _log.Trace("Loaded existing media resources in {0} ms", stopwatch.ElapsedMilliseconds);
+
+                    return true;
+                }
+
+                // Fetch MMR as we were not able to find local files
                 _module.FindKey(imageMedia.Irn);
                 var result = _module.Fetch("start", 0, -1, new[] { "resource" }).Rows[0];
 
@@ -39,99 +110,51 @@ namespace CollectionsOnline.Import.Factories
 
                 using (var imageFactory = new ImageFactory())
                 {
-                    
                     imageFactory
                         .Load(fileStream);
 
                     stopwatch.Stop();
-                    _log.Trace("Loaded media resource FileStream in {0} ms ({1} kbytes, {2} width, {3} height)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"), imageFactory.Image.Width, imageFactory.Image.Height);
+                    _log.Trace("Loaded media resource FileStream in {0} ms ({1} kbytes, {2} width, {3} height)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"), imageFactory.Image.Width,
+                        imageFactory.Image.Height);
+
                     stopwatch.Reset();
                     stopwatch.Start();
 
-                    //// Original
-
-                    //// Perform a graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
-                    //if (imageFactory.Image.Width < 4000 || imageFactory.Image.Height < 4000)
-                    //    imageFactory.Brightness(0);
-
-                    //imageFactory
-                    //    .Format(new JpegFormat())
-                    //    .Resize(new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false))
-                    //    .Quality(90)
-                    //    .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "original"));
-
-                    //imageMedia.Original = new ImageMediaFile
-                    //{
-                    //    Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "original"),
-                    //    Width = imageFactory.Image.Width,
-                    //    Height = imageFactory.Image.Height
-                    //};
-
-                    // Thumbnail
-                    imageFactory
-                        .Reset()
-                        .Resize(new ResizeLayer(new Size(350, 350)))
-                        .Format(new JpegFormat())
-                        .Quality(60)
-                        .BackgroundColor(Color.White)
-                        .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "thumbnail"));
-
-                    imageMedia.Thumbnail = new ImageMediaFile
+                    foreach (var imageMediaJob in imageMediaJobs)
                     {
-                        Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "thumbnail"),
-                        Width = imageFactory.Image.Width,
-                        Height = imageFactory.Image.Height
-                    };
+                        imageFactory.Reset();
 
-                    //// Small
-                    //imageFactory
-                    //    .Reset()
-                    //    .Resize(new ResizeLayer(new Size(500, 500), ResizeMode.Max))
-                    //    .Format(new JpegFormat())
-                    //    .Quality(70)
-                    //    .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "small"));
+                        var destinationPath = PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
+                        var uriPath = PathFactory.MakeUriPath(imageMediaIrn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
 
-                    //imageMedia.Small = new ImageMediaFile
-                    //{
-                    //    Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "small"),
-                    //    Width = imageFactory.Image.Width,
-                    //    Height = imageFactory.Image.Height
-                    //};
+                        // Indirectly call graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
+                        if (imageMediaJob.ResizeLayer.Upscale == false && (imageFactory.Image.Width < imageMediaJob.ResizeLayer.Size.Width || imageFactory.Image.Height < imageMediaJob.ResizeLayer.Size.Height))
+                            imageFactory.Brightness(0);                        
 
-                    // Medium
-                    imageFactory
-                        .Reset()
-                        .Resize(new ResizeLayer(new Size(800, 800), ResizeMode.Max))
-                        .Format(new JpegFormat())
-                        .Quality(70)
-                        .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "medium"));
+                        imageFactory
+                            .Resize(imageMediaJob.ResizeLayer)
+                            .Format(new JpegFormat())
+                            .Quality(imageMediaJob.Quality);
 
-                    imageMedia.Medium = new ImageMediaFile
-                    {
-                        Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "medium"),
-                        Width = imageFactory.Image.Width,
-                        Height = imageFactory.Image.Height
-                    };
+                        if (imageMediaJob.BackgroundColor.HasValue)
+                            imageFactory.BackgroundColor(imageMediaJob.BackgroundColor.Value);
 
-                    //// Large
-                    //imageFactory
-                    //    .Reset()
-                    //    .Resize(new ResizeLayer(new Size(1200, 1200), ResizeMode.Max))
-                    //    .Format(new JpegFormat())
-                    //    .Quality(70)
-                    //    .Save(PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, "large"));
+                        imageFactory.Save(destinationPath);
 
-                    //imageMedia.Large = new ImageMediaFile
-                    //{
-                    //    Uri = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, "large"),
-                    //    Width = imageFactory.Image.Width,
-                    //    Height = imageFactory.Image.Height
-                    //};
-
-                    stopwatch.Stop();
-                    _log.Trace("Created all derivative image media in {0} ms", stopwatch.ElapsedMilliseconds);
+                        // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
+                        typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
+                            .SetValue(imageMedia, new ImageMediaFile
+                            {
+                                Uri = uriPath,
+                                Width = imageFactory.Image.Width,
+                                Height = imageFactory.Image.Height
+                            });
+                    }
                 }
-              
+
+                stopwatch.Stop();
+                _log.Trace("Created all derivative image media in {0} ms", stopwatch.ElapsedMilliseconds);
+
                 return true;
             }
             catch (Exception exception)
@@ -155,6 +178,17 @@ namespace CollectionsOnline.Import.Factories
             }
 
             return false;
+        }
+
+        private class ImageMediaJob
+        {
+            public FileDerivativeType FileDerivativeType { get; set; }
+
+            public ResizeLayer ResizeLayer { get; set; }
+
+            public int Quality { get; set; }
+
+            public Color? BackgroundColor { get; set; }
         }
     }
 }

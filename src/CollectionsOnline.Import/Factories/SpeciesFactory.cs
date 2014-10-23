@@ -136,7 +136,8 @@ namespace CollectionsOnline.Import.Factories
                 var authority = conservationMap.GetEncodedString("SpeConservationList_tab");
                 var status = conservationMap.GetEncodedString("SpeStatus_tab");
 
-                species.ConservationStatuses.Add(string.Format("{0} {1}", authority, status));
+                if(!string.IsNullOrWhiteSpace(authority) && !string.IsNullOrWhiteSpace(status))
+                    species.ConservationStatuses.Add(string.Format("{0} {1}", authority, status));
             }
 
             species.ScientificDiagnosis = map.GetEncodedString("SpeScientificDiagnosis");
