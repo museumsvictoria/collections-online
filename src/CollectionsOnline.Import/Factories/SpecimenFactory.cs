@@ -175,7 +175,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.Significance = map.GetEncodedString("SubHistoryTechSignificance");
 
             // Tags
-            specimen.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab").Select(x => _slugFactory.MakeSlug(x)));
+            specimen.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab"));
 
             // Collection plans
             specimen.CollectionPlans = map.GetEncodedStrings("SubThemes_tab");

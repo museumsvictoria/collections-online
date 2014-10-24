@@ -36,7 +36,7 @@ namespace CollectionsOnline.Import.Factories
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    ResizeLayer = new ResizeLayer(new Size(350, 350)),
+                    ResizeLayer = new ResizeLayer(new Size(350, 350), ResizeMode.Max),
                     BackgroundColor = Color.White,
                     Quality = 60
                 },
@@ -54,7 +54,7 @@ namespace CollectionsOnline.Import.Factories
                 },
                 new ImageMediaJob
                 {
-                    FileDerivativeType = FileDerivativeType.Medium,
+                    FileDerivativeType = FileDerivativeType.Large,
                     ResizeLayer = new ResizeLayer(new Size(1200, 1200), ResizeMode.Max),
                     Quality = 70
                 }

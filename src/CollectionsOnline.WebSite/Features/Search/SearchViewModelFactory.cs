@@ -5,6 +5,7 @@ using System.Web;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Utilities;
+using Humanizer;
 using Nancy;
 using Raven.Abstractions.Data;
 
@@ -29,7 +30,7 @@ namespace CollectionsOnline.WebSite.Features.Search
             // Build facets
             foreach (var facet in facets.Results)
             {
-                var facetViewModel = new FacetViewModel { Name = facet.Key };
+                var facetViewModel = new FacetViewModel { Name = facet.Key.Humanize() };
 
                 foreach (var facetValue in facet.Value.Values)
                 {
@@ -43,15 +44,15 @@ namespace CollectionsOnline.WebSite.Features.Search
                         var facetValueViewModel = new FacetValueViewModel
                         {
                             Facet = facet.Key,
-                            Name = facetValue.Range,
+                            Name = facetValue.Range.Humanize(),
                             Hits = facetValue.Hits
                         };
 
-                        if (facetValues != null && facetValues.Contains(facetValue.Range))
+                        if (facetValues != null && facetValues.Contains(facetValue.Range, StringComparison.OrdinalIgnoreCase))
                         {
                             facetValueQueryString.Remove(facet.Key.ToLower());
 
-                            foreach (var value in facetValues.Where(x => x != facetValue.Range))
+                            foreach (var value in facetValues.Where(x => !string.Equals(x, facetValue.Range, StringComparison.OrdinalIgnoreCase)))
                             {
                                 facetValueQueryString.Add(facet.Key.ToLower(), value);
                             }
@@ -348,7 +349,7 @@ namespace CollectionsOnline.WebSite.Features.Search
             {
                 // Trim summary to fit
                 if (result.Summary != null)
-                    result.Summary = result.Summary.Truncate(Core.Config.Constants.SummaryMaxChars);
+                    result.Summary = StringExtensions.Truncate(result.Summary, Core.Config.Constants.SummaryMaxChars);
 
                 searchViewModel.Results.Add(result);
             }

@@ -48,6 +48,15 @@ namespace CollectionsOnline.Core.Extensions
             return input.IndexOf(valueToCheck, comparisonType) >= 0;
         }
 
+        public static bool Contains(this IEnumerable<string> source, string value, StringComparison comparisonType)
+        {
+            var collection = source as ICollection<string>;
+            if (collection == null || !collection.Any())
+                return false;
+
+            return source.Any(element => element.Contains(value, comparisonType));
+        }
+
         public static string Remove(this string input, IEnumerable<string> values)
         {
             if (values != null && !string.IsNullOrWhiteSpace(input))

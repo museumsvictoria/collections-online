@@ -23,8 +23,6 @@
 
         public string SpeciesType { get; set; }
 
-        public string SpeciesSubType { get; set; }
-
         public string SpeciesEndemicity { get; set; }
 
         public string SpecimenScientificGroup { get; set; }

@@ -184,12 +184,12 @@
                         @if (Model.Specimen.DateVisitedFrom.HasValue)
                         {
                             <dt>Date Visited From</dt>
-                            <dd>@Model.Specimen.DateVisitedFrom.Value</dd>
+                            <dd>@Model.Specimen.DateVisitedFrom.Value.ToString(Model.Specimen.DateVisitedFrom.Value == Model.Specimen.DateVisitedFrom.Value.Date ? "d" : "g")</dd>
                         }
                         @if (Model.Specimen.DateVisitedTo.HasValue)
                         {
                             <dt>Date Visited To</dt>
-                            <dd>@Model.Specimen.DateVisitedTo.Value</dd>
+                            <dd>@Model.Specimen.DateVisitedTo.Value.ToString(Model.Specimen.DateVisitedTo.Value == Model.Specimen.DateVisitedTo.Value.Date ? "d" : "g")</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.DepthTo))
                         {

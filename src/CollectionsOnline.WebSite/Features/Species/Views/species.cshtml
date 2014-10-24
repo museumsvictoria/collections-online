@@ -72,7 +72,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Species.AnimalSubType))
                         {
                             <dt>Animal SubType</dt>
-                            <dd><a href="/search?speciessubtype=@HttpUtility.UrlEncode(Model.Species.AnimalSubType.ToLower())">@Model.Species.AnimalSubType</a></dd>
+                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Species.AnimalSubType)">@Model.Species.AnimalSubType</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.FastFact))
                         {

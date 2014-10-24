@@ -243,7 +243,7 @@ namespace CollectionsOnline.Import.Factories
             item.Associations = _associationFactory.Make(map.GetMaps("associations"));
 
             // Tags
-            item.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab").Select(x => _slugFactory.MakeSlug(x)));
+            item.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab"));
 
             item.Significance = map.GetEncodedString("SubHistoryTechSignificance");
             item.ModelScale = map.GetEncodedString("DimModelScale");
@@ -420,7 +420,7 @@ namespace CollectionsOnline.Import.Factories
             item.IndigenousCulturesMedium = map.GetEncodedStrings("DesObjectMedium_tab").Concatenate(", ");
             item.IndigenousCulturesDescription = map.GetEncodedString("DesObjectDescription");
 
-            item.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab").Select(x => _slugFactory.MakeSlug(x)));
+            item.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab"));
 
             item.IndigenousCulturesPhotographer = _partiesNameFactory.Make(map.GetMap("icphotographer"));
             item.IndigenousCulturesAuthor = _partiesNameFactory.Make(map.GetMap("icauthor"));

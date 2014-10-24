@@ -93,11 +93,6 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("SpeciesType", searchInputModel.SpeciesType);
                     facetQuery = facetQuery.AndAlso().WhereEquals("SpeciesType", searchInputModel.SpeciesType);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.SpeciesSubType))
-                {
-                    query = query.AndAlso().WhereEquals("SpeciesSubType", searchInputModel.SpeciesSubType);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("SpeciesSubType", searchInputModel.SpeciesSubType);
-                }
                 if (!string.IsNullOrWhiteSpace(searchInputModel.SpeciesEndemicity))
                 {
                     query = query.AndAlso().WhereEquals("SpeciesEndemicity", searchInputModel.SpeciesEndemicity);

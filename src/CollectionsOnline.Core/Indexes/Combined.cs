@@ -40,7 +40,6 @@ namespace CollectionsOnline.Core.Indexes
                     Discipline = item.Discipline,                    
                     ItemType = item.Type,
                     SpeciesType = (string)null,
-                    SpeciesSubType = (string)null,
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = (string)null,
                     ArticleTypes = new object[] { },
@@ -95,7 +94,7 @@ namespace CollectionsOnline.Core.Indexes
                     TypeStatus = (string)null,
                     GeoTypes = new object[] { },
                     MuseumLocations = new object[] { item.MuseumLocation.Gallery, item.MuseumLocation.Venue },
-                    Articles = item.RelatedArticleIds,
+                    Articles = LoadDocument<Article>(item.RelatedArticleIds).Select(x => x.Title),
                     Species = new object[] { }
                 });
 
@@ -130,13 +129,12 @@ namespace CollectionsOnline.Core.Indexes
                     Discipline = (string) null,
                     ItemType = (string) null,
                     SpeciesType = species.AnimalType,
-                    SpeciesSubType = species.AnimalSubType,
                     SpeciesEndemicity = species.Endemicity,
                     SpecimenScientificGroup = (string) null,
                     ArticleTypes = new object[] { },
 
                     // Term fields
-                    Keywords = new object[] { species.ConservationStatuses },
+                    Keywords = new object[] { species.ConservationStatuses, species.AnimalSubType },
                     Localities = new object[] { species.NationalParks },
                     Collections = new object[] { },
                     Dates = new object[] {},
@@ -188,7 +186,6 @@ namespace CollectionsOnline.Core.Indexes
                     Discipline = specimen.Discipline,                    
                     ItemType = specimen.Type,
                     SpeciesType = (string) null,
-                    SpeciesSubType = (string) null,
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     ArticleTypes = new object[] { },
@@ -230,7 +227,7 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.MeteoritesGroup,
                         specimen.TektitesClassification },
                     MuseumLocations = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
-                    Articles = specimen.RelatedArticleIds,
+                    Articles = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title),                    
                     Species = specimen.RelatedSpeciesIds
                 });
 
@@ -265,7 +262,6 @@ namespace CollectionsOnline.Core.Indexes
                     Discipline = (string) null,                    
                     ItemType = (string) null,
                     SpeciesType = (string) null,
-                    SpeciesSubType = (string) null,
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = (string) null,
                     ArticleTypes = article.Types,
@@ -300,25 +296,6 @@ namespace CollectionsOnline.Core.Indexes
 
             Index(x => x.MediaIrns, FieldIndexing.NotAnalyzed);
             Index(x => x.TaxonomyIrn, FieldIndexing.NotAnalyzed);
-            Index(x => x.Keywords, FieldIndexing.NotAnalyzed);
-            Index(x => x.Localities, FieldIndexing.NotAnalyzed);
-            Index(x => x.Collections, FieldIndexing.NotAnalyzed);
-            Index(x => x.Dates, FieldIndexing.NotAnalyzed);
-            Index(x => x.CulturalGroups, FieldIndexing.NotAnalyzed);
-            Index(x => x.Classifications, FieldIndexing.NotAnalyzed);
-            Index(x => x.Names, FieldIndexing.NotAnalyzed);
-            Index(x => x.Technique, FieldIndexing.NotAnalyzed);
-            Index(x => x.Denominations, FieldIndexing.NotAnalyzed);
-            Index(x => x.Habitats, FieldIndexing.NotAnalyzed);
-            Index(x => x.Phylum, FieldIndexing.NotAnalyzed);
-            Index(x => x.Class, FieldIndexing.NotAnalyzed);
-            Index(x => x.Order, FieldIndexing.NotAnalyzed);
-            Index(x => x.Family, FieldIndexing.NotAnalyzed);
-            Index(x => x.TypeStatus, FieldIndexing.NotAnalyzed);
-            Index(x => x.GeoTypes, FieldIndexing.NotAnalyzed);
-            Index(x => x.MuseumLocations, FieldIndexing.NotAnalyzed);
-            Index(x => x.Articles, FieldIndexing.NotAnalyzed);
-            Index(x => x.Species, FieldIndexing.NotAnalyzed);
 
             Store(x => x.Id, FieldStorage.Yes);
             Store(x => x.Name, FieldStorage.Yes);
@@ -328,7 +305,7 @@ namespace CollectionsOnline.Core.Indexes
             
             Sort(x => x.Quality, SortOptions.Int);
 
-            Analyzers.Add(x => x.Content, "SimpleAnalyzer");
+            Analyzers.Add(x => x.Content, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
 
             Suggestion(x => x.Content);
 
@@ -339,7 +316,6 @@ namespace CollectionsOnline.Core.Indexes
             TermVector(x => x.Discipline, FieldTermVector.Yes);
             TermVector(x => x.ItemType, FieldTermVector.Yes);
             TermVector(x => x.SpeciesType, FieldTermVector.Yes);
-            TermVector(x => x.SpeciesSubType, FieldTermVector.Yes);
             TermVector(x => x.SpeciesEndemicity, FieldTermVector.Yes);
             TermVector(x => x.SpecimenScientificGroup, FieldTermVector.Yes);
             TermVector(x => x.ArticleTypes, FieldTermVector.Yes);
