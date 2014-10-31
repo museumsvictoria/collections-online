@@ -76,6 +76,11 @@
                             <dt>Type Status</dt>
                             <dd>@Model.Specimen.TypeStatus</dd>
                         }
+                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificName))
+                        {
+                            <dt>Scientific Name</dt>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.ScientificName)">@Model.Specimen.ScientificName</a></dd>
+                        }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Author))
                         {
                             <dt>Scientific Name Author</dt>
@@ -452,81 +457,81 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Kingdom))
                         {
                             <dt>Kingdom</dt>
-                            <dd>@Model.Specimen.Taxonomy.Kingdom</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Kingdom)">@Model.Specimen.Taxonomy.Kingdom</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Phylum))
                         {
                             <dt>Phylum</dt>
-                            <dd><a href="/search?phylum=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Phylum)">@Model.Specimen.Taxonomy.Phylum</a></dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Phylum)">@Model.Specimen.Taxonomy.Phylum</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subphylum))
                         {
                             <dt>Subphylum</dt>
-                            <dd>@Model.Specimen.Taxonomy.Subphylum</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subphylum)">@Model.Specimen.Taxonomy.Subphylum</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Superclass))
                         {
                             <dt>Superclass</dt>
-                            <dd>@Model.Specimen.Taxonomy.Superclass</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Superclass)">@Model.Specimen.Taxonomy.Superclass</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Class))
                         {
                             <dt>Class</dt>
-                            <dd><a href="/search?class=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Class)">@Model.Specimen.Taxonomy.Class</a></dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Class)">@Model.Specimen.Taxonomy.Class</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subclass))
                         {
                             <dt>Subclass</dt>
-                            <dd>@Model.Specimen.Taxonomy.Subclass</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subclass)">@Model.Specimen.Taxonomy.Subclass</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Superorder))
                         {
                             <dt>Superorder</dt>
-                            <dd>@Model.Specimen.Taxonomy.Superorder</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Superorder)">@Model.Specimen.Taxonomy.Superorder</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Order))
                         {
                             <dt>Order</dt>
-                            <dd><a href="/search?order=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Order)">@Model.Specimen.Taxonomy.Order</a></dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Order)">@Model.Specimen.Taxonomy.Order</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Suborder))
                         {
                             <dt>Suborder</dt>
-                            <dd>@Model.Specimen.Taxonomy.Suborder</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Suborder)">@Model.Specimen.Taxonomy.Suborder</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Infraorder))
                         {
                             <dt>Infraorder</dt>
-                            <dd>@Model.Specimen.Taxonomy.Infraorder</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Infraorder)">@Model.Specimen.Taxonomy.Infraorder</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Superfamily))
                         {
                             <dt>Superfamily</dt>
-                            <dd>@Model.Specimen.Taxonomy.Superfamily</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Superfamily)">@Model.Specimen.Taxonomy.Superfamily</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Family))
                         {
                             <dt>Family</dt>
-                            <dd><a href="/search?family=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Family)">@Model.Specimen.Taxonomy.Family</a></dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Family)">@Model.Specimen.Taxonomy.Family</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subfamily))
                         {
                             <dt>Subfamily</dt>
-                            <dd>@Model.Specimen.Taxonomy.Subfamily</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subfamily)">@Model.Specimen.Taxonomy.Subfamily</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Genus))
                         {
                             <dt>Genus</dt>
-                            <dd>@Model.Specimen.Taxonomy.Genus</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Genus)">@Model.Specimen.Taxonomy.Genus</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subgenus))
                         {
                             <dt>Subgenus</dt>
-                            <dd>@Model.Specimen.Taxonomy.Subgenus</dd>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subgenus)">@Model.Specimen.Taxonomy.Subgenus</a></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Species))
                         {
-                            <dt>SpeciesName</dt>
+                            <dt>Species Name</dt>
                             <dd>@Model.Specimen.Taxonomy.Species</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subspecies))
@@ -554,10 +559,7 @@
                         @foreach (var relatedItem in Model.RelatedItems)
                         {
                             <a href="/@relatedItem.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
-                                {
-                                    <img src="@relatedItem.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedItem.Title</span>
                             </a>
                             <br/>
@@ -565,10 +567,7 @@
                         @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                         {
                             <a href="/@relatedSpecimen.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
-                                {
-                                    <img src="@relatedSpecimen.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedSpecimen.Title</span>
                             </a>
                             <br/>
@@ -580,7 +579,7 @@
                 {
                     <div>
                         <h4>
-                            <a href="/search?taxonomy=@Model.Specimen.Taxonomy.Irn">See all related species/specimens/items (@Model.RelatedSpeciesSpecimenItemCount)</a>
+                            <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Specimen.Taxonomy.TaxonName)">See all the things related to this specimen (@Model.RelatedSpeciesSpecimenItemCount)</a>
                         </h4>
                     </div>
                 }
@@ -592,10 +591,7 @@
                         @foreach (var relatedArticle in Model.RelatedArticles)
                         {
                             <a href="/@relatedArticle.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
-                                {
-                                    <img src="@relatedArticle.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri) ? "http://placehold.it/110" : relatedArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedArticle.Title</span>
                             </a>
                             <br/>
@@ -610,10 +606,7 @@
                         @foreach (var relatedSpecies in Model.RelatedSpecies)
                         {
                             <a href="/@relatedSpecies.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedSpecies.ThumbnailUri))
-                                {
-                                    <img src="@relatedSpecies.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedSpecies.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecies.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedSpecies.Title</span>
                             </a>
                             <br/>

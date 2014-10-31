@@ -7,6 +7,7 @@ using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Utilities;
 using Humanizer;
 using Nancy;
+using NLog;
 using Raven.Abstractions.Data;
 
 namespace CollectionsOnline.WebSite.Features.Search
@@ -44,7 +45,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                         var facetValueViewModel = new FacetValueViewModel
                         {
                             Facet = facet.Key,
-                            Name = facetValue.Range.Humanize(),
+                            Name = facetValue.Range.Humanize(LetterCasing.Title),
                             Hits = facetValue.Hits
                         };
 
@@ -212,55 +213,16 @@ namespace CollectionsOnline.WebSite.Features.Search
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Phylum))
+            if (!string.IsNullOrWhiteSpace(searchInputModel.Taxon))
             {
                 var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
 
-                termQueryString.Remove("phylum");
+                termQueryString.Remove("taxon");
 
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
-                    Name = searchInputModel.Phylum,
-                    Term = "Phylum",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
-                });
-            }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Class))
-            {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
-
-                termQueryString.Remove("class");
-
-                searchViewModel.ActiveTerms.Add(new TermViewModel
-                {
-                    Name = searchInputModel.Class,
-                    Term = "Class",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
-                });
-            }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Order))
-            {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
-
-                termQueryString.Remove("order");
-
-                searchViewModel.ActiveTerms.Add(new TermViewModel
-                {
-                    Name = searchInputModel.Order,
-                    Term = "Order",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
-                });
-            }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Family))
-            {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
-
-                termQueryString.Remove("family");
-
-                searchViewModel.ActiveTerms.Add(new TermViewModel
-                {
-                    Name = searchInputModel.Family,
-                    Term = "Family",
+                    Name = searchInputModel.Taxon,
+                    Term = "Taxon",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
@@ -312,34 +274,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                 searchViewModel.ActiveTerms.Add(new TermViewModel
                 {
                     Name = searchInputModel.Article,
-                    Term = "article",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
-                });
-            }
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Species))
-            {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
-
-                termQueryString.Remove("species");
-
-                searchViewModel.ActiveTerms.Add(new TermViewModel
-                {
-                    Name = searchInputModel.Species,
-                    Term = "Species",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
-                });
-            }
-            //TODO: temp term query
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Taxonomy))
-            {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
-
-                termQueryString.Remove("taxonomy");
-
-                searchViewModel.ActiveTerms.Add(new TermViewModel
-                {
-                    Name = searchInputModel.Taxonomy,
-                    Term = "Taxonomy",
+                    Term = "Article",
                     Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
                 });
             }
@@ -383,7 +318,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                     Url = String.Concat(baseUrl, "?query=", HttpUtility.UrlEncode(suggestion))
                 });
             }
-
+            
             return searchViewModel;
         }
     }

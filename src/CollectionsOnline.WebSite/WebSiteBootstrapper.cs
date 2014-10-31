@@ -77,7 +77,7 @@ namespace CollectionsOnline.WebSite
             pipelines.AfterRequest += ctx =>
             {
                 MiniProfiler.Stop();
-                _log.Trace(MiniProfiler.Current.RenderPlainText);
+                _log.Trace(MiniProfiler.Current.RenderPlainText().Replace(Environment.NewLine, ""));
             };
         }
     }

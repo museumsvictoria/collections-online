@@ -68,10 +68,7 @@
                         @if (Model.ParentArticle != null)
                         {
                             <a href="/@Model.ParentArticle.Id">
-                                @if (!string.IsNullOrWhiteSpace(Model.ParentArticle.ThumbnailUri))
-                                {
-                                    <img src="@Model.ParentArticle.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(Model.ParentArticle.ThumbnailUri) ? "http://placehold.it/110" : Model.ParentArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@Model.ParentArticle.Title</span>
                             </a>
                             <br/>
@@ -79,10 +76,7 @@
                         @foreach (var childArticle in @Model.ChildArticles)
                         {
                             <a href="/@childArticle.Id">
-                                @if (!string.IsNullOrWhiteSpace(childArticle.ThumbnailUri))
-                                {
-                                    <img src="@childArticle.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(childArticle.ThumbnailUri) ? "http://placehold.it/110" : childArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@childArticle.Title</span>
                             </a>
                             <br/>
@@ -97,10 +91,7 @@
                         @foreach (var relatedArticle in Model.RelatedArticles)
                         {
                             <a href="/@relatedArticle.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
-                                {
-                                    <img src="@relatedArticle.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri) ? "http://placehold.it/110" : relatedArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedArticle.Title</span>
                             </a>
                             <br/>
@@ -115,10 +106,7 @@
                         @foreach (var relatedItem in Model.RelatedItems)
                         {
                             <a href="/@relatedItem.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
-                                {
-                                    <img src="@relatedItem.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedItem.Title</span>
                             </a>
                             <br/>
@@ -126,10 +114,7 @@
                         @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                         {
                             <a href="/@relatedSpecimen.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
-                                {
-                                    <img src="@relatedSpecimen.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedSpecimen.Title</span>
                             </a>
                             <br/>
@@ -141,7 +126,7 @@
                 {
                     <div>
                         <h4>
-                            <a href="/search?article=@Model.Article.Title">See all items/specimens (@Model.RelatedItemSpecimenCount) </a>
+                            <a href="/search?article=@HttpUtility.UrlEncode(@Model.Article.Title)">See all the things related to this article (@Model.RelatedItemSpecimenCount)</a>
                         </h4>
                     </div>
                 }

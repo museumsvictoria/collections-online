@@ -176,11 +176,11 @@ namespace CollectionsOnline.Import.Factories
                         "ArtPrimaryInscriptions",
                         "ArtSecondaryInscriptions",
                         "ArtTertiaryInscriptions",
-                        "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
+                        "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab],AdmPublishWebNoPassword)",
                         "RigText0",
                         "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
-                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])]",
-                        "relatedarticles=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
+                        "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeAccuracyNotes_tab,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab],relatedspecies=<enarratives:TaxTaxaRef_tab>.(irn,DetPurpose_tab))]",
+                        "relatedarticlespecies=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
                         "relatedpartyarticles=AssAssociationNameRef_tab.(relatedarticles=<enarratives:ParPartiesRef_tab>.(irn,DetPurpose_tab))",
                         "relatedsitearticles=ArcSiteNameRef.(relatedarticles=<enarratives:SitSitesRef_tab>.(irn,DetPurpose_tab))"
                     };
@@ -542,12 +542,20 @@ namespace CollectionsOnline.Import.Factories
                         item.Taxonomy.Subspecies,
                         item.Taxonomy.Author
                     }.Concatenate(" ");
+
+                    // Species profile Relationship
+                    var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
+                    item.RelatedSpeciesIds.AddRange(relatedSpeciesMaps
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                        .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
                 }
             }
 
             // Acquisition information
+            // TODO: make factory method as code duplicated in SpecimenFactory
             var accessionMap = map.GetMap("accession");
-            if (accessionMap != null)
+            if (accessionMap != null &&
+                string.Equals(accessionMap.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase))
             {
                 var method = accessionMap.GetEncodedString("AcqAcquisitionMethod");
 
@@ -597,13 +605,17 @@ namespace CollectionsOnline.Import.Factories
                     item.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
             }
 
-            // Related articles (direct attached)
-            var relatedArticlesMap = map.GetMaps("relatedarticles");
-            if (relatedArticlesMap != null)
+            // Related articles/species (direct attached)
+            var relatedArticleSpeciesMap = map.GetMaps("relatedarticlespecies");
+            if (relatedArticleSpeciesMap != null)
             {
-                item.RelatedArticleIds.AddRangeUnique(relatedArticlesMap
+                item.RelatedArticleIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                     .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+
+                item.RelatedSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
+                    .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                    .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
             }
 
             // Related articles (via party relationship)

@@ -64,13 +64,7 @@
 
         public object[] Habitats { get; set; }
 
-        public string Phylum { get; set; }
-
-        public string Class { get; set; }
-
-        public string Order { get; set; }
-
-        public string Family { get; set; }
+        public object[] Taxon { get; set; }
 
         public string TypeStatus { get; set; }
 
@@ -79,7 +73,5 @@
         public object[] MuseumLocations { get; set; }
 
         public object[] Articles { get; set; }
-
-        public object[] Species { get; set; }
     }
 }

@@ -222,3 +222,4 @@ packages/
 logs/
 **/content/media/
 git-update-index-hide-files.ps1
+git-update-index-show-files.ps1

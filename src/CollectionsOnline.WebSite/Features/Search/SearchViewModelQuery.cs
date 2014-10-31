@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using CollectionsOnline.Core.Indexes;
 using Nancy;
+using NLog;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Constants = CollectionsOnline.Core.Config.Constants;
@@ -163,25 +164,10 @@ namespace CollectionsOnline.WebSite.Features.Search
                     query = query.AndAlso().WhereEquals("Habitats", searchInputModel.Habitat);
                     facetQuery = facetQuery.AndAlso().WhereEquals("Habitats", searchInputModel.Habitat);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Phylum))
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Taxon))
                 {
-                    query = query.AndAlso().WhereEquals("Phylum", searchInputModel.Phylum);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Phylum", searchInputModel.Phylum);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Class))
-                {
-                    query = query.AndAlso().WhereEquals("Class", searchInputModel.Class);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Class", searchInputModel.Class);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Order))
-                {
-                    query = query.AndAlso().WhereEquals("Order", searchInputModel.Order);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Order", searchInputModel.Order);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Family))
-                {
-                    query = query.AndAlso().WhereEquals("Family", searchInputModel.Family);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Family", searchInputModel.Family);
+                    query = query.AndAlso().WhereEquals("Taxon", searchInputModel.Taxon);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("Taxon", searchInputModel.Taxon);
                 }
                 if (!string.IsNullOrWhiteSpace(searchInputModel.TypeStatus))
                 {
@@ -202,18 +188,6 @@ namespace CollectionsOnline.WebSite.Features.Search
                 {
                     query = query.AndAlso().WhereEquals("Articles", searchInputModel.Article);
                     facetQuery = facetQuery.AndAlso().WhereEquals("Articles", searchInputModel.Article);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Species))
-                {
-                    query = query.AndAlso().WhereEquals("Species", searchInputModel.Species);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Species", searchInputModel.Species);
-                }
-
-                //TODO: temp term query
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Taxonomy))
-                {
-                    query = query.AndAlso().WhereEquals("TaxonomyIrn", searchInputModel.Taxonomy);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("TaxonomyIrn", searchInputModel.Taxonomy);
                 }
 
                 RavenQueryStatistics statistics;
@@ -248,7 +222,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                             Distance = StringDistanceTypes.JaroWinkler,
                             Popularity = true,
                         }).Suggestions.ToList();
-                }
+                }                
 
                 return _searchViewModelFactory.MakeViewModel(
                     results,

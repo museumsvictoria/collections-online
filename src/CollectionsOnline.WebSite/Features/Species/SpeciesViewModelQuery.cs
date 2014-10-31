@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Models;
 using Raven.Client;
-using Raven.Client.Linq;
 
 namespace CollectionsOnline.WebSite.Features.Species
 {
@@ -20,11 +18,18 @@ namespace CollectionsOnline.WebSite.Features.Species
         {
             var result = _documentSession.Load<SpeciesViewTransformer, SpeciesViewTransformerResult>(speciesId);
 
-            var query = _documentSession.Advanced
-                .LuceneQuery<CombinedResult, Combined>()
-                .WhereEquals("Species", speciesId);
+            if (result.Species.Taxonomy != null)
+            {
+                var query = _documentSession.Advanced
+                    .LuceneQuery<CombinedResult, Combined>()
+                    .WhereEquals("Taxon", result.Species.Taxonomy.TaxonName);
 
-            result.RelatedSpecimenCount = query.QueryResult.TotalResults;
+                // Dont allow a link to search page if the current species is the only result
+                if (query.SelectFields<CombinedResult>("Id").Select(x => x.Id).Except(new[] {speciesId}).Any())
+                {
+                    result.RelatedSpecimenCount = query.QueryResult.TotalResults;
+                }
+            }
 
             return result;
         }

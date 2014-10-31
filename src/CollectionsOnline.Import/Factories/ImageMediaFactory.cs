@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -36,7 +37,7 @@ namespace CollectionsOnline.Import.Factories
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    ResizeLayer = new ResizeLayer(new Size(350, 350), ResizeMode.Max),
+                    ResizeLayer = new ResizeLayer(new Size(350, 350)),
                     BackgroundColor = Color.White,
                     Quality = 60
                 },
@@ -68,33 +69,37 @@ namespace CollectionsOnline.Import.Factories
 
             try
             {
-                // Dont fetch mmr if we find existing files matching all image media jobs
-                if (imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, x.FileDerivativeType))))
+                // First check to see if we are not overwriting existing data, 
+                // then if we find existing files matching all of our image media jobs, use the files on disk instead
+                if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
                 {
-                    foreach (var imageMediaJob in imageMediaJobs)
+                    if (imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, x.FileDerivativeType))))
                     {
-                        using (var imageFactory = new ImageFactory())
+                        foreach (var imageMediaJob in imageMediaJobs)
                         {
-                            var destPath = PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
-                            var uriPath = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
+                            using (var imageFactory = new ImageFactory())
+                            {
+                                var destPath = PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
+                                var uriPath = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
 
-                            imageFactory.Load(destPath);
+                                imageFactory.Load(destPath);
 
-                            // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
-                            typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
-                                .SetValue(imageMedia, new ImageMediaFile
-                                {
-                                    Uri = uriPath,
-                                    Width = imageFactory.Image.Width,
-                                    Height = imageFactory.Image.Height
-                                });
+                                // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
+                                typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
+                                    .SetValue(imageMedia, new ImageMediaFile
+                                    {
+                                        Uri = uriPath,
+                                        Width = imageFactory.Image.Width,
+                                        Height = imageFactory.Image.Height
+                                    });
+                            }
                         }
+
+                        stopwatch.Stop();
+                        _log.Trace("Loaded existing media resources in {0} ms", stopwatch.ElapsedMilliseconds);
+
+                        return true;
                     }
-
-                    stopwatch.Stop();
-                    _log.Trace("Loaded existing media resources in {0} ms", stopwatch.ElapsedMilliseconds);
-
-                    return true;
                 }
 
                 // Fetch MMR as we were not able to find local files

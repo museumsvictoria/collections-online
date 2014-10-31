@@ -58,6 +58,8 @@ namespace CollectionsOnline.WebSite.Features.Items
 
         public IList<RelatedDocumentViewModel> RelatedArticles { get; set; }
 
+        public int RelatedSpeciesSpecimenItemCount { get; set; }
+
         public ItemViewTransformerResult()
         {
             RelatedItems = new List<RelatedDocumentViewModel>();

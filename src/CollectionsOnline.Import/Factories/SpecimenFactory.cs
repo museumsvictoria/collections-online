@@ -86,7 +86,7 @@ namespace CollectionsOnline.Import.Factories
                         "relateditemspecimens=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
                         "attacheditemspecimens=ColPhysicallyAttachedToRef.(irn,MdaDataSets_tab)",
                         "parentitemspecimens=ColParentRecordRef.(irn,MdaDataSets_tab)",
-                        "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab])",
+                        "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab],AdmPublishWebNoPassword)",
                         "RigText0",
                         "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
                         "LocDateCollectedFrom",
@@ -184,8 +184,10 @@ namespace CollectionsOnline.Import.Factories
             specimen.Associations = _associationFactory.Make(map.GetMaps("associations"));
 
             // Acquisition information
+            // TODO: make factory method as code duplicated in ItemFactory
             var accessionMap = map.GetMap("accession");
-            if (accessionMap != null)
+            if (accessionMap != null &&
+                string.Equals(accessionMap.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase))
             {
                 var method = accessionMap.GetEncodedString("AcqAcquisitionMethod");
 

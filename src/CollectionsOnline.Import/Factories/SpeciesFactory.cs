@@ -154,22 +154,7 @@ namespace CollectionsOnline.Import.Factories
             var taxonomyMap = map.GetMaps("taxa").FirstOrDefault();
             species.Taxonomy = _taxonomyFactory.Make(taxonomyMap);
 
-            if (taxonomyMap != null)
-            {
-                // Scientific Name
-                species.ScientificName = new[]
-                {
-                    species.Taxonomy.Genus,
-                    string.IsNullOrWhiteSpace(species.Taxonomy.Subgenus)
-                        ? null
-                        : string.Format("({0})", species.Taxonomy.Subgenus),
-                    species.Taxonomy.Species,
-                    species.Taxonomy.Subspecies,
-                    species.Taxonomy.Author
-                }.Concatenate(" ");
-            }
-
-            // Relationships          
+            // Relationships
 
             // Related items/specimens (directly related)
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))

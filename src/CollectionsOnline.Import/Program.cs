@@ -59,10 +59,10 @@ namespace CollectionsOnline.Import
             kernel.Bind<Session>().ToProvider<NinjectImuSessionProvider>().InSingletonScope();
 
             // Bind Imports
-            kernel.Bind<IImport>().To<ImuImport<Item>>();
-            kernel.Bind<IImport>().To<ImuImport<Species>>();
-            kernel.Bind<IImport>().To<ImuImport<Specimen>>();
             kernel.Bind<IImport>().To<ImuImport<Article>>();
+            kernel.Bind<IImport>().To<ImuImport<Species>>();
+            kernel.Bind<IImport>().To<ImuImport<Item>>();
+            kernel.Bind<IImport>().To<ImuImport<Specimen>>();
 
             kernel.Bind<IGeocoder>().ToMethod(x => new GoogleGeocoder
             {
@@ -73,6 +73,11 @@ namespace CollectionsOnline.Import
             kernel.Bind(x => x
                 .FromAssemblyContaining(typeof(Program), typeof(Constants))
                 .SelectAllClasses()
+                .Excluding<MigrationImport>()
+                .Excluding<MediaUpdateImport>()
+                //.Excluding<RelationshipImport>()
+                //.Excluding<TaxonomyUpdateImport>()
+                .Excluding<GeocodeImport>()
                 .BindAllInterfaces());
         }
     }

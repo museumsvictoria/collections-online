@@ -25,7 +25,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string ImuSpeciesQueryString = "Website - Species profile";
 
-        public static string ImuSpecimenQueryString = "Website - Atlas of Living Australia";
+        public static string ImuSpecimenQueryString = "Collections Online - Natural Sciences";
 
         public static string ImuArticleQueryString = "Website - History & Technology Collections";
 

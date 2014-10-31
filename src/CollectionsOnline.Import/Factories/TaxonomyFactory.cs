@@ -60,6 +60,24 @@ namespace CollectionsOnline.Import.Factories
 
                 taxonomy.TaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
 
+                if (higherClassification.SkipWhile(x => x.Key != "Subgenus").All(x => string.IsNullOrWhiteSpace(x.Value)))
+                {
+                    if (!string.IsNullOrWhiteSpace(taxonomy.TaxonRank))
+                        taxonomy.TaxonName = higherClassification[taxonomy.TaxonRank];
+                }
+                else
+                {
+                    taxonomy.TaxonName = new[]
+                    {
+                        taxonomy.Genus,
+                        string.IsNullOrWhiteSpace(taxonomy.Subgenus)
+                            ? null
+                            : string.Format("({0})", taxonomy.Subgenus),
+                        taxonomy.Species,
+                        taxonomy.Subspecies
+                    }.Concatenate(" ");
+                }
+
                 var names = map.GetMaps("comname");
                 foreach (var name in names)
                 {

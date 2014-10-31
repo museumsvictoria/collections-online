@@ -75,6 +75,8 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedArticleIds { get; set; }
 
+        public IList<string> RelatedSpeciesIds { get; set; }
+
         public IList<Media> Media { get; set; }
 
         public string AcquisitionInformation { get; set; }

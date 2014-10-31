@@ -51,6 +51,10 @@ namespace CollectionsOnline.Core.Infrastructure
                 documentSession.Store(new CombinedFacets());
                 documentSession.SaveChanges();
             }
+            
+            // Force aggressive cache check 
+            // TODO: Re-assess whether this belongs here
+            documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
 
             return documentStore;
         }

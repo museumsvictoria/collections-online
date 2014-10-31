@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IMu;
@@ -29,7 +28,7 @@ namespace CollectionsOnline.Import.Extensions
         private static string EncodeString(string value)
         {
             if (!string.IsNullOrWhiteSpace(value))
-                return Encoding.GetEncoding("Windows-1252").GetString(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
+                return Encoding.GetEncoding("Windows-1252").GetString(Encoding.GetEncoding("ISO-8859-1").GetBytes(value)).Trim();
 
             return value;
         }

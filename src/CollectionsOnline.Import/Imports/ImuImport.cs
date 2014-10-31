@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
@@ -72,9 +74,30 @@ namespace CollectionsOnline.Import.Imports
 
                         if (results.Count == 0)
                             break;
+                        
+                        var irnResults = results.Rows.Select(x => long.Parse(x.GetString("irn"))).ToList();
 
-                        importStatus.CachedResult.AddRange(results.Rows.Select(x => long.Parse(x.GetString("irn"))));
+                        // First check to see if we are not overwriting existing data, 
+                        // then find any existing documents and remove them from our cached irn list so we only add new results
+                        if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingDocuments"]))
+                        {
+                            var existingIrnResults = new List<long>();
+                            using (var subDocumentSession = _documentStore.OpenSession())
+                            {
+                                existingIrnResults.AddRange(
+                                    subDocumentSession.Load<T>(
+                                        irnResults.Select(
+                                            x =>
+                                                string.Format("{0}/{1}", Inflector.Pluralize(typeof (T).Name).ToLower(),
+                                                    x)))
+                                        .Where(x => x != null)
+                                        .Select(x => long.Parse(x.Id.Substring(x.Id.IndexOf('/') + 1))));
+                            }
+                            irnResults = irnResults.Except(existingIrnResults).ToList();
+                        }
 
+                        importStatus.CachedResult.AddRange(irnResults);
+                        
                         cachedCurrentOffset += results.Count;
 
                         _log.Debug("{0} cache progress... {1}/{2}", typeof(T).Name, cachedCurrentOffset, hits);

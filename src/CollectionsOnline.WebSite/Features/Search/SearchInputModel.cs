@@ -50,13 +50,7 @@
 
         public string Habitat { get; set; }
 
-        public string Phylum { get; set; }
-
-        public string Class { get; set; }
-
-        public string Order { get; set; }
-
-        public string Family { get; set; }
+        public string Taxon { get; set; }
 
         public string TypeStatus { get; set; }
 
@@ -65,10 +59,5 @@
         public string MuseumLocation { get; set; }
 
         public string Article { get; set; }
-
-        public string Species { get; set; }
-
-        //TODO: temp term query
-        public string Taxonomy { get; set; }
     }
 }

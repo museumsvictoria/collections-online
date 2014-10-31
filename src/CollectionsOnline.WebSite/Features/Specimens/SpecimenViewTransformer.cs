@@ -39,7 +39,7 @@ namespace CollectionsOnline.WebSite.Features.Specimens
                         {
                             relatedSpecies.Id,
                             relatedSpecies.ThumbnailUri,
-                            Title = relatedSpecies.ScientificName ?? relatedSpecies.Taxonomy.CommonName
+                            Title = relatedSpecies.Taxonomy.CommonName ?? relatedSpecies.Taxonomy.TaxonName
                         },
                     RelatedArticles = from articleId in specimen.RelatedArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)

@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Models;
+﻿using CollectionsOnline.Core.Indexes;
 using Raven.Client;
-using Raven.Client.Linq;
 
 namespace CollectionsOnline.WebSite.Features.Articles
 {

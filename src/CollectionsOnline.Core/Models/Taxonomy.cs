@@ -51,6 +51,8 @@ namespace CollectionsOnline.Core.Models
 
         public string TaxonRank { get; set; }
 
+        public string TaxonName { get; set; }
+
         public string CommonName { get; set; }
 
         public IList<string> OtherCommonNames { get; set; }

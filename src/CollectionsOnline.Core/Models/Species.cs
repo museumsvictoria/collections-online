@@ -84,8 +84,6 @@ namespace CollectionsOnline.Core.Models
 
         public Taxonomy Taxonomy { get; set; }
 
-        public string ScientificName { get; set; }
-
         private void InitializeCollections()
         {
             Colours = new List<string>();

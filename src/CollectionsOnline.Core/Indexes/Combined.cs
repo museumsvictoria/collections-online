@@ -87,15 +87,28 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = item.ArcheologyTechnique,
                     Denominations = new object[] { item.NumismaticsDenomination, item.PhilatelyDenomination },
                     Habitats = new object[] { },
-                    Phylum = (string)null,
-                    Class = (string)null,
-                    Order = (string)null,
-                    Family = (string)null,
+                    Taxon = new object[] { item.ScientificName,
+                        item.Taxonomy.Kingdom,
+                        item.Taxonomy.Phylum,
+                        item.Taxonomy.Subphylum,
+                        item.Taxonomy.Superclass,
+                        item.Taxonomy.Class,
+                        item.Taxonomy.Subclass,
+                        item.Taxonomy.Superorder,
+                        item.Taxonomy.Order,
+                        item.Taxonomy.Suborder,
+                        item.Taxonomy.Infraorder,
+                        item.Taxonomy.Superfamily,
+                        item.Taxonomy.Family,
+                        item.Taxonomy.Subfamily,
+                        item.Taxonomy.Genus,
+                        item.Taxonomy.Subgenus,
+                        item.Taxonomy.TaxonName,
+                        LoadDocument<Species>(item.RelatedSpeciesIds).Select(x => x.Taxonomy.TaxonName) },
                     TypeStatus = (string)null,
                     GeoTypes = new object[] { },
                     MuseumLocations = new object[] { item.MuseumLocation.Gallery, item.MuseumLocation.Venue },
-                    Articles = LoadDocument<Article>(item.RelatedArticleIds).Select(x => x.Title),
-                    Species = new object[] { }
+                    Articles = LoadDocument<Article>(item.RelatedArticleIds).Select(x => x.Title)
                 });
 
             AddMap<Species>(speciesDocs =>
@@ -144,15 +157,26 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = (string)null,
                     Denominations = (string)null,
                     Habitats = new object[] { species.Habitats, species.WhereToLook },
-                    Phylum = species.Taxonomy.Phylum,
-                    Class = species.Taxonomy.Class,
-                    Order = species.Taxonomy.Order,
-                    Family = species.Taxonomy.Family,
+                    Taxon = new object[] { species.Taxonomy.Kingdom,
+                        species.Taxonomy.Phylum,
+                        species.Taxonomy.Subphylum,
+                        species.Taxonomy.Superclass,
+                        species.Taxonomy.Class,
+                        species.Taxonomy.Subclass,
+                        species.Taxonomy.Superorder,
+                        species.Taxonomy.Order,
+                        species.Taxonomy.Suborder,
+                        species.Taxonomy.Infraorder,
+                        species.Taxonomy.Superfamily,
+                        species.Taxonomy.Family,
+                        species.Taxonomy.Subfamily,
+                        species.Taxonomy.Genus,
+                        species.Taxonomy.Subgenus,
+                        species.Taxonomy.TaxonName },
                     TypeStatus = (string)null,
                     GeoTypes = new object[] { },
                     MuseumLocations = new object[] { },
-                    Articles = new object[] { },
-                    Species = new object[] { }
+                    Articles = new object[] { }
                 });
 
             AddMap<Specimen>(specimens =>
@@ -213,10 +237,24 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = (string)null,
                     Denominations = new object[] { },
                     Habitats = new object[] { },
-                    Phylum = specimen.Taxonomy.Phylum,
-                    Class = specimen.Taxonomy.Class,
-                    Order = specimen.Taxonomy.Order,
-                    Family = specimen.Taxonomy.Family,
+                    Taxon = new object[] { specimen.ScientificName,
+                        specimen.Taxonomy.Kingdom,
+                        specimen.Taxonomy.Phylum,
+                        specimen.Taxonomy.Subphylum,
+                        specimen.Taxonomy.Superclass,
+                        specimen.Taxonomy.Class,
+                        specimen.Taxonomy.Subclass,
+                        specimen.Taxonomy.Superorder,
+                        specimen.Taxonomy.Order,
+                        specimen.Taxonomy.Suborder,
+                        specimen.Taxonomy.Infraorder,
+                        specimen.Taxonomy.Superfamily,
+                        specimen.Taxonomy.Family,
+                        specimen.Taxonomy.Subfamily,
+                        specimen.Taxonomy.Genus,
+                        specimen.Taxonomy.Subgenus,
+                        specimen.Taxonomy.TaxonName,
+                        LoadDocument<Species>(specimen.RelatedSpeciesIds).Select(x => x.Taxonomy.TaxonName) },
                     TypeStatus = specimen.TypeStatus,
                     GeoTypes = new object[] { specimen.PetrologyRockClass, 
                         specimen.PetrologyRockGroup, 
@@ -227,8 +265,7 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.MeteoritesGroup,
                         specimen.TektitesClassification },
                     MuseumLocations = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
-                    Articles = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title),                    
-                    Species = specimen.RelatedSpeciesIds
+                    Articles = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title)
                 });
 
             AddMap<Article>(articles =>
@@ -277,15 +314,11 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = (string) null,
                     Denominations = new object[] { },
                     Habitats = new object[] { },
-                    Phylum = (string)null,
-                    Class = (string)null,
-                    Order = (string)null,
-                    Family = (string)null,
+                    Taxon = new object[] { },                    
                     TypeStatus = (string)null,
                     GeoTypes = new object[] { },
                     MuseumLocations = new object[] { },
-                    Articles = new object[] { },
-                    Species = new object[] { }
+                    Articles = new object[] { }
                 });
             
             Index(x => x.Id, FieldIndexing.No);

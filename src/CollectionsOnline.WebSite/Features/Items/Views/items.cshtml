@@ -573,6 +573,137 @@
                             <dt>Tertiary Inscriptions</dt>
                             <dd>@Model.Item.ArtworkTertiaryInscriptions</dd>
                         }
+                        @if (!string.IsNullOrWhiteSpace(Model.Item.TypeStatus))
+                        {
+                            <dt>Type Status</dt>
+                            <dd>@Model.Item.TypeStatus</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Item.ScientificName))
+                        {
+                            <dt>Scientific Name</dt>
+                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.ScientificName)">@Model.Item.ScientificName</a></dd>
+                        }
+                        @if (Model.Item.Taxonomy != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Author))
+                            {
+                                <dt>Scientific Name Author</dt>
+                                <dd>@Model.Item.Taxonomy.Author</dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.CommonName))
+                            {
+                                <dt>Common Name</dt>
+                                <dd>@Model.Item.Taxonomy.CommonName</dd>
+                            }
+                            if (Model.Item.Taxonomy.OtherCommonNames.Any())
+                            {
+                                <dt>Other Common Names</dt>
+                                <dd>
+                                    @foreach (var otherCommonNames in @Model.Item.Taxonomy.OtherCommonNames)
+                                    {
+                                        <span>@otherCommonNames</span>
+                                    }
+                                </dd>
+                            }
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Item.IdentifiedBy))
+                        {
+                            <dt>Identified By</dt>
+                            <dd>@Model.Item.IdentifiedBy</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Item.DateIdentified))
+                        {
+                            <dt>Date Identified</dt>
+                            <dd>@Model.Item.DateIdentified</dd>
+                        }
+                        @if (Model.Item.Taxonomy != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Kingdom))
+                            {
+                                <dt>Kingdom</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Kingdom)">@Model.Item.Taxonomy.Kingdom</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Phylum))
+                            {
+                                <dt>Phylum</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Phylum)">@Model.Item.Taxonomy.Phylum</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subphylum))
+                            {
+                                <dt>Subphylum</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subphylum)">@Model.Item.Taxonomy.Subphylum</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Superclass))
+                            {
+                                <dt>Superclass</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Superclass)">@Model.Item.Taxonomy.Superclass</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Class))
+                            {
+                                <dt>Class</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Class)">@Model.Item.Taxonomy.Class</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subclass))
+                            {
+                                <dt>Subclass</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subclass)">@Model.Item.Taxonomy.Subclass</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Superorder))
+                            {
+                                <dt>Superorder</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Superorder)">@Model.Item.Taxonomy.Superorder</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Order))
+                            {
+                                <dt>Order</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Order)">@Model.Item.Taxonomy.Order</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Suborder))
+                            {
+                                <dt>Suborder</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Suborder)">@Model.Item.Taxonomy.Suborder</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Infraorder))
+                            {
+                                <dt>Infraorder</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Infraorder)">@Model.Item.Taxonomy.Infraorder</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Superfamily))
+                            {
+                                <dt>Superfamily</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Superfamily)">@Model.Item.Taxonomy.Superfamily</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Family))
+                            {
+                                <dt>Family</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Family)">@Model.Item.Taxonomy.Family</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subfamily))
+                            {
+                                <dt>Subfamily</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subfamily)">@Model.Item.Taxonomy.Subfamily</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Genus))
+                            {
+                                <dt>Genus</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Genus)">@Model.Item.Taxonomy.Genus</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subgenus))
+                            {
+                                <dt>Subgenus</dt>
+                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subgenus)">@Model.Item.Taxonomy.Subgenus</a></dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Species))
+                            {
+                                <dt>Species Name</dt>
+                                <dd>@Model.Item.Taxonomy.Species</dd>
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subspecies))
+                            {
+                                <dt>Subspecies</dt>
+                                <dd>@Model.Item.Taxonomy.Subspecies</dd>
+                            }
+                        }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.AcquisitionInformation))
                         {
                             <dt>Acquisition Information</dt>
@@ -608,6 +739,15 @@
                         <a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a>
                     }
                 </div>
+              
+                @if (Model.RelatedSpeciesSpecimenItemCount > 0)
+                {
+                    <div>
+                        <h4>
+                            <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Item.Taxonomy.TaxonName)">See all the things related to this item (@Model.RelatedSpeciesSpecimenItemCount)</a>
+                        </h4>
+                    </div>
+                }
                 
                 @if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
                 {
@@ -616,10 +756,7 @@
                         @foreach (var relatedItem in Model.RelatedItems)
                         {
                             <a href="/@relatedItem.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
-                                {
-                                    <img src="@relatedItem.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedItem.Title</span>
                             </a>
                             <br/>
@@ -627,10 +764,7 @@
                         @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                         {
                             <a href="/@relatedSpecimen.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
-                                {
-                                    <img src="@relatedSpecimen.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedSpecimen.Title</span>
                             </a>
                             <br/>
@@ -645,10 +779,7 @@
                         @foreach (var relatedArticle in Model.RelatedArticles)
                         {
                             <a href="/@relatedArticle.Id">
-                                @if (!string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
-                                {
-                                    <img src="@relatedArticle.ThumbnailUri" width="100" height="100" class="img-thumbnail" />
-                                }
+                                <img src="@(string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri) ? "http://placehold.it/110" : relatedArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
                                 <span>@relatedArticle.Title</span>
                             </a>
                             <br/>
