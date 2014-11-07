@@ -16,7 +16,7 @@
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.ObjectName))
                         {
-                            @Model.Specimen.ObjectName
+                            @Html.Raw(Model.Specimen.ObjectName)
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.RegistrationNumber))
                         {
@@ -51,15 +51,10 @@
                 
                 <div class="main-content">
                     <dl>
-                        @if (!string.IsNullOrWhiteSpace(Model.Specimen.Summary))
-                        {
-                            <dt>Summary</dt>
-                            <dd>@Model.Specimen.Summary</dd>
-                        }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.ObjectSummary))
                         {
-                            <dt>Object Summary</dt>
-                            <dd>@Model.Specimen.ObjectSummary</dd>
+                            <dt>Summary</dt>
+                            <dd>@Html.Raw(Model.Specimen.ObjectSummary)</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Significance))
                         {
@@ -522,22 +517,22 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Genus))
                         {
                             <dt>Genus</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Genus)">@Model.Specimen.Taxonomy.Genus</a></dd>
+                            <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Genus)">@Model.Specimen.Taxonomy.Genus</a></em></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subgenus))
                         {
                             <dt>Subgenus</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subgenus)">@Model.Specimen.Taxonomy.Subgenus</a></dd>
+                            <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subgenus)">@Model.Specimen.Taxonomy.Subgenus</a></em></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Species))
                         {
                             <dt>Species Name</dt>
-                            <dd>@Model.Specimen.Taxonomy.Species</dd>
+                            <dd><em>@Model.Specimen.Taxonomy.Species</em></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subspecies))
                         {
                             <dt>Subspecies</dt>
-                            <dd>@Model.Specimen.Taxonomy.Subspecies</dd>
+                            <dd><em>@Model.Specimen.Taxonomy.Subspecies</em></dd>
                         }
                         @if (Model.Specimen.Keywords.Any())
                         {
@@ -560,7 +555,7 @@
                         {
                             <a href="/@relatedItem.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedItem.Title</span>
+                                <span>@Html.Raw(relatedItem.Title)</span>
                             </a>
                             <br/>
                         }
@@ -568,7 +563,7 @@
                         {
                             <a href="/@relatedSpecimen.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedSpecimen.Title</span>
+                                <span>@Html.Raw(relatedSpecimen.Title)</span>
                             </a>
                             <br/>
                         }

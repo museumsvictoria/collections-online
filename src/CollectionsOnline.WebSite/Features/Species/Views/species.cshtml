@@ -42,22 +42,22 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Species.GeneralDescription))
                         {
                             <dt>General Description</dt>
-                            <dd>@Model.Species.GeneralDescription</dd>
+                            <dd>@Html.Raw(Model.Species.GeneralDescription)</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Biology))
                         {
                             <dt>Biology</dt>
-                            <dd>@Model.Species.Biology</dd>
+                            <dd>@Html.Raw(Model.Species.Biology)</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Distribution))
                         {
                             <dt>Distribution</dt>
-                            <dd>@Model.Species.Distribution</dd>
+                            <dd>@Html.Raw(Model.Species.Distribution)</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Habitat))
                         {
                             <dt>Habitat</dt>
-                            <dd>@Model.Species.Habitat</dd>
+                            <dd>@Html.Raw(Model.Species.Habitat)</dd>
                         }
                     </dl>
                 </div>
@@ -77,12 +77,12 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Species.FastFact))
                         {
                             <dt>Fast Fact</dt>
-                            <dd>@Model.Species.FastFact</dd>
+                            <dd>@Html.Raw(Model.Species.FastFact)</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.BriefId))
                         {
                             <dt>Brief Id</dt>
-                            <dd>@Model.Species.BriefId</dd>
+                            <dd>@Html.Raw(Model.Species.BriefId)</dd>
                         }
                         @if (Model.Species.Colours.Any())
                         {
@@ -157,7 +157,7 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Hazards))
                         {
                             <dt>Hazards</dt>
-                            <dd>@Model.Species.Hazards</dd>
+                            <dd>@Html.Raw(Model.Species.Hazards)</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Endemicity))
                         {
@@ -322,22 +322,22 @@
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Genus))
                         {
                             <dt>Genus</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Genus)">@Model.Species.Taxonomy.Genus</a></dd>
+                            <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Genus)">@Model.Species.Taxonomy.Genus</a></em></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subgenus))
                         {
                             <dt>Subgenus</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subgenus)">@Model.Species.Taxonomy.Subgenus</a></dd>
+                            <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subgenus)">@Model.Species.Taxonomy.Subgenus</a></em></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Species))
                         {
-                            <dt>SpeciesName</dt>
-                            <dd>@Model.Species.Taxonomy.Species</dd>
+                            <dt>Species Name</dt>
+                            <dd><em>@Model.Species.Taxonomy.Species</em></dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subspecies))
                         {
                             <dt>Subspecies</dt>
-                            <dd>@Model.Species.Taxonomy.Subspecies</dd>
+                            <dd><em>@Model.Species.Taxonomy.Subspecies</em></dd>
                         }
                     </dl>
                 </div>
@@ -350,7 +350,7 @@
                         {
                             <a href="/@relatedItem.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedItem.Title</span>
+                                <span>@Html.Raw(relatedItem.Title)</span>
                             </a>
                             <br/>
                         }
@@ -358,7 +358,7 @@
                         {
                             <a href="/@relatedSpecimen.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedSpecimen.Title</span>
+                                <span>@Html.Raw(relatedSpecimen.Title)</span>
                             </a>
                             <br/>
                         }

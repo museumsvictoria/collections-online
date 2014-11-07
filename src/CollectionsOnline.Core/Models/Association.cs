@@ -18,18 +18,6 @@
 
         public string State { get; set; }
 
-        public string Country { get; set; }
-
-        public string Place { get; set; }
-
-        public string PlaceKey { get; set; }
-
-        public string GeocodedPlace { get; set; }
-
-        public double Longitude { get; set; }
-
-        public double Latitude { get; set; }
-
-        public GeocodeStatus GeocodeStatus { get; set; }
+        public string Country { get; set; }   
     }
 }

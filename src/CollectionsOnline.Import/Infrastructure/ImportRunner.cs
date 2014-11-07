@@ -77,6 +77,8 @@ namespace CollectionsOnline.Import.Infrastructure
                 documentSession.SaveChanges();
                 documentSession.Dispose();
             }
+
+            _log.Debug("Another data import is currently running... exiting");
         }
     }
 }

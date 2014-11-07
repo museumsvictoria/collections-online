@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Configuration;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
-using Geocoding;
-using Geocoding.Google;
 using IMu;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -64,20 +61,14 @@ namespace CollectionsOnline.Import
             kernel.Bind<IImport>().To<ImuImport<Item>>();
             kernel.Bind<IImport>().To<ImuImport<Specimen>>();
 
-            kernel.Bind<IGeocoder>().ToMethod(x => new GoogleGeocoder
-            {
-                ApiKey = ConfigurationManager.AppSettings["GoogleApiKey"]
-            });
-
             // Bind the rest
             kernel.Bind(x => x
                 .FromAssemblyContaining(typeof(Program), typeof(Constants))
                 .SelectAllClasses()
                 .Excluding<MigrationImport>()
-                .Excluding<MediaUpdateImport>()
-                //.Excluding<RelationshipImport>()
+                .Excluding<RelationshipImport>()
+                //.Excluding<MediaUpdateImport>()                
                 //.Excluding<TaxonomyUpdateImport>()
-                .Excluding<GeocodeImport>()
                 .BindAllInterfaces());
         }
     }

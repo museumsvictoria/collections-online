@@ -9,12 +9,26 @@ namespace CollectionsOnline.Core.Models
 
         public DateTime DateModified { get; set; }
 
-        public string Title { get; set; }
+        public string Caption { get; set; }
+
+        public IList<string> Creators { get; set; }
+
+        public IList<string> Sources { get; set; }
+
+        public string Credit { get; set; }
+
+        public string RightsStatement { get; set; }
+
+        public string RightsStatus { get; set; }
+
+        public string Licence { get; set; }
+
+        public string LicenceDetails { get; set; }
     }
 
     public class ImageMedia : Media
     {
-        public string AlternateText { get; set; }
+        public string AlternativeText { get; set; }
 
         public ImageMediaFile Original { get; set; }
 

@@ -107,7 +107,7 @@
                         {
                             <a href="/@relatedItem.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedItem.Title</span>
+                                <span>@Html.Raw(relatedItem.Title)</span>
                             </a>
                             <br/>
                         }
@@ -115,7 +115,7 @@
                         {
                             <a href="/@relatedSpecimen.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedSpecimen.Title</span>
+                                <span>@Html.Raw(relatedSpecimen.Title)</span>
                             </a>
                             <br/>
                         }

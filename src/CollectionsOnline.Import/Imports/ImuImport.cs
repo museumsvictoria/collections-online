@@ -7,6 +7,7 @@ using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
+using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
@@ -74,8 +75,8 @@ namespace CollectionsOnline.Import.Imports
 
                         if (results.Count == 0)
                             break;
-                        
-                        var irnResults = results.Rows.Select(x => long.Parse(x.GetString("irn"))).ToList();
+
+                        var irnResults = results.Rows.Select(x => long.Parse(x.GetEncodedString("irn"))).ToList();
 
                         // First check to see if we are not overwriting existing data, 
                         // then find any existing documents and remove them from our cached irn list so we only add new results

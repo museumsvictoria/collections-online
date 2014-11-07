@@ -12,7 +12,7 @@
                     <h1>
                         <a href="/search?itemtype=@HttpUtility.UrlEncode(@Model.Item.Type.ToLower())">@Model.Item.Type</a><br />
                         @Model.Item.RegistrationNumber<br />
-                        @Model.Item.ObjectName<br />
+                        @Html.Raw(Model.Item.ObjectName)<br />
                         @Model.Item.TradeLiteratureCoverTitle
                     </h1>
                 </div>
@@ -43,10 +43,15 @@
                 
                 <div class="main-content">
                     <dl>
-                        @if (!string.IsNullOrWhiteSpace(Model.Item.Summary))
+                        @if (!string.IsNullOrWhiteSpace(Model.Item.ObjectSummary))
                         {
                             <dt>Summary</dt>
-                            <dd>@Model.Item.Summary</dd>
+                            <dd>@Html.Raw(Model.Item.ObjectSummary)</dd>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Item.PhysicalDescription))
+                        {
+                            <dt>Physical Description</dt>
+                            <dd>@Model.Item.PhysicalDescription</dd>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDescription))
                         {
@@ -686,22 +691,22 @@
                             if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Genus))
                             {
                                 <dt>Genus</dt>
-                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Genus)">@Model.Item.Taxonomy.Genus</a></dd>
+                                <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Genus)">@Model.Item.Taxonomy.Genus</a></em></dd>
                             }
                             if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subgenus))
                             {
                                 <dt>Subgenus</dt>
-                                <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subgenus)">@Model.Item.Taxonomy.Subgenus</a></dd>
+                                <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subgenus)">@Model.Item.Taxonomy.Subgenus</a></em></dd>
                             }
                             if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Species))
                             {
                                 <dt>Species Name</dt>
-                                <dd>@Model.Item.Taxonomy.Species</dd>
+                                <dd><em>@Model.Item.Taxonomy.Species</em></dd>
                             }
                             if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subspecies))
                             {
                                 <dt>Subspecies</dt>
-                                <dd>@Model.Item.Taxonomy.Subspecies</dd>
+                                <dd><em>@Model.Item.Taxonomy.Subspecies</em></dd>
                             }
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.Item.AcquisitionInformation))
@@ -757,7 +762,7 @@
                         {
                             <a href="/@relatedItem.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedItem.Title</span>
+                                <span>@Html.Raw(relatedItem.Title)</span>
                             </a>
                             <br/>
                         }
@@ -765,7 +770,7 @@
                         {
                             <a href="/@relatedSpecimen.Id">
                                 <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedSpecimen.Title</span>
+                                <span>@Html.Raw(relatedSpecimen.Title)</span>
                             </a>
                             <br/>
                         }

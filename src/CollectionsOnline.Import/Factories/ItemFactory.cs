@@ -140,7 +140,7 @@ namespace CollectionsOnline.Import.Factories
                         "TLDPublicationTypes_tab",
                         "TLSPrimaryRole",
                         "tlparty=TLSPrimaryNameRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MulDescription,MulCreator_tab,MdaDataSets_tab,MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab,ChaRepository_tab,DetAlternateText,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "iclocality=[ProStateProvince_tab,ProRegion_tab,ProSpecificLocality_tab]",
                         "ProCountry",
                         "ProCulturalGroups_tab",
@@ -236,7 +236,7 @@ namespace CollectionsOnline.Import.Factories
 
             item.ObjectName = map.GetEncodedString("ClaObjectName");
             item.ObjectSummary = map.GetEncodedString("ClaObjectSummary");
-            item.Description = map.GetEncodedString("DesPhysicalDescription");
+            item.PhysicalDescription = map.GetEncodedString("DesPhysicalDescription");
             item.Inscription = map.GetEncodedString("DesInscriptions");
 
             // Associations
@@ -502,8 +502,8 @@ namespace CollectionsOnline.Import.Factories
 
             // Taxonomy
             // TODO: make factory method as code duplicated in SpecimenFactory
-            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => (x.GetEncodedString("IdeTypeStatus_tab") != null && Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab").Trim().ToLower()))) ??
-                                 map.GetMaps("identifications").FirstOrDefault(x => (x.GetEncodedString("IdeCurrentNameLocal_tab") != null && x.GetEncodedString("IdeCurrentNameLocal_tab").Trim().ToLower() == "yes"));
+            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab"))) ??
+                                    map.GetMaps("identifications").FirstOrDefault(x => string.Equals(x.GetEncodedString("IdeCurrentNameLocal_tab"), "yes", StringComparison.OrdinalIgnoreCase));
             if (identificationMap != null)
             {
                 // Type Status
@@ -555,7 +555,7 @@ namespace CollectionsOnline.Import.Factories
             // TODO: make factory method as code duplicated in SpecimenFactory
             var accessionMap = map.GetMap("accession");
             if (accessionMap != null &&
-                string.Equals(accessionMap.GetString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase))
+                string.Equals(accessionMap.GetEncodedString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase))
             {
                 var method = accessionMap.GetEncodedString("AcqAcquisitionMethod");
 
@@ -642,8 +642,8 @@ namespace CollectionsOnline.Import.Factories
             // Build summary
             if (!string.IsNullOrWhiteSpace(item.ObjectSummary))
                 item.Summary = item.ObjectSummary;
-            else if (!string.IsNullOrWhiteSpace(item.Description))
-                item.Summary = item.Description;
+            else if (!string.IsNullOrWhiteSpace(item.PhysicalDescription))
+                item.Summary = item.PhysicalDescription;
             
             stopwatch.Stop();
             _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CollectionsOnline.Import.Extensions;
 using IMu;
 using CollectionsOnline.Core.Extensions;
 
@@ -10,45 +11,43 @@ namespace CollectionsOnline.Import.Factories
         {
             if (map != null)
             {
-                switch (map.GetString("NamPartyType"))
+                switch (map.GetEncodedString("NamPartyType"))
                 {
                     case "Collaboration":
                         return new[]
                         {
-                            map.GetString("ColCollaborationName")
+                            map.GetEncodedString("ColCollaborationName")
                         }.Concatenate(", ");
                     case "Cutter Number":
                         return new[]
                         {
-                            map.GetString("NamBranch"),
-                            map.GetString("NamDepartment"),
-                            map.GetString("NamOrganisation"),
-                            map.GetString("AddPhysStreet"),
-                            map.GetString("AddPhysCity"),
-                            map.GetString("AddPhysState"),
-                            map.GetString("AddPhysCountry")
+                            map.GetEncodedString("NamBranch"),
+                            map.GetEncodedString("NamDepartment"),
+                            map.GetEncodedString("NamOrganisation"),
+                            map.GetEncodedString("AddPhysStreet"),
+                            map.GetEncodedString("AddPhysCity"),
+                            map.GetEncodedString("AddPhysState"),
+                            map.GetEncodedString("AddPhysCountry")
                         }.Concatenate(", ");
                     case "Organisation":
                         return new[]
                         {
-                            map.GetString("NamBranch"),
-                            map.GetString("NamDepartment"),
-                            map.GetString("NamOrganisation")
+                            map.GetEncodedString("NamBranch"),
+                            map.GetEncodedString("NamDepartment"),
+                            map.GetEncodedString("NamOrganisation")
                         }.Concatenate(", ");
                     case "Person":
                         return new[]
                         {
-                            map.GetString("NamFullName"),
-                            map.GetString("NamOrganisation")
+                            map.GetEncodedString("NamFullName"),
+                            map.GetEncodedString("NamOrganisation")
                         }.Concatenate(" - ");
                     case "Position":
                         break;
                     case "Transport":
                         var name = string.Empty;
-                        var organisationOtherName =
-                            map.GetStrings("NamOrganisationOtherNames_tab")
-                                .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
-                        var source = map.GetString("NamSource");
+                        var organisationOtherName = map.GetEncodedStrings("NamOrganisationOtherNames_tab").FirstOrDefault();
+                        var source = map.GetEncodedString("NamSource");
 
                         if (string.IsNullOrWhiteSpace(organisationOtherName) && !string.IsNullOrWhiteSpace(source))
                         {
@@ -66,8 +65,8 @@ namespace CollectionsOnline.Import.Factories
                         return new[]
                         {
                             name,
-                            map.GetString("NamFullName"),
-                            map.GetString("NamOrganisation")
+                            map.GetEncodedString("NamFullName"),
+                            map.GetEncodedString("NamOrganisation")
                         }.Concatenate(", ");
                 }
             }

@@ -2,6 +2,7 @@
 using System.Linq;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Import.Extensions;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
@@ -14,48 +15,48 @@ namespace CollectionsOnline.Import.Factories
             {
                 var taxonomy = new Taxonomy();
 
-                taxonomy.Irn = long.Parse(map.GetString("irn"));
-                taxonomy.Kingdom = map.GetString("ClaKingdom");
-                taxonomy.Phylum = map.GetString("ClaPhylum");
-                taxonomy.Subphylum = map.GetString("ClaSubphylum");
-                taxonomy.Superclass = map.GetString("ClaSuperclass");
-                taxonomy.Class = map.GetString("ClaClass");
-                taxonomy.Subclass = map.GetString("ClaSubclass");
-                taxonomy.Superorder = map.GetString("ClaSuperorder");
-                taxonomy.Order = map.GetString("ClaOrder");
-                taxonomy.Suborder = map.GetString("ClaSuborder");
-                taxonomy.Infraorder = map.GetString("ClaInfraorder");
-                taxonomy.Superfamily = map.GetString("ClaSuperfamily");
-                taxonomy.Family = map.GetString("ClaFamily");
-                taxonomy.Subfamily = map.GetString("ClaSubfamily");
-                taxonomy.Genus = map.GetString("ClaGenus");
-                taxonomy.Subgenus = map.GetString("ClaSubgenus");
-                taxonomy.Species = map.GetString("ClaSpecies");
-                taxonomy.Subspecies = map.GetString("ClaSubspecies");
+                taxonomy.Irn = long.Parse(map.GetEncodedString("irn"));
+                taxonomy.Kingdom = map.GetEncodedString("ClaKingdom");
+                taxonomy.Phylum = map.GetEncodedString("ClaPhylum");
+                taxonomy.Subphylum = map.GetEncodedString("ClaSubphylum");
+                taxonomy.Superclass = map.GetEncodedString("ClaSuperclass");
+                taxonomy.Class = map.GetEncodedString("ClaClass");
+                taxonomy.Subclass = map.GetEncodedString("ClaSubclass");
+                taxonomy.Superorder = map.GetEncodedString("ClaSuperorder");
+                taxonomy.Order = map.GetEncodedString("ClaOrder");
+                taxonomy.Suborder = map.GetEncodedString("ClaSuborder");
+                taxonomy.Infraorder = map.GetEncodedString("ClaInfraorder");
+                taxonomy.Superfamily = map.GetEncodedString("ClaSuperfamily");
+                taxonomy.Family = map.GetEncodedString("ClaFamily");
+                taxonomy.Subfamily = map.GetEncodedString("ClaSubfamily");
+                taxonomy.Genus = map.GetEncodedString("ClaGenus");
+                taxonomy.Subgenus = map.GetEncodedString("ClaSubgenus");
+                taxonomy.Species = map.GetEncodedString("ClaSpecies");
+                taxonomy.Subspecies = map.GetEncodedString("ClaSubspecies");
 
-                taxonomy.Author = map.GetString("AutAuthorString");
-                taxonomy.Code = map.GetString("ClaApplicableCode");
+                taxonomy.Author = map.GetEncodedString("AutAuthorString");
+                taxonomy.Code = map.GetEncodedString("ClaApplicableCode");
 
                 //higherClassification
                 var higherClassification = new Dictionary<string, string>
                         {
-                            { "Kingdom", map.GetString("ClaKingdom") },
-                            { "Phylum", map.GetString("ClaPhylum") },
-                            { "Subphylum", map.GetString("ClaSubphylum") },
-                            { "Superclass", map.GetString("ClaSuperclass") },
-                            { "Class", map.GetString("ClaClass") },
-                            { "Subclass", map.GetString("ClaSubclass") },
-                            { "Superorder", map.GetString("ClaSuperorder") },
-                            { "Order", map.GetString("ClaOrder") },
-                            { "Suborder", map.GetString("ClaSuborder") },
-                            { "Infraorder", map.GetString("ClaInfraorder") },
-                            { "Superfamily", map.GetString("ClaSuperfamily") },
-                            { "Family", map.GetString("ClaFamily") },
-                            { "Subfamily", map.GetString("ClaSubfamily") },
-                            { "Genus", map.GetString("ClaGenus") },
-                            { "Subgenus", map.GetString("ClaSubgenus") },
-                            { "Species", map.GetString("ClaSpecies") },
-                            { "Subspecies", map.GetString("ClaSubspecies") }
+                            { "Kingdom", map.GetEncodedString("ClaKingdom") },
+                            { "Phylum", map.GetEncodedString("ClaPhylum") },
+                            { "Subphylum", map.GetEncodedString("ClaSubphylum") },
+                            { "Superclass", map.GetEncodedString("ClaSuperclass") },
+                            { "Class", map.GetEncodedString("ClaClass") },
+                            { "Subclass", map.GetEncodedString("ClaSubclass") },
+                            { "Superorder", map.GetEncodedString("ClaSuperorder") },
+                            { "Order", map.GetEncodedString("ClaOrder") },
+                            { "Suborder", map.GetEncodedString("ClaSuborder") },
+                            { "Infraorder", map.GetEncodedString("ClaInfraorder") },
+                            { "Superfamily", map.GetEncodedString("ClaSuperfamily") },
+                            { "Family", map.GetEncodedString("ClaFamily") },
+                            { "Subfamily", map.GetEncodedString("ClaSubfamily") },
+                            { "Genus", map.GetEncodedString("ClaGenus") },
+                            { "Subgenus", map.GetEncodedString("ClaSubgenus") },
+                            { "Species", map.GetEncodedString("ClaSpecies") },
+                            { "Subspecies", map.GetEncodedString("ClaSubspecies") }
                         };
 
                 taxonomy.TaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
@@ -81,8 +82,8 @@ namespace CollectionsOnline.Import.Factories
                 var names = map.GetMaps("comname");
                 foreach (var name in names)
                 {
-                    var status = name.GetString("ComStatus_tab");
-                    var vernacularName = name.GetString("ComName_tab");
+                    var status = name.GetEncodedString("ComStatus_tab");
+                    var vernacularName = name.GetEncodedString("ComName_tab");
 
                     if (status != null && status.ToLower() == "preferred")
                     {

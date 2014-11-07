@@ -45,7 +45,7 @@ namespace CollectionsOnline.Core.Models
 
         public string ObjectSummary { get; set; }
 
-        public string Description { get; set; }
+        public string PhysicalDescription { get; set; }
 
         public string Inscription { get; set; }
 
