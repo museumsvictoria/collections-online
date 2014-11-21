@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'entypo';
+    src:font-url('/content/fonts/entypo.eot');
+    src:url('/content/fonts/entypo.eot?#iefix') format('embedded-opentype'), 
+        url('/content/fonts/entypo.woff') format('woff'), 
+        url('/content/fonts/entypo.ttf') format('truetype'), 
+        url('/content/fonts/entypo.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'entypo-social';
+    src:url('/content/fonts/entypo-social.eot');
+    src:url('/content/fonts/entypo-social.eot?#iefix') format('embedded-opentype'), 
+        url('/content/fonts/entypo-social.woff') format('woff'), 
+        url('/content/fonts/entypo-social.ttf') format('truetype'), 
+        url('/content/fonts/entypo-social.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: $font-family;
+}
+
+.brand {
+    color: $color-default;
+    font-size:1.35em;
+    line-height:1em;
+    font-weight:400;
+    text-transform:uppercase;
+    text-decoration:none;
+
+    span {
+        color: $color-museum-green;
+        font-weight:600;
+    }
+}
+
+.icon-search {
+    font-family: $font-family-entypo;
+}
+
+nav {
+    color: $color-default;
+    font-size:1.35em;
+    line-height:1em;
+    font-weight:400;
+    text-transform:uppercase;
+    text-decoration:none;
+}

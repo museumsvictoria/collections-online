@@ -1,0 +1,58 @@
+﻿@import "normalize";
+@import 'variables';
+@import 'mixins';
+@import 'grid';
+@import "typography";
+@import "layout";
+
+header {
+    background:rgba(0, 0, 0, 0.89);
+    height:76px;    
+}
+
+.brand {
+    display:inline-block;
+    margin:28px 0 0 2.96%;
+}
+
+nav {
+    @include gridle_float (right);
+    margin:0 2.96% 0 0;
+
+    a {
+        display:inline-block;
+    }
+}
+
+.form-search {
+    display: inline-block;
+    background-color:$color-museum-green;
+    height:76px;
+    width:190px;
+
+    button {
+        background-color:$color-museum-green;
+        color: $color-default;
+        border:0;
+        float:right;
+    }
+
+    input {
+        background-color:$color-museum-green;
+        color: $color-default;
+        border:0;
+        padding:0;
+        width:160px;
+
+    }
+
+    .text {
+        clip: rect(0 0 0 0);
+        overflow: hidden;
+        position: absolute;
+        height: 1px;
+        width: 1px;
+    }
+}
+
+

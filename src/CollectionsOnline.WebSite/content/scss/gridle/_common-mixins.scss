@@ -1,0 +1,105 @@
+// |------------------------------------------------------
+// |------------------------------------------------------
+// | Common mixins
+// |------------------------------------------------------
+// |------------------------------------------------------
+
+@mixin _gridle_container_common(
+	$state : default
+) {
+	@extend %gridle-simple-clearfix;
+	@extend %gridle-container-common;
+	// debug part :
+	$debug : _gridle_get_var_value(debug, $state);
+	@if ($debug == true) {
+		#{$gridle-debug-selector} {
+			@extend %gridle-container-debug-common;
+		}
+	}
+}
+@mixin _gridle_grid_common() {
+	@extend %gridle-grid-common;
+	
+	// loop on each states :
+	@each $stateName, $state in $_gridle-states
+	{
+		// vars :
+		$direction : _gridle_get_var_value(direction, $state);
+		$classes : _gridle_get_var_value(classes, $state);
+		$gutter-width : _gridle_get_var_value(gutter-width, $state);
+		$debug : _gridle_get_var_value(debug, $state);
+		
+		@if $classes
+		{
+			@include gridle_state($state) {
+				@if $direction == rtl {
+					float:right;
+					direction:rtl;
+				} @else {
+					float:left;
+					direction:ltr;
+				}
+
+				padding-left:$gutter-width/2;
+				padding-right:$gutter-width/2;
+			}
+			
+			@if $debug == true {
+				#{$gridle-debug-selector} {
+					@extend %gridle-grid-debug-common;
+				}
+			}
+		}
+	}
+}
+@mixin _gridle_parent_common() {
+	@extend %gridle-clearfix;
+	@extend %gridle-parent-common;
+}
+@mixin _gridle_push_common(
+	$state : default
+) {
+	$debug : _gridle_get_var_value(debug, $state);
+
+	// extend common :
+	@extend %gridle-push-pull-common;
+	@if $debug == true {
+		#{$gridle-debug-selector} {
+			@extend %gridle-push-pull-debug-background-common;
+			background-color:#f4efdf !important;
+		}
+	}
+}
+@mixin _gridle_pull_common(
+	$state : default
+) {
+	$debug : _gridle_get_var_value(debug, $state);
+
+	@extend %gridle-push-pull-common;
+	@if $debug == true {
+		#{$gridle-debug-selector} {
+			@extend %gridle-push-pull-debug-background-common;
+			background-color:#cfe4d5 !important;
+		}
+	}
+}
+@mixin _gridle_prefix_common(
+	$state : default
+) {
+	$debug : _gridle_get_var_value(debug, $state);
+	@if $debug == true {
+		#{$gridle-debug-selector} {
+			@extend %gridle-prefix-debug-common;
+		}
+	}
+}
+@mixin _gridle_suffix_common(
+	$state : default
+) {
+	$debug : _gridle_get_var_value(debug, $state);
+	@if $debug == true {
+		#{$gridle-debug-selector} {
+			@extend %gridle-suffix-debug-common;
+		}
+	}
+}

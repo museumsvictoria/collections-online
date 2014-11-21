@@ -4,12 +4,26 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Collections Online Website</title>
-        <link href="/content/css/bootstrap.css" rel="stylesheet">
-        <link href="/content/css/base.css" rel="stylesheet">
+        <link href="/content/css/styles.css" rel="stylesheet">
+        <script type="text/javascript" src="//use.typekit.net/izq0fed.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     </head>
     <body>
+        <header>
+            <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
+            <nav>
+                <form class="form-search" method="GET" action="/search" role="form">
+                    <button type="submit">
+                        <span class="icon-search" aria-hidden="true">&#128269;</span>
+                        <span class="text">Search</span>
+                    </button>
+                    <input type="text" name="query" class="form-control" value="">
+                </form>
+                <a href="">Browse articles</a>
+                <a href="">About</a>
+                <a href="">API</a>
+            </nav>
+        </header>
         @RenderBody()
-        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-        <script src="/content/js/bootstrap.min.js"></script>
     </body>
 </html>
