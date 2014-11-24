@@ -1,4 +1,4 @@
-﻿article,
+article,
 aside,
 details,
 figcaption,
@@ -662,7 +662,7 @@ input[type="checkbox"], input[type="radio"] {
  */
 @font-face {
   font-family: 'entypo';
-  src: font-url("/content/fonts/entypo.eot");
+  src: url("/content/fonts/entypo.eot");
   src: url("/content/fonts/entypo.eot?#iefix") format("embedded-opentype"), url("/content/fonts/entypo.woff") format("woff"), url("/content/fonts/entypo.ttf") format("truetype"), url("/content/fonts/entypo.svg") format("svg");
   font-weight: normal;
   font-style: normal; }
@@ -689,6 +689,14 @@ body {
 .icon-search {
   font-family: "entypo"; }
 
+nav {
+  color: #fff;
+  font-size: 1.35em;
+  line-height: 1em;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-decoration: none; }
+
 header {
   background: rgba(0, 0, 0, 0.89);
   height: 76px; }
@@ -706,7 +714,8 @@ nav {
 .form-search {
   display: inline-block;
   background-color: #B7D71F;
-  height: 76px; }
+  height: 76px;
+  width: 190px; }
   .form-search button {
     background-color: #B7D71F;
     color: #fff;
@@ -716,7 +725,8 @@ nav {
     background-color: #B7D71F;
     color: #fff;
     border: 0;
-    padding: 0; }
+    padding: 0;
+    width: 160px; }
   .form-search .text {
     clip: rect(0 0 0 0);
     overflow: hidden;
