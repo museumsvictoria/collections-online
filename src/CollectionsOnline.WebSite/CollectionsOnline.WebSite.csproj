@@ -124,6 +124,7 @@
     <Content Include="content\css\styles.css" />
     <Content Include="content\fonts\entypo-social.svg" />
     <Content Include="content\fonts\entypo.svg" />
+    <Content Include="content\img\logo-mv-white.png" />
     <Content Include="gulpfile.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -16,7 +16,7 @@ var filePaths = {
 
 gulp.task('build-css', function () {
     return gulp.src(filePaths.css.src)
-        .pipe(sass({noCache : true}))
+        .pipe(sass({ noCache: true, sourcemap: true }))
         .pipe(gulp.dest(filePaths.css.dest));
 });
 

@@ -13,11 +13,9 @@
             <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
             <nav>
                 <form class="form-search" method="GET" action="/search" role="form">
-                    <button type="submit">
-                        <span class="icon-search" aria-hidden="true">&#128269;</span>
-                        <span class="text">Search</span>
-                    </button>
-                    <input type="text" name="query" class="form-control" value="">
+                    <span class="icon-search" aria-hidden="true"></span>
+                    <span class="icon-label-hidden">Search the collection</span>
+                    <input type="text" name="query" class="form-control" placeholder="SEARCH">
                 </form>
                 <a href="">Browse articles</a>
                 <a href="">About</a>
@@ -25,5 +23,12 @@
             </nav>
         </header>
         @RenderBody()
+        <footer>
+            <div class="wrapper">
+                <div class="logos">
+                    <img src="/content/img/logo-mv-white.png" width="178" height="102" alt="Museum Victoria" />
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

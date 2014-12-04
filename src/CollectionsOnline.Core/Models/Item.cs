@@ -303,6 +303,7 @@ namespace CollectionsOnline.Core.Models
             RelatedItemIds = new List<string>();
             RelatedSpecimenIds = new List<string>();
             RelatedArticleIds = new List<string>();
+            RelatedSpeciesIds = new List<string>();
             Media = new List<Media>();
             AudioVisualContentSummaries = new List<string>();
             TradeLiteraturePublicationTypes = new List<string>();

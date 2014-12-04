@@ -43,6 +43,15 @@ namespace CollectionsOnline.WebSite.Features.Items
                             relatedArticle.Id,
                             relatedArticle.ThumbnailUri,
                             relatedArticle.Title
+                        },
+                    RelatedSpecies = from speciesId in item.RelatedSpeciesIds
+                        let relatedSpecies = LoadDocument<Core.Models.Species>(speciesId)
+                        where relatedSpecies != null && !relatedSpecies.IsHidden
+                        select new
+                        {
+                            relatedSpecies.Id,
+                            relatedSpecies.ThumbnailUri,
+                            Title = relatedSpecies.Taxonomy.TaxonName ?? relatedSpecies.Taxonomy.CommonName
                         }
                 };
         }
@@ -58,6 +67,8 @@ namespace CollectionsOnline.WebSite.Features.Items
 
         public IList<RelatedDocumentViewModel> RelatedArticles { get; set; }
 
+        public IList<RelatedDocumentViewModel> RelatedSpecies { get; set; }
+
         public int RelatedSpeciesSpecimenItemCount { get; set; }
 
         public ItemViewTransformerResult()
@@ -65,6 +76,7 @@ namespace CollectionsOnline.WebSite.Features.Items
             RelatedItems = new List<RelatedDocumentViewModel>();
             RelatedSpecimens = new List<RelatedDocumentViewModel>();
             RelatedArticles = new List<RelatedDocumentViewModel>();
+            RelatedSpecies = new List<RelatedDocumentViewModel>();
         }
     }
 }
