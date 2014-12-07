@@ -1,395 +1,561 @@
-﻿@using CollectionsOnline.Core.Models
+﻿@using System
+@using CollectionsOnline.Core.Models
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Species.SpeciesViewTransformerResult>
 @{
     Layout = "layout.cshtml";
 }
-<div class="container no-nav">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="record">
-                <div class="title">
-                    <h1>
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.TaxonName))
-                        {
-                            <em>@Model.Species.Taxonomy.TaxonName</em>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.CommonName))
-                        {
-                            @Model.Species.Taxonomy.CommonName
-                        }
-                    </h1>
-                </div>
 
-                <div class="images">
-                    @{
-                        var imageMedia = Model.Species.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
-                        for (int i = 0; i < imageMedia.Count; i++)
+@{
+    var imageMedia = Model.Species.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList().FirstOrDefault();
+    if (imageMedia != null)
+    {
+        <figure id="media">
+            <img src="@imageMedia.Medium.Uri" alt="@imageMedia.AlternativeText" />
+            <figcaption>
+                <div class="wrapper">
+                    <div class="caption">
+                        @if (!string.IsNullOrWhiteSpace(imageMedia.Caption))
                         {
-                            if (i == 0)
-                            {
-                                <img src="@imageMedia[i].Medium.Uri" width="@imageMedia[i].Medium.Width" height="@imageMedia[i].Medium.Height" class="img-rounded center-block" />
-                            }
-                            else
-                            {
-                                <img src="@imageMedia[i].Thumbnail.Uri" width="100" height="100" class="img-thumbnail" />
-                            }
+                            <strong>@Html.Raw(imageMedia.Caption)</strong>
                         }
+                    </div>
+                    <div class="media-tools">
+                        <button class="icon">
+                            <span class="icon-download" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Download Media</span>
+                        </button>
+                        <button class="icon">
+                            <span class="icon-fullscreen" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">View full screen</span>
+                        </button>
+                    </div>
+                </div>
+            </figcaption>
+        </figure>
+    }
+}
+
+<div id="title">
+    <div class="wrapper">
+        <h1>
+            @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.TaxonName))
+            {
+                <em>@Model.Species.Taxonomy.TaxonName</em><br/>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.CommonName))
+            {
+                @Model.Species.Taxonomy.CommonName
+            }
+        </h1>
+        <div class="thumbnails">
+            @{
+                for (int i = 0; i < new Random().Next(0, 15); i++)
+                {
+                    <div class="thumbnail"><div class="image"></div></div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div id="record">
+    <div class="wrapper">
+        <section class="text-content">
+            <div class="summary">
+                @if (!string.IsNullOrWhiteSpace(Model.Species.GeneralDescription))
+                {
+                    <h3>General Description</h3>
+                    <p>@Html.Raw(Model.Species.GeneralDescription)</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Species.Biology))
+                {
+                    <h3>Biology</h3>
+                    <p>@Html.Raw(Model.Species.Biology)</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Species.Distribution))
+                {
+                    <h3>Distribution</h3>
+                    <p>@Html.Raw(Model.Species.Distribution)</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Species.Habitat))
+                {
+                    <h3>Habitat</h3>
+                    <p>@Html.Raw(Model.Species.Habitat)</p>
+                }
+            </div>
+            <div class="detail">
+                <ul>
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.AnimalType))
+                    {
+                        <li>
+                            <h3>Animal Type</h3>
+                            <p><a href="/search?speciestype=@HttpUtility.UrlEncode(Model.Species.AnimalType.ToLower())">@Model.Species.AnimalType</a></p>
+                        </li>
                     }
-                </div>
-
-                <div class="main-content">
-                    <dl>
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.GeneralDescription))
-                        {
-                            <dt>General Description</dt>
-                            <dd>@Html.Raw(Model.Species.GeneralDescription)</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Biology))
-                        {
-                            <dt>Biology</dt>
-                            <dd>@Html.Raw(Model.Species.Biology)</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Distribution))
-                        {
-                            <dt>Distribution</dt>
-                            <dd>@Html.Raw(Model.Species.Distribution)</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Habitat))
-                        {
-                            <dt>Habitat</dt>
-                            <dd>@Html.Raw(Model.Species.Habitat)</dd>
-                        }
-                    </dl>
-                </div>
-
-                <div class="detailed dl-horizontal">
-                    <dl>
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.AnimalType))
-                        {
-                            <dt>Animal Type</dt>
-                            <dd><a href="/search?speciestype=@HttpUtility.UrlEncode(Model.Species.AnimalType.ToLower())">@Model.Species.AnimalType</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.AnimalSubType))
-                        {
-                            <dt>Animal SubType</dt>
-                            <dd><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Species.AnimalSubType)">@Model.Species.AnimalSubType</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.FastFact))
-                        {
-                            <dt>Fast Fact</dt>
-                            <dd>@Html.Raw(Model.Species.FastFact)</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.BriefId))
-                        {
-                            <dt>Brief Id</dt>
-                            <dd>@Html.Raw(Model.Species.BriefId)</dd>
-                        }
-                        @if (Model.Species.Colours.Any())
-                        {
-                            <dt>Colours</dt>
-                            <dd>
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.AnimalSubType))
+                    {
+                        <li>
+                            <h3>Animal SubType</h3>
+                            <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Species.AnimalSubType)">@Model.Species.AnimalSubType</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.FastFact))
+                    {
+                        <li>
+                            <h3>Fast Fact</h3>
+                            <p>@Html.Raw(Model.Species.FastFact)</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.BriefId))
+                    {
+                        <li>
+                            <h3>Brief Id</h3>
+                            <p>@Html.Raw(Model.Species.BriefId)</p>
+                        </li>
+                    }
+                    @if (Model.Species.Colours.Any())
+                    {
+                        <li>
+                            <h3>Colours</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.Colours.Count; i++)
                                 {
                                     <span>@Model.Species.Colours[i]</span>@(i != Model.Species.Colours.Count - 1 ? ", " : "")
-                                }                                
-                            </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.MaximumSize))
-                        {
-                            <dt>Maximum Size</dt>
-                            <dd>@Model.Species.MaximumSize</dd>
-                        }
-                        @if (Model.Species.Habitats.Any())
-                        {
-                            <dt>Habitats</dt>
-                            <dd>
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.MaximumSize))
+                    {
+                        <li>
+                            <h3>Maximum Size</h3>
+                            <p>@Model.Species.MaximumSize</p>
+                        </li>
+                    }
+                    @if (Model.Species.Habitats.Any())
+                    {
+                        <li>
+                            <h3>Habitats</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.Habitats.Count; i++)
                                 {
                                     <a href="/search?habitat=@HttpUtility.UrlEncode(Model.Species.Habitats[i])">@Model.Species.Habitats[i]</a>@(i != Model.Species.Habitats.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (Model.Species.WhereToLook.Any())
-                        {
-                            <dt>Where To Look</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Species.WhereToLook.Any())
+                    {
+                        <li>
+                            <h3>Where To Look</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.WhereToLook.Count; i++)
                                 {
                                     <a href="/search?habitat=@HttpUtility.UrlEncode(Model.Species.WhereToLook[i])">@Model.Species.WhereToLook[i]</a>@(i != Model.Species.WhereToLook.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (Model.Species.WhenActive.Any())
-                        {
-                            <dt>When Active</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Species.WhenActive.Any())
+                    {
+                        <li>
+                            <h3>When Active</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.WhenActive.Count; i++)
                                 {
                                     <span>@Model.Species.WhenActive[i]</span>@(i != Model.Species.WhenActive.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (Model.Species.NationalParks.Any())
-                        {
-                            <dt>National Parks</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Species.NationalParks.Any())
+                    {
+                        <li>
+                            <h3>National Parks</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.NationalParks.Count; i++)
                                 {
                                     <a href="/search?locality=@HttpUtility.UrlEncode(Model.Species.NationalParks[i])">@Model.Species.NationalParks[i]</a>@(i != Model.Species.NationalParks.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Diet))
-                        {
-                            <dt>Diet</dt>
-                            <dd>@Model.Species.Diet</dd>
-                        }
-                        @if (Model.Species.DietCategories.Any())
-                        {
-                            <dt>Diet Categories</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Diet))
+                    {
+                        <li>
+                            <h3>Diet</h3>
+                            <p>@Model.Species.Diet</p>
+                        </li>
+                    }
+                    @if (Model.Species.DietCategories.Any())
+                    {
+                        <li>
+                            <h3>Diet Categories</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.DietCategories.Count; i++)
                                 {
                                     <span>@Model.Species.DietCategories[i]</span>@(i != Model.Species.DietCategories.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Hazards))
-                        {
-                            <dt>Hazards</dt>
-                            <dd>@Html.Raw(Model.Species.Hazards)</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Endemicity))
-                        {
-                            <dt>Endemicity</dt>
-                            <dd><a href="/search?speciesendemicity=@HttpUtility.UrlEncode(Model.Species.Endemicity.ToLower())">@Model.Species.Endemicity</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Commercial))
-                        {
-                            <dt>Commercial</dt>
-                            <dd>@Model.Species.Commercial</dd>
-                        }
-                        @if (Model.Species.ConservationStatuses.Any())
-                        {
-                            <dt>Conservation Statuses</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Hazards))
+                    {
+                        <li>
+                            <h3>Hazards</h3>
+                            <p>@Html.Raw(Model.Species.Hazards)</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Endemicity))
+                    {
+                        <li>
+                            <h3>Endemicity</h3>
+                            <p><a href="/search?speciesendemicity=@HttpUtility.UrlEncode(Model.Species.Endemicity.ToLower())">@Model.Species.Endemicity</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Commercial))
+                    {
+                        <li>
+                            <h3>Commercial</h3>
+                            <p>@Model.Species.Commercial</p>
+                        </li>
+                    }
+                    @if (Model.Species.ConservationStatuses.Any())
+                    {
+                        <li>
+                            <h3>Conservation Statuses</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.ConservationStatuses.Count; i++)
                                 {
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Species.ConservationStatuses[i])">@Model.Species.ConservationStatuses[i]</a>@(i != Model.Species.ConservationStatuses.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.ScientificDiagnosis))
-                        {
-                            <dt>Scientific Diagnosis</dt>
-                            <dd>@Model.Species.ScientificDiagnosis</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Web))
-                        {
-                            <dt>Web</dt>
-                            <dd>@Model.Species.Web</dd>
-                        }
-                        @if (Model.Species.Plants.Any())
-                        {
-                            <dt>Plants</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.ScientificDiagnosis))
+                    {
+                        <li>
+                            <h3>Scientific Diagnosis</h3>
+                            <p>@Model.Species.ScientificDiagnosis</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Web))
+                    {
+                        <li>
+                            <h3>Web</h3>
+                            <p>@Model.Species.Web</p>
+                        </li>
+                    }
+                    @if (Model.Species.Plants.Any())
+                    {
+                        <li>
+                            <h3>Plants</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.Plants.Count; i++)
                                 {
                                     <span>@Model.Species.Plants[i]</span>@(i != Model.Species.Plants.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.FlightStart))
-                        {
-                            <dt>Flight Start</dt>
-                            <dd>@Model.Species.FlightStart</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.FlightEnd))
-                        {
-                            <dt>Flight End</dt>
-                            <dd>@Model.Species.FlightEnd</dd>
-                        }
-                        @if (Model.Species.Depths.Any())
-                        {
-                            <dt>Depths</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.FlightStart))
+                    {
+                        <li>
+                            <h3>Flight Start</h3>
+                            <p>@Model.Species.FlightStart</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.FlightEnd))
+                    {
+                        <li>
+                            <h3>Flight End</h3>
+                            <p>@Model.Species.FlightEnd</p>
+                        </li>
+                    }
+                    @if (Model.Species.Depths.Any())
+                    {
+                        <li>
+                            <h3>Depths</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.Depths.Count; i++)
                                 {
                                     <span>@Model.Species.Depths[i]</span>@(i != Model.Species.Depths.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (Model.Species.WaterColumnLocations.Any())
-                        {
-                            <dt>Water Column Locations</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Species.WaterColumnLocations.Any())
+                    {
+                        <li>
+                            <h3>Water Column Locations</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.WaterColumnLocations.Count; i++)
                                 {
                                     <span>@Model.Species.WaterColumnLocations[i]</span>@(i != Model.Species.WaterColumnLocations.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.TaxonName))
-                        {
-                            <dt>Taxon Name</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Species.Taxonomy.TaxonName)">@Model.Species.Taxonomy.TaxonName</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Author))
-                        {
-                            <dt>Scientific Author</dt>
-                            <dd>@Model.Species.Taxonomy.Author</dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.CommonName))
-                        {
-                            <dt>Common Name</dt>
-                            <dd>@Model.Species.Taxonomy.CommonName</dd>
-                        }
-                        @if (Model.Species.Taxonomy.OtherCommonNames.Any())
-                        {
-                            <dt>Other Names</dt>
-                            <dd>
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.TaxonName))
+                    {
+                        <li>
+                            <h3>Taxon Name</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Species.Taxonomy.TaxonName)">@Model.Species.Taxonomy.TaxonName</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Author))
+                    {
+                        <li>
+                            <h3>Scientific Author</h3>
+                            <p>@Model.Species.Taxonomy.Author</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.CommonName))
+                    {
+                        <li>
+                            <h3>Common Name</h3>
+                            <p>@Model.Species.Taxonomy.CommonName</p>
+                        </li>
+                    }
+                    @if (Model.Species.Taxonomy.OtherCommonNames.Any())
+                    {
+                        <li>
+                            <h3>Other Names</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Species.Taxonomy.OtherCommonNames.Count; i++)
                                 {
                                     <span>@Model.Species.Taxonomy.OtherCommonNames[i]</span>@(i != Model.Species.Taxonomy.OtherCommonNames.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Kingdom))
-                        {
-                            <dt>Kingdom</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Kingdom)">@Model.Species.Taxonomy.Kingdom</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Phylum))
-                        {
-                            <dt>Phylum</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Phylum)">@Model.Species.Taxonomy.Phylum</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subphylum))
-                        {
-                            <dt>Subphylum</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subphylum)">@Model.Species.Taxonomy.Subphylum</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superclass))
-                        {
-                            <dt>Superclass</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Superclass)">@Model.Species.Taxonomy.Superclass</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Class))
-                        {
-                            <dt>Class</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Class)">@Model.Species.Taxonomy.Class</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subclass))
-                        {
-                            <dt>Subclass</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subclass)">@Model.Species.Taxonomy.Subclass</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superorder))
-                        {
-                            <dt>Superorder</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Superorder)">@Model.Species.Taxonomy.Superorder</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Order))
-                        {
-                            <dt>Order</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Order)">@Model.Species.Taxonomy.Order</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Suborder))
-                        {
-                            <dt>Suborder</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Suborder)">@Model.Species.Taxonomy.Suborder</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Infraorder))
-                        {
-                            <dt>Infraorder</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Infraorder)">@Model.Species.Taxonomy.Infraorder</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superfamily))
-                        {
-                            <dt>Superfamily</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Superfamily)">@Model.Species.Taxonomy.Superfamily</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Family))
-                        {
-                            <dt>Family</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Family)">@Model.Species.Taxonomy.Family</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subfamily))
-                        {
-                            <dt>Subfamily</dt>
-                            <dd><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subfamily)">@Model.Species.Taxonomy.Subfamily</a></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Genus))
-                        {
-                            <dt>Genus</dt>
-                            <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Genus)">@Model.Species.Taxonomy.Genus</a></em></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subgenus))
-                        {
-                            <dt>Subgenus</dt>
-                            <dd><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subgenus)">@Model.Species.Taxonomy.Subgenus</a></em></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Species))
-                        {
-                            <dt>Species Name</dt>
-                            <dd><em>@Model.Species.Taxonomy.Species</em></dd>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subspecies))
-                        {
-                            <dt>Subspecies</dt>
-                            <dd><em>@Model.Species.Taxonomy.Subspecies</em></dd>
-                        }
-                    </dl>
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Kingdom))
+                    {
+                        <li>
+                            <h3>Kingdom</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Kingdom)">@Model.Species.Taxonomy.Kingdom</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Phylum))
+                    {
+                        <li>
+                            <h3>Phylum</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Phylum)">@Model.Species.Taxonomy.Phylum</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subphylum))
+                    {
+                        <li>
+                            <h3>Subphylum</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subphylum)">@Model.Species.Taxonomy.Subphylum</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superclass))
+                    {
+                        <li>
+                            <h3>Superclass</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Superclass)">@Model.Species.Taxonomy.Superclass</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Class))
+                    {
+                        <li>
+                            <h3>Class</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Class)">@Model.Species.Taxonomy.Class</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subclass))
+                    {
+                        <li>
+                            <h3>Subclass</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subclass)">@Model.Species.Taxonomy.Subclass</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superorder))
+                    {
+                        <li>
+                            <h3>Superorder</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Superorder)">@Model.Species.Taxonomy.Superorder</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Order))
+                    {
+                        <li>
+                            <h3>Order</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Order)">@Model.Species.Taxonomy.Order</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Suborder))
+                    {
+                        <li>
+                            <h3>Suborder</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Suborder)">@Model.Species.Taxonomy.Suborder</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Infraorder))
+                    {
+                        <li>
+                            <h3>Infraorder</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Infraorder)">@Model.Species.Taxonomy.Infraorder</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Superfamily))
+                    {
+                        <li>
+                            <h3>Superfamily</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Superfamily)">@Model.Species.Taxonomy.Superfamily</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Family))
+                    {
+                        <li>
+                            <h3>Family</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Family)">@Model.Species.Taxonomy.Family</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subfamily))
+                    {
+                        <li>
+                            <h3>Subfamily</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subfamily)">@Model.Species.Taxonomy.Subfamily</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Genus))
+                    {
+                        <li>
+                            <h3>Genus</h3>
+                            <p><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Genus)">@Model.Species.Taxonomy.Genus</a></em></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subgenus))
+                    {
+                        <li>
+                            <h3>Subgenus</h3>
+                            <p><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Species.Taxonomy.Subgenus)">@Model.Species.Taxonomy.Subgenus</a></em></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Species))
+                    {
+                        <li>
+                            <h3>Species Name</h3>
+                            <p><em>@Model.Species.Taxonomy.Species</em></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.Subspecies))
+                    {
+                        <li>
+                            <h3>Subspecies</h3>
+                            <p><em>@Model.Species.Taxonomy.Subspecies</em></p>
+                        </li>
+                    }
+            </ul>
+            </div>
+        </section>
+        <aside class="side-content">
+            <div class="print">
+                <a class="icon" href="#">
+                    <span class="icon-print" aria-hidden="true"></span>
+                    <span class="icon-label">Printer friendly</span>
+                </a>
+            </div>
+            <div class="social">
+                <h4>Share</h4>
+                <div class="social-tools">
+                    <a class="icon" href="#">
+                        <span class="icon-facebook" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Facebook</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-twitter" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Twitter</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-pintrest" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Pintrest</span>
+                    </a>
                 </div>
-
-                @if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
-                {
-                    <div class="related-items">
-                        <h4>Related Items</h4>
-                        @foreach (var relatedItem in Model.RelatedItems)
-                        {
-                            <a href="/@relatedItem.Id">
-                                <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@Html.Raw(relatedItem.Title)</span>
-                            </a>
-                            <br/>
-                        }
-                        @foreach (var relatedSpecimen in Model.RelatedSpecimens)
-                        {
-                            <a href="/@relatedSpecimen.Id">
-                                <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@Html.Raw(relatedSpecimen.Title)</span>
-                            </a>
-                            <br/>
-                        }
-                    </div>
-                }
-                
-                @if (Model.RelatedSpecimenCount > 0)
-                {
-                    <div>
-                        <h4>
-                            <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Species.Taxonomy.TaxonName)">See all the things related to this species (@Model.RelatedSpecimenCount)</a>
-                        </h4>
-                    </div>
-                }
-
+            </div>
+        </aside>
+        <aside class="cite-content">
+            <div class="cite">
+                <h3>Cite this page</h3>
+                <p>Museum Victoria (2014) @Html.RenderContext.Context.Request.Url.SiteBase@Html.RenderContext.Context.Request.Url.Path</p>
+                <p>
+                    <strong>Rights /</strong> Text on this page is licensed as
+                    <a class="icon" href="http://creativecommons.org/licenses/by/2.0/au/">
+                        <span class="icon-cc-by" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">CC BY</span>
+                    </a>
+                </p>
                 @if (Model.Species.Authors.Any())
                 {
-                    <div class="authors">Authors</div>
-                    foreach (var author in @Model.Species.Authors)
-                    {
-                        <div>
-                            @if (author.ProfileImage != null)
+                    <p class="authors">
+                        <strong>Authors /</strong>
+                        @foreach (var author in @Model.Species.Authors)
+                        {
+                            if (author.ProfileImage != null)
                             {
                                 <img src="@author.ProfileImage.Thumbnail.Uri" width="100" height="100" class="img-thumbnail" />
                             }
-                            <h4>@author.Name</h4>
-                            <p>@author.Biography</p>
-                        </div>
-                    }
+                            <span>@author.Name</span><br/>
+                            @author.Biography<br/>
+                        }
+                    </p>
                 }
             </div>
-        </div>
+        </aside>
     </div>
 </div>
+
+@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
+{
+    <div id="related">
+        <div class="wrapper">
+            <div class="related-content">
+                <h3>Showing related</h3>
+                @foreach (var relatedItem in Model.RelatedItems)
+                {
+                    <div class="item">
+                        <a href="/@relatedItem.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedItem.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedItem.Title)</span>
+                        </a>
+                    </div>
+                }
+                @foreach (var relatedSpecimen in Model.RelatedSpecimens)
+                {
+                    <div class="item">
+                        <a href="/@relatedSpecimen.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedSpecimen.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedSpecimen.Title)</span>
+                        </a>
+                    </div>
+                }
+            </div>
+            @if (Model.RelatedSpecimenCount > 0)
+            {
+                <div class="related-link">
+                    <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Species.Taxonomy.TaxonName)">See all the things related to this species (@Model.RelatedSpecimenCount) ... </a>
+                </div>
+            }
+        </div>
+    </div>
+}

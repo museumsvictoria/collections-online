@@ -1,152 +1,250 @@
-﻿@using CollectionsOnline.Core.Models
+﻿@using System
+@using CollectionsOnline.Core.Models
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Articles.ArticleViewTransformerResult>
 @{
     Layout = "layout.cshtml";
 }
-<div class="container no-nav">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="record">
-                <div class="title">
-                    <h1>
-                        @Model.Article.Title<br />
-                        @foreach (var type in @Model.Article.Types)
+
+@{
+    var imageMedia = Model.Article.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList().FirstOrDefault();
+    if (imageMedia != null)
+    {
+        <figure id="media">
+            <img src="@imageMedia.Medium.Uri" alt="@imageMedia.AlternativeText" />
+            <figcaption>
+                <div class="wrapper">
+                    <div class="caption">
+                        @if (!string.IsNullOrWhiteSpace(imageMedia.Caption))
                         {
-                            <a href="/search?articletypes=@HttpUtility.UrlEncode(type.ToLower())">@type</a><br />
+                            <strong>@imageMedia.Caption</strong>
                         }
-                    </h1>
+                    </div>
+                    <div class="media-tools">
+                        <button class="icon">
+                            <span class="icon-download" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Download Media</span>
+                        </button>
+                        <button class="icon">
+                            <span class="icon-fullscreen" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">View full screen</span>
+                        </button>
+                    </div>
                 </div>
+            </figcaption>
+        </figure>
+    }
+}
 
-                <div class="images">
-                    @{
-                        var imageMedia = Model.Article.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
-                        for (int i = 0; i < imageMedia.Count; i++)
-                        {
-                            if (i == 0)
-                            {
-                                <img src="@imageMedia[i].Medium.Uri" width="@imageMedia[i].Medium.Width" height="@imageMedia[i].Medium.Height" class="img-rounded center-block" />
-                            }
-                            else
-                            {
-                                <img src="@imageMedia[i].Thumbnail.Uri" width="100" height="100" class="img-thumbnail" />
-                            }
-                        }
-                    }
-                </div>
-
-                <div class="main-content">
-                    @if (!string.IsNullOrWhiteSpace(Model.Article.ContentSummary))
-                    {
-                        <h4>Summary</h4>
-                        @Html.Raw(Model.Article.ContentSummary)
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Article.Content))
-                    {
-                        @Html.Raw(Model.Article.Content)
-                    }
-                </div>
-
-                @if (Model.Article.Keywords.Any())
+<div id="title">
+    <div class="wrapper">
+        <h1>
+            @Model.Article.Title<br />
+            @foreach (var type in @Model.Article.Types)
+            {
+                <a href="/search?articletypes=@HttpUtility.UrlEncode(type.ToLower())">@type</a><br />
+            }
+        </h1>
+        <div class="thumbnails">
+            @{
+                for (int i = 0; i < new Random().Next(0, 15); i++)
                 {
-                    <div>
-                        <dl>
-                            <dt>Keywords</dt>
-                            <dd>
+                    <div class="thumbnail"><div class="image"></div></div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div id="record">
+    <div class="wrapper">
+        <section class="text-content">
+            <div class="summary">
+                @if (!string.IsNullOrWhiteSpace(Model.Article.ContentSummary))
+                {
+                    <h3>Summary</h3>
+                    <p>@Html.Raw(Model.Article.ContentSummary)</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Article.Content))
+                {
+                    @Html.Raw(Model.Article.Content)
+                }
+            </div>
+            <div class="detail">
+                <ul>
+                    @if (Model.Article.Keywords.Any())
+                    {
+                        <li>
+                            <h3>Keywords</h3>
+                            <p>
                                 @for (int i = 0; i < Model.Article.Keywords.Count; i++)
                                 {
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Article.Keywords[i])">@Model.Article.Keywords[i]</a>@(i != Model.Article.Keywords.Count - 1 ? ", " : "")
                                 }
-                            </dd>
-                        </dl>
-                    </div>
-                }
-
-                @if (Model.ChildArticles.Any() || Model.ParentArticle != null)
-                {
-                    <div class="related-articles">
-                        <h4>Related Articles</h4>
-                        @if (Model.ParentArticle != null)
-                        {
-                            <a href="/@Model.ParentArticle.Id">
-                                <img src="@(string.IsNullOrWhiteSpace(Model.ParentArticle.ThumbnailUri) ? "http://placehold.it/110" : Model.ParentArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@Model.ParentArticle.Title</span>
-                            </a>
-                            <br/>
-                        }
-                        @foreach (var childArticle in @Model.ChildArticles)
-                        {
-                            <a href="/@childArticle.Id">
-                                <img src="@(string.IsNullOrWhiteSpace(childArticle.ThumbnailUri) ? "http://placehold.it/110" : childArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@childArticle.Title</span>
-                            </a>
-                            <br/>
-                        }
-                    </div>
-                }
-                
-                @if (Model.RelatedArticles.Any())
-                {
-                    <div class="related-articles">
-                        <h4>Associated Articles</h4>
-                        @foreach (var relatedArticle in Model.RelatedArticles)
-                        {
-                            <a href="/@relatedArticle.Id">
-                                <img src="@(string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri) ? "http://placehold.it/110" : relatedArticle.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@relatedArticle.Title</span>
-                            </a>
-                            <br/>
-                        }
-                    </div>
-                }
-
-                @if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
-                {
-                    <div class="related-items">
-                        <h4>Related Items</h4>
-                        @foreach (var relatedItem in Model.RelatedItems)
-                        {
-                            <a href="/@relatedItem.Id">
-                                <img src="@(string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri) ? "http://placehold.it/110" : relatedItem.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@Html.Raw(relatedItem.Title)</span>
-                            </a>
-                            <br/>
-                        }
-                        @foreach (var relatedSpecimen in Model.RelatedSpecimens)
-                        {
-                            <a href="/@relatedSpecimen.Id">
-                                <img src="@(string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri) ? "http://placehold.it/110" : relatedSpecimen.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                <span>@Html.Raw(relatedSpecimen.Title)</span>
-                            </a>
-                            <br/>
-                        }
-                    </div>
-                }
-                
-                @if (Model.RelatedItemSpecimenCount > 0)
-                {
-                    <div>
-                        <h4>
-                            <a href="/search?article=@HttpUtility.UrlEncode(@Model.Article.Title)">See all the things related to this article (@Model.RelatedItemSpecimenCount)</a>
-                        </h4>
-                    </div>
-                }
-                
+                            </p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </section>
+        <aside class="side-content">
+            <div class="print">
+                <a class="icon" href="#">
+                    <span class="icon-print" aria-hidden="true"></span>
+                    <span class="icon-label">Printer friendly</span>
+                </a>
+            </div>
+            <div class="social">
+                <h4>Share</h4>
+                <div class="social-tools">
+                    <a class="icon" href="#">
+                        <span class="icon-facebook" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Facebook</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-twitter" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Twitter</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-pintrest" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Pintrest</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <aside class="cite-content">
+            <div class="cite">
+                <h3>Cite this page</h3>
+                <p>Museum Victoria (2014) @Html.RenderContext.Context.Request.Url.SiteBase@Html.RenderContext.Context.Request.Url.Path</p>
+                <p>
+                    <strong>Rights /</strong> Text on this page is licensed as
+                    <a class="icon" href="http://creativecommons.org/licenses/by/2.0/au/">
+                        <span class="icon-cc-by" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">CC BY</span>
+                    </a>
+                </p>
                 @if (Model.Article.Authors.Any())
                 {
-                    <div class="authors">Authors</div>
-                    foreach (var author in @Model.Article.Authors)
-                    {
-                        <div>
-                            @if (author.ProfileImage != null)
+                    <p class="authors">
+                        <strong>Authors /</strong>
+                        @foreach (var author in @Model.Article.Authors)
+                        {
+                            if (author.ProfileImage != null)
                             {
                                 <img src="@author.ProfileImage.Thumbnail.Uri" width="100" height="100" class="img-thumbnail" />
                             }
-                            <h4>@author.Name</h4>
-                            <p>@author.Biography</p>
-                        </div>
-                    }
+                            <span>@author.Name</span><br/>
+                            @author.Biography<br/>
+                        }
+                    </p>
                 }
             </div>
-        </div>
+        </aside>
     </div>
 </div>
+
+@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
+{
+    <div id="related">
+        <div class="wrapper">
+            <div class="related-content">
+                <h3>Showing related</h3>
+                @if (Model.ParentArticle != null)
+                {
+                    <div class="article">
+                        <a href="/@Model.ParentArticle.Id">
+                            @if (string.IsNullOrWhiteSpace(Model.ParentArticle.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@Model.ParentArticle.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(Model.ParentArticle.Title)</span>
+                        </a>
+                    </div>
+                }
+                @foreach (var childArticle in Model.ChildArticles)
+                {
+                    <div class="article">
+                        <a href="/@childArticle.Id">
+                            @if (string.IsNullOrWhiteSpace(childArticle.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@childArticle.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(childArticle.Title)</span>
+                        </a>
+                    </div>
+                }
+                @foreach (var relatedArticle in Model.RelatedArticles)
+                {
+                    <div class="article">
+                        <a href="/@relatedArticle.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedArticle.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedArticle.Title)</span>
+                        </a>
+                    </div>
+                }
+                @foreach (var relatedItem in Model.RelatedItems)
+                {
+                    <div class="item">
+                        <a href="/@relatedItem.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedItem.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedItem.Title)</span>
+                        </a>
+                    </div>
+                }
+                @foreach (var relatedSpecimen in Model.RelatedSpecimens)
+                {
+                    <div class="item">
+                        <a href="/@relatedSpecimen.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedSpecimen.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedSpecimen.Title)</span>
+                        </a>
+                    </div>
+                }
+            </div>
+            @if (Model.RelatedItemSpecimenCount > 0)
+            {
+                <div class="related-link">
+                    <a href="/search?article=@HttpUtility.UrlEncode(@Model.Article.Title)">See all the things related to this article (@Model.RelatedItemSpecimenCount) ... </a>
+                </div>
+            }
+        </div>
+    </div>
+}

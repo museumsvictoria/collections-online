@@ -17,7 +17,7 @@
                     <div class="caption">
                         @if (!string.IsNullOrWhiteSpace(imageMedia.Caption))
                         {
-                            <strong>@imageMedia.Caption</strong>
+                            <strong>@Html.Raw(imageMedia.Caption)</strong>
                         }
                     </div>
                     <div class="media-tools">
@@ -1024,88 +1024,94 @@
     </div>
 </div>
 
-<div id="related">
-    <div class="wrapper">
-        <div class="related-content">
-            <h3>Showing related</h3>
-            @foreach (var relatedItem in Model.RelatedItems)
+@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || (Model.RelatedSpecies != null && Model.RelatedSpecies.Any()))
+{
+    <div id="related">
+        <div class="wrapper">
+            <div class="related-content">
+                <h3>Showing related</h3>
+                @foreach (var relatedItem in Model.RelatedItems)
+                {
+                    <div class="item">
+                        <a href="/@relatedItem.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedItem.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedItem.Title)</span>
+                        </a>
+                    </div>
+                }
+                @foreach (var relatedSpecimen in Model.RelatedSpecimens)
+                {
+                    <div class="specimen">
+                        <a href="/@relatedSpecimen.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedSpecimen.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedSpecimen.Title)</span>
+                        </a>
+                    </div>
+                }
+                @foreach (var relatedArticle in Model.RelatedArticles)
+                {
+                    <div class="article">
+                        <a href="/@relatedArticle.Id">
+                            @if (string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
+                            {
+                                <span class="no-image">
+                                    <span class="no-image-label">No Image</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@relatedArticle.ThumbnailUri" />
+                            }
+                            <span class="title">@Html.Raw(relatedArticle.Title)</span>
+                        </a>
+                    </div>
+                }
+                @if (Model.RelatedSpecies != null)
+                {
+                    foreach (var relatedSpecies in Model.RelatedSpecies)
+                    {
+                        <div class="species">
+                            <a href="/@relatedSpecies.Id">
+                                @if (string.IsNullOrWhiteSpace(relatedSpecies.ThumbnailUri))
+                                {
+                                    <span class="no-image">
+                                        <span class="no-image-label">No Image</span>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <img src="@relatedSpecies.ThumbnailUri" />
+                                }
+                                <span class="title">@Html.Raw(relatedSpecies.Title)</span>
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+            @if (Model.RelatedSpeciesSpecimenItemCount > 0)
             {
-                <div class="item">
-                    <a href="/@relatedItem.Id">
-                        @if (string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
-                        {
-                            <span class="no-image">
-                                <span class="no-image-label">No Image</span>
-                            </span>
-                        }
-                        else
-                        {
-                            <img src="@relatedItem.ThumbnailUri" />
-                        }
-                        <span class="title">@Html.Raw(relatedItem.Title)</span>
-                    </a>
-                </div>
-            }
-            @foreach (var relatedSpecimen in Model.RelatedSpecimens)
-            {
-                <div class="specimen">
-                    <a href="/@relatedSpecimen.Id">
-                        @if (string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
-                        {
-                            <span class="no-image">
-                                <span class="no-image-label">No Image</span>
-                            </span>
-                        }
-                        else
-                        {
-                            <img src="@relatedSpecimen.ThumbnailUri" />
-                        }
-                        <span class="title">@Html.Raw(relatedSpecimen.Title)</span>
-                    </a>
-                </div>
-            }
-            @foreach (var relatedArticle in Model.RelatedArticles)
-            {
-                <div class="article">
-                    <a href="/@relatedArticle.Id">
-                        @if (string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
-                        {
-                            <span class="no-image">
-                                <span class="no-image-label">No Image</span>
-                            </span>
-                        }
-                        else
-                        {
-                            <img src="@relatedArticle.ThumbnailUri" />
-                        }
-                        <span class="title">@Html.Raw(relatedArticle.Title)</span>
-                    </a>
-                </div>
-            }
-            @foreach (var relatedSpecies in Model.RelatedSpecies)
-            {
-                <div class="species">
-                    <a href="/@relatedSpecies.Id">
-                        @if (string.IsNullOrWhiteSpace(relatedSpecies.ThumbnailUri))
-                        {
-                            <span class="no-image">
-                                <span class="no-image-label">No Image</span>
-                            </span>
-                        }
-                        else
-                        {
-                            <img src="@relatedSpecies.ThumbnailUri" />
-                        }
-                        <span class="title">@Html.Raw(relatedSpecies.Title)</span>
-                    </a>
+                <div class="related-link">
+                    <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Item.Taxonomy.TaxonName)">See all the things related to this item (@Model.RelatedSpeciesSpecimenItemCount) ... </a>
                 </div>
             }
         </div>
-        @if (Model.RelatedSpeciesSpecimenItemCount > 0)
-        {
-            <div class="related-link">
-                <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Item.Taxonomy.TaxonName)">See all the things related to this item (@Model.RelatedSpeciesSpecimenItemCount) ... </a>
-            </div>
-        }
     </div>
-</div>
+}
