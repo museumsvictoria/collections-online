@@ -6,34 +6,31 @@
     Layout = "layout.cshtml";
 }
 
-@{
-    var imageMedia = Model.Item.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList().FirstOrDefault();
-    if (imageMedia != null)
-    {
-        <figure id="media">
-            <img src="@imageMedia.Medium.Uri" alt="@imageMedia.AlternativeText" />
-            <figcaption>
-                <div class="wrapper">
-                    <div class="caption">
-                        @if (!string.IsNullOrWhiteSpace(imageMedia.Caption))
-                        {
-                            <strong>@Html.Raw(imageMedia.Caption)</strong>
-                        }
-                    </div>
-                    <div class="media-tools">
-                        <button class="icon">
-                            <span class="icon-download" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Download Media</span>
-                        </button>
-                        <button class="icon">
-                            <span class="icon-fullscreen" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">View full screen</span>
-                        </button>
-                    </div>
+@if (Model.ItemHeroImage != null)
+{
+    <figure id="media">
+        <img src="@Model.ItemHeroImage.Medium.Uri" alt="@Model.ItemHeroImage.AlternativeText" />
+        <figcaption>
+            <div class="wrapper">
+                <div class="caption">
+                    @if (!string.IsNullOrWhiteSpace(Model.ItemHeroImage.Caption))
+                    {
+                        <strong>@Html.Raw(Model.ItemHeroImage.Caption)</strong>
+                    }
                 </div>
-            </figcaption>
-        </figure>
-    }
+                <div class="media-tools">
+                    <button class="icon">
+                        <span class="icon-download" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Download Media</span>
+                    </button>
+                    <button class="icon">
+                        <span class="icon-fullscreen" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">View full screen</span>
+                    </button>
+                </div>
+            </div>
+        </figcaption>
+    </figure>
 }
 
 <div id="title">
@@ -43,14 +40,24 @@
             @Html.Raw(Model.Item.ObjectName)<br />
             @Model.Item.TradeLiteratureCoverTitle
         </h1>
-        <div class="thumbnails">
-            @{
-                for (int i = 0; i < new Random().Next(0, 15); i++)
+        @if (Model.ItemImages.Any())
+        {
+            <div class="thumbnails">
+                @foreach (var itemImage in Model.ItemImages)
                 {
-                    <div class="thumbnail"><div class="image"></div></div>
+                    <div class="thumbnail">
+                        @if (itemImage.Thumbnail.Uri == Model.ItemHeroImage.Thumbnail.Uri)
+                        {
+                            <img class="active" src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
+                        }
+                        else
+                        {
+                            <img src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
+                        }
+                    </div>
                 }
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>
 
@@ -456,9 +463,11 @@
                                 {
                                     <a href="/search?name=@HttpUtility.UrlEncode(Model.Item.BrandNames[i])">@Model.Item.BrandNames[i]</a>@(i != Model.Item.BrandNames.Count - 1 ? ", " : "")
 
+
                                 }
-                            </p>
-                        </li>
+                                        <
+                                    </p>
+                                </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyContextNumber))
                     {
@@ -978,11 +987,11 @@
         <aside class="side-content">
             @if (Model.Item.MuseumLocation != null)
             {
-                <div class="on-display">
-                    On display<br />
-                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
-                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
-                </div>
+            <div class="on-display">
+                On display<br />
+                <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
+                <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
+            </div>
             }
             <div class="print">
                 <a class="icon" href="#">
@@ -1010,11 +1019,12 @@
         </aside>
         <aside class="cite-content">
             <div class="cite">
-                <h3>Cite this page</h3>
-                <p>Museum Victoria (2014) @Html.RenderContext.Context.Request.Url.SiteBase@Html.RenderContext.Context.Request.Url.Path</p>
+                <h4>Cite this page</h4>
+                <p>@Html.RenderCitation(Model.Item)</p>
+                <h4>Rights</h4>
                 <p>
-                    <strong>Rights /</strong> Text on this page is licensed as
-                    <a class="icon" href="http://creativecommons.org/licenses/by/2.0/au/">
+                    Authored text on this page is licensed as
+                    <a class="icon" href="http://creativecommons.org/licenses/by/3.0/au/">
                         <span class="icon-cc-by" aria-hidden="true"></span>
                         <span class="icon-label-hidden">CC BY</span>
                     </a>

@@ -67,6 +67,10 @@ namespace CollectionsOnline.WebSite.Features.Specimens
         public IList<RelatedDocumentViewModel> RelatedArticles { get; set; }
 
         public int RelatedSpeciesSpecimenItemCount { get; set; }
+        
+        public ImageMedia SpecimenHeroImage { get; set; }
+        
+        public IList<ImageMedia> SpecimenImages { get; set; }
 
         public SpecimenViewTransformerResult()
         {
@@ -74,6 +78,7 @@ namespace CollectionsOnline.WebSite.Features.Specimens
             RelatedSpecimens = new List<RelatedDocumentViewModel>();
             RelatedSpecies = new List<RelatedDocumentViewModel>();
             RelatedArticles = new List<RelatedDocumentViewModel>();
+            SpecimenImages = new List<ImageMedia>();
         }
     }
 }

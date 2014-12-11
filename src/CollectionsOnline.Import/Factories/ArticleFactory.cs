@@ -50,8 +50,8 @@ namespace CollectionsOnline.Import.Factories
                         "NarNarrativeSummary",
                         "DesType_tab",
                         "DesGeographicLocation_tab",
-                        "authors=NarAuthorsRef_tab.(NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
-                        "contributors=[contributor=NarContributorRef_tab.(NamFullName,BioLabel),NarContributorRole_tab]",
+                        "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
+                        "contributors=[contributor=NarContributorRef_tab.(NamFirst,NamLast,NamFullName,BioLabel),NarContributorRole_tab]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
@@ -89,7 +89,7 @@ namespace CollectionsOnline.Import.Factories
                 new CultureInfo("en-AU"));
             article.Title = map.GetEncodedString("NarTitle");
             article.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab"));
-            article.Content = map.GetEncodedString("NarNarrative");
+            article.Content = HtmlConverter.HtmlSanitizer(map.GetEncodedString("NarNarrative"));
             article.ContentSummary = map.GetEncodedString("NarNarrativeSummary");
             article.Types.AddRange(map.GetEncodedStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)));
             article.Keywords.AddRange(map.GetEncodedStrings("DesGeographicLocation_tab"));
@@ -99,7 +99,9 @@ namespace CollectionsOnline.Import.Factories
                 .Where(x => x != null)
                 .Select(x => new Author
                 {
-                    Name = x.GetEncodedString("NamFullName"),
+                    FirstName = x.GetEncodedString("NamFirst"),
+                    LastName = x.GetEncodedString("NamLast"),
+                    FullName = x.GetEncodedString("NamFullName"),
                     Biography = x.GetEncodedString("BioLabel"),
                     ProfileImage = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault()) as ImageMedia
                 }).ToList();
@@ -115,7 +117,9 @@ namespace CollectionsOnline.Import.Factories
                    .Select(x => x.GetMap("contributor"))
                    .Select(x => new Author
                    {
-                       Name = x.GetEncodedString("NamFullName"),
+                       FirstName = x.GetEncodedString("NamFirst"),
+                       LastName = x.GetEncodedString("NamLast"),
+                       FullName = x.GetEncodedString("NamFullName"),
                        Biography = x.GetEncodedString("BioLabel")
                    }));
 

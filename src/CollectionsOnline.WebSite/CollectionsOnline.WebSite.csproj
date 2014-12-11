@@ -230,6 +230,12 @@
   <ItemGroup>
     <Content Include="package.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="content\fonts\mv-collections.eot" />
+    <Content Include="content\fonts\mv-collections.svg" />
+    <Content Include="content\fonts\mv-collections.ttf" />
+    <Content Include="content\fonts\mv-collections.woff" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

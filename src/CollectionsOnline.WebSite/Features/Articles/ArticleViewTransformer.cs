@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Features.Shared;
@@ -70,6 +71,10 @@ namespace CollectionsOnline.WebSite.Features.Articles
         public IList<RelatedDocumentViewModel> RelatedArticles { get; set; }
 
         public int RelatedItemSpecimenCount { get; set; }
+        
+        public ImageMedia ArticleHeroImage { get; set; }
+        
+        public IList<ImageMedia> ArticleImages { get; set; }
 
         public ArticleViewTransformerResult()
         {
@@ -77,6 +82,7 @@ namespace CollectionsOnline.WebSite.Features.Articles
             RelatedSpecimens = new List<RelatedDocumentViewModel>();
             ChildArticles = new List<RelatedDocumentViewModel>();
             RelatedArticles = new List<RelatedDocumentViewModel>();
+            ArticleImages = new List<ImageMedia>();
         }
     }
 }

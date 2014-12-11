@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Ganss.XSS;
 using HtmlAgilityPack;
 
 namespace CollectionsOnline.Import.Utilities
@@ -20,6 +22,13 @@ namespace CollectionsOnline.Import.Utilities
             ConvertTo(doc.DocumentNode, sw);
 
             return sw.ToString();
+        }
+
+        public static string HtmlSanitizer(string html)
+        {
+            var sanitizer = new HtmlSanitizer(DefaultAllowedTags, allowedAttributes:DefaultAllowedAttributes);
+
+            return sanitizer.Sanitize(html);
         }
 
         private static void ConvertTo(HtmlNode node, StringWriter outText)
@@ -73,5 +82,147 @@ namespace CollectionsOnline.Import.Utilities
                 ConvertTo(subnode, outText);
             }
         }
+
+        private static readonly ISet<string> DefaultAllowedTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "a",
+            "abbr",
+            "acronym",
+            "address",
+            "area",
+            "b",
+            "big",
+            "blockquote",
+            "br",
+            "caption",
+            "center",
+            "cite",
+            "code",
+            "col",
+            "colgroup",
+            "dd",
+            "del",
+            "dfn",
+            "div",
+            "dl",
+            "dt",
+            "em",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "hr",
+            "i",
+            "ins",
+            "kbd",
+            "li",
+            "menu",
+            "ol",
+            "p",
+            "pre",
+            "q",
+            "s",
+            "samp",
+            "small",
+            "span",
+            "strike",
+            "strong",
+            "sub",
+            "sup",
+            "table",
+            "tbody",
+            "td",
+            "textarea",
+            "tfoot",
+            "th",
+            "thead",
+            "tr",
+            "tt",
+            "u",
+            "ul",
+            "var",
+            "section",
+            "nav",
+            "article",
+            "aside",
+            "header",
+            "footer",
+            "main",
+            "figure",
+            "figcaption",
+            "data",
+            "time",
+            "mark",
+            "ruby",
+            "rt",
+            "rp",
+            "bdi",
+            "wbr",
+            "details",
+            "summary",
+            "menuitem"
+        };
+
+        private static readonly ISet<string> DefaultAllowedAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "abbr",
+            "accept",
+            "accept-charset",
+            "accesskey",
+            "action",
+            "align",
+            "alt",
+            "axis",
+            "char",
+            "charoff",
+            "charset",
+            "checked",
+            "cite",
+            "clear",
+            "cols",
+            "colspan",
+            "compact",
+            "coords",
+            "datetime",
+            "dir",
+            "disabled",
+            "enctype",
+            "for",
+            "headers",
+            "href",
+            "hreflang",
+            "hspace",
+            "ismap",
+            "label",
+            "lang",
+            "longdesc",
+            "maxlength",
+            "media",
+            "method",
+            "multiple",
+            "name",
+            "nohref",
+            "noshade",
+            "nowrap",
+            "prompt",
+            "readonly",
+            "rel",
+            "rev",
+            "rows",
+            "rowspan",
+            "rules",
+            "scope",
+            "selected",
+            "shape",
+            "span",
+            "start",
+            "summary",
+            "tabindex",
+            "target",
+            "title",
+            "type",
+        };
     }
 }

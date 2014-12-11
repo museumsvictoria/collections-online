@@ -1,4 +1,6 @@
-﻿using CollectionsOnline.Core.Indexes;
+﻿using System.Linq;
+using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Features.Articles
@@ -22,6 +24,10 @@ namespace CollectionsOnline.WebSite.Features.Articles
                 .WhereEquals("Articles", result.Article.Title);
 
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
+
+            // Set Media
+            result.ArticleHeroImage = result.Article.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            result.ArticleImages = result.Article.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
 
             return result;
         }

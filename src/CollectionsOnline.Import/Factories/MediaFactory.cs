@@ -72,8 +72,7 @@ namespace CollectionsOnline.Import.Factories
         {
             var medias = new List<Media>();
 
-            // TODO: REMOVE HAX
-            medias.AddRange(maps.Take(1).Select(Make).Where(x => x != null));
+            medias.AddRange(maps.Select(Make).Where(x => x != null));
 
             return medias;
         }

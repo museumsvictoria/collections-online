@@ -6,34 +6,31 @@
     Layout = "layout.cshtml";
 }
 
-@{
-    var imageMedia = Model.Specimen.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList().FirstOrDefault();
-    if (imageMedia != null)
-    {
-        <figure id="media">
-            <img src="@imageMedia.Medium.Uri" alt="@imageMedia.AlternativeText" />
-            <figcaption>
-                <div class="wrapper">
-                    <div class="caption">
-                        @if (!string.IsNullOrWhiteSpace(imageMedia.Caption))
-                        {
-                            <strong>@Html.Raw(imageMedia.Caption)</strong>
-                        }
-                    </div>
-                    <div class="media-tools">
-                        <button class="icon">
-                            <span class="icon-download" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Download Media</span>
-                        </button>
-                        <button class="icon">
-                            <span class="icon-fullscreen" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">View full screen</span>
-                        </button>
-                    </div>
+@if (Model.SpecimenHeroImage != null)
+{
+    <figure id="media">
+        <img src="@Model.SpecimenHeroImage.Medium.Uri" alt="@Model.SpecimenHeroImage.AlternativeText" />
+        <figcaption>
+            <div class="wrapper">
+                <div class="caption">
+                    @if (!string.IsNullOrWhiteSpace(Model.SpecimenHeroImage.Caption))
+                    {
+                        <strong>@Html.Raw(Model.SpecimenHeroImage.Caption)</strong>
+                    }
                 </div>
-            </figcaption>
-        </figure>
-    }
+                <div class="media-tools">
+                    <button class="icon">
+                        <span class="icon-download" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Download Media</span>
+                    </button>
+                    <button class="icon">
+                        <span class="icon-fullscreen" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">View full screen</span>
+                    </button>
+                </div>
+            </div>
+        </figcaption>
+    </figure>
 }
 
 <div id="title">
@@ -52,14 +49,24 @@
                 @Model.Specimen.RegistrationNumber
             }
         </h1>
-        <div class="thumbnails">
-            @{
-                for (int i = 0; i < new Random().Next(0, 15); i++)
+        @if (Model.SpecimenImages.Any())
+        {
+            <div class="thumbnails">
+                @foreach (var specimenImage in Model.SpecimenImages)
                 {
-                    <div class="thumbnail"><div class="image"></div></div>
+                    <div class="thumbnail">
+                        @if (specimenImage.Thumbnail.Uri == Model.SpecimenHeroImage.Thumbnail.Uri)
+                        {
+                            <img class="active" src="@specimenImage.Thumbnail.Uri" alt="@specimenImage.AlternativeText" />
+                        }
+                        else
+                        {
+                            <img src="@specimenImage.Thumbnail.Uri" alt="@specimenImage.AlternativeText" />
+                        }
+                    </div>
                 }
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>
 
@@ -732,11 +739,12 @@
         </aside>
         <aside class="cite-content">
             <div class="cite">
-                <h3>Cite this page</h3>
-                <p>Museum Victoria (2014) @Html.RenderContext.Context.Request.Url.SiteBase@Html.RenderContext.Context.Request.Url.Path</p>
+                <h4>Cite this page</h4>
+                <p>@Html.RenderCitation(Model.Specimen)</p>
+                <h4>Rights</h4>
                 <p>
-                    <strong>Rights /</strong> Text on this page is licensed as
-                    <a class="icon" href="http://creativecommons.org/licenses/by/2.0/au/">
+                    Authored text on this page is licensed as
+                    <a class="icon" href="http://creativecommons.org/licenses/by/3.0/au/">
                         <span class="icon-cc-by" aria-hidden="true"></span>
                         <span class="icon-label-hidden">CC BY</span>
                     </a>

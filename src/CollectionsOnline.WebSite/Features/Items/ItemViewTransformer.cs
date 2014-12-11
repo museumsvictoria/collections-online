@@ -71,12 +71,17 @@ namespace CollectionsOnline.WebSite.Features.Items
 
         public int RelatedSpeciesSpecimenItemCount { get; set; }
 
+        public ImageMedia ItemHeroImage { get; set; }
+
+        public IList<ImageMedia> ItemImages { get; set; }
+
         public ItemViewTransformerResult()
         {
             RelatedItems = new List<RelatedDocumentViewModel>();
             RelatedSpecimens = new List<RelatedDocumentViewModel>();
             RelatedArticles = new List<RelatedDocumentViewModel>();
             RelatedSpecies = new List<RelatedDocumentViewModel>();
+            ItemImages = new List<ImageMedia>();
         }
     }
 }

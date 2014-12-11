@@ -45,11 +45,16 @@ namespace CollectionsOnline.WebSite.Features.Species
         public IList<RelatedDocumentViewModel> RelatedSpecimens { get; set; }
 
         public int RelatedSpecimenCount { get; set; }
+        
+        public ImageMedia SpeciesHeroImage { get; set; }
+        
+        public IList<ImageMedia> SpeciesImages { get; set; }
 
         public SpeciesViewTransformerResult()
         {
             RelatedItems = new List<RelatedDocumentViewModel>();
             RelatedSpecimens = new List<RelatedDocumentViewModel>();
+            SpeciesImages = new List<ImageMedia>();
         }
     }
 }

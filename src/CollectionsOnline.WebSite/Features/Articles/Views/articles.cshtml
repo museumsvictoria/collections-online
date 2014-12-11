@@ -1,38 +1,34 @@
-﻿@using System
-@using CollectionsOnline.Core.Models
+﻿@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Articles.ArticleViewTransformerResult>
 @{
     Layout = "layout.cshtml";
 }
 
-@{
-    var imageMedia = Model.Article.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList().FirstOrDefault();
-    if (imageMedia != null)
-    {
-        <figure id="media">
-            <img src="@imageMedia.Medium.Uri" alt="@imageMedia.AlternativeText" />
-            <figcaption>
-                <div class="wrapper">
-                    <div class="caption">
-                        @if (!string.IsNullOrWhiteSpace(imageMedia.Caption))
-                        {
-                            <strong>@imageMedia.Caption</strong>
-                        }
-                    </div>
-                    <div class="media-tools">
-                        <button class="icon">
-                            <span class="icon-download" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Download Media</span>
-                        </button>
-                        <button class="icon">
-                            <span class="icon-fullscreen" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">View full screen</span>
-                        </button>
-                    </div>
+@if (Model.ArticleHeroImage != null)
+{
+    <figure id="media">
+        <img src="@Model.ArticleHeroImage.Medium.Uri" alt="@Model.ArticleHeroImage.AlternativeText" />
+        <figcaption>
+            <div class="wrapper">
+                <div class="caption">
+                    @if (!string.IsNullOrWhiteSpace(Model.ArticleHeroImage.Caption))
+                    {
+                        <strong>@Model.ArticleHeroImage.Caption</strong>
+                    }
                 </div>
-            </figcaption>
-        </figure>
-    }
+                <div class="media-tools">
+                    <button class="icon">
+                        <span class="icon-download" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Download Media</span>
+                    </button>
+                    <button class="icon">
+                        <span class="icon-fullscreen" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">View full screen</span>
+                    </button>
+                </div>
+            </div>
+        </figcaption>
+    </figure>
 }
 
 <div id="title">
@@ -44,14 +40,24 @@
                 <a href="/search?articletypes=@HttpUtility.UrlEncode(type.ToLower())">@type</a><br />
             }
         </h1>
-        <div class="thumbnails">
-            @{
-                for (int i = 0; i < new Random().Next(0, 15); i++)
+        @if (Model.ArticleImages.Any())
+        {
+            <div class="thumbnails">
+                @foreach (var articleImage in Model.ArticleImages)
                 {
-                    <div class="thumbnail"><div class="image"></div></div>
+                    <div class="thumbnail">
+                        @if (articleImage.Thumbnail.Uri == Model.ArticleHeroImage.Thumbnail.Uri)
+                        {
+                            <img class="active" src="@articleImage.Thumbnail.Uri" alt="@articleImage.AlternativeText" />
+                        }
+                        else
+                        {
+                            <img src="@articleImage.Thumbnail.Uri" alt="@articleImage.AlternativeText" />
+                        }
+                    </div>
                 }
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>
 
@@ -113,10 +119,11 @@
         </aside>
         <aside class="cite-content">
             <div class="cite">
-                <h3>Cite this page</h3>
-                <p>Museum Victoria (2014) @Html.RenderContext.Context.Request.Url.SiteBase@Html.RenderContext.Context.Request.Url.Path</p>
+                <h4>Cite this page</h4>
+                <p>@Html.RenderCitation(Model.Article)</p>
+                <h4>Rights</h4>
                 <p>
-                    <strong>Rights /</strong> Text on this page is licensed as
+                    Text on this page is licensed as
                     <a class="icon" href="http://creativecommons.org/licenses/by/2.0/au/">
                         <span class="icon-cc-by" aria-hidden="true"></span>
                         <span class="icon-label-hidden">CC BY</span>
@@ -124,15 +131,15 @@
                 </p>
                 @if (Model.Article.Authors.Any())
                 {
-                    <p class="authors">
-                        <strong>Authors /</strong>
+                    <h4>Authors</h4>
+                    <p>
                         @foreach (var author in @Model.Article.Authors)
                         {
                             if (author.ProfileImage != null)
                             {
-                                <img src="@author.ProfileImage.Thumbnail.Uri" width="100" height="100" class="img-thumbnail" />
+                                <img src="@author.ProfileImage.Thumbnail.Uri" />
                             }
-                            <span>@author.Name</span><br/>
+                            <span>@author.FullName</span><br/>
                             @author.Biography<br/>
                         }
                     </p>

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Features.Species
@@ -30,6 +31,10 @@ namespace CollectionsOnline.WebSite.Features.Species
                     result.RelatedSpecimenCount = query.QueryResult.TotalResults;
                 }
             }
+
+            // Set Media
+            result.SpeciesHeroImage = result.Species.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            result.SpeciesImages = result.Species.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
 
             return result;
         }
