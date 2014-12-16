@@ -42,6 +42,8 @@
 
         public object[] ArticleTypes { get; set; }
 
+        public string OnDisplayLocation { get; set; }
+
         /* term fields */
 
         public object[] Keywords { get; set; }

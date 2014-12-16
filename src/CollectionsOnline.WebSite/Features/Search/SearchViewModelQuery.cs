@@ -117,6 +117,11 @@ namespace CollectionsOnline.WebSite.Features.Search
                         facetQuery = facetQuery.AndAlso().WhereEquals("ArticleTypes", articleType);
                     }
                 }
+                if (!string.IsNullOrWhiteSpace(searchInputModel.OnDisplayLocation))
+                {
+                    query = query.AndAlso().WhereEquals("OnDisplayLocation", searchInputModel.OnDisplayLocation);
+                    facetQuery = facetQuery.AndAlso().WhereEquals("OnDisplayLocation", searchInputModel.OnDisplayLocation);
+                }
 
                 // Term queries
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Keyword))

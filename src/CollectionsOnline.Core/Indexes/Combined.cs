@@ -37,12 +37,13 @@ namespace CollectionsOnline.Core.Indexes
                     Category = item.Category,
                     HasImages = (item.Media.Any()) ? "Yes" : (string)null,
                     OnDisplay = item.MuseumLocation != null ? "Yes" : (string)null,
-                    Discipline = item.Discipline,                    
+                    Discipline = item.Discipline,
                     ItemType = item.Type,
                     SpeciesType = (string)null,
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = (string)null,
                     ArticleTypes = new object[] { },
+                    OnDisplayLocation = item.MuseumLocation.OnDisplayLocation,
                     
                     // Term fields
                     Keywords = new object[] { item.Keywords,
@@ -145,6 +146,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = species.Endemicity,
                     SpecimenScientificGroup = (string) null,
                     ArticleTypes = new object[] { },
+                    OnDisplayLocation = (string)null,
 
                     // Term fields
                     Keywords = new object[] { species.ConservationStatuses, species.AnimalSubType },
@@ -213,6 +215,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     ArticleTypes = new object[] { },
+                    OnDisplayLocation = specimen.MuseumLocation.OnDisplayLocation,
 
                     // Term fields
                     Keywords = new object[] { specimen.Keywords, specimen.ExpeditionName },
@@ -302,6 +305,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = new object[] { },
                     SpecimenScientificGroup = (string) null,
                     ArticleTypes = article.Types,
+                    OnDisplayLocation = (string)null,
 
                     // Term fields
                     Keywords = article.Keywords,
@@ -352,6 +356,7 @@ namespace CollectionsOnline.Core.Indexes
             TermVector(x => x.SpeciesEndemicity, FieldTermVector.Yes);
             TermVector(x => x.SpecimenScientificGroup, FieldTermVector.Yes);
             TermVector(x => x.ArticleTypes, FieldTermVector.Yes);
+            TermVector(x => x.OnDisplayLocation, FieldTermVector.Yes);
         }
     }
 }

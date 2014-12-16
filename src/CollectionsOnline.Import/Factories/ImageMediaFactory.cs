@@ -28,12 +28,12 @@ namespace CollectionsOnline.Import.Factories
             // Build a list the various image conversions used in the application
             imageMediaJobs = new List<ImageMediaJob>
             {
-                new ImageMediaJob
-                {
-                    FileDerivativeType = FileDerivativeType.Original,
-                    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
-                    Quality = 90
-                },
+                //new ImageMediaJob
+                //{
+                //    FileDerivativeType = FileDerivativeType.Original,
+                //    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
+                //    Quality = 90
+                //},
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
@@ -41,23 +41,23 @@ namespace CollectionsOnline.Import.Factories
                     BackgroundColor = Color.White,
                     Quality = 60
                 },
-                new ImageMediaJob
-                {
-                    FileDerivativeType = FileDerivativeType.Small,
-                    ResizeLayer = new ResizeLayer(new Size(500, 500), ResizeMode.Max),
-                    Quality = 70
-                },
-                new ImageMediaJob
-                {
-                    FileDerivativeType = FileDerivativeType.Medium,
-                    ResizeLayer = new ResizeLayer(new Size(800, 800), ResizeMode.Max),
-                    Quality = 70
-                },
+                //new ImageMediaJob
+                //{
+                //    FileDerivativeType = FileDerivativeType.Small,
+                //    ResizeLayer = new ResizeLayer(new Size(500, 500), ResizeMode.Max),
+                //    Quality = 70
+                //},
+                //new ImageMediaJob
+                //{
+                //    FileDerivativeType = FileDerivativeType.Medium,
+                //    ResizeLayer = new ResizeLayer(new Size(800, 800), ResizeMode.Max),
+                //    Quality = 60
+                //},
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Large,
-                    ResizeLayer = new ResizeLayer(new Size(1200, 1200), ResizeMode.Max),
-                    Quality = 70
+                    ResizeLayer = new ResizeLayer(new Size(1040, 1040), ResizeMode.Max),
+                    Quality = 60
                 }
             };
         }

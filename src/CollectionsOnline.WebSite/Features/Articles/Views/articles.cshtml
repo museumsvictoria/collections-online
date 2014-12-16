@@ -7,7 +7,7 @@
 @if (Model.ArticleHeroImage != null)
 {
     <figure id="media">
-        <img src="@Model.ArticleHeroImage.Medium.Uri" alt="@Model.ArticleHeroImage.AlternativeText" />
+        <img src="@Model.ArticleHeroImage.Large.Uri" alt="@Model.ArticleHeroImage.AlternativeText" />
         <figcaption>
             <div class="wrapper">
                 <div class="caption">
@@ -85,6 +85,30 @@
                                 @for (int i = 0; i < Model.Article.Keywords.Count; i++)
                                 {
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Article.Keywords[i])">@Model.Article.Keywords[i]</a>@(i != Model.Article.Keywords.Count - 1 ? ", " : "")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Article.Authors.Any())
+                    {
+                        <li>
+                            <h3>Authors</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Article.Authors.Count; i++)
+                                {
+                                    @Model.Article.Authors[i].FullName@(i != Model.Article.Authors.Count - 1 ? ", " : " ")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Article.Contributors.Any())
+                    {
+                        <li>
+                            <h3>Contributors</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Article.Contributors.Count; i++)
+                                {
+                                    @Model.Article.Contributors[i].FullName@(i != Model.Article.Contributors.Count - 1 ? ", " : " ")
                                 }
                             </p>
                         </li>

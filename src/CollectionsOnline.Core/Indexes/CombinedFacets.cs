@@ -54,6 +54,10 @@ namespace CollectionsOnline.Core.Indexes
                 new Facet<CombinedResult>
                 {
                     Name = x => x.ArticleTypes
+                },
+                new Facet<CombinedResult>
+                {
+                    Name = x => x.OnDisplayLocation
                 }
             };
         }
