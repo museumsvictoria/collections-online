@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
 using IMu;
 using NLog;
@@ -42,6 +39,10 @@ namespace CollectionsOnline.Import.Factories
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
+
+            Mapper.CreateMap<Item, Item>()
+                .ForMember(x => x.Id, options => options.Ignore())
+                .ForMember(x => x.Comments, options => options.Ignore());
         }
 
         public string ModuleName
@@ -651,11 +652,10 @@ namespace CollectionsOnline.Import.Factories
             return item;
         }
 
-        public void RegisterAutoMapperMap()
+        public void UpdateDocument(Item newDocument, Item existingDocument)
         {
-            Mapper.CreateMap<Item, Item>()
-                .ForMember(x => x.Id, options => options.Ignore())
-                .ForMember(x => x.Comments, options => options.Ignore());
+            // Map over existing document
+            Mapper.Map(newDocument, existingDocument);
         }
     }
 }

@@ -3,7 +3,7 @@ using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public interface IEmuAggregateRootFactory<out T> where T : EmuAggregateRoot
+    public interface IEmuAggregateRootFactory<T> where T : EmuAggregateRoot
     {
         string ModuleName { get; }
 
@@ -13,6 +13,6 @@ namespace CollectionsOnline.Import.Factories
 
         T MakeDocument(Map map);
 
-        void RegisterAutoMapperMap();
+        void UpdateDocument(T newDocument, T existingDocument);
     }
 }

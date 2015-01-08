@@ -901,15 +901,14 @@ button.icon {
     padding-right: 10px;
     width: 66.66667%; }
     #record .text-content .summary {
-      margin: 5em 0 2em; }
+      margin: 5em 0 2em;
+      line-height: 1.8em;
+      font-size: 1.1em; }
       #record .text-content .summary h3 {
         color: #424242;
         font-size: 1.6em;
         font-weight: 400;
         margin: 1em 0 0.5em; }
-      #record .text-content .summary p {
-        line-height: 1.8em;
-        font-size: 1.1em; }
     #record .text-content .detail ul {
       margin: 0;
       padding: 0;

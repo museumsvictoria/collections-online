@@ -3,28 +3,36 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using IMu;
 using NLog;
+using Raven.Abstractions.Commands;
+using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
+using Raven.Client;
+using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class SpeciesFactory : IEmuAggregateRootFactory<Species>
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
+        private readonly IDocumentStore _documentStore;
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
 
         public SpeciesFactory(
+            IDocumentStore documentStore,
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory)
         {
+            _documentStore = documentStore;
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
+
+            Mapper.CreateMap<Species, Species>()
+                .ForMember(x => x.Id, options => options.Ignore());
         }
 
         public string ModuleName
@@ -196,10 +204,92 @@ namespace CollectionsOnline.Import.Factories
             return species;
         }
 
-        public void RegisterAutoMapperMap()
+        public void UpdateDocument(Species newDocument, Species existingDocument)
         {
-            Mapper.CreateMap<Species, Species>()
-                .ForMember(x => x.Id, options => options.Ignore());
+            // Perform any denormalized updates
+
+            // Related Items update
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = itemIdtoRemove,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Remove,
+                                AllPositions = true,
+                                Name = "RelatedSpeciesIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+                foreach (var itemIdToAdd in newDocument.RelatedItemIds.Except(existingDocument.RelatedItemIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = itemIdToAdd,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Add,
+                                Name = "RelatedSpeciesIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+
+                documentSession.SaveChanges();
+            }
+
+            // Related Specimen update
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                foreach (var specimenIdtoRemove in existingDocument.RelatedSpecimenIds.Except(newDocument.RelatedSpecimenIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = specimenIdtoRemove,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Remove,
+                                AllPositions = true,
+                                Name = "RelatedSpeciesIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+                foreach (var specimenIdtoAdd in newDocument.RelatedSpecimenIds.Except(existingDocument.RelatedSpecimenIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = specimenIdtoAdd,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Add,
+                                Name = "RelatedSpeciesIdsRelatedSpeciesIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+
+                documentSession.SaveChanges();
+            }
+
+            // Map over existing document
+            Mapper.Map(newDocument, existingDocument);
         }
     }
 }

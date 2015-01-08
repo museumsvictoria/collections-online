@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
@@ -11,22 +10,29 @@ using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Utilities;
 using IMu;
 using NLog;
+using Raven.Abstractions.Commands;
+using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
+using Raven.Client;
+using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class ArticleFactory : IEmuAggregateRootFactory<Article>
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
-        private readonly ISlugFactory _slugFactory;
+        private readonly IDocumentStore _documentStore;
         private readonly IMediaFactory _mediaFactory;
 
         public ArticleFactory(
-            ISlugFactory slugFactory,
+            IDocumentStore documentStore,
             IMediaFactory mediaFactory)
         {
-            _slugFactory = slugFactory;
+            _documentStore = documentStore;
             _mediaFactory = mediaFactory;
+
+            Mapper.CreateMap<Article, Article>()
+                .ForMember(x => x.Id, options => options.Ignore());
         }
 
         public string ModuleName
@@ -179,10 +185,129 @@ namespace CollectionsOnline.Import.Factories
             return article;
         }
 
-        public void RegisterAutoMapperMap()
+        public void UpdateDocument(Article newDocument, Article existingDocument)
         {
-            Mapper.CreateMap<Article, Article>()
-                .ForMember(x => x.Id, options => options.Ignore());
+            // Perform any denormalized updates
+            
+            // Related Items update
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = itemIdtoRemove,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Remove,
+                                AllPositions = true,
+                                Name = "RelatedArticleIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+                foreach (var itemIdToAdd in newDocument.RelatedItemIds.Except(existingDocument.RelatedItemIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = itemIdToAdd,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Add,
+                                Name = "RelatedArticleIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+
+                documentSession.SaveChanges();
+            }
+
+            // Related Specimen update
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                foreach (var specimenIdtoRemove in existingDocument.RelatedSpecimenIds.Except(newDocument.RelatedSpecimenIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = specimenIdtoRemove,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Remove,
+                                AllPositions = true,
+                                Name = "RelatedArticleIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+                foreach (var specimenIdtoAdd in newDocument.RelatedSpecimenIds.Except(existingDocument.RelatedSpecimenIds))
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = specimenIdtoAdd,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Add,
+                                Name = "RelatedArticleIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                }
+
+                documentSession.SaveChanges();
+            }
+
+            // Parent Article update
+            if (!string.Equals(newDocument.ParentArticleId, existingDocument.ParentArticleId, StringComparison.OrdinalIgnoreCase))
+            {
+                using (var documentSession = _documentStore.OpenSession())
+                {
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = existingDocument.ParentArticleId,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Remove,
+                                AllPositions = true,
+                                Name = "ChildArticleIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+                    documentSession.Advanced.Defer(new PatchCommandData
+                    {
+                        Key = newDocument.ParentArticleId,
+                        Patches = new[]
+                        {
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Add,
+                                Name = "ChildArticleIds",
+                                Value = newDocument.Id
+                            }
+                        }
+                    });
+
+                    documentSession.SaveChanges();
+                }
+            }
+
+            // Map over existing document
+            Mapper.Map(newDocument, existingDocument);
         }
     }
 }

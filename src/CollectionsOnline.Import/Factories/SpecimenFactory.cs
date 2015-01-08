@@ -39,6 +39,9 @@ namespace CollectionsOnline.Import.Factories
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
             _museumLocationFactory = museumLocationFactory;
+
+            Mapper.CreateMap<Specimen, Specimen>()
+                .ForMember(x => x.Id, options => options.Ignore());
         }
 
         public string ModuleName
@@ -546,10 +549,10 @@ namespace CollectionsOnline.Import.Factories
             return specimen;
         }
 
-        public void RegisterAutoMapperMap()
+        public void UpdateDocument(Specimen newDocument, Specimen existingDocument)
         {
-            Mapper.CreateMap<Specimen, Specimen>()
-                .ForMember(x => x.Id, options => options.Ignore());
+            // Map over existing document
+            Mapper.Map(newDocument, existingDocument);
         }
     }
 }
