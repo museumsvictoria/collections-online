@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Transactions;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
@@ -118,6 +119,7 @@ namespace CollectionsOnline.Import.Imports
             // Perform import
             while (true)
             {
+                using (var tx = new TransactionScope())
                 using (var documentSession = _documentStore.OpenSession())
                 {
                     if (ImportCanceled())
@@ -153,7 +155,7 @@ namespace CollectionsOnline.Import.Imports
                             if (existingDocuments[i] != null)
                             {
                                 // Update existing
-                                Mapper.Map(newDocuments[i], existingDocuments[i]);
+                                _imuFactory.UpdateDocument(newDocuments[i], existingDocuments[i]);
                             }
                             else
                             {
@@ -174,6 +176,8 @@ namespace CollectionsOnline.Import.Imports
 
                     _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
                     documentSession.SaveChanges();
+
+                    tx.Complete();
                 }
             }
 
