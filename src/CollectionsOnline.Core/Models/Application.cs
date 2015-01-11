@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Config;
@@ -36,17 +35,16 @@ namespace CollectionsOnline.Core.Models
             foreach (var importStatus in ImportStatuses)
             {
                 importStatus.IsFinished = false;
-                importStatus.CachedResult = null;
-                importStatus.CurrentOffset = 0;
-                if(importStatus.CachedResultDate.HasValue)
-                    importStatus.PreviousDateRun = importStatus.CachedResultDate;
-                importStatus.CachedResultDate = null;
+                importStatus.CurrentImportCacheOffset = 0;
             }
         }
 
-        public void ImportFinished(string importType)
+        public void ImportFinished(string importType, DateTime importCacheDateCreated)
         {
-            ImportStatuses.First(x => x.ImportType == importType).IsFinished = true;
+            var importStatus = ImportStatuses.First(x => x.ImportType == importType);
+
+            importStatus.IsFinished = true;
+            importStatus.PreviousDateRun = importCacheDateCreated;
         }
 
         public ImportStatus GetImportStatus(string importType)

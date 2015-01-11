@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using NLog;
+using Raven.Abstractions.Data;
 using Raven.Client;
+using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Infrastructure
 {
@@ -69,6 +70,9 @@ namespace CollectionsOnline.Import.Infrastructure
                 {
                     _log.Debug("All imports finished succesfully");
                     application.FinishedAllImportsSuccessfully();
+
+                    // Delete all import caches
+                    _documentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery { Query = "Tag:ImportCaches" }, true);
                 }
                 
                 // Force aggressive cache check

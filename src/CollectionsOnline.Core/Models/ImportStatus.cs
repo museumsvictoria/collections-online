@@ -9,12 +9,8 @@ namespace CollectionsOnline.Core.Models
 
         public DateTime? PreviousDateRun { get; set; }
 
-        public int CurrentOffset { get; set; }
+        public int CurrentImportCacheOffset { get; set; }
 
         public bool IsFinished { get; set; }
-
-        public DateTime? CachedResultDate { get; set; }
-
-        public IList<long> CachedResult { get; set; }
     }
 }

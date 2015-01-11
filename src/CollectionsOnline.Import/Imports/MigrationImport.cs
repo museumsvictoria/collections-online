@@ -98,7 +98,7 @@ namespace CollectionsOnline.Import.Imports
 
         public int Order
         {
-            get { return 20; }
+            get { return 200; }
         }
 
         private bool ImportCanceled()

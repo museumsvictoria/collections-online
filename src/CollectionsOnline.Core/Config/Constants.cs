@@ -33,6 +33,8 @@ namespace CollectionsOnline.Core.Config
 
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(1);
 
+        public static TimeSpan MaxTransactionTimeSpan = TimeSpan.FromHours(1);
+
         public static TimeSpan ImuOfflineTimeSpan = new TimeSpan(19, 00, 0); // 7:00pm
 
         public static Dictionary<Tuple<string, string, string, string>, MuseumLocation> MuseumLocations = new Dictionary

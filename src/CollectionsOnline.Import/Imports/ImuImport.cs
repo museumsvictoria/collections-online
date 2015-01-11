@@ -12,6 +12,7 @@ using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
+using Raven.Abstractions.Commands;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
 
@@ -37,7 +38,8 @@ namespace CollectionsOnline.Import.Imports
         public void Run()
         {
             var module = new Module(_imuFactory.ModuleName, _session);
-            
+            ImportCache importCache;
+
             // Check for existing import in case we need to resume.
             using (var documentSession = _documentStore.OpenSession())
             {
@@ -49,18 +51,18 @@ namespace CollectionsOnline.Import.Imports
                     return;
                 }
 
-                _log.Debug("Starting {0} import", typeof(T).Name);
+                _log.Debug("Starting {0} import", typeof (T).Name);
 
-                // Cache the search results
-                if (importStatus.CachedResult == null)
+                // Check for existing cached results
+                importCache = documentSession.Load<ImportCache>(string.Format("importCaches/{0}", typeof(T).Name.ToLower()));
+                if (importCache == null)
                 {
+                    importCache = new ImportCache { Id = string.Format("importCaches/{0}", typeof(T).Name.ToLower()) };
+
                     var terms = _imuFactory.Terms;
-                    importStatus.CachedResult = new List<long>();
 
                     if (importStatus.PreviousDateRun.HasValue)
                         terms.Add("AdmDateModified", importStatus.PreviousDateRun.Value.ToString("MMM dd yyyy"), ">=");
-
-                    importStatus.CachedResultDate = DateTime.Now;
 
                     var hits = module.FindTerms(terms);
 
@@ -72,7 +74,7 @@ namespace CollectionsOnline.Import.Imports
                         if (ImportCanceled())
                             return;
 
-                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });                        
+                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
 
                         if (results.Count == 0)
                             break;
@@ -90,7 +92,7 @@ namespace CollectionsOnline.Import.Imports
                                     subDocumentSession.Load<T>(
                                         irnResults.Select(
                                             x =>
-                                                string.Format("{0}/{1}", Inflector.Pluralize(typeof (T).Name).ToLower(),
+                                                string.Format("{0}/{1}", Inflector.Pluralize(typeof(T).Name).ToLower(),
                                                     x)))
                                         .Where(x => x != null)
                                         .Select(x => long.Parse(x.Id.Substring(x.Id.IndexOf('/') + 1))));
@@ -98,14 +100,15 @@ namespace CollectionsOnline.Import.Imports
                             irnResults = irnResults.Except(existingIrnResults).ToList();
                         }
 
-                        importStatus.CachedResult.AddRange(irnResults);
-                        
+                        importCache.Irns.AddRange(irnResults);
+
                         cachedCurrentOffset += results.Count;
 
                         _log.Debug("{0} cache progress... {1}/{2}", typeof(T).Name, cachedCurrentOffset, hits);
                     }
 
                     // Store cached result
+                    documentSession.Store(importCache);
                     documentSession.SaveChanges();
 
                     _log.Debug("Caching of {0} search results complete, beginning import.", typeof(T).Name);
@@ -115,11 +118,11 @@ namespace CollectionsOnline.Import.Imports
                     _log.Debug("Cached search results found, resuming {0} import.", typeof(T).Name);
                 }
             }
-
+            
             // Perform import
             while (true)
             {
-                using (var tx = new TransactionScope())
+                using (var tx = new TransactionScope(TransactionScopeOption.Required, Constants.MaxTransactionTimeSpan))
                 using (var documentSession = _documentStore.OpenSession())
                 {
                     if (ImportCanceled())
@@ -127,11 +130,11 @@ namespace CollectionsOnline.Import.Imports
 
                     var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
-                    var cachedResultBatch = importStatus.CachedResult
-                        .Skip(importStatus.CurrentOffset)
+                    var cachedResultBatch = importCache.Irns
+                        .Skip(importStatus.CurrentImportCacheOffset)
                         .Take(Constants.DataBatchSize)
                         .ToList();
-
+                    
                     if (cachedResultBatch.Count == 0)
                         break;
 
@@ -145,6 +148,7 @@ namespace CollectionsOnline.Import.Imports
                     _log.Trace("Found and fetched {0} {1} records in {2} ms",cachedResultBatch.Count, typeof(T).Name, stopwatch.ElapsedMilliseconds);
 
                     // If import has run before, update existing documents, otherwise simply store new documents.
+                    stopwatch = Stopwatch.StartNew();
                     if (importStatus.PreviousDateRun.HasValue)
                     {
                         var newDocuments = results.Rows.Select(_imuFactory.MakeDocument).ToList();
@@ -171,13 +175,15 @@ namespace CollectionsOnline.Import.Imports
                             .ToList()
                             .ForEach(documentSession.Store);
                     }
+                    stopwatch.Stop();
+                    _log.Trace("Updated/Created {0} {1} records in {2} ms", cachedResultBatch.Count, typeof(T).Name, stopwatch.ElapsedMilliseconds);
 
-                    importStatus.CurrentOffset += results.Count;
-
-                    _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
+                    importStatus.CurrentImportCacheOffset += results.Count;
+                    
                     documentSession.SaveChanges();
-
                     tx.Complete();
+
+                    _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, importStatus.CurrentImportCacheOffset, importCache.Irns.Count);
                 }
             }
 
@@ -185,14 +191,15 @@ namespace CollectionsOnline.Import.Imports
 
             using (var documentSession = _documentStore.OpenSession())
             {
-                documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString());
+                // Mark import status as finished
+                documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString(), importCache.DateCreated);
                 documentSession.SaveChanges();
             }
         }
 
         public int Order
         {
-            get { return 0; }
+            get { return 100; }
         }
 
         private bool ImportCanceled()
@@ -204,6 +211,6 @@ namespace CollectionsOnline.Import.Imports
             }
 
             return Program.ImportCanceled;
-        }
+        }        
     }
 }
