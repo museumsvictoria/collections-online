@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -14,6 +15,7 @@ using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using Raven.Client.Document;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
@@ -185,126 +187,114 @@ namespace CollectionsOnline.Import.Factories
             return article;
         }
 
-        public void UpdateDocument(Article newDocument, Article existingDocument)
+        public void UpdateDocument(Article newDocument, Article existingDocument, IDocumentSession documentSession)
         {
             // Perform any denormalized updates
-            
-            // Related Items update
-            using (var documentSession = _documentStore.OpenSession())
-            {
-                foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
-                {
-                    documentSession.Advanced.Defer(new PatchCommandData
-                    {
-                        Key = itemIdtoRemove,
-                        Patches = new[]
-                        {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Remove,
-                                AllPositions = true,
-                                Name = "RelatedArticleIds",
-                                Value = newDocument.Id
-                            }
-                        }
-                    });
-                }
-                foreach (var itemIdToAdd in newDocument.RelatedItemIds.Except(existingDocument.RelatedItemIds))
-                {
-                    documentSession.Advanced.Defer(new PatchCommandData
-                    {
-                        Key = itemIdToAdd,
-                        Patches = new[]
-                        {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Add,
-                                Name = "RelatedArticleIds",
-                                Value = newDocument.Id
-                            }
-                        }
-                    });
-                }
+            var patchCommands = new List<ICommandData>();
 
-                documentSession.SaveChanges();
+            // Related Items update
+            foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
+            {
+                patchCommands.Add(new PatchCommandData
+                {
+                    Key = itemIdtoRemove,
+                    Patches = new[]
+                    {
+                        new PatchRequest
+                        {
+                            Type = PatchCommandType.Remove,
+                            AllPositions = true,
+                            Name = "RelatedArticleIds",
+                            Value = newDocument.Id
+                        }
+                    }
+                });
+            }
+            foreach (var itemIdToAdd in newDocument.RelatedItemIds.Except(existingDocument.RelatedItemIds))
+            {
+                patchCommands.Add(new PatchCommandData
+                {
+                    Key = itemIdToAdd,
+                    Patches = new[]
+                    {
+                        new PatchRequest
+                        {
+                            Type = PatchCommandType.Add,
+                            Name = "RelatedArticleIds",
+                            Value = newDocument.Id
+                        }
+                    }
+                });
             }
 
             // Related Specimen update
-            using (var documentSession = _documentStore.OpenSession())
+            foreach (var specimenIdtoRemove in existingDocument.RelatedSpecimenIds.Except(newDocument.RelatedSpecimenIds))
             {
-                foreach (var specimenIdtoRemove in existingDocument.RelatedSpecimenIds.Except(newDocument.RelatedSpecimenIds))
+                patchCommands.Add(new PatchCommandData
                 {
-                    documentSession.Advanced.Defer(new PatchCommandData
+                    Key = specimenIdtoRemove,
+                    Patches = new[]
                     {
-                        Key = specimenIdtoRemove,
-                        Patches = new[]
+                        new PatchRequest
                         {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Remove,
-                                AllPositions = true,
-                                Name = "RelatedArticleIds",
-                                Value = newDocument.Id
-                            }
+                            Type = PatchCommandType.Remove,
+                            AllPositions = true,
+                            Name = "RelatedArticleIds",
+                            Value = newDocument.Id
                         }
-                    });
-                }
-                foreach (var specimenIdtoAdd in newDocument.RelatedSpecimenIds.Except(existingDocument.RelatedSpecimenIds))
+                    }
+                });
+            }
+            foreach (var specimenIdtoAdd in newDocument.RelatedSpecimenIds.Except(existingDocument.RelatedSpecimenIds))
+            {
+                patchCommands.Add(new PatchCommandData
                 {
-                    documentSession.Advanced.Defer(new PatchCommandData
+                    Key = specimenIdtoAdd,
+                    Patches = new[]
                     {
-                        Key = specimenIdtoAdd,
-                        Patches = new[]
+                        new PatchRequest
                         {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Add,
-                                Name = "RelatedArticleIds",
-                                Value = newDocument.Id
-                            }
+                            Type = PatchCommandType.Add,
+                            Name = "RelatedArticleIds",
+                            Value = newDocument.Id
                         }
-                    });
-                }
-
-                documentSession.SaveChanges();
+                    }
+                });
             }
 
             // Parent Article update
             if (!string.Equals(newDocument.ParentArticleId, existingDocument.ParentArticleId, StringComparison.OrdinalIgnoreCase))
             {
-                using (var documentSession = _documentStore.OpenSession())
+                patchCommands.Add(new PatchCommandData
                 {
-                    documentSession.Advanced.Defer(new PatchCommandData
+                    Key = existingDocument.ParentArticleId,
+                    Patches = new[]
                     {
-                        Key = existingDocument.ParentArticleId,
-                        Patches = new[]
+                        new PatchRequest
                         {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Remove,
-                                AllPositions = true,
-                                Name = "ChildArticleIds",
-                                Value = newDocument.Id
-                            }
+                            Type = PatchCommandType.Remove,
+                            AllPositions = true,
+                            Name = "ChildArticleIds",
+                            Value = newDocument.Id
                         }
-                    });
-                    documentSession.Advanced.Defer(new PatchCommandData
+                    }
+                });
+                patchCommands.Add(new PatchCommandData
+                {
+                    Key = newDocument.ParentArticleId,
+                    Patches = new[]
                     {
-                        Key = newDocument.ParentArticleId,
-                        Patches = new[]
+                        new PatchRequest
                         {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Add,
-                                Name = "ChildArticleIds",
-                                Value = newDocument.Id
-                            }
+                            Type = PatchCommandType.Add,
+                            Name = "ChildArticleIds",
+                            Value = newDocument.Id
                         }
-                    });
-
-                    documentSession.SaveChanges();
-                }
+                    }
+                });
             }
+
+            documentSession.Advanced.Defer(patchCommands.ToArray());
 
             // Map over existing document
             Mapper.Map(newDocument, existingDocument);

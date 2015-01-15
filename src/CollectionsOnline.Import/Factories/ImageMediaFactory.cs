@@ -18,22 +18,21 @@ namespace CollectionsOnline.Import.Factories
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly Module _module;
-
-        private IList<ImageMediaJob> imageMediaJobs;
+        private readonly IList<ImageMediaJob> _imageMediaJobs;
 
         public ImageMediaFactory(Session session)
         {
             _module = new Module("emultimedia", session);
 
             // Build a list the various image conversions used in the application
-            imageMediaJobs = new List<ImageMediaJob>
+            _imageMediaJobs = new List<ImageMediaJob>
             {
-                //new ImageMediaJob
-                //{
-                //    FileDerivativeType = FileDerivativeType.Original,
-                //    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
-                //    Quality = 90
-                //},
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Original,
+                    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
+                    Quality = 90
+                },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
@@ -57,7 +56,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     FileDerivativeType = FileDerivativeType.Large,
                     ResizeLayer = new ResizeLayer(new Size(1040, 1040), ResizeMode.Max),
-                    Quality = 60
+                    Quality = 80
                 }
             };
         }
@@ -73,9 +72,9 @@ namespace CollectionsOnline.Import.Factories
                 // then if we find existing files matching all of our image media jobs, use the files on disk instead
                 if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
                 {
-                    if (imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, x.FileDerivativeType))))
+                    if (_imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, x.FileDerivativeType))))
                     {
-                        foreach (var imageMediaJob in imageMediaJobs)
+                        foreach (var imageMediaJob in _imageMediaJobs)
                         {
                             using (var imageFactory = new ImageFactory())
                             {
@@ -125,7 +124,7 @@ namespace CollectionsOnline.Import.Factories
                     stopwatch.Reset();
                     stopwatch.Start();
 
-                    foreach (var imageMediaJob in imageMediaJobs)
+                    foreach (var imageMediaJob in _imageMediaJobs)
                     {
                         imageFactory.Reset();
 

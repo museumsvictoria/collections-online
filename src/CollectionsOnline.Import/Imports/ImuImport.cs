@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
-using System.Transactions;
-using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
@@ -12,7 +10,6 @@ using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using IMu;
 using NLog;
-using Raven.Abstractions.Commands;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
 
@@ -122,7 +119,6 @@ namespace CollectionsOnline.Import.Imports
             // Perform import
             while (true)
             {
-                using (var tx = new TransactionScope(TransactionScopeOption.Required, Constants.MaxTransactionTimeSpan))
                 using (var documentSession = _documentStore.OpenSession())
                 {
                     if (ImportCanceled())
@@ -159,7 +155,7 @@ namespace CollectionsOnline.Import.Imports
                             if (existingDocuments[i] != null)
                             {
                                 // Update existing
-                                _imuFactory.UpdateDocument(newDocuments[i], existingDocuments[i]);
+                                _imuFactory.UpdateDocument(newDocuments[i], existingDocuments[i], documentSession);
                             }
                             else
                             {
@@ -181,7 +177,6 @@ namespace CollectionsOnline.Import.Imports
                     importStatus.CurrentImportCacheOffset += results.Count;
                     
                     documentSession.SaveChanges();
-                    tx.Complete();
 
                     _log.Debug("{0} import progress... {1}/{2}", typeof(T).Name, importStatus.CurrentImportCacheOffset, importCache.Irns.Count);
                 }

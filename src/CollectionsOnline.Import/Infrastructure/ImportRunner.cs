@@ -72,7 +72,7 @@ namespace CollectionsOnline.Import.Infrastructure
                     application.FinishedAllImportsSuccessfully();
 
                     // Delete all import caches
-                    _documentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery { Query = "Tag:ImportCaches" }, true);
+                    _documentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery { Query = "Tag:ImportCaches" }, new BulkOperationOptions { AllowStale = true });
                 }
                 
                 // Force aggressive cache check

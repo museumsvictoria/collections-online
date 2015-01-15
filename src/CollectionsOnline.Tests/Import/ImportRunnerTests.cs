@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
@@ -23,16 +22,18 @@ namespace CollectionsOnline.Tests.Import
                     new[] { new Application { ImportsRunning = true }}
                 };
             var import = Substitute.For<IImport>();
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import });
+            var importRunner = new ImportRunner(DocumentStore, new[] { import });
 
             // When
             importRunner.Run();
 
             // Then
-            var application = DocumentSession.Load<Application>(Constants.ApplicationId);
-
-            application.ImportsRunning.ShouldBe(true);
-            import.DidNotReceive().Run();
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                var application = documentSession.Load<Application>(Constants.ApplicationId);
+                application.ImportsRunning.ShouldBe(true);
+                import.DidNotReceive().Run();
+            }
         }
 
         [Fact]
@@ -44,16 +45,19 @@ namespace CollectionsOnline.Tests.Import
                     new[] { new Application() }
                 };
             var import = Substitute.For<IImport>();
-            var importRunner = new ImportRunner(DocumentSession.Advanced.DocumentStore, new[] { import });
+            var importRunner = new ImportRunner(DocumentStore, new[] { import });
 
             // When
             importRunner.Run();
 
             // Then
-            var application = DocumentSession.Load<Application>(Constants.ApplicationId);
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                var application = documentSession.Load<Application>(Constants.ApplicationId);
 
-            application.ImportsRunning.ShouldBe(false);
-            import.Received().Run();
+                application.ImportsRunning.ShouldBe(false);
+                import.Received().Run();
+            }
         }
     }
 }

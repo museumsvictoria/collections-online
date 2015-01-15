@@ -14,7 +14,7 @@ namespace CollectionsOnline.WebApi.Modules
             Get["/"] = parameters =>
                 {
                     var items = documentSession.Advanced
-                        .LuceneQuery<Item, Combined>()
+                        .DocumentQuery<Item, Combined>()
                         .WhereEquals("Type", "Item")
                         .Statistics(out Statistics)
                         .Skip(Offset)

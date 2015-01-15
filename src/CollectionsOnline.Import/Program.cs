@@ -66,7 +66,7 @@ namespace CollectionsOnline.Import
                 .FromAssemblyContaining(typeof(Program), typeof(Constants))
                 .SelectAllClasses()
                 .Excluding<MigrationImport>()
-                .Excluding<RelationshipImport>()
+                //.Excluding<RelationshipImport>()
                 //.Excluding<MediaUpdateImport>()                
                 //.Excluding<TaxonomyUpdateImport>()
                 .BindAllInterfaces());

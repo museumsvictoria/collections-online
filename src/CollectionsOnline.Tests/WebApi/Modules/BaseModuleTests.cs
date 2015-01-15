@@ -32,7 +32,7 @@ namespace CollectionsOnline.Tests.WebApi.Modules
             Browser = new Browser(with =>
                 {
                     with.Module<ItemModule>();
-                    with.Dependency(DocumentSession);
+                    with.Dependency(DocumentStore.OpenSession());
                 });
         }
 

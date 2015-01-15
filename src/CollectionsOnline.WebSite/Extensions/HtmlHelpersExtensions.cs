@@ -77,18 +77,21 @@ namespace CollectionsOnline.WebSite.Extensions
 
             for (int i = 0; i < authors.Count; i++)
             {
-                sb.Append(string.Format("{0}, {1}.", authors[i].LastName, authors[i].FirstName.Substring(0, 1)));
-
-                if (i < authors.Count - 1)
+                if (authors[i].FirstName != null && authors[i].LastName != null)
                 {
-                    sb.Append(", ");
+                    sb.Append(string.Format("{0}, {1}.", authors[i].LastName, authors[i].FirstName.Substring(0, 1)));
 
-                    if (i == authors.Count - 2)
-                        sb.Append(" and ");
-                }
-                else
-                {
-                    sb.Append(" ");
+                    if (i < authors.Count - 1)
+                    {
+                        sb.Append(", ");
+
+                        if (i == authors.Count - 2)
+                            sb.Append(" and ");
+                    }
+                    else
+                    {
+                        sb.Append(" ");
+                    }
                 }
             }
 

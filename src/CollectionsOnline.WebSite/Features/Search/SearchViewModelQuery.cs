@@ -42,14 +42,14 @@ namespace CollectionsOnline.WebSite.Features.Search
                 // perform query
                 queryStopwatch.Start();
                 var query = _documentSession.Advanced
-                    .LuceneQuery<CombinedResult, Combined>()
+                    .DocumentQuery<CombinedResult, Combined>()
                     .Skip(searchInputModel.Offset)
                     .Take(searchInputModel.Limit);
 
                 // get facets
                 facetStopwatch.Start();
                 var facetQuery = _documentSession.Advanced
-                    .LuceneQuery<CombinedResult, Combined>();
+                    .DocumentQuery<CombinedResult, Combined>();
 
                 // search query
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Query))

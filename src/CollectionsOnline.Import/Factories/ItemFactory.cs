@@ -12,6 +12,7 @@ using CollectionsOnline.Import.Extensions;
 using IMu;
 using NLog;
 using Raven.Abstractions.Extensions;
+using Raven.Client;
 
 namespace CollectionsOnline.Import.Factories
 {
@@ -652,7 +653,7 @@ namespace CollectionsOnline.Import.Factories
             return item;
         }
 
-        public void UpdateDocument(Item newDocument, Item existingDocument)
+        public void UpdateDocument(Item newDocument, Item existingDocument, IDocumentSession documentSession)
         {
             // Map over existing document
             Mapper.Map(newDocument, existingDocument);

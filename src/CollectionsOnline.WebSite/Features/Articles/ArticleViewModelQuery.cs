@@ -20,7 +20,7 @@ namespace CollectionsOnline.WebSite.Features.Articles
             var result = _documentSession.Load<ArticleViewTransformer, ArticleViewTransformerResult>(articleId);
 
             var query = _documentSession.Advanced
-                .LuceneQuery<CombinedResult, Combined>()
+                .DocumentQuery<CombinedResult, Combined>()
                 .WhereEquals("Articles", result.Article.Title);
 
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;

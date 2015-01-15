@@ -1,5 +1,6 @@
 ﻿using CollectionsOnline.Core.Models;
 using IMu;
+using Raven.Client;
 
 namespace CollectionsOnline.Import.Factories
 {
@@ -13,6 +14,6 @@ namespace CollectionsOnline.Import.Factories
 
         T MakeDocument(Map map);
 
-        void UpdateDocument(T newDocument, T existingDocument);
+        void UpdateDocument(T newDocument, T existingDocument, IDocumentSession documentSession);
     }
 }

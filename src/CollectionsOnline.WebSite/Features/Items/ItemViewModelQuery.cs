@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Features.Items
             if (result.Item.Taxonomy != null)
             {
                 var query = _documentSession.Advanced
-                    .LuceneQuery<CombinedResult, Combined>()
+                    .DocumentQuery<CombinedResult, Combined>()
                     .WhereEquals("Taxon", result.Item.Taxonomy.TaxonName);
 
                 // Dont allow a link to search page if the current item is the only result

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -204,89 +205,82 @@ namespace CollectionsOnline.Import.Factories
             return species;
         }
 
-        public void UpdateDocument(Species newDocument, Species existingDocument)
+        public void UpdateDocument(Species newDocument, Species existingDocument, IDocumentSession documentSession)
         {
             // Perform any denormalized updates
+            var patchCommands = new List<ICommandData>();
 
             // Related Items update
-            using (var documentSession = _documentStore.OpenSession())
+            foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
             {
-                foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
+                patchCommands.Add(new PatchCommandData
                 {
-                    documentSession.Advanced.Defer(new PatchCommandData
+                    Key = itemIdtoRemove,
+                    Patches = new[]
                     {
-                        Key = itemIdtoRemove,
-                        Patches = new[]
+                        new PatchRequest
                         {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Remove,
-                                AllPositions = true,
-                                Name = "RelatedSpeciesIds",
-                                Value = newDocument.Id
-                            }
+                            Type = PatchCommandType.Remove,
+                            AllPositions = true,
+                            Name = "RelatedSpeciesIds",
+                            Value = newDocument.Id
                         }
-                    });
-                }
-                foreach (var itemIdToAdd in newDocument.RelatedItemIds.Except(existingDocument.RelatedItemIds))
+                    }
+                });
+            }
+            foreach (var itemIdToAdd in newDocument.RelatedItemIds.Except(existingDocument.RelatedItemIds))
+            {
+                patchCommands.Add(new PatchCommandData
                 {
-                    documentSession.Advanced.Defer(new PatchCommandData
+                    Key = itemIdToAdd,
+                    Patches = new[]
                     {
-                        Key = itemIdToAdd,
-                        Patches = new[]
+                        new PatchRequest
                         {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Add,
-                                Name = "RelatedSpeciesIds",
-                                Value = newDocument.Id
-                            }
+                            Type = PatchCommandType.Add,
+                            Name = "RelatedSpeciesIds",
+                            Value = newDocument.Id
                         }
-                    });
-                }
-
-                documentSession.SaveChanges();
+                    }
+                });
             }
 
             // Related Specimen update
-            using (var documentSession = _documentStore.OpenSession())
+            foreach (var specimenIdtoRemove in existingDocument.RelatedSpecimenIds.Except(newDocument.RelatedSpecimenIds))
             {
-                foreach (var specimenIdtoRemove in existingDocument.RelatedSpecimenIds.Except(newDocument.RelatedSpecimenIds))
+                patchCommands.Add(new PatchCommandData
                 {
-                    documentSession.Advanced.Defer(new PatchCommandData
+                    Key = specimenIdtoRemove,
+                    Patches = new[]
                     {
-                        Key = specimenIdtoRemove,
-                        Patches = new[]
+                        new PatchRequest
                         {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Remove,
-                                AllPositions = true,
-                                Name = "RelatedSpeciesIds",
-                                Value = newDocument.Id
-                            }
+                            Type = PatchCommandType.Remove,
+                            AllPositions = true,
+                            Name = "RelatedSpeciesIds",
+                            Value = newDocument.Id
                         }
-                    });
-                }
-                foreach (var specimenIdtoAdd in newDocument.RelatedSpecimenIds.Except(existingDocument.RelatedSpecimenIds))
-                {
-                    documentSession.Advanced.Defer(new PatchCommandData
-                    {
-                        Key = specimenIdtoAdd,
-                        Patches = new[]
-                        {
-                            new PatchRequest
-                            {
-                                Type = PatchCommandType.Add,
-                                Name = "RelatedSpeciesIdsRelatedSpeciesIds",
-                                Value = newDocument.Id
-                            }
-                        }
-                    });
-                }
-
-                documentSession.SaveChanges();
+                    }
+                });
             }
+            foreach (var specimenIdtoAdd in newDocument.RelatedSpecimenIds.Except(existingDocument.RelatedSpecimenIds))
+            {
+                patchCommands.Add(new PatchCommandData
+                {
+                    Key = specimenIdtoAdd,
+                    Patches = new[]
+                    {
+                        new PatchRequest
+                        {
+                            Type = PatchCommandType.Add,
+                            Name = "RelatedSpeciesIdsRelatedSpeciesIds",
+                            Value = newDocument.Id
+                        }
+                    }
+                });
+            }
+
+            documentSession.Advanced.Defer(patchCommands.ToArray());
 
             // Map over existing document
             Mapper.Map(newDocument, existingDocument);

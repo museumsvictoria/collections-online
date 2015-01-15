@@ -35,22 +35,29 @@ namespace CollectionsOnline.Tests.Import.Factories
                     new[] { item1, item2, item3 }
                 };
 
-            var articleFactory = new ArticleFactory(DocumentSession.Advanced.DocumentStore, Substitute.For<IMediaFactory>());
+            var articleFactory = new ArticleFactory(DocumentStore, Substitute.For<IMediaFactory>());
 
             // When
-            existingArticle = DocumentSession.Load<Article>("articles/1");
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                existingArticle = documentSession.Load<Article>("articles/1");
 
-            var newArticle = FakeArticles.CreateFakeArticle("articles/1");
-            newArticle.RelatedItemIds = new[] { "items/168", "items/230" };
-            
-            articleFactory.UpdateDocument(newArticle, existingArticle);
+                var newArticle = FakeArticles.CreateFakeArticle("articles/1");
+                newArticle.RelatedItemIds = new[] {"items/168", "items/230"};
+
+                articleFactory.UpdateDocument(newArticle, existingArticle, documentSession);
+                documentSession.SaveChanges();
+            }
 
             // Then
-            var updatedItem1 = DocumentSession.Load<Item>("items/23");
-            updatedItem1.RelatedArticleIds.ShouldNotContain("articles/1");
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                var updatedItem1 = documentSession.Load<Item>("items/23");
+                updatedItem1.RelatedArticleIds.ShouldNotContain("articles/1");
 
-            var updatedItem3 = DocumentSession.Load<Item>("items/230");
-            updatedItem3.RelatedArticleIds.ShouldContain("articles/1");
+                var updatedItem3 = documentSession.Load<Item>("items/230");
+                updatedItem3.RelatedArticleIds.ShouldContain("articles/1");
+            }
         }
 
         [Fact]
@@ -76,22 +83,29 @@ namespace CollectionsOnline.Tests.Import.Factories
                     new[] { specimen1, specimen2, specimen3 }
                 };
 
-            var articleFactory = new ArticleFactory(DocumentSession.Advanced.DocumentStore, Substitute.For<IMediaFactory>());
+            var articleFactory = new ArticleFactory(DocumentStore, Substitute.For<IMediaFactory>());
 
             // When
-            existingArticle = DocumentSession.Load<Article>("articles/1");
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                existingArticle = documentSession.Load<Article>("articles/1");
 
-            var newArticle = FakeArticles.CreateFakeArticle("articles/1");
-            newArticle.RelatedSpecimenIds = new[] { "specimens/168", "specimens/230" };
+                var newArticle = FakeArticles.CreateFakeArticle("articles/1");
+                newArticle.RelatedSpecimenIds = new[] {"specimens/168", "specimens/230"};
 
-            articleFactory.UpdateDocument(newArticle, existingArticle);
+                articleFactory.UpdateDocument(newArticle, existingArticle, documentSession);
+                documentSession.SaveChanges();
+            }
 
             // Then
-            var updatedSpecimen1 = DocumentSession.Load<Specimen>("specimens/23");
-            updatedSpecimen1.RelatedArticleIds.ShouldNotContain("articles/1");
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                var updatedSpecimen1 = documentSession.Load<Specimen>("specimens/23");
+                updatedSpecimen1.RelatedArticleIds.ShouldNotContain("articles/1");
 
-            var updatedSpecimen3 = DocumentSession.Load<Specimen>("specimens/230");
-            updatedSpecimen3.RelatedArticleIds.ShouldContain("articles/1");
+                var updatedSpecimen3 = documentSession.Load<Specimen>("specimens/230");
+                updatedSpecimen3.RelatedArticleIds.ShouldContain("articles/1");
+            }
         }
 
         [Fact]
@@ -114,23 +128,29 @@ namespace CollectionsOnline.Tests.Import.Factories
                     new[] { parentArticle1, parentArticle2, childArticle1, childArticle2 }
                 };
 
-            var articleFactory = new ArticleFactory(DocumentSession.Advanced.DocumentStore, Substitute.For<IMediaFactory>());
+            var articleFactory = new ArticleFactory(DocumentStore, Substitute.For<IMediaFactory>());
 
             // When
-            childArticle1 = DocumentSession.Load<Article>("articles/2126");
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                childArticle1 = documentSession.Load<Article>("articles/2126");
 
-            var newChildArticle1 = FakeArticles.CreateFakeArticle("articles/2126");
-            newChildArticle1.ParentArticleId = "articles/848";
+                var newChildArticle1 = FakeArticles.CreateFakeArticle("articles/2126");
+                newChildArticle1.ParentArticleId = "articles/848";
 
-            articleFactory.UpdateDocument(newChildArticle1, childArticle1);
+                articleFactory.UpdateDocument(newChildArticle1, childArticle1, documentSession);
+                documentSession.SaveChanges();
+            }
 
             // Then
-            parentArticle1 = DocumentSession.Load<Article>("articles/1348");
-            parentArticle1.ChildArticleIds.ShouldNotContain("articles/2126");
+            using (var documentSession = DocumentStore.OpenSession())
+            {
+                parentArticle1 = documentSession.Load<Article>("articles/1348");
+                parentArticle1.ChildArticleIds.ShouldNotContain("articles/2126");
 
-            parentArticle1 = DocumentSession.Load<Article>("articles/848");
-            parentArticle1.ChildArticleIds.ShouldContain("articles/2126");
-
+                parentArticle1 = documentSession.Load<Article>("articles/848");
+                parentArticle1.ChildArticleIds.ShouldContain("articles/2126");
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Features.Specimens
             if (result.Specimen.Taxonomy != null)
             {
                 var query = _documentSession.Advanced
-                    .LuceneQuery<CombinedResult, Combined>()
+                    .DocumentQuery<CombinedResult, Combined>()
                     .WhereEquals("Taxon", result.Specimen.Taxonomy.TaxonName);
 
                 // Dont allow a link to search page if the current specimen is the only result

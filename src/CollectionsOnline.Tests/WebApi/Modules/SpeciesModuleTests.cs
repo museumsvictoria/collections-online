@@ -31,7 +31,7 @@ namespace CollectionsOnline.Tests.WebApi.Modules
             Browser = new Browser(with =>
                 {
                     with.Module<SpeciesModule>();
-                    with.Dependency(DocumentSession);
+                    with.Dependency(DocumentStore.OpenSession());
                 });
         }
 
