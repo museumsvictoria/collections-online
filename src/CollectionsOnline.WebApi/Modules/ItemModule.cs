@@ -6,12 +6,12 @@ using Raven.Client;
 
 namespace CollectionsOnline.WebApi.Modules
 {
-    public class ItemModule : BaseModule
+    public class ItemModule : WebApiModule
     {
         public ItemModule(IDocumentSession documentSession)
             : base("/items")
         {
-            Get["/"] = parameters =>
+            Get["items-index", "/"] = parameters =>
                 {
                     var items = documentSession.Advanced
                         .DocumentQuery<Item, Combined>()
@@ -24,7 +24,7 @@ namespace CollectionsOnline.WebApi.Modules
                     return BuildResponse(items);
                 };
 
-            Get["/{itemId}"] = parameters =>
+            Get["items-by-id", "/{itemId}"] = parameters =>
                 {
                     string itemId = parameters.itemId;
                     var item = documentSession

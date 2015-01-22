@@ -56,6 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nancy.Hosting.Aspnet.0.23.2\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
+    <Reference Include="Nancy.Metadata.Module">
+      <HintPath>..\packages\Nancy.MetaData.0.23.2\lib\net40\Nancy.Metadata.Module.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy.Serialization.JsonNet, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nancy.Serialization.JsonNet.0.23.2\lib\net40\Nancy.Serialization.JsonNet.dll</HintPath>
@@ -116,13 +119,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Metadata\ItemMetadataModule.cs" />
+    <Compile Include="Metadata\WebapiMetadata.cs" />
     <Compile Include="WebApiBootstrapper.cs" />
     <Compile Include="Modules\ArticleModule.cs" />
     <Compile Include="Modules\SpecimenModule.cs" />
     <Compile Include="Modules\SpeciesModule.cs" />
     <Compile Include="WebApiJsonSerializer.cs" />
     <Compile Include="Models\WebApiInputModel.cs" />
-    <Compile Include="Modules\BaseModule.cs" />
+    <Compile Include="Modules\WebApiModule.cs" />
     <Compile Include="Modules\ItemModule.cs" />
     <Compile Include="Modules\IndexModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

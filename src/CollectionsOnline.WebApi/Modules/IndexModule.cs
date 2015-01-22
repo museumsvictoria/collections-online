@@ -1,12 +1,18 @@
-﻿using Nancy;
+﻿using System.Linq;
+using CollectionsOnline.WebApi.Metadata;
+using Nancy;
+using Nancy.Routing;
 
 namespace CollectionsOnline.WebApi.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule()
+        public IndexModule(IRouteCacheProvider routeCacheProvider)
         {
-            Get["/"] = parameters => View["index"];
+            Get["/"] = parameters =>
+            {
+                return View["index", routeCacheProvider.GetCache().RetrieveMetadata<WebapiMetadata>().Where(x => x != null).GroupBy(x => x.Path).Select(x => x.First())];
+            };
         }
     }
 }

@@ -6,7 +6,7 @@ using Raven.Client;
 
 namespace CollectionsOnline.WebApi.Modules
 {
-    public class ArticleModule : BaseModule
+    public class ArticleModule : WebApiModule
     {
         public ArticleModule(IDocumentSession documentSession)
             : base("/articles")

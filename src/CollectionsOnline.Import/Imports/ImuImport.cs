@@ -199,7 +199,7 @@ namespace CollectionsOnline.Import.Imports
 
         private bool ImportCanceled()
         {
-            if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
+            if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpanStart && DateTime.Now.TimeOfDay < Constants.ImuOfflineTimeSpanEnd)
             {
                 _log.Warn("Imu about to go offline, canceling all imports");
                 Program.ImportCanceled = true;

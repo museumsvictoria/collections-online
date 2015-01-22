@@ -9,9 +9,9 @@ using Raven.Client;
 
 namespace CollectionsOnline.WebApi.Modules
 {
-    public abstract class BaseModule : NancyModule
+    public abstract class WebApiModule : NancyModule
     {
-        protected BaseModule(string modulePath = "")
+        protected WebApiModule(string modulePath = "")
             : base("/v1" + modulePath)
         {
             Before += context =>
