@@ -1,266 +1,268 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Transactions;
-//using CollectionsOnline.Core.Config;
-//using CollectionsOnline.Core.Indexes;
-//using CollectionsOnline.Core.Models;
-//using CollectionsOnline.Core.Extensions;
-//using CollectionsOnline.Import.Factories;
-//using IMu;
-//using NLog;
-//using Raven.Abstractions.Extensions;
-//using Raven.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
+using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
+using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Import.Extensions;
+using CollectionsOnline.Import.Factories;
+using IMu;
+using NLog;
+using Raven.Abstractions.Extensions;
+using Raven.Client;
 
-//namespace CollectionsOnline.Import.Imports
-//{
-//    public class MediaUpdateImport : IImport
-//    {
-//        private readonly Logger _log = LogManager.GetCurrentClassLogger();
-//        private readonly IDocumentStore _documentStore;
-//        private readonly Session _session;
-//        private readonly IMediaFactory _mediaFactory;
+namespace CollectionsOnline.Import.Imports
+{
+    public class MediaUpdateImport : IImport
+    {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
+        private readonly IDocumentStore _documentStore;
+        private readonly Session _session;
+        private readonly IMediaFactory _mediaFactory;
 
-//        public MediaUpdateImport(
-//            IDocumentStore documentStore,
-//            Session session,
-//            IMediaFactory mediaFactory)
-//        {
-//            _documentStore = documentStore;
-//            _session = session;
-//            _mediaFactory = mediaFactory;
-//        }
+        public MediaUpdateImport(
+            IDocumentStore documentStore,
+            Session session,
+            IMediaFactory mediaFactory)
+        {
+            _documentStore = documentStore;
+            _session = session;
+            _mediaFactory = mediaFactory;
+        }
 
-//        public void Run()
-//        {
-//            var module = new Module("emultimedia", _session);
-//            var columns = new[]
-//                                {
-//                                    "irn",
-//                                    "MulTitle",
-//                                    "MulMimeType",
-//                                    "MulDescription",
-//                                    "MulCreator_tab",
-//                                    "MdaDataSets_tab",
-//                                    "MdaElement_tab",
-//                                    "MdaQualifier_tab",
-//                                    "MdaFreeText_tab",
-//                                    "ChaRepository_tab",
-//                                    "DetAlternateText",
-//                                    "AdmPublishWebNoPassword",
-//                                    "AdmDateModified",
-//                                    "AdmTimeModified"
-//                                };
-//            var associatedDocumentCount = 0;
+        public void Run()
+        {
+            var module = new Module("emultimedia", _session);
+            ImportCache importCache;
+            var columns = new[]
+                                {
+                                    "irn",
+                                    "MulTitle",
+                                    "MulMimeType",
+                                    "MulDescription",
+                                    "MulCreator_tab",
+                                    "MdaDataSets_tab",
+                                    "MdaElement_tab",
+                                    "MdaQualifier_tab",
+                                    "MdaFreeText_tab",
+                                    "ChaRepository_tab",
+                                    "DetAlternateText",
+                                    "AdmPublishWebNoPassword",
+                                    "AdmDateModified",
+                                    "AdmTimeModified"
+                                };
+            var associatedDocumentCount = 0;
 
-//            using (var documentSession = _documentStore.OpenSession())
-//            {
-//                // Check to see whether we need to run import, so grab the earliest previous date run of any imports that utilize multimedia.
-//                var previousDateRun = documentSession
-//                    .Load<Application>(Constants.ApplicationId)
-//                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
-//                    .Select(x => x.PreviousDateRun)
-//                    .OrderBy(x => x)
-//                    .FirstOrDefault(x => x.HasValue);
 
-//                // Exit current import if it has never run.
-//                if(!previousDateRun.HasValue)
-//                    return;
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                // Check to see whether we need to run import, so grab the earliest previous date run of any imports that utilize multimedia.
+                var previousDateRun = documentSession
+                    .Load<Application>(Constants.ApplicationId)
+                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
+                    .Select(x => x.PreviousDateRun)
+                    .OrderBy(x => x)
+                    .FirstOrDefault(x => x.HasValue);
 
-//                // Check for existing import in case we need to resume.
-//                var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
+                // Exit current import if it has never run.
+                if (!previousDateRun.HasValue)
+                    return;
 
-//                // Exit current import if it had completed previous time it was run.
-//                if (importStatus.IsFinished)
-//                {
-//                    return;
-//                }
+                // Check for existing import in case we need to resume.
+                var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
-//                _log.Debug("Starting {0} import", GetType().Name);
+                // Exit current import if it had completed previous time it was run.
+                if (importStatus.IsFinished)
+                {
+                    return;
+                }
 
-//                // Cache the search results
-//                if (importStatus.CachedResult == null)
-//                {
-//                    var terms = new Terms();
-//                    terms.Add("MdaDataSets_tab", Constants.ImuMultimediaQueryString);
-//                    terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
-//                    importStatus.CachedResult = new List<long>();
-//                    importStatus.CachedResultDate = DateTime.Now;
+                _log.Debug("Starting {0} import", GetType().Name);
 
-//                    var hits = module.FindTerms(terms);
+                // Check for existing cached results
+                importCache = documentSession.Load<ImportCache>("importCaches/media");
+                if (importCache == null)
+                {
+                    importCache = new ImportCache { Id = "importCaches/media" };
 
-//                    _log.Debug("Caching {0} search results. {1} Hits", GetType().Name, hits);
+                    var terms = new Terms();
+                    terms.Add("MdaDataSets_tab", Constants.ImuMultimediaQueryString);
+                    terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
 
-//                    var cachedCurrentOffset = 0;
-//                    while (true)
-//                    {
-//                        if (ImportCanceled())
-//                            return;
+                    var hits = module.FindTerms(terms);
 
-//                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
+                    _log.Debug("Caching {0} search results. {1} Hits", GetType().Name, hits);
 
-//                        if (results.Count == 0)
-//                            break;
+                    var cachedCurrentOffset = 0;
+                    while (true)
+                    {
+                        if (ImportCanceled())
+                            return;
 
-//                        importStatus.CachedResult.AddRange(results.Rows.Select(x => long.Parse(x.GetString("irn"))));
+                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
 
-//                        cachedCurrentOffset += results.Count;
+                        if (results.Count == 0)
+                            break;
 
-//                        _log.Debug("{0} cache progress... {1}/{2}", GetType().Name, cachedCurrentOffset, hits);
-//                    }
+                        importCache.Irns.AddRange(results.Rows.Select(x => long.Parse(x.GetEncodedString("irn"))));
 
-//                    // Store cached result
-//                    documentSession.SaveChanges();
+                        cachedCurrentOffset += results.Count;
 
-//                    _log.Debug("Caching of {0} search results complete, beginning import.", GetType().Name);
-//                }
-//                else
-//                {
-//                    _log.Debug("Cached search results found, resuming {0} import.", GetType().Name);
-//                }
-//            }
+                        _log.Debug("{0} cache progress... {1}/{2}", GetType().Name, cachedCurrentOffset, hits);
+                    }
 
-//            // Perform import
-//            while (true)
-//            {
-//                using (var tx = new TransactionScope())
-//                using (var documentSession = _documentStore.OpenSession())
-//                {
-//                    if (ImportCanceled())
-//                        return;
+                    // Store cached result
+                    documentSession.Store(importCache);
+                    documentSession.SaveChanges();
 
-//                    var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
+                    _log.Debug("Caching of {0} search results complete, beginning import.", GetType().Name);
+                }
+                else
+                {
+                    _log.Debug("Cached search results found, resuming {0} import.", GetType().Name);
+                }
+            }
+            
+            // Perform import
+            while (true)
+            {
+                using (var documentSession = _documentStore.OpenSession())
+                {
+                    if (ImportCanceled())
+                        return;
 
-//                    var cachedResultBatch = importStatus.CachedResult
-//                        .Skip(importStatus.CurrentOffset)
-//                        .Take(Constants.DataBatchSize)
-//                        .ToList();
+                    var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
-//                    if (cachedResultBatch.Count == 0)
-//                        break;
+                    var cachedResultBatch = importCache.Irns
+                        .Skip(importStatus.CurrentImportCacheOffset)
+                        .Take(Constants.DataBatchSize)
+                        .ToList();
 
-//                    module.FindKeys(cachedResultBatch);
+                    if (cachedResultBatch.Count == 0)
+                        break;
 
-//                    var results = module.Fetch("start", 0, -1, columns);
+                    module.FindKeys(cachedResultBatch);
 
-//                    foreach (var row in results.Rows)
-//                    {
-//                        var mediaIrn = long.Parse(row.GetString("irn"));
+                    var results = module.Fetch("start", 0, -1, columns);
 
-//                        var count = 0;
-//                        while (true)
-//                        {
-//                            using (var associatedDocumentSession = _documentStore.OpenSession())
-//                            {
-//                                if (ImportCanceled())
-//                                    return;
+                    foreach (var row in results.Rows)
+                    {
+                        var mediaIrn = long.Parse(row.GetString("irn"));
 
-//                                var associatedDocumentBatch = associatedDocumentSession
-//                                    .Query<object, Combined>()
-//                                    .Where(x => ((CombinedResult)x).MediaIrns.Any(y => y == mediaIrn))
-//                                    .Skip(count)
-//                                    .Take(Constants.DataBatchSize)
-//                                    .ToList();
+                        var count = 0;
+                        while (true)
+                        {
+                            using (var associatedDocumentSession = _documentStore.OpenSession())
+                            {
+                                if (ImportCanceled())
+                                    return;
 
-//                                if (associatedDocumentBatch.Count == 0)
-//                                    break;
+                                var associatedDocumentBatch = associatedDocumentSession
+                                    .Query<object, Combined>()
+                                    .Where(x => ((CombinedResult)x).MediaIrns.Any(y => y == mediaIrn))
+                                    .Skip(count)
+                                    .Take(Constants.DataBatchSize)
+                                    .ToList();
 
-//                                foreach (var document in associatedDocumentBatch)
-//                                {
-//                                    var media = _mediaFactory.Make(row);
+                                if (associatedDocumentBatch.Count == 0)
+                                    break;
 
-//                                    // Determine type of document
-//                                    var item = document as Item;
-//                                    if (item != null)
-//                                    {
-//                                        var existingMedia = item.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-//                                        if (existingMedia != null)
-//                                            item.Media[item.Media.IndexOf(existingMedia)] = media;
+                                foreach (var document in associatedDocumentBatch)
+                                {
+                                    var media = _mediaFactory.Make(row);
 
-//                                        associatedDocumentCount++;
-//                                        continue;
-//                                    }
+                                    // Determine type of document
+                                    var item = document as Item;
+                                    if (item != null)
+                                    {
+                                        var existingMedia = item.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        if (existingMedia != null)
+                                            item.Media[item.Media.IndexOf(existingMedia)] = media;
 
-//                                    var species = document as Species;
-//                                    if (species != null)
-//                                    {
-//                                        var existingMedia = species.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-//                                        if (existingMedia != null)
-//                                            species.Media[species.Media.IndexOf(existingMedia)] = media;
+                                        associatedDocumentCount++;
+                                        continue;
+                                    }
 
-//                                        var author = species.Authors.SingleOrDefault(x => x.ProfileImage != null && x.ProfileImage.Irn == mediaIrn);
-//                                        if (author != null)
-//                                            author.ProfileImage = media as ImageMedia;
+                                    var species = document as Species;
+                                    if (species != null)
+                                    {
+                                        var existingMedia = species.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        if (existingMedia != null)
+                                            species.Media[species.Media.IndexOf(existingMedia)] = media;
 
-//                                        associatedDocumentCount++;
-//                                        continue;
-//                                    }
+                                        var author = species.Authors.SingleOrDefault(x => x.ProfileImage != null && x.ProfileImage.Irn == mediaIrn);
+                                        if (author != null)
+                                            author.ProfileImage = media as ImageMedia;
 
-//                                    var specimen = document as Specimen;
-//                                    if (specimen != null)
-//                                    {
-//                                        var existingMedia = specimen.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-//                                        if (existingMedia != null)
-//                                            specimen.Media[specimen.Media.IndexOf(existingMedia)] = media;
+                                        associatedDocumentCount++;
+                                        continue;
+                                    }
 
-//                                        associatedDocumentCount++;
-//                                        continue;
-//                                    }
+                                    var specimen = document as Specimen;
+                                    if (specimen != null)
+                                    {
+                                        var existingMedia = specimen.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        if (existingMedia != null)
+                                            specimen.Media[specimen.Media.IndexOf(existingMedia)] = media;
 
-//                                    var article = document as Article;
-//                                    if (article != null)
-//                                    {
-//                                        var existingMedia = article.Media.SingleOrDefault(x => x.Irn == mediaIrn);
-//                                        if (existingMedia != null)
-//                                            article.Media[article.Media.IndexOf(existingMedia)] = media;
+                                        associatedDocumentCount++;
+                                        continue;
+                                    }
 
-//                                        var author = article.Authors.SingleOrDefault(x => x.ProfileImage != null && x.ProfileImage.Irn == mediaIrn);
-//                                        if (author != null)
-//                                            author.ProfileImage = media as ImageMedia;
+                                    var article = document as Article;
+                                    if (article != null)
+                                    {
+                                        var existingMedia = article.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        if (existingMedia != null)
+                                            article.Media[article.Media.IndexOf(existingMedia)] = media;
 
-//                                        associatedDocumentCount++;
-//                                    }
-//                                }
+                                        var author = article.Authors.SingleOrDefault(x => x.ProfileImage != null && x.ProfileImage.Irn == mediaIrn);
+                                        if (author != null)
+                                            author.ProfileImage = media as ImageMedia;
 
-//                                // Save any changes
-//                                associatedDocumentSession.SaveChanges();
-//                                count += associatedDocumentBatch.Count;
-//                            }
-//                        }
-//                    }
+                                        associatedDocumentCount++;
+                                    }
+                                }
 
-//                    importStatus.CurrentOffset += results.Count;
+                                // Save any changes
+                                associatedDocumentSession.SaveChanges();
+                                count += associatedDocumentBatch.Count;
+                            }
+                        }
+                    }
 
-//                    _log.Debug("{0} import progress... {1}/{2}", GetType().Name, importStatus.CurrentOffset, importStatus.CachedResult.Count);
-//                    documentSession.SaveChanges();
+                    importStatus.CurrentImportCacheOffset += results.Count;
 
-//                    tx.Complete();
-//                }                
-//            }
+                    _log.Debug("{0} import progress... {1}/{2}", GetType().Name, importStatus.CurrentImportCacheOffset, importCache.Irns.Count);
+                    documentSession.SaveChanges();
+                }
+            }
 
-//            _log.Debug("{0} import complete, updated {1} associated documents", GetType().Name, associatedDocumentCount);
+            _log.Debug("{0} import complete, updated {1} associated documents", GetType().Name, associatedDocumentCount);
 
-//            using (var documentSession = _documentStore.OpenSession())
-//            {
-//                documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString());
-//                documentSession.SaveChanges();
-//            }
-//        }
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString(), importCache.DateCreated);
+                documentSession.SaveChanges();
+            }
+        }
 
-//        public int Order
-//        {
-//            get { return 10; }
-//        }
+        public int Order
+        {
+            get { return 10; }
+        }
 
-//        private bool ImportCanceled()
-//        {
-//            if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpan)
-//            {
-//                _log.Warn("Imu about to go offline, canceling all imports");
-//                Program.ImportCanceled = true;
-//            }
+        private bool ImportCanceled()
+        {
+            if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpanStart && DateTime.Now.TimeOfDay < Constants.ImuOfflineTimeSpanEnd)
+            {
+                _log.Warn("Imu about to go offline, canceling all imports");
+                Program.ImportCanceled = true;
+            }
 
-//            return Program.ImportCanceled;
-//        }
-//    }
-//}
+            return Program.ImportCanceled;
+        }
+    }
+}

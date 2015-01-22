@@ -189,6 +189,8 @@ namespace CollectionsOnline.Import.Factories
 
         public void UpdateDocument(Article newDocument, Article existingDocument, IDocumentSession documentSession)
         {
+            //TODO: because related id's can be from different relationships in emu, it is possible to remove a legitimate relationship when updating. consider splitting related id's into different relationships (related party articles, related sites articles)
+
             // Perform any denormalized updates
             var patchCommands = new List<ICommandData>();
 

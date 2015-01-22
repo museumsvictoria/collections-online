@@ -1,13 +1,11 @@
-﻿using System;
-using Nancy;
+﻿using Nancy;
 using Nancy.ModelBinding;
-using NLog;
 
 namespace CollectionsOnline.WebSite.Features.Search
 {
     public class SearchModule : NancyModule
     {
-        public SearchModule(            
+        public SearchModule(
             ISearchViewModelQuery searchViewModelQuery)            
         {
             Get["/search"] = parameters =>

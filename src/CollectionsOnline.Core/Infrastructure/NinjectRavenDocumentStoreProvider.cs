@@ -26,7 +26,7 @@ namespace CollectionsOnline.Core.Infrastructure
             }.Initialize();
 
             // Ensure DB exists
-            documentStore.DatabaseCommands.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
+            documentStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
 
             // Ensure we have a application document
             using (var documentSession = documentStore.OpenSession())

@@ -13,29 +13,29 @@ namespace CollectionsOnline.Import.Factories
         {
             if (map != null)
             {
-                var taxonomy = new Taxonomy();
-
-                taxonomy.Irn = long.Parse(map.GetEncodedString("irn"));
-                taxonomy.Kingdom = map.GetEncodedString("ClaKingdom");
-                taxonomy.Phylum = map.GetEncodedString("ClaPhylum");
-                taxonomy.Subphylum = map.GetEncodedString("ClaSubphylum");
-                taxonomy.Superclass = map.GetEncodedString("ClaSuperclass");
-                taxonomy.Class = map.GetEncodedString("ClaClass");
-                taxonomy.Subclass = map.GetEncodedString("ClaSubclass");
-                taxonomy.Superorder = map.GetEncodedString("ClaSuperorder");
-                taxonomy.Order = map.GetEncodedString("ClaOrder");
-                taxonomy.Suborder = map.GetEncodedString("ClaSuborder");
-                taxonomy.Infraorder = map.GetEncodedString("ClaInfraorder");
-                taxonomy.Superfamily = map.GetEncodedString("ClaSuperfamily");
-                taxonomy.Family = map.GetEncodedString("ClaFamily");
-                taxonomy.Subfamily = map.GetEncodedString("ClaSubfamily");
-                taxonomy.Genus = map.GetEncodedString("ClaGenus");
-                taxonomy.Subgenus = map.GetEncodedString("ClaSubgenus");
-                taxonomy.Species = map.GetEncodedString("ClaSpecies");
-                taxonomy.Subspecies = map.GetEncodedString("ClaSubspecies");
-
-                taxonomy.Author = map.GetEncodedString("AutAuthorString");
-                taxonomy.Code = map.GetEncodedString("ClaApplicableCode");
+                var taxonomy = new Taxonomy
+                {
+                    Irn = long.Parse(map.GetEncodedString("irn")),
+                    Kingdom = map.GetEncodedString("ClaKingdom"),
+                    Phylum = map.GetEncodedString("ClaPhylum"),
+                    Subphylum = map.GetEncodedString("ClaSubphylum"),
+                    Superclass = map.GetEncodedString("ClaSuperclass"),
+                    Class = map.GetEncodedString("ClaClass"),
+                    Subclass = map.GetEncodedString("ClaSubclass"),
+                    Superorder = map.GetEncodedString("ClaSuperorder"),
+                    Order = map.GetEncodedString("ClaOrder"),
+                    Suborder = map.GetEncodedString("ClaSuborder"),
+                    Infraorder = map.GetEncodedString("ClaInfraorder"),
+                    Superfamily = map.GetEncodedString("ClaSuperfamily"),
+                    Family = map.GetEncodedString("ClaFamily"),
+                    Subfamily = map.GetEncodedString("ClaSubfamily"),
+                    Genus = map.GetEncodedString("ClaGenus"),
+                    Subgenus = map.GetEncodedString("ClaSubgenus"),
+                    Species = map.GetEncodedString("ClaSpecies"),
+                    Subspecies = map.GetEncodedString("ClaSubspecies"),
+                    Author = map.GetEncodedString("AutAuthorString"),
+                    Code = map.GetEncodedString("ClaApplicableCode")
+                };
 
                 //higherClassification
                 var higherClassification = new Dictionary<string, string>
