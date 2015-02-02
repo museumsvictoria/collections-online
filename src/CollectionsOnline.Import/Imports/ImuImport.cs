@@ -141,7 +141,7 @@ namespace CollectionsOnline.Import.Imports
                     var results = module.Fetch("start", 0, -1, _imuFactory.Columns);
 
                     stopwatch.Stop();
-                    _log.Trace("Found and fetched {0} {1} records in {2} ms",cachedResultBatch.Count, typeof(T).Name, stopwatch.ElapsedMilliseconds);
+                    _log.Trace("Found and fetched {0} {1} records in {2} ms", cachedResultBatch.Count, typeof(T).Name, stopwatch.ElapsedMilliseconds);
 
                     // If import has run before, update existing documents, otherwise simply store new documents.
                     stopwatch = Stopwatch.StartNew();

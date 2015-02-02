@@ -37,6 +37,10 @@ namespace CollectionsOnline.Core.Config
         
         public static TimeSpan ImuOfflineTimeSpanEnd = new TimeSpan(23, 00, 0); // 11:00pm
 
+        public static string CurrentWebApiVersionHeader = "application/vnd.collections.v1+json";
+
+        public static string CurrentWebApiVersionPathSegment = "/{v1?}";
+
         public static Dictionary<Tuple<string, string, string, string>, MuseumLocation> MuseumLocations = new Dictionary
             <Tuple<string, string, string, string>, MuseumLocation>(new OrdinalIgnoreCaseTupleComparer())
         {
