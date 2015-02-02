@@ -21,7 +21,8 @@ namespace CollectionsOnline.WebSite.Features.Articles
 
             var query = _documentSession.Advanced
                 .DocumentQuery<CombinedResult, Combined>()
-                .WhereEquals("Articles", result.Article.Title);
+                .WhereEquals("Articles", result.Article.Title)
+                .Take(1);
 
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
 

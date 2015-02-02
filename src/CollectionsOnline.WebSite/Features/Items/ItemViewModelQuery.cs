@@ -23,7 +23,8 @@ namespace CollectionsOnline.WebSite.Features.Items
             {
                 var query = _documentSession.Advanced
                     .DocumentQuery<CombinedResult, Combined>()
-                    .WhereEquals("Taxon", result.Item.Taxonomy.TaxonName);
+                    .WhereEquals("Taxon", result.Item.Taxonomy.TaxonName)
+                    .Take(1);
 
                 // Dont allow a link to search page if the current item is the only result
                 if (query.SelectFields<CombinedResult>("Id").Select(x => x.Id).Except(new[] { itemId }).Any())

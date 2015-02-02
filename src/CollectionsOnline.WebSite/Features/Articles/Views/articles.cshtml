@@ -173,7 +173,7 @@
     </div>
 </div>
 
-@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
+@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedItemSpecimenCount > 0)
 {
     <div id="related">
         <div class="wrapper">

@@ -4,8 +4,8 @@ using Nancy;
 
 namespace CollectionsOnline.WebApi.Metadata
 {
-    public class WebapiMetadata
-    {
+    public class WebApiMetadata
+    {      
         public string Method { get; set; }
         
         public string Path { get; set; }
@@ -19,5 +19,5 @@ namespace CollectionsOnline.WebApi.Metadata
         public string SampleResponse { get; set; }
 
         public string ExampleUrl { get; set; }
-    }
+    }    
 }

@@ -36,7 +36,8 @@
     <Reference Include="CsQuery">
       <HintPath>..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
     </Reference>
-    <Reference Include="FizzWare.NBuilder">
+    <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -96,9 +97,9 @@
     <Compile Include="Core\Extensions\StringExtensionsTests.cs" />
     <Compile Include="Core\Factories\SlugFactoryTests.cs" />
     <Compile Include="Fakes\FakeArticles.cs" />
-    <Compile Include="Fakes\FakeSpecimens.cs" />
-    <Compile Include="Fakes\FakeSpecies.cs" />
     <Compile Include="Fakes\FakeItems.cs" />
+    <Compile Include="Fakes\FakeSpecies.cs" />
+    <Compile Include="Fakes\FakeSpecimens.cs" />
     <Compile Include="Import\Factories\ArticleFactoryTests.cs" />
     <Compile Include="Import\ImportRunnerTests.cs" />
     <Compile Include="Core\Utilities\NaturalDateConverterTests.cs" />

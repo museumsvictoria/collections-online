@@ -12,7 +12,7 @@ namespace CollectionsOnline.WebApi.Modules
     public abstract class WebApiModule : NancyModule
     {
         protected WebApiModule(string modulePath = "")
-            : base("/v1" + modulePath)
+            : base(Constants.CurrentWebApiVersionPathSegment + modulePath)
         {
             Before += context =>
                 {
@@ -42,7 +42,7 @@ namespace CollectionsOnline.WebApi.Modules
                         Headers = new
                         {
                             Link = BuildLinkHeader(),
-                            TotalResults = Statistics.TotalResults
+                            TotalResults = Statistics.TotalResults,
                         },
                         Response = model,
                         Status = httpStatus

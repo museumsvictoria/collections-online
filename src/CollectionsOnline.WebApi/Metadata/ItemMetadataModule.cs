@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using FizzWare.NBuilder;
 using Nancy;
 using Nancy.Metadata.Module;
 using Newtonsoft.Json;
+using Raven.Client;
 
 namespace CollectionsOnline.WebApi.Metadata
 {
-    public class ItemMetadataModule : MetadataModule<WebapiMetadata>
+    public class ItemMetadataModule : MetadataModule<WebApiMetadata>
     {
-        public ItemMetadataModule()
+        public ItemMetadataModule(IDocumentStore documentStore)
         {
             Describe["items-index"] = description =>
             {
-                return new WebapiMetadata
+                return new WebApiMetadata
                 {
                     Method = description.Method,
-                    Path = description.Path,
+                    Path = description.Path.Replace(Constants.CurrentWebApiVersionPathSegment, string.Empty),
                     Description = "Returns a bunch of items.",
                     StatusCodes = new Dictionary<HttpStatusCode, string>
                     {
@@ -24,35 +28,47 @@ namespace CollectionsOnline.WebApi.Metadata
                     },
                     SampleResponse = JsonConvert.SerializeObject(new []
                     {
-                        new Item
-                        {
-                            Id = "items/1",
-                            ObjectName = "Example object name"
-                        }
+                        Builder<Item>
+                            .CreateNew()
+                            .With(x => x.Id = "items/1")
+                            .With(x => x.DateModified = new DateTime(2015, 1, 1))
+                            .With(x => x.Associations = Builder<Association>
+                                .CreateListOfSize(1)
+                                .Build())
+                            .Build()
                     }, Formatting.Indented),
-                    ExampleUrl = description.Path,
+                    ExampleUrl = description.Path.Replace(Constants.CurrentWebApiVersionPathSegment, string.Empty),
                 };
             };
 
             Describe["items-by-id"] = description =>
             {
-                return new WebapiMetadata
+                using (var documentSession = documentStore.OpenSession())
                 {
-                    Method = description.Method,
-                    Path = description.Path,
-                    Description = "Returns a single item by Id.",
-                    StatusCodes = new Dictionary<HttpStatusCode, string>
+                    return new WebApiMetadata
                     {
-                        { HttpStatusCode.OK, "The item was found and retrieved ok." },
-                        { HttpStatusCode.NotFound, "The item could not be found and probably does not exist." }
-                    },
-                    SampleResponse = JsonConvert.SerializeObject(new Item
+                        Method = description.Method,
+                        Path = description.Path.Replace(Constants.CurrentWebApiVersionPathSegment, string.Empty),
+                        Description = "Returns a single item by Id.",
+                        StatusCodes = new Dictionary<HttpStatusCode, string>
                         {
-                            Id = "items/1",
-                            ObjectName = "Example object name"
-                        }, Formatting.Indented),
-                    ExampleUrl = "/v1/items/791773",
-                };
+                            {HttpStatusCode.OK, "The item was found and retrieved ok."},
+                            {HttpStatusCode.NotFound, "The item could not be found and probably does not exist."}
+                        },
+                        SampleResponse = JsonConvert.SerializeObject(Builder<Item>
+                            .CreateNew()
+                            .With(x => x.Id = "items/1")
+                            .With(x => x.DateModified = new DateTime(2015, 1, 1))
+                            .With(x => x.Associations = Builder<Association>
+                                .CreateListOfSize(1)
+                                .Build())
+                            .Build(), Formatting.Indented),
+                        ExampleUrl = documentSession.Advanced
+                            .DocumentQuery<Item, Combined>()
+                            .WhereEquals("Type", "Item")
+                            .First().Id,
+                    };
+                }
             };
         }
     }

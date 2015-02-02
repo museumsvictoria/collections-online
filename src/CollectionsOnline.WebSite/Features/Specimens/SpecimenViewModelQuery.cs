@@ -23,7 +23,8 @@ namespace CollectionsOnline.WebSite.Features.Specimens
             {
                 var query = _documentSession.Advanced
                     .DocumentQuery<CombinedResult, Combined>()
-                    .WhereEquals("Taxon", result.Specimen.Taxonomy.TaxonName);
+                    .WhereEquals("Taxon", result.Specimen.Taxonomy.TaxonName)
+                    .Take(1);
 
                 // Dont allow a link to search page if the current specimen is the only result
                 if (query.SelectFields<CombinedResult>("Id").Select(x => x.Id).Except(new[] { specimenId }).Any())
