@@ -239,6 +239,9 @@
     <Content Include="content\fonts\mv-collections.ttf" />
     <Content Include="content\fonts\mv-collections.woff" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\Shared\Views\searchbar.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Configuration
+<!DOCTYPE html>
 <html>
     <head>        
         <meta charset="utf-8">
@@ -12,14 +13,12 @@
         <header>
             <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
             <nav>
-                <form class="form-search" method="GET" action="/search" role="form">
-                    <span class="icon-search" aria-hidden="true"></span>
-                    <span class="icon-label-hidden">Search the collection</span>
-                    <input type="text" name="query" class="form-control" placeholder="SEARCH">
-                </form>
-                <a href="">Browse articles</a>
                 <a href="">About</a>
-                <a href="">API</a>
+                <a href="@ConfigurationManager.AppSettings["WebApiUrl"]">Developers</a>
+                <a href="#" class="button-search">
+                    <span class="icon-search-header" aria-hidden="true"></span>
+                    Search
+                </a>
             </nav>
         </header>
         @RenderBody()

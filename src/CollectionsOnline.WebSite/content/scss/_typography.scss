@@ -31,13 +31,41 @@
     font-style: normal;
 }
 
+.icon-close:before {
+    font-family:$font-family-mv-collections;
+    content:"\e601";
+}
+
+.icon-search-header:before {
+    font-family:$font-family-mv-collections;
+    content:"\e602";
+    font-size:1.5em;
+    position:absolute;
+    right:20px;
+}
+
+.icon-left-arrow:before {
+    font-family:$font-family-mv-collections;
+    content:"\e607";
+}
+
+.icon-right-arrow:before {
+    font-family:$font-family-mv-collections;
+    content:"\e60a";
+}
+
 .icon-search:before {
     font-family:$font-family-mv-collections;
     content:"\e60b";
-    line-height:76px;
-    position:absolute;
     font-size:1.5em;
-    left:17px;
+}
+
+.icon-filter:before {
+    font-family:$font-family-mv-collections;
+    content:"\e602";
+    font-size:1.3em;
+    position:absolute;
+    left:190px;
 }
 
 .icon-download:before {

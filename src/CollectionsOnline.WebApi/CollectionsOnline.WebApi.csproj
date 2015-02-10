@@ -123,6 +123,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Metadata\ArticleMetadataModule.cs" />
     <Compile Include="Metadata\ItemMetadataModule.cs" />
     <Compile Include="Metadata\WebapiMetadata.cs" />
     <Compile Include="WebApiBootstrapper.cs" />

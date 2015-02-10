@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using ImageProcessor;
 using ImageProcessor.Imaging;
@@ -173,6 +174,11 @@ namespace CollectionsOnline.Import.Factories
                     // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
                     _log.Warn("Multimedia resource was not found, unable to save image at this time {0}, {1}", imageMedia.Irn, exception);
                 }
+                //TODO: handle this somehow. refresh imu session maybe? imu session has been made transient for the time being
+                //else if (exception.ToString().Contains("ContextBadIdentifier", StringComparison.OrdinalIgnoreCase))
+                //{
+                //    
+                //}
                 else
                 {
                     // Error is unexpected therefore we want the entire import to fail, re-throw the error.

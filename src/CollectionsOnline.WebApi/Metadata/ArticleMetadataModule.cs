@@ -11,31 +11,28 @@ using Raven.Client;
 
 namespace CollectionsOnline.WebApi.Metadata
 {
-    public class ItemMetadataModule : MetadataModule<WebApiMetadata>
+    public class ArticleMetadataModule : MetadataModule<WebApiMetadata>
     {
-        public ItemMetadataModule(IDocumentStore documentStore)
+        public ArticleMetadataModule(IDocumentStore documentStore)
         {
-            Describe["items-index"] = description =>
+            Describe["articles-index"] = description =>
             {
                 return new WebApiMetadata
                 {
                     Name = description.Name,
                     Method = description.Method,
                     Path = description.Path.Replace(Constants.CurrentWebApiVersionPathSegment, string.Empty),
-                    Description = "Returns a bunch of items.",
+                    Description = "Returns a bunch of articles.",
                     StatusCodes = new Dictionary<HttpStatusCode, string>
                     {
-                        { HttpStatusCode.OK, "A bunch of items were able to be retrieved ok." }
+                        { HttpStatusCode.OK, "A bunch of articles were able to be retrieved ok." }
                     },
                     SampleResponse = JsonConvert.SerializeObject(new []
                     {
-                        Builder<Item>
+                        Builder<Article>
                             .CreateNew()
-                            .With(x => x.Id = "items/1")
+                            .With(x => x.Id = "articles/1")
                             .With(x => x.DateModified = new DateTime(2015, 1, 1))
-                            .With(x => x.Associations = Builder<Association>
-                                .CreateListOfSize(1)
-                                .Build())
                             .Build()
                     }, Formatting.Indented),
                     ExampleUrl = description.Path.Replace(Constants.CurrentWebApiVersionPathSegment, string.Empty),

@@ -1,11 +1,9 @@
-﻿@using System
-@using CollectionsOnline.Core.Models
-@using CollectionsOnline.WebSite.Extensions
+﻿@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Items.ItemViewTransformerResult>
 @{
     Layout = "layout.cshtml";
 }
-
+@Html.Partial("searchbar")
 @if (Model.ItemHeroImage != null)
 {
     <figure id="media">

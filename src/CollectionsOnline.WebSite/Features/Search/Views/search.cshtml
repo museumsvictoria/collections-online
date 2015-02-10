@@ -2,30 +2,97 @@
 @{
     Layout = "layout.cshtml";
 }
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <h4 class="navbar-text">Search collections online</h4>
-    <form class="navbar-form navbar-left" method="GET" action="/search" role="form">
-        <div class="input-group">
-            <span class="input-group-btn">
-                <button type="submit" class="btn btn-default">search</button>
-            </span>
-            <input type="text" name="query" class="form-control" value="@Model.Query">
-        </div>
-    </form>    
-</nav>
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            @foreach (var facet in Model.Facets)
+<div id="search">
+    <aside class="facets">
+        <a href="#" class="button-filter">
+            <span class="icon-filter" aria-hidden="true"></span>
+            Filter by
+        </a>
+        @foreach (var facet in Model.Facets)
+        {
+            <h4>@facet.Name</h4>
+            foreach (var value in facet.Values)
             {
-                <h4>@facet.Name</h4>
-                <div class="list-group">
-                    @foreach (var value in facet.Values)
-                    {
-                        <a href="@value.Url" class="list-group-item @(value.Active ? "active" : "")">@value.Name <span class="badge">@value.Hits</span></a>
-                    }
+                if (value.Active)
+                {
+                    <a href="@value.Url" class="active">@value.Name <span class="badge">(@value.Hits)</span></a>
+                }
+                else
+                {
+                    <a href="@value.Url">@value.Name <span class="badge">(@value.Hits)</span></a>
+                }
+
+            }
+        }
+    </aside>
+    <div class="results">
+        @Html.Partial("searchbar", Model)
+        @if (Model.ActiveFacets.Any() || Model.ActiveTerms.Any())
+        {
+            <div class="active-facets">
+                @foreach (var activeFacet in Model.ActiveFacets)
+                {
+                    <a href="@activeFacet.Url">
+                        @activeFacet.Name
+                        <span class="icon-close" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Remove facet</span>
+                    </a>
+                }
+                @foreach (var activeTerm in Model.ActiveTerms)
+                {
+                    <a href="@activeTerm.Url">
+                        @activeTerm.Name
+                        <span class="icon-close" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Remove facet</span>
+                    </a>
+                }
+            </div>
+        }
+        <div class="pagination">
+            <div class="counts"><strong>@Model.TotalResults</strong> results, displaying <strong>@(Model.Offset+1)</strong> to <strong>@(Model.Limit + Model.Offset)</strong></div>
+            <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="icon-left-arrow"></span> Previous</a>
+            <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="icon-right-arrow"></span></a>
+        </div>
+        <div class="results-area">
+            @foreach (var result in Model.Results)
+            {
+                <div class="@result.Type.ToLower()">
+                    <a href="/@result.Id">
+                        @if (string.IsNullOrWhiteSpace(result.ThumbnailUri))
+                        {
+                            <span class="no-image">
+                                <span class="no-image-label">No Image</span>
+                            </span>
+                        }
+                        else
+                        {
+                            <img src="@result.ThumbnailUri" />
+                        }
+                        <span class="title">@Html.Raw(result.Name)</span>
+                    </a>
                 </div>
             }
+        </div>
+        <div class="pagination bottom">
+            <div class="counts"><strong>@Model.TotalResults</strong> results, displaying <strong>@(Model.Offset+1)</strong> to <strong>@(Model.Limit + Model.Offset)</strong></div>
+            <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="icon-left-arrow"></span> Previous</a>
+            <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="icon-right-arrow"></span></a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+@*<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+
         </div>
         <div class="col-md-9">
             <div class="btn-toolbar search-active-facets" role="toolbar">
@@ -94,4 +161,4 @@
             </nav>
         </div>
     </div>
-</div>
+</div>*@

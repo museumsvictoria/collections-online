@@ -11,7 +11,7 @@ namespace CollectionsOnline.WebApi.Modules
         public ArticleModule(IDocumentSession documentSession)
             : base("/articles")
         {
-            Get["/"] = parameters =>
+            Get["articles-index", "/"] = parameters =>
                 {
                     var articles = documentSession.Advanced
                         .DocumentQuery<Article, Combined>()
@@ -24,7 +24,7 @@ namespace CollectionsOnline.WebApi.Modules
                     return BuildResponse(articles);
                 };
 
-            Get["/{articleId}"] = parameters =>
+            Get["articles-by-id", "/{articleId}"] = parameters =>
                 {
                     string articleId = parameters.articleId;
                     var article = documentSession

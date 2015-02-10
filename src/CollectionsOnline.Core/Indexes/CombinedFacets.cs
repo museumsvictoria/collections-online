@@ -17,19 +17,19 @@ namespace CollectionsOnline.Core.Indexes
             {
                 new Facet<CombinedResult>
                 {
-                    Name = x => x.Type
-                },
-                new Facet<CombinedResult>
-                {
-                    Name = x => x.Category
-                },
-                new Facet<CombinedResult>
-                {
                     Name = x => x.HasImages
                 },
                 new Facet<CombinedResult>
                 {
                     Name = x => x.OnDisplay
+                },
+                new Facet<CombinedResult>
+                {
+                    Name = x => x.Type
+                },
+                new Facet<CombinedResult>
+                {
+                    Name = x => x.Category
                 },
                 new Facet<CombinedResult>
                 {

@@ -5,7 +5,9 @@ using Nancy;
 namespace CollectionsOnline.WebApi.Metadata
 {
     public class WebApiMetadata
-    {      
+    {
+        public string Name { get; set; }
+
         public string Method { get; set; }
         
         public string Path { get; set; }

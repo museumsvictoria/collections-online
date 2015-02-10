@@ -78,9 +78,8 @@ namespace CollectionsOnline.Import.Imports
 
                         var irnResults = results.Rows.Select(x => long.Parse(x.GetEncodedString("irn"))).ToList();
 
-                        // First check to see if we are not overwriting existing data, 
-                        // then find any existing documents and remove them from our cached irn list so we only add new results
-                        if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingDocuments"]))
+                        // Check to see if we are skipping existing data, used for testing and debugging purposes only
+                        if (bool.Parse(ConfigurationManager.AppSettings["SkipExistingDocuments"]))
                         {
                             var existingIrnResults = new List<long>();
                             using (var subDocumentSession = _documentStore.OpenSession())

@@ -31,7 +31,7 @@ namespace CollectionsOnline.Import
             };
 
             // Log any exceptions that are not handled
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) => _log.Error(eventArgs.ExceptionObject);
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) => _log.Error(eventArgs.ExceptionObject);                                    
 
             _kernel = CreateKernel();
 
@@ -53,22 +53,22 @@ namespace CollectionsOnline.Import
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
 
             // Imu Bindings
-            kernel.Bind<Session>().ToProvider<NinjectImuSessionProvider>().InSingletonScope();
+            kernel.Bind<Session>().ToProvider<NinjectImuSessionProvider>();
 
             // Bind Imports
             kernel.Bind<IImport>().To<ImuImport<Article>>();
             kernel.Bind<IImport>().To<ImuImport<Species>>();
             kernel.Bind<IImport>().To<ImuImport<Item>>();
-            kernel.Bind<IImport>().To<ImuImport<Specimen>>();
+            kernel.Bind<IImport>().To<ImuImport<Specimen>>();            
 
             // Bind the rest
             kernel.Bind(x => x
                 .FromAssemblyContaining(typeof(Program), typeof(Constants))
                 .SelectAllClasses()
                 .Excluding<MigrationImport>()
-                //.Excluding<RelationshipImport>()
-                //.Excluding<MediaUpdateImport>()                
-                //.Excluding<TaxonomyUpdateImport>()
+                .Excluding<RelationshipImport>()
+                .Excluding<MediaUpdateImport>()
+                .Excluding<TaxonomyUpdateImport>()
                 .BindAllInterfaces());
         }
     }

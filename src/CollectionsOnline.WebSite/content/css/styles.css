@@ -678,13 +678,36 @@ input[type="checkbox"], input[type="radio"] {
   src: url("/content/fonts/entypo-social.eot?#iefix") format("embedded-opentype"), url("/content/fonts/entypo-social.woff") format("woff"), url("/content/fonts/entypo-social.ttf") format("truetype"), url("/content/fonts/entypo-social.svg") format("svg");
   font-weight: normal;
   font-style: normal; }
+.icon-close:before {
+  font-family: "mv-collections";
+  content: "\e601"; }
+
+.icon-search-header:before {
+  font-family: "mv-collections";
+  content: "\e602";
+  font-size: 1.5em;
+  position: absolute;
+  right: 20px; }
+
+.icon-left-arrow:before {
+  font-family: "mv-collections";
+  content: "\e607"; }
+
+.icon-right-arrow:before {
+  font-family: "mv-collections";
+  content: "\e60a"; }
+
 .icon-search:before {
   font-family: "mv-collections";
   content: "\e60b";
-  line-height: 76px;
+  font-size: 1.5em; }
+
+.icon-filter:before {
+  font-family: "mv-collections";
+  content: "\e602";
+  font-size: 1.3em;
   position: absolute;
-  font-size: 1.5em;
-  left: 17px; }
+  left: 190px; }
 
 .icon-download:before {
   font-family: "mv-collections";
@@ -768,6 +791,13 @@ nav {
     line-height: 76px; }
     nav a:hover {
       background: #000;
+      color: #fff; }
+  nav .button-search {
+    background-color: #B7D71F;
+    color: #fff;
+    padding-right: 60px; }
+    nav .button-search:hover {
+      background-color: #B7D71F;
       color: #fff; }
 
 button.icon {
@@ -1120,7 +1150,8 @@ footer {
 .no-image {
   display: block;
   position: relative;
-  width: 100%; }
+  width: 100%;
+  background: #cccccc; }
   .no-image:before {
     content: "";
     display: block;
@@ -1137,5 +1168,153 @@ footer {
     left: 0;
     bottom: 0;
     right: 0; }
+
+#search {
+  display: flex; }
+  #search .facets {
+    background: #141414;
+    width: 300px; }
+    #search .facets .button-filter {
+      padding: 0 20px;
+      display: block;
+      color: #fff;
+      background: #000;
+      height: 70px;
+      line-height: 70px;
+      font-size: 1.4em;
+      font-weight: 300; }
+    #search .facets h4 {
+      padding: 0 20px;
+      font-weight: 300;
+      font-size: 1.1em;
+      color: #fff;
+      margin: 1.33em 0 0.6em; }
+    #search .facets a {
+      padding: 0 20px;
+      display: block;
+      color: #fff; }
+      #search .facets a .badge {
+        color: #bbbbbb; }
+    #search .facets a.active {
+      color: #fff;
+      font-weight: 500; }
+      #search .facets a.active .badge {
+        color: #B7D71F; }
+  #search .results {
+    width: 100%;
+    background: #e3e3e3; }
+    #search .results .active-facets {
+      padding: 20px 0 0 20px; }
+      #search .results .active-facets a {
+        color: #756969;
+        height: 35px;
+        line-height: 35px;
+        display: inline-block;
+        border-radius: 2px;
+        background: #fff;
+        padding: 0 10px;
+        margin: 0 5px 0 0; }
+        #search .results .active-facets a .icon-close {
+          color: #000;
+          font-size: 0.7em;
+          padding: 0 0 0 5px; }
+    #search .results .pagination {
+      margin: 40px 0 0 20px; }
+      #search .results .pagination .counts {
+        display: inline-block;
+        margin: 0 20px 0 0; }
+      #search .results .pagination a.button {
+        display: inline-block;
+        padding: 0 5px;
+        color: #000; }
+      #search .results .pagination a.button.disabled {
+        color: #cccccc; }
+      #search .results .pagination .icon-left-arrow, #search .results .pagination .icon-right-arrow {
+        font-size: 0.7em; }
+    #search .results .pagination.bottom {
+      margin: 20px 0 40px 20px; }
+    #search .results .results-area {
+      display: table;
+      content: "";
+      clear: both; }
+      #search .results .results-area .item, #search .results .results-area .specimen, #search .results .results-area .article, #search .results .results-area .species {
+        float: left;
+        width: 240px;
+        margin: 20px 0 0 20px; }
+        #search .results .results-area .item a, #search .results .results-area .specimen a, #search .results .results-area .article a, #search .results .results-area .species a {
+          display: block;
+          position: relative; }
+          #search .results .results-area .item a:before, #search .results .results-area .specimen a:before, #search .results .results-area .article a:before, #search .results .results-area .species a:before {
+            border-bottom-left-radius: 3px;
+            padding: 10px;
+            color: #fff;
+            text-transform: uppercase;
+            position: absolute;
+            font-size: 0.9em;
+            font-weight: 500;
+            top: 0;
+            right: 0; }
+        #search .results .results-area .item img, #search .results .results-area .specimen img, #search .results .results-area .article img, #search .results .results-area .species img {
+          width: 100%;
+          display: block; }
+        #search .results .results-area .item .title, #search .results .results-area .specimen .title, #search .results .results-area .article .title, #search .results .results-area .species .title {
+          display: block;
+          height: 6em;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          background-color: #f9f9f9;
+          color: #000;
+          font-weight: 500;
+          padding: 10px; }
+    #search .results .item img, #search .results .item .no-image {
+      border-bottom: 5px solid #f26935; }
+    #search .results .item a:before {
+      background-color: rgba(242, 105, 53, 0.8);
+      content: "Item"; }
+    #search .results .article img, #search .results .article .no-image {
+      border-bottom: 5px solid #687e72; }
+    #search .results .article a:before {
+      background-color: rgba(104, 126, 114, 0.8);
+      content: "Article"; }
+    #search .results .specimen img, #search .results .specimen .no-image {
+      border-bottom: 5px solid #83ac9c; }
+    #search .results .specimen a:before {
+      background-color: rgba(131, 172, 156, 0.8);
+      content: "Specimen"; }
+    #search .results .species img, #search .results .species .no-image {
+      border-bottom: 5px solid #f2c31d; }
+    #search .results .species a:before {
+      background-color: rgba(242, 195, 29, 0.8);
+      content: "Species"; }
+    #search .results .no-image-label {
+      padding-top: 4em; }
+
+#search-bar {
+  background: #B7D71F;
+  height: 70px; }
+  #search-bar form {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    padding: 0 20px; }
+    #search-bar form input {
+      margin: 0;
+      outline: 0;
+      padding: 0 1em;
+      font-size: 1.2em;
+      font-weight: 300;
+      border: 0;
+      width: 100%;
+      height: 44px;
+      border-radius: 2px 0 0 2px; }
+    #search-bar form button {
+      height: 44px;
+      margin: 0;
+      outline: 0;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 0 2px 2px 0;
+      color: #fff;
+      background: #000; }
 
 /*# sourceMappingURL=styles.css.map */

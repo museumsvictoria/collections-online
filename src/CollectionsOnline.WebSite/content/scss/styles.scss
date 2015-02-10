@@ -54,6 +54,17 @@ nav {
             color:$color-default;
         }
     }
+
+    .button-search {
+        background-color:$color-museum-green;
+        color:$color-default;
+        padding-right:60px;
+
+        &:hover {
+        background-color:$color-museum-green;
+        color:$color-default;
+        }
+    }
 }
 
 button.icon {
@@ -496,6 +507,7 @@ footer {
     display:block;
     position: relative;
 	width: 100%;
+    background:#cccccc;
 
     &:before {
 	    content: "";
@@ -515,5 +527,233 @@ footer {
 	    left: 0;
 	    bottom: 0;
 	    right: 0;
+    }
+}
+
+#search {
+    display:flex;
+
+    .facets {
+        background:#141414;
+        width:300px;        
+
+        .button-filter
+        {
+            padding:0 20px;
+            display:block;
+            color:$color-default;
+            background:#000;
+            height:70px;
+            line-height:70px;
+            font-size:1.4em;
+            font-weight:300;
+        }
+
+        h4 {
+            padding:0 20px;
+            font-weight:300;
+            font-size:1.1em;
+            color:$color-default;
+            margin:1.33em 0 0.6em;
+        }
+
+        a {
+            padding:0 20px;
+            display:block;
+            color:$color-default;            
+
+            .badge {
+                color:#bbbbbb;
+            }
+        }
+
+        a.active {
+            color:$color-default;
+            font-weight:500;
+
+            .badge {
+                color:$color-museum-green;
+            }
+        }
+    }
+
+    .results {
+        width:100%;
+        background:#e3e3e3;
+
+        .active-facets {
+            padding:20px 0 0 20px;
+            a {
+                color:#756969;
+                height:35px;
+                line-height:35px;
+                display:inline-block;
+                border-radius:2px;
+                background:$color-default;
+                padding:0 10px;
+                margin:0 5px 0 0;
+
+                .icon-close {
+                    color:$color;
+                    font-size:0.7em;
+                    padding:0 0 0 5px;
+                }
+            }
+        }
+
+        .pagination {
+            margin:40px 0 0 20px;
+
+            .counts {
+                display:inline-block;
+                margin:0 20px 0 0;
+            }
+
+            a.button {
+                display:inline-block;
+                padding:0 5px;
+                color:$color;
+            }
+
+            a.button.disabled {
+                color:#cccccc;
+            }
+
+            .icon-left-arrow, .icon-right-arrow {
+                font-size:0.7em;
+            }
+        }
+
+        .pagination.bottom {
+            margin:20px 0 40px 20px;
+        }
+
+        .results-area {
+            display:table;
+            content:"";
+            clear:both;
+
+            .item, .specimen, .article, .species {
+                float:left;
+                width:240px;
+                margin:20px 0 0 20px;
+
+                a {
+                    display:block;
+                    position:relative;
+
+                    &:before {
+                        border-bottom-left-radius:3px;
+                        padding:10px;
+                        color:$color-default;
+                        text-transform:uppercase;
+                        position:absolute;
+                        font-size:0.9em;
+                        font-weight:500;
+                        top:0;
+                        right:0;
+                    }
+                }        
+
+                img {
+                    width:100%;
+                    display:block;
+                }
+
+                .title {
+                    display:block;
+                    height:6em;
+                    overflow:hidden;
+                    text-overflow:ellipsis;
+                    background-color:#f9f9f9;
+                    color:#000;
+                    font-weight:500;
+                    padding:10px;
+                }
+            }
+        }
+
+        .item {
+            img, .no-image {
+                border-bottom:5px solid rgb(242, 105, 53);
+            }
+
+            a:before {
+                background-color:rgba(242, 105, 53, 0.8);
+                content:"Item";
+            }
+        }
+
+        .article {
+            img, .no-image {
+                border-bottom:5px solid rgb(104, 126, 114);
+            }
+
+            a:before {
+                background-color:rgba(104, 126, 114, 0.8);
+                content:"Article";
+            }
+        }
+
+        .specimen {
+            img, .no-image {
+                border-bottom:5px solid rgb(131, 172, 156);
+            }
+
+            a:before {
+                background-color:rgba(131, 172, 156, 0.8);
+                content:"Specimen";
+            }
+        }
+
+        .species {
+            img, .no-image {
+                border-bottom:5px solid rgb(242, 195, 29);
+            }
+
+            a:before {
+                background-color:rgba(242, 195, 29, 0.8);
+                content:"Species";
+            }
+        }
+
+        .no-image-label {
+            padding-top:4em;
+        }
+    }
+}
+
+#search-bar {
+    background:$color-museum-green;
+    height:70px;
+
+    form {
+        display:flex;
+        align-items:center;
+        height:70px;
+        padding:0 20px;
+                
+        input {
+            margin:0;
+            outline:0;
+            padding:0 1em;
+            font-size:1.2em;
+            font-weight:300;
+            border:0;
+            width:100%;
+            height:44px;
+            border-radius:2px 0 0 2px;
+        }
+
+        button {
+            height:44px;
+            margin:0;
+            outline:0;
+            padding:0 10px;
+            border:0;
+            border-radius:0 2px 2px 0;
+            color:$color-default;
+            background:#000;
+        }
     }
 }
