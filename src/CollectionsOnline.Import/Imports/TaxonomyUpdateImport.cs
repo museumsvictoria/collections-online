@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
+using CollectionsOnline.Import.Infrastructure;
 using IMu;
 using NLog;
 using Raven.Abstractions.Data;
@@ -20,22 +20,21 @@ namespace CollectionsOnline.Import.Imports
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
-        private readonly Session _session;
+        private readonly IImuSessionProvider _imuSessionProvider;
         private readonly ITaxonomyFactory _taxonomyFactory;
 
         public TaxonomyUpdateImport(
             IDocumentStore documentStore,
-            Session session,
+            IImuSessionProvider imuSessionProvider,
             ITaxonomyFactory taxonomyFactory)
         {
             _documentStore = documentStore;
-            _session = session;
+            _imuSessionProvider = imuSessionProvider;
             _taxonomyFactory = taxonomyFactory;
         }
 
         public void Run()
         {
-            var module = new Module("etaxonomy", _session);
             ImportCache importCache;
             var columns = new[]
                                 {
@@ -59,10 +58,12 @@ namespace CollectionsOnline.Import.Imports
                                     "ClaSubspecies",
                                     "AutAuthorString",
                                     "ClaApplicableCode",
-                                    "comname=[ComName_tab,ComStatus_tab]"                                    
+                                    "comname=[ComName_tab,ComStatus_tab]"
                                 };
+            var moduleName = "etaxonomy";
 
             using (var documentSession = _documentStore.OpenSession())
+            using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
             {
                 // Check to see whether we need to run import, so grab the previous date run of any imports that utilize taxonomy.
                 var previousDateRun = documentSession
@@ -96,7 +97,7 @@ namespace CollectionsOnline.Import.Imports
                     var terms = new Terms();
                     terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
 
-                    var hits = module.FindTerms(terms);
+                    var hits = imuSession.FindTerms(terms);
 
                     _log.Debug("Caching {0} search results. {1} Hits", GetType().Name, hits);
 
@@ -106,7 +107,7 @@ namespace CollectionsOnline.Import.Imports
                         if (ImportCanceled())
                             return;
 
-                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
+                        var results = imuSession.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
 
                         if (results.Count == 0)
                             break;
@@ -134,6 +135,7 @@ namespace CollectionsOnline.Import.Imports
             while (true)
             {
                 using (var documentSession = _documentStore.OpenSession())
+                using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
                 {
                     if (ImportCanceled())
                         return;
@@ -150,9 +152,9 @@ namespace CollectionsOnline.Import.Imports
 
                     var stopwatch = Stopwatch.StartNew();
 
-                    module.FindKeys(cachedResultBatch);
+                    imuSession.FindKeys(cachedResultBatch);
 
-                    var results = module.Fetch("start", 0, -1, columns);
+                    var results = imuSession.Fetch("start", 0, -1, columns);
 
                     stopwatch.Stop();
                     _log.Trace("Found and fetched {0} taxonomy records in {1} ms", cachedResultBatch.Count, stopwatch.ElapsedMilliseconds);

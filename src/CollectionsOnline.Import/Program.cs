@@ -52,9 +52,6 @@ namespace CollectionsOnline.Import
             // Raven Db Bindings
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
 
-            // Imu Bindings
-            kernel.Bind<Session>().ToProvider<NinjectImuSessionProvider>();
-
             // Bind Imports
             kernel.Bind<IImport>().To<ImuImport<Article>>();
             kernel.Bind<IImport>().To<ImuImport<Species>>();

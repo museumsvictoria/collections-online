@@ -8,7 +8,7 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
-using IMu;
+using CollectionsOnline.Import.Infrastructure;
 using NLog;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
@@ -19,26 +19,26 @@ namespace CollectionsOnline.Import.Imports
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
-        private readonly Session _session;
+        private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IEmuAggregateRootFactory<T> _imuFactory;
 
         public ImuImport(
             IDocumentStore documentStore,
-            Session session,
+            IImuSessionProvider imuSessionProvider,
             IEmuAggregateRootFactory<T> imuFactory)
         {
             _documentStore = documentStore;
-            _session = session;
+            _imuSessionProvider = imuSessionProvider;
             _imuFactory = imuFactory;
         }
 
         public void Run()
         {
-            var module = new Module(_imuFactory.ModuleName, _session);
-            ImportCache importCache;
+            ImportCache importCache;            
 
             // Check for existing import in case we need to resume.
             using (var documentSession = _documentStore.OpenSession())
+            using (var imuSession = _imuSessionProvider.CreateInstance(_imuFactory.ModuleName))
             {
                 var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
@@ -61,7 +61,7 @@ namespace CollectionsOnline.Import.Imports
                     if (importStatus.PreviousDateRun.HasValue)
                         terms.Add("AdmDateModified", importStatus.PreviousDateRun.Value.ToString("MMM dd yyyy"), ">=");
 
-                    var hits = module.FindTerms(terms);
+                    var hits = imuSession.FindTerms(terms);
 
                     _log.Debug("Caching {0} search results. {1} Hits", typeof(T).Name, hits);
 
@@ -71,7 +71,7 @@ namespace CollectionsOnline.Import.Imports
                         if (ImportCanceled())
                             return;
 
-                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
+                        var results = imuSession.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
 
                         if (results.Count == 0)
                             break;
@@ -119,6 +119,7 @@ namespace CollectionsOnline.Import.Imports
             while (true)
             {
                 using (var documentSession = _documentStore.OpenSession())
+                using (var imuSession = _imuSessionProvider.CreateInstance(_imuFactory.ModuleName))
                 {
                     if (ImportCanceled())
                         return;
@@ -135,9 +136,9 @@ namespace CollectionsOnline.Import.Imports
 
                     var stopwatch = Stopwatch.StartNew();
 
-                    module.FindKeys(cachedResultBatch);
+                    imuSession.FindKeys(cachedResultBatch);
 
-                    var results = module.Fetch("start", 0, -1, _imuFactory.Columns);
+                    var results = imuSession.Fetch("start", 0, -1, _imuFactory.Columns);
 
                     stopwatch.Stop();
                     _log.Trace("Found and fetched {0} {1} records in {2} ms", cachedResultBatch.Count, typeof(T).Name, stopwatch.ElapsedMilliseconds);

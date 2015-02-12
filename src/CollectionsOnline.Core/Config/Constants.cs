@@ -9,7 +9,7 @@ namespace CollectionsOnline.Core.Config
     {
         public static string ApplicationId = "applications/collectionsonline";
 
-        public static int DataBatchSize = 10;
+        public static int DataBatchSize = 50;
 
         public static int CachedDataBatchSize = 10000;
 

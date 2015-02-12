@@ -121,7 +121,9 @@
     </Compile>
     <Compile Include="Infrastructure\ImportRunner.cs" />
     <Compile Include="Imports\ImuImport.cs" />
-    <Compile Include="Infrastructure\NinjectImuSessionProvider.cs" />
+    <Compile Include="Infrastructure\IImuSessionProvider.cs" />
+    <Compile Include="Infrastructure\ImuSession.cs" />
+    <Compile Include="Infrastructure\ImuSessionProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HtmlConverter.cs" />

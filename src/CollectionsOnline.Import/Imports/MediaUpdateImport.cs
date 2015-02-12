@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
+using CollectionsOnline.Import.Infrastructure;
 using IMu;
 using NLog;
 using Raven.Abstractions.Extensions;
@@ -19,22 +18,21 @@ namespace CollectionsOnline.Import.Imports
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
-        private readonly Session _session;
+        private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IMediaFactory _mediaFactory;
 
         public MediaUpdateImport(
             IDocumentStore documentStore,
-            Session session,
+            IImuSessionProvider imuSessionProvider,
             IMediaFactory mediaFactory)
         {
             _documentStore = documentStore;
-            _session = session;
+            _imuSessionProvider = imuSessionProvider;
             _mediaFactory = mediaFactory;
         }
 
         public void Run()
         {
-            var module = new Module("emultimedia", _session);
             ImportCache importCache;
             var columns = new[]
                                 {
@@ -57,6 +55,7 @@ namespace CollectionsOnline.Import.Imports
 
 
             using (var documentSession = _documentStore.OpenSession())
+            using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
             {
                 // Check to see whether we need to run import, so grab the earliest previous date run of any imports that utilize multimedia.
                 var previousDateRun = documentSession
@@ -91,7 +90,7 @@ namespace CollectionsOnline.Import.Imports
                     terms.Add("MdaDataSets_tab", Constants.ImuMultimediaQueryString);
                     terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
 
-                    var hits = module.FindTerms(terms);
+                    var hits = imuSession.FindTerms(terms);
 
                     _log.Debug("Caching {0} search results. {1} Hits", GetType().Name, hits);
 
@@ -101,7 +100,7 @@ namespace CollectionsOnline.Import.Imports
                         if (ImportCanceled())
                             return;
 
-                        var results = module.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
+                        var results = imuSession.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
 
                         if (results.Count == 0)
                             break;
@@ -129,6 +128,7 @@ namespace CollectionsOnline.Import.Imports
             while (true)
             {
                 using (var documentSession = _documentStore.OpenSession())
+                using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
                 {
                     if (ImportCanceled())
                         return;
@@ -143,9 +143,9 @@ namespace CollectionsOnline.Import.Imports
                     if (cachedResultBatch.Count == 0)
                         break;
 
-                    module.FindKeys(cachedResultBatch);
+                    imuSession.FindKeys(cachedResultBatch);
 
-                    var results = module.Fetch("start", 0, -1, columns);
+                    var results = imuSession.Fetch("start", 0, -1, columns);
 
                     foreach (var row in results.Rows)
                     {

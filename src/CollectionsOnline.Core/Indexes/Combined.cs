@@ -192,7 +192,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Content fields
                     Id = specimen.Id,
-                    Name = specimen.ObjectName ?? specimen.ScientificName,
+                    Name = specimen.ObjectName ?? specimen.ScientificName ?? specimen.TektitesName ?? specimen.PetrologyRockName ?? specimen.MeteoritesName,
                     Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
                     ThumbnailUri = specimen.ThumbnailUri,
