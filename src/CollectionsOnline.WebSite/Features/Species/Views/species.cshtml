@@ -535,12 +535,13 @@
                                 <img src="@relatedItem.ThumbnailUri" />
                             }
                             <span class="title">@Html.Raw(relatedItem.Title)</span>
+                            <span class="icon-item" aria-hidden="true"></span>
                         </a>
                     </div>
                 }
                 @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                 {
-                    <div class="item">
+                    <div class="specimen">
                         <a href="/@relatedSpecimen.Id">
                             @if (string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
                             {
@@ -553,6 +554,7 @@
                                 <img src="@relatedSpecimen.ThumbnailUri" />
                             }
                             <span class="title">@Html.Raw(relatedSpecimen.Title)</span>
+                            <span class="icon-specimen" aria-hidden="true"></span>
                         </a>
                     </div>
                 }

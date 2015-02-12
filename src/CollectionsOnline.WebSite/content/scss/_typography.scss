@@ -80,6 +80,23 @@
     font-size:1.5em;
 }
 
+.icon-article:before {
+    font-family:$font-family-mv-collections;
+    content:"\e600";
+}
+.icon-item:before {
+    font-family:$font-family-mv-collections;
+    content:"\e606";
+}
+.icon-species:before {
+    font-family:$font-family-mv-collections;
+    content:"\e60c";
+}
+.icon-specimen:before {
+    font-family:$font-family-mv-collections;
+    content:"\e60d";
+}
+
 .icon-print:before {
     font-family:$font-family-entypo;
     content:"\E716";

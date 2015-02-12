@@ -1,0 +1,67 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Features.Home.HomeViewModel>
+@{
+    Layout = "layout.cshtml";
+}
+<div id="hero">
+    <form method="GET" action="/search" role="form">
+        <div class="search-area">
+            <input type="text" name="query" placeholder="enter search term ...">
+            <button type="submit">
+                <span class="icon-search" aria-hidden="true"></span>
+                <span class="icon-label-hidden">Search</span>
+            </button>
+        </div>
+    </form>
+</div>
+<div id="explore">
+    <div class="wrapper">
+        <div class="explore-content">
+            <h2>Explore the collection</h2>
+            <div class="explore-type article">
+                <a href="/search?type=article">
+                    <img src="/content/img/img-home-article.jpg" />
+                    <span class="icon-article">
+                        <span class="count-wrapper">
+                            <span class="type">Articles</span>
+                            <span class="count">@Model.ArticleCount.ToString("N0")</span>
+                        </span>
+                    </span>
+                    
+                </a>
+            </div>
+            <div class="explore-type item">
+                <a href="/search?type=item">
+                    <img src="/content/img/img-home-item.jpg" />
+                    <span class="icon-item">
+                        <span class="count-wrapper">
+                            <span class="type">Items</span>
+                            <span class="count">@Model.ItemCount.ToString("N0")</span>
+                        </span>
+                    </span>
+                </a>
+            </div>
+            <div class="explore-type species">
+                <a href="/search?type=species">
+                    <img src="/content/img/img-home-species.jpg" />
+                    <span class="icon-species">
+                        <span class="count-wrapper">
+                            <span class="type">Species</span>
+                            <span class="count">@Model.SpeciesCount.ToString("N0")</span>
+                        </span>
+                    </span>
+                </a>
+            </div>
+            <div class="explore-type specimen">
+                <a href="/search?type=specimen">
+                    <img src="/content/img/img-home-specimen.jpg" />
+                    <span class="icon-specimen">
+                        <span class="count-wrapper">
+                            <span class="type">Specimens</span>
+                            <span class="count">@Model.SpecimenCount.ToString("N0")</span>
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

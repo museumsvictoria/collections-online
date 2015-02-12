@@ -437,46 +437,50 @@ button.icon {
         }
 
         .item {
-            img, .no-image {
-                border-bottom:5px solid rgb(242, 105, 53);
-            }
-
-            a:before {
-                background-color:rgba(242, 105, 53, 0.8);
-                content:"Item";
+            .icon-item {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-item;
             }
         }
 
         .article {
-            img, .no-image {
-                border-bottom:5px solid rgb(104, 126, 114);
-            }
-
-            a:before {
-                background-color:rgba(104, 126, 114, 0.8);
-                content:"Article";
+            .icon-article {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-article;
             }
         }
 
         .specimen {
-            img, .no-image {
-                border-bottom:5px solid rgb(131, 172, 156);
-            }
-
-            a:before {
-                background-color:rgba(131, 172, 156, 0.8);
-                content:"Specimen";
+            .icon-specimen {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-specimen;
             }
         }
 
         .species {
-            img, .no-image {
-                border-bottom:5px solid rgb(242, 195, 29);
-            }
-
-            a:before {
-                background-color:rgba(242, 195, 29, 0.8);
-                content:"Species";
+            .icon-species {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-species;
             }
         }
 
@@ -674,46 +678,50 @@ footer {
         }
 
         .item {
-            img, .no-image {
-                border-bottom:5px solid rgb(242, 105, 53);
-            }
-
-            a:before {
-                background-color:rgba(242, 105, 53, 0.8);
-                content:"Item";
+            .icon-item {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-item;
             }
         }
 
         .article {
-            img, .no-image {
-                border-bottom:5px solid rgb(104, 126, 114);
-            }
-
-            a:before {
-                background-color:rgba(104, 126, 114, 0.8);
-                content:"Article";
+            .icon-article {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-article;
             }
         }
 
         .specimen {
-            img, .no-image {
-                border-bottom:5px solid rgb(131, 172, 156);
-            }
-
-            a:before {
-                background-color:rgba(131, 172, 156, 0.8);
-                content:"Specimen";
+            .icon-specimen {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-specimen;
             }
         }
 
         .species {
-            img, .no-image {
-                border-bottom:5px solid rgb(242, 195, 29);
-            }
-
-            a:before {
-                background-color:rgba(242, 195, 29, 0.8);
-                content:"Species";
+            .icon-species {
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:1.5em;
+                padding:0 4px;
+                color:$color-default;
+                background-color:$color-species;
             }
         }
 
@@ -731,8 +739,8 @@ footer {
         display:flex;
         align-items:center;
         height:70px;
-        padding:0 20px;
-                
+        padding:0 20px;        
+
         input {
             margin:0;
             outline:0;
@@ -754,6 +762,138 @@ footer {
             border-radius:0 2px 2px 0;
             color:$color-default;
             background:#000;
+        }
+    }
+}
+
+#hero {
+    background: url(/content/img/img-home-birds.jpg) no-repeat center center;
+    background-size: cover;
+    height: 600px;
+    display: flex;
+    align-items: flex-end;
+
+    form {
+        height: 150px;
+        background-color: rgba(183, 215, 31, 0.7);
+        width: 100%;
+        display: flex;
+        align-items:center;
+
+        .search-area {
+            width:66%;
+            display:flex;
+            margin:auto;
+
+            input {
+                height: 60px;
+                margin: 0;
+                outline: 0;
+                padding: 0 1em;
+                border: 0;
+                width: 100%;
+                border-radius: 3px 0 0 3px;
+                font-size:1.3em;
+                font-weight:300;
+            }
+
+            button {
+                height: 60px;
+                margin: 0;
+                outline: 0;
+                padding: 0 16px;
+                border: 0;
+                border-radius: 0 3px 3px 0;
+                color: $color-default;
+                background: #1a1e06;
+                font-size:1.4em;
+
+                .icon-search:before {
+                    position:relative;
+                    top:1px;
+                    left:1px;
+                }
+            }
+        }
+    }
+}
+
+#explore {
+    background:#1d1d1d;
+
+    .explore-content {
+        @include gridle_parent();
+
+        h2 {
+            color:$color-default;
+            @include gridle (12);
+            font-size:1.7em;
+            margin:3em 0 1em;
+        }
+
+        .explore-type {
+            @include gridle (3);
+
+            a {
+                position:relative;
+                display:block;
+                margin:0 0 5em;
+
+                img {
+                    border-radius:3px;
+                    width:100%;
+                    display:block;
+                }
+
+                .icon-article, .icon-item, .icon-species, .icon-specimen {
+                    border-top-left-radius:3px;
+                    color:$color-default;
+                    top:0;
+                    left:0;
+                    position:absolute;
+                    padding:0 10px;                    
+                    font-size:4em;
+                    display:flex;
+                    align-items:center;
+
+                    .count-wrapper {
+                        display:flex;
+                        flex-direction:column;
+                        padding:0 10px;
+
+                        .type {
+                            font-size:0.3em;
+                        }
+
+                        .count {
+                            font-size:0.3em;
+                            font-weight:300;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        .article {
+            span {
+                background-color:$color-article;
+            }
+        }
+        .item {
+            span {
+                background-color:$color-item;
+            }
+        }
+        .species {
+            span {
+                background-color:$color-species;
+            }
+        }
+        .specimen {
+            span {
+                background-color:$color-specimen;
+            }
         }
     }
 }

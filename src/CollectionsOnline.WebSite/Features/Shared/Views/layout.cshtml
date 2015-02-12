@@ -1,5 +1,4 @@
-﻿@using System.Configuration
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>        
         <meta charset="utf-8">
@@ -10,17 +9,7 @@
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     </head>
     <body>
-        <header>
-            <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
-            <nav>
-                <a href="">About</a>
-                <a href="@ConfigurationManager.AppSettings["WebApiUrl"]">Developers</a>
-                <a href="#" class="button-search">
-                    <span class="icon-search-header" aria-hidden="true"></span>
-                    Search
-                </a>
-            </nav>
-        </header>
+        @Html.Partial("header")
         @RenderBody()
         <footer>
             <div class="wrapper">

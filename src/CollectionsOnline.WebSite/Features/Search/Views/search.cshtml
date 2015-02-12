@@ -69,6 +69,7 @@
                             <img src="@result.ThumbnailUri" />
                         }
                         <span class="title">@Html.Raw(result.Name)</span>
+                        <span class="icon-@result.Type.ToLower()" aria-hidden="true"></span>
                     </a>
                 </div>
             }
@@ -80,85 +81,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-@*<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-9">
-            <div class="btn-toolbar search-active-facets" role="toolbar">
-                @foreach (var activeFacet in Model.ActiveFacets)
-                {
-                    <a class="btn btn-info" href="@activeFacet.Url">
-                        <strong>@activeFacet.Name</strong><span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                }
-                @foreach (var activeTerm in Model.ActiveTerms)
-                {
-                    <a class="btn btn-warning" href="@activeTerm.Url">
-                        <strong>@activeTerm.Name</strong><span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                }
-            </div>               
-            <nav class="navbar navbar-default" role="navigation">
-                <p class="navbar-text navbar-left">
-                    <strong>@Model.TotalResults Results (Query @(Model.QueryTimeElapsed)ms, Facets[@Model.TotalFacetValues] @(Model.FacetTimeElapsed)ms)</strong>
-                </p>
-                <div class="nav navbar-right search-results-pagination">
-                    <span class="navbar-text navbar-left">Page @Model.CurrentPage of @Model.TotalPages </span>
-                    <a role="button" href="@Model.PrevPageUrl" class="btn btn-xs navbar-btn btn-default @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="glyphicon glyphicon-chevron-left"></span> Previous</a>
-                    <a role="button" href="@Model.NextPageUrl" class="btn btn-xs navbar-btn btn-default @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
-                </div>
-            </nav>
-            @if (Model.Suggestions.Count > 0)
-            {
-                <div>
-                    Did you mean?
-
-                    @foreach (var suggestion in Model.Suggestions)
-                    {
-                        <a href="@suggestion.Url">@suggestion.Suggestion</a>
-                    }
-                </div>
-            }
-            <div class="list-group search-results">
-                @foreach (var result in Model.Results)
-                {
-                    <div class="list-group-item @result.Type.ToLower()">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <a href="@result.Id">
-                                    <img src="@(string.IsNullOrWhiteSpace(result.ThumbnailUri) ? "http://placehold.it/110" : result.ThumbnailUri)" width="110" height="110" class="img-thumbnail" />
-                                </a>
-                            </div>
-                            <div class="col-md-10">
-                                <h4><a href="@result.Id">@result.Name</a></h4>
-                                <div class="summary">
-                                    @result.Summary
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <nav class="navbar navbar-default" role="navigation">
-                <p class="navbar-text navbar-left"><strong>@Model.TotalResults Results</strong></p>
-                <div class="nav navbar-right search-results-pagination">
-                    <span class="navbar-text navbar-left">Page @Model.CurrentPage of @Model.TotalPages </span>
-                    <a role="button" href="@Model.PrevPageUrl" class="btn btn-xs navbar-btn btn-default @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="glyphicon glyphicon-chevron-left"></span> Previous</a>
-                    <a role="button" href="@Model.NextPageUrl" class="btn btn-xs navbar-btn btn-default @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")"><span class="glyphicon glyphicon-chevron-right"></span> Next</a>
-                </div>
-            </nav>
-        </div>
-    </div>
-</div>*@

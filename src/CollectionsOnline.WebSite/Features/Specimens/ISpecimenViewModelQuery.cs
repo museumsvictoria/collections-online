@@ -1,6 +1,4 @@
-﻿using CollectionsOnline.WebSite.Features.Items;
-
-namespace CollectionsOnline.WebSite.Features.Specimens
+﻿namespace CollectionsOnline.WebSite.Features.Specimens
 {
     public interface ISpecimenViewModelQuery
     {

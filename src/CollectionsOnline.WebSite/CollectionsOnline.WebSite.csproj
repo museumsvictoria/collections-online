@@ -127,6 +127,11 @@
     <Content Include="content\css\styles.css" />
     <Content Include="content\fonts\entypo-social.svg" />
     <Content Include="content\fonts\entypo.svg" />
+    <Content Include="content\img\img-home-article.jpg" />
+    <Content Include="content\img\img-home-birds.jpg" />
+    <Content Include="content\img\img-home-item.jpg" />
+    <Content Include="content\img\img-home-species.jpg" />
+    <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-mv-white.png" />
     <Content Include="gulpfile.js" />
     <Content Include="Web.config">
@@ -139,6 +144,10 @@
     <Compile Include="Features\Articles\ArticlesModule.cs" />
     <Compile Include="Features\Articles\ArticleViewModelQuery.cs" />
     <Compile Include="Features\Articles\ArticleViewTransformer.cs" />
+    <Compile Include="Features\Home\HomeModule.cs" />
+    <Compile Include="Features\Home\IHomeViewModelQuery.cs" />
+    <Compile Include="Features\Home\HomeViewModel.cs" />
+    <Compile Include="Features\Home\HomeViewModelQuery.cs" />
     <Compile Include="Features\Items\ItemViewTransformer.cs" />
     <Compile Include="Features\Shared\RelatedDocumentViewModel.cs" />
     <Compile Include="Features\Species\SpeciesViewTransformer.cs" />
@@ -241,6 +250,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Features\Shared\Views\searchbar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\Home\Views\home.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Features\Shared\Views\header.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
