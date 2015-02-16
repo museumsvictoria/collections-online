@@ -21,7 +21,7 @@ namespace CollectionsOnline.WebSite.Features.Species
                         {
                             relatedItem.Id, 
                             relatedItem.ThumbnailUri,
-                            Title = relatedItem.ObjectName
+                            relatedItem.DisplayTitle
                         },
                     RelatedSpecimens = from specimenId in species.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -30,7 +30,7 @@ namespace CollectionsOnline.WebSite.Features.Species
                         {
                             relatedSpecimen.Id,
                             relatedSpecimen.ThumbnailUri,
-                            Title = relatedSpecimen.ObjectName ?? relatedSpecimen.ScientificName
+                            relatedSpecimen.DisplayTitle
                         }
                 };
         }

@@ -19,7 +19,6 @@ namespace CollectionsOnline.Import.Factories
     public class ItemFactory : IEmuAggregateRootFactory<Item>
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
-        private readonly ISlugFactory _slugFactory;
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly IMuseumLocationFactory _museumLocationFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
@@ -27,14 +26,12 @@ namespace CollectionsOnline.Import.Factories
         private readonly IAssociationFactory _associationFactory;
 
         public ItemFactory(
-            ISlugFactory slugFactory,
             IPartiesNameFactory partiesNameFactory,
             IMuseumLocationFactory museumLocationFactory,
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory,
             IAssociationFactory associationFactory)
         {
-            _slugFactory = slugFactory;
             _partiesNameFactory = partiesNameFactory;
             _museumLocationFactory = museumLocationFactory;
             _taxonomyFactory = taxonomyFactory;
@@ -471,24 +468,7 @@ namespace CollectionsOnline.Import.Factories
             item.IndigenousCulturesSheets = map.GetEncodedString("ManSheets");
             item.IndigenousCulturesPages = map.GetEncodedString("ManPages");
             item.IndigenousCulturesLetterTo = _partiesNameFactory.Make(map.GetMap("icletterto"));
-            item.IndigenousCulturesLetterFrom = _partiesNameFactory.Make(map.GetMap("icletterfrom"));
-            
-            if (string.Equals(map.GetEncodedString("ColCategory"), "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
-            {
-                item.ObjectName = new[]
-                    {
-                        item.IndigenousCulturesMedium,
-                        item.IndigenousCulturesCulturalGroups.Concatenate(", "),
-                        new []
-                        {
-                            item.IndigenousCulturesLocality,
-                            item.IndigenousCulturesRegion,
-                            item.IndigenousCulturesState,
-                            item.IndigenousCulturesCountry
-                        }.Concatenate(", "),
-                        item.IndigenousCulturesDate
-                    }.Concatenate(", ");
-            }
+            item.IndigenousCulturesLetterFrom = _partiesNameFactory.Make(map.GetMap("icletterfrom"));           
 
             // Artwork fields
             item.ArtworkMedium = map.GetEncodedString("ArtMedium");
@@ -646,6 +626,28 @@ namespace CollectionsOnline.Import.Factories
                 item.Summary = item.ObjectSummary;
             else if (!string.IsNullOrWhiteSpace(item.PhysicalDescription))
                 item.Summary = item.PhysicalDescription;
+
+            // Display Title
+            if (string.Equals(map.GetEncodedString("ColCategory"), "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
+            {
+                item.DisplayTitle = new[]
+                    {
+                        item.IndigenousCulturesMedium,
+                        item.IndigenousCulturesCulturalGroups.Concatenate(", "),
+                        new []
+                        {
+                            item.IndigenousCulturesLocality,
+                            item.IndigenousCulturesRegion,
+                            item.IndigenousCulturesState,
+                            item.IndigenousCulturesCountry
+                        }.Concatenate(", "),
+                        item.IndigenousCulturesDate
+                    }.Concatenate(", ");
+            }
+            else if (!string.IsNullOrWhiteSpace(item.ObjectName))
+                item.DisplayTitle = item.ObjectName;
+            else
+                item.DisplayTitle = string.Format("Item {0}", item.RegistrationNumber);
             
             stopwatch.Stop();
             _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);

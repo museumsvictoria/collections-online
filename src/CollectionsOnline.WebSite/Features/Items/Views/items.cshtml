@@ -35,8 +35,7 @@
     <div class="wrapper">
         <h1>
             <span class="reg-number"><a href="/search?itemtype=@HttpUtility.UrlEncode(@Model.Item.Type.ToLower())">@Model.Item.Type</a> @Model.Item.RegistrationNumber</span><br />
-            @Html.Raw(Model.Item.ObjectName)<br />
-            @Model.Item.TradeLiteratureCoverTitle
+            @Html.Raw(Model.Item.DisplayTitle)
         </h1>
         @if (Model.ItemImages.Any())
         {
@@ -1051,7 +1050,7 @@
                             {
                                 <img src="@relatedItem.ThumbnailUri" />
                             }
-                            <span class="title">@Html.Raw(relatedItem.Title)</span>
+                            <span class="title">@Html.Raw(relatedItem.DisplayTitle)</span>
                             <span class="icon-item" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -1070,7 +1069,7 @@
                             {
                                 <img src="@relatedSpecimen.ThumbnailUri" />
                             }
-                            <span class="title">@Html.Raw(relatedSpecimen.Title)</span>
+                            <span class="title">@Html.Raw(relatedSpecimen.DisplayTitle)</span>
                             <span class="icon-specimen" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -1089,7 +1088,7 @@
                             {
                                 <img src="@relatedArticle.ThumbnailUri" />
                             }
-                            <span class="title">@Html.Raw(relatedArticle.Title)</span>
+                            <span class="title">@Html.Raw(relatedArticle.DisplayTitle)</span>
                             <span class="icon-article" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -1110,7 +1109,7 @@
                                 {
                                     <img src="@relatedSpecies.ThumbnailUri" />
                                 }
-                                <span class="title">@Html.Raw(relatedSpecies.Title)</span>
+                                <span class="title">@Html.Raw(relatedSpecies.DisplayTitle)</span>
                                 <span class="icon-species" aria-hidden="true"></span>
                             </a>
                         </div>

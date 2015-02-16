@@ -49,7 +49,7 @@
             </div>
         }
         <div class="pagination">
-            <div class="counts"><strong>@Model.TotalResults</strong> results, displaying <strong>@(Model.Offset+1)</strong> to <strong>@(Model.Limit + Model.Offset)</strong></div>
+            <div class="counts"><strong>@Model.TotalResults</strong> results in <strong>@((Model.QueryTimeElapsed+Model.FacetTimeElapsed).ToString("N0")) ms</strong>, displaying <strong>@(Model.Offset+1)</strong> to <strong>@(Model.Limit + Model.Offset)</strong></div>
             <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="icon-left-arrow"></span> Previous</a>
             <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="icon-right-arrow"></span></a>
         </div>
@@ -68,14 +68,14 @@
                         {
                             <img src="@result.ThumbnailUri" />
                         }
-                        <span class="title">@Html.Raw(result.Name)</span>
+                        <span class="title">@Html.Raw(result.DisplayTitle)</span>
                         <span class="icon-@result.Type.ToLower()" aria-hidden="true"></span>
                     </a>
                 </div>
             }
         </div>
         <div class="pagination bottom">
-            <div class="counts"><strong>@Model.TotalResults</strong> results, displaying <strong>@(Model.Offset+1)</strong> to <strong>@(Model.Limit + Model.Offset)</strong></div>
+            <div class="counts"><strong>@Model.TotalResults</strong> results in <strong>@((Model.QueryTimeElapsed+Model.FacetTimeElapsed).ToString("N0")) ms</strong>, displaying <strong>@(Model.Offset+1)</strong> to <strong>@(Model.Limit + Model.Offset)</strong></div>
             <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="icon-left-arrow"></span> Previous</a>
             <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="icon-right-arrow"></span></a>
         </div>

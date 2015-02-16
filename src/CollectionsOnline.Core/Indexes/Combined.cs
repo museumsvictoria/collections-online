@@ -10,6 +10,60 @@ namespace CollectionsOnline.Core.Indexes
     {
         public Combined()
         {
+            AddMap<Article>(articles =>
+                from article in articles
+                where article.IsHidden == false
+                select new
+                {
+                    // Update fields
+                    MediaIrns = new object[] { article.Media.Select(x => x.Irn), article.Authors.Select(x => x.ProfileImage.Irn) },
+                    TaxonomyIrn = 0,
+
+                    // Content fields
+                    Id = article.Id,
+                    DisplayTitle = article.DisplayTitle,
+                    Content = new object[] { article.Content, article.ContentSummary },
+                    Summary = article.Summary,
+                    ThumbnailUri = article.ThumbnailUri,
+
+                    // Sort fields
+                    Quality =
+                        ((article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any()) ? 1 : 0) +
+                        ((article.Keywords.Any()) ? 1 : 0) +
+                        (article.Media.Count * 2) +
+                        ((article.ChildArticleIds.Any()) ? 1 : 0),
+
+                    // Facet fields
+                    Type = "Article",
+                    Category = "History & Technology",
+                    HasImages = (article.Media.Any()) ? "Yes" : (string)null,
+                    OnDisplay = (string)null,
+                    Discipline = (string)null,
+                    ItemType = (string)null,
+                    SpeciesType = (string)null,
+                    SpeciesEndemicity = new object[] { },
+                    SpecimenScientificGroup = (string)null,
+                    ArticleTypes = article.Types,
+                    OnDisplayLocation = (string)null,
+
+                    // Term fields
+                    Keywords = article.Keywords,
+                    Localities = new object[] { },
+                    Collections = new object[] { },
+                    Dates = new object[] { },
+                    CulturalGroups = new object[] { },
+                    Classifications = new object[] { },
+                    Names = new object[] { },
+                    Technique = (string)null,
+                    Denominations = new object[] { },
+                    Habitats = new object[] { },
+                    Taxon = new object[] { },
+                    TypeStatus = (string)null,
+                    GeoTypes = new object[] { },
+                    MuseumLocations = new object[] { },
+                    Articles = new object[] { }
+                });
+
             AddMap<Item>(items => 
                 from item in items
                 where item.IsHidden == false
@@ -21,7 +75,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Content fields
                     Id = item.Id,
-                    Name = item.ObjectName,
+                    DisplayTitle = item.DisplayTitle,
                     Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber },
                     Summary = item.Summary,
                     ThumbnailUri = item.ThumbnailUri,
@@ -123,7 +177,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Content fields
                     Id = species.Id,
-                    Name = species.Taxonomy.CommonName ?? species.Taxonomy.Species ?? species.Taxonomy.Genus,
+                    DisplayTitle = species.DisplayTitle,
                     Content = new object[] { species.AnimalType, species.AnimalSubType, species.Taxonomy.CommonName, species.Taxonomy.Species, species.Taxonomy.Genus, species.Taxonomy.Family, species.Taxonomy.Order, species.Taxonomy.Class, species.Taxonomy.Phylum },
                     Summary = species.Summary,
                     ThumbnailUri = species.ThumbnailUri,
@@ -192,7 +246,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Content fields
                     Id = specimen.Id,
-                    Name = specimen.ObjectName ?? specimen.ScientificName ?? specimen.TektitesName ?? specimen.PetrologyRockName ?? specimen.MeteoritesName,
+                    DisplayTitle = specimen.DisplayTitle,
                     Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
                     Summary = specimen.Summary,
                     ThumbnailUri = specimen.ThumbnailUri,
@@ -270,63 +324,9 @@ namespace CollectionsOnline.Core.Indexes
                     MuseumLocations = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
                     Articles = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title)
                 });
-
-            AddMap<Article>(articles =>
-                from article in articles
-                where article.IsHidden == false
-                select new
-                {
-                    // Update fields
-                    MediaIrns = new object[] { article.Media.Select(x => x.Irn), article.Authors.Select(x => x.ProfileImage.Irn) },
-                    TaxonomyIrn = 0,
-
-                    // Content fields
-                    Id = article.Id,
-                    Name = article.Title,
-                    Content = new object[] {article.Content, article.ContentSummary},
-                    Summary = article.Summary,
-                    ThumbnailUri = article.ThumbnailUri,
-
-                    // Sort fields
-                    Quality =
-                        ((article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any()) ? 1 : 0) +
-                        ((article.Keywords.Any()) ? 1 : 0) +
-                        (article.Media.Count * 2) +
-                        ((article.ChildArticleIds.Any()) ? 1 : 0),
-
-                    // Facet fields
-                    Type = "Article",
-                    Category = "History & Technology",
-                    HasImages = (article.Media.Any()) ? "Yes" : (string) null,
-                    OnDisplay = (string)null,
-                    Discipline = (string) null,                    
-                    ItemType = (string) null,
-                    SpeciesType = (string) null,
-                    SpeciesEndemicity = new object[] { },
-                    SpecimenScientificGroup = (string) null,
-                    ArticleTypes = article.Types,
-                    OnDisplayLocation = (string)null,
-
-                    // Term fields
-                    Keywords = article.Keywords,
-                    Localities = new object[] { },
-                    Collections = new object[] { },
-                    Dates = new object[] { },
-                    CulturalGroups = new object[] { },
-                    Classifications = new object[] { },
-                    Names = new object[] { },
-                    Technique = (string) null,
-                    Denominations = new object[] { },
-                    Habitats = new object[] { },
-                    Taxon = new object[] { },                    
-                    TypeStatus = (string)null,
-                    GeoTypes = new object[] { },
-                    MuseumLocations = new object[] { },
-                    Articles = new object[] { }
-                });
             
             Index(x => x.Id, FieldIndexing.No);
-            Index(x => x.Name, FieldIndexing.No);
+            Index(x => x.DisplayTitle, FieldIndexing.No);
             Index(x => x.Content, FieldIndexing.Analyzed);
             Index(x => x.Summary, FieldIndexing.No);
             Index(x => x.ThumbnailUri, FieldIndexing.No);
@@ -335,7 +335,7 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.TaxonomyIrn, FieldIndexing.NotAnalyzed);
 
             Store(x => x.Id, FieldStorage.Yes);
-            Store(x => x.Name, FieldStorage.Yes);
+            Store(x => x.DisplayTitle, FieldStorage.Yes);
             Store(x => x.Summary, FieldStorage.Yes);
             Store(x => x.ThumbnailUri, FieldStorage.Yes);
             Store(x => x.Type, FieldStorage.Yes);

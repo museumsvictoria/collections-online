@@ -21,7 +21,7 @@ namespace CollectionsOnline.WebSite.Features.Specimens
                         {
                             relatedItem.Id, 
                             relatedItem.ThumbnailUri,
-                            Title = relatedItem.ObjectName
+                            relatedItem.DisplayTitle
                         },
                     RelatedSpecimens = from specimenId in specimen.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -30,7 +30,7 @@ namespace CollectionsOnline.WebSite.Features.Specimens
                         {
                             relatedSpecimen.Id,
                             relatedSpecimen.ThumbnailUri,
-                            Title = relatedSpecimen.ObjectName ?? relatedSpecimen.ScientificName
+                            relatedSpecimen.DisplayTitle
                         },
                     RelatedSpecies = from speciesId in specimen.RelatedSpeciesIds
                         let relatedSpecies = LoadDocument<Core.Models.Species>(speciesId)
@@ -39,7 +39,7 @@ namespace CollectionsOnline.WebSite.Features.Specimens
                         {
                             relatedSpecies.Id,
                             relatedSpecies.ThumbnailUri,
-                            Title = relatedSpecies.Taxonomy.CommonName ?? relatedSpecies.Taxonomy.TaxonName
+                            relatedSpecies.DisplayTitle
                         },
                     RelatedArticles = from articleId in specimen.RelatedArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
@@ -48,7 +48,7 @@ namespace CollectionsOnline.WebSite.Features.Specimens
                         {
                             relatedArticle.Id,
                             relatedArticle.ThumbnailUri,
-                            relatedArticle.Title
+                            relatedArticle.DisplayTitle
                         }
                 };
         }

@@ -33,16 +33,7 @@
 
 <div id="title">
     <div class="wrapper">
-        <h1>
-            @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.TaxonName))
-            {
-                <em>@Model.Species.Taxonomy.TaxonName</em><br/>
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.Species.Taxonomy.CommonName))
-            {
-                @Model.Species.Taxonomy.CommonName
-            }
-        </h1>
+        <h1>@Html.Raw(Model.Species.DisplayTitle)</h1>
         @if (Model.SpeciesImages.Any())
         {
             <div class="thumbnails">
@@ -534,7 +525,7 @@
                             {
                                 <img src="@relatedItem.ThumbnailUri" />
                             }
-                            <span class="title">@Html.Raw(relatedItem.Title)</span>
+                            <span class="title">@Html.Raw(relatedItem.DisplayTitle)</span>
                             <span class="icon-item" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -553,7 +544,7 @@
                             {
                                 <img src="@relatedSpecimen.ThumbnailUri" />
                             }
-                            <span class="title">@Html.Raw(relatedSpecimen.Title)</span>
+                            <span class="title">@Html.Raw(relatedSpecimen.DisplayTitle)</span>
                             <span class="icon-specimen" aria-hidden="true"></span>
                         </a>
                     </div>

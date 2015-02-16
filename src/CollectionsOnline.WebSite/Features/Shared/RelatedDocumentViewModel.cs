@@ -6,6 +6,6 @@
 
         public string ThumbnailUri { get; set; }
 
-        public string Title { get; set; }
+        public string DisplayTitle { get; set; }
     }
 }

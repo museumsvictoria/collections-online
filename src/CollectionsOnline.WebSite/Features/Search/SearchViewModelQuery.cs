@@ -199,7 +199,7 @@ namespace CollectionsOnline.WebSite.Features.Search
                 var results = query
                     .SelectFields<CombinedResult>(
                         "Id",
-                        "Name",
+                        "DisplayTitle",
                         "Summary",
                         "ThumbnailUri",
                         "Type")

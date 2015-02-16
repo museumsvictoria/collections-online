@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Extensions;
-using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Utilities;
@@ -15,7 +14,6 @@ using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
-using Raven.Client.Document;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
@@ -23,14 +21,11 @@ namespace CollectionsOnline.Import.Factories
     public class ArticleFactory : IEmuAggregateRootFactory<Article>
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
-        private readonly IDocumentStore _documentStore;
         private readonly IMediaFactory _mediaFactory;
 
         public ArticleFactory(
-            IDocumentStore documentStore,
             IMediaFactory mediaFactory)
         {
-            _documentStore = documentStore;
             _mediaFactory = mediaFactory;
 
             Mapper.CreateMap<Article, Article>()
@@ -180,6 +175,12 @@ namespace CollectionsOnline.Import.Factories
                     _log.Warn("Unable to convert article content html to text, irn:{0}, html:{0}, exception:{1}", map.GetEncodedString("irn"), article.Content, e);
                 }
             }
+
+            // Display Title
+            if (!string.IsNullOrWhiteSpace(article.Title))
+                article.DisplayTitle = article.Title;
+            else
+                article.DisplayTitle = "Article";
 
             stopwatch.Stop();
             _log.Trace("Completed article creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);

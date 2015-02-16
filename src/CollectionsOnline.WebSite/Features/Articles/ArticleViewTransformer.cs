@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Features.Articles
                         {
                             relatedItem.Id, 
                             relatedItem.ThumbnailUri,
-                            Title = relatedItem.ObjectName
+                            relatedItem.DisplayTitle
                         },
                     RelatedSpecimens = from specimenId in article.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -31,7 +31,7 @@ namespace CollectionsOnline.WebSite.Features.Articles
                         {
                             relatedSpecimen.Id,
                             relatedSpecimen.ThumbnailUri,
-                            Title = relatedSpecimen.ObjectName ?? relatedSpecimen.ScientificName
+                            relatedSpecimen.DisplayTitle
                         },
                     ParentArticle = (LoadDocument<Article>(article.ParentArticleId) != null && !LoadDocument<Article>(article.ParentArticleId).IsHidden) ? LoadDocument<Article>(article.ParentArticleId) : null,
                     ChildArticles = from articleId in article.ChildArticleIds
@@ -41,7 +41,7 @@ namespace CollectionsOnline.WebSite.Features.Articles
                         {
                             relatedArticle.Id,
                             relatedArticle.ThumbnailUri,
-                            relatedArticle.Title
+                            relatedArticle.DisplayTitle
                         },
                     RelatedArticles = from articleId in article.RelatedArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
@@ -50,7 +50,7 @@ namespace CollectionsOnline.WebSite.Features.Articles
                         {
                             relatedArticle.Id,
                             relatedArticle.ThumbnailUri,
-                            relatedArticle.Title
+                            relatedArticle.DisplayTitle
                         }
                 };
         }

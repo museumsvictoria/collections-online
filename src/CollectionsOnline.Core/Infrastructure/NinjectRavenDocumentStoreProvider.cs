@@ -28,6 +28,15 @@ namespace CollectionsOnline.Core.Infrastructure
             // Ensure DB exists
             documentStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
 
+            // Create indexes and store facets
+            IndexCreation.CreateIndexes(typeof(Combined).Assembly, documentStore);
+
+            using (var documentSession = documentStore.OpenSession())
+            {
+                documentSession.Store(new CombinedFacets());
+                documentSession.SaveChanges();
+            }
+
             // Ensure we have a application document
             using (var documentSession = documentStore.OpenSession())
             {
@@ -42,19 +51,10 @@ namespace CollectionsOnline.Core.Infrastructure
 
                 documentSession.SaveChanges();
             }
-
-            // Create indexes and store facets
-            IndexCreation.CreateIndexes(typeof(Combined).Assembly, documentStore);
-
-            using (var documentSession = documentStore.OpenSession())
-            {
-                documentSession.Store(new CombinedFacets());
-                documentSession.SaveChanges();
-            }
             
             // Force aggressive cache check 
             // TODO: Re-assess whether this belongs here
-            documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
+            //documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
 
             return documentStore;
         }

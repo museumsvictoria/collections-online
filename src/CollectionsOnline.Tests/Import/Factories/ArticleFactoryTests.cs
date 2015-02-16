@@ -35,7 +35,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                     new[] { item1, item2, item3 }
                 };
 
-            var articleFactory = new ArticleFactory(DocumentStore, Substitute.For<IMediaFactory>());
+            var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>());
 
             // When
             using (var documentSession = DocumentStore.OpenSession())
@@ -83,7 +83,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                     new[] { specimen1, specimen2, specimen3 }
                 };
 
-            var articleFactory = new ArticleFactory(DocumentStore, Substitute.For<IMediaFactory>());
+            var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>());
 
             // When
             using (var documentSession = DocumentStore.OpenSession())
@@ -128,7 +128,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                     new[] { parentArticle1, parentArticle2, childArticle1, childArticle2 }
                 };
 
-            var articleFactory = new ArticleFactory(DocumentStore, Substitute.For<IMediaFactory>());
+            var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>());
 
             // When
             using (var documentSession = DocumentStore.OpenSession())

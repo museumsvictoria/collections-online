@@ -19,16 +19,13 @@ namespace CollectionsOnline.Import.Factories
     public class SpeciesFactory : IEmuAggregateRootFactory<Species>
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
-        private readonly IDocumentStore _documentStore;
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
 
         public SpeciesFactory(
-            IDocumentStore documentStore,
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory)
         {
-            _documentStore = documentStore;
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
 
@@ -198,6 +195,16 @@ namespace CollectionsOnline.Import.Factories
                 species.Summary = species.GeneralDescription;
             else if (!string.IsNullOrWhiteSpace(species.Biology))
                 species.Summary = species.Biology;
+
+            // Display Title
+            if (species.Taxonomy != null && (!string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName) && !string.IsNullOrWhiteSpace(species.Taxonomy.CommonName)))
+                species.DisplayTitle = string.Format("<em>{0}</em> {1}", species.Taxonomy.TaxonName, species.Taxonomy.CommonName);
+            else if (species.Taxonomy != null && !string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName))
+                species.DisplayTitle = string.Format("<em>{0}</em>", species.Taxonomy.TaxonName);
+            else if (species.Taxonomy != null && !string.IsNullOrWhiteSpace(species.Taxonomy.CommonName))
+                species.DisplayTitle = species.Taxonomy.CommonName;
+            else
+                species.DisplayTitle = "Species";
 
             stopwatch.Stop();
             _log.Trace("Completed species creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);

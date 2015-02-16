@@ -18,6 +18,8 @@ namespace CollectionsOnline.Core.Models
 
         public string ThumbnailUri { get; set; }
 
+        public string DisplayTitle { get; set; }
+
         #endregion
 
         public DateTime DateModified { get; set; }

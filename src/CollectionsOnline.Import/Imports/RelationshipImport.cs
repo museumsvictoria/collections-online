@@ -52,7 +52,7 @@ namespace CollectionsOnline.Import.Imports
                 {
                     item.RelatedArticleIds.AddRangeUnique(documentSession
                         .Query<object, Combined>()
-                        .Where(x => ((CombinedResult)x).Name.In(item.CollectionNames) && ((CombinedResult)x).Type == "article")
+                        .Where(x => ((CombinedResult)x).DisplayTitle.In(item.CollectionNames) && ((CombinedResult)x).Type == "article")
                         .ToList()
                         .Select(x => ((CombinedResult)x).Id));
                 }

@@ -544,6 +544,37 @@ namespace CollectionsOnline.Import.Factories
                     specimen.AssociatedDate = yearSpan;
             }
 
+            // Display Title
+            if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrWhiteSpace(specimen.TektitesName) && !string.IsNullOrWhiteSpace(specimen.TektitesClassification))
+                    specimen.DisplayTitle = string.Format("{0} {1}", specimen.TektitesName, specimen.TektitesClassification);
+                else if (!string.IsNullOrWhiteSpace(specimen.TektitesName))
+                    specimen.DisplayTitle = specimen.TektitesName;
+                else
+                    specimen.DisplayTitle = "Tektite";
+            }
+            else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrWhiteSpace(specimen.MeteoritesName))
+                    specimen.DisplayTitle = specimen.MeteoritesName;
+                else
+                    specimen.DisplayTitle = "Meteorite";
+            }
+            else if (string.Equals(specimen.Discipline, "Petrology", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrWhiteSpace(specimen.PetrologyRockName))
+                    specimen.DisplayTitle = specimen.PetrologyRockName;
+                else
+                    specimen.DisplayTitle = "Petrology";
+            }
+            else if (!string.IsNullOrWhiteSpace(specimen.ScientificName))
+                specimen.DisplayTitle = string.Format("<em>{0}</em>", specimen.ScientificName);
+            else if (!string.IsNullOrWhiteSpace(specimen.ObjectName))
+                specimen.DisplayTitle = specimen.ObjectName;
+            else
+                specimen.DisplayTitle = string.Format("Specimen {0}", specimen.RegistrationNumber);
+
             stopwatch.Stop();
             _log.Trace("Completed specimen creation for catalog record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
             

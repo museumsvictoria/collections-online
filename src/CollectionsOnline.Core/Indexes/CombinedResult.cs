@@ -10,7 +10,7 @@
         /* Content/Order fields */
         public string Id { get; set; }
 
-        public string Name { get; set; }
+        public string DisplayTitle { get; set; }
 
         public object[] Content { get; set; }
 
