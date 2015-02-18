@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using IMu;
-using CollectionsOnline.Core.Extensions;
 
 namespace CollectionsOnline.Import.Factories
 {

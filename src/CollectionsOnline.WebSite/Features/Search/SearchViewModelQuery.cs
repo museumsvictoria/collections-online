@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CollectionsOnline.Core.Indexes;
 using Nancy;
-using NLog;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Constants = CollectionsOnline.Core.Config.Constants;

@@ -1,6 +1,4 @@
-﻿using System;
-using CollectionsOnline.Core.Config;
-using Ninject.Activation;
+﻿using Ninject.Activation;
 using Raven.Client;
 
 namespace CollectionsOnline.Core.Infrastructure

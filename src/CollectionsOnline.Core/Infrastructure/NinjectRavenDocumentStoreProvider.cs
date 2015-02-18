@@ -6,7 +6,6 @@ using Ninject.Activation;
 using NLog;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Extensions;
 using Raven.Client.Indexes;
 
 namespace CollectionsOnline.Core.Infrastructure
@@ -50,11 +49,7 @@ namespace CollectionsOnline.Core.Infrastructure
                 }
 
                 documentSession.SaveChanges();
-            }
-            
-            // Force aggressive cache check 
-            // TODO: Re-assess whether this belongs here
-            //documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
+            }          
 
             return documentStore;
         }

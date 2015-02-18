@@ -4,10 +4,8 @@ using System.Linq;
 using System.Web;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Utilities;
 using Humanizer;
 using Nancy;
-using NLog;
 using Raven.Abstractions.Data;
 
 namespace CollectionsOnline.WebSite.Features.Search

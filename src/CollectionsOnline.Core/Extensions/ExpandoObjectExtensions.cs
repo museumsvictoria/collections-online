@@ -2,7 +2,7 @@
 using System.Dynamic;
 using System.Linq;
 
-namespace CollectionsOnline.WebSite.Extensions
+namespace CollectionsOnline.Core.Extensions
 {
     public static class ExpandoObjectExtensions
     {

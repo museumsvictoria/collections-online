@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
@@ -13,6 +15,14 @@ namespace CollectionsOnline.Tests.Import
 {
     public class ImportRunnerTests : RavenDbTestBase
     {
+        public ImportRunnerTests()
+        {
+            IndexesToExecute = new List<Type>
+            {
+                typeof(Combined)
+            };
+        }
+
         [Fact]
         public void GivenImportRunning_RunImport_KeepsRunning()
         {
@@ -48,13 +58,13 @@ namespace CollectionsOnline.Tests.Import
             var importRunner = new ImportRunner(DocumentStore, new[] { import });
 
             // When
+            // TODO: work out what to do with failing test and Raven/DocumentsByEntityName not existing in embedded db
             importRunner.Run();
 
             // Then
             using (var documentSession = DocumentStore.OpenSession())
             {
                 var application = documentSession.Load<Application>(Constants.ApplicationId);
-
                 application.ImportsRunning.ShouldBe(false);
                 import.Received().Run();
             }
