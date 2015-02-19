@@ -92,7 +92,18 @@ namespace CollectionsOnline.Import.Factories
                 new CultureInfo("en-AU"));
             article.Title = map.GetEncodedString("NarTitle");
             article.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab"));
-            article.Content = HtmlConverter.HtmlSanitizer(map.GetEncodedString("NarNarrative"));
+
+            var sanitizedResult = HtmlConverter.HtmlSanitizer(map.GetEncodedString("NarNarrative"));
+
+            article.Content = sanitizedResult.Html;
+
+            if(sanitizedResult.HasRemovedTag || sanitizedResult.HasRemovedStyle || sanitizedResult.HasRemovedAttribute)
+                _log.Trace("Suspected obsolete HTML, consider reviewing narrative with irn {0} (removedTag:{1}, removedStyle:{2}, removedAttribute:{3})", 
+                    map.GetEncodedString("irn"), 
+                    sanitizedResult.HasRemovedTag, 
+                    sanitizedResult.HasRemovedStyle, 
+                    sanitizedResult.HasRemovedAttribute);
+            
             article.ContentSummary = map.GetEncodedString("NarNarrativeSummary");
             article.Types.AddRange(map.GetEncodedStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)));
             article.Keywords.AddRange(map.GetEncodedStrings("DesGeographicLocation_tab"));

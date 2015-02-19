@@ -24,11 +24,19 @@ namespace CollectionsOnline.Import.Utilities
             return sw.ToString();
         }
 
-        public static string HtmlSanitizer(string html)
+        public static HtmlSanitizerResult HtmlSanitizer(string html)
         {
             var sanitizer = new HtmlSanitizer(DefaultAllowedTags, allowedAttributes:DefaultAllowedAttributes);
 
-            return sanitizer.Sanitize(html);
+            var result = new HtmlSanitizerResult();
+
+            sanitizer.RemovingTag += ((s, e) => { result.HasRemovedTag = true; });
+            sanitizer.RemovingStyle += ((s, e) => { result.HasRemovedStyle = true; });
+            sanitizer.RemovingAttribute += ((s, e) => { result.HasRemovedAttribute = true; });
+
+            result.Html = sanitizer.Sanitize(html);
+
+            return result;
         }
 
         private static void ConvertTo(HtmlNode node, StringWriter outText)
@@ -87,15 +95,12 @@ namespace CollectionsOnline.Import.Utilities
         {
             "a",
             "abbr",
-            "acronym",
             "address",
             "area",
             "b",
-            "big",
             "blockquote",
             "br",
             "caption",
-            "center",
             "cite",
             "code",
             "col",
@@ -127,7 +132,6 @@ namespace CollectionsOnline.Import.Utilities
             "samp",
             "small",
             "span",
-            "strike",
             "strong",
             "sub",
             "sup",
@@ -139,7 +143,6 @@ namespace CollectionsOnline.Import.Utilities
             "th",
             "thead",
             "tr",
-            "tt",
             "u",
             "ul",
             "var",

@@ -2,6 +2,6 @@
 {
     public interface ISlugFactory
     {
-        string MakeSlug(string value);
+        string MakeSlug(string value, int maxLength = 0);
     }
 }

@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 namespace CollectionsOnline.Core.Factories
 {
     /// <summary>
-    /// Stolen from RacoonBlog, with some slight modifcations.
+    /// Stolen from RacoonBlog, with some slight modifications.
     /// </summary>
     public class SlugFactory : ISlugFactory
     {
-        public string MakeSlug(string value)
+        public string MakeSlug(string value, int maxLength = 0)
         {
             if (value == null) return value;
 
@@ -25,7 +25,10 @@ namespace CollectionsOnline.Core.Factories
             // 4 - Replace all the non-word characters with dashes
             value = ReplaceNonWordWithDashes(value);
 
-            // 5 - Trim the string of leading/trailing whitespace
+            // 5 - Trim to the max character length allowed, include entire words
+            value = TrimToMaxLength(value, maxLength);
+
+            // 6 - Trim the string of leading/trailing whitespace
             value = value.Trim(' ', '-');
 
             return value;
@@ -73,6 +76,34 @@ namespace CollectionsOnline.Core.Factories
             title = Regex.Replace(title, "[ ]{1,}", "-", RegexOptions.None);
 
             return title;
+        }
+
+        private string TrimToMaxLength(string value, int maxLength)
+        {            
+            if (maxLength > 0)
+            {
+                var builder = new StringBuilder();
+
+                bool maxLengthHit = false;
+
+                // Split string into words
+                foreach (var word in value.Split('-'))
+                {
+                    if (builder.Length + word.Length > maxLength)
+                    {
+                        if (builder.Length == 0)
+                            builder.Append(word);
+
+                        break;
+                    }
+
+                    builder.Append(word + '-');
+                }
+
+                value = builder.ToString();
+            }
+
+            return value;
         }
     }
 }
