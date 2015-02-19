@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebApi.Models;
 using Nancy;
 using Raven.Client;
 
@@ -11,6 +13,8 @@ namespace CollectionsOnline.WebApi.Modules
         public ArticleModule(IDocumentSession documentSession)
             : base("/articles")
         {
+            Mapper.CreateMap<Article, ArticleViewModel>();
+
             Get["articles-index", "/"] = parameters =>
                 {
                     var articles = documentSession.Advanced
@@ -30,7 +34,7 @@ namespace CollectionsOnline.WebApi.Modules
                     var article = documentSession
                         .Load<Article>("articles/" + articleId);
 
-                    return article == null ? BuildErrorResponse(HttpStatusCode.NotFound, "Article {0} not found", articleId) : BuildResponse(article);
+                    return (article == null || article.IsHidden) ? BuildErrorResponse(HttpStatusCode.NotFound, "Article {0} not found", articleId) : BuildResponse(Mapper.Map<Article, ArticleViewModel>(article));
                 };
         }
     }

@@ -131,6 +131,7 @@
     <Compile Include="Factories\IImageMediaFactory.cs" />
     <Compile Include="Factories\PartiesNameFactory.cs" />
     <Compile Include="Factories\ImageMediaFactory.cs" />
+    <Compile Include="Utilities\HtmlSanitizerResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

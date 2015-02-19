@@ -39,7 +39,7 @@ namespace CollectionsOnline.WebApi.Metadata
                 };
             };
 
-            Describe["items-by-id"] = description =>
+            Describe["articles-by-id"] = description =>
             {
                 using (var documentSession = documentStore.OpenSession())
                 {
@@ -63,8 +63,8 @@ namespace CollectionsOnline.WebApi.Metadata
                                 .Build())
                             .Build(), Formatting.Indented),
                         ExampleUrl = documentSession.Advanced
-                            .DocumentQuery<Item, Combined>()
-                            .WhereEquals("Type", "Item")
+                            .DocumentQuery<Article, Combined>()
+                            .WhereEquals("Type", "Article")
                             .First().Id,
                     };
                 }

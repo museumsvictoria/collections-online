@@ -4,7 +4,6 @@ using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
-using IMu;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
