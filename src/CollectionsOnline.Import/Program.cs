@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Core.Models;
@@ -66,6 +67,20 @@ namespace CollectionsOnline.Import
                 .Excluding<MediaUpdateImport>()
                 .Excluding<TaxonomyUpdateImport>()
                 .BindAllInterfaces());
+
+            // Automapper configuration for update methods on EmuAggregateRootFactories
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Article, Article>()
+                    .ForMember(x => x.Id, options => options.Ignore());
+                cfg.CreateMap<Item, Item>()
+                    .ForMember(x => x.Id, options => options.Ignore())
+                    .ForMember(x => x.Comments, options => options.Ignore());
+                cfg.CreateMap<Species, Species>()
+                    .ForMember(x => x.Id, options => options.Ignore());
+                cfg.CreateMap<Specimen, Specimen>()
+                    .ForMember(x => x.Id, options => options.Ignore());
+            });
         }
     }
 }
