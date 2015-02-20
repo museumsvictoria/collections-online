@@ -6,7 +6,6 @@ using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
-using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using IMu;
@@ -37,10 +36,6 @@ namespace CollectionsOnline.Import.Factories
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
-
-            Mapper.CreateMap<Item, Item>()
-                .ForMember(x => x.Id, options => options.Ignore())
-                .ForMember(x => x.Comments, options => options.Ignore());
         }
 
         public string ModuleName

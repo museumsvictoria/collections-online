@@ -13,8 +13,6 @@ namespace CollectionsOnline.WebApi.Modules
         public ArticleModule(IDocumentSession documentSession)
             : base("/articles")
         {
-            Mapper.CreateMap<Article, ArticleViewModel>();
-
             Get["articles-index", "/"] = parameters =>
                 {
                     var articles = documentSession.Advanced
@@ -28,13 +26,11 @@ namespace CollectionsOnline.WebApi.Modules
                     return BuildResponse(articles);
                 };
 
-            Get["articles-by-id", "/{articleId}"] = parameters =>
+            Get["articles-by-id", "/{id}"] = parameters =>
                 {
-                    string articleId = parameters.articleId;
-                    var article = documentSession
-                        .Load<Article>("articles/" + articleId);
+                    var article = documentSession.Load<Article>("articles/" + parameters.id as string);
 
-                    return (article == null || article.IsHidden) ? BuildErrorResponse(HttpStatusCode.NotFound, "Article {0} not found", articleId) : BuildResponse(Mapper.Map<Article, ArticleViewModel>(article));
+                    return (article == null || article.IsHidden) ? BuildErrorResponse(HttpStatusCode.NotFound, "Article {0} not found", parameters.id) : BuildResponse(Mapper.Map<Article, ArticleViewModel>(article));
                 };
         }
     }

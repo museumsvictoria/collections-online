@@ -133,6 +133,7 @@
     <Compile Include="Metadata\ItemMetadataModule.cs" />
     <Compile Include="Metadata\WebapiMetadata.cs" />
     <Compile Include="Models\ArticleViewModel.cs" />
+    <Compile Include="Models\ItemViewModel.cs" />
     <Compile Include="WebApiBootstrapper.cs" />
     <Compile Include="Modules\ArticleModule.cs" />
     <Compile Include="Modules\SpecimenModule.cs" />

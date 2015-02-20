@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebApi.Models;
 using Nancy;
 using Raven.Client;
 
@@ -24,13 +26,11 @@ namespace CollectionsOnline.WebApi.Modules
                     return BuildResponse(items);
                 };
 
-            Get["items-by-id", "/{itemId}"] = parameters =>
+            Get["items-by-id", "/{id}"] = parameters =>
                 {
-                    string itemId = parameters.itemId;
-                    var item = documentSession
-                        .Load<Item>("items/" + itemId);
+                    var item = documentSession.Load<Item>("items/" + parameters.id as string);
 
-                    return item == null ? BuildErrorResponse(HttpStatusCode.NotFound, "Item {0} not found", itemId) : BuildResponse(item);
+                    return (item == null || item.IsHidden) ? BuildErrorResponse(HttpStatusCode.NotFound, "Item {0} not found", parameters.id) : BuildResponse(Mapper.Map<Item, ItemViewModel>(item));
                 };
         }
     }

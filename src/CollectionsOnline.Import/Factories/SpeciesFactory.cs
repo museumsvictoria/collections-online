@@ -28,9 +28,6 @@ namespace CollectionsOnline.Import.Factories
         {
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
-
-            Mapper.CreateMap<Species, Species>()
-                .ForMember(x => x.Id, options => options.Ignore());
         }
 
         public string ModuleName

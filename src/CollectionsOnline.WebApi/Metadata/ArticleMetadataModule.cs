@@ -54,13 +54,10 @@ namespace CollectionsOnline.WebApi.Metadata
                             {HttpStatusCode.OK, "The item was found and retrieved ok."},
                             {HttpStatusCode.NotFound, "The item could not be found and probably does not exist."}
                         },
-                        SampleResponse = JsonConvert.SerializeObject(Builder<Item>
+                        SampleResponse = JsonConvert.SerializeObject(Builder<Article>
                             .CreateNew()
-                            .With(x => x.Id = "items/1")
+                            .With(x => x.Id = "articles/1")
                             .With(x => x.DateModified = new DateTime(2015, 1, 1))
-                            .With(x => x.Associations = Builder<Association>
-                                .CreateListOfSize(1)
-                                .Build())
                             .Build(), Formatting.Indented),
                         ExampleUrl = documentSession.Advanced
                             .DocumentQuery<Article, Combined>()

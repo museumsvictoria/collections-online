@@ -27,9 +27,6 @@ namespace CollectionsOnline.Import.Factories
             IMediaFactory mediaFactory)
         {
             _mediaFactory = mediaFactory;
-
-            Mapper.CreateMap<Article, Article>()
-                .ForMember(x => x.Id, options => options.Ignore());
         }
 
         public string ModuleName

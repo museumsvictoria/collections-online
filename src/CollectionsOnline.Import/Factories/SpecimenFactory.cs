@@ -39,10 +39,7 @@ namespace CollectionsOnline.Import.Factories
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
-            _museumLocationFactory = museumLocationFactory;
-
-            Mapper.CreateMap<Specimen, Specimen>()
-                .ForMember(x => x.Id, options => options.Ignore());
+            _museumLocationFactory = museumLocationFactory;            
         }
 
         public string ModuleName

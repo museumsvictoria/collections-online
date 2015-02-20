@@ -12,8 +12,7 @@ namespace CollectionsOnline.WebSite.Features.Articles
         {
             Get["/articles/{id}"] = parameters =>
             {
-                var article = documentSession
-                    .Load<Article>("articles/" + parameters.id as string);
+                var article = documentSession.Load<Article>("articles/" + parameters.id as string);
 
                 return (article == null || article.IsHidden) ? HttpStatusCode.NotFound : View["articles", articleViewModelQuery.BuildArticle("articles/" + parameters.id)];
             };

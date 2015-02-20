@@ -1,6 +1,9 @@
 ﻿using System;
+using AutoMapper;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
+using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebApi.Models;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
@@ -34,7 +37,7 @@ namespace CollectionsOnline.WebApi
         }
 
         protected override void ApplicationStartup(IKernel kernal, IPipelines pipelines)
-        {
+        {            
             JsonSettings.MaxJsonLength = Int32.MaxValue;
 
             pipelines.OnError += (ctx, ex) =>
@@ -43,6 +46,13 @@ namespace CollectionsOnline.WebApi
 
                 return null;
             };
+
+            // Automapper configuration
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Article, ArticleViewModel>();
+                cfg.CreateMap<Item, ItemViewModel>();
+            });
         }
     }
 }
