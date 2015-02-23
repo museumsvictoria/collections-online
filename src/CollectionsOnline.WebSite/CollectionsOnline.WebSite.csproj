@@ -41,6 +41,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="FizzWare.NBuilder">
+      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
     <Reference Include="Humanizer, Version=1.33.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Humanizer.1.33.7\lib\portable-win+net40+sl50+wp8+wpa81\Humanizer.dll</HintPath>
@@ -50,25 +59,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\StackExchange.Profiling.RavenDb\MiniProfiler.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.1.0.0\lib\net40\Nancy.dll</HintPath>
+      <HintPath>..\packages\Nancy.1.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Bootstrappers.Ninject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy.Bootstrappers.Ninject, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Bootstrappers.Ninject.1.0.0\lib\net40\Nancy.Bootstrappers.Ninject.dll</HintPath>
+      <HintPath>..\packages\Nancy.Bootstrappers.Ninject.1.1\lib\net40\Nancy.Bootstrappers.Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Hosting.Aspnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy.Hosting.Aspnet, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Hosting.Aspnet.1.0.0\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
+      <HintPath>..\packages\Nancy.Hosting.Aspnet.1.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Serialization.JsonNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Serialization.JsonNet.1.0.0\lib\net40\Nancy.Serialization.JsonNet.dll</HintPath>
+    <Reference Include="Nancy.Metadata.Modules">
+      <HintPath>..\packages\Nancy.Metadata.Modules.1.1\lib\net40\Nancy.Metadata.Modules.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.ViewEngines.Razor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy.Serialization.JsonNet, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Viewengines.Razor.1.0.0\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
+      <HintPath>..\packages\Nancy.Serialization.JsonNet.1.1\lib\net40\Nancy.Serialization.JsonNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.ViewEngines.Razor, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Viewengines.Razor.1.1\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -139,40 +151,57 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
-    <Compile Include="Features\Articles\IArticleViewModelQuery.cs" />
-    <Compile Include="Features\Articles\ArticlesModule.cs" />
-    <Compile Include="Features\Articles\ArticleViewModelQuery.cs" />
-    <Compile Include="Features\Articles\ArticleViewTransformer.cs" />
-    <Compile Include="Features\Home\HomeModule.cs" />
-    <Compile Include="Features\Home\IHomeViewModelQuery.cs" />
-    <Compile Include="Features\Home\HomeViewModel.cs" />
-    <Compile Include="Features\Home\HomeViewModelQuery.cs" />
-    <Compile Include="Features\Items\ItemViewTransformer.cs" />
-    <Compile Include="Features\Shared\RelatedDocumentViewModel.cs" />
-    <Compile Include="Features\Species\SpeciesViewTransformer.cs" />
-    <Compile Include="Features\Specimens\ISpecimenViewModelQuery.cs" />
-    <Compile Include="Features\Specimens\SpecimenViewTransformer.cs" />
-    <Compile Include="Features\Specimens\SpecimensModule.cs" />
-    <Compile Include="Features\Specimens\SpecimenViewModelQuery.cs" />
-    <Compile Include="Features\Species\ISpeciesViewModelQuery.cs" />
-    <Compile Include="Features\Species\SpeciesModule.cs" />
-    <Compile Include="Features\Species\SpeciesViewModelQuery.cs" />
-    <Compile Include="Features\Items\IItemViewModelQuery.cs" />
-    <Compile Include="Features\Items\ItemsModule.cs" />
-    <Compile Include="Features\Items\ItemViewModelQuery.cs" />
-    <Compile Include="Features\Search\SearchViewModel.cs" />
-    <Compile Include="Features\Search\SearchInputModel.cs" />
-    <Compile Include="Features\Search\SearchModule.cs" />
-    <Compile Include="Features\Search\ISearchViewModelQuery.cs" />
-    <Compile Include="Features\Search\ISearchViewModelFactory.cs" />
-    <Compile Include="Features\Search\SearchViewModelQuery.cs" />
-    <Compile Include="Features\Search\SearchViewModelFactory.cs" />
+    <Compile Include="Metadata\ArticlesApiMetadataModule.cs" />
+    <Compile Include="Metadata\ItemsApiMetadataModule.cs" />
+    <Compile Include="Metadata\ApiMetadata.cs" />
+    <Compile Include="Models\ArticleApiViewModel.cs" />
+    <Compile Include="Models\ItemApiViewModel.cs" />
+    <Compile Include="Modules\ArticlesApiModule.cs" />
+    <Compile Include="Modules\DevelopersModule.cs" />
+    <Compile Include="Modules\ItemsModule.cs" />
+    <Compile Include="Modules\BaseApiModule.cs" />
+    <Compile Include="Models\ApiInputModel.cs" />
+    <Compile Include="Modules\ItemsApiModule.cs" />
+    <Compile Include="Modules\SpeciesApiModule.cs" />
+    <Compile Include="Modules\SpecimenApiModule.cs" />
+    <Compile Include="Queries\IArticleViewModelQuery.cs" />
+    <Compile Include="Modules\ArticlesModule.cs" />
+    <Compile Include="Queries\ArticleViewModelQuery.cs" />
+    <Compile Include="Transformers\ArticleViewTransformer.cs" />
+    <Compile Include="Modules\HomeModule.cs" />
+    <Compile Include="Queries\IHomeViewModelQuery.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
+    <Compile Include="Queries\HomeViewModelQuery.cs" />
+    <Compile Include="Transformers\ArticleViewTransformerResult.cs" />
+    <Compile Include="Transformers\SpecimenViewTransformerResult.cs" />
+    <Compile Include="Transformers\SpeciesViewTransformerResult.cs" />
+    <Compile Include="Transformers\ItemViewTransformerResult.cs" />
+    <Compile Include="Transformers\ItemViewTransformer.cs" />
+    <Compile Include="Models\RelatedDocumentViewModel.cs" />
+    <Compile Include="Transformers\SpeciesViewTransformer.cs" />
+    <Compile Include="Queries\ISpecimenViewModelQuery.cs" />
+    <Compile Include="Transformers\SpecimenViewTransformer.cs" />
+    <Compile Include="Modules\SpecimensModule.cs" />
+    <Compile Include="Queries\SpecimenViewModelQuery.cs" />
+    <Compile Include="Queries\ISpeciesViewModelQuery.cs" />
+    <Compile Include="Modules\SpeciesModule.cs" />
+    <Compile Include="Queries\SpeciesViewModelQuery.cs" />
+    <Compile Include="Queries\IItemViewModelQuery.cs" />
+    <Compile Include="Queries\ItemViewModelQuery.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\SearchInputModel.cs" />
+    <Compile Include="Modules\SearchModule.cs" />
+    <Compile Include="Queries\ISearchViewModelQuery.cs" />
+    <Compile Include="Factories\ISearchViewModelFactory.cs" />
+    <Compile Include="Queries\SearchViewModelQuery.cs" />
+    <Compile Include="Factories\SearchViewModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Infrastructure\ApiJsonSerializer.cs" />
     <Compile Include="WebSiteBootstrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="Features\Search\Views\search.cshtml" />
+    <Content Include="Views\search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionsOnline.Core\CollectionsOnline.Core.csproj">
@@ -181,19 +210,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Shared\Views\layout.cshtml" />
+    <Content Include="Views\layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Items\Views\items.cshtml" />
+    <Content Include="Views\items.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Species\Views\species.cshtml" />
+    <Content Include="Views\species.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Specimens\Views\specimens.cshtml" />
+    <Content Include="Views\specimens.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Articles\Views\articles.cshtml" />
+    <Content Include="Views\articles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="content\js\" />
@@ -248,13 +277,16 @@
     <Content Include="content\fonts\mv-collections.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Shared\Views\searchbar.cshtml" />
+    <Content Include="Views\searchbar.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Home\Views\home.cshtml" />
+    <Content Include="Views\home.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Shared\Views\header.cshtml" />
+    <Content Include="Views\header.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\developers.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -285,10 +317,11 @@
   <PropertyGroup>
     <PostBuildEvent>
 if $(ConfigurationName) == Debug (
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.0.0\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.0.0\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.1\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.1\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
 )</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

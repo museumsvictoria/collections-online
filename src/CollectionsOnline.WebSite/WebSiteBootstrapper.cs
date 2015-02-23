@@ -1,11 +1,16 @@
 ﻿using System;
+using AutoMapper;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
-using CollectionsOnline.WebSite.Features.Items;
+using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Infrastructure;
+using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Transformers;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
-using Nancy.Conventions;
+using Nancy.Json;
+using Newtonsoft.Json;
 using Ninject.Extensions.Conventions;
 using Ninject;
 using NLog;
@@ -23,6 +28,8 @@ namespace CollectionsOnline.WebSite
         protected override void ConfigureApplicationContainer(IKernel kernel)
         {
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
+            kernel.Bind<JsonSerializer>().To<ApiJsonSerializer>();
+
             var documentStore = kernel.Get<IDocumentStore>();
 
             // Register view transformers
@@ -42,24 +49,10 @@ namespace CollectionsOnline.WebSite
                 .BindAllInterfaces());
         }
 
-        protected override void ConfigureConventions(NancyConventions nancyConventions)
-        {
-            base.ConfigureConventions(nancyConventions);
-
-            nancyConventions.ViewLocationConventions.Clear();
-
-            // 1 Handles: features / *modulename* / views / *viewname*
-            nancyConventions.ViewLocationConventions.Add((viewName, model, viewLocationContext) => string.Concat("features/", viewLocationContext.ModuleName, "/views/", viewName));
-
-            // 2 Handles: features / *viewname*
-            nancyConventions.ViewLocationConventions.Add((viewName, model, viewLocationContext) => string.Concat("features/", viewName));
-
-            // 3 Handles: features / shared / views/ *viewname*
-            nancyConventions.ViewLocationConventions.Add((viewName, model, viewLocationContext) => string.Concat("features/shared/views/", viewName));
-        }
-
         protected override void ApplicationStartup(IKernel container, IPipelines pipelines)
         {
+            JsonSettings.MaxJsonLength = Int32.MaxValue;
+
             pipelines.OnError += (ctx, ex) =>
             {
                 _log.Error(ex);
@@ -79,6 +72,13 @@ namespace CollectionsOnline.WebSite
                 MiniProfiler.Stop();
                 _log.Trace(MiniProfiler.Current.RenderPlainText().Replace(Environment.NewLine, ""));
             };
+
+            // Automapper configuration
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Article, ArticleApiViewModel>();
+                cfg.CreateMap<Item, ItemApiViewModel>();
+            });
         }
     }
 }

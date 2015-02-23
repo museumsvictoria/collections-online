@@ -40,13 +40,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.1.0.0\lib\net40\Nancy.dll</HintPath>
+      <HintPath>..\packages\Nancy.1.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Testing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nancy.Testing.1.0.0\lib\net40\Nancy.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.ViewEngines.Razor, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Viewengines.Razor.1.1\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -76,6 +80,10 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -105,11 +113,11 @@
     <Compile Include="Core\Utilities\NaturalDateConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
-    <Compile Include="WebApi\Modules\BaseModuleTests.cs" />
-    <Compile Include="WebApi\Modules\ArticleModuleTests.cs" />
-    <Compile Include="WebApi\Modules\SpecimenModuleTests.cs" />
-    <Compile Include="WebApi\Modules\SpeciesModuleTests.cs" />
-    <Compile Include="WebApi\Modules\ItemModuleTests.cs" />
+    <Compile Include="Modules\BaseModuleTests.cs" />
+    <Compile Include="Modules\ArticleApiModuleTests.cs" />
+    <Compile Include="Modules\SpecimenApiModuleTests.cs" />
+    <Compile Include="Modules\SpeciesApiModuleTests.cs" />
+    <Compile Include="Modules\ItemApiModuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -128,9 +136,9 @@
       <Project>{3EF059D8-3822-40D0-95B9-4FB40F4D4DA9}</Project>
       <Name>CollectionsOnline.RedirectWebSite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CollectionsOnline.WebApi\CollectionsOnline.WebApi.csproj">
-      <Project>{887a8565-4a10-44c8-82ef-f2f2d1d2bfbf}</Project>
-      <Name>CollectionsOnline.WebApi</Name>
+    <ProjectReference Include="..\CollectionsOnline.WebSite\CollectionsOnline.WebSite.csproj">
+      <Project>{b7b199de-9766-4d15-948d-8925d5e5b4c5}</Project>
+      <Name>CollectionsOnline.WebSite</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +147,13 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>
+if $(ConfigurationName) == Debug (
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.1\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.1\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

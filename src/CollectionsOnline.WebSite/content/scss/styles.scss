@@ -897,3 +897,15 @@ footer {
         }
     }
 }
+
+#developers {
+    display:flex;
+
+    .menu {
+        width:300px;
+    }
+
+    .documentation {
+        width:100%;
+    }
+}

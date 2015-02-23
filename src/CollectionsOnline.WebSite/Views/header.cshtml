@@ -1,0 +1,16 @@
+﻿@using System.Configuration
+<header>
+    <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
+    <nav>
+        <a href="">About</a>
+        <a href="/developers">Developers</a>
+        
+        @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home")
+        {
+            <a href="#" class="button-search">
+                <span class="icon-search-header" aria-hidden="true"></span>
+                Search
+            </a>
+        }
+    </nav>
+</header>

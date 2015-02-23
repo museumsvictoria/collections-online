@@ -1454,4 +1454,11 @@ footer {
     #explore .explore-content .specimen span {
       background-color: #7e7989; }
 
+#developers {
+  display: flex; }
+  #developers .menu {
+    width: 300px; }
+  #developers .documentation {
+    width: 100%; }
+
 /*# sourceMappingURL=styles.css.map */
