@@ -27,17 +27,7 @@ namespace CollectionsOnline.WebSite.Metadata
                     {
                         { HttpStatusCode.OK, "A bunch of items were able to be retrieved ok." }
                     },
-                    SampleResponse = JsonConvert.SerializeObject(new []
-                    {
-                        Builder<Item>
-                            .CreateNew()
-                            .With(x => x.Id = "items/1")
-                            .With(x => x.DateModified = new DateTime(2015, 1, 1))
-                            .With(x => x.Associations = Builder<Association>
-                                .CreateListOfSize(1)
-                                .Build())
-                            .Build()
-                    }, Formatting.Indented),
+                    SampleResponse = JsonConvert.SerializeObject(SampleItems.CreateList(), Formatting.Indented),
                     ExampleUrl = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
                 };
             };
@@ -57,18 +47,8 @@ namespace CollectionsOnline.WebSite.Metadata
                             {HttpStatusCode.OK, "The item was found and retrieved ok."},
                             {HttpStatusCode.NotFound, "The item could not be found and probably does not exist."}
                         },
-                        SampleResponse = JsonConvert.SerializeObject(Builder<Item>
-                            .CreateNew()
-                            .With(x => x.Id = "items/1")
-                            .With(x => x.DateModified = new DateTime(2015, 1, 1))
-                            .With(x => x.Associations = Builder<Association>
-                                .CreateListOfSize(1)
-                                .Build())
-                            .Build(), Formatting.Indented),
-                        ExampleUrl = documentSession.Advanced
-                            .DocumentQuery<Item, Combined>()
-                            .WhereEquals("Type", "Item")
-                            .First().Id,
+                        SampleResponse = JsonConvert.SerializeObject(SampleItems.Create(), Formatting.Indented),
+                        ExampleUrl = string.Format("{0}/{1}", Constants.ApiBasePath, documentSession.Advanced.DocumentQuery<Item, Combined>().WhereEquals("Type", "Item").First().Id),
                     };
                 }
             };

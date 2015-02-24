@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
@@ -23,7 +24,7 @@ namespace CollectionsOnline.WebSite.Modules
                         .Take(Limit)
                         .ToList();
 
-                    return BuildResponse(articles);
+                    return BuildResponse(Mapper.Map<IEnumerable<Article>, IEnumerable<ArticleApiViewModel>>(articles));
                 };
 
             Get["articles-by-id", "/{id}"] = parameters =>

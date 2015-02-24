@@ -84,8 +84,6 @@ namespace CollectionsOnline.Core.Factories
             {
                 var builder = new StringBuilder();
 
-                bool maxLengthHit = false;
-
                 // Split string into words
                 foreach (var word in value.Split('-'))
                 {

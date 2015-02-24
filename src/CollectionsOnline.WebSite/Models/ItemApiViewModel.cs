@@ -6,7 +6,7 @@ namespace CollectionsOnline.WebSite.Models
 {
     public class ItemApiViewModel : AggregateRoot
     {
-        public IList<Comment> Comments { get; set; }
+        public IList<CommentApiViewModel> Comments { get; set; }
 
         public DateTime DateModified { get; set; }
 

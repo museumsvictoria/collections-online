@@ -155,10 +155,12 @@
     <Compile Include="Factories\DevelopersViewModelFactory.cs" />
     <Compile Include="Metadata\ApiOperationMetadata.cs" />
     <Compile Include="Metadata\ArticlesApiMetadataModule.cs" />
+    <Compile Include="Metadata\SampleItems.cs" />
     <Compile Include="Metadata\ItemsApiMetadataModule.cs" />
     <Compile Include="Metadata\ApiMetadata.cs" />
     <Compile Include="Models\ArticleApiViewModel.cs" />
     <Compile Include="Models\DevelopersViewModel.cs" />
+    <Compile Include="Models\CommentApiViewModel.cs" />
     <Compile Include="Models\ItemApiViewModel.cs" />
     <Compile Include="Modules\ArticlesApiModule.cs" />
     <Compile Include="Modules\DevelopersModule.cs" />

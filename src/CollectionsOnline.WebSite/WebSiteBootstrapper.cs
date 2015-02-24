@@ -78,6 +78,7 @@ namespace CollectionsOnline.WebSite
             {
                 cfg.CreateMap<Article, ArticleApiViewModel>();
                 cfg.CreateMap<Item, ItemApiViewModel>();
+                cfg.CreateMap<Comment, CommentApiViewModel>();
             });
         }
     }
