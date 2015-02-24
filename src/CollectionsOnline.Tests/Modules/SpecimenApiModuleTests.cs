@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Tests.Fakes;
@@ -41,7 +42,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GetSpecimens_ReturnsSpecimens()
         {
             // Given When
-            var result = Browser.Get("/api/v1/specimens", with => with.HttpRequest());
+            var result = Browser.Get(string.Format("{0}{1}/specimens", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with => with.HttpRequest());
 
             // Then
             result.Body.DeserializeJson<IEnumerable<Specimen>>().Count().ShouldBe(5);
@@ -51,7 +52,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenAnInvalidId_GetSpecies_ReturnsNotFound()
         {
             // Given When
-            var result = Browser.Get("/api/v1/specimens/6", with => with.HttpRequest());
+            var result = Browser.Get(string.Format("{0}{1}/specimens/6", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with => with.HttpRequest());
 
             // Then
             result.StatusCode.ShouldBe(HttpStatusCode.NotFound);

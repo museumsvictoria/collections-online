@@ -12,7 +12,7 @@ namespace CollectionsOnline.WebSite.Modules
     public abstract class BaseApiModule : NancyModule
     {
         protected BaseApiModule(string modulePath = "")
-            : base("/api" + Constants.CurrentApiVersionPathSegment + modulePath)
+            : base(string.Format("{0}{1}{2}", Constants.ApiBasePath, Constants.CurrentApiVersionPathSegment, modulePath))
         {
             Before += context =>
                 {

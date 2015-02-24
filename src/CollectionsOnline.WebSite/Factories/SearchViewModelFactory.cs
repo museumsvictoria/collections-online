@@ -13,7 +13,15 @@ namespace CollectionsOnline.WebSite.Factories
 {
     public class SearchViewModelFactory : ISearchViewModelFactory
     {
-        public SearchViewModel MakeViewModel(IList<CombinedResult> results, FacetResults facets, List<string> suggestions, Request request, int totalResults, SearchInputModel searchInputModel, long queryTimeElapsed, long facetTimeElapsed)
+        public SearchViewModel MakeViewModel(
+            IList<CombinedResult> results,
+            FacetResults facets,
+            List<string> suggestions,
+            Request request,
+            int totalResults,
+            SearchInputModel searchInputModel,
+            long queryTimeElapsed,
+            long facetTimeElapsed)
         {
             var searchViewModel = new SearchViewModel
             {

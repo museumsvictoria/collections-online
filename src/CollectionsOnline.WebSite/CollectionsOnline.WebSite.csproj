@@ -151,10 +151,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
+    <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
+    <Compile Include="Factories\DevelopersViewModelFactory.cs" />
+    <Compile Include="Metadata\ApiOperationMetadata.cs" />
     <Compile Include="Metadata\ArticlesApiMetadataModule.cs" />
     <Compile Include="Metadata\ItemsApiMetadataModule.cs" />
     <Compile Include="Metadata\ApiMetadata.cs" />
     <Compile Include="Models\ArticleApiViewModel.cs" />
+    <Compile Include="Models\DevelopersViewModel.cs" />
     <Compile Include="Models\ItemApiViewModel.cs" />
     <Compile Include="Modules\ArticlesApiModule.cs" />
     <Compile Include="Modules\DevelopersModule.cs" />

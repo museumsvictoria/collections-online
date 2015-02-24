@@ -1,15 +1,14 @@
-﻿@using CollectionsOnline.Core.Config
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, System.Collections.Generic.IEnumerable<CollectionsOnline.WebSite.Metadata.ApiMetadata>>>>
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.DevelopersViewModel>
 @{
     Layout = "layout.cshtml";
 }
 <div id="developers">
     <aside class="menu">
-        @foreach (var apiOperationMetadata in @Model)
+        @foreach (var apiOperationMetadata in @Model.OperationMetadata)
         {
-            <a href="#@apiOperationMetadata.Key.ToLower()">@apiOperationMetadata.Key</a>
+            <a href="#@apiOperationMetadata.Name.ToLower()">@apiOperationMetadata.Name</a>
             <ul>
-                @foreach (var metadata in apiOperationMetadata.Value)
+                @foreach (var metadata in apiOperationMetadata.Metadata)
                 {
                     <li><a href="#@metadata.Name">@metadata.Path</a></li>
                 }
@@ -20,29 +19,29 @@
         <h1 id="api-overview">API Overview</h1>
         <p>API is a set of methods based on restful ideas over HTTP.  At this time it only supports the GET verb and responses are in JSON only.</p>
         <p>The root uri for the current version is located at</p>
-        <pre>@RenderContext.Context.Request.Url.SiteBase/api/</pre>
+        <pre>@Model.ApiRootUrl</pre>
 
         <h2 id="versions">Versions</h2>
         <p>At this time the API supports one version only, this is the default version returned via the root uri. It can also be accessed via the following uri for future versions.</p>
-        <pre>@RenderContext.Context.Request.Url.SiteBase/api/v1/</pre>
+        <pre>@Model.ApiCurrentVersionRootUrl</pre>
     
         <h2 id="pagination">Pagination</h2>
-        <p>Requests that return multiple objects will by default display 30 objects per request.  You can specify more objects to return by specifiying a <em>?limit</em> query string parameter up to a maximum of @Constants.PagingPageSizeMax objects.</p>
+        <p>Requests that return multiple objects will by default display 30 objects per request.  You can specify more objects to return by specifiying a <em>?limit</em> query string parameter up to a maximum of @Model.PagingPageSizeMax objects.</p>
         <p>You can also specify an object offset in order to retrieve results for different pages via a <em>?offset</em> query string parameter.</p>
         <h4>Link Header</h4>
         <p>The actual pagination information is stored in the response headers.  In order to allow easy traversing of data sets refer to the <a href="http://tools.ietf.org/html/rfc5988">Link header</a> to get the next page of objects in your request. E.g</p>
-        <pre>Link: &lt;http://localhost:7820/api/v1/items?limit=50&amp;offset=100&gt;; rel=&quot;next&quot;,&lt;http://localhost:7820/api/v1/items?limit=50&gt;; rel=&quot;prev&quot;</pre>
+        <pre>Link: &lt;@Model.ApiRootUrl/items?limit=50&amp;offset=100&gt;; rel=&quot;next&quot;,&lt;@Model.ApiRootUrl/items?limit=50&gt;; rel=&quot;prev&quot;</pre>
         <p>The total results is also stored in the response headers. E.g</p>
         <pre>Total-Results: 87366</pre>
     
         <h2 id="response-envelope">Response Envelope</h2>
         <p>In order to make debuging with the api easy, we have included a way to encapsulate all the data needed for a response in the body of the response without having to dive into the actual headers. In order to do this simply add the value <em>?envelope=true</em> to the query string</p>
     
-        @foreach (var apiOperationMetadata in @Model)
+        @foreach (var apiOperationMetadata in @Model.OperationMetadata)
         {
-            <h2 id="@apiOperationMetadata.Key.ToLower()">Operations about @apiOperationMetadata.Key</h2>
+            <h2 id="@apiOperationMetadata.Name.ToLower()">Operations about @apiOperationMetadata.Name</h2>
 
-            foreach (var metadata in apiOperationMetadata.Value)
+            foreach (var metadata in apiOperationMetadata.Metadata)
             {
                 <div id="@metadata.Name">
                     <h3>@metadata.Method</h3>

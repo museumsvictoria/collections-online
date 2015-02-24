@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Tests.Fakes;
@@ -42,7 +43,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenEnvelopeRequest_GetItems_ReturnsEnvelope()
         {
             // Given When
-            var result = Browser.Get("/api/v1/items", with =>
+            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
                 {
                     with.HttpRequest();
                     with.Query("envelope", "true");
@@ -57,7 +58,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenOneLimitRequest_GetItems_ReturnsOneItem()
         {
             // Given When
-            var result = Browser.Get("/api/v1/items", with =>
+            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("limit", "1");
@@ -71,7 +72,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenOneLimitRequest_GetItems_ReturnsLinkHeader()
         {
             // Given When
-            var result = Browser.Get("/api/v1/items", with =>
+            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("limit", "1");
@@ -85,7 +86,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenThirtyLimitRequest_GetItems_DoesNotReturnLinkHeader()
         {
             // Given When
-            var result = Browser.Get("/api/v1/items", with =>
+            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("limit", "30");
@@ -99,7 +100,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenOffsetRequest_GetItems_ReturnsCorrectItem()
         {
             // Given When
-            var result = Browser.Get("/api/v1/items", with =>
+            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("limit", "10");
