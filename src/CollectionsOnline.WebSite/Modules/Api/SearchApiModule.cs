@@ -1,23 +1,22 @@
 ﻿using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Queries;
-using Nancy;
 using Nancy.ModelBinding;
 
-namespace CollectionsOnline.WebSite.Modules
+namespace CollectionsOnline.WebSite.Modules.Api
 {
-    public class SearchModule : NancyModule
+    public class SearchApiModule : BaseApiModule
     {
-        public SearchModule(
-            ISearchViewModelQuery searchViewModelQuery)            
+        public SearchApiModule(ISearchViewModelQuery searchViewModelQuery)
+            : base("/search")
         {
-            Get["/search"] = parameters =>
+            Get["search-api", ""] = parameters =>
             {
                 var searchInputModel = this.Bind<SearchInputModel>();
 
                 searchInputModel.CurrentUrl = string.Format("{0}{1}", Request.Url.SiteBase, Request.Url.Path);
                 searchInputModel.CurrentQueryString = Request.Url.Query;
 
-                return View["search", searchViewModelQuery.BuildSearch(searchInputModel)];
+                return BuildResponse(searchViewModelQuery.BuildSearch(searchInputModel));
             };
         }
     }

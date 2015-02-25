@@ -32,7 +32,7 @@
             <div class="active-facets">
                 @foreach (var activeFacet in Model.ActiveFacets)
                 {
-                    <a href="@activeFacet.Url">
+                    <a href="@activeFacet.UrlToRemove">
                         @activeFacet.Name
                         <span class="icon-close" aria-hidden="true"></span>
                         <span class="icon-label-hidden">Remove facet</span>
@@ -40,7 +40,7 @@
                 }
                 @foreach (var activeTerm in Model.ActiveTerms)
                 {
-                    <a href="@activeTerm.Url">
+                    <a href="@activeTerm.UrlToRemove">
                         @activeTerm.Name
                         <span class="icon-close" aria-hidden="true"></span>
                         <span class="icon-label-hidden">Remove facet</span>

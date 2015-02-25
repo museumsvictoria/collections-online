@@ -6,7 +6,6 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.WebSite.Models;
 using Humanizer;
-using Nancy;
 using Raven.Abstractions.Data;
 
 namespace CollectionsOnline.WebSite.Factories
@@ -17,7 +16,6 @@ namespace CollectionsOnline.WebSite.Factories
             IList<CombinedResult> results,
             FacetResults facets,
             List<string> suggestions,
-            Request request,
             int totalResults,
             SearchInputModel searchInputModel,
             long queryTimeElapsed,
@@ -31,9 +29,7 @@ namespace CollectionsOnline.WebSite.Factories
                 Offset = searchInputModel.Offset,
                 QueryTimeElapsed = queryTimeElapsed,
                 FacetTimeElapsed = facetTimeElapsed
-            };
-
-            var baseUrl = string.Format("{0}{1}", request.Url.SiteBase, request.Url.Path);
+            };            
 
             // Build facets
             foreach (var facet in facets.Results)
@@ -44,7 +40,7 @@ namespace CollectionsOnline.WebSite.Factories
                 {
                     if (facetValue.Range != "NULL_VALUE")
                     {
-                        var facetValueQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                        var facetValueQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
                         facetValueQueryString.Remove("offset");
 
                         var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
@@ -73,8 +69,8 @@ namespace CollectionsOnline.WebSite.Factories
                         }
 
                         facetValueViewModel.Url = (facetValueQueryString.Count > 0)
-                            ? String.Concat(baseUrl, "?", facetValueQueryString)
-                            : baseUrl;
+                            ? String.Concat(searchInputModel.CurrentUrl, "?", facetValueQueryString)
+                            : searchInputModel.CurrentUrl;
 
                         facetViewModel.Values.Add(facetValueViewModel);
                     }
@@ -85,204 +81,212 @@ namespace CollectionsOnline.WebSite.Factories
             }
 
             // Build ActiveFacets
-            searchViewModel.ActiveFacets = searchViewModel.Facets.SelectMany(x => x.Values).Where(y => y.Active).ToList();
+            searchViewModel.ActiveFacets = searchViewModel.Facets
+                .SelectMany(x => x.Values)
+                .Where(y => y.Active)
+                .Select(x => new ActiveFacetValueViewModel
+                {
+                    Facet = x.Facet,
+                    Name = x.Name,
+                    UrlToRemove = x.Url
+                }).ToList();
 
             // Build ActiveQuery
             if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("query");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Query,
                     Term = "Query",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             
             // Build ActiveTerms
             if (!string.IsNullOrWhiteSpace(searchInputModel.Keyword))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("keyword");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Keyword,
                     Term = "Keyword",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Locality))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("locality");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Locality,
                     Term = "Locality",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Collection))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("collection");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Collection,
                     Term = "Collection",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.CulturalGroup))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("culturalgroup");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.CulturalGroup,
                     Term = "CulturalGroup",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Classification))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("classification");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Classification,
                     Term = "classification",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Name))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("name");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Name,
                     Term = "Name",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Technique))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("technique");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Technique,
                     Term = "Technique",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Denomination))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("denomination");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Denomination,
                     Term = "Denomination",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Habitat))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("habitat");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Habitat,
                     Term = "Habitat",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Taxon))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("taxon");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Taxon,
                     Term = "Taxon",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.TypeStatus))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("typestatus");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.TypeStatus,
                     Term = "TypeStatus",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.GeoType))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("geotype");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.GeoType,
                     Term = "GeoType",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.MuseumLocation))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("museumlocation");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.MuseumLocation,
                     Term = "MuseumLocation",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
             if (!string.IsNullOrWhiteSpace(searchInputModel.Article))
             {
-                var termQueryString = HttpUtility.ParseQueryString(request.Url.Query);
+                var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
                 termQueryString.Remove("article");
 
-                searchViewModel.ActiveTerms.Add(new TermViewModel
+                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Article,
                     Term = "Article",
-                    Url = (termQueryString.Count > 0) ? String.Concat(baseUrl, "?", termQueryString) : baseUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
 
@@ -297,12 +301,12 @@ namespace CollectionsOnline.WebSite.Factories
             }
 
             // Build next prev page links
-            var queryString = HttpUtility.ParseQueryString(request.Url.Query);
+            var queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             if ((searchInputModel.Offset + searchInputModel.Limit) < totalResults)
             {
                 queryString.Set("offset", (searchInputModel.Offset + searchInputModel.Limit).ToString());
 
-                searchViewModel.NextPageUrl = String.Concat(baseUrl, "?", queryString);
+                searchViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
             }
 
             if ((searchInputModel.Offset - searchInputModel.Limit) >= 0)
@@ -313,7 +317,7 @@ namespace CollectionsOnline.WebSite.Factories
                     queryString.Remove("offset");
                 }
 
-                searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(baseUrl, "?", queryString) : baseUrl;
+                searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;
             }
 
             // Build suggestions
@@ -322,7 +326,7 @@ namespace CollectionsOnline.WebSite.Factories
                 searchViewModel.Suggestions.Add(new SuggestionViewModel
                 {
                     Suggestion = suggestion,
-                    Url = String.Concat(baseUrl, "?query=", HttpUtility.UrlEncode(suggestion))
+                    Url = String.Concat(searchInputModel.CurrentUrl, "?query=", HttpUtility.UrlEncode(suggestion))
                 });
             }
             

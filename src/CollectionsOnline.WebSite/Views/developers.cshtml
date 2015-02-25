@@ -2,6 +2,7 @@
 @{
     Layout = "layout.cshtml";
 }
+@Html.Partial("searchbar")
 <div id="developers">
     <aside class="menu">
         @foreach (var apiOperationMetadata in @Model.OperationMetadata)
@@ -68,9 +69,9 @@
                                 @foreach (var parameter in metadata.Parameters)
                                 {
                                     <tr>
-                                        <td>@parameter.Item1</td>
-                                        <td>@parameter.Item2</td>
-                                        <td>@parameter.Item3</td>
+                                        <td>@parameter.Parameter</td>
+                                        <td>@parameter.Type</td>
+                                        <td>@parameter.Description</td>
                                     </tr>
                                 }
                             </tbody>

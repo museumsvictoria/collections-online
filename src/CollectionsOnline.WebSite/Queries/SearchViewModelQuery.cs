@@ -4,7 +4,6 @@ using System.Linq;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
-using Nancy;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Constants = CollectionsOnline.Core.Config.Constants;
@@ -24,7 +23,7 @@ namespace CollectionsOnline.WebSite.Queries
             _searchViewModelFactory = searchViewModelFactory;
         }
 
-        public SearchViewModel BuildSearch(SearchInputModel searchInputModel, Request request)
+        public SearchViewModel BuildSearch(SearchInputModel searchInputModel)
         {
             // Aggressively cache due to slow facet performance
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
@@ -233,7 +232,6 @@ namespace CollectionsOnline.WebSite.Queries
                     results,
                     facets,
                     suggestions,
-                    request,
                     statistics.TotalResults,
                     searchInputModel,
                     queryStopwatch.ElapsedMilliseconds,

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 
 namespace CollectionsOnline.WebSite.Infrastructure

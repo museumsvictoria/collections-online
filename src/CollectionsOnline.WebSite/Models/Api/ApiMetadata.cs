@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Nancy;
 
 namespace CollectionsOnline.WebSite.Models.Api
@@ -14,12 +13,21 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public string Description { get; set; }
 
-        public IEnumerable<Tuple<string, string, string>> Parameters { get; set; }
+        public IEnumerable<ApiParameter> Parameters { get; set; }
 
         public IDictionary<HttpStatusCode, string> StatusCodes { get; set; }
 
         public string SampleResponse { get; set; }
 
         public string ExampleUrl { get; set; }
-    }    
+    }
+
+    public class ApiParameter
+    {
+        public string Parameter { get; set; }
+
+        public string Type { get; set; }
+
+        public string Description { get; set; }
+    }
 }

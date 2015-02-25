@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
@@ -47,6 +48,15 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         Method = description.Method,
                         Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
                         Description = "Returns a single article by Id.",
+                        Parameters = new []
+                        {
+                            new ApiParameter
+                            {
+                                Parameter = "Id",
+                                Description = "Id of article to be retrieved",
+                                Type = "Integer"
+                            }
+                        },
                         StatusCodes = new Dictionary<HttpStatusCode, string>
                         {
                             {HttpStatusCode.OK, "The article was found and retrieved ok."},

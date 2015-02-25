@@ -156,6 +156,8 @@
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
+    <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
+    <Compile Include="Modules\Api\SearchApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SpeciesApiMetadataModule.cs" />
     <Compile Include="Modules\Api\ArticlesApiMetadataModule.cs" />

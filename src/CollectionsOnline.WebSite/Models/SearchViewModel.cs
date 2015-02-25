@@ -50,9 +50,9 @@ namespace CollectionsOnline.WebSite.Models
 
         public IList<CombinedResult> Results { get; set; }
 
-        public IList<FacetValueViewModel> ActiveFacets { get; set; }
+        public IList<ActiveFacetValueViewModel> ActiveFacets { get; set; }
 
-        public IList<TermViewModel> ActiveTerms { get; set; }
+        public IList<ActiveTermViewModel> ActiveTerms { get; set; }
 
         public IList<SuggestionViewModel> Suggestions { get; set; }
 
@@ -60,8 +60,8 @@ namespace CollectionsOnline.WebSite.Models
         {
             Facets = new List<FacetViewModel>();
             Results = new List<CombinedResult>();
-            ActiveFacets = new List<FacetValueViewModel>();
-            ActiveTerms = new List<TermViewModel>();
+            ActiveFacets = new List<ActiveFacetValueViewModel>();
+            ActiveTerms = new List<ActiveTermViewModel>();
             Suggestions = new List<SuggestionViewModel>();
         }
     }
@@ -91,13 +91,22 @@ namespace CollectionsOnline.WebSite.Models
         public int Hits { get; set; }
     }
 
-    public class TermViewModel
+    public class ActiveFacetValueViewModel
+    {
+        public string Facet { get; set; }
+
+        public string Name { get; set; }
+
+        public string UrlToRemove { get; set; }
+    }
+
+    public class ActiveTermViewModel
     {
         public string Term { get; set; }
 
         public string Name { get; set; }
 
-        public string Url { get; set; }
+        public string UrlToRemove { get; set; }
     }
 
     public class SuggestionViewModel

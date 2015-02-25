@@ -8,6 +8,10 @@
 
         public string Query { get; set; }
 
+        public string CurrentUrl { get; set; }
+
+        public string CurrentQueryString { get; set; }
+
         /* facet fields */
         public string Type { get; set; }
 

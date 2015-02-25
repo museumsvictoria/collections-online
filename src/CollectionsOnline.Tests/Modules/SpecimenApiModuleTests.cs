@@ -7,7 +7,6 @@ using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Tests.Fakes;
 using CollectionsOnline.WebSite.Infrastructure;
-using CollectionsOnline.WebSite.Modules;
 using CollectionsOnline.WebSite.Modules.Api;
 using Nancy;
 using Nancy.Testing;

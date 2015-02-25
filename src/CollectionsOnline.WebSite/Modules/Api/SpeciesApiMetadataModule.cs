@@ -3,7 +3,6 @@ using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Metadata.Modules;
@@ -47,6 +46,15 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         Method = description.Method,
                         Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
                         Description = "Returns a single species by Id.",
+                        Parameters = new[]
+                        {
+                            new ApiParameter
+                            {
+                                Parameter = "Id",
+                                Description = "Id of species to be retrieved",
+                                Type = "Integer"
+                            }
+                        },
                         StatusCodes = new Dictionary<HttpStatusCode, string>
                         {
                             {HttpStatusCode.OK, "The species was found and retrieved ok."},
