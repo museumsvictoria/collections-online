@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Utilities;
-using CollectionsOnline.WebSite.Metadata;
 using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Routing;
 

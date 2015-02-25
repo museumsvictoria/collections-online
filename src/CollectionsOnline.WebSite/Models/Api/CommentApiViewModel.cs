@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CollectionsOnline.WebSite.Models
+namespace CollectionsOnline.WebSite.Models.Api
 {
     public class CommentApiViewModel
     {

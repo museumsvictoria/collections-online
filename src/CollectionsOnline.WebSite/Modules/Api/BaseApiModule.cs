@@ -3,11 +3,12 @@ using System.Linq;
 using System.Web;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.ModelBinding;
 using Raven.Client;
 
-namespace CollectionsOnline.WebSite.Modules
+namespace CollectionsOnline.WebSite.Modules.Api
 {
     public abstract class BaseApiModule : NancyModule
     {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CollectionsOnline.WebSite.Metadata;
+using CollectionsOnline.WebSite.Models.Api;
 
 namespace CollectionsOnline.WebSite.Models
 {

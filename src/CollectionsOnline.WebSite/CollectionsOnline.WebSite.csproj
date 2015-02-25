@@ -41,14 +41,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper.Net4">
+    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
-    <Reference Include="FizzWare.NBuilder">
-      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
     <Reference Include="Humanizer, Version=1.33.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,23 +152,27 @@
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
     <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
     <Compile Include="Factories\DevelopersViewModelFactory.cs" />
-    <Compile Include="Metadata\ApiOperationMetadata.cs" />
-    <Compile Include="Metadata\ArticlesApiMetadataModule.cs" />
-    <Compile Include="Metadata\SampleItems.cs" />
-    <Compile Include="Metadata\ItemsApiMetadataModule.cs" />
-    <Compile Include="Metadata\ApiMetadata.cs" />
-    <Compile Include="Models\ArticleApiViewModel.cs" />
+    <Compile Include="Infrastructure\AutomapperConfig.cs" />
+    <Compile Include="Models\Api\ApiOperationMetadata.cs" />
+    <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
+    <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
+    <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />
+    <Compile Include="Modules\Api\SpeciesApiMetadataModule.cs" />
+    <Compile Include="Modules\Api\ArticlesApiMetadataModule.cs" />
+    <Compile Include="Modules\Api\ItemsApiMetadataModule.cs" />
+    <Compile Include="Models\Api\ApiMetadata.cs" />
+    <Compile Include="Models\Api\ArticleApiViewModel.cs" />
     <Compile Include="Models\DevelopersViewModel.cs" />
-    <Compile Include="Models\CommentApiViewModel.cs" />
-    <Compile Include="Models\ItemApiViewModel.cs" />
-    <Compile Include="Modules\ArticlesApiModule.cs" />
+    <Compile Include="Models\Api\CommentApiViewModel.cs" />
+    <Compile Include="Models\Api\ItemApiViewModel.cs" />
+    <Compile Include="Modules\Api\ArticlesApiModule.cs" />
     <Compile Include="Modules\DevelopersModule.cs" />
     <Compile Include="Modules\ItemsModule.cs" />
-    <Compile Include="Modules\BaseApiModule.cs" />
-    <Compile Include="Models\ApiInputModel.cs" />
-    <Compile Include="Modules\ItemsApiModule.cs" />
-    <Compile Include="Modules\SpeciesApiModule.cs" />
-    <Compile Include="Modules\SpecimenApiModule.cs" />
+    <Compile Include="Modules\Api\BaseApiModule.cs" />
+    <Compile Include="Models\Api\ApiInputModel.cs" />
+    <Compile Include="Modules\Api\ItemsApiModule.cs" />
+    <Compile Include="Modules\Api\SpeciesApiModule.cs" />
+    <Compile Include="Modules\Api\SpecimensApiModule.cs" />
     <Compile Include="Queries\IArticleViewModelQuery.cs" />
     <Compile Include="Modules\ArticlesModule.cs" />
     <Compile Include="Queries\ArticleViewModelQuery.cs" />
@@ -203,7 +206,7 @@
     <Compile Include="Factories\SearchViewModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\ApiJsonSerializer.cs" />
-    <Compile Include="WebSiteBootstrapper.cs" />
+    <Compile Include="Infrastructure\WebSiteBootstrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

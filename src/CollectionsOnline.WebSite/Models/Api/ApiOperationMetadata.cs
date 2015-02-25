@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CollectionsOnline.WebSite.Metadata
+namespace CollectionsOnline.WebSite.Models.Api
 {
     public class ApiOperationMetadata
     {

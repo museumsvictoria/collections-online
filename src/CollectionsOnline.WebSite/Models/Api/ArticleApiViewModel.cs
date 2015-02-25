@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CollectionsOnline.Core.Models;
 
-namespace CollectionsOnline.WebSite.Models
+namespace CollectionsOnline.WebSite.Models.Api
 {
     public class ArticleApiViewModel : AggregateRoot
     {

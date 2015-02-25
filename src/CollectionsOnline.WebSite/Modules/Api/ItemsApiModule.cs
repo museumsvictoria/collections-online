@@ -4,10 +4,11 @@ using AutoMapper;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Raven.Client;
 
-namespace CollectionsOnline.WebSite.Modules
+namespace CollectionsOnline.WebSite.Modules.Api
 {
     public class ItemsApiModule : BaseApiModule
     {

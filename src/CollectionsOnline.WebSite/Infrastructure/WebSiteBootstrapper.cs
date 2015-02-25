@@ -1,25 +1,21 @@
 ﻿using System;
-using AutoMapper;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
-using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Infrastructure;
-using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
 using Nancy.Json;
 using Newtonsoft.Json;
-using Ninject.Extensions.Conventions;
 using Ninject;
+using Ninject.Extensions.Conventions;
 using NLog;
 using Raven.Client;
 using Raven.Client.Indexes;
 using StackExchange.Profiling;
 using StackExchange.Profiling.RavenDb;
 
-namespace CollectionsOnline.WebSite
+namespace CollectionsOnline.WebSite.Infrastructure
 {
     public class WebSiteBootstrapper : NinjectNancyBootstrapper 
     {
@@ -74,12 +70,7 @@ namespace CollectionsOnline.WebSite
             };
 
             // Automapper configuration
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<Article, ArticleApiViewModel>();
-                cfg.CreateMap<Item, ItemApiViewModel>();
-                cfg.CreateMap<Comment, CommentApiViewModel>();
-            });
+            AutomapperConfig.Initialize();
         }
     }
 }

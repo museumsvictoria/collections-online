@@ -7,7 +7,9 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Tests.Fakes;
+using CollectionsOnline.WebSite.Infrastructure;
 using CollectionsOnline.WebSite.Modules;
+using CollectionsOnline.WebSite.Modules.Api;
 using Nancy.Testing;
 using Newtonsoft.Json;
 using Shouldly;
@@ -34,6 +36,7 @@ namespace CollectionsOnline.Tests.Modules
                 {
                     with.Module<ItemsApiModule>();
                     with.Dependency(DocumentStore.OpenSession());
+                    with.ApplicationStartup((container, pipelines) => AutomapperConfig.Initialize());
                 });
         }
 

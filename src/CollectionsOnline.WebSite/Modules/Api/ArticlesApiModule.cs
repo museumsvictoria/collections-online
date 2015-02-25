@@ -3,18 +3,18 @@ using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Raven.Client;
 
-namespace CollectionsOnline.WebSite.Modules
+namespace CollectionsOnline.WebSite.Modules.Api
 {
     public class ArticlesApiModule : BaseApiModule
     {
         public ArticlesApiModule(IDocumentSession documentSession)
             : base("/articles")
         {
-            Get["articles-index", "/"] = parameters =>
+            Get["articles-api-index", "/"] = parameters =>
                 {
                     var articles = documentSession.Advanced
                         .DocumentQuery<Article, Combined>()
@@ -27,7 +27,7 @@ namespace CollectionsOnline.WebSite.Modules
                     return BuildResponse(Mapper.Map<IEnumerable<Article>, IEnumerable<ArticleApiViewModel>>(articles));
                 };
 
-            Get["articles-by-id", "/{id}"] = parameters =>
+            Get["articles-api-by-id", "/{id}"] = parameters =>
                 {
                     var article = documentSession.Load<Article>("articles/" + parameters.id as string);
 

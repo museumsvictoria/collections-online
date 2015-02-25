@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Nancy;
 
-namespace CollectionsOnline.WebSite.Metadata
+namespace CollectionsOnline.WebSite.Models.Api
 {
     public class ApiMetadata
     {
