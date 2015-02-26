@@ -30,7 +30,7 @@
 
         public string OnDisplay { get; set; }
 
-        public string Discipline { get; set; }        
+        public object[] CollectionAreas { get; set; }
 
         public string ItemType { get; set; }
 

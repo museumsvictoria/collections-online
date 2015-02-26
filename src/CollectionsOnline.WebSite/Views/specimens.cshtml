@@ -157,13 +157,13 @@
                         }
                     </p>
                 }
-                @if (@Model.Specimen.CollectionPlans.Any())
+                @if (@Model.Specimen.CollectionAreas.Any())
                 {
-                    <h3>Collection Plans</h3>
+                    <h3>Collection Areas</h3>
                     <p>
-                        @for (int i = 0; i < Model.Specimen.CollectionPlans.Count; i++)
+                        @for (int i = 0; i < Model.Specimen.CollectionAreas.Count; i++)
                         {
-                            <a href="/search?collection=@HttpUtility.UrlEncode(Model.Specimen.CollectionPlans[i])">@Model.Specimen.CollectionPlans[i]</a>@(i != Model.Specimen.CollectionPlans.Count - 1 ? "," : "")
+                            <a href="/search?collectionarea=@HttpUtility.UrlEncode(Model.Specimen.CollectionAreas[i])">@Model.Specimen.CollectionAreas[i]</a>@(i != Model.Specimen.CollectionAreas.Count - 1 ? "," : "")
                         }
                     </p>
                 }
@@ -548,7 +548,7 @@
                     {
                         <li>
                             <h3>Discipline</h3>
-                            <p><a href="/search?discipline=@HttpUtility.UrlEncode(@Model.Specimen.Discipline.ToLower())">@Model.Specimen.Discipline</a></p>
+                            <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Specimen.Discipline.ToLower())">@Model.Specimen.Discipline</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.Type))

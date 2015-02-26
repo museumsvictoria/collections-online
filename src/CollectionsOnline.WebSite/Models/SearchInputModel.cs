@@ -21,7 +21,7 @@
 
         public string OnDisplay { get; set; }
 
-        public string Discipline { get; set; }
+        public string[] CollectionAreas { get; set; }
 
         public string ItemType { get; set; }
 
@@ -30,8 +30,6 @@
         public string SpeciesEndemicity { get; set; }
 
         public string SpecimenScientificGroup { get; set; }
-
-        public string SpecimenDiscipline { get; set; }
 
         public string[] ArticleTypes { get; set; }
 

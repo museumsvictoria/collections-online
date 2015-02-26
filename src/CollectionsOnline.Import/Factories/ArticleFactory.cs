@@ -94,6 +94,15 @@ namespace CollectionsOnline.Import.Factories
 
             article.Content = sanitizedResult.Html;
 
+            try
+            {
+                article.ContentText = HtmlConverter.HtmlToText(article.Content);
+            }
+            catch (Exception e)
+            {
+                _log.Warn("Unable to convert article content html to text, irn:{0}, html:{1}, exception:{2}", map.GetEncodedString("irn"), article.Content, e);
+            }
+
             if(sanitizedResult.HasRemovedTag || sanitizedResult.HasRemovedStyle || sanitizedResult.HasRemovedAttribute)
                 _log.Trace("Suspected obsolete HTML, consider reviewing narrative with irn {0} (removedTag:{1}, removedStyle:{2}, removedAttribute:{3})", 
                     map.GetEncodedString("irn"), 
@@ -173,16 +182,7 @@ namespace CollectionsOnline.Import.Factories
             if (!string.IsNullOrWhiteSpace(article.ContentSummary))
                 article.Summary = article.ContentSummary;
             else if (!string.IsNullOrWhiteSpace(article.Content))
-            {
-                try
-                {
-                    article.Summary = HtmlConverter.HtmlToText(article.Content);
-                }
-                catch (Exception e)
-                {
-                    _log.Warn("Unable to convert article content html to text, irn:{0}, html:{0}, exception:{1}", map.GetEncodedString("irn"), article.Content, e);
-                }
-            }
+                article.Summary = article.ContentText;
 
             // Display Title
             if (!string.IsNullOrWhiteSpace(article.Title))

@@ -34,7 +34,7 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> CollectionNames { get; set; }
 
-        public IList<string> CollectionPlans { get; set; }
+        public IList<string> CollectionAreas { get; set; }
 
         public string PrimaryClassification { get; set; }
 
@@ -294,7 +294,7 @@ namespace CollectionsOnline.Core.Models
         {
             Comments = new List<Comment>();
             CollectionNames = new List<string>();
-            CollectionPlans = new List<string>();
+            CollectionAreas = new List<string>();
             Associations = new List<Association>();
             Keywords = new List<string>();
             Dimensions = new List<Dimension>();

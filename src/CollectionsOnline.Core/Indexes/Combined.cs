@@ -21,7 +21,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = article.Id,
                     DisplayTitle = article.DisplayTitle,
-                    Content = new object[] { article.Content, article.ContentSummary },
+                    Content = new object[] { article.ContentText, article.ContentSummary },
                     Summary = article.Summary,
                     ThumbnailUri = article.ThumbnailUri,
 
@@ -37,10 +37,10 @@ namespace CollectionsOnline.Core.Indexes
                     Category = "History & Technology",
                     HasImages = (article.Media.Any()) ? "Yes" : (string)null,
                     OnDisplay = (string)null,
-                    Discipline = (string)null,
+                    CollectionAreas = new object[] { },
                     ItemType = (string)null,
                     SpeciesType = (string)null,
-                    SpeciesEndemicity = new object[] { },
+                    SpeciesEndemicity = (string)null,
                     SpecimenScientificGroup = (string)null,
                     ArticleTypes = article.Types,
                     OnDisplayLocation = (string)null,
@@ -90,10 +90,10 @@ namespace CollectionsOnline.Core.Indexes
                     Category = item.Category,
                     HasImages = (item.Media.Any()) ? "Yes" : (string)null,
                     OnDisplay = item.MuseumLocation != null ? "Yes" : (string)null,
-                    Discipline = item.Discipline,
+                    CollectionAreas = item.CollectionAreas,
                     ItemType = item.Type,
                     SpeciesType = (string)null,
-                    SpeciesEndemicity = new object[] { },
+                    SpeciesEndemicity = (string)null,
                     SpecimenScientificGroup = (string)null,
                     ArticleTypes = new object[] { },
                     OnDisplayLocation = item.MuseumLocation.OnDisplayLocation,
@@ -117,7 +117,7 @@ namespace CollectionsOnline.Core.Indexes
                         item.IndigenousCulturesRegion, 
                         item.IndigenousCulturesState, 
                         item.IndigenousCulturesCountry },
-                    Collections = new object[] { item.CollectionNames, item.CollectionPlans },
+                    Collections = new object[] { item.CollectionNames, item.Discipline },
                     Dates = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date), 
                         item.IndigenousCulturesDate, 
                         item.IndigenousCulturesDateCollected,
@@ -193,7 +193,7 @@ namespace CollectionsOnline.Core.Indexes
                     Category = "Natural Sciences",
                     HasImages = (species.Media.Any()) ? "Yes" : (string) null,
                     OnDisplay = (string)null,
-                    Discipline = (string) null,
+                    CollectionAreas = new object[] { },
                     ItemType = (string) null,
                     SpeciesType = species.AnimalType,
                     SpeciesEndemicity = species.Endemicity,
@@ -262,10 +262,10 @@ namespace CollectionsOnline.Core.Indexes
                     Category = specimen.Category,
                     HasImages = (specimen.Media.Any()) ? "Yes" : (string) null,
                     OnDisplay = specimen.MuseumLocation != null ? "Yes" : (string)null,
-                    Discipline = specimen.Discipline,                    
+                    CollectionAreas = specimen.CollectionAreas,                    
                     ItemType = specimen.Type,
                     SpeciesType = (string) null,
-                    SpeciesEndemicity = new object[] { },
+                    SpeciesEndemicity = (string)null,
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     ArticleTypes = new object[] { },
                     OnDisplayLocation = specimen.MuseumLocation.OnDisplayLocation,
@@ -285,7 +285,7 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.NearestNamedPlace,
                         specimen.TektitesLocalStrewnfield, 
                         specimen.TektitesGlobalStrewnfield },
-                    Collections = new object[] { specimen.CollectionNames, specimen.CollectionPlans },
+                    Collections = new object[] { specimen.CollectionNames, specimen.Discipline },
                     Dates = new object[] { specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date) },
                     CulturalGroups = new object[] { },
                     Classifications = new object[] { specimen.PrimaryClassification, specimen.SecondaryClassification, specimen.TertiaryClassification },
@@ -349,7 +349,7 @@ namespace CollectionsOnline.Core.Indexes
             TermVector(x => x.Category, FieldTermVector.Yes);
             TermVector(x => x.HasImages, FieldTermVector.Yes);
             TermVector(x => x.OnDisplay, FieldTermVector.Yes);
-            TermVector(x => x.Discipline, FieldTermVector.Yes);
+            TermVector(x => x.CollectionAreas, FieldTermVector.Yes);
             TermVector(x => x.ItemType, FieldTermVector.Yes);
             TermVector(x => x.SpeciesType, FieldTermVector.Yes);
             TermVector(x => x.SpeciesEndemicity, FieldTermVector.Yes);

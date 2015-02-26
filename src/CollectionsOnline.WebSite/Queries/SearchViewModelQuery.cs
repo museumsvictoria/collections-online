@@ -78,10 +78,13 @@ namespace CollectionsOnline.WebSite.Queries
                     query = query.AndAlso().WhereEquals("OnDisplay", searchInputModel.OnDisplay);
                     facetQuery = facetQuery.AndAlso().WhereEquals("OnDisplay", searchInputModel.OnDisplay);
                 }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Discipline))
+                if (searchInputModel.CollectionAreas != null && searchInputModel.CollectionAreas.Any())
                 {
-                    query = query.AndAlso().WhereEquals("Discipline", searchInputModel.Discipline);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("Discipline", searchInputModel.Discipline);
+                    foreach (var collectionArea in searchInputModel.CollectionAreas)
+                    {
+                        query = query.AndAlso().WhereEquals("CollectionAreas", collectionArea);
+                        facetQuery = facetQuery.AndAlso().WhereEquals("CollectionAreas", collectionArea);
+                    }
                 }
                 if (!string.IsNullOrWhiteSpace(searchInputModel.ItemType))
                 {
@@ -102,11 +105,6 @@ namespace CollectionsOnline.WebSite.Queries
                 {
                     query = query.AndAlso().WhereEquals("SpecimenScientificGroup", searchInputModel.SpecimenScientificGroup);
                     facetQuery = facetQuery.AndAlso().WhereEquals("SpecimenScientificGroup", searchInputModel.SpecimenScientificGroup);
-                }
-                if (!string.IsNullOrWhiteSpace(searchInputModel.SpecimenDiscipline))
-                {
-                    query = query.AndAlso().WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
-                    facetQuery = facetQuery.AndAlso().WhereEquals("SpecimenDiscipline", searchInputModel.SpecimenDiscipline);
                 }
                 if (searchInputModel.ArticleTypes != null && searchInputModel.ArticleTypes.Any())
                 {

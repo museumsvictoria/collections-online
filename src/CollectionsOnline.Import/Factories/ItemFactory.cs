@@ -217,8 +217,8 @@ namespace CollectionsOnline.Import.Factories
             // Collection names
             item.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
 
-            // Collection plans
-            item.CollectionPlans = map.GetEncodedStrings("SubThemes_tab");
+            // Collection areas
+            item.CollectionAreas = map.GetEncodedStrings("SubThemes_tab");
 
             // Classifications
             if (map.GetEncodedString("ClaPrimaryClassification") != null && !map.GetEncodedString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))

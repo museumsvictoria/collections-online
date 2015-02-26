@@ -178,8 +178,8 @@ namespace CollectionsOnline.Import.Factories
             // Tags
             specimen.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab"));
 
-            // Collection plans
-            specimen.CollectionPlans = map.GetEncodedStrings("SubThemes_tab");
+            // Collection areas
+            specimen.CollectionAreas = map.GetEncodedStrings("SubThemes_tab");
 
             // Associations
             specimen.Associations = _associationFactory.Make(map.GetMaps("associations"));

@@ -80,7 +80,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Item.Discipline))
                 {
                     <h3>Discipline</h3>
-                    <p><a href="/search?discipline=@HttpUtility.UrlEncode(@Model.Item.Discipline.ToLower())">@Model.Item.Discipline</a><br /></p>
+                    <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Item.Discipline.ToLower())">@Model.Item.Discipline</a><br /></p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.Significance))
                 {
@@ -152,15 +152,15 @@
                             </p>
                         </li>
                     }
-                    @if (@Model.Item.CollectionPlans.Any())
+                    @if (@Model.Item.CollectionAreas.Any())
                     {
 
                         <li>
-                            <h3>Collection Plans</h3>
+                            <h3>Collection Areas</h3>
                             <p>
-                                @for (int i = 0; i < Model.Item.CollectionPlans.Count; i++)
+                                @for (int i = 0; i < Model.Item.CollectionAreas.Count; i++)
                                 {
-                                    <a href="/search?collection=@HttpUtility.UrlEncode(Model.Item.CollectionPlans[i])">@Model.Item.CollectionPlans[i]</a>@(i != Model.Item.CollectionPlans.Count - 1 ? "," : "")
+                                    <a href="/search?collectionareas=@HttpUtility.UrlEncode(Model.Item.CollectionAreas[i])">@Model.Item.CollectionAreas[i]</a>@(i != Model.Item.CollectionAreas.Count - 1 ? "," : "")
                                 }
                             </p>
                         </li>

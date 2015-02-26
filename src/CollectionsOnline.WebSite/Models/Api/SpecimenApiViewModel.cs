@@ -36,7 +36,7 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> Keywords { get; set; }
 
-        public IList<string> CollectionPlans { get; set; }
+        public IList<string> CollectionAreas { get; set; }
 
         public IList<Association> Associations { get; set; }
 
