@@ -48,7 +48,7 @@ namespace CollectionsOnline.WebSite.Models
             }
         }
 
-        public IList<CombinedResult> Results { get; set; }
+        public IList<CombinedResultViewModel> Results { get; set; }
 
         public IList<ActiveFacetValueViewModel> ActiveFacets { get; set; }
 
@@ -59,7 +59,7 @@ namespace CollectionsOnline.WebSite.Models
         public SearchViewModel()
         {
             Facets = new List<FacetViewModel>();
-            Results = new List<CombinedResult>();
+            Results = new List<CombinedResultViewModel>();
             ActiveFacets = new List<ActiveFacetValueViewModel>();
             ActiveTerms = new List<ActiveTermViewModel>();
             Suggestions = new List<SuggestionViewModel>();

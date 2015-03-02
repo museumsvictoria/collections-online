@@ -153,9 +153,11 @@
     <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
     <Compile Include="Factories\DevelopersViewModelFactory.cs" />
     <Compile Include="Infrastructure\AutomapperConfig.cs" />
+    <Compile Include="ModelBinders\SearchInputModelBinder.cs" />
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
+    <Compile Include="Models\CombinedResultViewModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />

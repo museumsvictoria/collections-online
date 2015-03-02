@@ -178,8 +178,10 @@ namespace CollectionsOnline.Import.Factories
             // Tags
             specimen.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab"));
 
-            // Collection areas
-            specimen.CollectionAreas = map.GetEncodedStrings("SubThemes_tab");
+            // Collection areas (remove problematic characters used for multi-select facets)
+            specimen.CollectionAreas = map.GetEncodedStrings("SubThemes_tab")
+                .Select(x => x.CleanForMultiFacets())
+                .ToList();
 
             // Associations
             specimen.Associations = _associationFactory.Make(map.GetMaps("associations"));

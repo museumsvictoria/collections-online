@@ -217,8 +217,10 @@ namespace CollectionsOnline.Import.Factories
             // Collection names
             item.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
 
-            // Collection areas
-            item.CollectionAreas = map.GetEncodedStrings("SubThemes_tab");
+            // Collection areas (remove problematic characters used for multi-select facets)
+            item.CollectionAreas = map.GetEncodedStrings("SubThemes_tab")
+                .Select(x => x.CleanForMultiFacets())
+                .ToList();
 
             // Classifications
             if (map.GetEncodedString("ClaPrimaryClassification") != null && !map.GetEncodedString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))

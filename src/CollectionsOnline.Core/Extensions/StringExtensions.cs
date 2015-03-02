@@ -68,5 +68,19 @@ namespace CollectionsOnline.Core.Extensions
 
             return input;
         }
+
+        public static string CleanForMultiFacets(this string input)
+        {
+            // Replace commas
+            input = input.Replace(",", " and");
+
+            // Replace em-dash
+            input = input.Replace("–", "-");
+
+            // Remove plural shorthand
+            input = input.Replace("(s)", "");
+
+            return input;
+        }
     }
 }

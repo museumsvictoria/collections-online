@@ -27,7 +27,7 @@ namespace CollectionsOnline.WebSite.Extensions
             if(!string.IsNullOrWhiteSpace(association.Country))
                 parts.Add(string.Format("<a href=\"/search?locality={0}\">{1}</a>", HttpUtility.UrlEncode(association.Country), association.Country));
             if(!string.IsNullOrWhiteSpace(association.Date))
-                parts.Add(association.Date);
+                parts.Add(string.Format("<a href=\"/search?date={0}\">{1}</a>", HttpUtility.UrlEncode(association.Date), association.Date));
 
             var result = parts.Concatenate(", ");
 

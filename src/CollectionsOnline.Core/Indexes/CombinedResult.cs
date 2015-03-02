@@ -30,7 +30,7 @@
 
         public string OnDisplay { get; set; }
 
-        public object[] CollectionAreas { get; set; }
+        public object[] CollectionArea { get; set; }
 
         public string ItemType { get; set; }
 
@@ -40,40 +40,40 @@
 
         public string SpecimenScientificGroup { get; set; }
 
-        public object[] ArticleTypes { get; set; }
+        public object[] ArticleType { get; set; }
 
         public string OnDisplayLocation { get; set; }
 
         /* term fields */
 
-        public object[] Keywords { get; set; }
+        public object[] Keyword { get; set; }
 
-        public object[] Localities { get; set; }
+        public object[] Locality { get; set; }
 
-        public object[] Collections { get; set; }
+        public object[] Collection { get; set; }
 
-        public object[] Dates { get; set; }
+        public object[] Date { get; set; }
 
-        public object[] CulturalGroups { get; set; }
+        public object[] CulturalGroup { get; set; }
 
-        public object[] Classifications { get; set; }
+        public object[] Classification { get; set; }
 
-        public object[] Names { get; set; }
+        public object[] Name { get; set; }
 
         public string Technique { get; set; }
 
-        public object[] Denominations { get; set; }
+        public object[] Denomination { get; set; }
 
-        public object[] Habitats { get; set; }
+        public object[] Habitat { get; set; }
 
         public object[] Taxon { get; set; }
 
         public string TypeStatus { get; set; }
 
-        public object[] GeoTypes { get; set; }
+        public object[] GeoType { get; set; }
 
-        public object[] MuseumLocations { get; set; }
+        public object[] MuseumLocation { get; set; }
 
-        public object[] Articles { get; set; }
+        public object[] Article { get; set; }
     }
 }

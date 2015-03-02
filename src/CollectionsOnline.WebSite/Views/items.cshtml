@@ -160,7 +160,7 @@
                             <p>
                                 @for (int i = 0; i < Model.Item.CollectionAreas.Count; i++)
                                 {
-                                    <a href="/search?collectionareas=@HttpUtility.UrlEncode(Model.Item.CollectionAreas[i])">@Model.Item.CollectionAreas[i]</a>@(i != Model.Item.CollectionAreas.Count - 1 ? "," : "")
+                                    <a href="/search?collectionarea=@HttpUtility.UrlEncode(Model.Item.CollectionAreas[i])">@Model.Item.CollectionAreas[i]</a>@(i != Model.Item.CollectionAreas.Count - 1 ? "," : "")
                                 }
                             </p>
                         </li>
@@ -350,7 +350,7 @@
                     {
                         <li>
                             <h3>Date</h3>
-                            <p>@Model.Item.IndigenousCulturesDate</p>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesDate)">@Model.Item.IndigenousCulturesDate</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesCollector))
@@ -364,7 +364,7 @@
                     {
                         <li>
                             <h3>Date Collected</h3>
-                            <p>@Model.Item.IndigenousCulturesDateCollected</p>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesDateCollected)">@Model.Item.IndigenousCulturesDateCollected</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesIndividualsIdentified))
@@ -567,7 +567,7 @@
                     {
                         <li>
                             <h3>Manufacture Date</h3>
-                            <p>@Model.Item.ArcheologyManufactureDate</p>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.ArcheologyManufactureDate)">@Model.Item.ArcheologyManufactureDate</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyTechnique))
@@ -637,7 +637,7 @@
                     {
                         <li>
                             <h3>Issue Date</h3>
-                            <p>@Model.Item.PhilatelyDateIssued</p>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.PhilatelyDateIssued)">@Model.Item.PhilatelyDateIssued</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyForm))

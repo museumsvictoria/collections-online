@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Queries
 
             var query = _documentSession.Advanced
                 .DocumentQuery<CombinedResult, Combined>()
-                .WhereEquals("Articles", result.Article.Title)
+                .WhereEquals("Article", result.Article.Title)
                 .Take(1);
 
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;

@@ -8,7 +8,7 @@ namespace CollectionsOnline.WebSite.Factories
     public interface ISearchViewModelFactory
     {
         SearchViewModel MakeViewModel(
-            IList<CombinedResult> results,
+            IList<CombinedResultViewModel> results,
             FacetResults facets, 
             List<string> suggestions, 
             int totalResults, 

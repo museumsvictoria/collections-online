@@ -111,7 +111,10 @@ namespace CollectionsOnline.Import.Factories
                     sanitizedResult.HasRemovedAttribute);
             
             article.ContentSummary = map.GetEncodedString("NarNarrativeSummary");
-            article.Types.AddRange(map.GetEncodedStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)));
+
+            // Article types (Remove problematic formatting that is used in facets)
+            article.Types.AddRange(map.GetEncodedStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => x.CleanForMultiFacets()));
+
             article.Keywords.AddRange(map.GetEncodedStrings("DesGeographicLocation_tab"));
 
             // Authors

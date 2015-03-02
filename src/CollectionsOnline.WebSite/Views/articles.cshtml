@@ -37,7 +37,7 @@
             @Html.Raw(Model.Article.DisplayTitle)<br />
             @foreach (var type in @Model.Article.Types)
             {
-                <a href="/search?articletypes=@HttpUtility.UrlEncode(type.ToLower())">@type</a><br />
+                <a href="/search?articletype=@HttpUtility.UrlEncode(type.ToLower())">@type</a><br />
             }
         </h1>
         @if (Model.ArticleImages.Any())

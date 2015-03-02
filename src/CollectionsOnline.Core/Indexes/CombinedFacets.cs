@@ -29,7 +29,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedResult>
                 {
-                    Name = x => x.CollectionAreas
+                    Name = x => x.CollectionArea
                 },
                 new Facet<CombinedResult>
                 {
@@ -49,7 +49,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedResult>
                 {
-                    Name = x => x.ArticleTypes
+                    Name = x => x.ArticleType
                 },
                 new Facet<CombinedResult>
                 {
