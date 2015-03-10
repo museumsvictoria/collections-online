@@ -224,11 +224,11 @@ namespace CollectionsOnline.Import.Factories
 
             // Classifications
             if (map.GetEncodedString("ClaPrimaryClassification") != null && !map.GetEncodedString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                item.PrimaryClassification = map.GetEncodedString("ClaPrimaryClassification").ToSentenceCase();
+                item.Classifications.Add(map.GetEncodedString("ClaPrimaryClassification").ToSentenceCase());
             if (map.GetEncodedString("ClaSecondaryClassification") != null && !map.GetEncodedString("ClaSecondaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                item.SecondaryClassification = map.GetEncodedString("ClaSecondaryClassification").ToSentenceCase();
+                item.Classifications.Add(map.GetEncodedString("ClaSecondaryClassification").ToSentenceCase());
             if (map.GetEncodedString("ClaTertiaryClassification") != null && !map.GetEncodedString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                item.TertiaryClassification = map.GetEncodedString("ClaTertiaryClassification").ToSentenceCase();
+                 item.Classifications.Add(map.GetEncodedString("ClaTertiaryClassification").ToSentenceCase());
 
             item.ObjectName = map.GetEncodedString("ClaObjectName");
             item.ObjectSummary = map.GetEncodedString("ClaObjectSummary");
@@ -406,10 +406,14 @@ namespace CollectionsOnline.Import.Factories
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();
             if (iclocalityMap != null)
             {
-                item.IndigenousCulturesLocality = iclocalityMap.GetEncodedString("ProSpecificLocality_tab");
-                item.IndigenousCulturesRegion = iclocalityMap.GetEncodedString("ProRegion_tab");
-                item.IndigenousCulturesState = iclocalityMap.GetEncodedString("ProStateProvince_tab");
-                item.IndigenousCulturesCountry = map.GetEncodedString("ProCountry");
+                item.IndigenousCulturesLocalities = new[]
+                {
+                    iclocalityMap.GetEncodedString("ProSpecificLocality_tab"),
+                    iclocalityMap.GetEncodedString("ProRegion_tab"),
+                    iclocalityMap.GetEncodedString("ProStateProvince_tab"),
+                    map.GetEncodedString("ProCountry")
+                }.Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList();
             }
 
             item.IndigenousCulturesCulturalGroups = map.GetEncodedStrings("ProCulturalGroups_tab");
@@ -631,13 +635,7 @@ namespace CollectionsOnline.Import.Factories
                     {
                         item.IndigenousCulturesMedium,
                         item.IndigenousCulturesCulturalGroups.Concatenate(", "),
-                        new []
-                        {
-                            item.IndigenousCulturesLocality,
-                            item.IndigenousCulturesRegion,
-                            item.IndigenousCulturesState,
-                            item.IndigenousCulturesCountry
-                        }.Concatenate(", "),
+                        item.IndigenousCulturesLocalities.Concatenate(", "),
                         item.IndigenousCulturesDate
                     }.Concatenate(", ");
             }

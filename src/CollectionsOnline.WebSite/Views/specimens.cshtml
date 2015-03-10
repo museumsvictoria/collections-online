@@ -33,7 +33,10 @@
 
 <div id="title">
     <div class="wrapper">
-        <h1>@Html.Raw(Model.Specimen.DisplayTitle)</h1>
+        <h1>
+            @Html.Raw(Model.Specimen.DisplayTitle)<br />
+            @Model.Specimen.RegistrationNumber
+        </h1>
         @if (Model.SpecimenImages.Any())
         {
             <div class="thumbnails">
@@ -84,29 +87,7 @@
                     <h3>Scientific Name</h3>
                     <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.ScientificName)">@Model.Specimen.ScientificName</a></p>
                 }
-                @if (Model.Specimen.Taxonomy != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Author))
-                    {
-                        <h3>Scientific Name Author</h3>
-                        <p>@Model.Specimen.Taxonomy.Author</p>
-                    }
-                    if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.CommonName))
-                    {
-                        <h3>Common Name</h3>
-                        <p>@Model.Specimen.Taxonomy.CommonName</p>
-                    }
-                    if (Model.Specimen.Taxonomy.OtherCommonNames.Any())
-                    {
-                        <h3>Other Common Names</h3>
-                        <p>
-                            @foreach (var otherCommonNames in @Model.Specimen.Taxonomy.OtherCommonNames)
-                            {
-                                <span>@otherCommonNames</span>
-                            }
-                        </p>
-                    }
-                }
+                @Html.Partial("taxonomy", Model.Specimen.Taxonomy)
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.IdentifiedBy))
                 {
                     <h3>Identified By</h3>
@@ -180,25 +161,16 @@
             </div>
             <div class="detail">
                 <ul>
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.PrimaryClassification))
+                    @if (Model.Specimen.Classifications.Any())
                     {
                         <li>
-                            <h3>Primary Classification</h3>
-                            <p><a href="/search?classification=@HttpUtility.UrlEncode(Model.Specimen.PrimaryClassification)">@Model.Specimen.PrimaryClassification</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.SecondaryClassification))
-                    {
-                        <li>
-                            <h3>Secondary Classification</h3>
-                            <p><a href="/search?classification=@HttpUtility.UrlEncode(Model.Specimen.SecondaryClassification)">@Model.Specimen.SecondaryClassification</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TertiaryClassification))
-                    {
-                        <li>
-                            <h3>Tertiary Classification</h3>
-                            <p><a href="/search?classification=@HttpUtility.UrlEncode(Model.Specimen.TertiaryClassification)">@Model.Specimen.TertiaryClassification</a></p>
+                            <h3>Classification</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Specimen.Classifications.Count; i++)
+                                {
+                                    <a href="/search?classification=@HttpUtility.UrlEncode(Model.Specimen.Classifications[i])">@Model.Specimen.Classifications[i]</a>@(i != Model.Specimen.Classifications.Count - 1 ? ", " : "")
+                                }
+                            </p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEventCode))
@@ -557,129 +529,7 @@
                             <h3>Type of Item</h3>
                             <p><a href="/search?itemtype=@HttpUtility.UrlEncode(@Model.Specimen.Type.ToLower())">@Model.Specimen.Type</a></p>
                         </li>
-                    }
-                    @if (Model.Specimen.Taxonomy != null)
-                    {
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Kingdom))
-                        {
-                            <li>
-                                <h3>Kingdom</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Kingdom)">@Model.Specimen.Taxonomy.Kingdom</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Phylum))
-                        {
-                            <li>
-                                <h3>Phylum</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Phylum)">@Model.Specimen.Taxonomy.Phylum</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subphylum))
-                        {
-                            <li>
-                                <h3>Subphylum</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subphylum)">@Model.Specimen.Taxonomy.Subphylum</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Superclass))
-                        {
-                            <li>
-                                <h3>Superclass</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Superclass)">@Model.Specimen.Taxonomy.Superclass</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Class))
-                        {
-                            <li>
-                                <h3>Class</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Class)">@Model.Specimen.Taxonomy.Class</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subclass))
-                        {
-                            <li>
-                                <h3>Subclass</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subclass)">@Model.Specimen.Taxonomy.Subclass</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Superorder))
-                        {
-                            <li>
-                                <h3>Superorder</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Superorder)">@Model.Specimen.Taxonomy.Superorder</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Order))
-                        {
-                            <li>
-                                <h3>Order</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Order)">@Model.Specimen.Taxonomy.Order</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Suborder))
-                        {
-                            <li>
-                                <h3>Suborder</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Suborder)">@Model.Specimen.Taxonomy.Suborder</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Infraorder))
-                        {
-                            <li>
-                                <h3>Infraorder</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Infraorder)">@Model.Specimen.Taxonomy.Infraorder</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Superfamily))
-                        {
-                            <li>
-                                <h3>Superfamily</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Superfamily)">@Model.Specimen.Taxonomy.Superfamily</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Family))
-                        {
-                            <li>
-                                <h3>Family</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Family)">@Model.Specimen.Taxonomy.Family</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subfamily))
-                        {
-                            <li>
-                                <h3>Subfamily</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subfamily)">@Model.Specimen.Taxonomy.Subfamily</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Genus))
-                        {
-                            <li>
-                                <h3>Genus</h3>
-                                <p><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Genus)">@Model.Specimen.Taxonomy.Genus</a></em></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subgenus))
-                        {
-                            <li>
-                                <h3>Subgenus</h3>
-                                <p><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.Subgenus)">@Model.Specimen.Taxonomy.Subgenus</a></em></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Species))
-                        {
-                            <li>
-                                <h3>Species Name</h3>
-                                <p><em>@Model.Specimen.Taxonomy.Species</em></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Subspecies))
-                        {
-                            <li>
-                                <h3>Subspecies</h3>
-                                <p><em>@Model.Specimen.Taxonomy.Subspecies</em></p>
-                            </li>
-                        }
-                    }
+                    }                    
                     @if (Model.Specimen.Keywords.Any())
                     {
                         <li>

@@ -22,11 +22,7 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> CollectionAreas { get; set; }
 
-        public string PrimaryClassification { get; set; }
-
-        public string SecondaryClassification { get; set; }
-
-        public string TertiaryClassification { get; set; }
+        public IList<string> Classifications { get; set; }
 
         public string ObjectName { get; set; }
 
@@ -170,13 +166,7 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public string TradeLiteraturePrimaryName { get; set; }
 
-        public string IndigenousCulturesLocality { get; set; }
-
-        public string IndigenousCulturesRegion { get; set; }
-
-        public string IndigenousCulturesState { get; set; }
-
-        public string IndigenousCulturesCountry { get; set; }
+        public IList<string> IndigenousCulturesLocalities { get; set; }
 
         public IList<string> IndigenousCulturesCulturalGroups { get; set; }
 

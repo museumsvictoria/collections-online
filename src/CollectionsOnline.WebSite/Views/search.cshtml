@@ -1,4 +1,5 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchViewModel>
+﻿@using Nancy.Diagnostics
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchViewModel>
 @{
     Layout = "layout.cshtml";
 }
@@ -46,6 +47,16 @@
                         <span class="icon-label-hidden">Remove facet</span>
                     </a>
                 }
+            </div>
+        }
+        @if (Model.Suggestions.Any())
+        {
+            <div class="suggestions">
+            <span>Did you mean?</span>
+            @foreach (var suggestion in Model.Suggestions)
+            {
+                <a href="@suggestion.Url">@suggestion.Suggestion</a>
+            }
             </div>
         }
         <div class="pagination">

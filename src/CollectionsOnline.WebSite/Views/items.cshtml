@@ -34,8 +34,8 @@
 <div id="title">
     <div class="wrapper">
         <h1>
-            <span class="reg-number"><a href="/search?itemtype=@HttpUtility.UrlEncode(@Model.Item.Type.ToLower())">@Model.Item.Type</a> @Model.Item.RegistrationNumber</span><br />
-            @Html.Raw(Model.Item.DisplayTitle)
+            @Html.Raw(Model.Item.DisplayTitle)<br />
+            @Model.Item.RegistrationNumber
         </h1>
         @if (Model.ItemImages.Any())
         {
@@ -67,6 +67,11 @@
                     <h3>Summary</h3>
                     <p>@Html.Raw(Model.Item.ObjectSummary)</p>
                 }
+                @if (!string.IsNullOrWhiteSpace(Model.Item.IsdDescriptionOfContent))
+                {
+                    <h3>Description of Content</h3>
+                    <p>@Model.Item.IsdDescriptionOfContent</p>
+                }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.PhysicalDescription))
                 {
                     <h3>Physical Description</h3>
@@ -77,35 +82,20 @@
                     <h3>Physical Description</h3>
                     <p>@Model.Item.IndigenousCulturesDescription</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.Discipline))
-                {
-                    <h3>Discipline</h3>
-                    <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Item.Discipline.ToLower())">@Model.Item.Discipline</a><br /></p>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.Significance))
-                {
-                    <h3>Statement of Significance</h3>
-                    <p>@Model.Item.Significance</p>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.IsdDescriptionOfContent))
-                {
-                    <h3>Description of Content</h3>
-                    <p>@Model.Item.IsdDescriptionOfContent</p>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.IsdDescriptionOfContent))
-                {
-                    <h3>Description</h3>
-                    <p>@Model.Item.IsdDescriptionOfContent</p>
-                }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyDescription))
                 {
-                    <h3>Description</h3>
+                    <h3>Physical Description</h3>
                     <p>@Model.Item.ArcheologyDescription</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsEdgeDescription))
+                @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteratureCoverTitle))
                 {
-                    <h3>Edge Description</h3>
-                    <p>@Model.Item.NumismaticsEdgeDescription</p>
+                    <h3>Title</h3>
+                    <p>@Model.Item.TradeLiteratureCoverTitle</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesTitle))
+                {
+                    <h3>Title</h3>
+                    <p>@Model.Item.IndigenousCulturesTitle</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsObverseDescription))
                 {
@@ -117,26 +107,16 @@
                     <h3>Reverse Description</h3>
                     <p>@Model.Item.NumismaticsReverseDescription</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyColour))
+                @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsEdgeDescription))
                 {
-                    <h3>Colour</h3>
-                    <p>@Model.Item.PhilatelyColour</p>
+                    <h3>Edge Description</h3>
+                    <p>@Model.Item.NumismaticsEdgeDescription</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyDenomination))
+                @if (!string.IsNullOrWhiteSpace(Model.Item.Significance))
                 {
-                    <h3>Denomination</h3>
-                    <p><a href="/search?denomination=@HttpUtility.UrlEncode(Model.Item.PhilatelyDenomination)">@Model.Item.PhilatelyDenomination</a></p>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimarySubject))
-                {
-                    <h3>Primary Subject</h3>
-                    <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimarySubject)">@Model.Item.TradeLiteraturePrimarySubject</a></p>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePublicationDate))
-                {
-                    <h3>Publication Date</h3>
-                    <p>@Model.Item.TradeLiteraturePublicationDate</p>
-                }
+                    <h3>Statement of Significance</h3>
+                    <p>@Model.Item.Significance</p>
+                }                
             </div>
             <div class="detail">
                 <ul>
@@ -154,7 +134,6 @@
                     }
                     @if (@Model.Item.CollectionAreas.Any())
                     {
-
                         <li>
                             <h3>Collection Areas</h3>
                             <p>
@@ -165,157 +144,18 @@
                             </p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.PrimaryClassification))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.AcquisitionInformation))
                     {
                         <li>
-                            <h3>Primary Classification</h3>
-                            <p><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.PrimaryClassification)">@Model.Item.PrimaryClassification</a></p>
+                            <h3>Acquisition Information</h3>
+                            <p>@Model.Item.AcquisitionInformation</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.SecondaryClassification))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.Acknowledgement))
                     {
                         <li>
-                            <h3>Secondary Classification</h3>
-                            <p><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.SecondaryClassification)">@Model.Item.SecondaryClassification</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.TertiaryClassification))
-                    {
-                        <li>
-                            <h3>Tertiary Classification</h3>
-                            <p><a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.TertiaryClassification)">@Model.Item.TertiaryClassification</a></p>
-                        </li>
-                    }
-                    @foreach (var association in @Model.Item.Associations)
-                    {
-                        <li>
-                            <h3>@association.Type</h3>
-                            <p>@Html.RenderAssociationDescription(association)</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.ModelScale))
-                    {
-                        <li>
-                            <h3>Model Scale</h3>
-                            <p>@Model.Item.ModelScale</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.Shape))
-                    {
-                        <li>
-                            <h3>Shape</h3>
-                            <p>@Model.Item.Shape</p>
-                        </li>
-                    }
-                    @foreach (var dimension in @Model.Item.Dimensions)
-                    {
-                        <li>
-                            <h3>
-                                @if (!string.IsNullOrWhiteSpace(dimension.Configuration))
-                                {
-                                    @dimension.Configuration
-                                }
-                                else
-                                {
-                                    @:Dimensions
-                                }
-                            </h3>
-                            <p>
-                                @if (!string.IsNullOrWhiteSpace(dimension.Dimensions))
-                                {
-                                    @dimension.Dimensions<br />
-                                }
-                                @if (!string.IsNullOrWhiteSpace(dimension.Comments))
-                                {
-                                    @dimension.Comments<br />
-                                }
-                            </p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.References))
-                    {
-                        <li>
-                            <h3>References</h3>
-                            <p>@Model.Item.References</p>
-                        </li>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.References) || Model.Item.Bibliographies.Any())
-                    {
-                        <li>
-                            <h3>References</h3>
-                            <p>
-                                @if (!string.IsNullOrWhiteSpace(Model.Item.References))
-                                {
-                                    @Model.Item.References<br />
-                                }
-                                @foreach (var bibliography in Model.Item.Bibliographies)
-                                {
-                                    @bibliography<br />
-                                }
-                            </p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.AudioVisualRecordingDetails))
-                    {
-                        <li>
-                            <h3>Recording Details</h3>
-                            <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.AudioVisualRecordingDetails)">@Model.Item.AudioVisualRecordingDetails</a></p>
-                        </li>
-                    }
-                    @if (@Model.Item.AudioVisualContentSummaries.Any())
-                    {
-                        <li>
-                            <h3>Audio Visual Content Summary</h3>
-                            <p>
-                                @for (int i = 0; i < Model.Item.AudioVisualContentSummaries.Count; i++)
-                                {
-                                    @Model.Item.AudioVisualContentSummaries[i]@(i != Model.Item.AudioVisualContentSummaries.Count - 1 ? "," : "")
-                                }
-                            </p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLocality))
-                    {
-                        <li>
-                            <h3>Locality</h3>
-                            <p>
-                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLocality))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLocality)">@Model.Item.IndigenousCulturesLocality</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesRegion))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesRegion)">@Model.Item.IndigenousCulturesRegion</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesState))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesState)">@Model.Item.IndigenousCulturesState</a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesCountry))
-                                {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCountry)">@Model.Item.IndigenousCulturesCountry</a>
-                                }
-                            </p>
-                        </li>
-                    }
-                    @if (@Model.Item.IndigenousCulturesCulturalGroups.Any())
-                    {
-                        <li>
-                            <h3>Cultural Groups</h3>
-                            <p>
-                                @for (int i = 0; i < Model.Item.IndigenousCulturesCulturalGroups.Count; i++)
-                                {
-                                    <a href="/search?culturalgroup=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCulturalGroups[i])">@Model.Item.IndigenousCulturesCulturalGroups[i]</a>@(i != Model.Item.IndigenousCulturesCulturalGroups.Count - 1 ? ", " : "")
-                                }
-                            </p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesMedium))
-                    {
-                        <li>
-                            <h3>Object/Medium</h3>
-                            <p>@Model.Item.IndigenousCulturesMedium</p>
+                            <h3>Acknowledgement</h3>
+                            <p>@Model.Item.Acknowledgement</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesPhotographer))
@@ -349,7 +189,7 @@
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDate))
                     {
                         <li>
-                            <h3>Date</h3>
+                            <h3>Date Produced</h3>
                             <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesDate)">@Model.Item.IndigenousCulturesDate</a></p>
                         </li>
                     }
@@ -367,6 +207,62 @@
                             <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesDateCollected)">@Model.Item.IndigenousCulturesDateCollected</a></p>
                         </li>
                     }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimaryRole))
+                    {
+                        <li>
+                            <h3><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></h3>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryName)">@Model.Item.TradeLiteraturePrimaryName</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkPublisher))
+                    {
+                        <li>
+                            <h3>Publisher</h3>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.ArtworkPublisher)">@Model.Item.ArtworkPublisher</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyManufactureName))
+                    {
+                        <li>
+                            <h3>Manufacture Name</h3>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.ArcheologyManufactureName)">@Model.Item.ArcheologyManufactureName</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyManufactureDate))
+                    {
+                        <li>
+                            <h3>Manufacture Date</h3>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.ArcheologyManufactureDate)">@Model.Item.ArcheologyManufactureDate</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsDateIssued))
+                    {
+                        <li>
+                            <h3>Date Issued</h3>
+                            <p>@Model.Item.NumismaticsDateIssued</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyDateIssued))
+                    {
+                        <li>
+                            <h3>Date Issued</h3>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.PhilatelyDateIssued)">@Model.Item.PhilatelyDateIssued</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePublicationDate))
+                    {
+                        <li>
+                            <h3>Publication Date</h3>
+                            <p>@Model.Item.TradeLiteraturePublicationDate</p>
+                        </li>
+                    }
+                    @foreach (var association in @Model.Item.Associations)
+                    {
+                        <li>
+                            <h3>@association.Type</h3>
+                            <p>@Html.RenderAssociationDescription(association)</p>
+                        </li>
+                    }                    
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesIndividualsIdentified))
                     {
                         <li>
@@ -374,25 +270,11 @@
                             <p>@Model.Item.IndigenousCulturesIndividualsIdentified</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesTitle))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.IsdPeopleDepicted))
                     {
                         <li>
-                            <h3>Title</h3>
-                            <p>@Model.Item.IndigenousCulturesTitle</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesSheets))
-                    {
-                        <li>
-                            <h3>Number of Sheets</h3>
-                            <p>@Model.Item.IndigenousCulturesSheets</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesPages))
-                    {
-                        <li>
-                            <h3>Number of Pages</h3>
-                            <p>@Model.Item.IndigenousCulturesPages</p>
+                            <h3>Individuals Identified</h3>
+                            <p>@Model.Item.IsdPeopleDepicted</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLetterTo))
@@ -409,6 +291,37 @@
                             <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLetterTo)">@Model.Item.IndigenousCulturesLetterFrom</a></p>
                         </li>
                     }
+                    @if (Model.Item.IndigenousCulturesLocalities.Any())
+                    {
+                        <li>
+                            <h3>Locality</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Item.IndigenousCulturesLocalities.Count; i++)
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLocalities[i])">@Model.Item.IndigenousCulturesLocalities[i]</a>@(i != Model.Item.IndigenousCulturesLocalities.Count - 1 ? ", " : "")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.AudioVisualRecordingDetails))
+                    {
+                        <li>
+                            <h3>Recording Details</h3>
+                            <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.AudioVisualRecordingDetails)">@Model.Item.AudioVisualRecordingDetails</a></p>
+                        </li>
+                    }
+                    @if (@Model.Item.AudioVisualContentSummaries.Any())
+                    {
+                        <li>
+                            <h3>Content Summary</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Item.AudioVisualContentSummaries.Count; i++)
+                                {
+                                    @Model.Item.AudioVisualContentSummaries[i]@(i != Model.Item.AudioVisualContentSummaries.Count - 1 ? "," : "")
+                                }
+                            </p>
+                        </li>
+                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IsdFormat))
                     {
                         <li>
@@ -423,11 +336,18 @@
                             <p>@Model.Item.IsdLanguage</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IsdPeopleDepicted))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesSheets))
                     {
                         <li>
-                            <h3>People Depicted</h3>
-                            <p>@Model.Item.IsdPeopleDepicted</p>
+                            <h3>Number of Sheets</h3>
+                            <p>@Model.Item.IndigenousCulturesSheets</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesPages))
+                    {
+                        <li>
+                            <h3>Number of Pages</h3>
+                            <p>@Model.Item.IndigenousCulturesPages</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.Inscription))
@@ -440,7 +360,7 @@
                     @if (@Model.Item.ModelNames.Any())
                     {
                         <li>
-                            <h3>Model Name/No.</h3>
+                            <h3>Model Name or Number</h3>
                             <p>
                                 @for (int i = 0; i < Model.Item.ModelNames.Count; i++)
                                 {
@@ -479,13 +399,6 @@
                             <p>@Model.Item.ArcheologySite</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyDescription))
-                    {
-                        <li>
-                            <h3>Description</h3>
-                            <p>@Model.Item.ArcheologyDescription</p>
-                        </li>
-                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyDistinguishingMarks))
                     {
                         <li>
@@ -510,7 +423,7 @@
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyDecoration))
                     {
                         <li>
-                            <h3>Archeology Decoration</h3>
+                            <h3>Decoration</h3>
                             <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.ArcheologyDecoration)">@Model.Item.ArcheologyDecoration</a></p>
                         </li>
                     }
@@ -556,20 +469,6 @@
                             <p>@Model.Item.ArcheologyShape</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyManufactureName))
-                    {
-                        <li>
-                            <h3>Manufacture Name</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.ArcheologyManufactureName)">@Model.Item.ArcheologyManufactureName</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyManufactureDate))
-                    {
-                        <li>
-                            <h3>Manufacture Date</h3>
-                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.ArcheologyManufactureDate)">@Model.Item.ArcheologyManufactureDate</a></p>
-                        </li>
-                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyTechnique))
                     {
                         <li>
@@ -591,11 +490,11 @@
                             <p><a href="/search?denomination=@HttpUtility.UrlEncode(Model.Item.NumismaticsDenomination)">@Model.Item.NumismaticsDenomination</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsDateIssued))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyDenomination))
                     {
                         <li>
-                            <h3>Date Issued</h3>
-                            <p>@Model.Item.NumismaticsDateIssued</p>
+                            <h3>Denomination</h3>
+                            <p><a href="/search?denomination=@HttpUtility.UrlEncode(Model.Item.PhilatelyDenomination)">@Model.Item.PhilatelyDenomination</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsSeries))
@@ -619,6 +518,13 @@
                             <p>@Model.Item.NumismaticsAxis</p>
                         </li>
                     }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyColour))
+                    {
+                        <li>
+                            <h3>Colour</h3>
+                            <p>@Model.Item.PhilatelyColour</p>
+                        </li>
+                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyImprint))
                     {
                         <li>
@@ -631,13 +537,6 @@
                         <li>
                             <h3>Issue</h3>
                             <p>@Model.Item.PhilatelyIssue</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyDateIssued))
-                    {
-                        <li>
-                            <h3>Issue Date</h3>
-                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.PhilatelyDateIssued)">@Model.Item.PhilatelyDateIssued</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.PhilatelyForm))
@@ -668,11 +567,18 @@
                             <p>@Model.Item.TradeLiteratureNumberofPages</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteratureCoverTitle))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePageSizeFormat))
                     {
                         <li>
-                            <h3>Cover Title</h3>
-                            <p>@Model.Item.TradeLiteratureCoverTitle</p>
+                            <h3>Page Size Format</h3>
+                            <p>@Model.Item.TradeLiteraturePageSizeFormat</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimarySubject))
+                    {
+                        <li>
+                            <h3>Primary Subject</h3>
+                            <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimarySubject)">@Model.Item.TradeLiteraturePrimarySubject</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteratureIllustrationTypes))
@@ -699,13 +605,6 @@
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePublicationTypes[i])">@Model.Item.TradeLiteraturePublicationTypes[i]</a>@(i != Model.Item.TradeLiteraturePublicationTypes.Count - 1 ? ", " : "")
                                 }
                             </p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimaryRole))
-                    {
-                        <li>
-                            <h3><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryName)">@Model.Item.TradeLiteraturePrimaryName</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkMedium))
@@ -743,11 +642,11 @@
                             <p>@Model.Item.ArtworkDrawingNumber</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkPublisher))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkState))
                     {
                         <li>
-                            <h3>Publisher</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.ArtworkPublisher)">@Model.Item.ArtworkPublisher</a></p>
+                            <h3>State</h3>
+                            <p>@Model.Item.ArtworkState</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ArtworkPrimaryInscriptions))
@@ -771,11 +670,35 @@
                             <p>@Model.Item.ArtworkTertiaryInscriptions</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.TypeStatus))
+                    @if (@Model.Item.IndigenousCulturesCulturalGroups.Any())
                     {
                         <li>
-                            <h3>Type Status</h3>
-                            <p>@Model.Item.TypeStatus</p>
+                            <h3>Cultural Groups</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Item.IndigenousCulturesCulturalGroups.Count; i++)
+                                {
+                                    <a href="/search?culturalgroup=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCulturalGroups[i])">@Model.Item.IndigenousCulturesCulturalGroups[i]</a>@(i != Model.Item.IndigenousCulturesCulturalGroups.Count - 1 ? ", " : "")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesMedium))
+                    {
+                        <li>
+                            <h3>Object/Medium</h3>
+                            <p>@Model.Item.IndigenousCulturesMedium</p>
+                        </li>
+                    }
+                    @if (Model.Item.Classifications.Any())
+                    {
+                        <li>
+                            <h3>Classification</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Item.Classifications.Count; i++)
+                                {
+                                    <a href="/search?classification=@HttpUtility.UrlEncode(Model.Item.Classifications[i])">@Model.Item.Classifications[i]</a>@(i != Model.Item.Classifications.Count - 1 ? ", " : "")
+                                }
+                            </p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.ScientificName))
@@ -785,34 +708,13 @@
                             <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.ScientificName)">@Model.Item.ScientificName</a></p>
                         </li>
                     }
-                    @if (Model.Item.Taxonomy != null)
+                    @Html.Partial("taxonomy", Model.Item.Taxonomy)
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.TypeStatus))
                     {
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Author))
-                        {
-                            <li>
-                                <h3>Scientific Name Author</h3>
-                                <p>@Model.Item.Taxonomy.Author</p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.CommonName))
-                        {
-                            <li>
-                                <h3>Common Name</h3>
-                                <p>@Model.Item.Taxonomy.CommonName</p>
-                            </li>
-                        }
-                        if (Model.Item.Taxonomy.OtherCommonNames.Any())
-                        {
-                            <li>
-                                <h3>Other Common Names</h3>
-                                <p>
-                                    @foreach (var otherCommonNames in @Model.Item.Taxonomy.OtherCommonNames)
-                                    {
-                                        <span>@otherCommonNames</span>
-                                    }
-                                </p>
-                            </li>
-                        }
+                        <li>
+                            <h3>Type Status</h3>
+                            <p>@Model.Item.TypeStatus</p>
+                        </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IdentifiedBy))
                     {
@@ -828,140 +730,85 @@
                             <p>@Model.Item.DateIdentified</p>
                         </li>
                     }
-                    @if (Model.Item.Taxonomy != null)
-                    {
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Kingdom))
-                        {
-                            <li>
-                                <h3>Kingdom</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Kingdom)">@Model.Item.Taxonomy.Kingdom</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Phylum))
-                        {
-                            <li>
-                                <h3>Phylum</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Phylum)">@Model.Item.Taxonomy.Phylum</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subphylum))
-                        {
-                            <li>
-                                <h3>Subphylum</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subphylum)">@Model.Item.Taxonomy.Subphylum</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Superclass))
-                        {
-                            <li>
-                                <h3>Superclass</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Superclass)">@Model.Item.Taxonomy.Superclass</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Class))
-                        {
-                            <li>
-                                <h3>Class</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Class)">@Model.Item.Taxonomy.Class</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subclass))
-                        {
-                            <li>
-                                <h3>Subclass</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subclass)">@Model.Item.Taxonomy.Subclass</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Superorder))
-                        {
-                            <li>
-                                <h3>Superorder</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Superorder)">@Model.Item.Taxonomy.Superorder</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Order))
-                        {
-                            <li>
-                                <h3>Order</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Order)">@Model.Item.Taxonomy.Order</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Suborder))
-                        {
-                            <li>
-                                <h3>Suborder</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Suborder)">@Model.Item.Taxonomy.Suborder</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Infraorder))
-                        {
-                            <li>
-                                <h3>Infraorder</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Infraorder)">@Model.Item.Taxonomy.Infraorder</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Superfamily))
-                        {
-                            <li>
-                                <h3>Superfamily</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Superfamily)">@Model.Item.Taxonomy.Superfamily</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Family))
-                        {
-                            <li>
-                                <h3>Family</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Family)">@Model.Item.Taxonomy.Family</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subfamily))
-                        {
-                            <li>
-                                <h3>Subfamily</h3>
-                                <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subfamily)">@Model.Item.Taxonomy.Subfamily</a></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Genus))
-                        {
-                            <li>
-                                <h3>Genus</h3>
-                                <p><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Genus)">@Model.Item.Taxonomy.Genus</a></em></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subgenus))
-                        {
-                            <li>
-                                <h3>Subgenus</h3>
-                                <p><em><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.Subgenus)">@Model.Item.Taxonomy.Subgenus</a></em></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Species))
-                        {
-                            <li>
-                                <h3>Species Name</h3>
-                                <p><em>@Model.Item.Taxonomy.Species</em></p>
-                            </li>
-                        }
-                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Subspecies))
-                        {
-                            <li>
-                                <h3>Subspecies</h3>
-                                <p><em>@Model.Item.Taxonomy.Subspecies</em></p>
-                            </li>
-                        }
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.AcquisitionInformation))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.Category))
                     {
                         <li>
-                            <h3>Acquisition Information</h3>
-                            <p>@Model.Item.AcquisitionInformation</p>
+                            <h3>Category</h3>
+                            <p><a href="/search?category=@HttpUtility.UrlEncode(Model.Item.Category)">@Model.Item.Category</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.Acknowledgement))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.Discipline))
                     {
                         <li>
-                            <h3>Acknowledgement</h3>
-                            <p>@Model.Item.Acknowledgement</p>
+                            <h3>Discipline</h3>
+                            <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Item.Discipline.ToLower())">@Model.Item.Discipline</a></p>
+                        </li>
+                        
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.Type))
+                    {
+                        <li>
+                            <h3>Type of item</h3>
+                            <p><a href="/search?itemtype=@HttpUtility.UrlEncode(@Model.Item.Type.ToLower())">@Model.Item.Type</a></p>
+                        </li>
+                    }
+                    @foreach (var dimension in @Model.Item.Dimensions.Where(x => !string.IsNullOrWhiteSpace(x.Dimensions)))
+                    {
+                        <li>
+                            <h3>
+                                @if (!string.IsNullOrWhiteSpace(dimension.Configuration))
+                                {
+                                    @dimension.Configuration
+                                }
+                                else
+                                {
+                                    @:Dimensions
+                                }
+                            </h3>
+                            <p>
+                                @dimension.Dimensions<br />
+                                @if (!string.IsNullOrWhiteSpace(dimension.Comments))
+                                {
+                                    @dimension.Comments<br />
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.ModelScale))
+                    {
+                        <li>
+                            <h3>Model Scale</h3>
+                            <p>@Model.Item.ModelScale</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.Shape))
+                    {
+                        <li>
+                            <h3>Shape</h3>
+                            <p>@Model.Item.Shape</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.References))
+                    {
+                        <li>
+                            <h3>References</h3>
+                            <p>@Model.Item.References</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.References) || Model.Item.Bibliographies.Any())
+                    {
+                        <li>
+                            <h3>References</h3>
+                            <p>
+                                @if (!string.IsNullOrWhiteSpace(Model.Item.References))
+                                {
+                                    @Model.Item.References<br />
+                                }
+                                @foreach (var bibliography in Model.Item.Bibliographies)
+                                {
+                                    @bibliography<br />
+                                }
+                            </p>
                         </li>
                     }
                     @if (Model.Item.Keywords.Any())

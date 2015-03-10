@@ -871,11 +871,6 @@ button.icon {
     font-size: 2em;
     font-weight: 400;
     color: #fff; }
-    #title h1 .reg-number {
-      color: #b8b8b8;
-      font-weight: 500; }
-      #title h1 .reg-number a {
-        color: #b8b8b8; }
   #title .thumbnails {
     float: left;
     direction: ltr;

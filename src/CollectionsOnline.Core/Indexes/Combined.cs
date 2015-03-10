@@ -21,7 +21,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = article.Id,
                     DisplayTitle = article.DisplayTitle,
-                    Content = new object[] { article.ContentText, article.ContentSummary },
+                    Content = new object[] { article.DisplayTitle, article.ContentText, article.ContentSummary, article.Keywords },
                     Summary = article.Summary,
                     ThumbnailUri = article.ThumbnailUri,
 
@@ -34,7 +34,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Facet fields
                     Type = "Article",
-                    Category = "History & Technology",
+                    Category = (string)null,
                     HasImages = (article.Media.Any()) ? "Yes" : (string)null,
                     OnDisplay = (string)null,
                     CollectionArea = new object[] { },
@@ -75,7 +75,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = item.Id,
                     DisplayTitle = item.DisplayTitle,
-                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber },
+                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber, item.ObjectSummary, item.PhysicalDescription },
                     Summary = item.Summary,
                     ThumbnailUri = item.ThumbnailUri,
 
@@ -113,10 +113,7 @@ namespace CollectionsOnline.Core.Indexes
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country), 
-                        item.IndigenousCulturesLocality, 
-                        item.IndigenousCulturesRegion, 
-                        item.IndigenousCulturesState, 
-                        item.IndigenousCulturesCountry },
+                        item.IndigenousCulturesLocalities },
                     Collection = new object[] { item.CollectionNames, item.Discipline },
                     Date = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date), 
                         item.IndigenousCulturesDate, 
@@ -125,7 +122,7 @@ namespace CollectionsOnline.Core.Indexes
                         item.PhilatelyDateIssued,
                         item.TradeLiteraturePublicationDate },
                     CulturalGroup = item.IndigenousCulturesCulturalGroups,
-                    Classification = new object[] { item.PrimaryClassification, item.SecondaryClassification, item.TertiaryClassification },
+                    Classification = item.Classifications,
                     Name = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name), 
                         item.IndigenousCulturesPhotographer, 
                         item.IndigenousCulturesAuthor, 
@@ -246,7 +243,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = specimen.Id,
                     DisplayTitle = specimen.DisplayTitle,
-                    Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country },
+                    Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country, (specimen.Taxonomy != null) ? new object[] { specimen.Taxonomy.CommonName, specimen.Taxonomy.Species, specimen.Taxonomy.Genus, specimen.Taxonomy.Family, specimen.Taxonomy.Order, specimen.Taxonomy.Class, specimen.Taxonomy.Phylum } : null },
                     Summary = specimen.Summary,
                     ThumbnailUri = specimen.ThumbnailUri,
 
@@ -288,7 +285,7 @@ namespace CollectionsOnline.Core.Indexes
                     Collection = new object[] { specimen.CollectionNames, specimen.Discipline },
                     Date = new object[] { specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date) },
                     CulturalGroup = new object[] { },
-                    Classification = new object[] { specimen.PrimaryClassification, specimen.SecondaryClassification, specimen.TertiaryClassification },
+                    Classification = specimen.Classifications,
                     Name = new object[] { specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name) },
                     Technique = (string)null,
                     Denomination = new object[] { },

@@ -36,11 +36,7 @@ namespace CollectionsOnline.Core.Models
 
         public string Type { get; set; }
 
-        public string PrimaryClassification { get; set; }
-
-        public string SecondaryClassification { get; set; }
-
-        public string TertiaryClassification { get; set; }
+        public IList<string> Classifications { get; set; }                
 
         public string ObjectName { get; set; }
 
@@ -248,6 +244,7 @@ namespace CollectionsOnline.Core.Models
         {
             CollectionNames = new List<string>();
             CollectionAreas = new List<string>();
+            Classifications = new List<string>();
             Associations = new List<Association>();
             RelatedItemIds = new List<string>();
             RelatedSpecimenIds = new List<string>();

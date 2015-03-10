@@ -164,11 +164,11 @@ namespace CollectionsOnline.Import.Factories
 
             // Classifications
             if (map.GetEncodedString("ClaPrimaryClassification") != null && !map.GetEncodedString("ClaPrimaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                specimen.PrimaryClassification = map.GetEncodedString("ClaPrimaryClassification").ToSentenceCase();
+                specimen.Classifications.Add(map.GetEncodedString("ClaPrimaryClassification").ToSentenceCase());
             if (map.GetEncodedString("ClaSecondaryClassification") != null && !map.GetEncodedString("ClaSecondaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                specimen.SecondaryClassification = map.GetEncodedString("ClaSecondaryClassification").ToSentenceCase();
+                specimen.Classifications.Add(map.GetEncodedString("ClaSecondaryClassification").ToSentenceCase());
             if (map.GetEncodedString("ClaTertiaryClassification") != null && !map.GetEncodedString("ClaTertiaryClassification").Contains("to be classified", StringComparison.OrdinalIgnoreCase))
-                specimen.TertiaryClassification = map.GetEncodedString("ClaTertiaryClassification").ToSentenceCase();
+                specimen.Classifications.Add(map.GetEncodedString("ClaTertiaryClassification").ToSentenceCase());
 
             specimen.ObjectName = map.GetEncodedString("ClaObjectName");
             specimen.ObjectSummary = map.GetEncodedString("ClaObjectSummary");

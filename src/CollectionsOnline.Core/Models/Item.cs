@@ -36,11 +36,7 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> CollectionAreas { get; set; }
 
-        public string PrimaryClassification { get; set; }
-
-        public string SecondaryClassification { get; set; }
-
-        public string TertiaryClassification { get; set; }
+        public IList<string> Classifications { get; set; }
 
         public string ObjectName { get; set; }
 
@@ -210,13 +206,7 @@ namespace CollectionsOnline.Core.Models
 
         #region Indigenous Cultures
 
-        public string IndigenousCulturesLocality { get; set; }
-
-        public string IndigenousCulturesRegion { get; set; }
-
-        public string IndigenousCulturesState { get; set; }
-
-        public string IndigenousCulturesCountry { get; set; }
+        public IList<string> IndigenousCulturesLocalities { get; set; }
 
         public IList<string> IndigenousCulturesCulturalGroups { get; set; }
 
@@ -295,6 +285,7 @@ namespace CollectionsOnline.Core.Models
             Comments = new List<Comment>();
             CollectionNames = new List<string>();
             CollectionAreas = new List<string>();
+            Classifications = new List<string>();
             Associations = new List<Association>();
             Keywords = new List<string>();
             Dimensions = new List<Dimension>();
@@ -308,6 +299,7 @@ namespace CollectionsOnline.Core.Models
             Media = new List<Media>();
             AudioVisualContentSummaries = new List<string>();
             TradeLiteraturePublicationTypes = new List<string>();
+            IndigenousCulturesLocalities = new List<string>();
             IndigenousCulturesCulturalGroups = new List<string>();
         }
     }
