@@ -151,6 +151,15 @@ namespace CollectionsOnline.WebSite.Factories
                 searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;
             }
 
+            // Build sort links
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("sort", "quality");
+            searchViewModel.QualitySortUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("sort", "relevance");
+            searchViewModel.RelevanceSortUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+
             // Build suggestions
             foreach (var suggestion in suggestions)
             {

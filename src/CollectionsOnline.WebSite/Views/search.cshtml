@@ -9,6 +9,9 @@
             <span class="icon-filter" aria-hidden="true"></span>
             Filter by
         </a>
+        <h4>Sort by</h4>
+        <a href="@Model.QualitySortUrl" class="button">Quality</a>
+        <a href="@Model.RelevanceSortUrl" class="button">Relevance</a>
         @foreach (var facet in Model.Facets)
         {
             <h4>@facet.Name</h4>

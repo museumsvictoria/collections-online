@@ -335,24 +335,14 @@ namespace CollectionsOnline.Core.Indexes
             Store(x => x.Summary, FieldStorage.Yes);
             Store(x => x.ThumbnailUri, FieldStorage.Yes);
             Store(x => x.Type, FieldStorage.Yes);
-            
+
             Sort(x => x.Quality, SortOptions.Int);
 
             Analyzers.Add(x => x.Content, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
 
             Suggestion(x => x.Content);
 
-            TermVector(x => x.Type, FieldTermVector.Yes);
-            TermVector(x => x.Category, FieldTermVector.Yes);
-            TermVector(x => x.HasImages, FieldTermVector.Yes);
-            TermVector(x => x.OnDisplay, FieldTermVector.Yes);
-            TermVector(x => x.CollectionArea, FieldTermVector.Yes);
-            TermVector(x => x.ItemType, FieldTermVector.Yes);
-            TermVector(x => x.SpeciesType, FieldTermVector.Yes);
-            TermVector(x => x.SpeciesEndemicity, FieldTermVector.Yes);
-            TermVector(x => x.SpecimenScientificGroup, FieldTermVector.Yes);
-            TermVector(x => x.ArticleType, FieldTermVector.Yes);
-            TermVector(x => x.OnDisplayLocation, FieldTermVector.Yes);
+            TermVector(x => x.Content, FieldTermVector.Yes);
         }
     }
 }

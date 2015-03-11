@@ -38,6 +38,10 @@ namespace CollectionsOnline.WebSite.Models
 
         public string PrevPageUrl { get; set; }
 
+        public string QualitySortUrl { get; set; }
+
+        public string RelevanceSortUrl { get; set; }
+
         public IList<FacetViewModel> Facets { get; set; }
 
         public int TotalFacetValues

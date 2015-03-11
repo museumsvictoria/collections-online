@@ -48,16 +48,24 @@ namespace CollectionsOnline.WebSite.Queries
                 {
                     query = query
                         .Search("Content", searchInputModel.Query)
-                        .OrderByScoreDescending()
-                        .OrderByDescending(x => x.Quality);
+                        .OrderByScoreDescending();
 
                     facetQuery = facetQuery
                         .Search("Content", searchInputModel.Query);
                 }
-                else
-                {
-                    query = query
-                        .OrderByDescending(x => x.Quality);
+
+                // Add sorting
+                switch (searchInputModel.Sort)
+                {                    
+                    default:
+                    case "quality":
+                        query = query
+                            .OrderByDescending(x => x.Quality);
+                        break;
+                    case "relevance":
+                        query = query
+                            .OrderByScoreDescending();
+                        break;
                 }
 
                 // facet queries

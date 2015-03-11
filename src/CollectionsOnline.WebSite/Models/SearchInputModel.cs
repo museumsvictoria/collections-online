@@ -8,7 +8,9 @@ namespace CollectionsOnline.WebSite.Models
 
         public int Limit { get; set; }
 
-        public string Query { get; set; }
+        public string Sort { get; set; }
+
+        public string Query { get; set; }        
 
         public string CurrentUrl { get; set; }
 

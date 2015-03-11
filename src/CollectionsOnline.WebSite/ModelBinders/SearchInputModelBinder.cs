@@ -25,6 +25,11 @@ namespace CollectionsOnline.WebSite.ModelBinders
             if (searchInputModel.Limit <= 0 || searchInputModel.Limit > Constants.PagingPageSizeMax)
                 searchInputModel.Limit = Constants.PagingPageSizeDefault;
 
+            if (string.Equals(query.Sort, "quality", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.Sort = "quality";
+            else if (string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.Sort = "relevance";
+
             searchInputModel.Query = query.Query;
 
             // Facets
