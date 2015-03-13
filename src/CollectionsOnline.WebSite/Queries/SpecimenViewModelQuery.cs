@@ -23,12 +23,12 @@ namespace CollectionsOnline.WebSite.Queries
             if (result.Specimen.Taxonomy != null)
             {
                 var query = _documentSession.Advanced
-                    .DocumentQuery<CombinedResult, Combined>()
+                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
                     .WhereEquals("Taxon", result.Specimen.Taxonomy.TaxonName)
                     .Take(1);
 
                 // Dont allow a link to search page if the current specimen is the only result
-                if (query.SelectFields<CombinedResult>("Id").Select(x => x.Id).Except(new[] { specimenId }).Any())
+                if (query.SelectFields<CombinedIndexResult>("Id").Select(x => x.Id).Except(new[] { specimenId }).Any())
                 {
                     result.RelatedSpeciesSpecimenItemCount = query.QueryResult.TotalResults;
                 }

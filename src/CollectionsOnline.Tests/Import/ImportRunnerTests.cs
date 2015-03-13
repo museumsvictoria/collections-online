@@ -19,7 +19,7 @@ namespace CollectionsOnline.Tests.Import
         {
             IndexesToExecute = new List<Type>
             {
-                typeof(Combined)
+                typeof(CombinedIndex)
             };
         }
 

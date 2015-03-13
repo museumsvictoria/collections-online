@@ -17,7 +17,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
         {
             using (var documentSession = documentStore.OpenSession())
             {
-                var sampleItem = documentSession.Advanced.DocumentQuery<Item, Combined>()
+                var sampleItem = documentSession.Advanced.DocumentQuery<Item, CombinedIndex>()
                     .WhereEquals("Type", "Item")
                     .FirstOrDefault();
 

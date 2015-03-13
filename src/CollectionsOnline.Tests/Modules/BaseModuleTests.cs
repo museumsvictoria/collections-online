@@ -29,7 +29,7 @@ namespace CollectionsOnline.Tests.Modules
 
             IndexesToExecute = new List<Type>
                 {
-                    typeof(Combined)
+                    typeof(CombinedIndex)
                 };
 
             Browser = new Browser(with =>

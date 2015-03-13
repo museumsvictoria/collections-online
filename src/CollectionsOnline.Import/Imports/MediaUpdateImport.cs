@@ -160,8 +160,8 @@ namespace CollectionsOnline.Import.Imports
                                     return;
 
                                 var associatedDocumentBatch = associatedDocumentSession
-                                    .Query<object, Combined>()
-                                    .Where(x => ((CombinedResult)x).MediaIrns.Any(y => y == mediaIrn))
+                                    .Query<object, CombinedIndex>()
+                                    .Where(x => ((CombinedIndexResult)x).MediaIrns.Any(y => y == mediaIrn))
                                     .Skip(count)
                                     .Take(Constants.DataBatchSize)
                                     .ToList();

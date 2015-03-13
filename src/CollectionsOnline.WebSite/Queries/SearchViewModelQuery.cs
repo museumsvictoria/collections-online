@@ -34,14 +34,14 @@ namespace CollectionsOnline.WebSite.Queries
                 // perform query
                 queryStopwatch.Start();
                 var query = _documentSession.Advanced
-                    .DocumentQuery<CombinedResult, Combined>()
+                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
                     .Skip(searchInputModel.Offset)
                     .Take(searchInputModel.Limit);
 
                 // get facets
                 facetStopwatch.Start();
                 var facetQuery = _documentSession.Advanced
-                    .DocumentQuery<CombinedResult, Combined>();
+                    .DocumentQuery<CombinedIndexResult, CombinedIndex>();
 
                 // search query
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
@@ -108,7 +108,7 @@ namespace CollectionsOnline.WebSite.Queries
                     results.Count <= Constants.SuggestionsMinResultsSize)
                 {
                     suggestions = _documentSession
-                        .Query<CombinedResult, Combined>()
+                        .Query<CombinedIndexResult, CombinedIndex>()
                         .Suggest(new SuggestionQuery()
                         {
                             Field = "Content",
@@ -118,7 +118,7 @@ namespace CollectionsOnline.WebSite.Queries
                             Distance = StringDistanceTypes.JaroWinkler,
                             Popularity = true,
                         }).Suggestions.ToList();
-                }                
+                }
 
                 return _searchViewModelFactory.MakeViewModel(
                     results,

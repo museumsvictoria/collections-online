@@ -28,7 +28,7 @@ namespace CollectionsOnline.Core.Infrastructure
             documentStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
 
             // Create indexes and store facets
-            IndexCreation.CreateIndexes(typeof(Combined).Assembly, documentStore);
+            IndexCreation.CreateIndexes(typeof(CombinedIndex).Assembly, documentStore);
 
             using (var documentSession = documentStore.OpenSession())
             {

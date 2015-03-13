@@ -17,7 +17,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
         {
             using (var documentSession = documentStore.OpenSession())
             {
-                var sampleSpecies = documentSession.Advanced.DocumentQuery<Species, Combined>()
+                var sampleSpecies = documentSession.Advanced.DocumentQuery<Species, CombinedIndex>()
                     .WhereEquals("Type", "Species")
                     .FirstOrDefault();
 

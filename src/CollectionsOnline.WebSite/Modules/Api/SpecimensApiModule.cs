@@ -17,7 +17,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
             Get["specimens-api-index", "/"] = parameters =>
                 {
                     var specimens = documentSession.Advanced
-                        .DocumentQuery<Specimen, Combined>()
+                        .DocumentQuery<Specimen, CombinedIndex>()
                         .WhereEquals("Type", "Specimen")
                         .Statistics(out Statistics)
                         .Skip(Offset)

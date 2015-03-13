@@ -163,7 +163,7 @@ namespace CollectionsOnline.Import.Imports
                     {
                         // Update taxonomy on items, species and specimens
                         _documentStore.DatabaseCommands.UpdateByIndex(
-                            "Combined",
+                            "CombinedIndex",
                             new IndexQuery { Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn")) },
                             new[]
                             {

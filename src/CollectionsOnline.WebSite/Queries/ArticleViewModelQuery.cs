@@ -21,7 +21,7 @@ namespace CollectionsOnline.WebSite.Queries
             var result = _documentSession.Load<ArticleViewTransformer, ArticleViewTransformerResult>(articleId);
 
             var query = _documentSession.Advanced
-                .DocumentQuery<CombinedResult, Combined>()
+                .DocumentQuery<CombinedIndexResult, CombinedIndex>()
                 .WhereEquals("Article", result.Article.Title)
                 .Take(1);
 

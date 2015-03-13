@@ -19,7 +19,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
         {
             using (var documentSession = documentStore.OpenSession())
             {
-                var sampleArticle = documentSession.Advanced.DocumentQuery<Article, Combined>()
+                var sampleArticle = documentSession.Advanced.DocumentQuery<Article, CombinedIndex>()
                     .WhereEquals("Type", "Article")
                     .FirstOrDefault();
 

@@ -50,10 +50,10 @@ namespace CollectionsOnline.Import.Imports
                 foreach (var item in items.Where(x => x != null))
                 {
                     item.RelatedArticleIds.AddRangeUnique(documentSession
-                        .Query<object, Combined>()
-                        .Where(x => ((CombinedResult)x).DisplayTitle.In(item.CollectionNames) && ((CombinedResult)x).Type == "article")
+                        .Query<object, CombinedIndex>()
+                        .Where(x => ((CombinedIndexResult)x).DisplayTitle.In(item.CollectionNames) && ((CombinedIndexResult)x).Type == "article")
                         .ToList()
-                        .Select(x => ((CombinedResult)x).Id));
+                        .Select(x => ((CombinedIndexResult)x).Id));
                 }
 
                 currentOffset += items.Count;

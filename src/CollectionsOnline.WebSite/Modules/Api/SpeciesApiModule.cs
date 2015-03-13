@@ -17,7 +17,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
             Get["species-api-index", "/"] = parameters =>
                 {
                     var species = documentSession.Advanced
-                        .DocumentQuery<Species, Combined>()
+                        .DocumentQuery<Species, CombinedIndex>()
                         .WhereEquals("Type", "Species")
                         .Statistics(out Statistics)
                         .Skip(Offset)

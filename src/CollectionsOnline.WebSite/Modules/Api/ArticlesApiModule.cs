@@ -17,7 +17,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
             Get["articles-api-index", "/"] = parameters =>
                 {
                     var articles = documentSession.Advanced
-                        .DocumentQuery<Article, Combined>()
+                        .DocumentQuery<Article, CombinedIndex>()
                         .WhereEquals("Type", "Article")
                         .Statistics(out Statistics)
                         .Skip(Offset)

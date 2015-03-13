@@ -17,7 +17,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
         {
             using (var documentSession = documentStore.OpenSession())
             {
-                var sampleSpecimen = documentSession.Advanced.DocumentQuery<Specimen, Combined>()
+                var sampleSpecimen = documentSession.Advanced.DocumentQuery<Specimen, CombinedIndex>()
                     .WhereEquals("Type", "Specimen")
                     .FirstOrDefault();
 

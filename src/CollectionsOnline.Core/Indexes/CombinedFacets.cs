@@ -11,47 +11,47 @@ namespace CollectionsOnline.Core.Indexes
 
             Facets = new List<Facet>
             {
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.HasImages
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.OnDisplay
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.Type
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.Category
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.CollectionArea
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.ItemType
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.SpeciesType
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.SpeciesEndemicity
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.SpecimenScientificGroup
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.ArticleType
                 },
-                new Facet<CombinedResult>
+                new Facet<CombinedIndexResult>
                 {
                     Name = x => x.OnDisplayLocation
                 }

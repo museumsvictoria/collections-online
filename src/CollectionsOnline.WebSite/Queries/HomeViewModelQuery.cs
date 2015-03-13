@@ -20,7 +20,7 @@ namespace CollectionsOnline.WebSite.Queries
             var homeViewModel = new HomeViewModel();
 
             var facetResult = _documentSession.Advanced
-                    .DocumentQuery<CombinedResult, Combined>()
+                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
                     .ToFacets("facets/combinedFacets");
 
             var typeFacet = facetResult.Results["Type"];
