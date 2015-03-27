@@ -4,16 +4,16 @@
     Layout = "layout.cshtml";
 }
 @Html.Partial("searchbar")
-@if (Model.SpecimenHeroImage != null)
+@if (Model.SpecimenImages.FirstOrDefault() != null)
 {
     <figure id="media">
-        <img src="@Model.SpecimenHeroImage.Large.Uri" alt="@Model.SpecimenHeroImage.AlternativeText" />
+        <img src="@Model.SpecimenImages.First().Large.Uri" alt="@Model.SpecimenImages.First().AlternativeText" />
         <figcaption>
             <div class="wrapper">
                 <div class="caption">
-                    @if (!string.IsNullOrWhiteSpace(Model.SpecimenHeroImage.Caption))
+                    @if (!string.IsNullOrWhiteSpace(Model.SpecimenImages.First().Caption))
                     {
-                        <strong>@Html.Raw(Model.SpecimenHeroImage.Caption)</strong>
+                        <strong>@Html.Raw(Model.SpecimenImages.First().Caption)</strong>
                     }
                 </div>
                 <div class="media-tools">
@@ -43,7 +43,7 @@
                 @foreach (var specimenImage in Model.SpecimenImages)
                 {
                     <div class="thumbnail">
-                        @if (specimenImage.Thumbnail.Uri == Model.SpecimenHeroImage.Thumbnail.Uri)
+                        @if (specimenImage.Thumbnail.Uri == Model.SpecimenImages.First().Thumbnail.Uri)
                         {
                             <img class="active" src="@specimenImage.Thumbnail.Uri" alt="@specimenImage.AlternativeText" />
                         }
@@ -689,4 +689,11 @@
             }
         </div>
     </div>
+}
+
+@if (Model.JsonSpecimenImages != null)
+{
+    <script>
+        var imagesModel = @Html.Raw(Model.JsonSpecimenImages);
+    </script>
 }

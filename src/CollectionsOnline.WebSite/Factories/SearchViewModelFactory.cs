@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using CollectionsOnline.Core.Extensions;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.WebSite.Models;
 using Humanizer;
 using Raven.Abstractions.Data;

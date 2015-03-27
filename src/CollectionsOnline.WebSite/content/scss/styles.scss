@@ -143,6 +143,7 @@ button.icon {
             @include gridle (3);
             @include gridle_no_gutter();
             padding:0 0 7px 7px;
+            cursor:pointer;
 
             img {
                 width:100%;
@@ -163,6 +164,7 @@ button.icon {
     
     img {
         max-width:100%;
+        max-height:700px;
         display:block;
         margin:0 auto;
     }

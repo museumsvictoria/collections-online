@@ -25,27 +25,27 @@ namespace CollectionsOnline.Import.Factories
         {
             _imuSessionProvider = imuSessionProvider;            
 
-
             // Build a list the various image conversions used in the application
             _imageMediaJobs = new List<ImageMediaJob>
             {
-                new ImageMediaJob
-                {
-                    FileDerivativeType = FileDerivativeType.Original,
-                    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
-                    Quality = 90
-                },
+                //new ImageMediaJob
+                //{
+                //    FileDerivativeType = FileDerivativeType.Original,
+                //    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
+                //    Quality = 90
+                //},
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    ResizeLayer = new ResizeLayer(new Size(350, 350)),
+                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Pad),
                     BackgroundColor = Color.White,
                     Quality = 60
                 },
                 //new ImageMediaJob
                 //{
                 //    FileDerivativeType = FileDerivativeType.Small,
-                //    ResizeLayer = new ResizeLayer(new Size(500, 500), ResizeMode.Max),
+                //    ResizeLayer = new ResizeLayer(new Size(350, 350)),
+                //    BackgroundColor = Color.White,
                 //    Quality = 70
                 //},
                 //new ImageMediaJob
@@ -57,7 +57,7 @@ namespace CollectionsOnline.Import.Factories
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Large,
-                    ResizeLayer = new ResizeLayer(new Size(1040, 1040), ResizeMode.Max),
+                    ResizeLayer = new ResizeLayer(new Size(1040, 1040), ResizeMode.Max, upscale:false),
                     Quality = 80
                 }
             };

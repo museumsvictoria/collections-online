@@ -238,6 +238,8 @@ namespace CollectionsOnline.Core.Models
 
         public string PetrologyRockDescription { get; set; }
 
+        public string PetrologyMineralsPresent { get; set; }
+
         #endregion
 
         private void InitializeCollections()

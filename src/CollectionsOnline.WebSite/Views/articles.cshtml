@@ -4,16 +4,16 @@
     Layout = "layout.cshtml";
 }
 @Html.Partial("searchbar")
-@if (Model.ArticleHeroImage != null)
+@if (Model.ArticleImages.FirstOrDefault() != null)
 {
     <figure id="media">
-        <img src="@Model.ArticleHeroImage.Large.Uri" alt="@Model.ArticleHeroImage.AlternativeText" />
+        <img src="@Model.ArticleImages.First().Large.Uri" alt="@Model.ArticleImages.First().AlternativeText" />
         <figcaption>
             <div class="wrapper">
                 <div class="caption">
-                    @if (!string.IsNullOrWhiteSpace(Model.ArticleHeroImage.Caption))
+                    @if (!string.IsNullOrWhiteSpace(Model.ArticleImages.First().Caption))
                     {
-                        <strong>@Model.ArticleHeroImage.Caption</strong>
+                        <strong>@Model.ArticleImages.First().Caption</strong>
                     }
                 </div>
                 <div class="media-tools">
@@ -46,7 +46,7 @@
                 @foreach (var articleImage in Model.ArticleImages)
                 {
                     <div class="thumbnail">
-                        @if (articleImage.Thumbnail.Uri == Model.ArticleHeroImage.Thumbnail.Uri)
+                        @if (articleImage.Thumbnail.Uri == Model.ArticleImages.First().Thumbnail.Uri)
                         {
                             <img class="active" src="@articleImage.Thumbnail.Uri" alt="@articleImage.AlternativeText" />
                         }
@@ -85,6 +85,18 @@
                                 @for (int i = 0; i < Model.Article.Keywords.Count; i++)
                                 {
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Article.Keywords[i])">@Model.Article.Keywords[i]</a>@(i != Model.Article.Keywords.Count - 1 ? ", " : "")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Article.Localities.Any())
+                    {
+                        <li>
+                            <h3>Localities</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Article.Localities.Count; i++)
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Article.Localities[i])">@Model.Article.Localities[i]</a>@(i != Model.Article.Localities.Count - 1 ? ", " : "")
                                 }
                             </p>
                         </li>
@@ -283,4 +295,11 @@
             }
         </div>
     </div>
+}
+
+@if (Model.JsonArticleImages != null)
+{
+    <script>
+        var imagesModel = @Html.Raw(Model.JsonArticleImages);
+    </script>
 }

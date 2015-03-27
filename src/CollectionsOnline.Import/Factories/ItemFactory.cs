@@ -138,8 +138,9 @@ namespace CollectionsOnline.Import.Factories
                         "iclocality=[ProStateProvince_tab,ProRegion_tab,ProSpecificLocality_tab]",
                         "ProCountry",
                         "ProCulturalGroups_tab",
-                        "DesObjectMedium_tab",
+                        "DesObjectMedium_tab",                        
                         "DesObjectDescription",
+                        "DesLocalName",
                         "DesSubjects_tab",
                         "icphotographer=SouPhotographerRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
                         "icauthor=SouAuthorRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
@@ -303,12 +304,14 @@ namespace CollectionsOnline.Import.Factories
             item.ModelNames = map.GetEncodedStrings("Pro2ModelNameNumber_tab");
 
             // Brand names
-            item.BrandNames = map.GetMaps("brand")
-                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("Pro2BrandName_tab")))
-                .Select(
-                    x => !string.IsNullOrWhiteSpace(x.GetEncodedString("Pro2ProductType_tab")) 
-                        ? string.Format("{0} ({1})", x.GetEncodedString("Pro2BrandName_tab"), x.GetEncodedString("Pro2ProductType_tab"))
-                        : x.GetEncodedString("Pro2BrandName_tab")).ToList();
+            item.Brands.AddRange(
+                map.GetMaps("brand")
+                    .Select(x => new Brand
+                    {
+                        Name = x.GetEncodedString("Pro2BrandName_tab"),
+                        ProductType = x.GetEncodedString("Pro2ProductType_tab")
+                    })
+                    .Where(x => x != null));
 
             // Archeology fields
             item.ArcheologyContextNumber = map.GetEncodedString("ArcContextNumber");
@@ -419,6 +422,7 @@ namespace CollectionsOnline.Import.Factories
             item.IndigenousCulturesCulturalGroups = map.GetEncodedStrings("ProCulturalGroups_tab");
             item.IndigenousCulturesMedium = map.GetEncodedStrings("DesObjectMedium_tab").Concatenate(", ");
             item.IndigenousCulturesDescription = map.GetEncodedString("DesObjectDescription");
+            item.IndigenousCulturesLocalName = map.GetEncodedString("DesLocalName");
 
             item.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab"));
 
@@ -634,6 +638,7 @@ namespace CollectionsOnline.Import.Factories
                 item.DisplayTitle = new[]
                     {
                         item.IndigenousCulturesMedium,
+                        item.IndigenousCulturesLocalName,
                         item.IndigenousCulturesCulturalGroups.Concatenate(", "),
                         item.IndigenousCulturesLocalities.Concatenate(", "),
                         item.IndigenousCulturesDate

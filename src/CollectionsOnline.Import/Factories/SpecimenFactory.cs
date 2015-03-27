@@ -118,6 +118,7 @@ namespace CollectionsOnline.Import.Factories
                         "RocGroup",
                         "RocRockName",
                         "RocRockDescription",
+                        "RocMainMineralsPresent",
                         "relatedarticlespecies=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
                         "relatedpartyarticles=AssAssociationNameRef_tab.(relatedarticles=<enarratives:ParPartiesRef_tab>.(irn,DetPurpose_tab))",
                         "relatedsitearticles=ArcSiteNameRef.(relatedarticles=<enarratives:SitSitesRef_tab>.(irn,DetPurpose_tab))",
@@ -375,11 +376,11 @@ namespace CollectionsOnline.Import.Factories
                 {
                     var decimalLatitude = (object[])latlongMap["LatLatitudeDecimal_nesttab"];
                     if (decimalLatitude != null)
-                        specimen.Latitude = decimalLatitude.Where(x => x != null).FirstOrDefault() as string;
+                        specimen.Latitude = decimalLatitude.Where(x => x != null).FirstOrDefault().ToString();
 
                     var decimalLongitude = ((object[])latlongMap["LatLongitudeDecimal_nesttab"]);
                     if (decimalLongitude != null)
-                        specimen.Longitude = decimalLongitude.Where(x => x != null).FirstOrDefault() as string;
+                        specimen.Longitude = decimalLongitude.Where(x => x != null).FirstOrDefault().ToString();
 
                     specimen.GeodeticDatum = (string.IsNullOrWhiteSpace(latlongMap.GetEncodedString("LatDatum_tab"))) ? "WGS84" : latlongMap.GetEncodedString("LatDatum_tab");
                     specimen.SiteRadius = latlongMap.GetEncodedString("LatRadiusNumeric_tab");
@@ -441,6 +442,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.PetrologyRockGroup = map.GetEncodedString("RocGroup");
             specimen.PetrologyRockName = map.GetEncodedString("RocRockName");
             specimen.PetrologyRockDescription = map.GetEncodedString("RocRockDescription");
+            specimen.PetrologyMineralsPresent = map.GetEncodedString("RocMainMineralsPresent");
 
             // Media
             specimen.Media = _mediaFactory.Make(map.GetMaps("media"));

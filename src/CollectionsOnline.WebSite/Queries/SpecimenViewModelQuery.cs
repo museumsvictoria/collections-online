@@ -2,6 +2,7 @@
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Transformers;
+using Newtonsoft.Json;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -34,9 +35,9 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Set Media
-            result.SpecimenHeroImage = result.Specimen.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            // Set Media            
             result.SpecimenImages = result.Specimen.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
+            result.JsonSpecimenImages = JsonConvert.SerializeObject(result.SpecimenImages);
 
             return result;
         }

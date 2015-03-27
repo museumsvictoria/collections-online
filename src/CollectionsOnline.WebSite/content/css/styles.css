@@ -887,7 +887,8 @@ button.icon {
       width: 25%;
       padding-left: 0;
       padding-right: 0;
-      padding: 0 0 7px 7px; }
+      padding: 0 0 7px 7px;
+      cursor: pointer; }
       #title .thumbnails .thumbnail img {
         width: 100%;
         display: block; }
@@ -899,6 +900,7 @@ button.icon {
   background-color: #b8b8b8; }
   #media img {
     max-width: 100%;
+    max-height: 700px;
     display: block;
     margin: 0 auto; }
   #media figcaption {

@@ -64,7 +64,7 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> ModelNames { get; set; }
 
-        public IList<string> BrandNames { get; set; }
+        public IList<Brand> Brands { get; set; }
 
         public IList<string> RelatedItemIds { get; set; }
 
@@ -214,6 +214,8 @@ namespace CollectionsOnline.Core.Models
 
         public string IndigenousCulturesDescription { get; set; }
 
+        public string IndigenousCulturesLocalName { get; set; }
+
         public string IndigenousCulturesPhotographer { get; set; }
 
         public string IndigenousCulturesAuthor { get; set; }
@@ -291,7 +293,7 @@ namespace CollectionsOnline.Core.Models
             Dimensions = new List<Dimension>();
             Bibliographies = new List<string>();
             ModelNames = new List<string>();
-            BrandNames = new List<string>();
+            Brands = new List<Brand>();
             RelatedItemIds = new List<string>();
             RelatedSpecimenIds = new List<string>();
             RelatedArticleIds = new List<string>();

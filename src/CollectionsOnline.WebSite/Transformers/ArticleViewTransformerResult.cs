@@ -20,9 +20,9 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedItemSpecimenCount { get; set; }
 
-        public ImageMedia ArticleHeroImage { get; set; }
-
         public IList<ImageMedia> ArticleImages { get; set; }
+
+        public string JsonArticleImages { get; set; }
 
         public ArticleViewTransformerResult()
         {

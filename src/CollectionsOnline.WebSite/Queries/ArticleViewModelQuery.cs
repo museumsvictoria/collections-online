@@ -2,6 +2,7 @@
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Transformers;
+using Newtonsoft.Json;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -28,8 +29,8 @@ namespace CollectionsOnline.WebSite.Queries
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
 
             // Set Media
-            result.ArticleHeroImage = result.Article.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
             result.ArticleImages = result.Article.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
+            result.JsonArticleImages = JsonConvert.SerializeObject(result.ArticleImages);
 
             return result;
         }

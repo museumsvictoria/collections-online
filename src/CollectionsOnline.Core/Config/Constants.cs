@@ -21,15 +21,15 @@ namespace CollectionsOnline.Core.Config
 
         public static int SummaryMaxChars = 200;
 
-        public static string ImuItemQueryString = "Collections Online - Humanities";
+        public static string ImuItemQueryString = "Collections Online: Humanities";
 
-        public static string ImuSpeciesQueryString = "Website - Species profile";
+        public static string ImuSpeciesQueryString = "Collections Online: Species Profile";
 
-        public static string ImuSpecimenQueryString = "Collections Online - Natural Sciences";
+        public static string ImuSpecimenQueryString = "Collections Online: Natural Sciences";
 
-        public static string ImuArticleQueryString = "Website - History & Technology Collections";
+        public static string ImuArticleQueryString = "Collections Online: Article";
 
-        public static string ImuMultimediaQueryString = "Website - Collections Online";
+        public static string ImuMultimediaQueryString = "Collections Online: MMR";
 
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(12);
 

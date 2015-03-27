@@ -17,7 +17,7 @@ namespace CollectionsOnline.Import.Factories
 
         private static int GetSubFolder(long id)
         {
-            return (int)(id % 10);
+            return (int)(id % 50);
         }
 
         private static string GetFileName(long irn, FileFormatType fileFormat, FileDerivativeType fileDerivative)

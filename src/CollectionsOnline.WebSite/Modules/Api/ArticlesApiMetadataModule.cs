@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Metadata.Modules;

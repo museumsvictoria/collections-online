@@ -115,7 +115,8 @@ namespace CollectionsOnline.Import.Factories
             // Article types (Remove problematic formatting that is used in facets)
             article.Types.AddRange(map.GetEncodedStrings("DesType_tab").Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => x.CleanForMultiFacets()));
 
-            article.Keywords.AddRange(map.GetEncodedStrings("DesGeographicLocation_tab"));
+            // Localities
+            article.Localities.AddRange(map.GetEncodedStrings("DesGeographicLocation_tab"));
 
             // Authors
             article.Authors = map.GetMaps("authors")

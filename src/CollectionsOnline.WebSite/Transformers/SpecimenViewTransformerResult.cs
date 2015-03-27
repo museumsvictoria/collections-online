@@ -18,9 +18,9 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedSpeciesSpecimenItemCount { get; set; }
 
-        public ImageMedia SpecimenHeroImage { get; set; }
-
         public IList<ImageMedia> SpecimenImages { get; set; }
+
+        public string JsonSpecimenImages { get; set; }
 
         public SpecimenViewTransformerResult()
         {

@@ -143,6 +143,9 @@
     <Content Include="content\img\img-home-species.jpg" />
     <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-mv-white.png" />
+    <Content Include="content\js\app\images.js" />
+    <Content Include="content\js\app\app.js" />
+    <Content Include="content\js\bundle.js" />
     <Content Include="gulpfile.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -237,9 +240,7 @@
   <ItemGroup>
     <Content Include="Views\articles.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="content\js\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="content\scss\gridle\_common-mixins.scss" />
     <Content Include="content\scss\gridle\_default-states.scss" />

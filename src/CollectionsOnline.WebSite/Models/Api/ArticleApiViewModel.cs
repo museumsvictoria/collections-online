@@ -12,6 +12,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> Keywords { get; set; }
 
+        public IList<string> Localities { get; set; }
+
         public string Content { get; set; }
 
         public string ContentSummary { get; set; }

@@ -47,7 +47,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Term fields
                     Keyword = article.Keywords,
-                    Locality = new object[] { },
+                    Locality = article.Localities,
                     Collection = new object[] { },
                     Date = new object[] { },
                     CulturalGroup = new object[] { },
@@ -108,7 +108,7 @@ namespace CollectionsOnline.Core.Indexes
                         item.NumismaticsSeries,
                         item.TradeLiteraturePrimarySubject,
                         item.TradeLiteraturePublicationTypes,
-                        item.TradeLiteraturePrimaryRole },
+                        item.Brands.Select(x => x.ProductType) },
                     Locality = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Locality)).Select(x => x.Locality), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
@@ -131,7 +131,7 @@ namespace CollectionsOnline.Core.Indexes
                         item.IndigenousCulturesCollector,
                         item.IndigenousCulturesLetterTo,
                         item.IndigenousCulturesLetterFrom,
-                        item.BrandNames,
+                        item.Brands.Select(x => x.Name),
                         item.ArcheologyManufactureName,
                         item.TradeLiteraturePrimaryName,
                         item.ArtworkPublisher },
@@ -174,7 +174,21 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = species.Id,
                     DisplayTitle = species.DisplayTitle,
-                    Content = new object[] { species.AnimalType, species.AnimalSubType, species.Taxonomy.CommonName, species.Taxonomy.Species, species.Taxonomy.Genus, species.Taxonomy.Family, species.Taxonomy.Order, species.Taxonomy.Class, species.Taxonomy.Phylum },
+                    Content =
+                        new object[]
+                        {
+                            (species.Taxonomy != null)
+                            ? new object[]
+                            {
+                                species.Taxonomy.Kingdom, species.Taxonomy.Phylum, species.Taxonomy.Subphylum,
+                                species.Taxonomy.Superclass, species.Taxonomy.Class, species.Taxonomy.Subclass,
+                                species.Taxonomy.Superorder, species.Taxonomy.Order, species.Taxonomy.Suborder,
+                                species.Taxonomy.Infraorder, species.Taxonomy.Superfamily, species.Taxonomy.Family,
+                                species.Taxonomy.Subfamily, species.Taxonomy.CommonName, species.Taxonomy.OtherCommonNames
+                            }
+                            : null,
+                            species.AnimalType, species.AnimalSubType
+                        },
                     Summary = species.Summary,
                     ThumbnailUri = species.ThumbnailUri,
 
@@ -243,7 +257,32 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = specimen.Id,
                     DisplayTitle = specimen.DisplayTitle,
-                    Content = new object[] { specimen.ScientificGroup, specimen.Type, specimen.RegistrationNumber, specimen.Discipline, specimen.Country, (specimen.Taxonomy != null) ? new object[] { specimen.Taxonomy.CommonName, specimen.Taxonomy.Species, specimen.Taxonomy.Genus, specimen.Taxonomy.Family, specimen.Taxonomy.Order, specimen.Taxonomy.Class, specimen.Taxonomy.Phylum } : null },
+                    Content = new object[]
+                    {
+                        specimen.RegistrationNumber, specimen.ScientificGroup, specimen.Category, specimen.CollectionNames, specimen.Discipline,
+                        specimen.Sex, specimen.StageOrAge, specimen.Storages.Select(x => string.Format("{0} {1} {2} {3}", x.FixativeTreatment, x.Form, x.Medium, x.Nature)),
+                        (specimen.Taxonomy != null)
+                            ? new object[]
+                            {
+                                specimen.Taxonomy.Kingdom, specimen.Taxonomy.Phylum, specimen.Taxonomy.Subphylum,
+                                specimen.Taxonomy.Superclass, specimen.Taxonomy.Class, specimen.Taxonomy.Subclass,
+                                specimen.Taxonomy.Superorder, specimen.Taxonomy.Order, specimen.Taxonomy.Suborder,
+                                specimen.Taxonomy.Infraorder, specimen.Taxonomy.Superfamily, specimen.Taxonomy.Family,
+                                specimen.Taxonomy.Subfamily, specimen.Taxonomy.CommonName, specimen.Taxonomy.OtherCommonNames
+                            }
+                            : null,
+                        specimen.ScientificName, specimen.TypeStatus, specimen.ExpeditionName, specimen.CollectionEventCode,
+                        specimen.SamplingMethod, specimen.CollectedBy, specimen.SiteCode, specimen.Ocean, specimen.Continent,
+                        specimen.Country, specimen.State, specimen.District, specimen.Town, specimen.NearestNamedPlace,
+                        specimen.PreciseLocation, specimen.GeologyEra, specimen.GeologyPeriod, specimen.GeologyEpoch,
+                        specimen.GeologyStage, specimen.GeologyGroup, specimen.GeologyFormation, specimen.GeologyMember,
+                        specimen.GeologyRockType, specimen.PetrologyRockClass,  specimen.PetrologyRockGroup, specimen.PetrologyRockName,
+                        specimen.PetrologyMineralsPresent, specimen.MineralogySpecies, specimen.MineralogyVariety, specimen.MineralogyGroup,
+                        specimen.MineralogyClass, specimen.MineralogyAssociatedMatrix, specimen.MineralogyTypeOfType, specimen.MeteoritesName,
+                        specimen.MeteoritesClass, specimen.MeteoritesGroup, specimen.MeteoritesType, specimen.MeteoritesMinerals, 
+                        specimen.TektitesName, specimen.TektitesClassification, specimen.TektitesShape, specimen.TektitesLocalStrewnfield,
+                        specimen.TektitesGlobalStrewnfield                        
+                    },
                     Summary = specimen.Summary,
                     ThumbnailUri = specimen.ThumbnailUri,
 

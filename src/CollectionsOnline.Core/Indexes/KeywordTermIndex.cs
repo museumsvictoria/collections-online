@@ -28,8 +28,7 @@ namespace CollectionsOnline.Core.Indexes
                     item.ArcheologySpecificActivity,
                     item.ArcheologyDecoration,
                     item.NumismaticsSeries,
-                    item.TradeLiteraturePrimarySubject,
-                    item.TradeLiteraturePrimaryRole
+                    item.TradeLiteraturePrimarySubject
                 }.Where(x => !string.IsNullOrWhiteSpace(x))
                 .Concat(item.Keywords.Where(x => !string.IsNullOrWhiteSpace(x)))
                 .Concat(item.ModelNames.Where(x => !string.IsNullOrWhiteSpace(x)))

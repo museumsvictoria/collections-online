@@ -14,9 +14,9 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedSpecimenCount { get; set; }
 
-        public ImageMedia SpeciesHeroImage { get; set; }
-
         public IList<ImageMedia> SpeciesImages { get; set; }
+
+        public string JsonSpeciesImages { get; set; }
 
         public SpeciesViewTransformerResult()
         {

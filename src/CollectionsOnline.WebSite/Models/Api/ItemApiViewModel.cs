@@ -50,7 +50,7 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> ModelNames { get; set; }
 
-        public IList<string> BrandNames { get; set; }
+        public IList<Brand> Brands { get; set; }
 
         public IList<string> RelatedItemIds { get; set; }
 
@@ -173,6 +173,8 @@ namespace CollectionsOnline.WebSite.Models.Api
         public string IndigenousCulturesMedium { get; set; }
 
         public string IndigenousCulturesDescription { get; set; }
+
+        public string IndigenousCulturesLocalName { get; set; }
 
         public string IndigenousCulturesPhotographer { get; set; }
 

@@ -4,16 +4,16 @@
     Layout = "layout.cshtml";
 }
 @Html.Partial("searchbar")
-@if (Model.ItemHeroImage != null)
+@if (Model.ItemImages.FirstOrDefault() != null)
 {
     <figure id="media">
-        <img src="@Model.ItemHeroImage.Large.Uri" alt="@Model.ItemHeroImage.AlternativeText" />
+        <img src="@Model.ItemImages.First().Large.Uri" alt="@Model.ItemImages.First().AlternativeText" />
         <figcaption>
             <div class="wrapper">
                 <div class="caption">
-                    @if (!string.IsNullOrWhiteSpace(Model.ItemHeroImage.Caption))
+                    @if (!string.IsNullOrWhiteSpace(@Model.ItemImages.First().Caption))
                     {
-                        <strong>@Html.Raw(Model.ItemHeroImage.Caption)</strong>
+                        <strong>@Html.Raw(@Model.ItemImages.First().Caption)</strong>
                     }
                 </div>
                 <div class="media-tools">
@@ -30,7 +30,6 @@
         </figcaption>
     </figure>
 }
-
 <div id="title">
     <div class="wrapper">
         <h1>
@@ -43,7 +42,7 @@
                 @foreach (var itemImage in Model.ItemImages)
                 {
                     <div class="thumbnail">
-                        @if (itemImage.Thumbnail.Uri == Model.ItemHeroImage.Thumbnail.Uri)
+                        @if (itemImage.Thumbnail.Uri == Model.ItemImages.First().Thumbnail.Uri)
                         {
                             <img class="active" src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
                         }
@@ -86,6 +85,11 @@
                 {
                     <h3>Physical Description</h3>
                     <p>@Model.Item.ArcheologyDescription</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLocalName))
+                {
+                    <h3>Local Name</h3>
+                    <p>@Model.Item.IndigenousCulturesLocalName</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteratureCoverTitle))
                 {
@@ -210,7 +214,7 @@
                     @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimaryRole))
                     {
                         <li>
-                            <h3><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryRole)">@Model.Item.TradeLiteraturePrimaryRole</a></h3>
+                            <h3>@Model.Item.TradeLiteraturePrimaryRole</h3>
                             <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.TradeLiteraturePrimaryName)">@Model.Item.TradeLiteraturePrimaryName</a></p>
                         </li>
                     }
@@ -262,7 +266,7 @@
                             <h3>@association.Type</h3>
                             <p>@Html.RenderAssociationDescription(association)</p>
                         </li>
-                    }                    
+                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesIndividualsIdentified))
                     {
                         <li>
@@ -365,22 +369,26 @@
                                 @for (int i = 0; i < Model.Item.ModelNames.Count; i++)
                                 {
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.ModelNames[i])">@Model.Item.ModelNames[i]</a>@(i != Model.Item.ModelNames.Count - 1 ? ", " : "")
-
-
                                 }
                             </p>
                         </li>
                     }
-                    @if (@Model.Item.BrandNames.Any())
+                    @if (@Model.Item.Brands.Any())
                     {
                         <li>
                             <h3>Brand Names</h3>
                             <p>
-                                @for (int i = 0; i < Model.Item.BrandNames.Count; i++)
+                                @for (int i = 0; i < Model.Item.Brands.Count; i++)
                                 {
-                                    <a href="/search?name=@HttpUtility.UrlEncode(Model.Item.BrandNames[i])">@Model.Item.BrandNames[i]</a>@(i != Model.Item.BrandNames.Count - 1 ? ", " : "")
-
-
+                                    if (!string.IsNullOrWhiteSpace(Model.Item.Brands[i].Name))
+                                    {
+                                        <a href="/search?name=@HttpUtility.UrlEncode(Model.Item.Brands[i].Name)">@Model.Item.Brands[i].Name</a>
+                                    }
+                                    if (!string.IsNullOrWhiteSpace(Model.Item.Brands[i].Name))
+                                    {
+                                        <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.Brands[i].ProductType)">(@Model.Item.Brands[i].ProductType)</a>
+                                    }
+                                    @(i != Model.Item.Brands.Count - 1 ? ", " : "")
                                 }
                             </p>
                         </li>
@@ -743,7 +751,7 @@
                             <h3>Discipline</h3>
                             <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Item.Discipline.ToLower())">@Model.Item.Discipline</a></p>
                         </li>
-                        
+
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.Type))
                     {
@@ -971,4 +979,11 @@
             }
         </div>
     </div>
+}
+
+@if (Model.JsonItemImages != null)
+{
+    <script>
+        var imagesModel = @Html.Raw(Model.JsonItemImages);
+    </script>
 }

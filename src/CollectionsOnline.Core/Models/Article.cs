@@ -28,6 +28,8 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> Keywords { get; set; }
 
+        public IList<string> Localities { get; set; }
+
         public string Content { get; set; }
 
         public string ContentSummary { get; set; }
@@ -53,6 +55,7 @@ namespace CollectionsOnline.Core.Models
         private void InitializeCollections()
         {
             Keywords = new List<string>();
+            Localities = new List<string>();
             Types = new List<string>();
             Authors = new List<Author>();
             Contributors = new List<Author>();
