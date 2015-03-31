@@ -74,7 +74,7 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public Taxonomy Taxonomy { get; set; }
 
-        public string ScientificName { get; set; }
+        public string ScientificName { get; set; }        
 
         public string ExpeditionName { get; set; }
 
@@ -114,9 +114,9 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public string MaximumElevation { get; set; }
 
-        public string Latitude { get; set; }
+        public IList<string> Latitudes { get; set; }
 
-        public string Longitude { get; set; }
+        public IList<string> Longitudes { get; set; }
 
         public string GeodeticDatum { get; set; }
 

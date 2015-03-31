@@ -20,6 +20,8 @@ namespace CollectionsOnline.Core.Models
 
         public string DisplayTitle { get; set; }
 
+        public string ScientificNameText { get; set; }
+
         #endregion
 
         public DateTime DateModified { get; set; }

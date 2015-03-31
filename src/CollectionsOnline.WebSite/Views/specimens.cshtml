@@ -6,31 +6,8 @@
 @Html.Partial("searchbar")
 @if (Model.SpecimenImages.FirstOrDefault() != null)
 {
-    <figure id="media">
-        <img src="@Model.SpecimenImages.First().Large.Uri" alt="@Model.SpecimenImages.First().AlternativeText" />
-        <figcaption>
-            <div class="wrapper">
-                <div class="caption">
-                    @if (!string.IsNullOrWhiteSpace(Model.SpecimenImages.First().Caption))
-                    {
-                        <strong>@Html.Raw(Model.SpecimenImages.First().Caption)</strong>
-                    }
-                </div>
-                <div class="media-tools">
-                    <button class="icon">
-                        <span class="icon-download" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Download Media</span>
-                    </button>
-                    <button class="icon">
-                        <span class="icon-fullscreen" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">View full screen</span>
-                    </button>
-                </div>
-            </div>
-        </figcaption>
-    </figure>
+    @Html.Partial("heroimagemedia", Model.SpecimenImages.First())
 }
-
 <div id="title">
     <div class="wrapper">
         <h1>
@@ -85,7 +62,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificName))
                 {
                     <h3>Scientific Name</h3>
-                    <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.ScientificName)">@Model.Specimen.ScientificName</a></p>
+                    <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.ScientificNameText)">@Model.Specimen.ScientificName</a></p>
                 }
                 @Html.Partial("taxonomy", Model.Specimen.Taxonomy)
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.IdentifiedBy))
@@ -98,12 +75,12 @@
                     <h3>Date Identified</h3>
                     <p>@Model.Specimen.DateIdentified</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Specimen.NumberOfSpecimens))
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.NumberOfSpecimens) && string.IsNullOrWhiteSpace(Model.Specimen.ClutchSize))
                 {
                     <h3>Number Of Specimens</h3>
                     <p>@Model.Specimen.NumberOfSpecimens</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Specimen.ClutchSize))
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.ClutchSize) && string.IsNullOrWhiteSpace(Model.Specimen.NumberOfSpecimens))
                 {
                     <h3>Clutch Size</h3>
                     <p>@Model.Specimen.ClutchSize</p>
@@ -306,18 +283,28 @@
                             <p>@Html.RenderAssociationDescription(association)</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.Latitude))
+                    @if (Model.Specimen.Latitudes.Any())
                     {
                         <li>
                             <h3>Latitude</h3>
-                            <p>@Model.Specimen.Latitude</p>
+                            <p>
+                                @for (int i = 0; i < Model.Specimen.Latitudes.Count; i++)
+                                {
+                                    @Model.Specimen.Latitudes[i]@(i != Model.Specimen.Latitudes.Count - 1 ? ";" : "")
+                                }
+                            </p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.Longitude))
+                    @if (Model.Specimen.Longitudes.Any())
                     {
                         <li>
                             <h3>Longitude</h3>
-                            <p>@Model.Specimen.Longitude</p>
+                            <p>
+                                @for (int i = 0; i < Model.Specimen.Longitudes.Count; i++)
+                                {
+                                    @Model.Specimen.Longitudes[i]@(i != Model.Specimen.Longitudes.Count - 1 ? ";" : "")
+                                }
+                            </p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeodeticDatum))

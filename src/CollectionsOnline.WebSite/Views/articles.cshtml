@@ -6,31 +6,8 @@
 @Html.Partial("searchbar")
 @if (Model.ArticleImages.FirstOrDefault() != null)
 {
-    <figure id="media">
-        <img src="@Model.ArticleImages.First().Large.Uri" alt="@Model.ArticleImages.First().AlternativeText" />
-        <figcaption>
-            <div class="wrapper">
-                <div class="caption">
-                    @if (!string.IsNullOrWhiteSpace(Model.ArticleImages.First().Caption))
-                    {
-                        <strong>@Model.ArticleImages.First().Caption</strong>
-                    }
-                </div>
-                <div class="media-tools">
-                    <button class="icon">
-                        <span class="icon-download" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Download Media</span>
-                    </button>
-                    <button class="icon">
-                        <span class="icon-fullscreen" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">View full screen</span>
-                    </button>
-                </div>
-            </div>
-        </figcaption>
-    </figure>
+    @Html.Partial("heroimagemedia", Model.ArticleImages.First())
 }
-
 <div id="title">
     <div class="wrapper">
         <h1>

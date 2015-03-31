@@ -240,7 +240,9 @@
   <ItemGroup>
     <Content Include="Views\articles.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\heroimagemedia.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="content\scss\gridle\_common-mixins.scss" />
     <Content Include="content\scss\gridle\_default-states.scss" />

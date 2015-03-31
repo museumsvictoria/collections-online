@@ -8,6 +8,7 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
+using CollectionsOnline.Import.Utilities;
 using IMu;
 using NLog;
 using Raven.Abstractions.Extensions;
@@ -516,6 +517,22 @@ namespace CollectionsOnline.Import.Factories
 
                 if (taxonomyMap != null)
                 {
+                    // Scientific Name
+                    item.ScientificName = new[]
+                    {
+                        item.QualifierRank != QualifierRankType.Genus ? null : item.Qualifier,
+                        string.Format("<em>{0}</em>", item.Taxonomy.Genus),
+                        string.IsNullOrWhiteSpace(item.Taxonomy.Subgenus)
+                            ? null
+                            : string.Format("<em>({0})</em>", item.Taxonomy.Subgenus),
+                        item.QualifierRank != QualifierRankType.Species ? null : item.Qualifier,
+                        string.Format("<em>{0}</em>", item.Taxonomy.Species),
+                        string.Format("<em>{0}</em>", item.Taxonomy.Subspecies),
+                        item.Taxonomy.Author
+                    }.Concatenate(" ");
+
+                    item.ScientificNameText = HtmlConverter.HtmlToText(item.ScientificNameText);
+
                     // Scientific Name
                     item.ScientificName = new[]
                     {

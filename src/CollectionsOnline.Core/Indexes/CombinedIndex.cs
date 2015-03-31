@@ -138,7 +138,7 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = item.ArcheologyTechnique,
                     Denomination = new object[] { item.NumismaticsDenomination, item.PhilatelyDenomination },
                     Habitat = new object[] { },
-                    Taxon = new object[] { item.ScientificName,
+                    Taxon = new object[] { item.ScientificNameText,
                         item.Taxonomy.Kingdom,
                         item.Taxonomy.Phylum,
                         item.Taxonomy.Subphylum,
@@ -271,7 +271,7 @@ namespace CollectionsOnline.Core.Indexes
                                 specimen.Taxonomy.Subfamily, specimen.Taxonomy.CommonName, specimen.Taxonomy.OtherCommonNames
                             }
                             : null,
-                        specimen.ScientificName, specimen.TypeStatus, specimen.ExpeditionName, specimen.CollectionEventCode,
+                        specimen.ScientificNameText, specimen.TypeStatus, specimen.ExpeditionName, specimen.CollectionEventCode,
                         specimen.SamplingMethod, specimen.CollectedBy, specimen.SiteCode, specimen.Ocean, specimen.Continent,
                         specimen.Country, specimen.State, specimen.District, specimen.Town, specimen.NearestNamedPlace,
                         specimen.PreciseLocation, specimen.GeologyEra, specimen.GeologyPeriod, specimen.GeologyEpoch,
@@ -289,7 +289,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Sort fields
                     Quality =
                         ((specimen.DateVisitedFrom.HasValue || !string.IsNullOrWhiteSpace(specimen.CollectedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
-                        ((!string.IsNullOrWhiteSpace(specimen.Latitude) || !string.IsNullOrWhiteSpace(specimen.Longitude)) ? 1 : 0) +
+                        ((specimen.Latitudes.Any() || specimen.Longitudes.Any()) ? 1 : 0) +
                         (specimen.Media.Count * 2) +
                         ((!string.IsNullOrWhiteSpace(specimen.ScientificName)) ? 1 : 0),
 
@@ -329,7 +329,7 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = (string)null,
                     Denomination = new object[] { },
                     Habitat = new object[] { },
-                    Taxon = new object[] { specimen.ScientificName,
+                    Taxon = new object[] { specimen.ScientificNameText,
                         specimen.Taxonomy.Kingdom,
                         specimen.Taxonomy.Phylum,
                         specimen.Taxonomy.Subphylum,

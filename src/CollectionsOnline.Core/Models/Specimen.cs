@@ -20,6 +20,8 @@ namespace CollectionsOnline.Core.Models
 
         public string DisplayTitle { get; set; }
 
+        public string ScientificNameText { get; set; }
+
         #endregion
 
         public DateTime DateModified { get; set; }
@@ -91,7 +93,7 @@ namespace CollectionsOnline.Core.Models
         public Taxonomy Taxonomy { get; set; }
 
         public string ScientificName { get; set; }
-
+        
         public string ExpeditionName { get; set; }
 
         public string CollectionEventCode { get; set; }
@@ -130,9 +132,9 @@ namespace CollectionsOnline.Core.Models
 
         public string MaximumElevation { get; set; }
 
-        public string Latitude { get; set; }
+        public IList<string> Latitudes { get; set; }
 
-        public string Longitude { get; set; }
+        public IList<string> Longitudes { get; set; }
 
         public string GeodeticDatum { get; set; }
 
@@ -255,6 +257,8 @@ namespace CollectionsOnline.Core.Models
             Keywords = new List<string>();
             Media = new List<Media>();
             Storages = new List<Storage>();
+            Latitudes = new List<string>();
+            Longitudes = new List<string>();
         }
     }
 }

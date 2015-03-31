@@ -6,29 +6,7 @@
 @Html.Partial("searchbar")
 @if (Model.ItemImages.FirstOrDefault() != null)
 {
-    <figure id="media">
-        <img src="@Model.ItemImages.First().Large.Uri" alt="@Model.ItemImages.First().AlternativeText" />
-        <figcaption>
-            <div class="wrapper">
-                <div class="caption">
-                    @if (!string.IsNullOrWhiteSpace(@Model.ItemImages.First().Caption))
-                    {
-                        <strong>@Html.Raw(@Model.ItemImages.First().Caption)</strong>
-                    }
-                </div>
-                <div class="media-tools">
-                    <button class="icon">
-                        <span class="icon-download" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Download Media</span>
-                    </button>
-                    <button class="icon">
-                        <span class="icon-fullscreen" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">View full screen</span>
-                    </button>
-                </div>
-            </div>
-        </figcaption>
-    </figure>
+    @Html.Partial("heroimagemedia", Model.ItemImages.First())
 }
 <div id="title">
     <div class="wrapper">
@@ -713,7 +691,7 @@
                     {
                         <li>
                             <h3>Scientific Name</h3>
-                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.ScientificName)">@Model.Item.ScientificName</a></p>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.ScientificNameText)">@Model.Item.ScientificName</a></p>
                         </li>
                     }
                     @Html.Partial("taxonomy", Model.Item.Taxonomy)
