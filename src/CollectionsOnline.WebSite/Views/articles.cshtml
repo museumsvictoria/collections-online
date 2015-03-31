@@ -12,9 +12,14 @@
     <div class="wrapper">
         <h1>
             @Html.Raw(Model.Article.DisplayTitle)<br />
-            @foreach (var type in @Model.Article.Types)
+            @if (Model.Article.Types.Any())
             {
-                <a href="/search?articletype=@HttpUtility.UrlEncode(type.ToLower())">@type</a><br />
+                <span>
+                    @for (int i = 0; i < Model.Article.Types.Count; i++)
+                    {
+                        <a href="/search?articletype=@HttpUtility.UrlEncode(Model.Article.Types[i])">@Model.Article.Types[i]</a>@(i != Model.Article.Types.Count - 1 ? ", " : "")
+                    }
+                </span><br />
             }
         </h1>
         @if (Model.ArticleImages.Any())

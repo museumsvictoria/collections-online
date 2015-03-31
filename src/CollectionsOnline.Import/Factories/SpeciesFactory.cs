@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using IMu;
@@ -194,12 +195,14 @@ namespace CollectionsOnline.Import.Factories
                 species.Summary = species.Biology;
 
             // Display Title
-            if (species.Taxonomy != null && (!string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName) && !string.IsNullOrWhiteSpace(species.Taxonomy.CommonName)))
-                species.DisplayTitle = string.Format("<em>{0}</em> {1}", species.Taxonomy.TaxonName, species.Taxonomy.CommonName);
-            else if (species.Taxonomy != null && !string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName))
-                species.DisplayTitle = string.Format("<em>{0}</em>", species.Taxonomy.TaxonName);
-            else if (species.Taxonomy != null && !string.IsNullOrWhiteSpace(species.Taxonomy.CommonName))
-                species.DisplayTitle = species.Taxonomy.CommonName;
+            if (species.Taxonomy != null)
+            {
+                species.DisplayTitle = new[]
+                {
+                    string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName) ? null : string.Format("<em>{0}</em>", species.Taxonomy.TaxonName),
+                    species.Taxonomy.CommonName
+                }.Concatenate(" ");
+            }                     
             else
                 species.DisplayTitle = "Species";
 

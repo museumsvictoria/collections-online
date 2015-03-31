@@ -284,13 +284,11 @@ namespace CollectionsOnline.Import.Factories
                     specimen.ScientificName = new[]
                     {
                         specimen.QualifierRank != QualifierRankType.Genus ? null : specimen.Qualifier,
-                        string.Format("<em>{0}</em>", specimen.Taxonomy.Genus),
-                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Subgenus)
-                            ? null
-                            : string.Format("<em>({0})</em>", specimen.Taxonomy.Subgenus),
+                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Genus) ? null : string.Format("<em>{0}</em>", specimen.Taxonomy.Genus),
+                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Subgenus) ? null : string.Format("<em>({0})</em>", specimen.Taxonomy.Subgenus),
                         specimen.QualifierRank != QualifierRankType.Species ? null : specimen.Qualifier,
-                        string.Format("<em>{0}</em>", specimen.Taxonomy.Species),
-                        string.Format("<em>{0}</em>", specimen.Taxonomy.Subspecies),
+                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Species) ? null : string.Format("<em>{0}</em>", specimen.Taxonomy.Species),
+                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Subspecies) ? null : string.Format("<em>{0}</em>", specimen.Taxonomy.Subspecies),
                         specimen.Taxonomy.Author
                     }.Concatenate(" ");
 
@@ -551,35 +549,33 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Display Title
-            if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase))
+            string displayTitle;
+            if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.TektitesName))
             {
-                if (!string.IsNullOrWhiteSpace(specimen.TektitesName) && !string.IsNullOrWhiteSpace(specimen.TektitesClassification))
-                    specimen.DisplayTitle = string.Format("{0} {1}", specimen.TektitesName, specimen.TektitesClassification);
-                else if (!string.IsNullOrWhiteSpace(specimen.TektitesName))
-                    specimen.DisplayTitle = specimen.TektitesName;
-                else
-                    specimen.DisplayTitle = "Tektite";
+                displayTitle = specimen.TektitesName;
             }
-            else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MeteoritesName))
             {
-                if (!string.IsNullOrWhiteSpace(specimen.MeteoritesName))
-                    specimen.DisplayTitle = specimen.MeteoritesName;
-                else
-                    specimen.DisplayTitle = "Meteorite";
+                displayTitle = specimen.MeteoritesName;
             }
-            else if (string.Equals(specimen.Discipline, "Petrology", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(specimen.Discipline, "Petrology", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.PetrologyRockName))
             {
-                if (!string.IsNullOrWhiteSpace(specimen.PetrologyRockName))
-                    specimen.DisplayTitle = specimen.PetrologyRockName;
-                else
-                    specimen.DisplayTitle = "Petrology";
+                displayTitle = specimen.PetrologyRockName;
             }
-            else if (!string.IsNullOrWhiteSpace(specimen.ScientificName))
-                specimen.DisplayTitle = specimen.ScientificName;
-            else if (!string.IsNullOrWhiteSpace(specimen.ObjectName))
-                specimen.DisplayTitle = specimen.ObjectName;
+            else if (string.Equals(specimen.Discipline, "Mineralogy", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MineralogySpecies))
+            {
+                displayTitle = specimen.MineralogySpecies;
+            }
             else
-                specimen.DisplayTitle = string.Format("Specimen {0}", specimen.RegistrationNumber);
+                displayTitle = specimen.ScientificName;
+
+            displayTitle = new[]
+            {
+                specimen.ObjectName,
+                displayTitle
+            }.Concatenate(" ");
+
+            specimen.DisplayTitle = !string.IsNullOrWhiteSpace(displayTitle) ? displayTitle : "Specimen";
 
             stopwatch.Stop();
             _log.Trace("Completed specimen creation for catalog record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);

@@ -521,13 +521,11 @@ namespace CollectionsOnline.Import.Factories
                     item.ScientificName = new[]
                     {
                         item.QualifierRank != QualifierRankType.Genus ? null : item.Qualifier,
-                        string.Format("<em>{0}</em>", item.Taxonomy.Genus),
-                        string.IsNullOrWhiteSpace(item.Taxonomy.Subgenus)
-                            ? null
-                            : string.Format("<em>({0})</em>", item.Taxonomy.Subgenus),
+                        string.IsNullOrWhiteSpace(item.Taxonomy.Genus) ? null : string.Format("<em>{0}</em>", item.Taxonomy.Genus),
+                        string.IsNullOrWhiteSpace(item.Taxonomy.Subgenus) ? null : string.Format("<em>({0})</em>", item.Taxonomy.Subgenus),
                         item.QualifierRank != QualifierRankType.Species ? null : item.Qualifier,
-                        string.Format("<em>{0}</em>", item.Taxonomy.Species),
-                        string.Format("<em>{0}</em>", item.Taxonomy.Subspecies),
+                        string.IsNullOrWhiteSpace(item.Taxonomy.Species) ? null : string.Format("<em>{0}</em>", item.Taxonomy.Species),
+                        string.IsNullOrWhiteSpace(item.Taxonomy.Subspecies) ? null : string.Format("<em>{0}</em>", item.Taxonomy.Subspecies),
                         item.Taxonomy.Author
                     }.Concatenate(" ");
 
@@ -664,7 +662,7 @@ namespace CollectionsOnline.Import.Factories
             else if (!string.IsNullOrWhiteSpace(item.ObjectName))
                 item.DisplayTitle = item.ObjectName;
             else
-                item.DisplayTitle = string.Format("Item {0}", item.RegistrationNumber);
+                item.DisplayTitle = "Item";
             
             stopwatch.Stop();
             _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);
