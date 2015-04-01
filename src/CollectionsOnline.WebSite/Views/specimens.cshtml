@@ -1,4 +1,5 @@
-﻿@using CollectionsOnline.WebSite.Extensions
+﻿@using CollectionsOnline.Core.Models
+@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.SpecimenViewTransformerResult>
 @{
     Layout = "layout.cshtml";
@@ -44,36 +45,63 @@
                     <h3>Summary</h3>
                     <p>@Html.Raw(Model.Specimen.ObjectSummary)</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Specimen.Significance))
-                {
-                    <h3>Significance</h3>
-                    <p>@Model.Specimen.Significance</p>
-                }
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.IsdDescriptionOfContent))
                 {
                     <h3>Description Of Content</h3>
                     <p>@Model.Specimen.IsdDescriptionOfContent</p>
+                }
+                @if (@Model.Specimen.CollectionNames.Any())
+                {
+                    <h3>Collection Names</h3>
+                    <p>
+                        @for (int i = 0; i < Model.Specimen.CollectionNames.Count; i++)
+                        {
+                            <a href="/search?collection=@HttpUtility.UrlEncode(Model.Specimen.CollectionNames[i])">@Model.Specimen.CollectionNames[i]</a>@(i != Model.Specimen.CollectionNames.Count - 1 ? "," : "")
+                        }
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificName))
+                {
+                    <h3>Scientific Name</h3>
+                    <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.ScientificNameText)">@Html.Raw(Model.Specimen.ScientificName)</a></p>
+                }
+                @if (Model.Specimen.Taxonomy != null && !string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Author))
+                {
+                    <h3>Author and date of publication</h3>
+                    <p>@Model.Specimen.Taxonomy.Author</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.TypeStatus))
                 {
                     <h3>Type Status</h3>
                     <p>@Model.Specimen.TypeStatus</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificName))
+                @if (Model.Specimen.Taxonomy != null)
                 {
-                    <h3>Scientific Name</h3>
-                    <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.ScientificNameText)">@Model.Specimen.ScientificName</a></p>
-                }
-                @Html.Partial("taxonomy", Model.Specimen.Taxonomy)
-                @if (!string.IsNullOrWhiteSpace(Model.Specimen.IdentifiedBy))
-                {
-                    <h3>Identified By</h3>
-                    <p>@Model.Specimen.IdentifiedBy</p>
+                    if (!string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.CommonName))
+                    {
+                        <h3>Preferred Common name</h3>
+                        <p>@Model.Specimen.Taxonomy.CommonName</p>
+                    }
+                    if (Model.Specimen.Taxonomy.OtherCommonNames.Any())
+                    {
+                        <h3>Other Common Names</h3>
+                        <p>
+                            @foreach (var otherCommonNames in @Model.Specimen.Taxonomy.OtherCommonNames)
+                            {
+                                <span>@otherCommonNames</span>
+                            }
+                        </p>
+                    }
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.DateIdentified))
                 {
                     <h3>Date Identified</h3>
                     <p>@Model.Specimen.DateIdentified</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.IdentifiedBy))
+                {
+                    <h3>Identified By</h3>
+                    <p>@Model.Specimen.IdentifiedBy</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.NumberOfSpecimens) && string.IsNullOrWhiteSpace(Model.Specimen.ClutchSize))
                 {
@@ -105,49 +133,178 @@
                         }
                     </p>
                 }
-                @if (@Model.Specimen.CollectionNames.Any())
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.PetrologyRockName))
                 {
-                    <h3>Collection Names</h3>
-                    <p>
-                        @for (int i = 0; i < Model.Specimen.CollectionNames.Count; i++)
-                        {
-                            <a href="/search?collection=@HttpUtility.UrlEncode(Model.Specimen.CollectionNames[i])">@Model.Specimen.CollectionNames[i]</a>@(i != Model.Specimen.CollectionNames.Count - 1 ? "," : "")
-                        }
-                    </p>
+                    <h3>Rock Name</h3>
+                    <p>@Model.Specimen.PetrologyRockName</p>
                 }
-                @if (@Model.Specimen.CollectionAreas.Any())
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.PetrologyRockClass))
                 {
-                    <h3>Collection Areas</h3>
-                    <p>
-                        @for (int i = 0; i < Model.Specimen.CollectionAreas.Count; i++)
-                        {
-                            <a href="/search?collectionarea=@HttpUtility.UrlEncode(Model.Specimen.CollectionAreas[i])">@Model.Specimen.CollectionAreas[i]</a>@(i != Model.Specimen.CollectionAreas.Count - 1 ? "," : "")
-                        }
-                    </p>
+                    <h3>Rock Class</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.PetrologyRockClass)">@Model.Specimen.PetrologyRockClass</a></p>
                 }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.PetrologyRockGroup))
+                {
+                    <h3>Rock Group</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.PetrologyRockGroup)">@Model.Specimen.PetrologyRockGroup</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.PetrologyRockDescription))
+                {
+                    <h3>Rock Description</h3>
+                    <p>@Model.Specimen.PetrologyRockDescription</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.PetrologyMineralsPresent))
+                {
+                    <h3>Minerals Present</h3>
+                    <p>@Model.Specimen.PetrologyMineralsPresent</p>
+                }                         
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogySpecies))
+                {
+                    <h3>Species</h3>
+                    <p>@Model.Specimen.MineralogySpecies</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyVariety))
+                {
+                    <h3>Variety</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyVariety)">@Model.Specimen.MineralogyVariety</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyGroup))
+                {
+                    <h3>Group</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyGroup)">@Model.Specimen.MineralogyGroup</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyClass))
+                {
+                    <h3>Class</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyClass)">@Model.Specimen.MineralogyClass</a>s</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyTypeOfType))
+                {
+                    <h3>Type of mineral type</h3>
+                    <p>@Model.Specimen.MineralogyTypeOfType</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyAssociatedMatrix))
+                {
+                    <h3>Associated Matrix</h3>
+                    <p>@Model.Specimen.MineralogyAssociatedMatrix</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesName))
+                {
+                    <h3>Name</h3>
+                    <p>@Model.Specimen.MeteoritesName</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesClass))
+                {
+                    <h3>Class</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MeteoritesClass)">@Model.Specimen.MeteoritesClass</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesGroup))
+                {
+                    <h3>Group</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MeteoritesGroup)">@Model.Specimen.MeteoritesGroup</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesType))
+                {
+                    <h3>Type</h3>
+                    <p>@Model.Specimen.MeteoritesType</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesMinerals))
+                {
+                    <h3>Minerals present</h3>
+                    <p>@Model.Specimen.MeteoritesMinerals</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesSpecimenWeight))
+                {
+                    <h3>Specimen Weight</h3>
+                    <p>@Model.Specimen.MeteoritesSpecimenWeight</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesTotalWeight))
+                {
+                    <h3>Total Weight</h3>
+                    <p>@Model.Specimen.MeteoritesTotalWeight</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesDateFell))
+                {
+                    <h3>Date specimen fell</h3>
+                    <p>@Model.Specimen.MeteoritesDateFell</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesDateFound))
+                {
+                    <h3>Date specimen found</h3>
+                    <p>@Model.Specimen.MeteoritesDateFound</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesName))
+                {
+                    <h3>Name</h3>
+                    <p>@Model.Specimen.TektitesName</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesClassification))
+                {
+                    <h3>Classification</h3>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.TektitesClassification)">@Model.Specimen.TektitesClassification</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesShape))
+                {
+                    <h3>Shape</h3>
+                    <p>@Model.Specimen.TektitesShape</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesLocalStrewnfield))
+                {
+                    <h3>Local Strewnfield</h3>
+                    <p><a href="/search?locality=@HttpUtility.UrlEncode(Model.Specimen.TektitesLocalStrewnfield)">@Model.Specimen.TektitesLocalStrewnfield</a></p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesGlobalStrewnfield))
+                {
+                    <h3>Global Strewnfield</h3>
+                    <p><a href="/search?locality=@HttpUtility.UrlEncode(Model.Specimen.TektitesGlobalStrewnfield)">@Model.Specimen.TektitesGlobalStrewnfield</a></p>
+                }                
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.AcquisitionInformation))
                 {
                     <h3>Acquisition Information</h3>
                     <p>@Model.Specimen.AcquisitionInformation</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Specimen.ExpeditionName))
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.Acknowledgement))
                 {
-                    <h3>Acquisition Information</h3>
-                    <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Specimen.ExpeditionName)">@Model.Specimen.ExpeditionName</a></p>
+                    <h3>Acknowledgement</h3>
+                    <p>@Model.Specimen.Acknowledgement</p>
+                }
+                @if (Model.Specimen.Classifications.Any())
+                {
+                    <h3>Classification</h3>
+                    <p>
+                        @for (int i = 0; i < Model.Specimen.Classifications.Count; i++)
+                        {
+                            <a href="/search?classification=@HttpUtility.UrlEncode(Model.Specimen.Classifications[i])">@Model.Specimen.Classifications[i]</a>@(i != Model.Specimen.Classifications.Count - 1 ? ", " : "")
+                        }
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Specimen.Significance))
+                {
+                    <h3>Significance</h3>
+                    <p>@Model.Specimen.Significance</p>
                 }
             </div>
             <div class="detail">
                 <ul>
-                    @if (Model.Specimen.Classifications.Any())
+                    @foreach (var association in @Model.Specimen.Associations)
                     {
                         <li>
-                            <h3>Classification</h3>
-                            <p>
-                                @for (int i = 0; i < Model.Specimen.Classifications.Count; i++)
-                                {
-                                    <a href="/search?classification=@HttpUtility.UrlEncode(Model.Specimen.Classifications[i])">@Model.Specimen.Classifications[i]</a>@(i != Model.Specimen.Classifications.Count - 1 ? ", " : "")
-                                }
-                            </p>
+                            <h3>@association.Type</h3>
+                            <p>@Html.RenderAssociationDescription(association)</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.ExpeditionName))
+                    {
+                        <li>
+                            <h3>Expedition Name</h3>
+                            <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Specimen.ExpeditionName)">@Model.Specimen.ExpeditionName</a></p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectedBy))
+                    {
+                        <li>
+                            <h3>Collected By</h3>
+                            <p>@Model.Specimen.CollectedBy</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEventCode))
@@ -163,7 +320,7 @@
                             <h3>Sampling Method</h3>
                             <p>@Model.Specimen.SamplingMethod</p>
                         </li>
-                    }
+                    }                   
                     @if (Model.Specimen.DateVisitedFrom.HasValue)
                     {
                         <li>
@@ -191,14 +348,7 @@
                             <h3>Depth From (m)</h3>
                             <p>@Model.Specimen.DepthFrom</p>
                         </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectedBy))
-                    {
-                        <li>
-                            <h3>Collected By</h3>
-                            <p>@Model.Specimen.CollectedBy</p>
-                        </li>
-                    }
+                    }                    
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.SiteCode))
                     {
                         <li>
@@ -276,13 +426,6 @@
                             <p>@Model.Specimen.MaximumElevation</p>
                         </li>
                     }
-                    @foreach (var association in @Model.Specimen.Associations)
-                    {
-                        <li>
-                            <h3>@association.Type</h3>
-                            <p>@Html.RenderAssociationDescription(association)</p>
-                        </li>
-                    }
                     @if (Model.Specimen.Latitudes.Any())
                     {
                         <li>
@@ -321,18 +464,11 @@
                             <p>@Model.Specimen.SiteRadius</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceBy))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceSource))
                     {
                         <li>
-                            <h3>Georeference By</h3>
-                            <p>@Model.Specimen.GeoreferenceBy</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceDate))
-                    {
-                        <li>
-                            <h3>Georeference Date</h3>
-                            <p>@Model.Specimen.GeoreferenceDate</p>
+                            <h3>Georeference Source</h3>
+                            <p>@Model.Specimen.GeoreferenceSource</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceProtocol))
@@ -342,151 +478,74 @@
                             <p>@Model.Specimen.GeoreferenceProtocol</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceSource))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceDate))
                     {
                         <li>
-                            <h3>Georeference Source</h3>
-                            <p>@Model.Specimen.GeoreferenceSource</p>
+                            <h3>Georeference Date</h3>
+                            <p>@Model.Specimen.GeoreferenceDate</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogySpecies))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeoreferenceBy))
                     {
                         <li>
-                            <h3>Mineralogy Species</h3>
-                            <p>@Model.Specimen.MineralogySpecies</p>
+                            <h3>Georeference By</h3>
+                            <p>@Model.Specimen.GeoreferenceBy</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyVariety))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyEra))
                     {
                         <li>
-                            <h3>Mineralogy Variety</h3>
-                            <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyVariety)">@Model.Specimen.MineralogyVariety</a></p>
+                            <h3>Era</h3>
+                            <p>@Model.Specimen.GeologyEra</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyGroup))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyPeriod))
                     {
                         <li>
-                            <h3>Mineralogy Group</h3>
-                            <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyGroup)">@Model.Specimen.MineralogyGroup</a></p>
+                            <h3>Period</h3>
+                            <p>@Model.Specimen.GeologyPeriod</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyClass))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyEpoch))
                     {
                         <li>
-                            <h3>Mineralogy Class</h3>
-                            <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyClass)">@Model.Specimen.MineralogyClass</a></p>
+                            <h3>Epoch</h3>
+                            <p>@Model.Specimen.GeologyEpoch</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyAssociatedMatrix))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyStage))
                     {
                         <li>
-                            <h3>Mineralogy Associated Matrix</h3>
-                            <p>@Model.Specimen.MineralogyAssociatedMatrix</p>
+                            <h3>Stage</h3>
+                            <p>@Model.Specimen.GeologyStage</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyType))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyGroup))
                     {
                         <li>
-                            <h3>Mineralogy Type</h3>
-                            <p>@Model.Specimen.MineralogyType</p>
+                            <h3>Geological group</h3>
+                            <p>@Model.Specimen.GeologyGroup</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesName))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyFormation))
                     {
                         <li>
-                            <h3>Meteorites Name</h3>
-                            <p>@Model.Specimen.MeteoritesName</p>
+                            <h3>Geological formation</h3>
+                            <p>@Model.Specimen.GeologyFormation</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesClass))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyMember))
                     {
                         <li>
-                            <h3>Meteorites Class</h3>
-                            <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MeteoritesClass)">@Model.Specimen.MeteoritesClass</a></p>
+                            <h3>Geological member</h3>
+                            <p>@Model.Specimen.GeologyMember</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesGroup))
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.GeologyRockType))
                     {
                         <li>
-                            <h3>Meteorites Group</h3>
-                            <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MeteoritesGroup)">@Model.Specimen.MeteoritesGroup</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesType))
-                    {
-                        <li>
-                            <h3>Meteorites Type</h3>
-                            <p>@Model.Specimen.MeteoritesType</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesMinerals))
-                    {
-                        <li>
-                            <h3>Meteorites Minerals</h3>
-                            <p>@Model.Specimen.MeteoritesMinerals</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesSpecimenWeight))
-                    {
-                        <li>
-                            <h3>Meteorites Specimen Weight</h3>
-                            <p>@Model.Specimen.MeteoritesSpecimenWeight</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesTotalWeight))
-                    {
-                        <li>
-                            <h3>Meteorites Total Weight</h3>
-                            <p>@Model.Specimen.MeteoritesTotalWeight</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesDateFell))
-                    {
-                        <li>
-                            <h3>Meteorites Date Fell</h3>
-                            <p>@Model.Specimen.MeteoritesDateFell</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.MeteoritesDateFound))
-                    {
-                        <li>
-                            <h3>Meteorites Date Found</h3>
-                            <p>@Model.Specimen.MeteoritesDateFound</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesName))
-                    {
-                        <li>
-                            <h3>Tektites Name</h3>
-                            <p>@Model.Specimen.TektitesName</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesClassification))
-                    {
-                        <li>
-                            <h3>Tektites Classification</h3>
-                            <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.TektitesClassification)">@Model.Specimen.TektitesClassification</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesShape))
-                    {
-                        <li>
-                            <h3>Tektites Shape</h3>
-                            <p>@Model.Specimen.TektitesShape</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesLocalStrewnfield))
-                    {
-                        <li>
-                            <h3>Tektites Local Strewnfield</h3>
-                            <p><a href="/search?locality=@HttpUtility.UrlEncode(Model.Specimen.TektitesLocalStrewnfield)">@Model.Specimen.TektitesLocalStrewnfield</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TektitesGlobalStrewnfield))
-                    {
-                        <li>
-                            <h3>Tektites Global Strewnfield</h3>
-                            <p><a href="/search?locality=@HttpUtility.UrlEncode(Model.Specimen.TektitesGlobalStrewnfield)">@Model.Specimen.TektitesGlobalStrewnfield</a></p>
+                            <h3>Rock Type</h3>
+                            <p>@Model.Specimen.GeologyRockType</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.Category))
@@ -510,6 +569,18 @@
                             <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Specimen.Discipline.ToLower())">@Model.Specimen.Discipline</a></p>
                         </li>
                     }
+                    @if (@Model.Specimen.CollectionAreas.Any())
+                    {
+                        <li>
+                            <h3>Collection Areas</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Specimen.CollectionAreas.Count; i++)
+                                {
+                                    <a href="/search?collectionarea=@HttpUtility.UrlEncode(Model.Specimen.CollectionAreas[i])">@Model.Specimen.CollectionAreas[i]</a>@(i != Model.Specimen.CollectionAreas.Count - 1 ? "," : "")
+                                }
+                            </p>
+                        </li>
+                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.Type))
                     {
                         <li>
@@ -528,7 +599,8 @@
                                 }
                             </p>
                         </li>
-                    }                    
+                    }
+                    @Html.Partial("taxonomy", Model.Specimen.Taxonomy)
                 </ul>
             </div>
         </section>

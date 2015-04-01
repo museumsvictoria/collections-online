@@ -1,26 +1,6 @@
 ﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.Taxonomy>
 @if (Model != null)
 {
-    if (!string.IsNullOrWhiteSpace(Model.Author))
-    {
-        <h3>Scientific Name Author</h3>
-        <p>@Model.Author</p>
-    }
-    if (!string.IsNullOrWhiteSpace(Model.CommonName))
-    {
-        <h3>Common Name</h3>
-        <p>@Model.CommonName</p>
-    }
-    if (Model.OtherCommonNames.Any())
-    {
-        <h3>Other Common Names</h3>
-        <p>
-            @foreach (var otherCommonNames in @Model.OtherCommonNames)
-            {
-                <span>@otherCommonNames</span>
-            }
-        </p>
-    }
     if (!string.IsNullOrWhiteSpace(Model.Kingdom))
     {
         <li>

@@ -691,10 +691,16 @@
                     {
                         <li>
                             <h3>Scientific Name</h3>
-                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.ScientificNameText)">@Model.Item.ScientificName</a></p>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.ScientificNameText)">@Html.Raw(Model.Item.ScientificName)</a></p>
                         </li>
                     }
-                    @Html.Partial("taxonomy", Model.Item.Taxonomy)
+                    @if (Model.Item.Taxonomy != null && !string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Author))
+                    {
+                        <li>
+                            <h3>Author and date of publication</h3>
+                            <p>@Model.Item.Taxonomy.Author</p>
+                        </li>
+                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.TypeStatus))
                     {
                         <li>
@@ -702,6 +708,29 @@
                             <p>@Model.Item.TypeStatus</p>
                         </li>
                     }
+                    @if (Model.Item.Taxonomy != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(Model.Item.Taxonomy.CommonName))
+                        {
+                            <li>
+                                <h3>Preferred Common name</h3>
+                                <p>@Model.Item.Taxonomy.CommonName</p>
+                            </li>
+                        }
+                        if (Model.Item.Taxonomy.OtherCommonNames.Any())
+                        {
+                            <li>
+                                <h3>Other Common Names</h3>
+                                <p>
+                                    @foreach (var otherCommonNames in @Model.Item.Taxonomy.OtherCommonNames)
+                                    {
+                                        <span>@otherCommonNames</span>
+                                    }
+                                </p>
+                            </li>
+                        }
+                    }
+                    @Html.Partial("taxonomy", Model.Item.Taxonomy)                    
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IdentifiedBy))
                     {
                         <li>

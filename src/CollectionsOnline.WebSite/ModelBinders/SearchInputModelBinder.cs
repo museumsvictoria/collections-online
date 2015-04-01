@@ -68,6 +68,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Terms.Add("Locality", query.Locality);
             if (query.Collection.HasValue)
                 searchInputModel.Terms.Add("Collection", query.Collection);
+            if (query.Date.HasValue)
+                searchInputModel.Terms.Add("Date", query.Date);
             if (query.CulturalGroup.HasValue)
                 searchInputModel.Terms.Add("CulturalGroup", query.CulturalGroup);
             if (query.Classification.HasValue)

@@ -14,7 +14,7 @@ module.exports = {
       $('#media img').attr('src', newImage.Large.Uri);
       
       if (newImage.Caption)
-        $('#media .caption-text').text(newImage.Caption);
+        $('#media .caption-text').html(newImage.Caption);
       if (newImage.Creators.length > 0)
         $('#media .creators').text(newImage.Creators.join(', '));
       if (newImage.Sources.length > 0)
