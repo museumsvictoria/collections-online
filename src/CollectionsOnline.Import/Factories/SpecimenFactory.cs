@@ -281,18 +281,11 @@ namespace CollectionsOnline.Import.Factories
                 if (taxonomyMap != null)
                 {
                     // Scientific Name
-                    specimen.ScientificName = new[]
-                    {
-                        specimen.QualifierRank != QualifierRankType.Genus ? null : specimen.Qualifier,
-                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Genus) ? null : string.Format("<em>{0}</em>", specimen.Taxonomy.Genus),
-                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Subgenus) ? null : string.Format("<em>({0})</em>", specimen.Taxonomy.Subgenus),
-                        specimen.QualifierRank != QualifierRankType.Species ? null : specimen.Qualifier,
-                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Species) ? null : string.Format("<em>{0}</em>", specimen.Taxonomy.Species),
-                        string.IsNullOrWhiteSpace(specimen.Taxonomy.Subspecies) ? null : string.Format("<em>{0}</em>", specimen.Taxonomy.Subspecies),
-                        specimen.Taxonomy.Author
-                    }.Concatenate(" ");
+                    specimen.ScientificName = _taxonomyFactory.MakeScientificName(specimen.QualifierRank,
+                        specimen.Qualifier, specimen.Taxonomy.Genus, specimen.Taxonomy.Subgenus,
+                        specimen.Taxonomy.Species, specimen.Taxonomy.Subspecies, specimen.Taxonomy.Author);
 
-                    specimen.ScientificNameText = HtmlConverter.HtmlToText(specimen.ScientificNameText);
+                    specimen.ScientificNameText = HtmlConverter.HtmlToText(specimen.ScientificName);
 
                     // Species profile Relationship
                     var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
@@ -379,11 +372,11 @@ namespace CollectionsOnline.Import.Factories
                 {
                     var decimalLatitudes = (object[])latlongMap["LatLatitudeDecimal_nesttab"];
                     if (decimalLatitudes != null && decimalLatitudes.Any(x => x != null))
-                        specimen.Latitudes.AddRange(decimalLatitudes.Select(x => x.ToString()).Where(x => x != null));
+                        specimen.Latitudes.AddRange(decimalLatitudes.Where(x => x != null).Select(x => x.ToString()));
 
                     var decimalLongitudes = ((object[])latlongMap["LatLongitudeDecimal_nesttab"]);
                     if (decimalLongitudes != null && decimalLongitudes.Any(x => x != null))
-                        specimen.Longitudes.AddRange(decimalLongitudes.Select(x => x.ToString()).Where(x => x != null));
+                        specimen.Longitudes.AddRange(decimalLongitudes.Where(x => x != null).Select(x => x.ToString()));
 
                     specimen.GeodeticDatum = (string.IsNullOrWhiteSpace(latlongMap.GetEncodedString("LatDatum_tab"))) ? "WGS84" : latlongMap.GetEncodedString("LatDatum_tab");
                     specimen.SiteRadius = latlongMap.GetEncodedString("LatRadiusNumeric_tab");

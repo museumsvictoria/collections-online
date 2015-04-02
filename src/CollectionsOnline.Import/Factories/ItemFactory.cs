@@ -518,32 +518,11 @@ namespace CollectionsOnline.Import.Factories
                 if (taxonomyMap != null)
                 {
                     // Scientific Name
-                    item.ScientificName = new[]
-                    {
-                        item.QualifierRank != QualifierRankType.Genus ? null : item.Qualifier,
-                        string.IsNullOrWhiteSpace(item.Taxonomy.Genus) ? null : string.Format("<em>{0}</em>", item.Taxonomy.Genus),
-                        string.IsNullOrWhiteSpace(item.Taxonomy.Subgenus) ? null : string.Format("<em>({0})</em>", item.Taxonomy.Subgenus),
-                        item.QualifierRank != QualifierRankType.Species ? null : item.Qualifier,
-                        string.IsNullOrWhiteSpace(item.Taxonomy.Species) ? null : string.Format("<em>{0}</em>", item.Taxonomy.Species),
-                        string.IsNullOrWhiteSpace(item.Taxonomy.Subspecies) ? null : string.Format("<em>{0}</em>", item.Taxonomy.Subspecies),
-                        item.Taxonomy.Author
-                    }.Concatenate(" ");
+                    item.ScientificName = _taxonomyFactory.MakeScientificName(item.QualifierRank,
+                        item.Qualifier, item.Taxonomy.Genus, item.Taxonomy.Subgenus,
+                        item.Taxonomy.Species, item.Taxonomy.Subspecies, item.Taxonomy.Author);
 
-                    item.ScientificNameText = HtmlConverter.HtmlToText(item.ScientificNameText);
-
-                    // Scientific Name
-                    item.ScientificName = new[]
-                    {
-                        item.QualifierRank != QualifierRankType.Genus ? null : item.Qualifier,
-                        item.Taxonomy.Genus,
-                        string.IsNullOrWhiteSpace(item.Taxonomy.Subgenus)
-                            ? null
-                            : string.Format("({0})", item.Taxonomy.Subgenus),
-                        item.QualifierRank != QualifierRankType.Species ? null : item.Qualifier,
-                        item.Taxonomy.Species,
-                        item.Taxonomy.Subspecies,
-                        item.Taxonomy.Author
-                    }.Concatenate(" ");
+                    item.ScientificNameText = HtmlConverter.HtmlToText(item.ScientificName);
 
                     // Species profile Relationship
                     var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");

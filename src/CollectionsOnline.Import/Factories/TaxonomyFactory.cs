@@ -100,5 +100,47 @@ namespace CollectionsOnline.Import.Factories
 
             return null;
         }
+
+        public string MakeScientificName(QualifierRankType qualifierRank, string qualifier, string genus,
+            string subgenus, string species, string subspecies, string author)
+        {
+            string scientificName;
+
+            if (!string.IsNullOrWhiteSpace(qualifier) && qualifierRank == QualifierRankType.Species)
+            {
+                scientificName = new[]
+                {
+                    string.Format("<em>{0}</em>", new[]
+                    {
+                        genus,
+                        subgenus
+                    }.Concatenate(" ")),
+                    qualifier,
+                    string.Format("<em>{0}</em>", new[]
+                    {
+                        species,
+                        subspecies
+                    }.Concatenate(" ")),
+                    author
+                }.Concatenate(" ");
+            }
+            else
+            {
+                scientificName = new[]
+                {
+                    qualifier,
+                    string.Format("<em>{0}</em>", new[]
+                    {
+                        genus,
+                        subgenus,
+                        species,
+                        subspecies
+                    }.Concatenate(" ")),
+                    author
+                }.Concatenate(" ");
+            }
+            
+            return scientificName;
+        }
     }
 }
