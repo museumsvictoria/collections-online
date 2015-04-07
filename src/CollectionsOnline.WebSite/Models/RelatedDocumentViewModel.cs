@@ -7,5 +7,7 @@
         public string ThumbnailUri { get; set; }
 
         public string DisplayTitle { get; set; }
+
+        public string SubDisplayTitle { get; set; }
     }
 }

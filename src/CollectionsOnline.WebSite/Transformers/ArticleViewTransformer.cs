@@ -19,7 +19,8 @@ namespace CollectionsOnline.WebSite.Transformers
                         {
                             relatedItem.Id, 
                             relatedItem.ThumbnailUri,
-                            relatedItem.DisplayTitle
+                            relatedItem.DisplayTitle,
+                            SubDisplayTitle = relatedItem.RegistrationNumber
                         },
                     RelatedSpecimens = from specimenId in article.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -28,7 +29,8 @@ namespace CollectionsOnline.WebSite.Transformers
                         {
                             relatedSpecimen.Id,
                             relatedSpecimen.ThumbnailUri,
-                            relatedSpecimen.DisplayTitle
+                            relatedSpecimen.DisplayTitle,
+                            SubDisplayTitle = relatedSpecimen.RegistrationNumber
                         },
                     ParentArticle = (LoadDocument<Article>(article.ParentArticleId) != null && !LoadDocument<Article>(article.ParentArticleId).IsHidden) ? LoadDocument<Article>(article.ParentArticleId) : null,
                     ChildArticles = from articleId in article.ChildArticleIds

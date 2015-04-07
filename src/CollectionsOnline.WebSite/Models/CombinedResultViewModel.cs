@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace CollectionsOnline.WebSite.Models
+﻿namespace CollectionsOnline.WebSite.Models
 {
     public class CombinedResultViewModel
     {
         public string Id { get; set; }
 
         public string DisplayTitle { get; set; }
+
+        public string SubDisplayTitle { get; set; }
 
         public string Summary { get; set; }
 

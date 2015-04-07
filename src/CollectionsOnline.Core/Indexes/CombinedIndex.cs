@@ -21,6 +21,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = article.Id,
                     DisplayTitle = article.DisplayTitle,
+                    SubDisplayTitle = (string)null,
                     Content = new object[] { article.DisplayTitle, article.ContentText, article.ContentSummary, article.Keywords },
                     Summary = article.Summary,
                     ThumbnailUri = article.ThumbnailUri,
@@ -75,6 +76,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = item.Id,
                     DisplayTitle = item.DisplayTitle,
+                    SubDisplayTitle = item.RegistrationNumber,
                     Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber, item.ObjectSummary, item.PhysicalDescription },
                     Summary = item.Summary,
                     ThumbnailUri = item.ThumbnailUri,
@@ -174,6 +176,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = species.Id,
                     DisplayTitle = species.DisplayTitle,
+                    SubDisplayTitle = (string)null,
                     Content =
                         new object[]
                         {
@@ -257,6 +260,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = specimen.Id,
                     DisplayTitle = specimen.DisplayTitle,
+                    SubDisplayTitle = specimen.RegistrationNumber,
                     Content = new object[]
                     {
                         specimen.RegistrationNumber, specimen.ScientificGroup, specimen.Category, specimen.CollectionNames, specimen.Discipline,
@@ -362,6 +366,7 @@ namespace CollectionsOnline.Core.Indexes
             
             Index(x => x.Id, FieldIndexing.No);
             Index(x => x.DisplayTitle, FieldIndexing.No);
+            Index(x => x.SubDisplayTitle, FieldIndexing.No);
             Index(x => x.Content, FieldIndexing.Analyzed);
             Index(x => x.Summary, FieldIndexing.No);
             Index(x => x.ThumbnailUri, FieldIndexing.No);
@@ -371,6 +376,7 @@ namespace CollectionsOnline.Core.Indexes
 
             Store(x => x.Id, FieldStorage.Yes);
             Store(x => x.DisplayTitle, FieldStorage.Yes);
+            Store(x => x.SubDisplayTitle, FieldStorage.Yes);
             Store(x => x.Summary, FieldStorage.Yes);
             Store(x => x.ThumbnailUri, FieldStorage.Yes);
             Store(x => x.Type, FieldStorage.Yes);
@@ -396,6 +402,8 @@ namespace CollectionsOnline.Core.Indexes
         public string Id { get; set; }
 
         public string DisplayTitle { get; set; }
+
+        public string SubDisplayTitle { get; set; }
 
         public object[] Content { get; set; }
 

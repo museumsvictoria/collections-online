@@ -19,7 +19,8 @@ namespace CollectionsOnline.WebSite.Transformers
                         {
                             relatedItem.Id, 
                             relatedItem.ThumbnailUri,
-                            relatedItem.DisplayTitle
+                            relatedItem.DisplayTitle,
+                            SubDisplayTitle = relatedItem.RegistrationNumber
                         },
                     RelatedSpecimens = from specimenId in specimen.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -28,7 +29,8 @@ namespace CollectionsOnline.WebSite.Transformers
                         {
                             relatedSpecimen.Id,
                             relatedSpecimen.ThumbnailUri,
-                            relatedSpecimen.DisplayTitle
+                            relatedSpecimen.DisplayTitle,
+                            SubDisplayTitle = relatedSpecimen.RegistrationNumber
                         },
                     RelatedSpecies = from speciesId in specimen.RelatedSpeciesIds
                         let relatedSpecies = LoadDocument<Species>(speciesId)
