@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Models;
 using Raven.Client.Indexes;
 
 namespace CollectionsOnline.WebSite.Transformers
@@ -36,7 +37,15 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedSpecimen.ThumbnailUri,
                             Type = "Specimen"
                         },
-                    ParentArticle = (LoadDocument<Article>(article.ParentArticleId) != null && !LoadDocument<Article>(article.ParentArticleId).IsHidden) ? LoadDocument<Article>(article.ParentArticleId) : null,
+                    ParentArticle = (LoadDocument<Article>(article.ParentArticleId) != null && !LoadDocument<Article>(article.ParentArticleId).IsHidden) ?
+                        new
+                        {
+                            LoadDocument<Article>(article.ParentArticleId).Id,
+                            LoadDocument<Article>(article.ParentArticleId).DisplayTitle,
+                            LoadDocument<Article>(article.ParentArticleId).Summary,
+                            LoadDocument<Article>(article.ParentArticleId).ThumbnailUri,
+                            Type = "Article"
+                        } : null,
                     ChildArticles = from articleId in article.ChildArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
                         where relatedArticle != null && !relatedArticle.IsHidden
