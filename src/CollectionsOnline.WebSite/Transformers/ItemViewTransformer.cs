@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
 using Raven.Client.Indexes;
 
 namespace CollectionsOnline.WebSite.Transformers
@@ -19,29 +17,35 @@ namespace CollectionsOnline.WebSite.Transformers
                         where relatedItem != null && !relatedItem.IsHidden
                         select new
                         {
-                            relatedItem.Id, 
-                            relatedItem.ThumbnailUri,
+                            relatedItem.Id,                             
                             relatedItem.DisplayTitle,
-                            SubDisplayTitle = relatedItem.RegistrationNumber
+                            SubDisplayTitle = relatedItem.RegistrationNumber,
+                            relatedItem.Summary,
+                            relatedItem.ThumbnailUri,
+                            Type = "Item"
                         },
                     RelatedSpecimens = from specimenId in item.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
                         where relatedSpecimen != null && !relatedSpecimen.IsHidden
                         select new
                         {
-                            relatedSpecimen.Id,
-                            relatedSpecimen.ThumbnailUri,
+                            relatedSpecimen.Id,                            
                             relatedSpecimen.DisplayTitle,
-                            SubDisplayTitle = relatedSpecimen.RegistrationNumber
+                            SubDisplayTitle = relatedSpecimen.RegistrationNumber,
+                            relatedSpecimen.Summary,
+                            relatedSpecimen.ThumbnailUri,
+                            Type = "Specimen"
                         },
                     RelatedArticles = from articleId in item.RelatedArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
                         where relatedArticle != null && !relatedArticle.IsHidden
                         select new
                         {
-                            relatedArticle.Id,
+                            relatedArticle.Id,                            
+                            relatedArticle.DisplayTitle,
+                            relatedArticle.Summary,
                             relatedArticle.ThumbnailUri,
-                            relatedArticle.DisplayTitle
+                            Type = "Article"
                         },
                     RelatedSpecies = from speciesId in item.RelatedSpeciesIds
                         let relatedSpecies = LoadDocument<Species>(speciesId)
@@ -49,8 +53,10 @@ namespace CollectionsOnline.WebSite.Transformers
                         select new
                         {
                             relatedSpecies.Id,
+                            relatedSpecies.DisplayTitle,
+                            relatedSpecies.Summary,
                             relatedSpecies.ThumbnailUri,
-                            relatedSpecies.DisplayTitle
+                            Type = "Species"
                         }
                 };
         }

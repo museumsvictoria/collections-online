@@ -3,11 +3,11 @@
     <form method="GET" action="/search" role="form">
         @if (Model != null)
         {
-            <input type="text" name="query" placeholder="enter search term ..." value="@Model.Query">
+            <input type="text" name="query" placeholder="enter search term ..." value="@Model.Query"/>
         }
         else
         {
-            <input type="text" name="query" placeholder="enter search term ...">
+            <input type="text" name="query" placeholder="enter search term ..."/>
         }
         <button type="submit">
             <span class="icon-search" aria-hidden="true"></span>

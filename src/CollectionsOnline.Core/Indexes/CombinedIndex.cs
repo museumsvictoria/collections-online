@@ -385,7 +385,7 @@ namespace CollectionsOnline.Core.Indexes
 
             Analyzers.Add(x => x.Content, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
 
-            Suggestion(x => x.Content);
+            //Suggestion(x => x.Content);
 
             TermVector(x => x.Content, FieldTermVector.Yes);
         }

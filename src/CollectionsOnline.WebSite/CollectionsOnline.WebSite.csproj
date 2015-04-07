@@ -160,7 +160,7 @@
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
-    <Compile Include="Models\CombinedResultViewModel.cs" />
+    <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />
@@ -193,7 +193,6 @@
     <Compile Include="Transformers\SpeciesViewTransformerResult.cs" />
     <Compile Include="Transformers\ItemViewTransformerResult.cs" />
     <Compile Include="Transformers\ItemViewTransformer.cs" />
-    <Compile Include="Models\RelatedDocumentViewModel.cs" />
     <Compile Include="Transformers\SpeciesViewTransformer.cs" />
     <Compile Include="Queries\ISpecimenViewModelQuery.cs" />
     <Compile Include="Transformers\SpecimenViewTransformer.cs" />
@@ -306,6 +305,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\taxonomy.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\emuroot.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -18,19 +18,23 @@ namespace CollectionsOnline.WebSite.Transformers
                         select new
                         {
                             relatedItem.Id, 
-                            relatedItem.ThumbnailUri,
                             relatedItem.DisplayTitle,
-                            SubDisplayTitle = relatedItem.RegistrationNumber
+                            SubDisplayTitle = relatedItem.RegistrationNumber,
+                            relatedItem.Summary,
+                            relatedItem.ThumbnailUri,                            
+                            Type = "Item"
                         },
                     RelatedSpecimens = from specimenId in article.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
                         where relatedSpecimen != null && !relatedSpecimen.IsHidden
                         select new
                         {
-                            relatedSpecimen.Id,
-                            relatedSpecimen.ThumbnailUri,
+                            relatedSpecimen.Id,                            
                             relatedSpecimen.DisplayTitle,
-                            SubDisplayTitle = relatedSpecimen.RegistrationNumber
+                            SubDisplayTitle = relatedSpecimen.RegistrationNumber,
+                            relatedSpecimen.Summary,
+                            relatedSpecimen.ThumbnailUri,
+                            Type = "Specimen"
                         },
                     ParentArticle = (LoadDocument<Article>(article.ParentArticleId) != null && !LoadDocument<Article>(article.ParentArticleId).IsHidden) ? LoadDocument<Article>(article.ParentArticleId) : null,
                     ChildArticles = from articleId in article.ChildArticleIds
@@ -39,8 +43,10 @@ namespace CollectionsOnline.WebSite.Transformers
                         select new
                         {
                             relatedArticle.Id,
+                            relatedArticle.DisplayTitle,
+                            relatedArticle.Summary,
                             relatedArticle.ThumbnailUri,
-                            relatedArticle.DisplayTitle
+                            Type = "Article"
                         },
                     RelatedArticles = from articleId in article.RelatedArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
@@ -48,8 +54,10 @@ namespace CollectionsOnline.WebSite.Transformers
                         select new
                         {
                             relatedArticle.Id,
+                            relatedArticle.DisplayTitle,
+                            relatedArticle.Summary,
                             relatedArticle.ThumbnailUri,
-                            relatedArticle.DisplayTitle
+                            Type = "Article"
                         }
                 };
         }

@@ -94,7 +94,7 @@ namespace CollectionsOnline.WebSite.Queries
 
                 RavenQueryStatistics statistics;
                 var results = query
-                    .SelectFields<CombinedResultViewModel>()
+                    .SelectFields<EmuAggregateRootViewModel>()
                     .Statistics(out statistics)
                     .ToList();
                 queryStopwatch.Stop();
@@ -104,21 +104,21 @@ namespace CollectionsOnline.WebSite.Queries
 
                 // Get suggestions if needed
                 var suggestions = new List<string>();
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Query) &&
-                    results.Count <= Constants.SuggestionsMinResultsSize)
-                {
-                    suggestions = _documentSession
-                        .Query<CombinedIndexResult, CombinedIndex>()
-                        .Suggest(new SuggestionQuery()
-                        {
-                            Field = "Content",
-                            Term = searchInputModel.Query,
-                            Accuracy = 0.4f,
-                            MaxSuggestions = 5,
-                            Distance = StringDistanceTypes.JaroWinkler,
-                            Popularity = true,
-                        }).Suggestions.ToList();
-                }
+                //if (!string.IsNullOrWhiteSpace(searchInputModel.Query) &&
+                //    results.Count <= Constants.SuggestionsMinResultsSize)
+                //{
+                //    suggestions = _documentSession
+                //        .Query<CombinedIndexResult, CombinedIndex>()
+                //        .Suggest(new SuggestionQuery()
+                //        {
+                //            Field = "Content",
+                //            Term = searchInputModel.Query,
+                //            Accuracy = 0.4f,
+                //            MaxSuggestions = 5,
+                //            Distance = StringDistanceTypes.JaroWinkler,
+                //            Popularity = true,
+                //        }).Suggestions.ToList();
+                //}
 
                 return _searchViewModelFactory.MakeViewModel(
                     results,

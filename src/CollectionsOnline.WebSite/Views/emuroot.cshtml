@@ -1,0 +1,17 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.EmuAggregateRootViewModel>
+<div class="@Model.Type.ToLower()">
+    <a href="/@Model.Id">
+        @if (string.IsNullOrWhiteSpace(Model.ThumbnailUri))
+        {
+            <span class="no-image">
+                <span class="no-image-label">No Image</span>
+            </span>
+        }
+        else
+        {
+            <img src="@Model.ThumbnailUri" />
+        }
+        <span class="title">@Html.Raw(Model.DisplayTitle)</span>
+        <span class="icon-@Model.Type.ToLower()" aria-hidden="true">@if (!string.IsNullOrWhiteSpace(Model.SubDisplayTitle)){ @Model.SubDisplayTitle }</span>
+    </a>
+</div>

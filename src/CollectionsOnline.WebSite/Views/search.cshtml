@@ -1,5 +1,4 @@
-﻿@using Nancy.Diagnostics
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchViewModel>
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchViewModel>
 @{
     Layout = "layout.cshtml";
 }
@@ -70,22 +69,7 @@
         <div class="results-area">
             @foreach (var result in Model.Results)
             {
-                <div class="@result.Type.ToLower()">
-                    <a href="/@result.Id">
-                        @if (string.IsNullOrWhiteSpace(result.ThumbnailUri))
-                        {
-                            <span class="no-image">
-                                <span class="no-image-label">No Image</span>
-                            </span>
-                        }
-                        else
-                        {
-                            <img src="@result.ThumbnailUri" />
-                        }
-                        <span class="title">@Html.Raw(result.DisplayTitle)</span>
-                        <span class="icon-@result.Type.ToLower()" aria-hidden="true"></span>
-                    </a>
-                </div>
+                @Html.Partial("emuroot", result)
             }
         </div>
         <div class="pagination bottom">

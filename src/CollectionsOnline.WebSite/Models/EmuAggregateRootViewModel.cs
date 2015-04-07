@@ -1,6 +1,6 @@
 ﻿namespace CollectionsOnline.WebSite.Models
 {
-    public class CombinedResultViewModel
+    public class EmuAggregateRootViewModel
     {
         public string Id { get; set; }
 

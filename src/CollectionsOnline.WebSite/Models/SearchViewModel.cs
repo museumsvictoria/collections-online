@@ -52,7 +52,7 @@ namespace CollectionsOnline.WebSite.Models
             }
         }
 
-        public IList<CombinedResultViewModel> Results { get; set; }
+        public IList<EmuAggregateRootViewModel> Results { get; set; }
 
         public IList<ActiveFacetValueViewModel> ActiveFacets { get; set; }
 
@@ -63,7 +63,7 @@ namespace CollectionsOnline.WebSite.Models
         public SearchViewModel()
         {
             Facets = new List<FacetViewModel>();
-            Results = new List<CombinedResultViewModel>();
+            Results = new List<EmuAggregateRootViewModel>();
             ActiveFacets = new List<ActiveFacetValueViewModel>();
             ActiveTerms = new List<ActiveTermViewModel>();
             Suggestions = new List<SuggestionViewModel>();

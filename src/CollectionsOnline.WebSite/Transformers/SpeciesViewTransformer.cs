@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
 using Raven.Client.Indexes;
 
 namespace CollectionsOnline.WebSite.Transformers
@@ -19,10 +17,12 @@ namespace CollectionsOnline.WebSite.Transformers
                         where relatedItem != null && !relatedItem.IsHidden
                         select new
                         {
-                            relatedItem.Id, 
-                            relatedItem.ThumbnailUri,
+                            relatedItem.Id,                             
                             relatedItem.DisplayTitle,
-                            SubDisplayTitle = relatedItem.RegistrationNumber
+                            SubDisplayTitle = relatedItem.RegistrationNumber,
+                            relatedItem.Summary,
+                            relatedItem.ThumbnailUri,
+                            Type = "Item"
                         },
                     RelatedSpecimens = from specimenId in species.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -30,9 +30,11 @@ namespace CollectionsOnline.WebSite.Transformers
                         select new
                         {
                             relatedSpecimen.Id,
-                            relatedSpecimen.ThumbnailUri,
                             relatedSpecimen.DisplayTitle,
-                            SubDisplayTitle = relatedSpecimen.RegistrationNumber
+                            SubDisplayTitle = relatedSpecimen.RegistrationNumber,
+                            relatedSpecimen.Summary,
+                            relatedSpecimen.ThumbnailUri,
+                            Type = "Specimen"
                         }
                 };
         }

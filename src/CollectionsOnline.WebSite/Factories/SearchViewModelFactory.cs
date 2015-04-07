@@ -12,7 +12,7 @@ namespace CollectionsOnline.WebSite.Factories
     public class SearchViewModelFactory : ISearchViewModelFactory
     {
         public SearchViewModel MakeViewModel(
-            IList<CombinedResultViewModel> results,
+            IList<EmuAggregateRootViewModel> results,
             FacetResults facets,
             List<string> suggestions,
             int totalResults,

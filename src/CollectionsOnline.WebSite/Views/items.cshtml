@@ -900,82 +900,19 @@
                 <h3>Showing related</h3>
                 @foreach (var relatedItem in Model.RelatedItems)
                 {
-                    <div class="item">
-                        <a href="/@relatedItem.Id">
-                            @if (string.IsNullOrWhiteSpace(relatedItem.ThumbnailUri))
-                            {
-                                <span class="no-image">
-                                    <span class="no-image-label">No Image</span>
-                                </span>
-                            }
-                            else
-                            {
-                                <img src="@relatedItem.ThumbnailUri" />
-                            }
-                            <span class="title">@Html.Raw(relatedItem.DisplayTitle)</span>
-                            <span class="icon-item" aria-hidden="true"></span>
-                        </a>
-                    </div>
+                    @Html.Partial("emuroot", relatedItem)
                 }
                 @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                 {
-                    <div class="specimen">
-                        <a href="/@relatedSpecimen.Id">
-                            @if (string.IsNullOrWhiteSpace(relatedSpecimen.ThumbnailUri))
-                            {
-                                <span class="no-image">
-                                    <span class="no-image-label">No Image</span>
-                                </span>
-                            }
-                            else
-                            {
-                                <img src="@relatedSpecimen.ThumbnailUri" />
-                            }
-                            <span class="title">@Html.Raw(relatedSpecimen.DisplayTitle)</span>
-                            <span class="icon-specimen" aria-hidden="true"></span>
-                        </a>
-                    </div>
+                    @Html.Partial("emuroot", relatedSpecimen)
                 }
                 @foreach (var relatedArticle in Model.RelatedArticles)
                 {
-                    <div class="article">
-                        <a href="/@relatedArticle.Id">
-                            @if (string.IsNullOrWhiteSpace(relatedArticle.ThumbnailUri))
-                            {
-                                <span class="no-image">
-                                    <span class="no-image-label">No Image</span>
-                                </span>
-                            }
-                            else
-                            {
-                                <img src="@relatedArticle.ThumbnailUri" />
-                            }
-                            <span class="title">@Html.Raw(relatedArticle.DisplayTitle)</span>
-                            <span class="icon-article" aria-hidden="true"></span>
-                        </a>
-                    </div>
+                    @Html.Partial("emuroot", relatedArticle)
                 }
-                @if (Model.RelatedSpecies != null)
+                @foreach (var relatedSpecies in Model.RelatedSpecies)
                 {
-                    foreach (var relatedSpecies in Model.RelatedSpecies)
-                    {
-                        <div class="species">
-                            <a href="/@relatedSpecies.Id">
-                                @if (string.IsNullOrWhiteSpace(relatedSpecies.ThumbnailUri))
-                                {
-                                    <span class="no-image">
-                                        <span class="no-image-label">No Image</span>
-                                    </span>
-                                }
-                                else
-                                {
-                                    <img src="@relatedSpecies.ThumbnailUri" />
-                                }
-                                <span class="title">@Html.Raw(relatedSpecies.DisplayTitle)</span>
-                                <span class="icon-species" aria-hidden="true"></span>
-                            </a>
-                        </div>
-                    }
+                    @Html.Partial("emuroot", relatedSpecies)
                 }
             </div>
             @if (Model.RelatedSpeciesSpecimenItemCount > 0)

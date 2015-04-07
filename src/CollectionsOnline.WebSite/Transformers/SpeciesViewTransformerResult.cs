@@ -8,9 +8,9 @@ namespace CollectionsOnline.WebSite.Transformers
     {
         public Species Species { get; set; }
 
-        public IList<RelatedDocumentViewModel> RelatedItems { get; set; }
+        public IList<EmuAggregateRootViewModel> RelatedItems { get; set; }
 
-        public IList<RelatedDocumentViewModel> RelatedSpecimens { get; set; }
+        public IList<EmuAggregateRootViewModel> RelatedSpecimens { get; set; }
 
         public int RelatedSpecimenCount { get; set; }
 
@@ -20,8 +20,8 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public SpeciesViewTransformerResult()
         {
-            RelatedItems = new List<RelatedDocumentViewModel>();
-            RelatedSpecimens = new List<RelatedDocumentViewModel>();
+            RelatedItems = new List<EmuAggregateRootViewModel>();
+            RelatedSpecimens = new List<EmuAggregateRootViewModel>();
             SpeciesImages = new List<ImageMedia>();
         }
     }
