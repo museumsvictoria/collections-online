@@ -25,7 +25,7 @@ namespace CollectionsOnline.WebSite.Factories
                     .Where(x => x.Metadata.Any()),
                 ApiRootUrl = string.Format("{0}{1}", request.Url.SiteBase, Constants.ApiBasePath),
                 ApiCurrentVersionRootUrl = string.Format("{0}{1}{2}", request.Url.SiteBase, Constants.ApiBasePath, Constants.CurrentApiVersionPath),
-                PagingPageSizeMax = Constants.PagingPageSizeMax.ToString()
+                PagingPageSizeMax = Constants.PagingPerPageMax.ToString()
             };
 
             return developersViewModel;

@@ -307,7 +307,7 @@
     <Content Include="Views\taxonomy.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\emuroot.cshtml" />
+    <Content Include="Views\emutile.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

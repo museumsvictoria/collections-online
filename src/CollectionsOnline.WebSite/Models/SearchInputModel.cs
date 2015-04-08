@@ -4,13 +4,15 @@ namespace CollectionsOnline.WebSite.Models
 {
     public class SearchInputModel
     {
-        public int Offset { get; set; }
+        public int Page { get; set; }
 
-        public int Limit { get; set; }
+        public int PerPage { get; set; }
 
         public string Sort { get; set; }
 
-        public string Query { get; set; }        
+        public string View { get; set; }
+
+        public string Query { get; set; }
 
         public string CurrentUrl { get; set; }
 

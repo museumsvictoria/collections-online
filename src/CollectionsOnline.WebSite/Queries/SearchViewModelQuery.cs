@@ -4,7 +4,6 @@ using System.Linq;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
-using Raven.Abstractions.Data;
 using Raven.Client;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
@@ -35,8 +34,8 @@ namespace CollectionsOnline.WebSite.Queries
                 queryStopwatch.Start();
                 var query = _documentSession.Advanced
                     .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                    .Skip(searchInputModel.Offset)
-                    .Take(searchInputModel.Limit);
+                    .Skip((searchInputModel.Page - 1) * searchInputModel.PerPage)
+                    .Take(searchInputModel.PerPage);
 
                 // get facets
                 facetStopwatch.Start();

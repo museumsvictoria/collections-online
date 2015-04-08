@@ -24,8 +24,8 @@ namespace CollectionsOnline.WebSite.Factories
             {
                 Query = searchInputModel.Query,
                 TotalResults = totalResults,
-                Limit = searchInputModel.Limit,
-                Offset = searchInputModel.Offset,
+                Page = searchInputModel.Page,
+                PerPage = searchInputModel.PerPage,
                 QueryTimeElapsed = queryTimeElapsed,
                 FacetTimeElapsed = facetTimeElapsed
             };
@@ -40,7 +40,7 @@ namespace CollectionsOnline.WebSite.Factories
                     if (facetValue.Range != "NULL_VALUE")
                     {
                         var facetValueQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
-                        facetValueQueryString.Remove("offset");
+                        facetValueQueryString.Remove("page");
 
                         var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
 
@@ -132,19 +132,20 @@ namespace CollectionsOnline.WebSite.Factories
 
             // Build next prev page links
             var queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
-            if ((searchInputModel.Offset + searchInputModel.Limit) < totalResults)
+            var totalPages = (totalResults + searchInputModel.PerPage - 1) / searchInputModel.PerPage;
+            if ((searchInputModel.Page + 1) <= totalPages)
             {
-                queryString.Set("offset", (searchInputModel.Offset + searchInputModel.Limit).ToString());
+                queryString.Set("page", (searchInputModel.Page + 1).ToString());
 
                 searchViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
             }
 
-            if ((searchInputModel.Offset - searchInputModel.Limit) >= 0)
+            if ((searchInputModel.Page - 1) >= 1)
             {
-                queryString.Set("offset", (searchInputModel.Offset - searchInputModel.Limit).ToString());
-                if ((searchInputModel.Offset - searchInputModel.Limit) == 0)
+                queryString.Set("page", (searchInputModel.Page - 1).ToString());
+                if ((searchInputModel.Page - 1) == 1)
                 {
-                    queryString.Remove("offset");
+                    queryString.Remove("page");
                 }
 
                 searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;

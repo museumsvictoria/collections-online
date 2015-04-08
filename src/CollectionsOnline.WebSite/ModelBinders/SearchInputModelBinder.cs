@@ -15,22 +15,30 @@ namespace CollectionsOnline.WebSite.ModelBinders
             var query = context.Request.Query;
 
             // Bind and normalize the regular stuff
-            if (query.Offset.HasValue)
-                searchInputModel.Offset = query.Offset;
-            if (searchInputModel.Offset < 0)
-                searchInputModel.Offset = 0;
+            if (query.Page.HasValue)
+                searchInputModel.Page = query.Page;
+            if (searchInputModel.Page <= 0)
+                searchInputModel.Page = 1;
 
-            if (query.Limit.HasValue)
-                searchInputModel.Limit = query.Limit;
-            if (searchInputModel.Limit <= 0 || searchInputModel.Limit > Constants.PagingPageSizeMax)
-                searchInputModel.Limit = Constants.PagingPageSizeDefault;
+            if (query.PerPage.HasValue)
+                searchInputModel.PerPage = query.Limit;
+            if (searchInputModel.PerPage <= 0 || searchInputModel.PerPage > Constants.PagingPerPageMax)
+                searchInputModel.PerPage = Constants.PagingPerPageDefault;
 
             if (string.Equals(query.Sort, "quality", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "quality";
             else if (string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "relevance";
 
+            if (string.Equals(query.View, "tile", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.View = "tile";
+            else if (string.Equals(query.View, "list", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.View = "list";
+
             searchInputModel.Query = query.Query;
+
+            searchInputModel.CurrentUrl = string.Format("{0}{1}", context.Request.Url.SiteBase, context.Request.Url.Path);
+            searchInputModel.CurrentQueryString = context.Request.Url.Query;
 
             // Facets
             searchInputModel.Facets = new Dictionary<string, string>();

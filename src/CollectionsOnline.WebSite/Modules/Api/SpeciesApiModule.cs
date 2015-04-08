@@ -20,8 +20,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         .DocumentQuery<Species, CombinedIndex>()
                         .WhereEquals("Type", "Species")
                         .Statistics(out Statistics)
-                        .Skip(Offset)
-                        .Take(Limit)
+                        .Skip((Page - 1) * PerPage)
+                        .Take(PerPage)
                         .ToList();
 
                     return BuildResponse(Mapper.Map<IEnumerable<Species>, IEnumerable<SpeciesApiViewModel>>(species));

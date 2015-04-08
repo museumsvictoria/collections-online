@@ -13,9 +13,9 @@ namespace CollectionsOnline.Core.Config
 
         public static int CachedDataBatchSize = 10000;
 
-        public static int PagingPageSizeDefault = 30;
+        public static int PagingPerPageDefault = 40;
 
-        public static int PagingPageSizeMax = 120;
+        public static int PagingPerPageMax = 100;
 
         public static int SuggestionsMinResultsSize = 15;
 

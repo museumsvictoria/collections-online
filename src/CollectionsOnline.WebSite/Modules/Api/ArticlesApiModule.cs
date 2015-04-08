@@ -20,8 +20,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         .DocumentQuery<Article, CombinedIndex>()
                         .WhereEquals("Type", "Article")
                         .Statistics(out Statistics)
-                        .Skip(Offset)
-                        .Take(Limit)
+                        .Skip((Page - 1) * PerPage)
+                        .Take(PerPage)
                         .ToList();
 
                     return BuildResponse(Mapper.Map<IEnumerable<Article>, IEnumerable<ArticleApiViewModel>>(articles));

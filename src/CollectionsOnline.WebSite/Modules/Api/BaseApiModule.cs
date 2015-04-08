@@ -69,14 +69,13 @@ namespace CollectionsOnline.WebSite.Modules.Api
         {
             var apiInputModel = this.Bind<ApiInputModel>();
 
-            if (apiInputModel.Offset < 0)
-                apiInputModel.Offset = 0;
+            if (apiInputModel.Page <= 0)
+                Page = 1;
 
-            if (apiInputModel.Limit <= 0 || apiInputModel.Limit > Constants.PagingPageSizeMax)
-                apiInputModel.Limit = Constants.PagingPageSizeDefault;
+            if (apiInputModel.PerPage <= 0 || apiInputModel.PerPage > Constants.PagingPerPageMax)
+                apiInputModel.PerPage = Constants.PagingPerPageDefault;
 
-            Offset = apiInputModel.Offset;
-            Limit = apiInputModel.Limit;
+            PerPage = apiInputModel.PerPage;
             Envelope = apiInputModel.Envelope;
         }
 
@@ -84,24 +83,25 @@ namespace CollectionsOnline.WebSite.Modules.Api
         {
             var queryString = HttpUtility.ParseQueryString(Request.Url.Query);
             var url = Request.Url;
+            var totalPages = (Statistics.TotalResults + PerPage - 1) / PerPage;
             var links = new List<string>();
 
             // Next
-            if ((Offset + Limit) < Statistics.TotalResults)
+            if ((Page + 1) <= totalPages)
             {
-                queryString.Set("offset", (Offset + Limit).ToString());
+                queryString.Set("page", (Page + 1).ToString());
 
                 url.Query = "?" + queryString;
                 links.Add(string.Format("<{0}>; rel=\"next\"", url));
             }
 
             // Prev
-            if ((Offset - Limit) >= 0)
+            if ((Page - 1) >= 1)
             {
-                queryString.Set("offset", (Offset - Limit).ToString());
-                if ((Offset - Limit) == 0)
+                queryString.Set("page", (Page - 1).ToString());
+                if ((Page - 1) == 1)
                 {
-                    queryString.Remove("offset");
+                    queryString.Remove("page");
                 }
 
                 url.Query = "?" + queryString;
@@ -114,9 +114,9 @@ namespace CollectionsOnline.WebSite.Modules.Api
             return string.Empty;
         }
 
-        protected int Offset { get; private set; }
+        protected int Page { get; private set; }
 
-        protected int Limit { get; private set; }
+        protected int PerPage { get; private set; }
 
         protected bool Envelope { get; private set; }
 

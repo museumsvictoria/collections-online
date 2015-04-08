@@ -1,38 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CollectionsOnline.Core.Indexes;
 
 namespace CollectionsOnline.WebSite.Models
 {
     public class SearchViewModel
     {
-        public int Offset { get; set; }
+        public int Page { get; set; }
 
-        public int Limit { get; set; }
+        public int PerPage { get; set; }
 
-        public int CurrentPage
-        {
-            get
-            {
-                return ((Offset) / Limit) + 1;
-            }
-        }
+        public string Sort { get; set; }
 
-        public int TotalPages
-        {
-            get
-            {
-                return (TotalResults / Limit) + (TotalResults % Limit > 0 ? 1 : 0);
-            }
-        }
+        public string View { get; set; }
+
+        public string Query { get; set; }
 
         public int TotalResults { get; set; }
 
         public long QueryTimeElapsed { get; set; }
 
         public long FacetTimeElapsed { get; set; }
-
-        public string Query { get; set; }
 
         public string NextPageUrl { get; set; }
 

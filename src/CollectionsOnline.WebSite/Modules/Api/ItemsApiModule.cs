@@ -21,8 +21,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         .DocumentQuery<Item, CombinedIndex>()
                         .WhereEquals("Type", "Item")
                         .Statistics(out Statistics)
-                        .Skip(Offset)
-                        .Take(Limit)
+                        .Skip((Page - 1) * PerPage)
+                        .Take(PerPage)
                         .ToList();
 
                     return BuildResponse(Mapper.Map<IEnumerable<Item>, IEnumerable<ItemApiViewModel>>(items));
