@@ -490,11 +490,11 @@
                 <h3>Showing related</h3>
                 @foreach (var relatedItem in Model.RelatedItems)
                 {
-                    @Html.Partial("emuroot", relatedItem)
+                    @Html.Partial("emutile", relatedItem)
                 }
                 @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                 {
-                    @Html.Partial("emuroot", relatedSpecimen)
+                    @Html.Partial("emutile", relatedSpecimen)
                 }
             </div>
             @if (Model.RelatedSpecimenCount > 0)
