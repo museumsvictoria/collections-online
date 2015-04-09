@@ -578,6 +578,7 @@ footer {
     .results {
         width:100%;
         background:#e3e3e3;
+        padding:0 0 20px 0;
 
         .active-facets {
             padding:20px 0 0 20px;
@@ -602,23 +603,50 @@ footer {
         .pagination {
             margin:40px 0 0 20px;
 
-            .counts {
+            div {
                 display:inline-block;
-                margin:0 20px 0 0;
             }
 
-            a.button {
+            .numbers {
+                float:left;
+            }
+
+            .options {
+                float:right;
+                margin-right:20px;
+            }
+
+            .pages a {
                 display:inline-block;
                 padding:0 5px;
                 color:$color;
             }
 
-            a.button.disabled {
+            .pages a.disabled {
                 color:#cccccc;
+            }
+
+            .order {
+                margin:0 20px 0 0;
+            }
+
+            .order a, .perpage a {
+                color:#756969;
+                height:35px;
+                line-height:35px;
+                display:inline-block;
+                border-radius:2px;
+                background:$color-default;
+                padding:0 10px;
+                margin:0 5px 0 0;
             }
 
             .icon-left-arrow, .icon-right-arrow {
                 font-size:0.7em;
+            }
+
+            input {
+                width:3rem;
             }
         }
 

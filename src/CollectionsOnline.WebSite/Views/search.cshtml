@@ -8,9 +8,6 @@
             <span class="icon-filter" aria-hidden="true"></span>
             Filter by
         </a>
-        <h4>Sort by</h4>
-        <a href="@Model.QualitySortUrl" class="button">Quality</a>
-        <a href="@Model.RelevanceSortUrl" class="button">Relevance</a>
         @foreach (var facet in Model.Facets)
         {
             <h4>@facet.Name</h4>
@@ -36,6 +33,7 @@
                 @foreach (var activeFacet in Model.ActiveFacets)
                 {
                     <a href="@activeFacet.UrlToRemove">
+                        <span>@activeFacet.Facet :</span>
                         @activeFacet.Name
                         <span class="icon-close" aria-hidden="true"></span>
                         <span class="icon-label-hidden">Remove facet</span>
@@ -44,6 +42,7 @@
                 @foreach (var activeTerm in Model.ActiveTerms)
                 {
                     <a href="@activeTerm.UrlToRemove">
+                        <span>@activeTerm.Term :</span>
                         @activeTerm.Name
                         <span class="icon-close" aria-hidden="true"></span>
                         <span class="icon-label-hidden">Remove facet</span>
@@ -54,17 +53,40 @@
         @if (Model.Suggestions.Any())
         {
             <div class="suggestions">
-            <span>Did you mean?</span>
-            @foreach (var suggestion in Model.Suggestions)
-            {
-                <a href="@suggestion.Url">@suggestion.Suggestion</a>
-            }
+                <span>Did you mean?</span>
+                @foreach (var suggestion in Model.Suggestions)
+                {
+                    <a href="@suggestion.Url">@suggestion.Suggestion</a>
+                }
             </div>
         }
         <div class="pagination">
-            <div class="counts"><strong>@Model.TotalResults</strong> results in <strong>@((Model.QueryTimeElapsed+Model.FacetTimeElapsed).ToString("N0")) ms</strong></div>
-            <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="icon-left-arrow"></span> Previous</a>
-            <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="icon-right-arrow"></span></a>
+            <div class="numbers">
+                <div class="counts">@Model.TotalResults.ToString("N0") results</div>
+                <div class="pages">
+                    <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")">
+                        <span class="icon-left-arrow"></span>
+                        <span class="icon-label-hidden">Previous page</span>
+                    </a>
+                    <input type="text" name="Page" value="@Model.Page" /> of @Model.TotalPages
+                    <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
+                        <span class="icon-label-hidden">Next page</span>
+                        <span class="icon-right-arrow"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="options">
+                <div class="order">
+                    Order by
+                    <a href="@Model.RelevanceSortUrl" class="button">Relevance</a>
+                    <a href="@Model.QualitySortUrl" class="button">Quality</a>
+                </div>
+                <div class="perpage">
+                    Results per page
+                    <a href="@Model.DefaultPerPageUrl" class="button">@CollectionsOnline.Core.Config.Constants.PagingPerPageDefault</a>
+                    <a href="@Model.MaxPerPageUrl" class="button">@CollectionsOnline.Core.Config.Constants.PagingPerPageMax</a>
+                </div>
+            </div>
         </div>
         <div class="results-area">
             @foreach (var result in Model.Results)
@@ -72,10 +94,21 @@
                 @Html.Partial("emutile", result)
             }
         </div>
-        <div class="pagination bottom">
-            <div class="counts"><strong>@Model.TotalResults</strong> results in <strong>@((Model.QueryTimeElapsed+Model.FacetTimeElapsed).ToString("N0")) ms</strong></div>
-            <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")"><span class="icon-left-arrow"></span> Previous</a>
-            <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">Next <span class="icon-right-arrow"></span></a>
+        <div class="pagination">
+            <div class="numbers">
+                <div class="counts">@Model.TotalResults.ToString("N0") results</div>
+                <div class="pages">
+                    <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")">
+                        <span class="icon-left-arrow"></span>
+                        <span class="icon-label-hidden">Previous page</span>
+                    </a>
+                    <input type="text" name="Page" value="@Model.Page" /> of @Model.TotalPages
+                    <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
+                        <span class="icon-label-hidden">Next page</span>
+                        <span class="icon-right-arrow"></span>
+                    </a>
+                </div>
+            </div>            
         </div>
     </div>
 </div>

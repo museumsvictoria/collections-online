@@ -21,7 +21,7 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Page = 1;
 
             if (query.PerPage.HasValue)
-                searchInputModel.PerPage = query.Limit;
+                searchInputModel.PerPage = query.PerPage;
             if (searchInputModel.PerPage <= 0 || searchInputModel.PerPage > Constants.PagingPerPageMax)
                 searchInputModel.PerPage = Constants.PagingPerPageDefault;
 

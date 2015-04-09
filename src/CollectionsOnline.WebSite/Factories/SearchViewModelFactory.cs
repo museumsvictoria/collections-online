@@ -24,6 +24,7 @@ namespace CollectionsOnline.WebSite.Factories
             {
                 Query = searchInputModel.Query,
                 TotalResults = totalResults,
+                TotalPages = (totalResults + searchInputModel.PerPage - 1) / searchInputModel.PerPage,
                 Page = searchInputModel.Page,
                 PerPage = searchInputModel.PerPage,
                 QueryTimeElapsed = queryTimeElapsed,
@@ -132,8 +133,7 @@ namespace CollectionsOnline.WebSite.Factories
 
             // Build next prev page links
             var queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
-            var totalPages = (totalResults + searchInputModel.PerPage - 1) / searchInputModel.PerPage;
-            if ((searchInputModel.Page + 1) <= totalPages)
+            if ((searchInputModel.Page + 1) <= searchViewModel.TotalPages)
             {
                 queryString.Set("page", (searchInputModel.Page + 1).ToString());
 
@@ -159,6 +159,14 @@ namespace CollectionsOnline.WebSite.Factories
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("sort", "relevance");
             searchViewModel.RelevanceSortUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("perpage", Core.Config.Constants.PagingPerPageDefault.ToString());
+            searchViewModel.DefaultPerPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("perpage", Core.Config.Constants.PagingPerPageMax.ToString());
+            searchViewModel.MaxPerPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
 
             // Build suggestions
             foreach (var suggestion in suggestions)

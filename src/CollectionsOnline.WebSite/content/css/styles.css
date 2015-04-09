@@ -1227,7 +1227,8 @@ footer {
         color: #82aa05; }
   #search .results {
     width: 100%;
-    background: #e3e3e3; }
+    background: #e3e3e3;
+    padding: 0 0 20px 0; }
     #search .results .active-facets {
       padding: 20px 0 0 20px; }
       #search .results .active-facets a {
@@ -1245,17 +1246,34 @@ footer {
           padding: 0 0 0 5px; }
     #search .results .pagination {
       margin: 40px 0 0 20px; }
-      #search .results .pagination .counts {
-        display: inline-block;
-        margin: 0 20px 0 0; }
-      #search .results .pagination a.button {
+      #search .results .pagination div {
+        display: inline-block; }
+      #search .results .pagination .numbers {
+        float: left; }
+      #search .results .pagination .options {
+        float: right;
+        margin-right: 20px; }
+      #search .results .pagination .pages a {
         display: inline-block;
         padding: 0 5px;
         color: #000; }
-      #search .results .pagination a.button.disabled {
+      #search .results .pagination .pages a.disabled {
         color: #cccccc; }
+      #search .results .pagination .order {
+        margin: 0 20px 0 0; }
+      #search .results .pagination .order a, #search .results .pagination .perpage a {
+        color: #756969;
+        height: 35px;
+        line-height: 35px;
+        display: inline-block;
+        border-radius: 2px;
+        background: #fff;
+        padding: 0 10px;
+        margin: 0 5px 0 0; }
       #search .results .pagination .icon-left-arrow, #search .results .pagination .icon-right-arrow {
         font-size: 0.7em; }
+      #search .results .pagination input {
+        width: 3rem; }
     #search .results .pagination.bottom {
       margin: 20px 0 40px 20px; }
     #search .results .results-area {

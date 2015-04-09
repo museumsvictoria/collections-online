@@ -17,6 +17,8 @@ namespace CollectionsOnline.WebSite.Models
 
         public int TotalResults { get; set; }
 
+        public int TotalPages { get; set; }
+
         public long QueryTimeElapsed { get; set; }
 
         public long FacetTimeElapsed { get; set; }
@@ -28,6 +30,10 @@ namespace CollectionsOnline.WebSite.Models
         public string QualitySortUrl { get; set; }
 
         public string RelevanceSortUrl { get; set; }
+
+        public string DefaultPerPageUrl { get; set; }
+
+        public string MaxPerPageUrl { get; set; }
 
         public IList<FacetViewModel> Facets { get; set; }
 
