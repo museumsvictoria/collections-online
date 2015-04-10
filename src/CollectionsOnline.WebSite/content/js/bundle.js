@@ -1,49 +1,93 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var $ = require('jquery');
 var images = require('./images');
+var search = require('./search');
 
 var App = {
   init: function() {
-    this.bindEvents();
-  },
-  bindEvents: function () {
-    images.bindEvents();
+    images.init();
+    search.init();
   }
 };
 
 $(document).ready(function () {
   App.init();
 });
-},{"./images":2,"jquery":3}],2:[function(require,module,exports){
+},{"./images":2,"./search":3,"jquery":4}],2:[function(require,module,exports){
 var $ = require('jquery');
 
 module.exports = {
+  init: function () {
+    this.cacheElements();
+    this.bindEvents();
+  },
+  cacheElements: function () {
+    this.Model = window.imagesModel;
+    this.$thumbs = $('#title .thumbnail');
+    this.$activeImage = $('#title .thumbnail img.active');
+    this.$heroImage = $('#media img');
+    this.$heroCaption = $('#media .caption-text');
+    this.$heroCreators = $('#media .creators');
+    this.$heroSources = $('#media .sources');
+    this.$heroCredit = $('#media .credit');
+    this.$heroRights = $('#media .rights-statement');
+  },
   bindEvents: function () {
-    $('#title .thumbnail').on('click', 'img', this.select.bind(this));
+    this.$thumbs.on('click', 'img', this.select.bind(this));
   },
   select: function(e) {
-    if (window.imagesModel) {
-      $('.thumbnail img.active').removeClass('active');
-      $(e.target).addClass('active');
+    if (this.Model) {
+      this.$activeImage.removeClass('active');
+
+      this.$activeImage = $(e.target).addClass('active');
       
-      var newImage = window.imagesModel[$(e.target).parent().index()];
+      var newImage = this.Model[$(e.target).parent().index()];
       
-      $('#media img').attr('src', newImage.Large.Uri);
+      this.$heroImage.attr('src', newImage.Large.Uri);
       
       if (newImage.Caption)
-        $('#media .caption-text').html(newImage.Caption);
+        this.$heroCaption.html(newImage.Caption);
       if (newImage.Creators.length > 0)
-        $('#media .creators').text(newImage.Creators.join(', '));
+        this.$heroCreators.text(newImage.Creators.join(', '));
       if (newImage.Sources.length > 0)
-        $('#media .sources').text('Source: ' + newImage.Sources.join(', '));
+        this.$heroSources.text('Source: ' + newImage.Sources.join(', '));
       if (newImage.Credit)
-        $('#media .credit').text('Credit: ' + newImage.Credit);
+        this.$heroCredit.text('Credit: ' + newImage.Credit);
       if (newImage.Credit)
-        $('#media .rights-statement').text('This image is: ' + newImage.Credit);
+        this.$heroRights.text('This image is: ' + newImage.Credit);
     }
   }
 };
-},{"jquery":3}],3:[function(require,module,exports){
+},{"jquery":4}],3:[function(require,module,exports){
+var $ = require('jquery');
+var queryString = require('query-string');
+
+module.exports = {
+  init: function () {
+    this.cacheElements();
+    this.bindEvents();
+  },
+  cacheElements: function () {
+    this.$pageInput = $('.pagination input');
+
+    this.totalPages = parseInt($('.pages .total').first().text());
+    this.query = queryString.parse(location.search);
+
+    console.log(this.query);
+  },
+  bindEvents: function () {
+    this.$pageInput.on('change', this.gotoPage.bind(this));
+  },
+  gotoPage: function (e) {
+    var page = $(e.target).val().replace(/\D/g, '');
+
+    if (page && (page >= 1 && page <= this.totalPages)) {
+      this.query.page = page;
+      location.search = queryString.stringify(this.query);
+    }
+  }
+};
+},{"jquery":4,"query-string":5}],4:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.3
  * http://jquery.com/
@@ -9249,5 +9293,73 @@ if ( typeof noGlobal === strundefined ) {
 return jQuery;
 
 }));
+
+},{}],5:[function(require,module,exports){
+/*!
+	query-string
+	Parse and stringify URL query strings
+	https://github.com/sindresorhus/query-string
+	by Sindre Sorhus
+	MIT License
+*/
+(function () {
+	'use strict';
+	var queryString = {};
+
+	queryString.parse = function (str) {
+		if (typeof str !== 'string') {
+			return {};
+		}
+
+		str = str.trim().replace(/^(\?|#)/, '');
+
+		if (!str) {
+			return {};
+		}
+
+		return str.trim().split('&').reduce(function (ret, param) {
+			var parts = param.replace(/\+/g, ' ').split('=');
+			var key = parts[0];
+			var val = parts[1];
+
+			key = decodeURIComponent(key);
+			// missing `=` should be `null`:
+			// http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+			val = val === undefined ? null : decodeURIComponent(val);
+
+			if (!ret.hasOwnProperty(key)) {
+				ret[key] = val;
+			} else if (Array.isArray(ret[key])) {
+				ret[key].push(val);
+			} else {
+				ret[key] = [ret[key], val];
+			}
+
+			return ret;
+		}, {});
+	};
+
+	queryString.stringify = function (obj) {
+		return obj ? Object.keys(obj).map(function (key) {
+			var val = obj[key];
+
+			if (Array.isArray(val)) {
+				return val.map(function (val2) {
+					return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
+				}).join('&');
+			}
+
+			return encodeURIComponent(key) + '=' + encodeURIComponent(val);
+		}).join('&') : '';
+	};
+
+	if (typeof define === 'function' && define.amd) {
+		define(function() { return queryString; });
+	} else if (typeof module !== 'undefined' && module.exports) {
+		module.exports = queryString;
+	} else {
+		window.queryString = queryString;
+	}
+})();
 
 },{}]},{},[1]);

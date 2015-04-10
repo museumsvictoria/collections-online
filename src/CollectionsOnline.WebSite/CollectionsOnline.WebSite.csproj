@@ -143,6 +143,7 @@
     <Content Include="content\img\img-home-species.jpg" />
     <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-mv-white.png" />
+    <Content Include="content\js\app\search.js" />
     <Content Include="content\js\app\images.js" />
     <Content Include="content\js\app\app.js" />
     <Content Include="content\js\bundle.js" />
@@ -240,7 +241,7 @@
     <Content Include="Views\articles.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\heroimagemedia.cshtml" />
+    <Content Include="Views\imagemedia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\scss\gridle\_common-mixins.scss" />

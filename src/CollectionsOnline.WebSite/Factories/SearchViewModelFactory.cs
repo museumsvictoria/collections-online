@@ -137,7 +137,11 @@ namespace CollectionsOnline.WebSite.Factories
             {
                 queryString.Set("page", (searchInputModel.Page + 1).ToString());
 
-                searchViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+                searchViewModel.NextPageButton = new ButtonViewModel
+                {
+                    Name = "Next page",
+                    Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString)
+                };
             }
 
             if ((searchInputModel.Page - 1) >= 1)
@@ -148,25 +152,52 @@ namespace CollectionsOnline.WebSite.Factories
                     queryString.Remove("page");
                 }
 
-                searchViewModel.PrevPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;
+                searchViewModel.PreviousPageButton = new ButtonViewModel
+                {
+                    Name = "Previous page",
+                    Url = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl
+                };
             }
 
             // Build sort links
+            //TODO: sort this mess out
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("sort", "quality");
-            searchViewModel.QualitySortUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+            searchViewModel.QualitySortButton = new ButtonViewModel
+            {
+                Name = "Quality",
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.Sort == "quality" || string.IsNullOrWhiteSpace(searchInputModel.Sort)
+            };
 
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("sort", "relevance");
-            searchViewModel.RelevanceSortUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+            searchViewModel.RelevanceSortButton = new ButtonViewModel
+            {
+                Name = "Relevance",
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.Sort == "relevance"
+            };
 
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("perpage", Core.Config.Constants.PagingPerPageDefault.ToString());
-            searchViewModel.DefaultPerPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+            queryString.Remove("page");
+            searchViewModel.DefaultPerPageButton = new ButtonViewModel
+            {
+                Name = Core.Config.Constants.PagingPerPageDefault.ToString(),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.PerPage == Core.Config.Constants.PagingPerPageDefault
+            };
 
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("perpage", Core.Config.Constants.PagingPerPageMax.ToString());
-            searchViewModel.MaxPerPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+            queryString.Remove("page");
+            searchViewModel.MaxPerPageButton = new ButtonViewModel
+            {
+                Name = Core.Config.Constants.PagingPerPageMax.ToString(),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.PerPage == Core.Config.Constants.PagingPerPageMax
+            };
 
             // Build suggestions
             foreach (var suggestion in suggestions)

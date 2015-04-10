@@ -602,6 +602,7 @@ footer {
 
         .pagination {
             margin:40px 0 0 20px;
+            color:#333333;
 
             div {
                 display:inline-block;
@@ -641,12 +642,23 @@ footer {
                 margin:0 5px 0 0;
             }
 
+            .order a.active, .perpage a.active {
+                background:#cccccc
+            }
+
             .icon-left-arrow, .icon-right-arrow {
                 font-size:0.7em;
             }
 
             input {
                 width:3rem;
+                border:1px solid #d7d7d7;
+                color:#756969;
+                padding:4px 0;
+                display:inline-block;
+                border-radius:2px;
+                text-align:center;
+                background:$color-default;
             }
         }
 

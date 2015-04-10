@@ -1,12 +1,11 @@
 ﻿var $ = require('jquery');
 var images = require('./images');
+var search = require('./search');
 
 var App = {
   init: function() {
-    this.bindEvents();
-  },
-  bindEvents: function () {
-    images.bindEvents();
+    images.init();
+    search.init();
   }
 };
 

@@ -1245,7 +1245,8 @@ footer {
           font-size: 0.7em;
           padding: 0 0 0 5px; }
     #search .results .pagination {
-      margin: 40px 0 0 20px; }
+      margin: 40px 0 0 20px;
+      color: #333333; }
       #search .results .pagination div {
         display: inline-block; }
       #search .results .pagination .numbers {
@@ -1270,10 +1271,19 @@ footer {
         background: #fff;
         padding: 0 10px;
         margin: 0 5px 0 0; }
+      #search .results .pagination .order a.active, #search .results .pagination .perpage a.active {
+        background: #cccccc; }
       #search .results .pagination .icon-left-arrow, #search .results .pagination .icon-right-arrow {
         font-size: 0.7em; }
       #search .results .pagination input {
-        width: 3rem; }
+        width: 3rem;
+        border: 1px solid #d7d7d7;
+        color: #756969;
+        padding: 4px 0;
+        display: inline-block;
+        border-radius: 2px;
+        text-align: center;
+        background: #fff; }
     #search .results .pagination.bottom {
       margin: 20px 0 40px 20px; }
     #search .results .results-area {

@@ -64,27 +64,33 @@
             <div class="numbers">
                 <div class="counts">@Model.TotalResults.ToString("N0") results</div>
                 <div class="pages">
-                    <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")">
-                        <span class="icon-left-arrow"></span>
-                        <span class="icon-label-hidden">Previous page</span>
-                    </a>
-                    <input type="text" name="Page" value="@Model.Page" /> of @Model.TotalPages
-                    <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
-                        <span class="icon-label-hidden">Next page</span>
-                        <span class="icon-right-arrow"></span>
-                    </a>
+                    @if (Model.PreviousPageButton != null)
+                    {
+                        <a href="@Model.PreviousPageButton.Url" class="button">
+                            <span class="icon-left-arrow"></span>
+                            <span class="icon-label-hidden">@Model.PreviousPageButton.Name</span>
+                        </a>
+                    }
+                    <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages</span>
+                    @if (Model.NextPageButton != null)
+                    {
+                        <a href="@Model.NextPageButton.Url" class="button">
+                            <span class="icon-label-hidden">@Model.NextPageButton.Name</span>
+                            <span class="icon-right-arrow"></span>
+                        </a>
+                    }
                 </div>
             </div>
             <div class="options">
                 <div class="order">
                     Order by
-                    <a href="@Model.RelevanceSortUrl" class="button">Relevance</a>
-                    <a href="@Model.QualitySortUrl" class="button">Quality</a>
+                    <a href="@Model.RelevanceSortButton.Url" class="button @(Model.RelevanceSortButton.Active ? "active" : "")">@Model.RelevanceSortButton.Name</a>
+                    <a href="@Model.QualitySortButton.Url" class="button @(Model.QualitySortButton.Active ? "active" : "")">@Model.QualitySortButton.Name</a>
                 </div>
                 <div class="perpage">
                     Results per page
-                    <a href="@Model.DefaultPerPageUrl" class="button">@CollectionsOnline.Core.Config.Constants.PagingPerPageDefault</a>
-                    <a href="@Model.MaxPerPageUrl" class="button">@CollectionsOnline.Core.Config.Constants.PagingPerPageMax</a>
+                    <a href="@Model.DefaultPerPageButton.Url" class="button @(Model.DefaultPerPageButton.Active ? "active" : "")">@Model.DefaultPerPageButton.Name</a>
+                    <a href="@Model.MaxPerPageButton.Url" class="button @(Model.MaxPerPageButton.Active ? "active" : "")">@Model.MaxPerPageButton.Name</a>
                 </div>
             </div>
         </div>
@@ -98,17 +104,23 @@
             <div class="numbers">
                 <div class="counts">@Model.TotalResults.ToString("N0") results</div>
                 <div class="pages">
-                    <a href="@Model.PrevPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PrevPageUrl) ? "disabled" : "")">
-                        <span class="icon-left-arrow"></span>
-                        <span class="icon-label-hidden">Previous page</span>
-                    </a>
-                    <input type="text" name="Page" value="@Model.Page" /> of @Model.TotalPages
-                    <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
-                        <span class="icon-label-hidden">Next page</span>
-                        <span class="icon-right-arrow"></span>
-                    </a>
+                    @if (Model.PreviousPageButton != null)
+                    {
+                        <a href="@Model.PreviousPageButton.Url" class="button">
+                            <span class="icon-left-arrow"></span>
+                            <span class="icon-label-hidden">@Model.PreviousPageButton.Name</span>
+                        </a>
+                    }
+                    <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages</span>
+                    @if (Model.NextPageButton != null)
+                    {
+                        <a href="@Model.NextPageButton.Url" class="button">
+                            <span class="icon-label-hidden">@Model.NextPageButton.Name</span>
+                            <span class="icon-right-arrow"></span>
+                        </a>
+                    }
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
 </div>

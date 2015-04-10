@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.ModelBinders
 
             if (query.PerPage.HasValue)
                 searchInputModel.PerPage = query.PerPage;
-            if (searchInputModel.PerPage <= 0 || searchInputModel.PerPage > Constants.PagingPerPageMax)
+            if (searchInputModel.PerPage != Constants.PagingPerPageDefault && searchInputModel.PerPage != Constants.PagingPerPageMax)
                 searchInputModel.PerPage = Constants.PagingPerPageDefault;
 
             if (string.Equals(query.Sort, "quality", StringComparison.OrdinalIgnoreCase))

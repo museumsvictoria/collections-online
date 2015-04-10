@@ -23,17 +23,17 @@ namespace CollectionsOnline.WebSite.Models
 
         public long FacetTimeElapsed { get; set; }
 
-        public string NextPageUrl { get; set; }
+        public ButtonViewModel NextPageButton { get; set; }
 
-        public string PrevPageUrl { get; set; }
+        public ButtonViewModel PreviousPageButton { get; set; }
 
-        public string QualitySortUrl { get; set; }
+        public ButtonViewModel QualitySortButton { get; set; }
 
-        public string RelevanceSortUrl { get; set; }
+        public ButtonViewModel RelevanceSortButton { get; set; }
 
-        public string DefaultPerPageUrl { get; set; }
+        public ButtonViewModel DefaultPerPageButton { get; set; }
 
-        public string MaxPerPageUrl { get; set; }
+        public ButtonViewModel MaxPerPageButton { get; set; }
 
         public IList<FacetViewModel> Facets { get; set; }
 
@@ -111,5 +111,14 @@ namespace CollectionsOnline.WebSite.Models
         public string Suggestion { get; set; }
 
         public string Url { get; set; }
+    }
+
+    public class ButtonViewModel
+    {
+        public string Name { get; set; }
+
+        public string Url { get; set; }
+
+        public bool Active { get; set; }
     }
 }
