@@ -70,21 +70,26 @@ module.exports = {
   cacheElements: function () {
     this.$pageInput = $('.pagination input');
 
-    this.totalPages = parseInt($('.pages .total').first().text());
+    this.totalPages = parseInt($('.pages .total').first().text().replace(/\D/g, ''));
     this.query = queryString.parse(location.search);
 
-    console.log(this.query);
+    this.$searchFilter = $('#search-filter');
+    this.$searchFilterButton = $('#search-filter .button-filter');
   },
   bindEvents: function () {
     this.$pageInput.on('change', this.gotoPage.bind(this));
+    this.$searchFilterButton.on('click', this.toggleSearchFilter.bind(this));
   },
   gotoPage: function (e) {
     var page = $(e.target).val().replace(/\D/g, '');
-
+    
     if (page && (page >= 1 && page <= this.totalPages)) {
       this.query.page = page;
       location.search = queryString.stringify(this.query);
     }
+  },
+  toggleSearchFilter: function() {
+    this.$searchFilter.toggleClass('disabled');
   }
 };
 },{"jquery":4,"query-string":5}],4:[function(require,module,exports){

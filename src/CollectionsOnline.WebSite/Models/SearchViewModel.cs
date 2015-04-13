@@ -23,9 +23,9 @@ namespace CollectionsOnline.WebSite.Models
 
         public long FacetTimeElapsed { get; set; }
 
-        public ButtonViewModel NextPageButton { get; set; }
+        public string NextPageUrl { get; set; }
 
-        public ButtonViewModel PreviousPageButton { get; set; }
+        public string PreviousPageUrl { get; set; }
 
         public ButtonViewModel QualitySortButton { get; set; }
 

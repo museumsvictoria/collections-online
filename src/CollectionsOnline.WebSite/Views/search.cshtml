@@ -3,27 +3,28 @@
     Layout = "layout.cshtml";
 }
 <div id="search">
-    <aside class="facets">
-        <a href="#" class="button-filter">
+    <aside id="search-filter">
+        <a class="button-filter">
             <span class="icon-filter" aria-hidden="true"></span>
             Filter by
         </a>
-        @foreach (var facet in Model.Facets)
-        {
-            <h4>@facet.Name</h4>
-            foreach (var value in facet.Values)
+        <div class="facets">
+            @foreach (var facet in Model.Facets)
             {
-                if (value.Active)
+                <h4>@facet.Name</h4>
+                foreach (var value in facet.Values)
                 {
-                    <a href="@value.Url" class="active">@value.Name <span class="badge">(@value.Hits)</span></a>
+                    if (value.Active)
+                    {
+                        <a href="@value.Url" class="active">@value.Name <span class="badge">(@value.Hits)</span></a>
+                    }
+                    else
+                    {
+                        <a href="@value.Url">@value.Name <span class="badge">(@value.Hits)</span></a>
+                    }
                 }
-                else
-                {
-                    <a href="@value.Url">@value.Name <span class="badge">(@value.Hits)</span></a>
-                }
-
             }
-        }
+        </div>
     </aside>
     <div class="results">
         @Html.Partial("searchbar", Model)
@@ -64,21 +65,15 @@
             <div class="numbers">
                 <div class="counts">@Model.TotalResults.ToString("N0") results</div>
                 <div class="pages">
-                    @if (Model.PreviousPageButton != null)
-                    {
-                        <a href="@Model.PreviousPageButton.Url" class="button">
-                            <span class="icon-left-arrow"></span>
-                            <span class="icon-label-hidden">@Model.PreviousPageButton.Name</span>
-                        </a>
-                    }
-                    <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages</span>
-                    @if (Model.NextPageButton != null)
-                    {
-                        <a href="@Model.NextPageButton.Url" class="button">
-                            <span class="icon-label-hidden">@Model.NextPageButton.Name</span>
-                            <span class="icon-right-arrow"></span>
-                        </a>
-                    }
+                    <a href="@Model.PreviousPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PreviousPageUrl) ? "disabled" : "")">
+                        <span class="icon-left-arrow"></span>
+                        <span class="icon-label-hidden">Previous page</span>
+                    </a>
+                    <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages.ToString("N0")</span>
+                    <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
+                        <span class="icon-label-hidden">Next page</span>
+                        <span class="icon-right-arrow"></span>
+                    </a>
                 </div>
             </div>
             <div class="options">
@@ -104,21 +99,15 @@
             <div class="numbers">
                 <div class="counts">@Model.TotalResults.ToString("N0") results</div>
                 <div class="pages">
-                    @if (Model.PreviousPageButton != null)
-                    {
-                        <a href="@Model.PreviousPageButton.Url" class="button">
-                            <span class="icon-left-arrow"></span>
-                            <span class="icon-label-hidden">@Model.PreviousPageButton.Name</span>
-                        </a>
-                    }
+                    <a href="@Model.PreviousPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PreviousPageUrl) ? "disabled" : "")">
+                        <span class="icon-left-arrow"></span>
+                        <span class="icon-label-hidden">Previous page</span>
+                    </a>
                     <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages</span>
-                    @if (Model.NextPageButton != null)
-                    {
-                        <a href="@Model.NextPageButton.Url" class="button">
-                            <span class="icon-label-hidden">@Model.NextPageButton.Name</span>
-                            <span class="icon-right-arrow"></span>
-                        </a>
-                    }
+                    <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
+                        <span class="icon-label-hidden">Next page</span>
+                        <span class="icon-right-arrow"></span>
+                    </a>7
                 </div>
             </div>
         </div>

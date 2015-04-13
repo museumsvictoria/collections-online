@@ -707,7 +707,12 @@ input[type="checkbox"], input[type="radio"] {
   content: "\e602";
   font-size: 1.3em;
   position: absolute;
-  left: 190px; }
+  left: 190px;
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg); }
 
 .icon-download:before {
   font-family: "mv-collections";
@@ -1196,10 +1201,11 @@ footer {
 
 #search {
   display: flex; }
-  #search .facets {
+  #search #search-filter {
     background: #141414;
     width: 300px; }
-    #search .facets .button-filter {
+    #search #search-filter .button-filter {
+      cursor: pointer;
       padding: 0 20px;
       display: block;
       color: #fff;
@@ -1208,23 +1214,31 @@ footer {
       line-height: 70px;
       font-size: 1.4em;
       font-weight: 300; }
-    #search .facets h4 {
+    #search #search-filter h4 {
       padding: 0 20px;
       font-weight: 300;
       font-size: 1.1em;
       color: #fff;
       margin: 1.33em 0 0.6em; }
-    #search .facets a {
+    #search #search-filter a {
       padding: 0 20px;
       display: block;
       color: #fff; }
-      #search .facets a .badge {
+      #search #search-filter a .badge {
         color: #bbbbbb; }
-    #search .facets a.active {
+    #search #search-filter a.active {
       color: #fff;
       font-weight: 500; }
-      #search .facets a.active .badge {
+      #search #search-filter a.active .badge {
         color: #82aa05; }
+  #search #search-filter.disabled .icon-filter::before {
+    -moz-transform: rotate(0);
+    -ms-transform: rotate(0);
+    -o-transform: rotate(0);
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  #search #search-filter.disabled .facets {
+    display: none; }
   #search .results {
     width: 100%;
     background: #e3e3e3;

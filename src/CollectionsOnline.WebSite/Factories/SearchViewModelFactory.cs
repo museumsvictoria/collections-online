@@ -136,12 +136,7 @@ namespace CollectionsOnline.WebSite.Factories
             if ((searchInputModel.Page + 1) <= searchViewModel.TotalPages)
             {
                 queryString.Set("page", (searchInputModel.Page + 1).ToString());
-
-                searchViewModel.NextPageButton = new ButtonViewModel
-                {
-                    Name = "Next page",
-                    Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString)
-                };
+                searchViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
             }
 
             if ((searchInputModel.Page - 1) >= 1)
@@ -151,12 +146,7 @@ namespace CollectionsOnline.WebSite.Factories
                 {
                     queryString.Remove("page");
                 }
-
-                searchViewModel.PreviousPageButton = new ButtonViewModel
-                {
-                    Name = "Previous page",
-                    Url = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl
-                };
+                searchViewModel.PreviousPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;
             }
 
             // Build sort links

@@ -529,238 +529,253 @@ footer {
 }
 
 #search {
-    display:flex;
+    display: flex;
 
-    .facets {
-        background:#141414;
-        width:300px;        
+    #search-filter {
+        background: #141414;
+        width: 300px;
 
-        .button-filter
-        {
-            padding:0 20px;
-            display:block;
-            color:$color-default;
-            background:#000;
-            height:70px;
-            line-height:70px;
-            font-size:1.4em;
-            font-weight:300;
+        .button-filter {
+            cursor: pointer;
+            padding: 0 20px;
+            display: block;
+            color: $color-default;
+            background: #000;
+            height: 70px;
+            line-height: 70px;
+            font-size: 1.4em;
+            font-weight: 300;
         }
 
         h4 {
-            padding:0 20px;
-            font-weight:300;
-            font-size:1.1em;
-            color:$color-default;
-            margin:1.33em 0 0.6em;
+            padding: 0 20px;
+            font-weight: 300;
+            font-size: 1.1em;
+            color: $color-default;
+            margin: 1.33em 0 0.6em;
         }
 
         a {
-            padding:0 20px;
-            display:block;
-            color:$color-default;            
+            padding: 0 20px;
+            display: block;
+            color: $color-default;
 
             .badge {
-                color:#bbbbbb;
+                color: #bbbbbb;
             }
         }
 
         a.active {
-            color:$color-default;
-            font-weight:500;
+            color: $color-default;
+            font-weight: 500;
 
             .badge {
-                color:$color-museum-green;
+                color: $color-museum-green;
             }
         }
     }
 
+    #search-filter.disabled {
+        .icon-filter::before {
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+        }
+
+        .facets {
+            display:none;
+        }
+    }
+
     .results {
-        width:100%;
-        background:#e3e3e3;
-        padding:0 0 20px 0;
+        width: 100%;
+        background: #e3e3e3;
+        padding: 0 0 20px 0;
 
         .active-facets {
-            padding:20px 0 0 20px;
+            padding: 20px 0 0 20px;
+
             a {
-                color:#756969;
-                height:35px;
-                line-height:35px;
-                display:inline-block;
-                border-radius:2px;
-                background:$color-default;
-                padding:0 10px;
-                margin:0 5px 0 0;
+                color: #756969;
+                height: 35px;
+                line-height: 35px;
+                display: inline-block;
+                border-radius: 2px;
+                background: $color-default;
+                padding: 0 10px;
+                margin: 0 5px 0 0;
 
                 .icon-close {
-                    color:$color;
-                    font-size:0.7em;
-                    padding:0 0 0 5px;
+                    color: $color;
+                    font-size: 0.7em;
+                    padding: 0 0 0 5px;
                 }
             }
         }
 
         .pagination {
-            margin:40px 0 0 20px;
-            color:#333333;
+            margin: 40px 0 0 20px;
+            color: #333333;
 
             div {
-                display:inline-block;
+                display: inline-block;
             }
 
             .numbers {
-                float:left;
+                float: left;
             }
 
             .options {
-                float:right;
-                margin-right:20px;
+                float: right;
+                margin-right: 20px;
             }
 
             .pages a {
-                display:inline-block;
-                padding:0 5px;
-                color:$color;
+                display: inline-block;
+                padding: 0 5px;
+                color: $color;
             }
 
             .pages a.disabled {
-                color:#cccccc;
+                color: #cccccc;
             }
 
             .order {
-                margin:0 20px 0 0;
+                margin: 0 20px 0 0;
             }
 
             .order a, .perpage a {
-                color:#756969;
-                height:35px;
-                line-height:35px;
-                display:inline-block;
-                border-radius:2px;
-                background:$color-default;
-                padding:0 10px;
-                margin:0 5px 0 0;
+                color: #756969;
+                height: 35px;
+                line-height: 35px;
+                display: inline-block;
+                border-radius: 2px;
+                background: $color-default;
+                padding: 0 10px;
+                margin: 0 5px 0 0;
             }
 
             .order a.active, .perpage a.active {
-                background:#cccccc
+                background: #cccccc;
             }
 
             .icon-left-arrow, .icon-right-arrow {
-                font-size:0.7em;
+                font-size: 0.7em;
             }
 
             input {
-                width:3rem;
-                border:1px solid #d7d7d7;
-                color:#756969;
-                padding:4px 0;
-                display:inline-block;
-                border-radius:2px;
-                text-align:center;
-                background:$color-default;
+                width: 3rem;
+                border: 1px solid #d7d7d7;
+                color: #756969;
+                padding: 4px 0;
+                display: inline-block;
+                border-radius: 2px;
+                text-align: center;
+                background: $color-default;
             }
         }
 
         .pagination.bottom {
-            margin:20px 0 40px 20px;
+            margin: 20px 0 40px 20px;
         }
 
         .results-area {
-            display:table;
-            content:"";
-            clear:both;
+            display: table;
+            content: "";
+            clear: both;
 
             .item, .specimen, .article, .species {
-                float:left;
-                width:240px;
-                margin:20px 0 0 20px;
+                float: left;
+                width: 240px;
+                margin: 20px 0 0 20px;
 
                 a {
-                    display:block;
-                    position:relative;
+                    display: block;
+                    position: relative;
 
                     &:before {
-                        border-bottom-left-radius:3px;
-                        padding:10px;
-                        color:$color-default;
-                        text-transform:uppercase;
-                        position:absolute;
-                        font-size:0.9em;
-                        font-weight:500;
-                        top:0;
-                        right:0;
+                        border-bottom-left-radius: 3px;
+                        padding: 10px;
+                        color: $color-default;
+                        text-transform: uppercase;
+                        position: absolute;
+                        font-size: 0.9em;
+                        font-weight: 500;
+                        top: 0;
+                        right: 0;
                     }
-                }        
+                }
 
                 img {
-                    width:100%;
-                    display:block;
+                    width: 100%;
+                    display: block;
                 }
 
                 .title {
-                    display:block;
-                    height:6em;
-                    overflow:hidden;
-                    text-overflow:ellipsis;
-                    background-color:#f9f9f9;
-                    color:#000;
-                    font-weight:500;
-                    padding:10px;
+                    display: block;
+                    height: 6em;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    background-color: #f9f9f9;
+                    color: #000;
+                    font-weight: 500;
+                    padding: 10px;
                 }
             }
         }
 
         .item {
             .icon-item {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-item;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-item;
             }
         }
 
         .article {
             .icon-article {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-article;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-article;
             }
         }
 
         .specimen {
             .icon-specimen {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-specimen;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-specimen;
             }
         }
 
         .species {
             .icon-species {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-species;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-species;
             }
         }
 
         .no-image-label {
-            padding-top:4em;
+            padding-top: 4em;
         }
     }
 }
