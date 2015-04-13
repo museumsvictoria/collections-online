@@ -75,6 +75,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
             if (apiInputModel.PerPage <= 0 || apiInputModel.PerPage > Constants.PagingPerPageMax)
                 apiInputModel.PerPage = Constants.PagingPerPageDefault;
 
+            Page = apiInputModel.Page;
             PerPage = apiInputModel.PerPage;
             Envelope = apiInputModel.Envelope;
         }

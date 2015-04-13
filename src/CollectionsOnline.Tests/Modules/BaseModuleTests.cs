@@ -8,8 +8,8 @@ using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Tests.Fakes;
 using CollectionsOnline.WebSite.Infrastructure;
-using CollectionsOnline.WebSite.Modules;
 using CollectionsOnline.WebSite.Modules.Api;
+using Nancy.Json;
 using Nancy.Testing;
 using Newtonsoft.Json;
 using Shouldly;
@@ -24,7 +24,7 @@ namespace CollectionsOnline.Tests.Modules
         {
             DataToBeSeeded = new List<IEnumerable>
                 {
-                    FakeItems.CreateFakeItems(15)
+                    FakeItems.CreateFakeItems(100)
                 };
 
             IndexesToExecute = new List<Type>
@@ -36,7 +36,11 @@ namespace CollectionsOnline.Tests.Modules
                 {
                     with.Module<ItemsApiModule>();
                     with.Dependency(DocumentStore.OpenSession());
-                    with.ApplicationStartup((container, pipelines) => AutomapperConfig.Initialize());
+                    with.ApplicationStartup((container, pipelines) =>
+                    {
+                        JsonSettings.MaxJsonLength = Int32.MaxValue;
+                        AutomapperConfig.Initialize();
+                    });
                 });
         }
 
@@ -58,27 +62,29 @@ namespace CollectionsOnline.Tests.Modules
         }
 
         [Fact]
-        public void GivenOneLimitRequest_GetItems_ReturnsOneItem()
+        public void GivenOnePageRequestAndDefaultPerPage_GetItems_ReturnsOnePage()
         {
             // Given When
             var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
-                with.Query("limit", "1");
+                with.Query("page", "1");
             });
 
+            var fdasfa = result.Body.DeserializeJson<IEnumerable<Item>>();
+
             // Then
-            result.Body.DeserializeJson<IEnumerable<Item>>().Count().ShouldBe(1);
+            result.Body.DeserializeJson<IEnumerable<Item>>().Count().ShouldBe(Constants.PagingPerPageDefault);
         }
 
         [Fact]
-        public void GivenOneLimitRequest_GetItems_ReturnsLinkHeader()
+        public void GivenOnePageRequest_GetItems_ReturnsLinkHeader()
         {
             // Given When
             var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
-                with.Query("limit", "1");
+                with.Query("page", "1");
             });
 
             // Then
@@ -86,32 +92,17 @@ namespace CollectionsOnline.Tests.Modules
         }
 
         [Fact]
-        public void GivenThirtyLimitRequest_GetItems_DoesNotReturnLinkHeader()
+        public void GivenPageRequest_GetItems_ReturnsCorrectItem()
         {
             // Given When
             var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
-                with.Query("limit", "30");
+                with.Query("page", "2");
             });
 
             // Then
-            result.Headers["Link"].ShouldBe(string.Empty);
-        }
-
-        [Fact]
-        public void GivenOffsetRequest_GetItems_ReturnsCorrectItem()
-        {
-            // Given When
-            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
-            {
-                with.HttpRequest();
-                with.Query("limit", "10");
-                with.Query("offset", "10");
-            });
-
-            // Then
-            result.Body.DeserializeJson<IEnumerable<Item>>().First().Id.ShouldBe("items/11");
+            result.Body.DeserializeJson<IEnumerable<Item>>().First().Id.ShouldBe("items/41");
         }
     }
 }
