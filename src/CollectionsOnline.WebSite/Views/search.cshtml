@@ -8,6 +8,12 @@
             <span class="icon-filter" aria-hidden="true"></span>
             Filter by
         </a>
+        <div class="term-search">
+            <h4>Location</h4>
+            <input type="text" id="location-term" placeholder="Enter location">
+            <h4>Keyword</h4>
+            <input type="text" id="keyword-term" placeholder="Enter keyword">
+        </div>
         <div class="facets">
             @foreach (var facet in Model.Facets)
             {
@@ -107,7 +113,7 @@
                     <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
                         <span class="icon-label-hidden">Next page</span>
                         <span class="icon-right-arrow"></span>
-                    </a>7
+                    </a>
                 </div>
             </div>
         </div>

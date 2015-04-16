@@ -4,6 +4,7 @@
 @import 'grid';
 @import "typography";
 @import "layout";
+@import "lib/autocompleter";
 
 body {
     font-family:$font-family;
@@ -956,5 +957,26 @@ footer {
 
     .documentation {
         width:100%;
+    }
+}
+
+.term-search {
+    position:relative;
+    padding:0 20px;
+
+    h4 {
+        padding:0 !important;
+    }
+
+    input {
+        color:#bbbbbb;
+        border:1px solid #636363;
+        border-radius:3px;
+        font-weight:400;
+        outline:0;
+        background:#141414;
+        padding:10px;
+        box-sizing:border-box;
+        width:200px;
     }
 }

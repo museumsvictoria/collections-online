@@ -4,12 +4,15 @@
   "description": "Next generation of Museum Victorias Collections Online website",
   "author": "Michael Mason",
   "license": "MIT",
+  "browser": {
+    "jquery-autocompleter": "./content/js/lib/jquery.autocompleter.js",
+    "query-string": "./content/js/lib/query-string.js"
+  },
   "devDependencies": {
     "browserify": "^9.0.3",
     "gulp": "^3.8.10",
     "gulp-ruby-sass": "^0.7.1",
     "jquery": "^2.1.3",
-    "query-string": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }
 }

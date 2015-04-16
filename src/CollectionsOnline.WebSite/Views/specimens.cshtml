@@ -176,7 +176,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyClass))
                 {
                     <h3>Class</h3>
-                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyClass)">@Model.Specimen.MineralogyClass</a>s</p>
+                    <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogyClass)">@Model.Specimen.MineralogyClass</a></p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyTypeOfType))
                 {
