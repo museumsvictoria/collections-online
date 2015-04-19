@@ -980,3 +980,191 @@ footer {
         width:200px;
     }
 }
+
+//additions from Pattern Lab
+.tile{
+    //Commented out size details for the moment - need to have specified some break points
+	//@include gridle ( 3 );
+	//@include gridle ( 3 , 'mobile' );
+	//@include gridle (6, 'tablet');
+	
+	&.list{
+	//@include gridle ( 6 );
+	//@include gridle ( 12 , 'mobile' );
+	//@include gridle (6, 'tablet');	
+	float:left;
+	direction:ltr;
+	
+	
+	}
+	&.full{
+			//@include gridle ( 3 );
+	//@include gridle ( 12 , 'mobile' );
+	//@include gridle (6, 'tablet');
+    width:255px;
+    padding-left:10px;
+    padding-right:10px;
+	float:left;
+	}
+	position: relative;
+	direction:ltr;
+	float:left;
+		& img
+	{
+	@include border-radius(3px);
+    display: block;
+    width: 100%;
+		
+		&.backgroundimage
+			{
+			width:400%;
+			height:400%;
+			position: absolute;
+			  left: -150%;
+			 top:-150%;
+			  z-index: -1;
+			  @include blur(100px);
+			}
+		
+		
+	}	
+	
+	& a
+	{
+	display: block;
+    margin: 0 0 20px 0px;
+    position: relative;
+	overflow: hidden;
+	text-decoration: none;
+	color: $colour-bodytext;
+	background: $colour-background-title;	
+	}
+	& .title
+	{
+		display:block;
+		padding: 35px $padding-side 20px $padding-side;
+		font-size: 14px;
+		background: $colour-background-title;
+		height:8em;
+		direction: ltr;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		position:relative;	
+		line-height: 1.3;	
+		@include border-radius-bottom(3px);
+		@include gridle_state(tablet mobile){
+		 height:8em;
+		 
+
+		 }
+		 & .heading
+		 {
+			 display:block;
+			 color: $colour-heading;
+			 font-weight: 500;
+		 }
+		 & .itemtext{
+		position: relative;
+		background:$colour-background-title;
+		}
+		& .regnum
+		{
+			display:block;
+			font-weight: 300;
+		}
+			
+	}
+}
+.itemtext{
+		position: relative;
+		background:$colour-background-title;
+		
+		.list &{
+			display:block;
+			background: $colour-background-title;
+		}
+	}	
+
+
+.tileimages
+{
+    display:block;
+    width: 100%;
+    overflow: hidden;
+    position:relative;
+    padding:$padding-side;
+    background-color:$colour-background-image;
+    @include border-radius-top(3px);
+    .list & {
+	    width:33%;
+	    float:left;
+	    padding:0;
+    }
+    & img{
+	    @include border-radius(0px);
+    }
+}
+
+ 
+
+.tile-tag{
+	direction: ltr;
+	color:$colour-bodytext-inverted;
+	align-items: center;
+    //border-top-left-radius: 3px;
+    color: #fff;
+    display: flex;
+    font-size: 21px;
+    line-height: 1.2;
+    left: 0;
+    padding: 0 $padding-side;
+	position: absolute;
+    top: 0;
+	
+	.home &
+	{
+		    font-size: 2.5em;
+	}
+	&.article{
+		background-color: $colour-articles
+	}
+	&.article:before {
+	@include icon-article;
+	}
+	&.item{
+		background-color: $colour-items;
+	}
+	&.item:before{
+		@include icon-item;
+	}
+	&.specimen{
+		background-color: $colour-specimens;
+	}
+	&.specimen:before{
+		@include icon-specimen;
+	}
+	&.species:before{
+		@include icon-species
+	}
+	&.species{
+		background-color: $colour-species;
+	}
+	& .count-wrapper
+	{
+		font-size: 14px;
+		line-height: 1em;
+		display: flex;
+		flex-direction: column;
+		padding: 0 10px;
+		.tile.home &
+		{
+			font-size: 0.45em;
+		}
+		& .type
+		{
+			text-transform: capitalize;
+			
+		}
+	}
+	
+}
