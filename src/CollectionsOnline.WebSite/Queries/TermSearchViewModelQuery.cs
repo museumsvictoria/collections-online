@@ -54,5 +54,24 @@ namespace CollectionsOnline.WebSite.Queries
             return result;
         }
 
+        public IList<TermSearchViewModel> BuildNameTermSearch(TermSearchInputModel termSearchInputModel)
+        {
+            var result = new List<TermSearchViewModel>();
+
+            if (!string.IsNullOrWhiteSpace(termSearchInputModel.Query))
+            {
+                result = _documentSession.Advanced
+                    .DocumentQuery<NameTermIndexResult, NameTermIndex>()
+                    .Search("Name", string.Format("{0}*", termSearchInputModel.Query.Replace("*", string.Empty)),
+                        EscapeQueryOptions.AllowPostfixWildcard)
+                    .OrderByScoreDescending()
+                    .Take(termSearchInputModel.Limit)
+                    .Select(x => new TermSearchViewModel { Label = x.Name })
+                    .ToList();
+            }
+
+            return result;
+        }
+
     }
 }

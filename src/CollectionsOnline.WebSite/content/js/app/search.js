@@ -38,6 +38,16 @@ module.exports = {
         location.search = queryString.stringify({ keyword: value });
       }
     });
+    $('#name-term').autocompleter({
+      source: '/search/term/name',
+      empty: false,
+      limit: 15,
+      cache: false,
+      highlightMatches: true,
+      callback: function (value) {
+        location.search = queryString.stringify({ name: value });
+      }
+    });
   },
   gotoPage: function (e) {
     var page = $(e.target).val().replace(/\D/g, '');

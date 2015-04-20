@@ -8,5 +8,7 @@ namespace CollectionsOnline.WebSite.Queries
         IList<TermSearchViewModel> BuildLocalityTermSearch(TermSearchInputModel termSearchInputModel);
 
         IList<TermSearchViewModel> BuildKeywordTermSearch(TermSearchInputModel termSearchInputModel);
+
+        IList<TermSearchViewModel> BuildNameTermSearch(TermSearchInputModel termSearchInputModel);
     }
 }

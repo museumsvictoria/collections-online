@@ -31,6 +31,13 @@ namespace CollectionsOnline.WebSite.Modules
 
                 return Response.AsJson(termSearchViewModelQuery.BuildKeywordTermSearch(termSearchInputModel));
             };
+
+            Get["/search/term/name"] = parameters =>
+            {
+                var termSearchInputModel = this.Bind<TermSearchInputModel>();
+
+                return Response.AsJson(termSearchViewModelQuery.BuildNameTermSearch(termSearchInputModel));
+            };
         }
     }
 }
