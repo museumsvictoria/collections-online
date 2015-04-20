@@ -13,17 +13,15 @@
                 <img src="@Model.ThumbnailUri" />
             }
         </span>
-            <span class="title">
-                <span class="tile-tag @Model.Type.ToLower()" aria-hidden="true">
-                    <span class="count-wrapper">
-                        <span class="type">@Model.Type.ToLower()</span>
-                    </span>
+        <span class="title">
+            <span class="tile-tag @Model.Type.ToLower()" aria-hidden="true">
+                <span class="count-wrapper">
+                    <span class="type">@Model.Type.ToLower()</span>
                 </span>
-                @if (!string.IsNullOrWhiteSpace(Model.SubDisplayTitle))
-                {<span class="regnum"> @Model.SubDisplayTitle </span>}
-                @Html.Raw(Model.DisplayTitle)
-
             </span>
-
-</a>
+            @if (!string.IsNullOrWhiteSpace(Model.SubDisplayTitle))
+            {<span class="regnum"> @Model.SubDisplayTitle </span>}
+            @Html.Raw(Model.DisplayTitle)
+        </span>
+    </a>
 </div>
