@@ -1,3 +1,4 @@
+@charset "UTF-8";
 article,
 aside,
 details,
@@ -1357,36 +1358,45 @@ footer {
     #search .results .results-area {
       display: table;
       content: "";
-      clear: both; }
-      #search .results .results-area .item, #search .results .results-area .specimen, #search .results .results-area .article, #search .results .results-area .species {
-        float: left;
-        width: 240px;
-        margin: 20px 0 0 20px; }
-        #search .results .results-area .item a, #search .results .results-area .specimen a, #search .results .results-area .article a, #search .results .results-area .species a {
-          display: block;
-          position: relative; }
-          #search .results .results-area .item a:before, #search .results .results-area .specimen a:before, #search .results .results-area .article a:before, #search .results .results-area .species a:before {
-            border-bottom-left-radius: 3px;
-            padding: 10px;
-            color: #fff;
-            text-transform: uppercase;
-            position: absolute;
-            font-size: 0.9em;
-            font-weight: 500;
-            top: 0;
-            right: 0; }
-        #search .results .results-area .item img, #search .results .results-area .specimen img, #search .results .results-area .article img, #search .results .results-area .species img {
-          width: 100%;
-          display: block; }
-        #search .results .results-area .item .title, #search .results .results-area .specimen .title, #search .results .results-area .article .title, #search .results .results-area .species .title {
-          display: block;
-          height: 6em;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          background-color: #f9f9f9;
-          color: #000;
-          font-weight: 500;
-          padding: 10px; }
+      clear: both;
+           /* .item, .specimen, .article, .species {
+                float: left;
+                width: 240px;
+                margin: 20px 0 0 20px;
+
+                a {
+                    display: block;
+                    position: relative;
+
+                    &:before {
+                        border-bottom-left-radius: 3px;
+                        padding: 10px;
+                        color: $color-default;
+                        text-transform: uppercase;
+                        position: absolute;
+                        font-size: 0.9em;
+                        font-weight: 500;
+                        top: 0;
+                        right: 0;
+                    }
+                }
+
+                img {
+                    width: 100%;
+                    display: block;
+                }
+
+                .title {
+                    display: block;
+                    height: 6em;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    background-color: #f9f9f9;
+                    color: #000;
+                    font-weight: 500;
+                    padding: 10px;
+                }
+            }*/ }
     #search .results .item .icon-item {
       position: absolute;
       top: 0;
@@ -1569,5 +1579,146 @@ footer {
     padding: 10px;
     box-sizing: border-box;
     width: 200px; }
+
+.tile {
+  position: relative;
+  direction: ltr;
+  float: left; }
+  .tile.list {
+    float: left;
+    direction: ltr; }
+  .tile.full {
+    width: 255px;
+    padding-left: 10px;
+    padding-right: 10px;
+    float: left; }
+  .tile img {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    display: block;
+    width: 100%; }
+    .tile img.backgroundimage {
+      width: 400%;
+      height: 400%;
+      position: absolute;
+      left: -150%;
+      top: -150%;
+      z-index: -1;
+      filter: blur(100px);
+      -webkit-filter: blur(100px);
+      -moz-filter: blur(100px); }
+  .tile a {
+    display: block;
+    margin: 0 0 20px 0px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: #454545;
+    background: #f2f2f2; }
+  .tile .title {
+    display: block;
+    padding: 35px 3% 20px 3%;
+    font-size: 14px;
+    background: #f2f2f2;
+    height: 8em;
+    direction: ltr;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    line-height: 1.3;
+    -webkit-border-radius: 0 0 3px 3px;
+    -moz-border-radius: 0 0 3px 3px;
+    -ms-border-radius: 0 0 3px 3px;
+    border-radius: 0 0 3px 3px;
+       /* @include gridle_state(tablet mobile){
+		 height:8em;
+		 
+
+		 } */ }
+    .tile .title .heading {
+      display: block;
+      color: #000000;
+      font-weight: 500; }
+    .tile .title .itemtext {
+      position: relative;
+      background: #f2f2f2; }
+    .tile .title .regnum {
+      display: block;
+      font-weight: 300; }
+
+.itemtext {
+  position: relative;
+  background: #f2f2f2; }
+  .list .itemtext {
+    display: block;
+    background: #f2f2f2; }
+
+.tileimages {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 3%;
+  background-color: #ffffff;
+  -webkit-border-radius: 3px 3px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
+  -ms-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0; }
+  .list .tileimages {
+    width: 33%;
+    float: left;
+    padding: 0; }
+  .tileimages img {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    border-radius: 0px; }
+
+.tile-tag {
+  direction: ltr;
+  color: #a1a1a1;
+  align-items: center;
+  color: #fff;
+  display: flex;
+  font-size: 21px;
+  line-height: 1.2;
+  left: 0;
+  padding: 0 3%;
+  position: absolute;
+  top: 0; }
+  .home .tile-tag {
+    font-size: 2.5em; }
+  .tile-tag.article {
+    background-color: #517f96; }
+  .tile-tag.article:before {
+    font-family: "mv-collections";
+    content: "\e600"; }
+  .tile-tag.item {
+    background-color: #f26935; }
+  .tile-tag.item:before {
+    font-family: "mv-collections";
+    content: "\e606"; }
+  .tile-tag.specimen {
+    background-color: #7e7989; }
+  .tile-tag.specimen:before {
+    font-family: "mv-collections";
+    content: "\e60d"; }
+  .tile-tag.species:before {
+    font-family: "mv-collections";
+    content: ""; }
+  .tile-tag.species {
+    background-color: #deae0e; }
+  .tile-tag .count-wrapper {
+    font-size: 14px;
+    line-height: 1em;
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px; }
+    .tile.home .tile-tag .count-wrapper {
+      font-size: 0.45em; }
+    .tile-tag .count-wrapper .type {
+      text-transform: capitalize; }
 
 /*# sourceMappingURL=styles.css.map */

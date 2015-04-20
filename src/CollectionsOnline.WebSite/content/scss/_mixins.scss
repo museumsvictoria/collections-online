@@ -1,0 +1,56 @@
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin border-radius-top($radius){
+  -webkit-border-radius: $radius $radius 0 0;
+     -moz-border-radius: $radius $radius 0 0;
+      -ms-border-radius: $radius $radius 0 0;
+          border-radius: $radius $radius 0 0;	
+	
+}
+
+@mixin border-radius-bottom($radius)
+{  -webkit-border-radius:  0 0 $radius $radius;
+     -moz-border-radius: 0 0 $radius $radius;
+      -ms-border-radius: 0 0 $radius $radius;
+          border-radius: 0 0 $radius $radius;	
+
+}
+
+@mixin blur($pixels){
+  filter: blur($pixels);
+  -webkit-filter: blur($pixels);
+  -moz-filter: blur($pixels);
+}
+
+@mixin icon-article{
+  font-family: $font-family-mv-collections;
+  content: "\e600";	
+}
+@mixin icon-item{
+	font-family: $font-family-mv-collections;
+  content: "\e606";
+}
+@mixin icon-spaced-item{
+	font-family: $font-family-mv-collections;
+  content: "\e606 ";
+}
+@mixin icon-species{
+	  font-family: $font-family-mv-collections;
+  content: "\e60c"
+}
+
+@mixin icon-specimen{
+	  font-family: $font-family-mv-collections;
+  content: "\e60d";
+	
+}
+
+@mixin icon-search-header{
+	  font-family: $font-family-mv-collections;
+  content: "\e602";
+}
