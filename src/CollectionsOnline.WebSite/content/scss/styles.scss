@@ -686,8 +686,8 @@ footer {
             display: table;
             content: "";
             clear: both;
-
-            .item, .specimen, .article, .species {
+            //20/4/2015 - Removed for Design integration
+           /* .item, .specimen, .article, .species {
                 float: left;
                 width: 240px;
                 margin: 20px 0 0 20px;
@@ -724,7 +724,7 @@ footer {
                     font-weight: 500;
                     padding: 10px;
                 }
-            }
+            }*/
         }
 
         .item {
@@ -981,26 +981,20 @@ footer {
     }
 }
 
+
 //additions from Pattern Lab
 .tile{
-    //Commented out size details for the moment - need to have specified some break points
-	//@include gridle ( 3 );
-	//@include gridle ( 3 , 'mobile' );
-	//@include gridle (6, 'tablet');
+
 	
 	&.list{
-	//@include gridle ( 6 );
-	//@include gridle ( 12 , 'mobile' );
-	//@include gridle (6, 'tablet');	
+
 	float:left;
 	direction:ltr;
 	
 	
 	}
 	&.full{
-			//@include gridle ( 3 );
-	//@include gridle ( 12 , 'mobile' );
-	//@include gridle (6, 'tablet');
+
     width:255px;
     padding-left:10px;
     padding-right:10px;
@@ -1052,11 +1046,12 @@ footer {
 		position:relative;	
 		line-height: 1.3;	
 		@include border-radius-bottom(3px);
-		@include gridle_state(tablet mobile){
+		
+       /* @include gridle_state(tablet mobile){
 		 height:8em;
 		 
 
-		 }
+		 } */
 		 & .heading
 		 {
 			 display:block;

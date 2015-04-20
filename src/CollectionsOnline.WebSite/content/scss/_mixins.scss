@@ -1,4 +1,3 @@
-//From PatternLab
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;
      -moz-border-radius: $radius;
@@ -27,21 +26,6 @@
   -webkit-filter: blur($pixels);
   -moz-filter: blur($pixels);
 }
-
-
-@mixin tablet {
-  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
-    @content;
-  }
-}
-
-@mixin desktop {
-  @media (min-width: #{$desktop-width}) {
-    @content;
-  }
-}
-
-
 
 @mixin icon-article{
   font-family: $font-family-mv-collections;
