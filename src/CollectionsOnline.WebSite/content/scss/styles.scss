@@ -1045,6 +1045,7 @@ footer {
 		text-overflow: ellipsis;
 		position:relative;	
 		line-height: 1.3;	
+        box-sizing: border-box;
 		@include border-radius-bottom(3px);
 		
        /* @include gridle_state(tablet mobile){
@@ -1089,6 +1090,7 @@ footer {
     position:relative;
     padding:$padding-side;
     background-color:$colour-background-image;
+    box-sizing: border-box;
     @include border-radius-top(3px);
     .list & {
 	    width:33%;
