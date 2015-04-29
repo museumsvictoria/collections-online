@@ -5,7 +5,6 @@
   "author": "Michael Mason",
   "license": "MIT",
   "browser": {
-    "jquery-autocompleter": "./content/js/lib/jquery.autocompleter.js",
     "query-string": "./content/js/lib/query-string.js"
   },
   "devDependencies": {

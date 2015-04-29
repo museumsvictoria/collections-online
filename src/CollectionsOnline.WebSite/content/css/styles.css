@@ -1592,22 +1592,6 @@ footer {
   #developers .documentation {
     width: 100%; }
 
-.term-search {
-  position: relative;
-  padding: 0 20px; }
-  .term-search h4 {
-    padding: 0 !important; }
-  .term-search input {
-    color: #bbbbbb;
-    border: 1px solid #636363;
-    border-radius: 3px;
-    font-weight: 400;
-    outline: 0;
-    background: #141414;
-    padding: 10px;
-    box-sizing: border-box;
-    width: 200px; }
-
 .tile {
   position: relative;
   direction: ltr;
@@ -1661,7 +1645,7 @@ footer {
     -moz-border-radius: 0 0 3px 3px;
     -ms-border-radius: 0 0 3px 3px;
     border-radius: 0 0 3px 3px;
-       /* @include gridle_state(tablet mobile){
+        /* @include gridle_state(tablet mobile){
 		 height:8em;
 		 
 

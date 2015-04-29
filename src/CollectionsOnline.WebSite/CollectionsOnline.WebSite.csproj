@@ -151,7 +151,6 @@
     <Content Include="content\js\app\images.js" />
     <Content Include="content\js\app\app.js" />
     <Content Include="content\js\bundle.js" />
-    <Content Include="content\js\lib\jquery.autocompleter.js" />
     <None Include="content\scss\lib\_autocompleter.scss" />
     <Content Include="content\js\lib\query-string.js" />
     <Content Include="gulpfile.js" />
@@ -169,8 +168,6 @@
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
-    <Compile Include="Models\TermSearchViewModel.cs" />
-    <Compile Include="Models\TermSearchInputModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />
@@ -193,8 +190,6 @@
     <Compile Include="Queries\IArticleViewModelQuery.cs" />
     <Compile Include="Modules\ArticlesModule.cs" />
     <Compile Include="Queries\ArticleViewModelQuery.cs" />
-    <Compile Include="Queries\ITermSearchViewModelQuery.cs" />
-    <Compile Include="Queries\TermSearchViewModelQuery.cs" />
     <Compile Include="Transformers\ArticleViewTransformer.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Queries\IHomeViewModelQuery.cs" />
