@@ -139,7 +139,11 @@
     <Content Include="content\fonts\entypo.svg" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-birds.jpg" />
+    <Content Include="content\img\img-home-bunjilaka.jpg" />
+    <Content Include="content\img\img-home-immigration-museum.jpg" />
     <Content Include="content\img\img-home-item.jpg" />
+    <Content Include="content\img\img-home-melbourne-museum.jpg" />
+    <Content Include="content\img\img-home-scienceworks.jpg" />
     <Content Include="content\img\img-home-species.jpg" />
     <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-mv-white.png" />

@@ -868,10 +868,10 @@ footer {
     }
 }
 
-#explore {
+#explore-collection {    
     background:#1d1d1d;
 
-    .explore-content {
+    .collection-content {
         @include gridle_parent();
 
         h2 {
@@ -943,6 +943,35 @@ footer {
         .specimen {
             span {
                 background-color:$color-specimen;
+            }
+        }
+    }
+
+    
+}
+
+#explore-venue
+{
+    background:#e2e2e2;
+
+    .recent-content, .venue-content {
+        @include gridle_parent();
+
+        h2 {
+            @include gridle (12);
+        }
+
+        .tile {
+            @include gridle (3);
+        }
+
+        .venue {
+            @include gridle (6);
+
+            span {
+                font-weight:300;
+                font-size:1.2em;
+                color:#000;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
@@ -21,46 +22,61 @@ namespace CollectionsOnline.Import.Imports
         }
 
         public void Run()
-        {
-            _log.Debug("Starting relationship import");
+        {          
+            ImportCache importCache;
+            List<string> importCacheItemIds;
+            var relatedArticleCount = 0;
 
             // Perform item relationship import
-            var documentSession = _documentStore.OpenSession();
-            
-            // Get the id's of all items that were cached in the current import
-            var importCache = documentSession.Load<ImportCache>("importCaches/item") ?? new ImportCache();
-            var importCacheItemIds = importCache.Irns.Select(x => string.Format("items/{0}", x)).ToList();
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                // Get the id's of all items that were cached in the current import
+                importCache = documentSession.Load<ImportCache>("importCaches/item") ?? new ImportCache();
+                importCacheItemIds = importCache.Irns.Select(x => string.Format("items/{0}", x)).ToList();
+            }
+
+            _log.Debug("Starting {0} import", GetType().Name);
 
             var currentOffset = 0;
             // Collection Name
             while (true)
             {
-                documentSession = _documentStore.OpenSession();
-                if (ImportCanceled())
-                    return;
-
-                var items = documentSession.Load<Item>(importCacheItemIds
-                    .Skip(currentOffset)
-                    .Take(Constants.DataBatchSize))
-                    .ToList();
-
-                if(items.Count == 0)
-                    break;
-                    
-                foreach (var item in items.Where(x => x != null))
+                using (var documentSession = _documentStore.OpenSession())
                 {
-                    item.RelatedArticleIds.AddRangeUnique(documentSession
-                        .Query<object, CombinedIndex>()
-                        .Where(x => ((CombinedIndexResult)x).DisplayTitle.In(item.CollectionNames) && ((CombinedIndexResult)x).Type == "article")
-                        .ToList()
-                        .Select(x => ((CombinedIndexResult)x).Id));
+                    if (ImportCanceled())
+                        return;
+
+                    var items = documentSession.Load<Item>(importCacheItemIds
+                        .Skip(currentOffset)
+                        .Take(Constants.DataBatchSize))
+                        .ToList();
+
+                    if (items.Count == 0)
+                        break;
+
+                    foreach (var item in items.Where(x => x != null))
+                    {
+                        using (var relatedDocumentSession = _documentStore.OpenSession())
+                        {
+                            var relatedArticleIds = relatedDocumentSession
+                                .Query<object, CombinedIndex>()
+                                .Where(x => ((CombinedIndexResult) x).DisplayTitle.In(item.CollectionNames) &&((CombinedIndexResult) x).Type == "article")
+                                .Select(x => ((CombinedIndexResult) x).Id)
+                                .ToList();
+
+                            if (relatedArticleIds.Any())
+                                _log.Debug("found {0} related articles via collection name for item with id {1}", relatedArticleIds.Count(), item.Id);
+
+                            item.RelatedArticleIds.AddRangeUnique(relatedArticleIds);
+                        }
+                    }
+
+                    currentOffset += items.Count;
+                    documentSession.SaveChanges();
+                    documentSession.Dispose();
+
+                    _log.Debug("relationship import progress... {0}/{1}", currentOffset, importCacheItemIds.Count);
                 }
-
-                currentOffset += items.Count;
-                documentSession.SaveChanges();
-                documentSession.Dispose();
-
-                _log.Debug("relationship import progress... {0}/{1}", currentOffset, importCacheItemIds.Count);
             }
 
             _log.Debug("relationship import complete");

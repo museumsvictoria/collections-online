@@ -1,4 +1,6 @@
-﻿namespace CollectionsOnline.WebSite.Models
+﻿using System;
+
+namespace CollectionsOnline.WebSite.Models
 {
     public class EmuAggregateRootViewModel
     {
@@ -13,5 +15,9 @@
         public string ThumbnailUri { get; set; }
 
         public string Type { get; set; }
+
+        public double Quality { get; set; }
+
+        public DateTime DateModified { get; set; }
     }
-}
+}   

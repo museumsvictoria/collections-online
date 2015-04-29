@@ -20,7 +20,9 @@
                 </span>
             </span>
             @if (!string.IsNullOrWhiteSpace(Model.SubDisplayTitle))
-            {<span class="regnum"> @Model.SubDisplayTitle </span>}
+            {
+                <span class="regnum">@Model.SubDisplayTitle</span>
+            }            
             @Html.Raw(Model.DisplayTitle)
         </span>
     </a>

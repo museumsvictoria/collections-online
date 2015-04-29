@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CollectionsOnline.Core.Models;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
@@ -30,8 +31,9 @@ namespace CollectionsOnline.Core.Indexes
                     Quality =
                         ((article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any()) ? 1 : 0) +
                         ((article.Keywords.Any()) ? 1 : 0) +
-                        (article.Media.Count * 2) +
+                        Math.Log(article.Media.Count + 2, 2) +
                         ((article.ChildArticleIds.Any()) ? 1 : 0),
+                    DateModified = article.DateModified.Date,
 
                     // Facet fields
                     Type = "Article",
@@ -84,8 +86,9 @@ namespace CollectionsOnline.Core.Indexes
                     // Sort fields
                     Quality = 
                         ((!string.IsNullOrWhiteSpace(item.PhysicalDescription) || !string.IsNullOrWhiteSpace(item.ObjectSummary) || !string.IsNullOrWhiteSpace(item.Significance) || !string.IsNullOrWhiteSpace(item.IsdDescriptionOfContent)) ? 1 : 0) + 
-                        (item.Media.Count * 2) +
+                        Math.Log(item.Media.Count + 2, 2) +
                         ((item.Associations.Any()) ? 1 : 0),
+                    DateModified = item.DateModified.Date,
 
                     // Facet fields
                     Type = "Item",
@@ -199,8 +202,9 @@ namespace CollectionsOnline.Core.Indexes
                     Quality =
                         ((!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet)) ? 1 : 0) +
                         ((!string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
-                        (species.Media.Count * 2) +
+                        Math.Log(species.Media.Count + 2, 2) +
                         ((species.RelatedItemIds.Any() || species.RelatedSpecimenIds.Any()) ? 1 : 0),
+                    DateModified = species.DateModified.Date,
 
                     // Facet fields
                     Type = "Species",
@@ -294,8 +298,9 @@ namespace CollectionsOnline.Core.Indexes
                     Quality =
                         ((specimen.DateVisitedFrom.HasValue || !string.IsNullOrWhiteSpace(specimen.CollectedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
                         ((specimen.Latitudes.Any() || specimen.Longitudes.Any()) ? 1 : 0) +
-                        (specimen.Media.Count * 2) +
+                        Math.Log(specimen.Media.Count + 2, 2) +
                         ((!string.IsNullOrWhiteSpace(specimen.ScientificName)) ? 1 : 0),
+                    DateModified = specimen.DateModified.Date,
 
                     // Facet fields
                     Type = "Specimen",
@@ -380,8 +385,10 @@ namespace CollectionsOnline.Core.Indexes
             Store(x => x.Summary, FieldStorage.Yes);
             Store(x => x.ThumbnailUri, FieldStorage.Yes);
             Store(x => x.Type, FieldStorage.Yes);
+            Store(x => x.Quality, FieldStorage.Yes);
 
-            Sort(x => x.Quality, SortOptions.Int);
+            Sort(x => x.Quality, SortOptions.Double);
+            Sort(x => x.DateModified, SortOptions.String);
 
             Analyzers.Add(x => x.Content, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
 
@@ -411,7 +418,9 @@ namespace CollectionsOnline.Core.Indexes
 
         public string ThumbnailUri { get; set; }
 
-        public int Quality { get; set; }
+        public double Quality { get; set; }
+
+        public DateTime DateModified { get; set; }
 
         /* facet fields */
 

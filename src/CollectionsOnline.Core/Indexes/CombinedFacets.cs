@@ -33,6 +33,10 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
+                    Name = x => x.SpecimenScientificGroup
+                },
+                new Facet<CombinedIndexResult>
+                {
                     Name = x => x.ItemType
                 },
                 new Facet<CombinedIndexResult>
@@ -42,10 +46,6 @@ namespace CollectionsOnline.Core.Indexes
                 new Facet<CombinedIndexResult>
                 {
                     Name = x => x.SpeciesEndemicity
-                },
-                new Facet<CombinedIndexResult>
-                {
-                    Name = x => x.SpecimenScientificGroup
                 },
                 new Facet<CombinedIndexResult>
                 {

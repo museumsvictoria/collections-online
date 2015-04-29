@@ -13,9 +13,9 @@
         </div>
     </form>
 </div>
-<div id="explore">
+<div id="explore-collection">
     <div class="wrapper">
-        <div class="explore-content">
+        <div class="collection-content">
             <h2>Explore the collection</h2>
             <div class="explore-type article">
                 <a href="/search?type=article">
@@ -62,6 +62,44 @@
                     </span>
                 </a>
             </div>
+        </div>
+    </div>
+</div>
+<div id="explore-venue">
+    <div class="wrapper">
+        <div class="venue-content">
+            <h2>Explore the collection on display</h2>
+            <div class="venue">
+                <a href="/search?ondisplaylocation=bunjilaka">
+                    <img src="/content/img/img-home-bunjilaka.jpg" />
+                    <span>Bunjilaka</span>
+                </a>
+            </div>
+            <div class="venue">
+                <a href="/search?ondisplaylocation=melbourne+museum">
+                    <img src="/content/img/img-home-melbourne-museum.jpg" />
+                    <span>Melbourne Museum</span>
+                </a>
+            </div>
+            <div class="venue">
+                <a href="/search?ondisplaylocation=scienceworks">
+                    <img src="/content/img/img-home-scienceworks.jpg" />
+                    <span>Scienceworks</span>
+                </a>
+            </div>
+            <div class="venue">
+                <a href="/search?ondisplaylocation=immigration+museum">
+                    <img src="/content/img/img-home-immigration-museum.jpg" />
+                    <span>Immigration Museum</span>
+                </a>
+            </div>
+        </div>
+        <div class="recent-content">
+            <h2>Recently added items</h2>
+            @foreach (var recentResults in Model.RecentResults)
+            {
+                @Html.Partial("emutile", recentResults)
+            }
         </div>
     </div>
 </div>
