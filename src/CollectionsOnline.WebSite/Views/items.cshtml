@@ -42,22 +42,22 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Item.ObjectSummary))
                 {
                     <h3>Summary</h3>
-                    <p>@Html.Raw(Model.Item.ObjectSummary)</p>
+                    <p>@Html.ConvertNewlines(Model.Item.ObjectSummary)</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.IsdDescriptionOfContent))
                 {
                     <h3>Description of Content</h3>
-                    <p>@Model.Item.IsdDescriptionOfContent</p>
+                    <p>@Html.ConvertNewlines(Model.Item.IsdDescriptionOfContent)</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.PhysicalDescription))
                 {
                     <h3>Physical Description</h3>
-                    <p>@Model.Item.PhysicalDescription</p>
+                    <p>@Html.ConvertNewlines(Model.Item.PhysicalDescription)</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDescription))
                 {
                     <h3>Physical Description</h3>
-                    <p>@Model.Item.IndigenousCulturesDescription</p>
+                    <p>@Html.ConvertNewlines(Model.Item.IndigenousCulturesDescription)</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyDescription))
                 {
@@ -114,14 +114,14 @@
                             </p>
                         </li>
                     }
-                    @if (@Model.Item.CollectionAreas.Any())
+                    @if (@Model.Item.CollectingAreas.Any())
                     {
                         <li>
-                            <h3>Collection Areas</h3>
+                            <h3>Collecting Areas</h3>
                             <p>
-                                @for (int i = 0; i < Model.Item.CollectionAreas.Count; i++)
+                                @for (int i = 0; i < Model.Item.CollectingAreas.Count; i++)
                                 {
-                                    <a href="/search?collectionarea=@HttpUtility.UrlEncode(Model.Item.CollectionAreas[i])">@Model.Item.CollectionAreas[i]</a>@(i != Model.Item.CollectionAreas.Count - 1 ? "," : "")
+                                    <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Item.CollectingAreas[i])">@Model.Item.CollectingAreas[i]</a>@(i != Model.Item.CollectingAreas.Count - 1 ? "," : "")
                                 }
                             </p>
                         </li>

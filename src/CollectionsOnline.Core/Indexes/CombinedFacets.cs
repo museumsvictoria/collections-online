@@ -17,10 +17,6 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
-                    Name = x => x.OnDisplay
-                },
-                new Facet<CombinedIndexResult>
-                {
                     Name = x => x.Type
                 },
                 new Facet<CombinedIndexResult>
@@ -29,7 +25,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
-                    Name = x => x.CollectionArea
+                    Name = x => x.CollectingArea
                 },
                 new Facet<CombinedIndexResult>
                 {
@@ -53,7 +49,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
-                    Name = x => x.OnDisplayLocation
+                    Name = x => x.DisplayLocation
                 }
             };
         }

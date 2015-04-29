@@ -213,14 +213,14 @@ namespace CollectionsOnline.Import.Factories
             item.Discipline = map.GetEncodedString("ColDiscipline");
             item.Type = map.GetEncodedString("ColTypeOfItem");
             item.RegistrationNumber = !string.IsNullOrWhiteSpace(map.GetEncodedString("ColRegPart"))
-                                         ? string.Format("{0}{1}.{2}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"), map.GetEncodedString("ColRegPart"))
-                                         : string.Format("{0}{1}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"));
+                                         ? string.Format("{0} {1}.{2}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"), map.GetEncodedString("ColRegPart"))
+                                         : string.Format("{0} {1}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"));
             
             // Collection names
             item.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
 
             // Collection areas (remove problematic characters used for multi-select facets)
-            item.CollectionAreas = map.GetEncodedStrings("SubThemes_tab")
+            item.CollectingAreas = map.GetEncodedStrings("SubThemes_tab")
                 .Select(x => x.CleanForMultiFacets())
                 .ToList();
 

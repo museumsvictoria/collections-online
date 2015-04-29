@@ -50,7 +50,7 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> Keywords { get; set; }
 
-        public IList<string> CollectionAreas { get; set; }
+        public IList<string> CollectingAreas { get; set; }
 
         public IList<Association> Associations { get; set; }
 
@@ -247,7 +247,7 @@ namespace CollectionsOnline.Core.Models
         private void InitializeCollections()
         {
             CollectionNames = new List<string>();
-            CollectionAreas = new List<string>();
+            CollectingAreas = new List<string>();
             Classifications = new List<string>();
             Associations = new List<Association>();
             RelatedItemIds = new List<string>();

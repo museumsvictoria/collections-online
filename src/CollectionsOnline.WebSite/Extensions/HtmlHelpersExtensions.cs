@@ -10,7 +10,7 @@ namespace CollectionsOnline.WebSite.Extensions
 {
     public static class HtmlHelpersExtensions
     {
-        public static IHtmlString RenderAssociationDescription<T>(this HtmlHelpers<T> helpers, Association association)
+        public static IHtmlString RenderAssociationDescription<T>(this HtmlHelpers<T> helper, Association association)
         {
             var parts = new List<string>();
 
@@ -37,7 +37,7 @@ namespace CollectionsOnline.WebSite.Extensions
             return new NonEncodedHtmlString(result);
         }
 
-        public static IHtmlString RenderCitation<T>(this HtmlHelpers<T> helpers, EmuAggregateRoot document)
+        public static IHtmlString RenderCitation<T>(this HtmlHelpers<T> helper, EmuAggregateRoot document)
         {
             var sb = new StringBuilder();
 
@@ -46,7 +46,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var article = document as Article;
 
                 sb.Append(BuildAuthorsCitation(article.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}{3} Accessed {4}", article.DateModified.Year, article.Title, helpers.RenderContext.Context.Request.Url.SiteBase, helpers.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}{3} Accessed {4}", article.DateModified.Year, article.Title, helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Species)
             {
@@ -60,14 +60,19 @@ namespace CollectionsOnline.WebSite.Extensions
                 if (!string.IsNullOrWhiteSpace(species.Taxonomy.CommonName))
                     sb.Append(string.Format("{0} ", species.Taxonomy.CommonName));
 
-                sb.Append(string.Format("in Museum Victoria Collections {0}{1} Accessed {2}", helpers.RenderContext.Context.Request.Url.SiteBase, helpers.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("in Museum Victoria Collections {0}{1} Accessed {2}", helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Item || document is Specimen)
             {
-                sb.Append(string.Format("Museum Victoria Collections {0}{1} Accessed {2}", helpers.RenderContext.Context.Request.Url.SiteBase, helpers.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("Museum Victoria Collections {0}{1} Accessed {2}", helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
 
             return new NonEncodedHtmlString(sb.ToString());
+        }
+
+        public static IHtmlString ConvertNewlines<T>(this HtmlHelpers<T> helper, string content)
+        {
+            return new NonEncodedHtmlString(content.Replace("\n", "<br />"));
         }
 
         private static string BuildAuthorsCitation(IList<Author> authors)

@@ -20,7 +20,7 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> CollectionNames { get; set; }
 
-        public IList<string> CollectionAreas { get; set; }
+        public IList<string> CollectingAreas { get; set; }
 
         public IList<string> Classifications { get; set; }
 

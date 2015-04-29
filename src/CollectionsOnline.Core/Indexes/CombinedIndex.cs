@@ -38,15 +38,14 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     Type = "Article",
                     Category = (string)null,
-                    HasImages = (article.Media.Any()) ? "Yes" : (string)null,
-                    OnDisplay = (string)null,
-                    CollectionArea = new object[] { },
+                    HasImages = (article.Media.Any()) ? "Yes" : "No",
+                    DisplayLocation = new object[] { },
+                    CollectingArea = new object[] { },
                     ItemType = (string)null,
                     SpeciesType = (string)null,
                     SpeciesEndemicity = (string)null,
                     SpecimenScientificGroup = (string)null,
                     ArticleType = article.Types,
-                    OnDisplayLocation = (string)null,
 
                     // Term fields
                     Keyword = article.Keywords,
@@ -93,15 +92,14 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     Type = "Item",
                     Category = item.Category,
-                    HasImages = (item.Media.Any()) ? "Yes" : (string)null,
-                    OnDisplay = item.MuseumLocation != null ? "Yes" : (string)null,
-                    CollectionArea = item.CollectionAreas,
+                    HasImages = (item.Media.Any()) ? "Yes" : "No",
+                    DisplayLocation = new object[] { item.MuseumLocation.OnDisplayLocation, item.MuseumLocation != null ? "All venues" : (string)null },
+                    CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
                     SpeciesType = (string)null,
                     SpeciesEndemicity = (string)null,
                     SpecimenScientificGroup = (string)null,
                     ArticleType = new object[] { },
-                    OnDisplayLocation = item.MuseumLocation.OnDisplayLocation,
                     
                     // Term fields
                     Keyword = new object[] { item.Keywords,
@@ -209,15 +207,14 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     Type = "Species",
                     Category = "Natural Sciences",
-                    HasImages = (species.Media.Any()) ? "Yes" : (string) null,
-                    OnDisplay = (string)null,
-                    CollectionArea = new object[] { },
+                    HasImages = (species.Media.Any()) ? "Yes" : "No",
+                    DisplayLocation = new object[] { },
+                    CollectingArea = new object[] { },
                     ItemType = (string) null,
                     SpeciesType = species.AnimalType,
                     SpeciesEndemicity = species.Endemicity,
                     SpecimenScientificGroup = (string) null,
                     ArticleType = new object[] { },
-                    OnDisplayLocation = (string)null,
 
                     // Term fields
                     Keyword = new object[] { species.ConservationStatuses, species.AnimalSubType },
@@ -305,15 +302,14 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     Type = "Specimen",
                     Category = specimen.Category,
-                    HasImages = (specimen.Media.Any()) ? "Yes" : (string) null,
-                    OnDisplay = specimen.MuseumLocation != null ? "Yes" : (string)null,
-                    CollectionArea = specimen.CollectionAreas,                    
+                    HasImages = (specimen.Media.Any()) ? "Yes" : "No",
+                    DisplayLocation = new object[] { specimen.MuseumLocation.OnDisplayLocation, specimen.MuseumLocation != null ? "All venues" : (string)null },
+                    CollectingArea = specimen.CollectingAreas,                    
                     ItemType = specimen.Type,
                     SpeciesType = (string) null,
                     SpeciesEndemicity = (string)null,
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     ArticleType = new object[] { },
-                    OnDisplayLocation = specimen.MuseumLocation.OnDisplayLocation,
 
                     // Term fields
                     Keyword = new object[] { specimen.Keywords, specimen.ExpeditionName },
@@ -430,9 +426,9 @@ namespace CollectionsOnline.Core.Indexes
 
         public string HasImages { get; set; }
 
-        public string OnDisplay { get; set; }
+        public object[] DisplayLocation { get; set; }
 
-        public object[] CollectionArea { get; set; }
+        public object[] CollectingArea { get; set; }
 
         public string ItemType { get; set; }
 
@@ -443,8 +439,6 @@ namespace CollectionsOnline.Core.Indexes
         public string SpecimenScientificGroup { get; set; }
 
         public object[] ArticleType { get; set; }
-
-        public string OnDisplayLocation { get; set; }
 
         /* term fields */
 

@@ -25,7 +25,6 @@ namespace CollectionsOnline.Import.Imports
         {          
             ImportCache importCache;
             List<string> importCacheItemIds;
-            var relatedArticleCount = 0;
 
             // Perform item relationship import
             using (var documentSession = _documentStore.OpenSession())

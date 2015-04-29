@@ -159,8 +159,8 @@ namespace CollectionsOnline.Import.Factories
             specimen.ScientificGroup = map.GetEncodedString("ColScientificGroup");
             specimen.Discipline = map.GetEncodedString("ColDiscipline");
             specimen.RegistrationNumber = map["ColRegPart"] != null
-                             ? string.Format("{0}{1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
-                             : string.Format("{0}{1}", map["ColRegPrefix"], map["ColRegNumber"]);
+                             ? string.Format("{0} {1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
+                             : string.Format("{0} {1}", map["ColRegPrefix"], map["ColRegNumber"]);
             specimen.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
             specimen.Type = map.GetEncodedString("ColTypeOfItem");
 
@@ -181,7 +181,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.Keywords.AddRange(map.GetEncodedStrings("SubSubjects_tab"));
 
             // Collection areas (remove problematic characters used for multi-select facets)
-            specimen.CollectionAreas = map.GetEncodedStrings("SubThemes_tab")
+            specimen.CollectingAreas = map.GetEncodedStrings("SubThemes_tab")
                 .Select(x => x.CleanForMultiFacets())
                 .ToList();
 

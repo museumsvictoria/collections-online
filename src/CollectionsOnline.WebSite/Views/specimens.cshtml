@@ -1,5 +1,4 @@
-﻿@using CollectionsOnline.Core.Models
-@using CollectionsOnline.WebSite.Extensions
+﻿@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.SpecimenViewTransformerResult>
 @{
     Layout = "layout.cshtml";
@@ -43,12 +42,12 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.ObjectSummary))
                 {
                     <h3>Summary</h3>
-                    <p>@Html.Raw(Model.Specimen.ObjectSummary)</p>
+                    <p>@Html.ConvertNewlines(Model.Specimen.ObjectSummary)</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.IsdDescriptionOfContent))
                 {
                     <h3>Description Of Content</h3>
-                    <p>@Model.Specimen.IsdDescriptionOfContent</p>
+                    <p>@Html.ConvertNewlines(Model.Specimen.IsdDescriptionOfContent)</p>
                 }
                 @if (@Model.Specimen.CollectionNames.Any())
                 {
@@ -569,14 +568,14 @@
                             <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Specimen.Discipline.ToLower())">@Model.Specimen.Discipline</a></p>
                         </li>
                     }
-                    @if (@Model.Specimen.CollectionAreas.Any())
+                    @if (@Model.Specimen.CollectingAreas.Any())
                     {
                         <li>
-                            <h3>Collection Areas</h3>
+                            <h3>Collecting Areas</h3>
                             <p>
-                                @for (int i = 0; i < Model.Specimen.CollectionAreas.Count; i++)
+                                @for (int i = 0; i < Model.Specimen.CollectingAreas.Count; i++)
                                 {
-                                    <a href="/search?collectionarea=@HttpUtility.UrlEncode(Model.Specimen.CollectionAreas[i])">@Model.Specimen.CollectionAreas[i]</a>@(i != Model.Specimen.CollectionAreas.Count - 1 ? "," : "")
+                                    <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Specimen.CollectingAreas[i])">@Model.Specimen.CollectingAreas[i]</a>@(i != Model.Specimen.CollectingAreas.Count - 1 ? "," : "")
                                 }
                             </p>
                         </li>
