@@ -21,6 +21,8 @@ namespace CollectionsOnline.Core.Config
 
         public static int SummaryMaxChars = 200;
 
+        public static int HomeMaxRecentResults = 4;
+
         public static string ImuItemQueryString = "Collections Online: Humanities";
 
         public static string ImuSpeciesQueryString = "Collections Online: Species Profile";
@@ -43,7 +45,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string CurrentApiVersionPath = "/v1";
 
-        public static string ApiBasePath = "/api";
+        public static string ApiBasePath = "/api";        
 
         public static Dictionary<Tuple<string, string, string, string>, MuseumLocation> MuseumLocations = new Dictionary
             <Tuple<string, string, string, string>, MuseumLocation>(new OrdinalIgnoreCaseTupleComparer())

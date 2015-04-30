@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using Nancy.Helpers;
@@ -73,6 +74,13 @@ namespace CollectionsOnline.WebSite.Extensions
         public static IHtmlString ConvertNewlines<T>(this HtmlHelpers<T> helper, string content)
         {
             return new NonEncodedHtmlString(content.Replace("\n", "<br />"));
+        }
+
+        public static IHtmlString ConvertHyperLinks<T>(this HtmlHelpers<T> helper, string content)
+        {
+            var regex = new Regex(@"(?<![>""])(http://[^ \n\r\t,;]+)");
+
+            return new NonEncodedHtmlString(regex.Replace(content, "<a href=\"$1\">[Link]</a>"));
         }
 
         private static string BuildAuthorsCitation(IList<Author> authors)

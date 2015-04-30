@@ -47,7 +47,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.IsdDescriptionOfContent))
                 {
                     <h3>Description Of Content</h3>
-                    <p>@Html.ConvertNewlines(Model.Specimen.IsdDescriptionOfContent)</p>
+                    <p>@Model.Specimen.IsdDescriptionOfContent</p>
                 }
                 @if (@Model.Specimen.CollectionNames.Any())
                 {
@@ -280,7 +280,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.Significance))
                 {
                     <h3>Significance</h3>
-                    <p>@Model.Specimen.Significance</p>
+                    <p>@Html.ConvertNewlines(@Model.Specimen.Significance)</p>
                 }
             </div>
             <div class="detail">

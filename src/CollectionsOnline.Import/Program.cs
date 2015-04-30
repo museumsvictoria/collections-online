@@ -62,10 +62,6 @@ namespace CollectionsOnline.Import
             kernel.Bind(x => x
                 .FromAssemblyContaining(typeof(Program), typeof(Constants))
                 .SelectAllClasses()
-                .Excluding<MigrationImport>()
-                .Excluding<RelationshipImport>()
-                .Excluding<MediaUpdateImport>()
-                .Excluding<TaxonomyUpdateImport>()
                 .BindAllInterfaces());
 
             // Automapper configuration for update methods on EmuAggregateRootFactories
