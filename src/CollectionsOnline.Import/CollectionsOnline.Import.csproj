@@ -100,6 +100,8 @@
     <Compile Include="Extensions\MapExtensions.cs" />
     <Compile Include="Factories\IEmuAggregateRootFactory.cs" />
     <Compile Include="Factories\IAssociationFactory.cs" />
+    <Compile Include="Factories\IFileMediaFactory.cs" />
+    <Compile Include="Factories\FileMediaFactory.cs" />
     <Compile Include="Factories\IMuseumLocationFactory.cs" />
     <Compile Include="Factories\IMediaFactory.cs" />
     <Compile Include="Factories\AssociationFactory.cs" />

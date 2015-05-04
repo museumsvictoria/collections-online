@@ -21,7 +21,8 @@ namespace CollectionsOnline.Import.Factories
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IList<ImageMediaJob> _imageMediaJobs;
 
-        public ImageMediaFactory(IImuSessionProvider imuSessionProvider)
+        public ImageMediaFactory(
+            IImuSessionProvider imuSessionProvider)
         {
             _imuSessionProvider = imuSessionProvider;            
 
@@ -70,7 +71,7 @@ namespace CollectionsOnline.Import.Factories
             if (ThereAreExistingMedia(ref imageMedia))
             {
                 stopwatch.Stop();
-                _log.Trace("Loaded existing media resources in {0} ms", stopwatch.ElapsedMilliseconds);
+                _log.Trace("Loaded existing image media resources in {0} ms", stopwatch.ElapsedMilliseconds);
 
                 return true;
             }
@@ -96,7 +97,7 @@ namespace CollectionsOnline.Import.Factories
                             .Load(fileStream);
 
                         stopwatch.Stop();
-                        _log.Trace("Loaded media resource FileStream in {0} ms ({1} kbytes, {2} width, {3} height)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"), imageFactory.Image.Width,
+                        _log.Trace("Loaded image media resource FileStream in {0} ms ({1} kbytes, {2} width, {3} height)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"), imageFactory.Image.Width,
                             imageFactory.Image.Height);
 
                         stopwatch.Reset();
@@ -105,9 +106,6 @@ namespace CollectionsOnline.Import.Factories
                         foreach (var imageMediaJob in _imageMediaJobs)
                         {
                             imageFactory.Reset();
-
-                            var destinationPath = PathFactory.MakeDestPath(imageMedia.Irn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
-                            var uriPath = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
 
                             // Indirectly call graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
                             if (imageMediaJob.ResizeLayer.Upscale == false && (imageFactory.Image.Width < imageMediaJob.ResizeLayer.Size.Width || imageFactory.Image.Height < imageMediaJob.ResizeLayer.Size.Height))
@@ -121,13 +119,13 @@ namespace CollectionsOnline.Import.Factories
                             if (imageMediaJob.BackgroundColor.HasValue)
                                 imageFactory.BackgroundColor(imageMediaJob.BackgroundColor.Value);
 
-                            imageFactory.Save(destinationPath);
+                            imageFactory.Save(PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType));
 
                             // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
                             typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
                                 .SetValue(imageMedia, new ImageMediaFile
                                 {
-                                    Uri = uriPath,
+                                    Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
                                     Width = imageFactory.Image.Width,
                                     Height = imageFactory.Image.Height
                                 });
@@ -155,7 +153,7 @@ namespace CollectionsOnline.Import.Factories
                 else
                 {
                     // Error is unexpected therefore we want the entire import to fail, re-throw the error.
-                    _log.Error("Error saving image {0}, un-recoverable error, {1}", imageMedia.Irn, exception);
+                    _log.Error("Error saving image media {0}, un-recoverable error, {1}", imageMedia.Irn, exception);
                     throw;
                 }
             }
@@ -171,22 +169,19 @@ namespace CollectionsOnline.Import.Factories
             {
                 var imageMediaIrn = imageMedia.Irn;
 
-                if (_imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, x.FileDerivativeType))))
+                if (_imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, ".jpg", x.FileDerivativeType))))
                 {
                     foreach (var imageMediaJob in _imageMediaJobs)
                     {
                         using (var imageFactory = new ImageFactory())
                         {
-                            var destPath = PathFactory.MakeDestPath(imageMediaIrn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
-                            var uriPath = PathFactory.MakeUriPath(imageMedia.Irn, FileFormatType.Jpg, imageMediaJob.FileDerivativeType);
-
-                            imageFactory.Load(destPath);
+                            imageFactory.Load(PathFactory.MakeDestPath(imageMediaIrn, ".jpg", imageMediaJob.FileDerivativeType));
 
                             // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
                             typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
                                 .SetValue(imageMedia, new ImageMediaFile
                                 {
-                                    Uri = uriPath,
+                                    Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
                                     Width = imageFactory.Image.Width,
                                     Height = imageFactory.Image.Height
                                 });

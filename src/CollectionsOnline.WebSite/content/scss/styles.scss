@@ -177,6 +177,10 @@ button.icon {
         .caption {
             @include gridle (10);
             margin:1em 0;
+
+            span {
+                display:block;
+            }
         }
 
         .media-tools {

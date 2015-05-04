@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
@@ -12,10 +13,14 @@ namespace CollectionsOnline.Import.Factories
     public class MediaFactory : IMediaFactory
     {
         private readonly IImageMediaFactory _imageMediaFactory;
+        private readonly IFileMediaFactory _fileMediaFactory;
 
-        public MediaFactory(IImageMediaFactory imageMediaFactory)
+        public MediaFactory(
+            IImageMediaFactory imageMediaFactory,
+            IFileMediaFactory fileMediaFactory)
         {
             _imageMediaFactory = imageMediaFactory;
+            _fileMediaFactory = fileMediaFactory;
         }
 
         public Media Make(Map map)
@@ -26,6 +31,8 @@ namespace CollectionsOnline.Import.Factories
             {
                 var irn = long.Parse(map.GetEncodedString("irn"));
                 var dateModified = DateTime.ParseExact(string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")), "dd/MM/yyyy HH:mm", new CultureInfo("en-AU"));
+                var mimeType = map.GetEncodedString("MulMimeType");
+                var originalFileExtension = Path.GetExtension(map.GetEncodedString("MulIdentifier"));
 
                 var captionMap = map.GetMaps("metadata").FirstOrDefault( x => string.Equals(x.GetEncodedString("MdaElement_tab"), "dcTitle", StringComparison.OrdinalIgnoreCase) && string.Equals(x.GetEncodedString("MdaQualifier_tab"), "Caption.COL"));
                 var caption = captionMap != null ? captionMap.GetEncodedString("MdaFreeText_tab") : map.GetEncodedString("MulTitle");
@@ -39,7 +46,7 @@ namespace CollectionsOnline.Import.Factories
                 var licenceDetails = map.GetEncodedString("RigLicenceDetails");
                 
                 // Handle images
-                if (string.Equals(map.GetEncodedString("MulMimeType"), "image", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(mimeType, "image", StringComparison.OrdinalIgnoreCase))
                 {
                     var alternativeText = map.GetEncodedString("DetAlternateText");
 
@@ -61,6 +68,29 @@ namespace CollectionsOnline.Import.Factories
                     if (_imageMediaFactory.Make(ref imageMedia))
                     {
                         return imageMedia;
+                    }
+                }
+
+                // Handle files
+                if (string.Equals(mimeType, "application", StringComparison.OrdinalIgnoreCase))
+                {
+                    var fileMedia = new FileMedia
+                    {
+                        Irn = irn,
+                        DateModified = dateModified,
+                        Caption = caption,
+                        Creators = creators,
+                        Sources = sources,
+                        Credit = credit,
+                        RightsStatement = rightsStatement,
+                        RightsStatus = rightsStatus,
+                        Licence = licence,
+                        LicenceDetails = licenceDetails
+                    };
+
+                    if (_fileMediaFactory.Make(ref fileMedia, originalFileExtension))
+                    {
+                        return fileMedia;
                     }
                 }
             }

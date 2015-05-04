@@ -1,6 +1,6 @@
 ﻿namespace CollectionsOnline.Core.Models
 {
-    public abstract class MediaFile
+    public class MediaFile
     {
         public string Uri { get; set; }
     }
@@ -10,5 +10,5 @@
         public int Width { get; set; }
 
         public int Height { get; set; }
-    }
+    }    
 }

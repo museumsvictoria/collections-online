@@ -40,4 +40,9 @@ namespace CollectionsOnline.Core.Models
 
         public ImageMediaFile Large { get; set; }
     }
+
+    public class FileMedia : Media
+    {
+        public MediaFile File { get; set; }
+    }
 }

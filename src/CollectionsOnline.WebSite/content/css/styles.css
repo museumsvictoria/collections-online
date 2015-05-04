@@ -973,6 +973,8 @@ button.icon {
       padding-right: 10px;
       width: 83.33333%;
       margin: 1em 0; }
+      #media figcaption .caption span {
+        display: block; }
     #media figcaption .media-tools {
       float: left;
       direction: ltr;
