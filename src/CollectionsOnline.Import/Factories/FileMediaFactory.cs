@@ -53,10 +53,14 @@ namespace CollectionsOnline.Import.Factories
                     {
                         fileStream.CopyTo(file);
                         fileStream.Dispose();
-                    }
 
-                    // Create media file
-                    fileMedia.File = new MediaFile { Uri = PathFactory.MakeUriPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None) };
+                        // Create media file
+                        fileMedia.File = new MediaFile
+                        {
+                            Uri = PathFactory.MakeUriPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None),
+                            Size = file.Length
+                        };
+                    } 
 
                     stopwatch.Stop();
                     _log.Trace("Created new file media in {0} ms", stopwatch.ElapsedMilliseconds);
@@ -93,7 +97,11 @@ namespace CollectionsOnline.Import.Factories
 
                 if (File.Exists(destPath))
                 {
-                    fileMedia.File = new MediaFile {Uri = uriPath};
+                    fileMedia.File = new MediaFile
+                    {
+                        Uri = uriPath,
+                        Size = new FileInfo(destPath).Length
+                    };
 
                     return true;
                 }

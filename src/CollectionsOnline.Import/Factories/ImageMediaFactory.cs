@@ -119,13 +119,16 @@ namespace CollectionsOnline.Import.Factories
                             if (imageMediaJob.BackgroundColor.HasValue)
                                 imageFactory.BackgroundColor(imageMediaJob.BackgroundColor.Value);
 
-                            imageFactory.Save(PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType));
+                            var destPath = PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
+
+                            imageFactory.Save(destPath);
 
                             // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
                             typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
                                 .SetValue(imageMedia, new ImageMediaFile
                                 {
                                     Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
+                                    Size = new FileInfo(destPath).Length,
                                     Width = imageFactory.Image.Width,
                                     Height = imageFactory.Image.Height
                                 });
@@ -175,13 +178,16 @@ namespace CollectionsOnline.Import.Factories
                     {
                         using (var imageFactory = new ImageFactory())
                         {
-                            imageFactory.Load(PathFactory.MakeDestPath(imageMediaIrn, ".jpg", imageMediaJob.FileDerivativeType));
+                            var destPath = PathFactory.MakeDestPath(imageMediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
+                            
+                            imageFactory.Load(destPath);
 
                             // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
                             typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
                                 .SetValue(imageMedia, new ImageMediaFile
                                 {
                                     Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
+                                    Size = new FileInfo(destPath).Length,
                                     Width = imageFactory.Image.Width,
                                     Height = imageFactory.Image.Height
                                 });
