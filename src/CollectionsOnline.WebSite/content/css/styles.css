@@ -215,7 +215,7 @@ input[type="checkbox"], input[type="radio"] {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-.grid-0, .grid-1, .grid-2, .grid-3, .grid-4, .grid-5, .grid-6, .grid-7, .grid-8, .grid-9, .grid-10, .grid-11, .grid-12, #title h1, #title .thumbnails, #title .thumbnails .thumbnail, #media figcaption .caption, #media figcaption .media-tools, #record .text-content, #record .text-content .detail h3, #record .text-content .detail p, #record .side-content, #record .cite-content, #related .related-content h3, #related .related-content .item, #related .related-content .specimen, #related .related-content .article, #related .related-content .species, footer .logos, #explore-collection .collection-content h2, #explore-collection .collection-content .explore-type, #explore-venue .recent-content h2, #explore-venue .venue-content h2, #explore-venue .recent-content .tile, #explore-venue .venue-content .tile, #explore-venue .recent-content .venue, #explore-venue .venue-content .venue {
+.grid-0, .grid-1, .grid-2, .grid-3, .grid-4, .grid-5, .grid-6, .grid-7, .grid-8, .grid-9, .grid-10, .grid-11, .grid-12, #title h1, #title .thumbnails, #title .thumbnails .thumbnail, #media figcaption .caption, #media figcaption .media-tools, #record .text-content, #record .text-content .detail h3, #record .text-content .detail p, #record .side-content, #record .cite-content, #related .related-content h3, #explore-collection .collection-content h2, #explore-collection .collection-content .explore-type, #explore-venue .recent-content h2, #explore-venue .venue-content h2, #explore-venue .recent-content .tile, #explore-venue .venue-content .tile, #explore-venue .recent-content .venue, #explore-venue .venue-content .venue, .footer .logos, footer .logos, footer .footerpromo, footer .footerbase {
   display: inline-block;
   min-height: 1px;
   -webkit-box-sizing: border-box;
@@ -661,6 +661,11 @@ input[type="checkbox"], input[type="radio"] {
 /**
  * Clear each class :
  */
+.container {
+  max-width: 1040px;
+  padding: 0px 10px;
+  margin: 0 auto; }
+
 @font-face {
   font-family: 'mv-collections';
   src: url("/content/fonts/mv-collections.eot");
@@ -917,6 +922,7 @@ button.icon {
 
 .wrapper {
   max-width: 1040px;
+  padding: 0px 10px;
   margin: 0 auto; }
 
 #title {
@@ -931,6 +937,18 @@ button.icon {
     font-size: 2em;
     font-weight: 400;
     color: #fff; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      #title h1 {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      #title h1 {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
   #title .thumbnails {
     float: left;
     direction: ltr;
@@ -939,6 +957,18 @@ button.icon {
     width: 33.33333%;
     margin: 2em 0 1.8em 0;
     padding-left: 0; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      #title .thumbnails {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      #title .thumbnails {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
     #title .thumbnails .thumbnail {
       float: left;
       direction: ltr;
@@ -949,6 +979,18 @@ button.icon {
       padding-right: 0;
       padding: 0 0 7px 7px;
       cursor: pointer; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #title .thumbnails .thumbnail {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #title .thumbnails .thumbnail {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
       #title .thumbnails .thumbnail img {
         width: 100%;
         display: block; }
@@ -973,6 +1015,18 @@ button.icon {
       padding-right: 10px;
       width: 83.33333%;
       margin: 1em 0; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #media figcaption .caption {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #media figcaption .caption {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
       #media figcaption .caption span {
         display: block; }
     #media figcaption .media-tools {
@@ -984,6 +1038,18 @@ button.icon {
       margin: 1em 0;
       display: flex;
       justify-content: flex-end; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #media figcaption .media-tools {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #media figcaption .media-tools {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
       #media figcaption .media-tools button {
         color: #4c4c4c;
         width: 50px;
@@ -1005,6 +1071,18 @@ button.icon {
     padding-left: 10px;
     padding-right: 10px;
     width: 66.66667%; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      #record .text-content {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      #record .text-content {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
     #record .text-content .summary {
       margin: 5em 0 2em;
       line-height: 1.8em;
@@ -1032,6 +1110,18 @@ button.icon {
       color: #6D6D6D;
       line-height: 1.6em;
       margin: 0.6em 0; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #record .text-content .detail h3 {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #record .text-content .detail h3 {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
     #record .text-content .detail p {
       float: left;
       direction: ltr;
@@ -1042,6 +1132,18 @@ button.icon {
       line-height: 1.6em;
       font-size: 1.1em;
       margin: 0.6em 0; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #record .text-content .detail p {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #record .text-content .detail p {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
     #record .text-content a {
       color: #488DD9;
       border-bottom: 2px solid rgba(72, 141, 217, 0.5); }
@@ -1057,6 +1159,18 @@ button.icon {
     font-size: 1.1em;
     color: #fff;
     margin: 5em 0 0; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      #record .side-content {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      #record .side-content {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
     #record .side-content .on-display {
       background: linear-gradient(60deg, #a82912 0%, #a82912 20%, #5f0800 21%, #000000 21%, #000000 51%, #490200 52%, #490200 56%, #000000 57%, #000000 62%, #5f0800 63%, #5f0800 67%, #711300 68%, #711300 98%, #b44b14 99%);
       margin: 0 0 20px;
@@ -1118,6 +1232,18 @@ button.icon {
     padding-right: 10px;
     width: 100%;
     margin: 4em 0; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      #record .cite-content {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      #record .cite-content {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
     #record .cite-content .cite {
       padding: 2em;
       background-color: #fff;
@@ -1139,7 +1265,47 @@ button.icon {
 #related .related-content {
   margin: 4em 0 2em;
   padding-left: 0;
-  padding-right: 0; }
+  padding-right: 0;
+        /* Commented out -
+        .item, .specimen, .article, .species {
+            @include gridle (3);
+            padding-top:10px;
+            padding-bottom:10px;
+                
+            a {
+                border:1px solid #dcdcdc;
+                display:block;
+                position:relative;
+
+                &:before {
+                    border-bottom-left-radius:3px;
+                    padding:10px;
+                    color:$color-default;
+                    text-transform:uppercase;
+                    position:absolute;
+                    font-size:0.9em;
+                    font-weight:500;
+                    top:0;
+                    right:0;
+                }
+            }        
+
+            img {
+                width:100%;
+                display:block;
+            }
+
+            .title {
+                display:block;
+                height:6em;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                background-color:#f9f9f9;
+                color:#000;
+                font-weight:500;
+                padding:10px;
+            }
+        }*/ }
   #related .related-content h3 {
     float: left;
     direction: ltr;
@@ -1149,40 +1315,18 @@ button.icon {
     color: #424242;
     font-size: 1.6em;
     font-weight: 400; }
-  #related .related-content .item, #related .related-content .specimen, #related .related-content .article, #related .related-content .species {
-    float: left;
-    direction: ltr;
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 25%;
-    padding-top: 10px;
-    padding-bottom: 10px; }
-    #related .related-content .item a, #related .related-content .specimen a, #related .related-content .article a, #related .related-content .species a {
-      border: 1px solid #dcdcdc;
-      display: block;
-      position: relative; }
-      #related .related-content .item a:before, #related .related-content .specimen a:before, #related .related-content .article a:before, #related .related-content .species a:before {
-        border-bottom-left-radius: 3px;
-        padding: 10px;
-        color: #fff;
-        text-transform: uppercase;
-        position: absolute;
-        font-size: 0.9em;
-        font-weight: 500;
-        top: 0;
-        right: 0; }
-    #related .related-content .item img, #related .related-content .specimen img, #related .related-content .article img, #related .related-content .species img {
-      width: 100%;
-      display: block; }
-    #related .related-content .item .title, #related .related-content .specimen .title, #related .related-content .article .title, #related .related-content .species .title {
-      display: block;
-      height: 6em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      background-color: #f9f9f9;
-      color: #000;
-      font-weight: 500;
-      padding: 10px; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      #related .related-content h3 {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      #related .related-content h3 {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
   #related .related-content .item .icon-item {
     position: absolute;
     top: 0;
@@ -1224,16 +1368,17 @@ button.icon {
   font-weight: 300;
   color: #424242; }
 
+/* Commented out 055/05/2015 - new footer section added to end*/
+/*
 footer {
-  background-color: #2a2a2a; }
-  footer .logos {
-    float: left;
-    direction: ltr;
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 100%;
-    margin: 2em 0; }
-
+    background-color:#2a2a2a;
+    
+    .logos {
+        @include gridle (12);
+        margin:2em 0;
+    }
+}
+*/
 .no-image {
   display: block;
   position: relative;
@@ -1517,12 +1662,36 @@ footer {
       width: 100%;
       font-size: 1.7em;
       margin: 3em 0 1em; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #explore-collection .collection-content h2 {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #explore-collection .collection-content h2 {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
     #explore-collection .collection-content .explore-type {
       float: left;
       direction: ltr;
       padding-left: 10px;
       padding-right: 10px;
       width: 25%; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #explore-collection .collection-content .explore-type {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #explore-collection .collection-content .explore-type {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
       #explore-collection .collection-content .explore-type a {
         position: relative;
         display: block;
@@ -1570,18 +1739,54 @@ footer {
       padding-left: 10px;
       padding-right: 10px;
       width: 100%; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #explore-venue .recent-content h2, #explore-venue .venue-content h2 {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #explore-venue .recent-content h2, #explore-venue .venue-content h2 {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
     #explore-venue .recent-content .tile, #explore-venue .venue-content .tile {
       float: left;
       direction: ltr;
       padding-left: 10px;
       padding-right: 10px;
       width: 25%; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #explore-venue .recent-content .tile, #explore-venue .venue-content .tile {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #explore-venue .recent-content .tile, #explore-venue .venue-content .tile {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
     #explore-venue .recent-content .venue, #explore-venue .venue-content .venue {
       float: left;
       direction: ltr;
       padding-left: 10px;
       padding-right: 10px;
       width: 50%; }
+      @media screen and (min-width: 330px) and (max-width: 500px) {
+        #explore-venue .recent-content .venue, #explore-venue .venue-content .venue {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
+      @media screen and (min-width: 501px) and (max-width: 768px) {
+        #explore-venue .recent-content .venue, #explore-venue .venue-content .venue {
+          float: left;
+          direction: ltr;
+          padding-left: 10px;
+          padding-right: 10px; } }
       #explore-venue .recent-content .venue span, #explore-venue .venue-content .venue span {
         font-weight: 300;
         font-size: 1.2em;
@@ -1736,5 +1941,179 @@ footer {
       font-size: 0.45em; }
     .tile-tag .count-wrapper .type {
       text-transform: capitalize; }
+
+/*------------------------------------*\
+    $FOOTER
+\*------------------------------------*/
+.footer {
+  clear: both;
+  overflow: hidden;
+  background: #262626; }
+  .footer .logos {
+    float: left;
+    direction: ltr;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    direction: ltr;
+    float: left;
+    margin: 2em 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      .footer .logos {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      .footer .logos {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+
+footer {
+  clear: both;
+  overflow: hidden;
+  background: #262626;
+  color: #f5f5f5;
+  padding-top: 32px; }
+  footer .wrapper {
+    padding-bottom: 30px; }
+  footer .logos {
+    direction: ltr;
+    float: left;
+    margin: 0 0 10px 0px;
+    padding: 0px 20px 10px 10px;
+    float: left;
+    direction: ltr;
+    padding-left: 10px;
+    padding-right: 10px;
+    float: left;
+    direction: ltr; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      footer .logos {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      footer .logos {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      footer .logos {
+        width: 100%; } }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      footer .logos {
+        float: left;
+        direction: ltr; } }
+  footer .footerpromos {
+    float: left; }
+  footer .footerpromo {
+    display: block;
+    float: left;
+    direction: ltr;
+    padding-left: 10px;
+    padding-right: 10px;
+    float: left;
+    direction: ltr;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-right: 1px solid #606060;
+    float: left;
+    direction: ltr; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      footer .footerpromo {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      footer .footerpromo {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      footer .footerpromo {
+        width: 33.33333%; } }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      footer .footerpromo {
+        display: none; } }
+    footer .footerpromo.first {
+      padding-left: 0px; }
+    footer .footerpromo ul {
+      padding-left: 10px;
+      list-style: outside none none;
+      margin: 0; }
+      footer .footerpromo ul li {
+        line-height: 14px;
+        padding-bottom: 4px; }
+    footer .footerpromo li {
+      line-height: 16px; }
+    footer .footerpromo h2 {
+      font-size: 14px;
+      padding-bottom: 6px; }
+    footer .footerpromo a {
+      font-size: 12px; }
+      footer .footerpromo a:hover {
+        text-decoration: underline; }
+  footer .comment {
+    color: #f5f5f5; }
+  footer .tweet {
+    color: #f5f5f5; }
+  footer h2 {
+    color: #f5f5f5; }
+  footer .footerbase {
+    float: left;
+    direction: ltr;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    background-color: #606060;
+    float: left;
+    direction: ltr;
+    padding: 20px 0px 0px; }
+    @media screen and (min-width: 330px) and (max-width: 500px) {
+      footer .footerbase {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    @media screen and (min-width: 501px) and (max-width: 768px) {
+      footer .footerbase {
+        float: left;
+        direction: ltr;
+        padding-left: 10px;
+        padding-right: 10px; } }
+    footer .footerbase .stategovernmentlinks {
+      float: left;
+      font-size: 12px;
+      padding-right: 30px;
+      padding-bottom: 20px;
+      padding-left: 10px; }
+      footer .footerbase .stategovernmentlinks img {
+        height: 30px; }
+    footer .footerbase .venueinformation {
+      font-size: 12px;
+      float: left;
+      padding-left: 10px;
+      padding-bottom: 20px;
+      margin-right: 20px; }
+    footer .footerbase.wrapper {
+      padding-bottom: 10px; }
+    footer .footerbase ul {
+      list-style: outside none none;
+      margin: 0;
+      clear: left; }
+      footer .footerbase ul li {
+        float: left;
+        margin-right: 13px;
+        font-size: 12px; }
 
 /*# sourceMappingURL=styles.css.map */

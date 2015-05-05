@@ -137,6 +137,7 @@
     <Content Include="content\css\styles.css" />
     <Content Include="content\fonts\entypo-social.svg" />
     <Content Include="content\fonts\entypo.svg" />
+    <Content Include="content\img\CreativeVictoriaLogo_Reversed.png" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-birds.jpg" />
     <Content Include="content\img\img-home-bunjilaka.jpg" />
