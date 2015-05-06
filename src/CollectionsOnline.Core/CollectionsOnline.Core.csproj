@@ -68,7 +68,9 @@
     <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentStoreProvider.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\CollectionOverview.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\EmuSummary.cs" />
     <Compile Include="Models\FileDerivativeType.cs" />
     <Compile Include="Models\ImportCache.cs" />
     <Compile Include="Models\MediaFile.cs" />

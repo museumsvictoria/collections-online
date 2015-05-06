@@ -1,4 +1,4 @@
-/// <vs BeforeBuild='build-css' SolutionOpened='watch' />
+/// <vs BeforeBuild='build-css, browserify' SolutionOpened='watch' />
 // Steps to build
 // 1. install node: http://nodejs.org/download/
 // 2. install gulp globally: npm install -g gulp
@@ -16,7 +16,7 @@ var browserify = require('browserify');
 
 var filePaths = {
   css: { src: './content/scss/styles.scss', dest: './content/css' }
-}
+};
 
 gulp.task('build-css', function () {
     return gulp.src(filePaths.css.src)
@@ -27,11 +27,10 @@ gulp.task('build-css', function () {
 // Watch Task.
 gulp.task('watch', function () {
   gulp.watch('./content/scss/**/*.scss', ['build-css']);
+  gulp.watch('./content/js/app/*.js', ['build-js']);
 });
 
-gulp.task('default', ['build-css']);
-
-gulp.task('browserify', function () {
+gulp.task('build-js', function () {
   return browserify('./content/js/app/app.js')
      .bundle()
      .pipe(source('bundle.js'))

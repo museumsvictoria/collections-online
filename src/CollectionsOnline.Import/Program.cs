@@ -56,7 +56,8 @@ namespace CollectionsOnline.Import
             kernel.Bind<IImport>().To<ImuImport<Article>>();
             kernel.Bind<IImport>().To<ImuImport<Species>>();
             kernel.Bind<IImport>().To<ImuImport<Item>>();
-            kernel.Bind<IImport>().To<ImuImport<Specimen>>();            
+            kernel.Bind<IImport>().To<ImuImport<Specimen>>();
+            kernel.Bind<IImport>().To<ImuImport<CollectionOverview>>();
 
             // Bind the rest
             kernel.Bind(x => x
@@ -75,6 +76,8 @@ namespace CollectionsOnline.Import
                 cfg.CreateMap<Species, Species>()
                     .ForMember(x => x.Id, options => options.Ignore());
                 cfg.CreateMap<Specimen, Specimen>()
+                    .ForMember(x => x.Id, options => options.Ignore());
+                cfg.CreateMap<CollectionOverview, CollectionOverview>()
                     .ForMember(x => x.Id, options => options.Ignore());
             });
         }

@@ -226,3 +226,5 @@ git-update-index-*-files.ps1
 *.css.map
 node_modules
 *.winmerge
+bundle.js
+styles.css

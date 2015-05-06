@@ -31,6 +31,8 @@ namespace CollectionsOnline.Core.Config
 
         public static string ImuArticleQueryString = "Collections Online: Article";
 
+        public static string ImuCollectionOverviewQueryString = "Collections Online: Collection Overview";
+
         public static string ImuMultimediaQueryString = "Collections Online: MMR";
 
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(12);
