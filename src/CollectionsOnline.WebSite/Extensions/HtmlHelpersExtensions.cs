@@ -78,9 +78,15 @@ namespace CollectionsOnline.WebSite.Extensions
 
         public static IHtmlString ConvertHyperLinks<T>(this HtmlHelpers<T> helper, string content)
         {
-            var regex = new Regex(@"(?<![>""])(http://[^ \n\r\t,;]+)");
+            var result = new StringBuilder(content);
+            var regexResult = Regex.Matches(content, @"((ht|f)tp(s?)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z‌​0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*)");
 
-            return new NonEncodedHtmlString(regex.Replace(content, "<a href=\"$1\">[Link]</a>"));
+            for (int i = 0; i < regexResult.Count; i++)
+            {
+                result.Replace(regexResult[i].Value, string.Format("<a href=\"{0}\">[Link {1}]</a>", regexResult[i].Value, i+1));
+            }
+
+            return new NonEncodedHtmlString(result.ToString());
         }
 
         private static string BuildAuthorsCitation(IList<Author> authors)

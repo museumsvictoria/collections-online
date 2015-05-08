@@ -22,6 +22,8 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public string JsonSpecimenImages { get; set; }
 
+        public string JsonSpecimenLatLongs { get; set; }
+
         public SpecimenViewTransformerResult()
         {
             RelatedItems = new List<EmuAggregateRootViewModel>();

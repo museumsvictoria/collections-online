@@ -283,6 +283,7 @@
                     <p>@Html.ConvertNewlines(@Model.Specimen.Significance)</p>
                 }
             </div>
+            <div id="map"></div>
             <div class="detail">
                 <ul>
                     @foreach (var association in @Model.Specimen.Associations)
@@ -690,5 +691,6 @@
 {
     <script>
         var imagesModel = @Html.Raw(Model.JsonSpecimenImages);
+        var latlongsModel = @Html.Raw(Model.JsonSpecimenLatLongs);
     </script>
 }

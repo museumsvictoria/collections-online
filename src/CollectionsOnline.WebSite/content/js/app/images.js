@@ -20,9 +20,8 @@ module.exports = {
     this.$thumbs.on('click', 'img', this.select.bind(this));
   },
   select: function(e) {
-    if (this.Model) {
+    if (this.Model !== undefined && this.Model.length != 0) {
       this.$activeImage.removeClass('active');
-
       this.$activeImage = $(e.target).addClass('active');
       
       var newImage = this.Model[$(e.target).parent().index()];
