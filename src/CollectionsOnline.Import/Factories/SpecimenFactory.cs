@@ -232,7 +232,9 @@ namespace CollectionsOnline.Import.Factories
             specimen.MuseumLocation = _museumLocationFactory.Make(map.GetMap("location"));
 
             // Number Of Specimens
-            specimen.NumberOfSpecimens = map.GetEncodedString("SpeNoSpecimens");
+            if(!string.IsNullOrWhiteSpace(map.GetEncodedString("SpeNoSpecimens")) && map.GetEncodedString("SpeNoSpecimens") != "0" )
+                specimen.NumberOfSpecimens = map.GetEncodedString("SpeNoSpecimens");
+
             // Clutch Size
             specimen.ClutchSize = map.GetEncodedString("BirTotalClutchSize");
             // Sex
@@ -542,33 +544,27 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Display Title
-            string displayTitle;
             if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.TektitesName))
-            {
-                displayTitle = specimen.TektitesName;
-            }
+                specimen.DisplayTitle = specimen.TektitesName;
             else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MeteoritesName))
-            {
-                displayTitle = specimen.MeteoritesName;
-            }
+                specimen.DisplayTitle = specimen.MeteoritesName;
             else if (string.Equals(specimen.Discipline, "Petrology", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.PetrologyRockName))
-            {
-                displayTitle = specimen.PetrologyRockName;
-            }
+                specimen.DisplayTitle = specimen.PetrologyRockName;
             else if (string.Equals(specimen.Discipline, "Mineralogy", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MineralogySpecies))
-            {
-                displayTitle = specimen.MineralogySpecies;
-            }
-            else
-                displayTitle = specimen.ScientificName;
+                specimen.DisplayTitle = specimen.MineralogySpecies;
+            else if (!string.IsNullOrWhiteSpace(specimen.ScientificName))
+                specimen.DisplayTitle = specimen.ScientificName;
+            else if (specimen.Taxonomy != null)
+                specimen.DisplayTitle = specimen.Taxonomy.TaxonName;
 
-            displayTitle = new[]
+            specimen.DisplayTitle = new[]
             {
                 specimen.ObjectName,
-                displayTitle
+                specimen.DisplayTitle
             }.Concatenate(" ");
 
-            specimen.DisplayTitle = !string.IsNullOrWhiteSpace(displayTitle) ? displayTitle : "Specimen";
+            if (string.IsNullOrWhiteSpace(specimen.DisplayTitle))
+                specimen.DisplayTitle = "Specimen";
 
             stopwatch.Stop();
             _log.Trace("Completed specimen creation for catalog record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);

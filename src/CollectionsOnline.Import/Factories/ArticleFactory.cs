@@ -191,7 +191,8 @@ namespace CollectionsOnline.Import.Factories
             // Display Title
             if (!string.IsNullOrWhiteSpace(article.Title))
                 article.DisplayTitle = article.Title;
-            else
+
+            if (string.IsNullOrWhiteSpace(article.DisplayTitle))
                 article.DisplayTitle = "Article";
 
             stopwatch.Stop();

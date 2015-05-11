@@ -53,20 +53,22 @@ namespace CollectionsOnline.Import.Imports
                     if (items.Count == 0)
                         break;
 
+                    var foundRelatedArticleCount = 0;
                     foreach (var item in items.Where(x => x != null))
                     {
                         using (var relatedDocumentSession = _documentStore.OpenSession())
                         {
                             var relatedArticleIds = relatedDocumentSession
                                 .Query<object, CombinedIndex>()
-                                .Where(x => ((CombinedIndexResult) x).DisplayTitle.In(item.CollectionNames) &&((CombinedIndexResult) x).Type == "article")
+                                .Where(x => ((CombinedIndexResult) x).DisplayTitle.In(item.CollectionNames) && ((CombinedIndexResult) x).Type == "article")
                                 .Select(x => ((CombinedIndexResult) x).Id)
                                 .ToList();
-
-                            if (relatedArticleIds.Any())
-                                _log.Debug("found {0} related articles via collection name for item with id {1}", relatedArticleIds.Count(), item.Id);
+                                                        
+                            var originalArticleCount = item.RelatedArticleIds.Count;
 
                             item.RelatedArticleIds.AddRangeUnique(relatedArticleIds);
+
+                            foundRelatedArticleCount += item.RelatedArticleIds.Count - originalArticleCount;
                         }
                     }
 
@@ -74,6 +76,8 @@ namespace CollectionsOnline.Import.Imports
                     documentSession.SaveChanges();
                     documentSession.Dispose();
 
+                    if(foundRelatedArticleCount > 0)
+                        _log.Debug("found {0} related articles via collection name", foundRelatedArticleCount);
                     _log.Debug("relationship import progress... {0}/{1}", currentOffset, importCacheItemIds.Count);
                 }
             }

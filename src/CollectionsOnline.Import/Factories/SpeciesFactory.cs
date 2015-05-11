@@ -202,8 +202,9 @@ namespace CollectionsOnline.Import.Factories
                     string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName) ? null : string.Format("<em>{0}</em>", species.Taxonomy.TaxonName),
                     species.Taxonomy.CommonName
                 }.Concatenate(" ");
-            }                     
-            else
+            }
+
+            if (string.IsNullOrWhiteSpace(species.DisplayTitle))
                 species.DisplayTitle = "Species";
 
             stopwatch.Stop();

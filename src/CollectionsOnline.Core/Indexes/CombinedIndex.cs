@@ -366,7 +366,7 @@ namespace CollectionsOnline.Core.Indexes
                 });
             
             Index(x => x.Id, FieldIndexing.No);
-            Index(x => x.DisplayTitle, FieldIndexing.No);
+            Index(x => x.DisplayTitle, FieldIndexing.NotAnalyzed);
             Index(x => x.SubDisplayTitle, FieldIndexing.No);
             Index(x => x.Content, FieldIndexing.Analyzed);
             Index(x => x.Summary, FieldIndexing.No);

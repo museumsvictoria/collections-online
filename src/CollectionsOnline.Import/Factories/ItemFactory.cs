@@ -640,7 +640,8 @@ namespace CollectionsOnline.Import.Factories
             }
             else if (!string.IsNullOrWhiteSpace(item.ObjectName))
                 item.DisplayTitle = item.ObjectName;
-            else
+
+            if (string.IsNullOrWhiteSpace(item.DisplayTitle))
                 item.DisplayTitle = "Item";
             
             stopwatch.Stop();

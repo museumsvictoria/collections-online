@@ -71,9 +71,7 @@ namespace CollectionsOnline.Import.Factories
                     taxonomy.TaxonName = new[]
                     {
                         taxonomy.Genus,
-                        string.IsNullOrWhiteSpace(taxonomy.Subgenus)
-                            ? null
-                            : string.Format("({0})", taxonomy.Subgenus),
+                        string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus),
                         taxonomy.Species,
                         taxonomy.Subspecies
                     }.Concatenate(" ");
@@ -108,34 +106,25 @@ namespace CollectionsOnline.Import.Factories
 
             if (!string.IsNullOrWhiteSpace(qualifier) && qualifierRank == QualifierRankType.Species)
             {
+                var taxonFirstPart = new[] {genus, subgenus}.Concatenate(" ");
+                var taxonSecondPart = new[] {species, subspecies}.Concatenate(" ");
+                
                 scientificName = new[]
                 {
-                    string.Format("<em>{0}</em>", new[]
-                    {
-                        genus,
-                        subgenus
-                    }.Concatenate(" ")),
+                    string.IsNullOrWhiteSpace(taxonFirstPart) ? null : string.Format("<em>{0}</em>", taxonFirstPart),
                     qualifier,
-                    string.Format("<em>{0}</em>", new[]
-                    {
-                        species,
-                        subspecies
-                    }.Concatenate(" ")),
+                    string.IsNullOrWhiteSpace(taxonSecondPart) ? null : string.Format("<em>{0}</em>", taxonSecondPart),
                     author
                 }.Concatenate(" ");
             }
             else
             {
+                var taxonFirstPart = new[] { genus, subgenus, species, subspecies }.Concatenate(" ");
+                
                 scientificName = new[]
                 {
                     qualifier,
-                    string.Format("<em>{0}</em>", new[]
-                    {
-                        genus,
-                        subgenus,
-                        species,
-                        subspecies
-                    }.Concatenate(" ")),
+                    string.IsNullOrWhiteSpace(taxonFirstPart) ? null : string.Format("<em>{0}</em>", taxonFirstPart),
                     author
                 }.Concatenate(" ");
             }
