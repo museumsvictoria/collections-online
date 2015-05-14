@@ -10,7 +10,7 @@
 
 @include gridle_register_state ( mobile , (
 	max-width : 500px,
-	min-width : 330px,
+	min-width : 200px,
 	gutter-width : 20px
 ) );
 @include gridle_register_state ( tablet , (
