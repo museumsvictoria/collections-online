@@ -7,3 +7,20 @@
 ));
 
 @include gridle_generate_classes ();
+
+@include gridle_register_state ( mobile , (
+	max-width : 500px,
+	min-width : 330px,
+	gutter-width : 20px
+) );
+@include gridle_register_state ( tablet , (
+	max-width : 768px,
+	min-width : 501px,
+	gutter-width : 20px
+) );
+
+.container {
+	max-width : 1040px;
+	padding: 0px 10px;
+	margin : 0 auto;
+}
