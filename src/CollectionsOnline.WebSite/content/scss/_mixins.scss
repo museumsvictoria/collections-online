@@ -54,3 +54,19 @@
 	  font-family: $font-family-mv-collections;
   content: "\e602";
 }
+
+@mixin flex-direction($direction){
+	  -webkit-flex-direction: $direction; /* Safari 6.1+ */
+    flex-direction: $direction; 
+}
+
+@mixin align-items-flex-end(){
+	  align-items: flex-end;
+  -webkit-align-items: flex-end;
+	
+}
+
+@mixin alignitem-center(){
+	align-items: center;
+	-webkit-align-items: center;
+}
