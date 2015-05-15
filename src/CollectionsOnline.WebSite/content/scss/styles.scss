@@ -498,6 +498,7 @@ button.icon {
     }
 }
 
+/*
 footer {
     background-color:#2a2a2a;
     
@@ -506,7 +507,7 @@ footer {
         margin:2em 0;
     }
 }
-
+*/
 .no-image {
     display:block;
     position: relative;
@@ -1179,4 +1180,158 @@ footer {
 #map {
     height:450px;
     border-radius:5px;
+}
+
+/*------------------------------------*\
+    $FOOTER
+\*------------------------------------*/
+.footer {
+	clear: both;
+	overflow: hidden;
+	background: $colour-background-dark;
+	
+	/*
+	& .logos
+	{
+	@include gridle(12);
+	direction: ltr;
+    float: left;
+    margin: 2em 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+	}
+	*/
+}
+
+footer {
+	clear: both;
+	overflow: hidden;
+	background: $colour-background-dark;
+	color:$colour-heading-inverted;
+	padding-top:32px;
+	
+	& .wrapper{
+		padding-bottom: 30px;
+		
+	}
+	
+	& .logos
+	{
+
+	
+	direction: ltr;
+    float: left;
+    margin: 0 0 10px px;
+    padding:0px 20px 10px 10px;
+
+    @include gridle(12, 'mobile');
+    float:left;
+	direction: ltr;
+		@include gridle_state('mobile'){
+			float:left;
+			direction: ltr;
+		}
+	}
+	& .footerpromos{
+		float: left;
+	}
+	& .footerpromo{
+		@include gridle(4, 'tablet');
+		float:left;
+		direction:ltr;
+		@include gridle_state('mobile'){
+		display: none;
+		}
+		&.first{
+			padding-left:0px;
+		}
+		padding-left: 20px;
+		padding-right: 20px;
+		border-right: 1px solid #606060;
+		float:left;
+		direction: ltr;
+		& ul{
+			padding-left: 10px;
+            list-style: outside none none;
+            margin: 0;
+
+			
+			& li{ 
+				line-height: 14px;
+				padding-bottom: 4px;
+			}
+		}
+					& li{ 
+				line-height: 16px;
+			}
+		& h2{
+			font-size: 14px;
+			padding-bottom: 6px;
+		}
+		& a {
+			font-size: 12px;
+			&:hover{
+				text-decoration: underline;
+			}
+		}
+	}
+	
+	& .comment{
+		
+		color: $colour-heading-inverted;
+	}
+	
+	& .tweet{
+		color: $colour-heading-inverted;
+	}
+	& h2{
+		color: $colour-heading-inverted;
+		
+		
+	}
+	
+	& .footerbase
+	{
+		@include gridle(12);
+		background-color: #606060;
+		float: left;
+		direction: ltr;
+		padding:20px 0px 0px;
+		
+		& .stategovernmentlinks{
+			float:left;
+			font-size:12px;
+			padding-right: 30px;
+			padding-bottom: 20px;
+			padding-left:10px;
+			& img
+			{
+				height: 30px;
+			}
+			
+		}
+		& .venueinformation{
+			font-size: 12px;
+			float:left;
+			padding-left: 10px;
+			padding-bottom: 20px;
+			margin-right:20px;
+		}
+        &.wrapper{
+            padding-bottom: 10px
+        }
+
+		& ul {
+            list-style: outside none none;
+			clear: left;
+            margin: 0;
+			//padding-left:10px;
+			& li {
+				float: left;
+				margin-right: 13px;
+				font-size: 12px;
+			}
+		}
+	}
 }
