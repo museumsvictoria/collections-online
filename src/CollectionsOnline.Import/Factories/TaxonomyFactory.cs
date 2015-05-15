@@ -104,7 +104,7 @@ namespace CollectionsOnline.Import.Factories
         {
             string scientificName;
 
-            if (!string.IsNullOrWhiteSpace(qualifier) && qualifierRank == QualifierRankType.Species)
+            if (qualifierRank == QualifierRankType.Species)
             {
                 var taxonFirstPart = new[] {genus, subgenus}.Concatenate(" ");
                 var taxonSecondPart = new[] {species, subspecies}.Concatenate(" ");
@@ -128,8 +128,8 @@ namespace CollectionsOnline.Import.Factories
                     author
                 }.Concatenate(" ");
             }
-            
-            return scientificName;
+
+            return string.IsNullOrWhiteSpace(scientificName) ? null : scientificName;
         }
     }
 }
