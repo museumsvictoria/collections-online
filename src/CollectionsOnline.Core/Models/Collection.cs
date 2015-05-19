@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CollectionsOnline.Core.Models
 {
-    public class CollectionOverview : EmuAggregateRoot
+    public class Collection : EmuAggregateRoot
     {
-        public CollectionOverview()
+        public Collection()
         {
             InitializeCollections();
         }

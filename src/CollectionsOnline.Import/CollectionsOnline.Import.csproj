@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\MapExtensions.cs" />
-    <Compile Include="Factories\CollectionOverviewFactory.cs" />
+    <Compile Include="Factories\CollectionFactory.cs" />
     <Compile Include="Factories\IEmuAggregateRootFactory.cs" />
     <Compile Include="Factories\IAssociationFactory.cs" />
     <Compile Include="Factories\IFileMediaFactory.cs" />

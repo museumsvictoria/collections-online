@@ -1,0 +1,38 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.CollectionIndexViewModel>
+@{
+    Layout = "layout.cshtml";
+}
+<div class="abouthero">
+    <img src="/content/img/about-hero-image.jpg" alt="" />
+</div>
+<div class="container about">
+    <div class="aboutcontent">
+        <h1>Our Collections</h1>
+        <p>At Museum Victoria, we have been building and researching our collections since 1854.</p>
+        <p>Our priceless collections record Australia's environmental and cultural history. They are an irreplaceable resource for understanding the past, reflecting on the present and looking into the future.</p>
+        <p>Research here adds to understanding of critical contemporary issues in science, the environment and society. Many of our researchers are world experts in their fields. Collaborative projects with universities, communities, government agencies and international institutions expand the museum's activities far beyond the walls of our buildings.</p>
+        <h2>History of the Collections</h2>
+        <p>Research and collecting commenced with the establishment of the National Museum of Victoria in 1854, which had a primary focus on natural sciences. In addition to researching and collecting Victorian and Australian animals, rocks, minerals and fossils, the first Directors also acquired significant international collections and established important international research networks.</p>
+        <p>From the late 19th century the museum began to actively research Australian Aboriginal people and cultures and to develop a significant collection of associated artefacts.</p>
+        <p>In 1870, the Industrial and Technological Museum (subsequently the Science Museum of Victoria) was established to research, collect and display important scientific and technological advances.</p>
+        <p>When the two institutions amalgamated in 1983, social history was added as a further research and collecting focus.</p>
+        <p>Currently, Museum Victoria holds a collection of over 16 million items, held in high-quality storage facilities at Melbourne Museum, Scienceworks and a specialised storage facility. Collection managers, conservators and curators research, document and preserve the collections for present and future generations.</p>
+    </div>
+    <div class="collections">
+        <h2>Collections</h2>
+        <div class="collections">
+            @foreach (var collection in Model.Collections)
+            {
+                <div class="collectiontile">
+                    <a href="/@collection.Id">
+                    <img src="@collection.ThumbnailUri" />
+                    <span class="title">
+                        <span class="heading">@collection.DisplayTitle</span>
+                        <span class="description">@collection.Summary</span>
+                    </span>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

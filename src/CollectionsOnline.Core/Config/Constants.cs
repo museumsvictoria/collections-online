@@ -21,7 +21,7 @@ namespace CollectionsOnline.Core.Config
 
         public static int SummaryMaxChars = 200;
 
-        public static int HomeMaxRecentResults = 4;
+        public static int HomeMaxRecentResults = 12;
 
         public static string ImuItemQueryString = "Collections Online: Humanities";
 
@@ -31,7 +31,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string ImuArticleQueryString = "Collections Online: Article";
 
-        public static string ImuCollectionOverviewQueryString = "Collections Online: Collection Overview";
+        public static string ImuCollectionQueryString = "Collections Online: Collection Overview";
 
         public static string ImuMultimediaQueryString = "Collections Online: MMR";
 

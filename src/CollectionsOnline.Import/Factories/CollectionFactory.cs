@@ -13,12 +13,12 @@ using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public class CollectionOverviewFactory : IEmuAggregateRootFactory<CollectionOverview>
+    public class CollectionFactory : IEmuAggregateRootFactory<Collection>
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IMediaFactory _mediaFactory;
 
-        public CollectionOverviewFactory(
+        public CollectionFactory(
             IMediaFactory mediaFactory)
         {
             _mediaFactory = mediaFactory;
@@ -57,31 +57,31 @@ namespace CollectionsOnline.Import.Factories
             {
                 var terms = new Terms();
 
-                terms.Add("DetPurpose_tab", Constants.ImuCollectionOverviewQueryString);
+                terms.Add("DetPurpose_tab", Constants.ImuCollectionQueryString);
 
                 return terms;
             }
         }
 
-        public CollectionOverview MakeDocument(Map map)
+        public Collection MakeDocument(Map map)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var collectionOverview = new CollectionOverview();
+            var collection = new Collection();
 
-            collectionOverview.Id = "collectionoverviews/" + map.GetEncodedString("irn");
+            collection.Id = "collections/" + map.GetEncodedString("irn");
 
-            collectionOverview.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
+            collection.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
-            collectionOverview.DateModified = DateTime.ParseExact(
+            collection.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU"));
-            collectionOverview.Title = map.GetEncodedString("NarTitle");
+            collection.Title = map.GetEncodedString("NarTitle");
 
             var sanitizedResult = HtmlConverter.HtmlSanitizer(map.GetEncodedString("NarNarrative"));
 
-            collectionOverview.Significance = sanitizedResult.Html;
+            collection.Significance = sanitizedResult.Html;
 
             if(sanitizedResult.HasRemovedTag || sanitizedResult.HasRemovedStyle || sanitizedResult.HasRemovedAttribute)
                 _log.Trace("Suspected obsolete HTML, consider reviewing narrative with irn {0} (removedTag:{1}, removedStyle:{2}, removedAttribute:{3})", 
@@ -90,10 +90,10 @@ namespace CollectionsOnline.Import.Factories
                     sanitizedResult.HasRemovedStyle, 
                     sanitizedResult.HasRemovedAttribute);
 
-            collectionOverview.CollectionSummary = map.GetEncodedString("NarNarrativeSummary");
+            collection.CollectionSummary = map.GetEncodedString("NarNarrativeSummary");
 
             // Authors
-            collectionOverview.Authors = map.GetMaps("authors")
+            collection.Authors = map.GetMaps("authors")
                 .Where(x => x != null)
                 .Select(x => new Author
                 {
@@ -105,16 +105,16 @@ namespace CollectionsOnline.Import.Factories
                 }).ToList();
 
             // Media           
-            collectionOverview.Media = _mediaFactory.Make(map.GetMaps("media"));            
+            collection.Media = _mediaFactory.Make(map.GetMaps("media"));            
 
-            var thumbnail = collectionOverview.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
+            var thumbnail = collection.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
             if (thumbnail != null)
-                collectionOverview.ThumbnailUri = thumbnail.Thumbnail.Uri;
+                collection.ThumbnailUri = thumbnail.Thumbnail.Uri;
 
             // Rights
             var rightsMap = map.GetMap("rights");
             if (rightsMap != null && !string.IsNullOrWhiteSpace(rightsMap.GetEncodedString("SummaryData")))
-                collectionOverview.RightsStatement = rightsMap.GetEncodedString("SummaryData");
+                collection.RightsStatement = rightsMap.GetEncodedString("SummaryData");
 
             // Relationships
 
@@ -123,13 +123,13 @@ namespace CollectionsOnline.Import.Factories
             {
                 var itemSpecimenMap = favorite.GetMap("itemspecimen");
                 if (itemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    collectionOverview.FavoriteItems.Add(new EmuSummary
+                    collection.FavoriteItems.Add(new EmuSummary
                     {
                         Id = string.Format("items/{0}", itemSpecimenMap.GetEncodedString("irn")),
                         Summary = favorite.GetEncodedString("ObjObjectNotes_tab")
                     });                    
                 if (itemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    collectionOverview.FavoriteSpecimens.Add(new EmuSummary
+                    collection.FavoriteSpecimens.Add(new EmuSummary
                     {
                         Id = string.Format("specimens/{0}", itemSpecimenMap.GetEncodedString("irn")),
                         Summary = favorite.GetEncodedString("ObjObjectNotes_tab")
@@ -141,7 +141,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 var articleMap = subCollection.GetMap("article");
                 if (articleMap.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                    collectionOverview.SubCollectionArticles.Add(new EmuSummary
+                    collection.SubCollectionArticles.Add(new EmuSummary
                     {
                         Id = string.Format("articles/{0}", articleMap.GetEncodedString("irn")),
                         Summary = subCollection.GetEncodedString("AssAssociatedWithComment_tab")
@@ -149,24 +149,24 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Build summary
-            if (!string.IsNullOrWhiteSpace(collectionOverview.CollectionSummary))
-                collectionOverview.Summary = collectionOverview.CollectionSummary;
-            else if (!string.IsNullOrWhiteSpace(collectionOverview.Significance))
-                collectionOverview.Summary = collectionOverview.Significance;
+            if (!string.IsNullOrWhiteSpace(collection.CollectionSummary))
+                collection.Summary = collection.CollectionSummary;
+            else if (!string.IsNullOrWhiteSpace(collection.Significance))
+                collection.Summary = collection.Significance;
 
             // Display Title
-            if (!string.IsNullOrWhiteSpace(collectionOverview.Title))
-                collectionOverview.DisplayTitle = collectionOverview.Title;
+            if (!string.IsNullOrWhiteSpace(collection.Title))
+                collection.DisplayTitle = collection.Title;
             else
-                collectionOverview.DisplayTitle = "Collection Overview";
+                collection.DisplayTitle = "Collection Overview";
            
             stopwatch.Stop();
             _log.Trace("Completed collection overview creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
 
-            return collectionOverview;
+            return collection;
         }
 
-        public void UpdateDocument(CollectionOverview newDocument, CollectionOverview existingDocument, IDocumentSession documentSession)
+        public void UpdateDocument(Collection newDocument, Collection existingDocument, IDocumentSession documentSession)
         {
             // Map over existing document
             Mapper.Map(newDocument, existingDocument);

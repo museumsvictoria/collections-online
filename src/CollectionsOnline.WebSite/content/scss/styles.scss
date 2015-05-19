@@ -6,7 +6,10 @@
 @import "layout";
 
 body {
-    font-family:$font-family;
+    background: $colour-background-light;
+	font: 100%/1.5 $font;
+	-webkit-text-size-adjust: 100%;
+	color: $gray-dark;
 }
 
 a {
@@ -1177,6 +1180,87 @@ footer {
     }
 }
 
+.collectiontile {
+    @include gridle (3);
+    @include gridle (6, tablet);
+    @include gridle (12, mobile);
+    float: left;
+    direction: ltr;
+    margin-bottom: 25px;
+
+    a {
+        color: $gray-dark;
+    }
+
+    .collectionareas & {
+        @include gridle (4);
+        @include gridle (6, tablet);
+        @include gridle (12, mobile);
+        float: left;
+        direction: ltr;
+    }
+
+    & img {
+        width: 100%;
+    }
+
+    & .desc {
+        font-size: 14px;
+        font-weight: 200;
+        padding: 10px 0px;
+        color: $colour-heading-inverted;
+        display: block;
+    }
+
+    & .title {
+        display: block;
+        padding: 10px $padding-side 20px $padding-side;
+        font-size: 14px;
+        background: $colour-background-title;
+        height: 130px;
+        direction: ltr;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+        line-height: 1.3;
+        @include border-radius-bottom(3px);
+
+        @include gridle_state(tablet mobile) {
+            height: 8em;
+        }
+
+        & h4 {
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
+        & .heading {
+            display: block;
+            font-weight: 500;
+        }
+
+        & .description {
+            font-weight: 300;
+        }
+
+        .list & .heading {
+            display: block;
+            color: $colour-heading;
+            font-weight: 500;
+        }
+
+        & .itemtext {
+            position: relative;
+            background: $colour-background-title;
+        }
+
+        & .regnum {
+            display: block;
+            font-weight: 300;
+        }
+    }
+}
+
 #map {
     height:450px;
     border-radius:5px;
@@ -1222,7 +1306,7 @@ footer {
 	
 	direction: ltr;
     float: left;
-    margin: 0 0 10px px;
+    margin: 0 0 10px 0px;
     padding:0px 20px 10px 10px;
 
     @include gridle(12, 'mobile');
@@ -1334,4 +1418,167 @@ footer {
 			}
 		}
 	}
+}
+
+// Collections
+.abouthero
+{
+display:block;
+width:100%;
+margin-bottom: 50px;
+
+& img {
+	width:100%;
+}
+}
+
+.breadcrumb
+{
+	display:block !important;
+}
+
+.about {
+	
+	& h1
+	{
+		    float: none;
+			font-size: 22px;
+			padding-bottom: 5px;
+			padding-left: 10px;
+	}
+	
+	& h2
+	{
+		    float: none;
+			font-size: 22px;
+			padding-bottom: 5px;
+			padding-left: 10px;
+	}
+	
+	& p
+	{
+		font-size: 17px;
+		font-weight: 300;
+		margin-bottom: 1.5em;
+		padding-left: 10px;
+		
+	}
+	
+	& .collections{
+		max-width:1040px;
+		& h2
+		{
+			padding-bottom: 15px;
+		}
+	}
+	& .aboutcontent{
+		width:66.6667%;
+	}
+}
+
+#collarea{
+	
+	& h1
+	{
+		    float: none;
+			font-size: 22px;
+			padding-bottom: 5px;
+			padding-left: 0px;
+	}
+	
+	& h2
+	{
+		    float: none;
+			font-size: 22px;
+			padding-bottom: 5px;
+			padding-left: 0px;
+	}
+	
+	& p
+	{
+		font-size: 17px;
+		font-weight: 300;
+		margin-bottom: 1.5em;
+		//padding-left: 10px;
+		
+	}
+
+	
+	
+	& .colldesc{
+		@include gridle(8);
+		float:left;
+		direction: ltr;
+		padding-right:20px;
+	}
+	& .subcoll{
+				@include gridle(12);
+		float:left;
+		direction: ltr;
+		padding-left: 0px;
+		padding-right: 0px;
+		margin-bottom: 50px;
+		& h2
+		{
+			padding-left:10px;	
+			padding-bottom: 15px;
+		}
+	}
+	& .sidecolumn{
+		@include gridle(4);
+		float:right;
+		direction:ltr;
+		
+		& h4 
+		{
+			   color: #454545;
+			   font-size: 17px;
+			   font-weight: 500;
+			   margin-bottom: 15px;
+		}
+		
+		& .favorites{
+		background-color: $colour-background-lightest;
+		border-radius: 3px;
+		color: #666;
+		padding: 15px 20px 20px;
+		}
+		& .tile.full{
+			width:100%;
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+		& .tileimages
+		{
+			width:33%;
+			float:left;
+		}
+		& .itemtext
+		{
+			display:block;
+			
+		}
+		
+		& .tile.list{
+			width:100%;
+			& .title{
+				width:75%;
+			}
+			& .tileimages{
+				   float: left;
+				   padding: 0;
+				   width: 33%;
+			}
+		}
+	}
+	
+	& .seeall{
+		
+		text-decoration: none;
+		
+		&:hover{
+			text-decoration: underline;
+		}
+	}
+	
 }

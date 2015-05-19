@@ -167,6 +167,7 @@
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
+    <Compile Include="Models\CollectionIndexViewModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />
@@ -180,15 +181,18 @@
     <Compile Include="Models\Api\ItemApiViewModel.cs" />
     <Compile Include="Modules\Api\ArticlesApiModule.cs" />
     <Compile Include="Modules\DevelopersModule.cs" />
+    <Compile Include="Modules\CollectionsModule.cs" />
     <Compile Include="Modules\ItemsModule.cs" />
     <Compile Include="Modules\Api\BaseApiModule.cs" />
     <Compile Include="Models\Api\ApiInputModel.cs" />
     <Compile Include="Modules\Api\ItemsApiModule.cs" />
     <Compile Include="Modules\Api\SpeciesApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiModule.cs" />
+    <Compile Include="Queries\CollectionViewModelQuery.cs" />
     <Compile Include="Queries\IArticleViewModelQuery.cs" />
     <Compile Include="Modules\ArticlesModule.cs" />
     <Compile Include="Queries\ArticleViewModelQuery.cs" />
+    <Compile Include="Queries\ICollectionViewModelQuery.cs" />
     <Compile Include="Transformers\ArticleViewTransformer.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Queries\IHomeViewModelQuery.cs" />
@@ -318,6 +322,9 @@
   <ItemGroup>
     <Folder Include="content\css\" />
     <Folder Include="content\scss\lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\collectionindex.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
