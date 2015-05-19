@@ -4,6 +4,6 @@ namespace CollectionsOnline.WebSite.Queries
 {
     public interface ISearchViewModelQuery
     {
-        SearchViewModel BuildSearch(SearchInputModel searchInputModel);
+        SearchIndexViewModel BuildSearchIndex(SearchInputModel searchInputModel);
     }
 }

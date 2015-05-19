@@ -11,7 +11,7 @@ namespace CollectionsOnline.WebSite.Factories
 {
     public class SearchViewModelFactory : ISearchViewModelFactory
     {
-        public SearchViewModel MakeViewModel(
+        public SearchIndexViewModel MakeSearchIndex(
             IList<EmuAggregateRootViewModel> results,
             FacetResults facets,
             List<string> suggestions,
@@ -20,7 +20,7 @@ namespace CollectionsOnline.WebSite.Factories
             long queryTimeElapsed,
             long facetTimeElapsed)
         {
-            var searchViewModel = new SearchViewModel
+            var searchIndexViewModel = new SearchIndexViewModel
             {
                 Query = searchInputModel.Query,
                 TotalResults = totalResults,
@@ -77,11 +77,11 @@ namespace CollectionsOnline.WebSite.Factories
                 }
 
                 if (facetViewModel.Values.Any())
-                    searchViewModel.Facets.Add(facetViewModel);
+                    searchIndexViewModel.Facets.Add(facetViewModel);
             }
 
             // Build ActiveFacets
-            searchViewModel.ActiveFacets = searchViewModel.Facets
+            searchIndexViewModel.ActiveFacets = searchIndexViewModel.Facets
                 .SelectMany(x => x.Values)
                 .Where(y => y.Active)
                 .Select(x => new ActiveFacetValueViewModel
@@ -98,7 +98,7 @@ namespace CollectionsOnline.WebSite.Factories
 
                 termQueryString.Remove("query");
 
-                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
+                searchIndexViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = searchInputModel.Query,
                     Term = "Query",
@@ -113,7 +113,7 @@ namespace CollectionsOnline.WebSite.Factories
 
                 termQueryString.Remove(term.Key);
 
-                searchViewModel.ActiveTerms.Add(new ActiveTermViewModel
+                searchIndexViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
                     Name = term.Value,
                     Term = term.Key,
@@ -128,15 +128,15 @@ namespace CollectionsOnline.WebSite.Factories
                 if (result.Summary != null)
                     result.Summary = StringExtensions.Truncate(result.Summary, Core.Config.Constants.SummaryMaxChars);
 
-                searchViewModel.Results.Add(result);
+                searchIndexViewModel.Results.Add(result);
             }
 
             // Build next prev page links
             var queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
-            if ((searchInputModel.Page + 1) <= searchViewModel.TotalPages)
+            if ((searchInputModel.Page + 1) <= searchIndexViewModel.TotalPages)
             {
                 queryString.Set("page", (searchInputModel.Page + 1).ToString());
-                searchViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+                searchIndexViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
             }
 
             if ((searchInputModel.Page - 1) >= 1)
@@ -146,14 +146,14 @@ namespace CollectionsOnline.WebSite.Factories
                 {
                     queryString.Remove("page");
                 }
-                searchViewModel.PreviousPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;
+                searchIndexViewModel.PreviousPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;
             }
 
             // Build sort links
             //TODO: sort this mess out
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("sort", "quality");
-            searchViewModel.QualitySortButton = new ButtonViewModel
+            searchIndexViewModel.QualitySortButton = new ButtonViewModel
             {
                 Name = "Quality",
                 Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
@@ -162,7 +162,7 @@ namespace CollectionsOnline.WebSite.Factories
 
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("sort", "relevance");
-            searchViewModel.RelevanceSortButton = new ButtonViewModel
+            searchIndexViewModel.RelevanceSortButton = new ButtonViewModel
             {
                 Name = "Relevance",
                 Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
@@ -172,7 +172,7 @@ namespace CollectionsOnline.WebSite.Factories
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("perpage", Core.Config.Constants.PagingPerPageDefault.ToString());
             queryString.Remove("page");
-            searchViewModel.DefaultPerPageButton = new ButtonViewModel
+            searchIndexViewModel.DefaultPerPageButton = new ButtonViewModel
             {
                 Name = Core.Config.Constants.PagingPerPageDefault.ToString(),
                 Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
@@ -182,7 +182,7 @@ namespace CollectionsOnline.WebSite.Factories
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("perpage", Core.Config.Constants.PagingPerPageMax.ToString());
             queryString.Remove("page");
-            searchViewModel.MaxPerPageButton = new ButtonViewModel
+            searchIndexViewModel.MaxPerPageButton = new ButtonViewModel
             {
                 Name = Core.Config.Constants.PagingPerPageMax.ToString(),
                 Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
@@ -192,14 +192,14 @@ namespace CollectionsOnline.WebSite.Factories
             // Build suggestions
             foreach (var suggestion in suggestions)
             {
-                searchViewModel.Suggestions.Add(new SuggestionViewModel
+                searchIndexViewModel.Suggestions.Add(new SuggestionViewModel
                 {
                     Suggestion = suggestion,
                     Url = String.Concat(searchInputModel.CurrentUrl, "?query=", HttpUtility.UrlEncode(suggestion))
                 });
             }
             
-            return searchViewModel;
+            return searchIndexViewModel;
         }
     }
 }

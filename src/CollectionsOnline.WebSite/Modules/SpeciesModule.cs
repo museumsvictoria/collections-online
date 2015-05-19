@@ -14,7 +14,7 @@ namespace CollectionsOnline.WebSite.Modules
             {
                 var species = documentSession.Load<Core.Models.Species>("species/" + parameters.id as string);
 
-                return (species == null || species.IsHidden) ? HttpStatusCode.NotFound : View["species", speciesViewModelQuery.BuildSpecies("species/" + parameters.id)];
+                return (species == null || species.IsHidden) ? HttpStatusCode.NotFound : View["Species", speciesViewModelQuery.BuildSpecies("species/" + parameters.id)];
             };
         }
     }

@@ -6,6 +6,6 @@ namespace CollectionsOnline.WebSite.Factories
 {
     public interface IDevelopersViewModelFactory
     {
-        DevelopersViewModel MakeViewModel(IRouteCache routeCache, Request request);
+        DevelopersIndexViewModel MakeDevelopersIndex(IRouteCache routeCache, Request request);
     }
 }

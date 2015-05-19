@@ -3,7 +3,7 @@ using CollectionsOnline.WebSite.Models.Api;
 
 namespace CollectionsOnline.WebSite.Models
 {
-    public class DevelopersViewModel
+    public class DevelopersIndexViewModel
     {
         public IEnumerable<ApiOperationMetadata> OperationMetadata { get; set; }
 

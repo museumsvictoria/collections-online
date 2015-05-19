@@ -1,6 +1,6 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchViewModel>
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchIndexViewModel>
 @{
-    Layout = "layout.cshtml";
+    Layout = "Layout.cshtml";
 }
 <div id="search">
     <aside id="search-filter">
@@ -27,7 +27,7 @@
         </div>
     </aside>
     <div class="results">
-        @Html.Partial("searchbar", Model)
+        @Html.Partial("SearchBar", Model)
         @if (Model.ActiveFacets.Any() || Model.ActiveTerms.Any())
         {
             <div class="active-facets">

@@ -10,9 +10,9 @@ namespace CollectionsOnline.WebSite.Factories
 {
     public class DevelopersViewModelFactory : IDevelopersViewModelFactory
     {
-        public DevelopersViewModel MakeViewModel(IRouteCache routeCache, Request request)
+        public DevelopersIndexViewModel MakeDevelopersIndex(IRouteCache routeCache, Request request)
         {
-            var developersViewModel = new DevelopersViewModel
+            return new DevelopersIndexViewModel
             {
                 OperationMetadata = routeCache.GroupBy(
                     x => Inflector.Pluralize(x.Key.Name.Replace("ApiModule", string.Empty)),
@@ -27,8 +27,6 @@ namespace CollectionsOnline.WebSite.Factories
                 ApiCurrentVersionRootUrl = string.Format("{0}{1}{2}", request.Url.SiteBase, Constants.ApiBasePath, Constants.CurrentApiVersionPath),
                 PagingPageSizeMax = Constants.PagingPerPageMax.ToString()
             };
-
-            return developersViewModel;
         }
     }
 }

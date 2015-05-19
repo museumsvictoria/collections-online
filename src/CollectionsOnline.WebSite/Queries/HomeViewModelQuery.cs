@@ -17,11 +17,11 @@ namespace CollectionsOnline.WebSite.Queries
             _documentSession = documentSession;
         }
 
-        public HomeViewModel BuildHome()
+        public HomeIndexViewModel BuildHomeIndex()
         {
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                var homeViewModel = new HomeViewModel();
+                var homeViewModel = new HomeIndexViewModel();
 
                 var facetResult = _documentSession.Advanced
                     .DocumentQuery<CombinedIndexResult, CombinedIndex>()

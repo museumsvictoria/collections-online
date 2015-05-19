@@ -15,7 +15,7 @@ namespace CollectionsOnline.WebSite.Modules
             {
                 var item = documentSession.Load<Item>("items/" + parameters.id as string);
 
-                return (item == null || item.IsHidden) ? HttpStatusCode.NotFound : View["items", itemViewModelQuery.BuildItem("items/" + parameters.id)];
+                return (item == null || item.IsHidden) ? HttpStatusCode.NotFound : View["Items", itemViewModelQuery.BuildItem("items/" + parameters.id)];
             };
         }
     }

@@ -1,0 +1,212 @@
+﻿@using CollectionsOnline.WebSite.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ArticleViewTransformerResult>
+@{
+    Layout = "Layout.cshtml";
+}
+@Html.Partial("SearchBar")
+@if (Model.ArticleImages.FirstOrDefault() != null)
+{
+    @Html.Partial("ImageMedia", Model.ArticleImages.First())
+}
+<div id="title">
+    <div class="wrapper">
+        <h1>
+            @Html.Raw(Model.Article.DisplayTitle)<br />
+            @if (Model.Article.Types.Any())
+            {
+                <span>
+                    @for (int i = 0; i < Model.Article.Types.Count; i++)
+                    {
+                        <a href="/search?articletype=@HttpUtility.UrlEncode(Model.Article.Types[i])">@Model.Article.Types[i]</a>@(i != Model.Article.Types.Count - 1 ? ", " : "")
+                    }
+                </span><br />
+            }
+        </h1>
+        @if (Model.ArticleImages.Any())
+        {
+            <div class="thumbnails">
+                @foreach (var articleImage in Model.ArticleImages)
+                {
+                    <div class="thumbnail">
+                        @if (articleImage.Thumbnail.Uri == Model.ArticleImages.First().Thumbnail.Uri)
+                        {
+                            <img class="active" src="@articleImage.Thumbnail.Uri" alt="@articleImage.AlternativeText" />
+                        }
+                        else
+                        {
+                            <img src="@articleImage.Thumbnail.Uri" alt="@articleImage.AlternativeText" />
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<div id="record">
+    <div class="wrapper">
+        <section class="text-content">
+            <div class="summary">
+                @if (!string.IsNullOrWhiteSpace(Model.Article.ContentSummary))
+                {
+                    <h3>Summary</h3>
+                    <p>@Html.Raw(Model.Article.ContentSummary)</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Article.Content))
+                {
+                    @Html.Raw(Model.Article.Content)
+                }
+            </div>
+            <div class="detail">
+                <ul>
+                    @if (Model.Article.Keywords.Any())
+                    {
+                        <li>
+                            <h3>Keywords</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Article.Keywords.Count; i++)
+                                {
+                                    <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Article.Keywords[i])">@Model.Article.Keywords[i]</a>@(i != Model.Article.Keywords.Count - 1 ? ", " : "")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Article.Localities.Any())
+                    {
+                        <li>
+                            <h3>Localities</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Article.Localities.Count; i++)
+                                {
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Article.Localities[i])">@Model.Article.Localities[i]</a>@(i != Model.Article.Localities.Count - 1 ? ", " : "")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Article.Authors.Any())
+                    {
+                        <li>
+                            <h3>Authors</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Article.Authors.Count; i++)
+                                {
+                                    @Model.Article.Authors[i].FullName@(i != Model.Article.Authors.Count - 1 ? ", " : " ")
+                                }
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Article.Contributors.Any())
+                    {
+                        <li>
+                            <h3>Contributors</h3>
+                            <p>
+                                @for (int i = 0; i < Model.Article.Contributors.Count; i++)
+                                {
+                                    @Model.Article.Contributors[i].FullName@(i != Model.Article.Contributors.Count - 1 ? ", " : " ")
+                                }
+                            </p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </section>
+        <aside class="side-content">
+            <div class="print">
+                <a class="icon" href="#">
+                    <span class="icon-print" aria-hidden="true"></span>
+                    <span class="icon-label">Printer friendly</span>
+                </a>
+            </div>
+            <div class="social">
+                <h4>Share</h4>
+                <div class="social-tools">
+                    <a class="icon" href="#">
+                        <span class="icon-facebook" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Facebook</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-twitter" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Twitter</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-pintrest" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Pintrest</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <aside class="cite-content">
+            <div class="cite">
+                <h4>Cite this page</h4>
+                <p>@Html.RenderCitation(Model.Article)</p>
+                <h4>Rights</h4>
+                <p>
+                    Text on this page is licensed as
+                    <a class="icon" href="http://creativecommons.org/licenses/by/2.0/au/">
+                        <span class="icon-cc-by" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">CC BY</span>
+                    </a>
+                </p>
+                @if (Model.Article.Authors.Any())
+                {
+                    <h4>Authors</h4>
+                    <p>
+                        @foreach (var author in @Model.Article.Authors)
+                        {
+                            if (author.ProfileImage != null)
+                            {
+                                <img src="@author.ProfileImage.Thumbnail.Uri" />
+                            }
+                            <span>@author.FullName</span><br/>
+                            @author.Biography<br/>
+                        }
+                    </p>
+                }
+            </div>
+        </aside>
+    </div>
+</div>
+
+@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedItemSpecimenCount > 0)
+{
+    <div id="related">
+        <div class="wrapper">
+            <div class="related-content">
+                <h3>Showing related</h3>
+                @if (Model.ParentArticle != null)
+                {
+                    @Html.Partial("emutile", Model.ParentArticle)
+                }
+                @foreach (var childArticle in Model.ChildArticles)
+                {
+                    @Html.Partial("emutile", childArticle)
+                }
+                @foreach (var relatedArticle in Model.RelatedArticles)
+                {
+                    @Html.Partial("emutile", relatedArticle)
+                }
+                @foreach (var relatedItem in Model.RelatedItems)
+                {
+                    @Html.Partial("emutile", relatedItem)
+                }
+                @foreach (var relatedSpecimen in Model.RelatedSpecimens)
+                {
+                    @Html.Partial("emutile", relatedSpecimen)
+                }
+            </div>
+            @if (Model.RelatedItemSpecimenCount > 0)
+            {
+                <div class="related-link">
+                    <a href="/search?article=@HttpUtility.UrlEncode(@Model.Article.Title)">See all the things related to this article (@Model.RelatedItemSpecimenCount) ... </a>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.JsonArticleImages != null)
+{
+    <script>
+        var imagesModel = @Html.Raw(Model.JsonArticleImages);
+    </script>
+}

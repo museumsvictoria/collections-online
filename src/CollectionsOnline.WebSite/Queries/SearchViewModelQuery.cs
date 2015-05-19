@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Queries
             _searchViewModelFactory = searchViewModelFactory;
         }
 
-        public SearchViewModel BuildSearch(SearchInputModel searchInputModel)
+        public SearchIndexViewModel BuildSearchIndex(SearchInputModel searchInputModel)
         {
             // Aggressively cache due to slow facet performance
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
@@ -119,7 +119,7 @@ namespace CollectionsOnline.WebSite.Queries
                 //        }).Suggestions.ToList();
                 //}
 
-                return _searchViewModelFactory.MakeViewModel(
+                return _searchViewModelFactory.MakeSearchIndex(
                     results,
                     facets,
                     suggestions,

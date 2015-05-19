@@ -176,7 +176,7 @@
     <Compile Include="Modules\Api\ItemsApiMetadataModule.cs" />
     <Compile Include="Models\Api\ApiMetadata.cs" />
     <Compile Include="Models\Api\ArticleApiViewModel.cs" />
-    <Compile Include="Models\DevelopersViewModel.cs" />
+    <Compile Include="Models\DevelopersIndexViewModel.cs" />
     <Compile Include="Models\Api\CommentApiViewModel.cs" />
     <Compile Include="Models\Api\ItemApiViewModel.cs" />
     <Compile Include="Modules\Api\ArticlesApiModule.cs" />
@@ -196,7 +196,7 @@
     <Compile Include="Transformers\ArticleViewTransformer.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Queries\IHomeViewModelQuery.cs" />
-    <Compile Include="Models\HomeViewModel.cs" />
+    <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Queries\HomeViewModelQuery.cs" />
     <Compile Include="Transformers\ArticleViewTransformerResult.cs" />
     <Compile Include="Transformers\SpecimenViewTransformerResult.cs" />
@@ -213,7 +213,7 @@
     <Compile Include="Queries\SpeciesViewModelQuery.cs" />
     <Compile Include="Queries\IItemViewModelQuery.cs" />
     <Compile Include="Queries\ItemViewModelQuery.cs" />
-    <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\SearchIndexViewModel.cs" />
     <Compile Include="Models\SearchInputModel.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Queries\ISearchViewModelQuery.cs" />
@@ -226,7 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="Views\search.cshtml" />
+    <Content Include="Views\SearchIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionsOnline.Core\CollectionsOnline.Core.csproj">
@@ -235,22 +235,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\layout.cshtml" />
+    <Content Include="Views\Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\items.cshtml" />
+    <Content Include="Views\Items.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\species.cshtml" />
+    <Content Include="Views\Species.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\specimens.cshtml" />
+    <Content Include="Views\Specimens.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\articles.cshtml" />
+    <Content Include="Views\Articles.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\imagemedia.cshtml" />
+    <Content Include="Views\ImageMedia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\scss\gridle\_common-mixins.scss" />
@@ -302,29 +302,29 @@
     <Content Include="content\fonts\mv-collections.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\searchbar.cshtml" />
+    <Content Include="Views\SearchBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\home.cshtml" />
+    <Content Include="Views\HomeIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\header.cshtml" />
+    <Content Include="Views\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\developers.cshtml" />
+    <Content Include="Views\DevelopersIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\taxonomy.cshtml" />
+    <Content Include="Views\Taxonomy.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\emutile.cshtml" />
+    <Content Include="Views\EmuTile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="content\css\" />
     <Folder Include="content\scss\lib\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\collectionindex.cshtml" />
+    <Content Include="Views\CollectionIndex.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

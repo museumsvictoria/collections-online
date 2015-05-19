@@ -7,9 +7,9 @@ namespace CollectionsOnline.WebSite.Modules
     {
         public HomeModule(IHomeViewModelQuery homeViewModelQuery)            
         {
-            Get["home", "/"] = parameters =>
+            Get["/"] = parameters =>
             {
-                return View["home", homeViewModelQuery.BuildHome()];
+                return View["HomeIndex", homeViewModelQuery.BuildHomeIndex()];
             };
         }
     }

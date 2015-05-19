@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace CollectionsOnline.WebSite.Models
 {
-    public class SearchViewModel
+    public class SearchIndexViewModel
     {
         public int Page { get; set; }
 
@@ -53,7 +53,7 @@ namespace CollectionsOnline.WebSite.Models
 
         public IList<SuggestionViewModel> Suggestions { get; set; }
 
-        public SearchViewModel()
+        public SearchIndexViewModel()
         {
             Facets = new List<FacetViewModel>();
             Results = new List<EmuAggregateRootViewModel>();

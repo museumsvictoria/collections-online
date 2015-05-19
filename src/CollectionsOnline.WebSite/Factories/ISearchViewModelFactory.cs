@@ -7,7 +7,7 @@ namespace CollectionsOnline.WebSite.Factories
 {
     public interface ISearchViewModelFactory
     {
-        SearchViewModel MakeViewModel(
+        SearchIndexViewModel MakeSearchIndex(
             IList<EmuAggregateRootViewModel> results,
             FacetResults facets, 
             List<string> suggestions, 

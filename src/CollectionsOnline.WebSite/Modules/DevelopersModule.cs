@@ -14,7 +14,7 @@ namespace CollectionsOnline.WebSite.Modules
         {
             Get["/developers"] = parameters =>
             {
-                return View["developers", developersViewModelFactory.MakeViewModel(routeCacheProvider.GetCache(), Request)];
+                return View["DevelopersIndex", developersViewModelFactory.MakeDevelopersIndex(routeCacheProvider.GetCache(), Request)];
             };
         }
     }

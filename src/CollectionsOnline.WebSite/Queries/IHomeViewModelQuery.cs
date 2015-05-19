@@ -4,6 +4,6 @@ namespace CollectionsOnline.WebSite.Queries
 {
     public interface IHomeViewModelQuery
     {
-        HomeViewModel BuildHome();
+        HomeIndexViewModel BuildHomeIndex();
     }
 }

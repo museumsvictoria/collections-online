@@ -1,12 +1,12 @@
 ﻿@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ItemViewTransformerResult>
 @{
-    Layout = "layout.cshtml";
+    Layout = "Layout.cshtml";
 }
-@Html.Partial("searchbar")
+@Html.Partial("SearchBar")
 @if (Model.ItemImages.FirstOrDefault() != null)
 {
-    @Html.Partial("imagemedia", Model.ItemImages.First())
+    @Html.Partial("ImageMedia", Model.ItemImages.First())
 }
 <div id="title">
     <div class="wrapper">
@@ -730,7 +730,7 @@
                             </li>
                         }
                     }
-                    @Html.Partial("taxonomy", Model.Item.Taxonomy)                    
+                    @Html.Partial("Taxonomy", Model.Item.Taxonomy)                    
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IdentifiedBy))
                     {
                         <li>

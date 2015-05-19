@@ -16,7 +16,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                 searchInputModel.CurrentUrl = string.Format("{0}{1}", Request.Url.SiteBase, Request.Url.Path);
                 searchInputModel.CurrentQueryString = Request.Url.Query;
 
-                return BuildResponse(searchViewModelQuery.BuildSearch(searchInputModel));
+                return BuildResponse(searchViewModelQuery.BuildSearchIndex(searchInputModel));
             };
         }
     }

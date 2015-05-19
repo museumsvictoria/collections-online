@@ -1,0 +1,54 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.ImageMedia>
+<figure id="media">
+    <img src="@Model.Large.Uri" alt="@Model.AlternativeText" />
+    <figcaption>
+        <div class="wrapper">
+            <div class="caption">
+                <span class="caption-text">
+                    @if (!string.IsNullOrWhiteSpace(Model.Caption))
+                    {
+                        @Html.Raw(Model.Caption)
+                    }
+                </span>
+                <span class="creators">
+                    @for (int i = 0; i < Model.Creators.Count; i++)
+                    {
+                        @Model.Creators[i]@(i != Model.Creators.Count - 1 ? ", " : "")
+                    }
+                </span>
+                <span class="sources">
+                    @if (Model.Sources.Any())
+                    {
+                        @:Source:
+                        for (int i = 0; i < Model.Sources.Count; i++)
+                        {
+                            @Model.Sources[i]@(i != Model.Sources.Count - 1 ? ", " : "")
+                        }
+                    }
+                </span>
+                <span class="credit">
+                    @if (!string.IsNullOrWhiteSpace(Model.Credit))
+                    {
+                        @:Credit: @Model.Credit
+                    }
+                </span>
+                <span class="rights-statement">
+                    @if (!string.IsNullOrWhiteSpace(Model.RightsStatement))
+                    {
+                        @:This image is: @Model.RightsStatement
+                    }
+                </span>
+            </div>
+            <div class="media-tools">
+                <button class="icon">
+                    <span class="icon-download" aria-hidden="true"></span>
+                    <span class="icon-label-hidden">Download Media</span>
+                </button>
+                <button class="icon">
+                    <span class="icon-fullscreen" aria-hidden="true"></span>
+                    <span class="icon-label-hidden">View full screen</span>
+                </button>
+            </div>
+        </div>
+    </figcaption>
+</figure>

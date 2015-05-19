@@ -2,7 +2,7 @@
 
 namespace CollectionsOnline.WebSite.Models
 {
-    public class HomeViewModel
+    public class HomeIndexViewModel
     {
         public int ArticleCount { get; set; }
 
@@ -14,7 +14,7 @@ namespace CollectionsOnline.WebSite.Models
 
         public IList<EmuAggregateRootViewModel> RecentResults { get; set; }
 
-        public HomeViewModel()
+        public HomeIndexViewModel()
         {
             RecentResults = new List<EmuAggregateRootViewModel>();
         }

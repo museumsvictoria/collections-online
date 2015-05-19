@@ -1,12 +1,12 @@
 ﻿@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.SpecimenViewTransformerResult>
 @{
-    Layout = "layout.cshtml";
+    Layout = "Layout.cshtml";
 }
-@Html.Partial("searchbar")
+@Html.Partial("SearchBar")
 @if (Model.SpecimenImages.FirstOrDefault() != null)
 {
-    @Html.Partial("imagemedia", Model.SpecimenImages.First())
+    @Html.Partial("ImageMedia", Model.SpecimenImages.First())
 }
 <div id="title">
     <div class="wrapper">
@@ -600,7 +600,7 @@
                             </p>
                         </li>
                     }
-                    @Html.Partial("taxonomy", Model.Specimen.Taxonomy)
+                    @Html.Partial("Taxonomy", Model.Specimen.Taxonomy)
                 </ul>
             </div>
         </section>
