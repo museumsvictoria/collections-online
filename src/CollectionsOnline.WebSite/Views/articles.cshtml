@@ -1,12 +1,12 @@
 ﻿@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ArticleViewTransformerResult>
 @{
-    Layout = "layout.cshtml";
+    Layout = "Layout.cshtml";
 }
-@Html.Partial("searchbar")
+@Html.Partial("SearchBar")
 @if (Model.ArticleImages.FirstOrDefault() != null)
 {
-    @Html.Partial("imagemedia", Model.ArticleImages.First())
+    @Html.Partial("ImageMedia", Model.ArticleImages.First())
 }
 <div id="title">
     <div class="wrapper">
