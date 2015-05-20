@@ -2,10 +2,9 @@
 <header>
     <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
     <nav>
-        <a href="/collections">Our collections</a>
-        <a href="/developers">Developers</a>
-        
-        @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home")
+        <a @((RenderContext.Context.ResolvedRoute.Description.Name == "collection-index") ? Html.Raw("class=\"active\"") : null) href="/collections">Our collections</a>
+        <a @((RenderContext.Context.ResolvedRoute.Description.Name == "developers-index") ? Html.Raw("class=\"active\"") : null) href="/developers">Developers</a>        
+        @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
         {
             <a href="#" class="button-search">
                 <span class="icon-search-header" aria-hidden="true"></span>

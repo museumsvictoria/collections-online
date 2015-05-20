@@ -352,9 +352,10 @@ button.icon {
             }
             
         }
-    }
+    }    
+}
 
-    .cite-content {
+.cite-content {
         @include gridle (12);
         margin:4em 0;
         
@@ -384,7 +385,6 @@ button.icon {
                 font-weight:500;
             }
         }
-    }
 }
 
 #related {
@@ -882,12 +882,15 @@ footer {
 
     .collection-content {
         @include gridle_parent();
-
+        
         h2 {
-            color:$color-default;
-            @include gridle (12);
             font-size:1.7em;
-            margin:3em 0 1em;
+            margin:3em 0 0;
+        }
+
+        p, h2 {
+            @include gridle (12);
+            color:$color-default;
         }
 
         .explore-type {
@@ -955,14 +958,11 @@ footer {
             }
         }
     }
-
-    
 }
 
 #explore-venue
 {
     background:#e2e2e2;
-
     .recent-content, .venue-content {
         @include gridle_parent();
 
@@ -1000,7 +1000,6 @@ footer {
 
 //additions from Pattern Lab
 .tile {
-
     &.list {
         float: left;
         direction: ltr;
@@ -1058,8 +1057,6 @@ footer {
         @include border-radius-bottom(3px);
         /* @include gridle_state(tablet mobile){
 		 height:8em;
-		 
-
 		 } */
         & .heading {
             display: block;
@@ -1089,7 +1086,6 @@ footer {
     }
 }
 
-
 .tileimages {
     display: block;
     width: 100%;
@@ -1110,8 +1106,6 @@ footer {
         @include border-radius(0px);
     }
 }
-
-
 
 .tile-tag {
     direction: ltr;
@@ -1297,21 +1291,16 @@ footer {
 	
 	& .wrapper{
 		padding-bottom: 30px;
-		
 	}
 	
-	& .logos
-	{
-
-	
-	direction: ltr;
-    float: left;
-    margin: 0 0 10px 0px;
-    padding:0px 20px 10px 10px;
-
-    @include gridle(12, 'mobile');
-    float:left;
-	direction: ltr;
+	& .logos {
+	    direction: ltr;
+        float: left;
+        margin: 0 0 10px 0px;
+        padding:0px 20px 10px 10px;
+        @include gridle(12, 'mobile');
+        float:left;
+	    direction: ltr;
 		@include gridle_state('mobile'){
 			float:left;
 			direction: ltr;
@@ -1324,22 +1313,23 @@ footer {
 		@include gridle(4, 'tablet');
 		float:left;
 		direction:ltr;
-		@include gridle_state('mobile'){
-		display: none;
+		@include gridle_state('mobile') {
+		    display: none;
 		}
 		&.first{
 			padding-left:0px;
 		}
+
 		padding-left: 20px;
 		padding-right: 20px;
 		border-right: 1px solid #606060;
 		float:left;
 		direction: ltr;
-		& ul{
+		
+        & ul{
 			padding-left: 10px;
             list-style: outside none none;
             margin: 0;
-
 			
 			& li{ 
 				line-height: 14px;
@@ -1362,17 +1352,15 @@ footer {
 	}
 	
 	& .comment{
-		
 		color: $colour-heading-inverted;
 	}
 	
 	& .tweet{
 		color: $colour-heading-inverted;
 	}
+
 	& h2{
 		color: $colour-heading-inverted;
-		
-		
 	}
 	
 	& .footerbase
@@ -1421,15 +1409,14 @@ footer {
 }
 
 // Collections
-.abouthero
-{
-display:block;
-width:100%;
-margin-bottom: 50px;
+.abouthero {
+    display:block;
+    width:100%;
+    margin-bottom: 50px;
 
-& img {
-	width:100%;
-}
+    & img {
+	    width:100%;
+    }
 }
 
 .breadcrumb
@@ -1438,7 +1425,6 @@ margin-bottom: 50px;
 }
 
 .about {
-	
 	& h1
 	{
 		    float: none;
@@ -1476,109 +1462,103 @@ margin-bottom: 50px;
 	}
 }
 
-#collarea{
-	
-	& h1
-	{
-		    float: none;
-			font-size: 22px;
-			padding-bottom: 5px;
-			padding-left: 0px;
-	}
-	
-	& h2
-	{
-		    float: none;
-			font-size: 22px;
-			padding-bottom: 5px;
-			padding-left: 0px;
-	}
-	
-	& p
-	{
-		font-size: 17px;
-		font-weight: 300;
-		margin-bottom: 1.5em;
-		//padding-left: 10px;
-		
-	}
+#collarea {
+    & h1 {
+        float: none;
+        font-size: 22px;
+        padding-bottom: 5px;
+        padding-left: 0px;
+    }
 
-	
-	
-	& .colldesc{
-		@include gridle(8);
-		float:left;
-		direction: ltr;
-		padding-right:20px;
-	}
-	& .subcoll{
-				@include gridle(12);
-		float:left;
-		direction: ltr;
-		padding-left: 0px;
-		padding-right: 0px;
-		margin-bottom: 50px;
-		& h2
-		{
-			padding-left:10px;	
-			padding-bottom: 15px;
-		}
-	}
-	& .sidecolumn{
-		@include gridle(4);
-		float:right;
-		direction:ltr;
-		
-		& h4 
-		{
-			   color: #454545;
-			   font-size: 17px;
-			   font-weight: 500;
-			   margin-bottom: 15px;
-		}
-		
-		& .favorites{
-		background-color: $colour-background-lightest;
-		border-radius: 3px;
-		color: #666;
-		padding: 15px 20px 20px;
-		}
-		& .tile.full{
-			width:100%;
-			padding-left: 0px;
-			padding-right: 0px;
-		}
-		& .tileimages
-		{
-			width:33%;
-			float:left;
-		}
-		& .itemtext
-		{
-			display:block;
-			
-		}
-		
-		& .tile.list{
-			width:100%;
-			& .title{
-				width:75%;
-			}
-			& .tileimages{
-				   float: left;
-				   padding: 0;
-				   width: 33%;
-			}
-		}
-	}
-	
-	& .seeall{
-		
-		text-decoration: none;
-		
-		&:hover{
-			text-decoration: underline;
-		}
-	}
-	
+    & h2 {
+        float: none;
+        font-size: 22px;
+        padding-bottom: 5px;
+        padding-left: 0px;
+    }
+
+    & p {
+        font-size: 17px;
+        font-weight: 300;
+        margin-bottom: 1.5em;
+        //padding-left: 10px;
+    }
+
+    & .colldesc {
+        @include gridle(8);
+        float: left;
+        direction: ltr;
+        padding-right: 20px;
+    }
+
+    & .subcoll {
+        @include gridle(12);
+        float: left;
+        direction: ltr;
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-bottom: 50px;
+
+        & h2 {
+            padding-left: 10px;
+            padding-bottom: 15px;
+        }
+    }
+
+    & .sidecolumn {
+        @include gridle(4);
+        float: right;
+        direction: ltr;
+
+        & h4 {
+            color: #454545;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        & .favorites {
+            background-color: $colour-background-lightest;
+            border-radius: 3px;
+            color: #666;
+            padding: 15px 20px 20px;
+        }
+
+        & .tile.full {
+            width: 100%;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        & .tileimages {
+            width: 33%;
+            float: left;
+        }
+
+        & .itemtext {
+            display: block;
+        }
+
+        & .tile.list {
+            width: 100%;
+
+            & .title {
+                width: 75%;
+            }
+
+            & .tileimages {
+                float: left;
+                padding: 0;
+                width: 33%;
+            }
+        }
+    }
+
+    & .seeall {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }

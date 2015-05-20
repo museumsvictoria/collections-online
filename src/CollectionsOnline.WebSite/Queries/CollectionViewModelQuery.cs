@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Transformers;
+using Newtonsoft.Json;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -42,9 +45,12 @@ namespace CollectionsOnline.WebSite.Queries
             }
         }
 
-        public Collection BuildCollection(string collectionId)
+        public CollectionViewTransformerResult BuildCollection(string collectionId)
         {
-            throw new System.NotImplementedException();
+            var result = _documentSession.Load<CollectionViewTransformer, CollectionViewTransformerResult>(collectionId);
+
+            return result;
+
         }
     }
 }

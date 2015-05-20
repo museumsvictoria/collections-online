@@ -148,6 +148,9 @@ namespace CollectionsOnline.Import.Factories
                     });
             }
 
+            // Collection Area
+            collection.CollectingArea = collection.Title.Replace("Collection", "").Trim();
+
             // Build summary
             if (!string.IsNullOrWhiteSpace(collection.CollectionSummary))
                 collection.Summary = collection.CollectionSummary;

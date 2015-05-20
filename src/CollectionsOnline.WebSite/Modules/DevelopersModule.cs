@@ -12,7 +12,7 @@ namespace CollectionsOnline.WebSite.Modules
             IDevelopersViewModelFactory developersViewModelFactory)
             : base(Constants.CurrentApiVersionPathSegment)
         {
-            Get["/developers"] = parameters =>
+            Get["developers-index", "/developers"] = parameters =>
             {
                 return View["DevelopersIndex", developersViewModelFactory.MakeDevelopersIndex(routeCacheProvider.GetCache(), Request)];
             };

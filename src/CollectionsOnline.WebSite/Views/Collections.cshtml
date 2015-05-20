@@ -1,0 +1,87 @@
+﻿@using CollectionsOnline.WebSite.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.CollectionViewTransformerResult>
+@{
+    Layout = "Layout.cshtml";
+}
+@Html.Partial("SearchBar")
+<div class="abouthero">
+    <img src="/content/img/about-hero-image.jpg" alt="several groups of men on horse carriages" />
+</div>
+<div id="collarea" class="container">
+    <div class="colldesc">
+        <h1>@Model.Collection.DisplayTitle</h1>
+        <p>@Html.ConvertNewlines(Model.Collection.CollectionSummary)</p>
+        <h2>Significance</h2>
+        @Html.Raw(Model.Collection.Significance)
+    </div>
+    <div class="sidecolumn">
+        <div class="favorites">
+            <h4>Our Curator's Favourite Items</h4>
+            @foreach (var favoriteItem in Model.FavoriteItems)
+            {
+                @Html.Partial("emutile", favoriteItem)
+            }
+            @foreach (var favoriteSpecimens in Model.FavoriteSpecimens)
+            {
+                @Html.Partial("emutile", favoriteSpecimens)
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Collection.CollectingArea))
+            {
+                <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Collection.CollectingArea)" class="seeall">See all items in this collection &gt;</a>
+            }
+        </div>
+        <aside class="cite-content">
+            <div class="side-column">
+                <div class="social">
+                    <h4>Share</h4>
+                    <div class="social-tools">
+                        <a class="icon" href="#">
+                            <span class="icon-facebook" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Facebook</span>
+                        </a>
+                        <a class="icon" href="#">
+                            <span class="icon-twitter" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Twitter</span>
+                        </a>
+                        <a class="icon" href="#">
+                            <span class="icon-pintrest" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Pintrest</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="cite">
+                    <h4>Cite this page</h4>
+                    <p>@Html.RenderCitation(Model.Collection)</p>
+                    @if (!string.IsNullOrWhiteSpace(Model.Collection.RightsStatement))
+                    {
+                        <h4>Rights</h4>
+                        <p>@Model.Collection.RightsStatement</p>
+                    }
+                    @if (Model.Collection.Authors.Any())
+                    {
+                        <h4>Authors</h4>
+                        <div class="authors">
+                            @foreach (var author in Model.Collection.Authors)
+                            {
+                                <div class="author">
+                                    <img src="@author.ProfileImage.Thumbnail.Uri" alt="@author.ProfileImage.AlternativeText" />
+                                    <span class="authorname">@author.FullName</span>
+                                    <span class="authorbio">@author.Biography</span>
+                                    <span style="clear: both; display: block"></span>
+                                </div>
+                            }
+			                <div class="clear"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </aside>
+    </div>
+    <div class="subcoll">
+        <h2>Some key sub-collections</h2>
+        @foreach (var subCollectionArticle in Model.SubCollectionArticles)
+        {
+            @Html.Partial("emutile", subCollectionArticle)
+        }
+    </div>
+</div>

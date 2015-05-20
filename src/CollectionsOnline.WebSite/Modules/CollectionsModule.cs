@@ -11,7 +11,7 @@ namespace CollectionsOnline.WebSite.Modules
             ICollectionViewModelQuery collectionViewModelQuery,
             IDocumentSession documentSession)
         {
-            Get["/collections"] = parameters =>
+            Get["collection-index", "/collections"] = parameters =>
             {
                 return View["CollectionIndex", collectionViewModelQuery.BuildCollectionIndex()];
             };
@@ -20,7 +20,7 @@ namespace CollectionsOnline.WebSite.Modules
             {
                 var collection = documentSession.Load<Collection>("collections/" + parameters.id as string);
 
-                return (collection == null || collection.IsHidden) ? HttpStatusCode.NotFound : View["Collections", collectionViewModelQuery.BuildCollection("collection/" + parameters.id)];
+                return (collection == null || collection.IsHidden) ? HttpStatusCode.NotFound : View["Collections", collectionViewModelQuery.BuildCollection("collections/" + parameters.id)];
             };
         }
     }

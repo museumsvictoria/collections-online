@@ -136,6 +136,7 @@
   <ItemGroup>
     <Content Include="content\fonts\entypo-social.svg" />
     <Content Include="content\fonts\entypo.svg" />
+    <Content Include="content\img\about-hero-image.jpg" />
     <Content Include="content\img\CreativeVictoriaLogo_Reversed.png" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-birds.jpg" />
@@ -193,11 +194,13 @@
     <Compile Include="Modules\ArticlesModule.cs" />
     <Compile Include="Queries\ArticleViewModelQuery.cs" />
     <Compile Include="Queries\ICollectionViewModelQuery.cs" />
+    <Compile Include="Transformers\CollectionViewTransformer.cs" />
     <Compile Include="Transformers\ArticleViewTransformer.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Queries\IHomeViewModelQuery.cs" />
     <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Queries\HomeViewModelQuery.cs" />
+    <Compile Include="Transformers\CollectionViewTransformerResult.cs" />
     <Compile Include="Transformers\ArticleViewTransformerResult.cs" />
     <Compile Include="Transformers\SpecimenViewTransformerResult.cs" />
     <Compile Include="Transformers\SpeciesViewTransformerResult.cs" />
@@ -325,6 +328,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\CollectionIndex.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Collections.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

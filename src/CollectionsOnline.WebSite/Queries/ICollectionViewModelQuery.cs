@@ -1,5 +1,5 @@
-﻿using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
+﻿using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Transformers;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -7,6 +7,6 @@ namespace CollectionsOnline.WebSite.Queries
     {
         CollectionIndexViewModel BuildCollectionIndex();
 
-        Collection BuildCollection(string collectionId);
+        CollectionViewTransformerResult BuildCollection(string collectionId);
     }
 }

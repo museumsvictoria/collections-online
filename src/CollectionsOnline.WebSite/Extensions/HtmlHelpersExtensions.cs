@@ -67,6 +67,13 @@ namespace CollectionsOnline.WebSite.Extensions
             {
                 sb.Append(string.Format("Museum Victoria Collections {0}{1} Accessed {2}", helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
+            else if(document is Collection)
+            {
+                var collection = document as Collection;
+
+                sb.Append(BuildAuthorsCitation(collection.Authors));
+                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}{3} Accessed {4}", collection.DateModified.Year, collection.Title, helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+            }
 
             return new NonEncodedHtmlString(sb.ToString());
         }
