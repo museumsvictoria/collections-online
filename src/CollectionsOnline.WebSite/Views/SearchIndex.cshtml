@@ -11,18 +11,43 @@
         <div class="facets">
             @foreach (var facet in Model.Facets)
             {
-                <h4>@facet.Name</h4>
-                foreach (var value in facet.Values)
-                {
-                    if (value.Active)
-                    {
-                        <a href="@value.Url" class="active">@value.Name <span class="badge">(@value.Hits)</span></a>
+                <div class="facetgroup">
+                    <div class="facetheader">
+                        <h4>@facet.Name</h4>
+                        @{
+                        var selectedFacets = "";
+                        var unselectedFacets = "";
+                        }
+                        @foreach (var value in facet.Values)
+                        {
+                            var linkClass = "";
+                            if (String.Equals(value.Name, "item") || String.Equals(value.Name, "article") || String.Equals(value.Name, "species") || String.Equals(value.Name, "specimen"))
+                            {
+                                linkClass = value.Name;
+                            }
+                            if (value.Active)
+                            {
+                               selectedFacets += String.Format("<a href=\"{0}\" class=\"{3}\">{1} ({2})<span class=\"icon-close\" aria-hidden=\"true\"></span><span class=\"icon-label-hidden\">Remove facet</span></a>",value.Url,value.Name, value.Hits, linkClass);
+                            }
+                            else
+                            {
+
+                                unselectedFacets += String.Format("<a href=\"{0}\" class=\"{3}\">{1} <span class=\"badge\">({2})</span></a>", value.Url, value.Name, value.Hits,linkClass);
+                            }
+                        }
+                        @if (!String.IsNullOrEmpty(selectedFacets))
+                        {
+                            <div class="selected">
+                                @Html.Raw(selectedFacets)
+                            </div>
+                        }
+                    </div>
+                    @if (!String.IsNullOrEmpty(unselectedFacets)) { 
+                      <div class="facetitems">
+                        @Html.Raw(unselectedFacets)
+                      </div>
                     }
-                    else
-                    {
-                        <a href="@value.Url">@value.Name <span class="badge">(@value.Hits)</span></a>
-                    }
-                }
+                </div>
             }
         </div>
     </aside>
@@ -86,6 +111,10 @@
                     Results per page
                     <a href="@Model.DefaultPerPageButton.Url" class="button @(Model.DefaultPerPageButton.Active ? "active" : "")">@Model.DefaultPerPageButton.Name</a>
                     <a href="@Model.MaxPerPageButton.Url" class="button @(Model.MaxPerPageButton.Active ? "active" : "")">@Model.MaxPerPageButton.Name</a>
+                </div>
+                <div class="viewtype">
+                    <a class="button active icon-grid" href="#"></a>
+                    <a class="button icon-list" href="#"></a>
                 </div>
             </div>
         </div>

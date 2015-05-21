@@ -542,18 +542,184 @@ footer {
     display: flex;
 
     #search-filter {
-        background: #141414;
+        background: $colour-background-lightest;
         width: 300px;
+        @include gridle_state(tablet){
+		        width:100%;
+		        display:block;    
+            }
+	    @include gridle_state(mobile){
+		        width:100%;
+		        display:block;
+		}	
+//start facet addition
+	& .facets{
+	background-color: $colour-background-lightest;
+    color: $colour-bodytext; //to-do rationalise colors
+	direction:ltr;
+	float: left;
+	position:relative;
+	padding: 40px 20px 0px 20px;
+		& a {
+		text-decoration: none;
+		display: block;
+		padding: 6px 0px;
+		//color: $colour-bodytext-inverted;
+		line-height:18px;
+		font-size: 14px;
+		font-weight: 400;
+		color: #333;
+			&:hover{text-decoration: underline;}
+			&.switch:before{
+			@include border-radius(9px);
+			width:40px;
+			background-color: black;
+			display:inline-block;
+			font-family: "entypo-social";
+			content: "\F307";	
+			font-size: 24px;
+			height: 18px;
+			margin-right: 10px;
+			vertical-align: middle;
+			overflow: hidden;
+			color:white;
+			}	
+			&.switch.active:before{
+				background-color: $colour-primary-green;
+				text-align: right;
+				color:white;
+			}
+	
+		
+			&.item:before{
+			@include icon-item;
+			font-size: 21px;
+			vertical-align: middle;
+			padding-right: 5px;
+			color: #555;
+			}
+			&.article:before{
+			@include icon-article;
+			 font-size: 21px;
+			 vertical-align: middle;
+			 padding-right: 5px;
+			 color: #555;
+			
+			}
+			&.specimen:before{
+			@include icon-specimen;
+					 font-size: 21px;
+					 vertical-align: middle;
+					 padding-right: 5px;
+					 color: #555;	
+			}
+			&.species:before{
+			@include icon-species;
+			 font-size: 21px;
+			 vertical-align: middle;
+			 padding-right: 5px;
+			 color: #555;
+			
+			}
+		} // end a
 
+		& h4{
+			   font-size: 18px;
+			   font-weight: 300;
+			    margin: 10px 0 12px;
+				padding: 0 0px 10px;
+			   color: $colour-bodytext-light;
+			   border-bottom: 1px solid #ddd;
+			   line-height: 27px;
+			  &:after{
+				  text-align: middle;
+				  font-weight: 400;
+				 font-size: 30px;
+				  float:right;
+				  content:"-";
+			  }
+			  &.collapsed{
+				    &:after{
+					  text-align: middle;
+					  font-weight: 400;
+					  font-size: 30px;
+					  float:right;
+					  content:"+";
+				  }
+			  }
+		} //end h4
+
+		& .badge{
+			font-size:14px;
+			font-weight: 400;
+			color: #555; //to-do rationalise colours
+			padding-left: 3px;
+			
+		}
+	
+		& .facetgroup
+		{
+			& .facetitems{
+			padding: 0px 0px 30px;
+			border-bottom: 1px solid #ddd; //to-do rationalise colour
+			}
+			
+			& .facetheader{
+						   border-bottom: 1px solid #ddd;
+						   margin-bottom: 12px;
+				& h4 {
+					border-bottom: none;
+					margin-bottom: 0px;
+				}
+			}
+			
+			.selected {
+	        		& a{
+					background: none repeat scroll 0 0 $colour-background-lightest;
+	
+					color: #333;
+					display: inline-block;
+					font-weight:500;
+					line-height: 18px;
+					padding: 6px 0px;
+					font-size: 14px;
+					& span {
+						font-weight:400;
+					}
+					
+					& .group{
+					
+					color:#000;	
+					}
+					
+					& .icon-close:before {
+						  font-size: 10px;
+						  font-weight: bold;
+						  padding: 0 0 0 5px;
+					}
+	    		}
+			}
+	
+		}
+	
+
+		
+	}	
+
+
+
+
+
+//end addition
         .button-filter {
             cursor: pointer;
             padding: 0 20px;
             display: block;
             color: $color-default;
-            background: #000;
+            background: $colour-primary-green;
             height: 70px;
             line-height: 70px;
-            font-size: 1.4em;
+            font-size: 18px;
             font-weight: 300;
         }
 
@@ -608,18 +774,25 @@ footer {
             padding: 20px 0 0 20px;
 
             a {
-                color: #756969;
-                height: 35px;
+                color: $colour-bodytext;
+               // height: 35px;
                 line-height: 35px;
                 display: inline-block;
-                border-radius: 2px;
-                background: $color-default;
+				font-weight:500;
+				line-height: 30px;
+				font-size: 14px;
+                border-radius: 3px;
+                background: $colour-background-lightest;
                 padding: 0 10px;
                 margin: 0 5px 0 0;
+ 
+                 & span {
+					font-weight:400;
+				}
 
-                .icon-close {
-                    color: $color;
-                    font-size: 0.7em;
+                & .icon-close {
+                    font-size: 10px;
+                    font-weight: bold;
                     padding: 0 0 0 5px;
                 }
             }
