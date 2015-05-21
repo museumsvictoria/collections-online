@@ -140,3 +140,12 @@
     vertical-align:-0.16em;
     line-height:0;    
 }
+
+.icon-list:before {
+    font-family: "mv-collections";
+    content: "\e611"; 
+}
+.icon-grid:before {
+    font-family: "mv-collections";
+    content: "\e60d"; 
+} 

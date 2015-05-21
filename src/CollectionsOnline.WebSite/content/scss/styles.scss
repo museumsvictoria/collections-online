@@ -768,7 +768,7 @@ footer {
     .results {
         width: 100%;
         background: #e3e3e3;
-        padding: 0 0 20px 0;
+        padding: 0 0 20px 0px;
 
         .active-facets {
             padding: 20px 0 0 20px;
@@ -799,20 +799,85 @@ footer {
         }
 
         .pagination {
-            margin: 40px 0 0 20px;
-            color: #333333;
+	        width: 100%;
+	        padding: 20px 20px 10px 20px;
+	        &.bottom{
+		        padding: 0px 20px 30px 20px;
+
+	        }
+            	clear: both;
+		    @include gridle_state(tablet){
+			    padding: 20px;
+			}
+		    @include gridle_state(mobile){
+			    padding: 20px;
+			}
+            & .counts {
+		        display: inline-block;
+		        font-size:20px;
+	        }
+            & a.button{
+		        display: inline-block;
+		        padding: 0 5px;
+		        &:hover{text-decoration: underline; }
+		        &.disabled{
+			        color:$colour-sidetext;
+			        text-decoration: none;
+			    }
+	        }
 
             div {
                 display: inline-block;
+                font-weight: 400;
+                margin-right: 20px;
             }
 
+
             .numbers {
-                float: left;
+               display:block;
+               line-height: 40px;
+               width: 100%;
             }
 
             .options {
-                float: right;
-                margin-right: 20px;
+
+                & .viewtype{
+			        line-height: 25px;
+			        font-size: 25px;
+		        }
+        		& a.button{
+		            display: inline-block;
+		            padding: 0 5px;
+		            text-decoration: none; 
+		            color: $colour-sidetext;
+		            &:hover{text-decoration: underline;}
+		            &.disabled{
+			            color:$colour-sidetext;
+		            }
+		            &.first{ 
+			            margin-left:5px;
+			            border-right:1px black solid;
+			            &.active{
+			                color:$colour-bodytext;
+                            text-decoration: underline;
+				            &:hover{text-decoration: none;}
+			             }
+		            }
+		            &.last{
+				        border-left: none;
+					    border-top-left-radius:0px;
+					    border-bottom-left-radius: 0px;	
+			            &.active{
+			                color:$colour-bodytext;
+			                text-decoration: underline;
+				            &:hover{text-decoration: none;}
+				        }
+			        }
+		            &.active{	
+		                color: $colour-bodytext;
+				        &:hover{text-decoration: none;}
+		            }
+		        }
             }
 
             .pages a {
@@ -824,7 +889,7 @@ footer {
             .pages a.disabled {
                 color: #cccccc;
             }
-
+/*
             .order {
                 margin: 0 20px 0 0;
             }
@@ -843,7 +908,7 @@ footer {
             .order a.active, .perpage a.active {
                 background: #cccccc;
             }
-
+*/
             .icon-left-arrow, .icon-right-arrow {
                 font-size: 0.7em;
             }
@@ -868,6 +933,7 @@ footer {
             display: table;
             content: "";
             clear: both;
+            padding-left: 10px;
             //20/4/2015 - Removed for Design integration
            /* .item, .specimen, .article, .species {
                 float: left;
