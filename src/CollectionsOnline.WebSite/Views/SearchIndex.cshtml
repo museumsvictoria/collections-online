@@ -26,8 +26,7 @@
             }
         </div>
     </aside>
-    <div class="results">
-        @Html.Partial("SearchBar", Model)
+    <div class="results">        
         @if (Model.ActiveFacets.Any() || Model.ActiveTerms.Any())
         {
             <div class="active-facets">

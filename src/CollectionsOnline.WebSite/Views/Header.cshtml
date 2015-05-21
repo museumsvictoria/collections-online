@@ -1,4 +1,4 @@
-﻿@using System.Configuration
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchIndexViewModel>
 <header>
     <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
     <nav>
@@ -7,9 +7,46 @@
         @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
         {
             <a href="#" class="button-search">
-                <span class="icon-search-header" aria-hidden="true"></span>
-                Search
+                <span id="search-button-icon" aria-hidden="true" @((Model != null && !string.IsNullOrWhiteSpace(Model.Query)) ? Html.Raw("class=\"icon-search-close\"") : Html.Raw("class=\"icon-search-header\""))class="icon-search-header"></span>
+                <span class="search-text">Search</span>
             </a>
         }
     </nav>
+    @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
+    {
+        <div id="search-bar" @((Model != null && !string.IsNullOrWhiteSpace(Model.Query)) ? Html.Raw("class=\"active\"") : null)>
+            <form method="GET" action="/search" role="form">
+                <input type="text" name="query" placeholder="enter search term ..." @((Model != null) ? Html.Raw(string.Format("value=\"{0}\"", Model.Query)) : null)/>
+                <button class="search" type="submit">
+                    <span class="icon-search" aria-hidden="true"></span>
+                    <span class="icon-label-hidden"></span>
+                </button>
+            </form>
+        </div>
+    }
 </header>
+
+
+@*<header>
+    <span class="brand">Museum Victoria<span> Collections</span></span>
+    <nav>
+        <a href="../../patterns/03-templates-08-about-landing/03-templates-08-about-landing.html">About</a>
+        <a href="../../patterns/03-templates-11-developer/03-templates-11-developer.html">Developers</a>
+
+        <span class="button-search" onclick="$('#search-bar').toggle();$('#search-button-icon').toggleClass('icon-search-header');$('#search-button-icon').toggleClass('icon-search-close');">
+            <span id="search-button-icon" aria-hidden="true" class="icon-search-header"></span>
+            <span class="search-text">Search</span>
+        </span>
+    </nav>
+    <div id="search-bar">
+        <form role="form" action="/search" method="GET">
+
+            <input type="text" placeholder="enter search term ..." name="query"></input>
+            <button class="search" type="submit">
+                <span class="icon-search" aria-hidden="true"></span>
+                <span class="icon-label-hidden"></span>
+            </button>
+
+        </form>
+    </div>
+</header>*@

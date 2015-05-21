@@ -8,14 +8,26 @@ module.exports = {
     this.bindEvents();
   },
   cacheElements: function () {
+    // Search pagination
     this.$pageInput = $('.pagination input');
     this.totalPages = parseInt($('.pages .total').first().text().replace(/\D/g, ''));
+    
+    // Search filter
     this.$searchFilter = $('#search-filter');
     this.$searchFilterButton = $('#search-filter .button-filter');
+    
+    // Search button
+    this.$searchButton = $('.button-search');
   },
   bindEvents: function () {
+    // Search pagination
     this.$pageInput.on('change', this.gotoPage.bind(this));
+    
+    // Search filter
     this.$searchFilterButton.on('click', this.toggleSearchFilter.bind(this));
+    
+    // Search button
+    this.$searchButton.on('click', this.toggleSearchButton.bind(this));
   },
   gotoPage: function (e) {
     var page = $(e.target).val().replace(/\D/g, '');
@@ -33,5 +45,10 @@ module.exports = {
   },
   toggleSearchFilter: function() {
     this.$searchFilter.toggleClass('disabled');
+  },
+  toggleSearchButton: function () {
+    $('#search-bar').toggle();
+    $('#search-button-icon').toggleClass('icon-search-header');
+    $('#search-button-icon').toggleClass('icon-search-close');
   }
 };

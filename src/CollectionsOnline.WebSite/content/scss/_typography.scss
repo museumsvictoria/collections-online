@@ -1,10 +1,10 @@
 ﻿@font-face {
     font-family: 'mv-collections';
-    src:url('/content/fonts/mv-collections.eot');
-    src:url('/content/fonts/mv-collections.eot?#iefix') format('embedded-opentype'), 
-        url('/content/fonts/mv-collections.woff') format('woff'), 
-        url('/content/fonts/mv-collections.ttf') format('truetype'), 
-        url('/content/fonts/mv-collections.svg') format('svg');
+    src:url("../fonts/mv-collections.eot");
+    src:url("../fonts/mv-collections.eot?#iefix") format("embedded-opentype"), 
+        url("../fonts/mv-collections.woff") format("woff"), 
+        url("../fonts/mv-collections.ttf") format("truetype"), 
+        url("../fonts/mv-collections.svg") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -31,112 +31,219 @@
     font-style: normal;
 }
 
+@font-face{
+	font-family: 'cc-icons';
+	src: url("/content/fonts/cc-icons.ttf");
+	font-weight: normal;
+	font-style: normal;
+}
+
 .icon-close:before {
-    font-family:$font-family-mv-collections;
-    content:"\e601";
+    font-family: "mv-collections";
+    content: "\e609";
+}
+
+.icon-close2:before {
+    font-family: "mv-collections";
+    content: "\e60a";
 }
 
 .icon-search-header:before {
-    font-family:$font-family-mv-collections;
-    content:"\e602";
-    font-size:1.5em;
-    position:absolute;
-    right:20px;
+    font-family: "mv-collections";
+    content: "\e601";
+    font-size: 1.5em;
+    position: absolute;
+    right: 20px;
+}
+
+.icon-search-close:before {
+    font-family: "mv-collections";
+    content: "\e609";
+    font-size: 1.5em;
+    position: absolute;
+    right: 20px;
+}
+
+.icon-down-arrow:before {
+    font-family: "mv-collections";
+    content: "\e600";
+}
+
+.icon-down-arrow2:before {
+    font-family: "mv-collections";
+    content: "\e601";
 }
 
 .icon-left-arrow:before {
-    font-family:$font-family-mv-collections;
-    content:"\e607";
+    font-family: "mv-collections";
+    content: "\e602";
 }
 
 .icon-right-arrow:before {
-    font-family:$font-family-mv-collections;
-    content:"\e60a";
+    font-family: "mv-collections";
+    content: "\e603";
+}
+
+.icon-right-arrow2:before {
+    font-family: "mv-collections";
+    content: "\e604";
+}
+
+.icon-right-arrow3:before {
+    font-family: "mv-collections";
+    content: "\e605";
 }
 
 .icon-search:before {
-    font-family:$font-family-mv-collections;
-    content:"\e60b";
-    font-size:1.5em;
+    font-family: "mv-collections";
+    content: "\e616";
+    font-size: 1.5em;
 }
 
 .icon-filter:before {
-    font-family:$font-family-mv-collections;
-    content:"\e602";
-    font-size:1.3em;
-    position:absolute;
-    left:190px;
-    -moz-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
+    font-family: "mv-collections";
+    content: "\e602";
+    font-size: 1.3em;
+    // position: absolute;
+    //right:10px;
 }
 
 .icon-download:before {
-    font-family:$font-family-mv-collections;
-    content:"\e603";
-    font-size:1.5em;
+    font-family: "mv-collections";
+    content: "\e60b";
+    font-size: 1.5em;
 }
 
 .icon-fullscreen:before {
-    font-family:$font-family-mv-collections;
-    content:"\e604";
-    font-size:1.5em;
+    font-family: "mv-collections";
+    content: "\e60c";
+    font-size: 1.5em;
 }
 
 .icon-article:before {
-    font-family:$font-family-mv-collections;
-    content:"\e600";
+    font-family: "mv-collections";
+    content: "\e606";
 }
+
 .icon-item:before {
-    font-family:$font-family-mv-collections;
-    content:"\e606";
+    font-family: "mv-collections";
+    content: "\e610";
 }
+
 .icon-species:before {
-    font-family:$font-family-mv-collections;
-    content:"\e60c";
+    font-family: "mv-collections";
+    content: "\e617";
 }
+
 .icon-specimen:before {
-    font-family:$font-family-mv-collections;
-    content:"\e60d";
+    font-family: "mv-collections";
+    content: "\e618";
+}
+
+.icon-audio:before {
+    font-family: "mv-collections";
+    content: "\e607";
+}
+
+.icon-contract:before {
+    font-family: "mv-collections";
+    content: "\e608";
+    font-size: 1.5em;
+}
+
+.icon-grid:before {
+    font-family: "mv-collections";
+    content: "\e60d";
+}
+
+.icon-home:before {
+    font-family: "mv-collections";
+    content: "\e60e";
+}
+
+.icon-image:before {
+    font-family: "mv-collections";
+    content: "\e60f";
+}
+
+.icon-list:before {
+    font-family: "mv-collections";
+    content: "\e611";
+}
+
+.icon-marker:before {
+    font-family: "mv-collections";
+    content: "\e612";
+}
+
+.icon-menu:before {
+    font-family: "mv-collections";
+    content: "\e613";
+}
+
+.icon-minus:before {
+    font-family: "mv-collections";
+    content: "\e614";
+}
+
+.icon-plus:before {
+    font-family: "mv-collections";
+    content: "\e615";
+}
+
+.icon-tick:before {
+    font-family: "mv-collections";
+    content: "\e619";
+}
+
+.icon-video:before {
+    font-family: "mv-collections";
+    content: "\e61a";
+}
+
+.icon-book:before {
+    font-family: "mv-collections";
+    content: "\e61b";
 }
 
 .icon-print:before {
-    font-family:$font-family-entypo;
-    content:"\E716";
-    font-size:3em;
-    line-height:0.2em;
-    position:absolute;
-    top:0.2em;
-    right:20px;
+    font-family: "entypo";
+    content: "\E716";
+    font-size: 3em;
+    line-height: 0.2em;
+    position: relative;
+    top: 0.2em;
+    //right: 20px;
 }
 
 .icon-facebook:before {
-    font-family:$font-family-entypo-social;
-    content:"\F30C";
-    font-size:3em;
-    line-height:0.5em;
+    font-family: "entypo-social";
+    content: "\F30C";
+    font-size: 3em;
+    line-height: 0.5em;
+    font-size: 2.5em;
 }
 
 .icon-twitter:before {
-    font-family:$font-family-entypo-social;
-    content:"\F309";
-    font-size:3em;
-    line-height:0.5em;
+    font-family: "entypo-social";
+    content: "\F309";
+    font-size: 3em;
+    line-height: 0.5em;
+    font-size: 2.5em;
 }
 
 .icon-pintrest:before {
-    font-family:$font-family-entypo-social;
-    content:"\F312";
-    font-size:3em;
-    line-height:0.5em;
+    font-family: "entypo-social";
+    content: "\F312";
+    font-size: 3em;
+    line-height: 0.5em;
+    font-size: 2.5em;
 }
 
 .icon-cc-by:before {
-    font-family:$font-family-entypo;
-    content:"\1F545";
-    font-size:3em;
-    vertical-align:-0.16em;
-    line-height:0;    
+    font-family: "cc-icons";
+    content: "b";
+    font-size: 3em;
+    vertical-align: -0.16em;
+    line-height: 0;
 }
