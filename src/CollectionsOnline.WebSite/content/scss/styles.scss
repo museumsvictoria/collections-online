@@ -737,7 +737,8 @@ button.icon {
         width: 100%;
         background: #e3e3e3;
         padding: 0 0 20px 0px;
-
+        margin-top: 70px;
+        flex:1;
         .active-facets {
             padding: 20px 0 0 20px;
 
@@ -1004,6 +1005,10 @@ button.icon {
 
     &.active {
         display: block;
+        
+        &.search{
+            margin-left: 300px;
+        }
     }
 }
 
