@@ -942,6 +942,32 @@ button.icon {
                     padding: 10px;
                 }
             }*/
+            &.grid {
+               & .tile{
+
+                        & .title{
+                                height: 0;
+                                overflow: visible;
+                                padding: 0;
+                        }
+
+                        & .tile-tag{
+                            top: -1.2em;
+                            border-top-right-radius: 3px;
+                        }
+                        & .regnum, .heading, .description{
+                            display:none;
+                        }
+               }
+           }
+
+           &.list{
+               & .tile.full{
+                   @include gridle(6);
+               }
+           }
+
+
         }
 
         .item {
