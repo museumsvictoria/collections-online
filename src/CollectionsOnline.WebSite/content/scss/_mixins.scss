@@ -27,32 +27,34 @@
   -moz-filter: blur($pixels);
 }
 
-@mixin icon-article{
-  font-family: $font-family-mv-collections;
-  content: "\e600";	
-}
-@mixin icon-item{
-	font-family: $font-family-mv-collections;
-  content: "\e606";
-}
-@mixin icon-spaced-item{
-	font-family: $font-family-mv-collections;
-  content: "\e606 ";
-}
-@mixin icon-species{
-	  font-family: $font-family-mv-collections;
-  content: "\e60c"
+@mixin icon-article {
+    font-family: "mv-collections";
+    content: "\e606";
 }
 
-@mixin icon-specimen{
-	  font-family: $font-family-mv-collections;
-  content: "\e60d";
-	
+@mixin icon-item {
+    font-family: "mv-collections";
+    content: "\e610";
 }
 
-@mixin icon-search-header{
-	  font-family: $font-family-mv-collections;
-  content: "\e602";
+@mixin icon-spaced-item {
+    font-family: "mv-collections";
+    content: "\e610 ";
+}
+
+@mixin icon-species {
+    font-family: "mv-collections";
+    content: "\e617";
+}
+
+@mixin icon-specimen {
+    font-family: "mv-collections";
+    content: "\e618";
+}
+
+@mixin icon-search-header {
+    font-family: "mv-collections";
+    content: "\e602";
 }
 
 @mixin display-flex(){

@@ -247,3 +247,43 @@
     vertical-align: -0.16em;
     line-height: 0;
 }
+
+/* Headings */
+/*Further Reading: http:/csswizardry.com/2012/02/pragmatic-practical-font-sizing-in-css/ */
+h1, .alpha   { 
+	line-height: 1.2;
+	.container &{
+	@include gridle (12);
+	direction: ltr;
+	}
+}
+
+h2, .beta    { 
+	line-height: 1.2;
+	.container &{
+	@include gridle (12);
+	direction: ltr;
+	}
+}
+
+h3, .gamma   { 
+	line-height: 1.2;
+}
+
+h4, .delta   {
+	
+}
+
+h5, .epsilon { 
+	
+}
+
+h6, .zeta    { 
+	
+}
+
+/* Subheadings */
+.subheading {
+	font-family: $font-secondary;
+	font-weight: normal;
+}

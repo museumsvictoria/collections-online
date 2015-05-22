@@ -3,103 +3,114 @@
     Layout = "Layout.cshtml";
 }
 <div id="hero">
-    <form method="GET" action="/search" role="form">
-        <div class="search-area">
-            <input type="text" name="query" placeholder="enter search term ...">
-            <button type="submit">
+    <div class="search-area">
+        <form method="GET" action="/search" role="form">
+            <input type="text" name="query" placeholder="enter search term ..." />
+            <button class="search" type="submit">
                 <span class="icon-search" aria-hidden="true"></span>
                 <span class="icon-label-hidden">Search</span>
             </button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-<div id="explore-collection">
-    <div class="wrapper">
-        <div class="collection-content">
-            <h2>Explore the collection</h2>
-            <p>Explore a wealth of collections and research about natural sciences, history, technology and Indigenous cultures from Museum Victoria in Australia. </p>
-            <div class="explore-type article">
-                <a href="/search?type=article">
+<div id="home-explore">
+    <div class="container">
+        <h2>Explore the collection by type</h2>
+        <p>Explore a wealth of collections and research about natural sciences, history, technology and Indigenous cultures from Museum Victoria in Australia. </p>
+        <div class="tile home">
+            <a href="/search?type=article">
+                <span class="wrapper">
                     <img src="/content/img/img-home-article.jpg" />
-                    <span class="icon-article">
+                    <span class="tile-tag article">
                         <span class="count-wrapper">
                             <span class="type">Articles</span>
                             <span class="count">@Model.ArticleCount.ToString("N0")</span>
                         </span>
-                    </span>                    
-                </a>
-            </div>
-            <div class="explore-type item">
-                <a href="/search?type=item">
+                    </span>
+                </span>
+                <span class="desc">People, places, events, and our collections</span>
+            </a>
+        </div>
+        <div class="tile home">
+            <a href="/search?type=item">
+                <span class="wrapper">
                     <img src="/content/img/img-home-item.jpg" />
-                    <span class="icon-item">
+                    <span class="tile-tag item">
                         <span class="count-wrapper">
                             <span class="type">Items</span>
                             <span class="count">@Model.ItemCount.ToString("N0")</span>
                         </span>
                     </span>
-                </a>
-            </div>
-            <div class="explore-type species">
-                <a href="/search?type=species">
-                    <img src="/content/img/img-home-species.jpg" />
-                    <span class="icon-species">
-                        <span class="count-wrapper">
-                            <span class="type">Species</span>
-                            <span class="count">@Model.SpeciesCount.ToString("N0")</span>
-                        </span>
-                    </span>
-                </a>
-            </div>
-            <div class="explore-type specimen">
-                <a href="/search?type=specimen">
+                </span>
+                <span class="desc">Things made and used by people</span>
+            </a>
+        </div>
+        <div class="tile home">
+            <a href="/search?type=specimen">
+                <span class="wrapper">
                     <img src="/content/img/img-home-specimen.jpg" />
-                    <span class="icon-specimen">
+                    <span class="tile-tag specimen">
                         <span class="count-wrapper">
                             <span class="type">Specimens</span>
                             <span class="count">@Model.SpecimenCount.ToString("N0")</span>
                         </span>
                     </span>
-                </a>
-            </div>
+                </span>
+                <span class="desc">Animals, fossils, and rocks in our collections</span>
+            </a>
+        </div>
+        <div class="tile home">
+            <a href="/search?type=species">
+                <span class="wrapper">
+                    <img src="/content/img/img-home-species.jpg" />
+                    <span class="tile-tag species">
+                        <span class="count-wrapper">
+                            <span class="type">Species</span>
+                            <span class="count">@Model.SpeciesCount.ToString("N0")</span>
+                        </span>
+                    </span>
+                </span>
+                <span class="desc">How, where, and what of animals</span>
+            </a>
         </div>
     </div>
 </div>
-<div id="explore-venue">
-    <div class="wrapper">
-        <div class="venue-content">
-            <h2>Explore the collection on display</h2>
-            <div class="venue">
-                <a href="/search?displaylocation=bunjilaka">
-                    <img src="/content/img/img-home-bunjilaka.jpg" />
-                    <span>Bunjilaka</span>
-                </a>
-            </div>
-            <div class="venue">
-                <a href="/search?displaylocation=melbourne+museum">
-                    <img src="/content/img/img-home-melbourne-museum.jpg" />
-                    <span>Melbourne Museum</span>
-                </a>
-            </div>
-            <div class="venue">
-                <a href="/search?displaylocation=scienceworks">
-                    <img src="/content/img/img-home-scienceworks.jpg" />
-                    <span>Scienceworks</span>
-                </a>
-            </div>
-            <div class="venue">
-                <a href="/search?displaylocation=immigration+museum">
-                    <img src="/content/img/img-home-immigration-museum.jpg" />
-                    <span>Immigration Museum</span>
-                </a>
-            </div>
+<div id="venues-explore">
+    <div class="container">
+        <h2>Explore the collection on display</h2>
+        <div class="venue-tile">
+            <a href="/search?displaylocation=melbourne+museum">
+                <img src="/content/img/img-home-melbourne-museum.jpg" />
+                <span class="label">Melbourne Museum</span>
+            </a>
         </div>
-        <div class="recent-content">
-            <h2>Recently added items</h2>
-            @foreach (var recentResults in Model.RecentResults)
-            {
-                @Html.Partial("emutile", recentResults)
-            }
+        <div class="venue-tile">
+            <a href="/search?displaylocation=scienceworks">
+                <img src="/content/img/img-home-scienceworks.jpg" />
+                <span class="label">Scienceworks</span>
+            </a>
         </div>
+        <div class="venue-tile">
+            <a href="/search?displaylocation=immigration+museum">
+                <img src="/content/img/img-home-immigration-museum.jpg" />
+                <span class="label">Immigration Museum</span>
+            </a>
+        </div>
+        <div class="venue-tile">
+            <a href="/search?displaylocation=bunjilaka">
+                <img src="/content/img/img-home-bunjilaka.jpg" />
+                <span class="label">Bunjilaka</span>
+            </a>
+        </div>
+
+    </div>
+</div>
+<div id="recent-explore">
+    <div class="container">
+        <h2>Recently Added Items</h2>
+        @foreach (var recentResults in Model.RecentResults)
+        {
+            @Html.Partial("emutile", recentResults)
+        }
     </div>
 </div>
