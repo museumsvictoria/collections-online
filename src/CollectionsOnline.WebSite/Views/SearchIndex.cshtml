@@ -111,14 +111,13 @@
                     <a href="@Model.RelevanceSortButton.Url" class="button first @(Model.RelevanceSortButton.Active ? "active" : "")">@Model.RelevanceSortButton.Name</a>
                     <a href="@Model.QualitySortButton.Url" class="button last @(Model.QualitySortButton.Active ? "active" : "")">@Model.QualitySortButton.Name</a>
                 </div>
-
                 <div class="viewtype">
-                    <a class="button active icon-grid" href="#"></a>
-                    <a class="button icon-list" href="#"></a>
+                    <a href="@Model.GridViewButton.Url" class="button icon-grid @(Model.GridViewButton.Active ? "active" : "")"></a>
+                    <a href="@Model.ListViewButton.Url" class="button icon-list @(Model.ListViewButton.Active ? "active" : "")"></a>
                 </div>
             </div>
         </div>
-        <div class="results-area grid">
+        <div class="results-area @(Model.GridViewButton.Active ? "grid" : "list")">
             @foreach (var result in Model.Results)
             {
                 @Html.Partial("emutile", result)

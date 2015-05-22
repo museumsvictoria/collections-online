@@ -189,6 +189,25 @@ namespace CollectionsOnline.WebSite.Factories
                 Active = searchInputModel.PerPage == Core.Config.Constants.PagingPerPageMax
             };
 
+            // View links
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("view", "grid");
+            searchIndexViewModel.GridViewButton = new ButtonViewModel
+            {
+                Name = "Grid",
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.View == "grid" || string.IsNullOrWhiteSpace(searchInputModel.View)
+            };
+
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("view", "list");
+            searchIndexViewModel.ListViewButton = new ButtonViewModel
+            {
+                Name = "List",
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.View == "list"
+            };
+
             // Build suggestions
             foreach (var suggestion in suggestions)
             {

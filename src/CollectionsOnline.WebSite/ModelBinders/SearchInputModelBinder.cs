@@ -30,8 +30,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
             else if (string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "relevance";
 
-            if (string.Equals(query.View, "tile", StringComparison.OrdinalIgnoreCase))
-                searchInputModel.View = "tile";
+            if (string.Equals(query.View, "grid", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.View = "grid";
             else if (string.Equals(query.View, "list", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "list";
 

@@ -6,15 +6,15 @@
         <a @((RenderContext.Context.ResolvedRoute.Description.Name == "developers-index") ? Html.Raw("class=\"active\"") : null) href="/developers">Developers</a>        
         @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
         {
-            <a href="#" class="button-search">
-                <span id="search-button-icon" aria-hidden="true" @((Model != null && !string.IsNullOrWhiteSpace(Model.Query)) ? Html.Raw("class=\"icon-search-close\"") : Html.Raw("class=\"icon-search-header\""))class="icon-search-header"></span>
+            <a href="#" class="button-search @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? "search" : null)">
+                <span id="search-button-icon" aria-hidden="true" class="icon-search-header"></span>
                 <span class="search-text">Search</span>
             </a>
         }
     </nav>
-    @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
+    @if (RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
     {
-        <div id="search-bar" @((Model != null && !string.IsNullOrWhiteSpace(Model.Query)) ? Html.Raw("class=\"active\"") : null)>
+        <div id="search-bar" @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? Html.Raw("class=\"search active\"") : null)>
             <form method="GET" action="/search" role="form">
                 <input type="text" name="query" placeholder="enter search term ..." @((Model != null) ? Html.Raw(string.Format("value=\"{0}\"", Model.Query)) : null)/>
                 <button class="search" type="submit">
@@ -25,28 +25,3 @@
         </div>
     }
 </header>
-
-
-@*<header>
-    <span class="brand">Museum Victoria<span> Collections</span></span>
-    <nav>
-        <a href="../../patterns/03-templates-08-about-landing/03-templates-08-about-landing.html">About</a>
-        <a href="../../patterns/03-templates-11-developer/03-templates-11-developer.html">Developers</a>
-
-        <span class="button-search" onclick="$('#search-bar').toggle();$('#search-button-icon').toggleClass('icon-search-header');$('#search-button-icon').toggleClass('icon-search-close');">
-            <span id="search-button-icon" aria-hidden="true" class="icon-search-header"></span>
-            <span class="search-text">Search</span>
-        </span>
-    </nav>
-    <div id="search-bar">
-        <form role="form" action="/search" method="GET">
-
-            <input type="text" placeholder="enter search term ..." name="query"></input>
-            <button class="search" type="submit">
-                <span class="icon-search" aria-hidden="true"></span>
-                <span class="icon-label-hidden"></span>
-            </button>
-
-        </form>
-    </div>
-</header>*@

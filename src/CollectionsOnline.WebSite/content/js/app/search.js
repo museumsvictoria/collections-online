@@ -24,7 +24,7 @@ module.exports = {
     this.$pageInput.on('change', this.gotoPage.bind(this));
     
     // Search filter
-    this.$searchFilterButton.on('click', this.toggleSearchFilter.bind(this));
+    //this.$searchFilterButton.on('click', this.toggleSearchFilter.bind(this));
     
     // Search button
     this.$searchButton.on('click', this.toggleSearchButton.bind(this));
@@ -47,8 +47,11 @@ module.exports = {
     this.$searchFilter.toggleClass('disabled');
   },
   toggleSearchButton: function () {
-    $('#search-bar').toggle();
-    $('#search-button-icon').toggleClass('icon-search-header');
-    $('#search-button-icon').toggleClass('icon-search-close');
+
+    if (!$('#search-bar').hasClass('search')) {
+      $('#search-bar').toggle();
+      $('#search-button-icon').toggleClass('icon-search-header');
+      $('#search-button-icon').toggleClass('icon-search-close');
+    }
   }
 };

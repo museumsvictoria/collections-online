@@ -35,6 +35,10 @@ namespace CollectionsOnline.WebSite.Models
 
         public ButtonViewModel MaxPerPageButton { get; set; }
 
+        public ButtonViewModel GridViewButton { get; set; }
+
+        public ButtonViewModel ListViewButton { get; set; }
+
         public IList<FacetViewModel> Facets { get; set; }
 
         public int TotalFacetValues

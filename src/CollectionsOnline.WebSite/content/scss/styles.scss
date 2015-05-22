@@ -82,6 +82,14 @@ nav {
         text-decoration: none;
     }
 
+    .button-search.search {
+        padding:0 20px 0 20px;
+
+        .icon-search-header {
+            display:none;
+        }
+    }
+
     .search-text{
 		@include gridle_hide("tablet");			
 	    @include gridle_hide("mobile");
@@ -1028,6 +1036,7 @@ button.icon {
     height: 70px;
     position: relative;
     display: none;
+    z-index:100;
 
     &.active {
         display: block;
