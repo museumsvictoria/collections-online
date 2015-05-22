@@ -55,6 +55,14 @@
   content: "\e602";
 }
 
+@mixin display-flex(){
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
 @mixin flex-direction($direction){
 	  -webkit-flex-direction: $direction; /* Safari 6.1+ */
     flex-direction: $direction; 

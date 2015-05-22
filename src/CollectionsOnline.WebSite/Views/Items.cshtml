@@ -3,7 +3,6 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("SearchBar")
 @if (Model.ItemImages.FirstOrDefault() != null)
 {
     @Html.Partial("ImageMedia", Model.ItemImages.First())

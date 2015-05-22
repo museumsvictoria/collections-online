@@ -10,7 +10,7 @@ namespace CollectionsOnline.WebSite.Modules
         public SearchModule(
             ISearchViewModelQuery searchViewModelQuery)
         {
-            Get["/search"] = parameters =>
+            Get["search-index", "/search"] = parameters =>
             {
                 var searchInputModel = this.Bind<SearchInputModel>();
 

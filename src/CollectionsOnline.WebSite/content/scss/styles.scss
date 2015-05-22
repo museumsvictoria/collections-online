@@ -23,51 +23,68 @@ header {
 }
 
 .brand {
-    display:inline-block;
-    padding:0 20px;
-    color: $color-default;
-    font-size:1.35em;
-    line-height:76px;
-    font-weight:400;
-    text-transform:uppercase;
-    text-decoration:none;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.35em;
+    font-weight: 400;
+    line-height: 76px;
+    padding: 0 20px;
+    text-decoration: none;
+    text-transform: uppercase;
 
-    span {
-        color:$color-museum-green;
-        font-weight:600;
+    @include gridle_state(mobile) {
+        line-height: 30px;
+        padding-top: 5px;
+    }
+}
+
+.brand span {
+    color: $colour-highlight-green;
+    font-weight: 600;
+
+    @include gridle_state(mobile) {
+        display: block;
     }
 }
 
 nav {
-    color:$color-default;
-    font-size:1em;    
-    font-weight:400;
-    text-transform:uppercase;
-    text-decoration:none;
-    float:right;
-    position:relative;
+    color: $colour-heading-inverted;
+    float: right;
+    font-size: 1em;
+    font-weight: 300;
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
 
     a {
-        display:inline-block;
-        padding:0 20px;
-        line-height:76px;
+        color: $colour-heading-inverted;
+	    display: inline-block;
+        line-height: 76px;
+        padding: 0 20px;
+        text-decoration: none;
+       // @include gridle_hide("mobile");
+        @include gridle_hide("tablet");
+        @include gridle_hide("mobile");
 
         &:hover {
-            background:#000;
-            color:$color-default;
+            cursor: pointer;
         }
     }
 
     .button-search {
-        background-color:$color-museum-green;
-        color:$color-default;
-        padding-right:60px;
-
-        &:hover {
-        background-color:$color-museum-green;
-        color:$color-default;
-        }
+        background-color: $colour-primary-green;
+        color: $colour-heading-inverted;
+        padding: 0 20px;    
+        padding-right: 60px;
+        display: inline-block;
+        line-height: 76px;
+        text-decoration: none;
     }
+
+    .search-text{
+		@include gridle_hide("tablet");			
+	    @include gridle_hide("mobile");
+	}
 }
 
 button.icon {
@@ -398,46 +415,6 @@ button.icon {
             font-size:1.6em;
             font-weight:400;
         }
-        /* Commented out -
-        .item, .specimen, .article, .species {
-            @include gridle (3);
-            padding-top:10px;
-            padding-bottom:10px;
-                
-            a {
-                border:1px solid #dcdcdc;
-                display:block;
-                position:relative;
-
-                &:before {
-                    border-bottom-left-radius:3px;
-                    padding:10px;
-                    color:$color-default;
-                    text-transform:uppercase;
-                    position:absolute;
-                    font-size:0.9em;
-                    font-weight:500;
-                    top:0;
-                    right:0;
-                }
-            }        
-
-            img {
-                width:100%;
-                display:block;
-            }
-
-            .title {
-                display:block;
-                height:6em;
-                overflow:hidden;
-                text-overflow:ellipsis;
-                background-color:#f9f9f9;
-                color:#000;
-                font-weight:500;
-                padding:10px;
-            }
-        }*/
 
         .item {
             .icon-item {
@@ -501,16 +478,6 @@ button.icon {
     }
 }
 
-/*
-footer {
-    background-color:#2a2a2a;
-    
-    .logos {
-        @include gridle (12);
-        margin:2em 0;
-    }
-}
-*/
 .no-image {
     display:block;
     position: relative;
@@ -1030,37 +997,86 @@ footer {
 }
 
 #search-bar {
-    background:$color-museum-green;
-    height:70px;
+    height: 70px;
+    position: relative;
+    display: none;
 
-    form {
-        display:flex;
-        align-items:center;
-        height:70px;
-        padding:0 20px;        
+    &.active {
+        display: block;
+    }
+}
 
-        input {
-            margin:0;
-            outline:0;
-            padding:0 1em;
-            font-size:1.2em;
-            font-weight:300;
-            border:0;
-            width:100%;
-            height:44px;
-            border-radius:2px 0 0 2px;
+#search-bar #search-filter {
+    width: 300px;
+    position: absolute;
+
+    @include gridle_state('tablet') {
+        width: 100%;
+        top: 70px;
+    }
+
+    @include gridle_state('mobile') {
+        width: 100%;
+        top: 70px;
+    }
+}
+
+#search-bar {
+    &.searchpage {
+        & form {
+            width: auto;
+            margin-left: 300px;
+        }
+    }
+
+    & form {
+        direction: ltr;
+        align-items: center;
+        @include display-flex();
+        height: 70px;
+        padding: 0 20px;
+        background: $colour-primary-green;
+        #search & {
+            left: 350px;
+            margin-left: 300px;
         }
 
-        button {
-            height:44px;
-            margin:0;
-            outline:0;
-            padding:0 10px;
-            border:0;
-            border-radius:0 2px 2px 0;
-            color:$color-default;
-            background:#000;
+        right: 0;
+
+        @include gridle_state('tablet') {
+            margin-left: 0;
+            width: 100%;
         }
+
+        @include gridle_state('mobile') {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        & input {
+            border: 0 none;
+            border-radius: 2px 0 0 2px;
+            font-size: 1.2em;
+            font-weight: 300;
+            height: 44px;
+            margin: 0;
+            outline: 0 none;
+            padding: 0 1em;
+            width: 100%;
+        }
+    }
+}
+
+button{
+    &.search{
+	    height: 44px;
+	    margin: 0px;
+	    outline: 0px none;
+	    padding: 0px 10px;
+	    border: 0px none;
+	    border-radius: 0px 2px 2px 0px;
+	    color: $colour-heading-inverted;
+	    background: none repeat scroll 0% 0% $colour-background-dark;
     }
 }
 
@@ -1225,15 +1241,125 @@ footer {
     }
 }
 
-#developers {
-    display:flex;
+// Developers
 
-    .menu {
-        width:300px;
+#developers {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-size: 16px;
+
+    & .side-column {
+        @include gridle(4);
+        @include gridle_push(8);
+        @include gridle(12,mobile);
+        direction: ltr;
+        background-color: #f6f6f6;
+        border-radius: 3px;
+        color: #666;
+        padding: 15px 20px 20px;
+
+        & h4 {
+            color: #454545;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        & ul {
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
     }
 
-    .documentation {
-        width:100%;
+    & h1 {
+        float: none;
+        font-size: 22px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        width: auto;
+    }
+
+    & p {
+        font-size: 17px;
+        font-weight: 300;
+        margin-bottom: 1.5em;
+        padding-left: 0px;
+    }
+
+    & h2 {
+        float: none;
+        font-size: 22px;
+        padding-bottom: 5px;
+        padding-left: 0px;
+    }
+
+    & h3 {
+        font-size: 17px;
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+
+    & h3 {
+        font-size: 17px;
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+}
+
+.documentation {
+    @include gridle(8);
+    @include gridle_pull(4);
+    @include gridle(8, tablet);
+    @include gridle(12, mobile);
+    padding-left: 10px;
+    padding-right: 20px;
+    direction: ltr;
+    word-wrap: normal;
+
+    & pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        padding: 10px;
+        background-color: #f6f6f6;
+        border-radius: 3px;
+        color: #666;
+        direction: ltr;
+    }
+
+    & code, kbd, pre, samp {
+        font-family: monospace,serif;
+        font-size: 1em;
+    }
+
+    & h1 {
+        float: none;
+        font-size: 22px;
+        padding-bottom: 5px;
+        //padding-left: 10px;
+    }
+
+    & p {
+        font-size: 17px;
+        font-weight: 300;
+        margin-bottom: 1.5em;
+        //padding-left: 10px;
+    }
+
+    & table {
+        border-collapse: collapse;
+        margin: 10px;
+        vertical-align: middle;
+        width: 100%;
+    }
+
+    & td {
+        border: 1px solid #666;
+        padding: 5px;
+    }
+
+    & th {
+        border: 1px solid #666;
+        padding: 5px;
     }
 }
 
@@ -1725,15 +1851,11 @@ footer {
 
     & .colldesc {
         @include gridle(8);
-        float: left;
-        direction: ltr;
         padding-right: 20px;
     }
 
     & .subcoll {
         @include gridle(12);
-        float: left;
-        direction: ltr;
         padding-left: 0px;
         padding-right: 0px;
         margin-bottom: 50px;

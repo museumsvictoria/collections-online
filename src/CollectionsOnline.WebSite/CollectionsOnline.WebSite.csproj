@@ -305,9 +305,6 @@
     <Content Include="content\fonts\mv-collections.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\SearchBar.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\HomeIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>

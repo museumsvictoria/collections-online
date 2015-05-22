@@ -2,9 +2,10 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("SearchBar")
-<div id="developers">
-    <aside class="menu">
+<div id="developers" class="container">
+    <h1>Developer Information</h1>
+    <aside class="side-column">
+        <h2>API Methods</h2>
         @foreach (var apiOperationMetadata in @Model.OperationMetadata)
         {
             <a href="#@apiOperationMetadata.Name.ToLower()">@apiOperationMetadata.Name</a>
@@ -17,7 +18,7 @@
         }
     </aside>
     <div class="documentation">
-        <h1 id="api-overview">API Overview</h1>
+        <h2 id="api-overview">API Overview</h2>
         <p>API is a set of methods based on restful ideas over HTTP.  At this time it only supports the GET verb and responses are in JSON only.</p>
         <p>The root uri for the current version is located at</p>
         <pre>@Model.ApiRootUrl</pre>
@@ -46,7 +47,7 @@
             {
                 <div id="@metadata.Name">
                     <h3>@metadata.Method</h3>
-                    <h3>@metadata.Path</h3>
+                    <h4>@metadata.Path</h4>
 
                     @if (!string.IsNullOrEmpty(metadata.Description))
                     {
