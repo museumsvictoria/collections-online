@@ -1827,15 +1827,16 @@ footer {
 	background: $colour-background-dark;
 	color:$colour-heading-inverted;
 	padding-top:32px;
-	
+	font-weight: 400;
 	& .wrapper{
 		padding-bottom: 30px;
+        padding-left: 10px;
 	}
 	
 	& .logos {
 	    direction: ltr;
         float: left;
-        margin: 0 0 10px 0px;
+        margin: 0 0 0px 0px;
         padding:0px 20px 10px 10px;
         @include gridle(12, 'mobile');
         float:left;
@@ -1852,6 +1853,7 @@ footer {
 		@include gridle(4, 'tablet');
 		float:left;
 		direction:ltr;
+
 		@include gridle_state('mobile') {
 		    display: none;
 		}
@@ -1881,9 +1883,16 @@ footer {
 		& h2{
 			font-size: 14px;
 			padding-bottom: 6px;
+            font-weight: 400;
+            direction: ltr;
+            float: left;
+            padding-left: 10px;
+            padding-right: 10px;
+            width: 100%;
 		}
 		& a {
 			font-size: 12px;
+            color:$colour-heading-inverted;
 			&:hover{
 				text-decoration: underline;
 			}
@@ -1909,7 +1918,15 @@ footer {
 		float: left;
 		direction: ltr;
 		padding:20px 0px 0px;
-		
+		& a {
+			font-size: 12px;
+            color:$colour-heading-inverted;
+			&:hover{
+				text-decoration: underline;
+			}
+		}
+
+
 		& .stategovernmentlinks{
 			float:left;
 			font-size:12px;
@@ -2200,6 +2217,7 @@ footer {
 	& h2{
 		margin-bottom: 7px;
 		font-weight: 400;
+        font-size:28px;
 	}
 }
 #venues-explore{
@@ -2217,6 +2235,7 @@ footer {
 		margin-bottom: 25px;
 		font-weight: 400;
 		color: $colour-heading-inverted;
+        font-size: 28px;
 	}
 }
 
@@ -2233,6 +2252,7 @@ footer {
 	& h2{
 		margin-bottom: 25px;
 		font-weight: 400;
+        font-size: 28px;
 	}
 	& .count {
 		display: none;
