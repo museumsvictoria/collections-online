@@ -1,6 +1,8 @@
 ﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.ImageMedia>
 <figure id="media">
-    <img src="@Model.Large.Uri" alt="@Model.AlternativeText" />
+    <div class="imageholder">
+        <img src="@Model.Large.Uri" alt="@Model.AlternativeText" />
+    </div>
     <figcaption>
         <div class="wrapper">
             <div class="caption">
