@@ -541,6 +541,53 @@ button.icon {
 	}
 } 
 
+
+//author section
+.author
+{
+	display: block;
+	width:100%;
+	margin: 0 0 20px;
+	font-size: 14px;
+	line-height: 1.4em; 
+	border-bottom: 1px solid #e8e8e8;
+	//padding: 1em;
+	& img 
+	{
+		float:left;
+		width:20%;
+		margin-right:10px;
+		border-radius: 30px;
+		margin-top: 5px;
+		// mobile and tablet image width 10%;
+		@include gridle_state(tablet){
+			width:10%;
+		}
+    
+		
+	}
+	& .authorname
+	{
+		//float:left;
+		
+		font-weight: 500;
+		display: block;
+		//width:90%;
+		//padding:10px;;
+	}
+	
+	& .authorbio
+	{
+	   float: left;
+	   width: 70%;
+    font-weight: 400;
+    margin: 0 0 20px;
+ 
+	}
+
+}
+
+
 #record {    
     //font-weight:300;
     padding-bottom: 40px;
@@ -797,6 +844,8 @@ button.icon {
                 color:$color-sub-heading;
                 font-weight:500;
             }
+
+
         }
 
 
