@@ -34,6 +34,20 @@
 </div>
 <div id="title">
     <div class="wrapper">
+        <div class="mediatypes">
+            <div class="type active images">
+                <div class="icon-image"><p>Images (@imageCount.ToString())</p></div>
+            </div>
+            <div class="type videos">
+                <div class="icon-video"><p>Videos (@videoCount.ToString())</p></div>
+            </div>
+            <div class="type audios">
+                <div class="icon-audio"><p>Audio (@audioCount.ToString())</p></div>
+            </div>
+            <div class="type books">
+                <div class="icon-book"><p>Books (@bookCount.ToString())</p></div>
+            </div>
+        </div>
         <h1>@Html.Raw(Model.Species.DisplayTitle)</h1>            
     </div>
 </div>
