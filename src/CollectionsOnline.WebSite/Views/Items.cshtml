@@ -2,35 +2,63 @@
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ItemViewTransformerResult>
 @{
     Layout = "Layout.cshtml";
+    var imageCount = 0;
+    var audioCount = 0;
+    var videoCount = 0;
+    var bookCount = 0;
 }
 @if (Model.ItemImages.FirstOrDefault() != null)
 {
     @Html.Partial("ImageMedia", Model.ItemImages.First())
 }
+<div  id="objectthumbs">
+    @if (Model.ItemImages.Any())
+    {
+        imageCount = Model.ItemImages.Count();
+        <div class="thumbnails wrapper">
+            @foreach (var itemImage in Model.ItemImages)
+            {
+                <div class="thumbnail">
+                    @if (itemImage.Thumbnail.Uri == Model.ItemImages.First().Thumbnail.Uri)
+                    {
+                        <img class="active" src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
+                    }
+                    else
+                    {
+                        <img src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
+                    }
+                </div>
+            }
+        </div>
+    }
+
+</div>
 <div id="title">
     <div class="wrapper">
-        <h1>
-            @Html.Raw(Model.Item.DisplayTitle)<br />
-            @Model.Item.RegistrationNumber
-        </h1>
-        @if (Model.ItemImages.Any())
-        {
-            <div class="thumbnails">
-                @foreach (var itemImage in Model.ItemImages)
-                {
-                    <div class="thumbnail">
-                        @if (itemImage.Thumbnail.Uri == Model.ItemImages.First().Thumbnail.Uri)
-                        {
-                            <img class="active" src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
-                        }
-                        else
-                        {
-                            <img src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
-                        }
-                    </div>
-                }
+        <div class="mediatypes">
+            <div class="type active images">
+                <div class="icon-image"><p>Images (@imageCount.ToString())</p></div>
             </div>
-        }
+            <div class="type videos">
+                <div class="icon-video"><p>Videos (@videoCount.ToString())</p></div>
+            </div>
+            <div class="type audios">
+                <div class="icon-audio"><p>Audio (@audioCount.ToString())</p></div>
+            </div>
+            <div class="type books">
+                <div class="icon-book"><p>Books (@bookCount.ToString())</p></div>
+            </div>
+        </div>
+        <h1>
+            <span class="reg-number item">
+                Item
+                @Model.Item.RegistrationNumber            
+            </span>
+            </br>
+            @Html.Raw(Model.Item.DisplayTitle)<br />
+ 
+        </h1>
+       
     </div>
 </div>
 
@@ -100,6 +128,7 @@
                 }                
             </div>
             <div class="detail">
+                <h3> More Information</h3>
                 <ul>
                     @if (@Model.Item.CollectionNames.Any())
                     {
@@ -833,40 +862,38 @@
                 </ul>
             </div>
         </section>
-        <aside class="side-content">
+
+
             @if (Model.Item.MuseumLocation != null)
             {
-            <div class="on-display">
-                On display<br />
-                <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
-                <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
-            </div>
-            }
-            <div class="print">
-                <a class="icon" href="#">
-                    <span class="icon-print" aria-hidden="true"></span>
-                    <span class="icon-label">Printer friendly</span>
-                </a>
-            </div>
-            <div class="social">
-                <h4>Share</h4>
-                <div class="social-tools">
-                    <a class="icon" href="#">
-                        <span class="icon-facebook" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Facebook</span>
-                    </a>
-                    <a class="icon" href="#">
-                        <span class="icon-twitter" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Twitter</span>
-                    </a>
-                    <a class="icon" href="#">
-                        <span class="icon-pintrest" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Pintrest</span>
-                    </a>
+          <aside class="display-content">              
+                <div class="on-display">
+                    On display<br />
+                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
+                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
                 </div>
+             </aside>           
+            }
+
+        <aside class="side-content">
+            <div class="sidecolumn">
+                <div class="social">
+                    <h4>Share</h4>
+                    <div class="social-tools">
+                        <a class="icon" href="#">
+                            <span class="icon-facebook" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Facebook</span>
+                        </a>
+                        <a class="icon" href="#">
+                            <span class="icon-twitter" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Twitter</span>
+                        </a>
+                        <a class="icon" href="#">
+                            <span class="icon-pintrest" aria-hidden="true"></span>
+                            <span class="icon-label-hidden">Pintrest</span>
+                        </a>
+                    </div>
             </div>
-        </aside>
-        <aside class="cite-content">
             <div class="cite">
                 <h4>Cite this page</h4>
                 <p>@Html.RenderCitation(Model.Item)</p>
@@ -879,6 +906,7 @@
                     </a>
                 </p>
             </div>
+         </div>   
         </aside>
     </div>
 </div>
