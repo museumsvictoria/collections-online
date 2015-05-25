@@ -19,8 +19,10 @@ a {
 }
 
 header {
-    background:#1b1b1b;
-    height:76px;    
+    background:$colour-background-dark;
+   // height:76px;  
+   	width:100%;
+	overflow: hidden;  
 }
 
 .brand {
@@ -701,6 +703,11 @@ button.icon {
         
     }
 
+    & aside:first-of-type{
+        margin-top:50px;
+    }
+
+
     & .sidecolumn{
     width:100%;
     background-color: $colour-background-lightest;
@@ -716,7 +723,7 @@ button.icon {
 	    @include gridle ( 12 , 'mobile' );
 	    float: right;
 	    direction: ltr;
-	    margin-top:50px;
+	  
    /*     font-weight:500;
         font-size:1.1em;
         color:$color-default;
@@ -751,19 +758,19 @@ button.icon {
 
 	
 	        &.melb{
-		        background:url("../images/mm-pattern_80.jpg");
+		        background:url("../img/mm-pattern_80.jpg");
 		        //background: rgba(26, 85, 166, 0.7);
 	        }
 	
 	        &.bunjil{
-		        background:url("../images/bunj-pattern.png");
+		        background:url("../img/bunj-pattern.png");
 	        }
 	
 	        &.imm{
-		        background:url("../images/im-pattern.png");
+		        background:url("../img/im-pattern.png");
 	        }
 	        &.sw{
-		        background:url("../images/sw-pattern.png");
+		        background:url("../img/sw-pattern.png");
 	        }
 	
 	        & .gallery{
@@ -1030,7 +1037,8 @@ button.icon {
 }
 
 #search {
-    display: flex;
+   @include display-flex();
+   margin-top:-70px;
 
     #search-filter {
         background: $colour-background-lightest;
