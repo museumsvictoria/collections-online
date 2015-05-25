@@ -27,5 +27,26 @@ namespace CollectionsOnline.Core.Models
                 return null;
             }
         }
+
+        public string OnDisplayClass
+        {
+            get
+            {
+                if (string.Equals(Gallery, "Bunjilaka", StringComparison.OrdinalIgnoreCase))
+                    return "bunj";
+                if (string.Equals(Venue, "Melbourne Museum", StringComparison.OrdinalIgnoreCase))
+                    return "mm";
+                if (string.Equals(Venue, "Immigration Museum", StringComparison.OrdinalIgnoreCase))
+                    return "im";
+                if (string.Equals(Venue, "Royal Exhibition Building", StringComparison.OrdinalIgnoreCase))
+                    return "mm";
+                if (string.Equals(Venue, "Scienceworks", StringComparison.OrdinalIgnoreCase))
+                    return "sw";
+                if (string.Equals(Gallery, "Discovery Centre", StringComparison.OrdinalIgnoreCase))
+                    return "mm";
+
+                return null;
+            }
+        }
     }
 }

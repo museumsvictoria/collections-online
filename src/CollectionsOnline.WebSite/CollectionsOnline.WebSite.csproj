@@ -137,7 +137,9 @@
     <Content Include="content\fonts\entypo-social.svg" />
     <Content Include="content\fonts\entypo.svg" />
     <Content Include="content\img\about-hero-image.jpg" />
+    <Content Include="content\img\bunj-pattern.png" />
     <Content Include="content\img\CreativeVictoriaLogo_Reversed.png" />
+    <Content Include="content\img\im-pattern.png" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-birds.jpg" />
     <Content Include="content\img\img-home-bunjilaka.jpg" />
@@ -148,6 +150,8 @@
     <Content Include="content\img\img-home-species.jpg" />
     <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-mv-white.png" />
+    <Content Include="content\img\mm-pattern_80.jpg" />
+    <Content Include="content\img\sw-pattern.png" />
     <Content Include="content\js\app\map.js" />
     <Content Include="content\js\app\search.js" />
     <Content Include="content\js\app\images.js" />
@@ -328,6 +332,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Collections.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="content\scss\_reset.scss" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

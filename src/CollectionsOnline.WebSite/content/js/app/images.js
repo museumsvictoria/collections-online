@@ -7,8 +7,8 @@ module.exports = {
   },
   cacheElements: function () {
     this.Model = window.imagesModel;
-    this.$thumbs = $('#title .thumbnail');
-    this.$activeImage = $('#title .thumbnail img.active');
+    this.$thumbs = $('#objectthumbs .thumbnail');
+    this.$activeImage = $('#objectthumbs .thumbnail img.active');
     this.$heroImage = $('#media img');
     this.$heroCaption = $('#media .caption-text');
     this.$heroCreators = $('#media .creators');

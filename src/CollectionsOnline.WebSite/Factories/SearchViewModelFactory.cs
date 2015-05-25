@@ -77,7 +77,12 @@ namespace CollectionsOnline.WebSite.Factories
                 }
 
                 if (facetViewModel.Values.Any())
+                {
+                    facetViewModel.Values = facetViewModel.Values.OrderByDescending(x => x.Hits).ToList();
+
                     searchIndexViewModel.Facets.Add(facetViewModel);
+                }
+                    
             }
 
             // Build ActiveFacets

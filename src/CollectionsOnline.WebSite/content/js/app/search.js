@@ -18,6 +18,11 @@ module.exports = {
     
     // Search button
     this.$searchButton = $('.button-search');
+    
+    // Facets
+    this.$facets = $('.facetgroup h4');
+    
+     
   },
   bindEvents: function () {
     // Search pagination
@@ -28,6 +33,9 @@ module.exports = {
     
     // Search button
     this.$searchButton.on('click', this.toggleSearchButton.bind(this));
+    
+    // Facets
+    this.$facets.on('click', this.toggleFacets.bind(this));
   },
   gotoPage: function (e) {
     var page = $(e.target).val().replace(/\D/g, '');
@@ -53,5 +61,13 @@ module.exports = {
       $('#search-button-icon').toggleClass('icon-search-header');
       $('#search-button-icon').toggleClass('icon-search-close');
     }
+  },
+  toggleFacets: function (e) {
+    var facetHeading = $(e.target);
+    var facetGroup = facetHeading.parents('.facetgroup');
+    var facetItems = facetGroup.children('.facetitems');
+
+    facetHeading.toggleClass('collapsed');
+    facetItems.toggle();
   }
 };

@@ -11,38 +11,38 @@
         <div class="facets">
             @foreach (var facet in Model.Facets)
             {
+                var selectedFacets = "";
+                var unselectedFacets = "";
+                foreach (var value in facet.Values)
+                {
+                    var linkClass = "";
+                    if (string.Equals(value.Name, "item") || string.Equals(value.Name, "article") || string.Equals(value.Name, "species") || string.Equals(value.Name, "specimen"))
+                    {
+                        linkClass = value.Name;
+                    }
+                    if (value.Active)
+                    {
+                        selectedFacets += string.Format("<a href=\"{0}\" class=\"{3}\">{1} ({2})<span class=\"icon-close\" aria-hidden=\"true\"></span><span class=\"icon-label-hidden\">Remove facet</span></a>", value.Url, value.Name, value.Hits, linkClass);
+                    }
+                    else
+                    {
+
+                        unselectedFacets += string.Format("<a href=\"{0}\" class=\"{3}\">{1} <span class=\"badge\">({2})</span></a>", value.Url, value.Name, value.Hits, linkClass);
+                    }
+                }
                 <div class="facetgroup">
                     <div class="facetheader">
-                        <h4>@facet.Name</h4>
-                        @{
-                        var selectedFacets = "";
-                        var unselectedFacets = "";
-                        }
-                        @foreach (var value in facet.Values)
-                        {
-                            var linkClass = "";
-                            if (String.Equals(value.Name, "item") || String.Equals(value.Name, "article") || String.Equals(value.Name, "species") || String.Equals(value.Name, "specimen"))
-                            {
-                                linkClass = value.Name;
-                            }
-                            if (value.Active)
-                            {
-                               selectedFacets += String.Format("<a href=\"{0}\" class=\"{3}\">{1} ({2})<span class=\"icon-close\" aria-hidden=\"true\"></span><span class=\"icon-label-hidden\">Remove facet</span></a>",value.Url,value.Name, value.Hits, linkClass);
-                            }
-                            else
-                            {
+                        <h4 class="collapsed">@facet.Name</h4>
 
-                                unselectedFacets += String.Format("<a href=\"{0}\" class=\"{3}\">{1} <span class=\"badge\">({2})</span></a>", value.Url, value.Name, value.Hits,linkClass);
-                            }
-                        }
-                        @if (!String.IsNullOrEmpty(selectedFacets))
+                        @if (!string.IsNullOrEmpty(selectedFacets))
                         {
                             <div class="selected">
                                 @Html.Raw(selectedFacets)
                             </div>
                         }
                     </div>
-                    @if (!String.IsNullOrEmpty(unselectedFacets)) { 
+                    @if (!string.IsNullOrEmpty(unselectedFacets))
+                    { 
                       <div class="facetitems">
                         @Html.Raw(unselectedFacets)
                       </div>

@@ -54,11 +54,8 @@
                 Item
                 @Model.Item.RegistrationNumber            
             </span>
-            </br>
-            @Html.Raw(Model.Item.DisplayTitle)<br />
- 
+            @Html.Raw(Model.Item.DisplayTitle)
         </h1>
-       
     </div>
 </div>
 
@@ -94,7 +91,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLocalName))
                 {
                     <h3>Local Name</h3>
-                    <p>@Model.Item.IndigenousCulturesLocalName</p>
+                    <p>@Html.Raw(Model.Item.IndigenousCulturesLocalName)</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteratureCoverTitle))
                 {
@@ -867,7 +864,7 @@
             @if (Model.Item.MuseumLocation != null)
             {
           <aside class="side-content">              
-                <div class="on-display">
+                <div class="on-display @Model.Item.MuseumLocation.OnDisplayClass">
                     On display<br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
