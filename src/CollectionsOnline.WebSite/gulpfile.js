@@ -1,4 +1,4 @@
-/// <vs BeforeBuild='build-css, browserify' SolutionOpened='watch' />
+/// <vs AfterBuild='build-js, build-css' SolutionOpened='watch' />
 // Steps to build
 // 1. install node: http://nodejs.org/download/
 // 2. install gulp globally: npm install -g gulp

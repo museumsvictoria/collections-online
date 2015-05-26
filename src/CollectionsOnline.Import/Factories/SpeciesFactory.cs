@@ -199,8 +199,8 @@ namespace CollectionsOnline.Import.Factories
             {
                 species.DisplayTitle = new[]
                 {
-                    string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName) ? null : string.Format("<em>{0}</em>", species.Taxonomy.TaxonName),
-                    species.Taxonomy.CommonName
+                    species.Taxonomy.CommonName,
+                    string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName) ? null : string.Format("<em>{0}</em>", species.Taxonomy.TaxonName)
                 }.Concatenate(" ");
             }
 
