@@ -29,18 +29,17 @@ namespace CollectionsOnline.Import.Factories
             // Build a list the various image conversions used in the application
             _imageMediaJobs = new List<ImageMediaJob>
             {
-                //new ImageMediaJob
-                //{
-                //    FileDerivativeType = FileDerivativeType.Original,
-                //    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
-                //    Quality = 90
-                //},
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Original,
+                    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
+                    Quality = 90
+                },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Pad),
-                    BackgroundColor = Color.White,
-                    Quality = 60
+                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Crop),
+                    Quality = 70
                 },
                 //new ImageMediaJob
                 //{
@@ -110,6 +109,9 @@ namespace CollectionsOnline.Import.Factories
                             // Indirectly call graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
                             if (imageMediaJob.ResizeLayer.Upscale == false && (imageFactory.Image.Width < imageMediaJob.ResizeLayer.Size.Width || imageFactory.Image.Height < imageMediaJob.ResizeLayer.Size.Height))
                                 imageFactory.Brightness(0);
+
+                            if (imageMediaJob.ResizeLayer.ResizeMode == ResizeMode.Crop)
+                                imageFactory.EntropyCrop();
 
                             imageFactory
                                 .Resize(imageMediaJob.ResizeLayer)
