@@ -555,6 +555,7 @@ button.icon {
 	font-size: 14px;
 	line-height: 1.4em; 
 	border-bottom: 1px solid #e8e8e8;
+    overflow: hidden;
 	//padding: 1em;
 	& img 
 	{
@@ -1837,28 +1838,73 @@ button{
         direction: ltr;
         background-color: #f6f6f6;
         border-radius: 3px;
-        color: #666;
+        color: $colour-sidetext;
         padding: 15px 20px 20px;
 
         & h4 {
-            color: #454545;
+            color: $colour-bodytext-light;
             font-size: 17px;
             font-weight: 500;
             margin-bottom: 2px;
+        }
+        & a{
+            color:inherit;
         }
 
         & ul {
             padding-left: 10px;
             margin-bottom: 20px;
+            list-style: outside none none;
+            & li{
+			clear:	both;
+			
+			    & h5{ 
+				    color: #666;
+			        direction: ltr;
+			        float: left;
+			        font-size: 15px;
+			        font-weight: 400;
+			        line-height: 1.4em;
+			        margin: 0.6em 0;
+			        padding-left: 0;
+			        padding-right: 10px;
+			        width: 25%;
+			    }
+			    & p{
+				        direction: ltr;
+					    float: left;
+					    font-size: 15px;
+					    line-height: 1.4em;
+					    margin: 0.6em 0;
+					    padding-left: 10px;
+					    padding-right: 0;
+					    width: 75%;
+			
+			    }
+			    & a{
+				        border-bottom: 1px dotted;
+					    color: rgba(25, 102, 93, 0.95);
+					    white-space: nowrap;
+					    &:hover{
+						    border-bottom: 1px solid;
+					    color: rgba(25, 102, 93, 1);
+					    }
+			    }
+			
+		    }
+
         }
     }
 
     & h1 {
-        float: none;
+        float:none;
+        width:100%;
+        display:inline-block;
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 10px;
-        width: auto;
+        padding-right:10px;
+        font-weight:400;
     }
 
     & p {
@@ -1873,6 +1919,10 @@ button{
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 0px;
+        padding-right: 10px;
+        width: 100%;
+        font-weight: 400;
+        direction:ltr;
     }
 
     & h3 {
@@ -2249,7 +2299,7 @@ $padding-side: 3%;
     float: left;
     direction: ltr;
     margin-bottom: 25px;
-
+    color:$colour-bodytext;
     .collectionareas & {
         @include gridle (4);
         @include gridle (6, tablet);
@@ -2275,6 +2325,7 @@ $padding-side: 3%;
         display: block;
         padding: 10px $padding-side 20px $padding-side;
         font-size: 14px;
+        color:$colour-bodytext;
         background: $colour-background-title;
         height: 130px;
         direction: ltr;
@@ -2513,6 +2564,7 @@ footer {
 			font-size: 22px;
 			padding-bottom: 5px;
 			padding-left: 10px;
+            font-weight:400;
 	}
 	
 	& h2
@@ -2521,7 +2573,16 @@ footer {
 			font-size: 22px;
 			padding-bottom: 5px;
 			padding-left: 10px;
+            font-weight:400;
 	}
+
+    & h3{
+            clear: both;
+            font-size: 20px;
+            padding-left: 10px;
+            font-weight: 400;
+            line-height: 1.3em;
+    }
 	
 	& p
 	{
@@ -2529,6 +2590,7 @@ footer {
 		font-weight: 300;
 		margin-bottom: 1.5em;
 		padding-left: 10px;
+  
 		
 	}
 	
@@ -2538,6 +2600,10 @@ footer {
 		{
 			padding-bottom: 15px;
 		}
+        & h3
+        {
+            padding-bottom: 15px;
+        }
 	}
 	& .aboutcontent{
 		width:66.6667%;
@@ -2550,6 +2616,7 @@ footer {
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 0px;
+        font-weight:400;
     }
 
     & h2 {
@@ -2557,6 +2624,7 @@ footer {
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 0px;
+        font-weight:400;
     }
 
     & p {
@@ -2581,12 +2649,19 @@ footer {
             padding-left: 10px;
             padding-bottom: 15px;
         }
+
+        & .tile.full{
+            @include gridle(4);
+        }
+
     }
 
     & .sidecolumn {
         @include gridle(4);
         float: right;
         direction: ltr;
+        margin-bottom:20px;
+        overflow:hidden;
 
         & h4 {
             color: #454545;
@@ -2594,10 +2669,15 @@ footer {
             font-weight: 500;
             margin-bottom: 15px;
         }
-
+        & .socialcite{
+            background-color: $colour-background-lightest;
+            @include border-radius(3px);
+            color: #666;
+            padding: 15px 20px 20px;
+        }
         & .favorites {
             background-color: $colour-background-lightest;
-            border-radius: 3px;
+            @include border-radius(3px);
             color: #666;
             padding: 15px 20px 20px;
         }

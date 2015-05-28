@@ -7,8 +7,9 @@
     <aside class="side-column">
         <h2>API Methods</h2>
         @foreach (var apiOperationMetadata in @Model.OperationMetadata)
-        {
+        {   <h4>
             <a href="#@apiOperationMetadata.Name.ToLower()">@apiOperationMetadata.Name</a>
+            </h4>
             <ul>
                 @foreach (var metadata in apiOperationMetadata.Metadata)
                 {

@@ -36,51 +36,53 @@
                 <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Collection.CollectingArea)" class="seeall">See all items in this collection &gt;</a>
             }
         </div>
-        <aside class="cite-content">
-            <div class="side-column">
-                <div class="social">
-                    <h4>Share</h4>
-                    <div class="social-tools">
-                        <a class="icon" href="#">
-                            <span class="icon-facebook" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Facebook</span>
-                        </a>
-                        <a class="icon" href="#">
-                            <span class="icon-twitter" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Twitter</span>
-                        </a>
-                        <a class="icon" href="#">
-                            <span class="icon-pintrest" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Pintrest</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="cite">
-                    <h4>Cite this page</h4>
-                    <p>@Html.RenderCitation(Model.Collection)</p>
-                    @if (!string.IsNullOrWhiteSpace(Model.Collection.RightsStatement))
-                    {
-                        <h4>Rights</h4>
-                        <p>@Model.Collection.RightsStatement</p>
-                    }
-                    @if (Model.Collection.Authors.Any())
-                    {
-                        <h4>Authors</h4>
-                        <div class="authors">
-                            @foreach (var author in Model.Collection.Authors)
-                            {
-                                <div class="author">
-                                    <img src="@author.ProfileImage.Thumbnail.Uri" alt="@author.ProfileImage.AlternativeText" />
-                                    <span class="authorname">@author.FullName</span>
-                                    <span class="authorbio">@author.Biography</span>
-                                    <span style="clear: both; display: block"></span>
-                                </div>
-                            }
-			                <div class="clear"></div>
-                        </div>
-                    }
+    </div>
+   
+    <div class="sidecolumn">
+        <div class="socialcite">
+            <div class="social">
+                <h4>Share</h4>
+                <div class="social-tools">
+                    <a class="icon" href="#">
+                        <span class="icon-facebook" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Facebook</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-twitter" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Twitter</span>
+                    </a>
+                    <a class="icon" href="#">
+                        <span class="icon-pintrest" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Pintrest</span>
+                    </a>
                 </div>
             </div>
-        </aside>
-    </div>   
+            <div class="cite">
+                <h4>Cite this page</h4>
+                <p>@Html.RenderCitation(Model.Collection)</p>
+                @if (!string.IsNullOrWhiteSpace(Model.Collection.RightsStatement))
+                {
+                    <h4>Rights</h4>
+                    <p>@Model.Collection.RightsStatement</p>
+                }
+                @if (Model.Collection.Authors.Any())
+                {
+                    <h4>Authors</h4>
+                    <div class="authors">
+                        @foreach (var author in Model.Collection.Authors)
+                        {
+                            <div class="author">
+                                <img src="@author.ProfileImage.Thumbnail.Uri" alt="@author.ProfileImage.AlternativeText" />
+                                <span class="authorname">@author.FullName</span>
+                                <span class="authorbio">@author.Biography</span>
+                            </div>
+                        }
+                        <div class="clear"></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+ 
+
 </div>
