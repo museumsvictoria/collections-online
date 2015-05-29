@@ -56,7 +56,6 @@ namespace CollectionsOnline.Import.Imports
                                 };
             var associatedDocumentCount = 0;
 
-
             using (var documentSession = _documentStore.OpenSession())
             using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
             {
@@ -77,9 +76,7 @@ namespace CollectionsOnline.Import.Imports
 
                 // Exit current import if it had completed previous time it was run.
                 if (importStatus.IsFinished)
-                {
                     return;
-                }
 
                 _log.Debug("Starting {0} import", GetType().Name);
 
