@@ -1438,6 +1438,7 @@ button.icon {
             content: "";
             clear: both;
             padding-left: 10px;
+            width: 100%;
             //20/4/2015 - Removed for Design integration
            /* .item, .specimen, .article, .species {
                 float: left;
@@ -2646,7 +2647,7 @@ footer {
         margin-bottom: 50px;
 
         & h2 {
-            padding-left: 10px;
+            padding-left: 0px;
             padding-bottom: 15px;
         }
 

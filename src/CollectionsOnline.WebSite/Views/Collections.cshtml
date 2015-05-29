@@ -22,7 +22,7 @@
     </div>
     <div class="sidecolumn">
         <div class="favorites">
-            <h4>Our Curator's Favourite Items</h4>
+            <h4>Our Favourite Items</h4>
             @foreach (var favoriteItem in Model.FavoriteItems)
             {
                 @Html.Partial("emutile", favoriteItem)
@@ -67,7 +67,7 @@
                 }
                 @if (Model.Collection.Authors.Any())
                 {
-                    <h4>Authors</h4>
+                    <h4>Curators and Collection Managers</h4>
                     <div class="authors">
                         @foreach (var author in Model.Collection.Authors)
                         {
