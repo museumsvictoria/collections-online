@@ -29,17 +29,18 @@ namespace CollectionsOnline.Import.Factories
             // Build a list the various image conversions used in the application
             _imageMediaJobs = new List<ImageMediaJob>
             {
-                new ImageMediaJob
-                {
-                    FileDerivativeType = FileDerivativeType.Original,
-                    ResizeLayer = new ResizeLayer(new Size(2000, 2000), ResizeMode.Max, upscale:false),
-                    Quality = 90
-                },
+                //new ImageMediaJob
+                //{
+                //    FileDerivativeType = FileDerivativeType.Original,
+                //    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
+                //    Quality = 90
+                //},
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Crop),
-                    Quality = 70
+                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Pad),
+                    BackgroundColor = Color.White,
+                    Quality = 60
                 },
                 //new ImageMediaJob
                 //{
