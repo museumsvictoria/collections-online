@@ -27,6 +27,8 @@ namespace CollectionsOnline.Core.Models
         public string Significance { get; set; }
 
         public string CollectionSummary { get; set; }
+
+        public string Category { get; set; }
         
         public string RightsStatement { get; set; }
 
