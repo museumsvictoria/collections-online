@@ -669,6 +669,7 @@ button.icon {
                 margin:0;
                 padding:0;
                 list-style:none;
+                overflow:hidden;
             }
 
           &  li {
@@ -682,7 +683,7 @@ button.icon {
                     color:$colour-sidetext;
                     line-height:1.4em;
                     margin:10px 0 0;
-                    color: #666;
+                    color:  $colour-sidetext;
                     padding-right: 10px;
                     padding-bottom: 0px;
                 }
@@ -716,7 +717,7 @@ button.icon {
     background-color: $colour-background-lightest;
     border-radius: 3px;
     padding: 15px 20px 20px;
-    color: #666;
+    color:  $colour-sidetext;
     }
 
 
@@ -1004,8 +1005,14 @@ button.icon {
     .related-link {
 		 float:right;
 		 font-weight: 300;
-		 text-decoration: underline;
 		 font-size: 18px;
+          & a {
+             color: $colour-sidetext;
+         }
+         & a:hover {
+             text-decoration:underline;
+         }
+
     }
 }
 
@@ -1039,6 +1046,14 @@ button.icon {
 #search {
    @include display-flex();
    margin-top:-70px;
+    @include gridle_state(tablet){
+       display:block;
+       margin-top:0px;
+   }
+   @include gridle_state(mobile){
+       display:block;
+       margin-top:0px;
+   }
 
     #search-filter {
         background: $colour-background-lightest;
@@ -1879,7 +1894,7 @@ button{
 			clear:	both;
 			
 			    & h5{ 
-				    color: #666;
+				    color:  $colour-sidetext;
 			        direction: ltr;
 			        float: left;
 			        font-size: 15px;
@@ -1974,7 +1989,7 @@ button{
         padding: 10px;
         background-color: #f6f6f6;
         border-radius: 3px;
-        color: #666;
+        color:  $colour-sidetext;
         direction: ltr;
     }
 
@@ -2097,11 +2112,15 @@ $padding-side: 3%;
 
     & .desc {
         //background-color: $colour-background-dark;
-        font-size: 14px;
-        font-weight: 200;
+        font-size: 15px;
+        font-weight: 300;
         padding: 10px 0px;
         color: $colour-heading-inverted;
         display: block;
+        @include gridle_state(tablet){
+            min-height:4.4em;
+        }
+
     }
 
     & .title {
@@ -2116,8 +2135,8 @@ $padding-side: 3%;
         padding: 35px $padding-side 20px $padding-side;
         font-size: 14px;
         background: $colour-background-title;
-        height: 125px;
-        ;
+        height: 145px;
+        
         direction: ltr;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -2132,6 +2151,9 @@ $padding-side: 3%;
         & .heading {
             font-weight: 500;
             color: $colour-heading;
+            height: 75px;
+            overflow:hidden;
+            display:block;
 
             .grid & {
                 display: none;
@@ -2211,7 +2233,7 @@ $padding-side: 3%;
 .tile-tag {
     direction: ltr;
     color: $colour-bodytext-inverted;
-    align-items: center;
+    @include alignitem-center;
     //border-top-left-radius: 3px;
     color: #fff;
     @include display-flex;
@@ -2273,6 +2295,13 @@ $padding-side: 3%;
 
         .tile.home & {
             font-size: 0.45em;
+            @include gridle_state(tablet){
+                @include alignitem-center;
+            }
+            @include gridle_state(mobile){
+                @include alignitem-center;
+            }
+
         }
 
         & .type {
@@ -2334,8 +2363,8 @@ $padding-side: 3%;
 
     & .desc {
         //background-color: $colour-background-dark;
-        font-size: 14px;
-        font-weight: 200;
+        font-size: 15px;
+        font-weight: 300;
         padding: 10px 0px;
         color: $colour-heading-inverted;
         display: block;
@@ -2371,6 +2400,10 @@ $padding-side: 3%;
 
         & .description {
             font-weight: 300;
+            height:75px;
+            overflow: hidden;
+            display: block;
+
         }
 
         .list & .heading {
@@ -2692,13 +2725,13 @@ footer {
         & .socialcite{
             background-color: $colour-background-lightest;
             @include border-radius(3px);
-            color: #666;
+            color: $colour-sidetext;
             padding: 15px 20px 20px;
         }
         & .favorites {
             background-color: $colour-background-lightest;
             @include border-radius(3px);
-            color: #666;
+            color:  $colour-sidetext;
             padding: 15px 20px 20px;
         }
 
@@ -2808,6 +2841,10 @@ footer {
 			    top: 0;
 			    width: 50%;
 			    height:100%;
+                @include alignitem-center;
+                @include flex-direction(column);
+                @include display-flex;
+
 			}
 		@include gridle-state('mobile'){
 				left:50%;
@@ -2815,6 +2852,10 @@ footer {
 			    top: 0;
 			    width: 50%;
 			    height:100%;
+                @include alignitem-center;
+                @include flex-direction(column);
+                @include display-flex;
+
 			}	
 			
 		}
@@ -2827,10 +2868,10 @@ footer {
 		display: block;
 		padding-left: 10px;
 		direction: ltr;
-		font-weight: 200;
+		font-weight: 300;
 		line-height: 22px;
 		margin-bottom: 25px;
-		font-size: 14px;
+		font-size: 15px;
 		line-height: 20px;
 		@include gridle-state('tablet'){
 			
@@ -2871,7 +2912,7 @@ footer {
 
 	& .tile.full{
 		@include gridle(3);
-		@include gridle(3,'tablet');
+		@include gridle(4,'tablet');
 		@include gridle(12, 'mobile');
 		
 	}
