@@ -45,9 +45,7 @@ header {
     color: $colour-highlight-green;
     font-weight: 600;
 
-    @include gridle_state(mobile) {
-        display: block;
-    }
+  
 }
 
 nav {
@@ -66,8 +64,8 @@ nav {
         padding: 0 20px;
         text-decoration: none;
        // @include gridle_hide("mobile");
-        @include gridle_hide("tablet");
-        @include gridle_hide("mobile");
+      //  @include gridle_hide("tablet");
+       // @include gridle_hide("mobile");
 
         &:hover {
             cursor: pointer;
@@ -93,8 +91,8 @@ nav {
     }
 
     .search-text{
-		@include gridle_hide("tablet");			
-	    @include gridle_hide("mobile");
+		//@include gridle_hide("tablet");			
+	    //@include gridle_hide("mobile");
 	}
 }
 
@@ -1580,12 +1578,19 @@ button.icon {
     position: relative;
     display: none;
     z-index:100;
-
+    clear:both;
     &.active {
         display: block;
         
         &.search{
+            clear:both;
             margin-left: 300px;
+            @include gridle_state(tablet){
+                margin-left:0px;
+            }
+            @include gridle_state(mobile){
+                margin-left:0px;
+            }
         }
     }
 }
@@ -1668,7 +1673,7 @@ button{
     height: 600px;
     @include display-flex();
     @include align-items-flex-end();
-
+    
     &.hero-image-1 {
         background: url("/content/img/bg-home-hero-birds.jpg") no-repeat center center;
     }
@@ -2037,6 +2042,7 @@ $padding-side: 3%;
 .tile {
 
     @include gridle ( 3 );
+    
     @include gridle ( 3, 'mobile' );
     @include gridle (6, 'tablet');
 
@@ -2066,6 +2072,7 @@ $padding-side: 3%;
         padding-left: 10px;
         padding-right: 10px;
         @include gridle (3);
+        width:284px;
         @include gridle (4, 'tablet');
         @include gridle ( 12, 'mobile' );
         float: left;
@@ -2130,6 +2137,7 @@ $padding-side: 3%;
             height: 0px;
             padding: 0px;
             overflow: visible;
+
         }
 
         padding: 35px $padding-side 20px $padding-side;
