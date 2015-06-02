@@ -1649,11 +1649,30 @@ button{
     }
 }
 
-#hero {
-    background: url("/content/img/img-home-birds.jpg") no-repeat center center;
+#hero {    
     height: 600px;
     @include display-flex();
     @include align-items-flex-end();
+
+    &.hero-image-1 {
+        background: url("/content/img/bg-home-hero-birds.jpg") no-repeat center center;
+    }
+
+    &.hero-image-2 {
+        background: url("/content/img/bg-home-hero-herpetology.jpg") no-repeat center center;
+    }
+
+    &.hero-image-3 {
+        background: url("/content/img/bg-home-hero-ic.jpg") no-repeat center center;
+    }
+    
+    &.hero-image-4 {
+        background: url("/content/img/bg-home-hero-ornithology.jpg") no-repeat center center;
+    }
+
+    &.hero-image-5 {
+        background: url("/content/img/bg-home-hero-paleontology.jpg") no-repeat center center;
+    }
 
     & .search-area {
         width: 100%;

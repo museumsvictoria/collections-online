@@ -32,7 +32,7 @@ namespace CollectionsOnline.Import.Factories
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Original,
-                    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
+                    ResizeLayer = new ResizeLayer(new Size(2000, 2000), ResizeMode.Max, upscale:false),
                     Quality = 90
                 },
                 new ImageMediaJob
@@ -109,9 +109,6 @@ namespace CollectionsOnline.Import.Factories
                             // Indirectly call graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
                             if (imageMediaJob.ResizeLayer.Upscale == false && (imageFactory.Image.Width < imageMediaJob.ResizeLayer.Size.Width || imageFactory.Image.Height < imageMediaJob.ResizeLayer.Size.Height))
                                 imageFactory.Brightness(0);
-
-                            if (imageMediaJob.ResizeLayer.ResizeMode == ResizeMode.Crop)
-                                imageFactory.EntropyCrop();
 
                             imageFactory
                                 .Resize(imageMediaJob.ResizeLayer)

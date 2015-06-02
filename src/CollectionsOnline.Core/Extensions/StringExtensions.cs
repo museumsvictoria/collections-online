@@ -36,7 +36,7 @@ namespace CollectionsOnline.Core.Extensions
 
         public static string Truncate(this string input, int maxChars)
         {
-            return input.Length <= maxChars ? input : input.Substring(0, maxChars) + " ..";
+            return input.Length <= maxChars ? input : input.Substring(0, maxChars) + " ...";
         }
 
         public static bool Contains(this string input, string valueToCheck, StringComparison comparisonType)

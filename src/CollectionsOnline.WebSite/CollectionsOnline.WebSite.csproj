@@ -141,8 +141,12 @@
     <Content Include="content\img\CreativeVictoriaLogo_Reversed.png" />
     <Content Include="content\img\im-pattern.png" />
     <Content Include="content\img\img-home-article.jpg" />
-    <Content Include="content\img\img-home-birds.jpg" />
     <Content Include="content\img\img-home-bunjilaka.jpg" />
+    <Content Include="content\img\bg-home-hero-birds.jpg" />
+    <Content Include="content\img\bg-home-hero-herpetology.jpg" />
+    <Content Include="content\img\bg-home-hero-ic.jpg" />
+    <Content Include="content\img\bg-home-hero-ornithology.jpg" />
+    <Content Include="content\img\bg-home-hero-paleontology.jpg" />
     <Content Include="content\img\img-home-immigration-museum.jpg" />
     <Content Include="content\img\img-home-item.jpg" />
     <Content Include="content\img\img-home-melbourne-museum.jpg" />

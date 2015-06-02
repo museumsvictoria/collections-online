@@ -22,6 +22,8 @@ namespace CollectionsOnline.Core.Config
         public static int SummaryMaxChars = 200;
 
         public static int HomeMaxRecentResults = 12;
+        
+        public static int HomeHeroBackgroundImages = 5;
 
         public static string ImuItemQueryString = "Collections Online: Humanities";
 
@@ -215,10 +217,6 @@ namespace CollectionsOnline.Core.Config
             {
                 new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "Planetarium", string.Empty, string.Empty),
                 new MuseumLocation { Gallery = "Planetarium", Venue = "Scienceworks" }
-            },
-            {
-                new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "Ground Level", "South", "Gallery"),
-                new MuseumLocation { Gallery = "Sportsworks", Venue = "Scienceworks" }
             },
             {
                 new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "Ground Level", "North", "Gallery"),

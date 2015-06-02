@@ -42,6 +42,7 @@ namespace CollectionsOnline.Import.Factories
                         "NarTitle",
                         "NarNarrative",
                         "NarNarrativeSummary",
+                        "DetNarrativeIdentifier",
                         "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "rights=NarRightsRef.(SummaryData)",
@@ -91,6 +92,8 @@ namespace CollectionsOnline.Import.Factories
                     sanitizedResult.HasRemovedAttribute);
 
             collection.CollectionSummary = map.GetEncodedString("NarNarrativeSummary");
+
+            collection.Category = map.GetEncodedString("DetNarrativeIdentifier");
 
             // Authors
             collection.Authors = map.GetMaps("authors")

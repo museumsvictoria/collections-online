@@ -72,7 +72,10 @@
                         @foreach (var author in Model.Collection.Authors)
                         {
                             <div class="author">
-                                <img src="@author.ProfileImage.Thumbnail.Uri" alt="@author.ProfileImage.AlternativeText" />
+                                @if (author.ProfileImage != null)
+                                {
+                                    <img src="@author.ProfileImage.Thumbnail.Uri" alt="@author.ProfileImage.AlternativeText" />
+                                }
                                 <span class="authorname">@author.FullName</span>
                                 <span class="authorbio">@author.Biography</span>
                             </div>
