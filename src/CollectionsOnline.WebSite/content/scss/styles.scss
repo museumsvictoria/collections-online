@@ -2098,6 +2098,9 @@ $padding-side: 3%;
         padding: 10px 0px;
         color: $colour-heading-inverted;
         display: block;
+        @include gridle_state(tablet){
+            min-height:4.4em;
+        }
     }
 
     & .title {
@@ -2271,6 +2274,14 @@ $padding-side: 3%;
 
         .tile.home & {
             font-size: 0.45em;
+
+            @include gridle_state(tablet){
+                @include alignitem-center;
+            }
+            @include gridle_state(mobile){
+                @include alignitem-center;
+            }
+
         }
 
         & .type {
@@ -2810,6 +2821,9 @@ footer {
 			    top: 0;
 			    width: 50%;
 			    height:100%;
+                @include alignitem-center;
+                @include flex-direction(column);
+                @include display-flex;
 			}
 		@include gridle-state('mobile'){
 				left:50%;
@@ -2817,6 +2831,9 @@ footer {
 			    top: 0;
 			    width: 50%;
 			    height:100%;
+                @include alignitem-center;
+                @include flex-direction(column);
+                @include display-flex;
 			}	
 			
 		}
