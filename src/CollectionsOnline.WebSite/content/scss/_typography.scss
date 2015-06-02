@@ -102,12 +102,18 @@
 
 .icon-filter:before {
     font-family: "mv-collections";
-    content: "\e602";
-    font-size: 1.3em;
+    content: "\e601";
+    font-size: 1.5em;
     // position: absolute;
     //right:10px;
 }
-
+.icon-filter-close:before {
+    font-family: "mv-collections";
+    content: "\e609";
+    font-size: 1.5em;
+    // position: absolute;
+    //right:10px;
+}
 .icon-download:before {
     font-family: "mv-collections";
     content: "\e60b";

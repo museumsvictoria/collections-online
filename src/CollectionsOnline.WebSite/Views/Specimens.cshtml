@@ -46,7 +46,7 @@
             </div>
         </div>
         <h1>
-            <span class="reg-number item">Specimen @Model.Specimen.RegistrationNumber</span>
+            <span class="reg-number specimen">Specimen @Model.Specimen.RegistrationNumber</span>
             @Html.Raw(Model.Specimen.DisplayTitle)
         </h1>
     </div>
@@ -92,7 +92,7 @@
                 }
             </div>
             <h2>Specimen Details</h2>
-            <li class="detail">
+            <div class="detail">
                 <ul>
                     @if (@Model.Specimen.CollectionNames.Any())
                     {

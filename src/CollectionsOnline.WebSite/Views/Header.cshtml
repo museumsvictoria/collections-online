@@ -3,7 +3,7 @@
     <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
     <nav>
         <a @((RenderContext.Context.ResolvedRoute.Description.Name == "collection-index") ? Html.Raw("class=\"active\"") : null) href="/collections">Our collections</a>
-        <a @((RenderContext.Context.ResolvedRoute.Description.Name == "developers-index") ? Html.Raw("class=\"active\"") : null) href="/developers">Developers</a>        
+        <a @((RenderContext.Context.ResolvedRoute.Description.Name == "developers-index") ? Html.Raw("class=\"active\"") : null) href="/developers">Our API</a>        
         @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
         {
             <a href="#" class="button-search @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? "search" : null)">
