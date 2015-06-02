@@ -24,23 +24,23 @@ namespace CollectionsOnline.WebSite.Queries
         {
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                var collectionIndexViewModel = new CollectionIndexViewModel
-                {
-                    Collections = _documentSession
-                        .Query<Collection>()                        
-                        .Take(50)
-                        .ToList()
-                };
-
-                collectionIndexViewModel.Collections = collectionIndexViewModel.Collections
-                    .Where(x => x.Media.Any())
+                var collections = _documentSession
+                    .Query<Collection>()
                     .ToList();
 
-                foreach (var collection in collectionIndexViewModel.Collections)
+                foreach (var collection in collections.Where(x => !string.IsNullOrWhiteSpace(x.Summary)))
                 {
                     collection.Summary = collection.Summary.Truncate(Constants.SummaryMaxChars);
                 }
 
+                // Todo : move linq query to an index
+                var collectionIndexViewModel = new CollectionIndexViewModel
+                {
+                    Collections = collections
+                        .Where(x => x.Media.Any() && x.IsHidden == false)
+                        .GroupBy(x => x.Category)
+                };
+                
                 return collectionIndexViewModel;
             }
         }
@@ -50,7 +50,6 @@ namespace CollectionsOnline.WebSite.Queries
             var result = _documentSession.Load<CollectionViewTransformer, CollectionViewTransformerResult>(collectionId);
 
             return result;
-
         }
     }
 }

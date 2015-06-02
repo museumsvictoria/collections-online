@@ -19,7 +19,7 @@ namespace CollectionsOnline.Core.Config
 
         public static int SuggestionsMinResultsSize = 15;
 
-        public static int SummaryMaxChars = 200;
+        public static int SummaryMaxChars = 120;
 
         public static int HomeMaxRecentResults = 12;
         

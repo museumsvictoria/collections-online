@@ -21,17 +21,21 @@
     <div class="collections">
         <h2>Collections</h2>
         <div class="collections">
-            @foreach (var collection in Model.Collections)
+            @foreach (var collectionGroup in Model.Collections)
             {
-                <div class="collectiontile">
-                    <a href="/@collection.Id">
-                    <img src="@collection.ThumbnailUri" />
-                    <span class="title">
-                        <span class="heading">@collection.DisplayTitle</span>
-                        <span class="description">@collection.Summary</span>
-                    </span>
-                    </a>
-                </div>
+                <h3>@collectionGroup.Key</h3>
+                foreach (var collection in collectionGroup)
+                {
+                    <div class="collectiontile">
+                        <a href="/@collection.Id">
+                            <img src="@collection.ThumbnailUri" />
+                            <span class="title">
+                                <span class="heading">@collection.DisplayTitle</span>
+                                <span class="description">@collection.Summary</span>
+                            </span>
+                        </a>
+                    </div>
+                }
             }
         </div>
     </div>
