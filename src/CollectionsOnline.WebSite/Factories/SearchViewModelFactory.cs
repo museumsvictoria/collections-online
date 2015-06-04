@@ -82,7 +82,6 @@ namespace CollectionsOnline.WebSite.Factories
 
                     searchIndexViewModel.Facets.Add(facetViewModel);
                 }
-                    
             }
 
             // Build ActiveFacets

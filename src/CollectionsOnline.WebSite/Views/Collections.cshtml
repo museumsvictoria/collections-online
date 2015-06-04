@@ -3,8 +3,7 @@
 @{
     Layout = "Layout.cshtml";
 }
-<div class="abouthero">
-    <img src="/content/img/about-hero-image.jpg" alt="several groups of men on horse carriages" />
+<div class="abouthero @Model.Collection.Category.ToClass()">    
 </div>
 <div id="collarea" class="container">
     <div class="colldesc">
@@ -12,13 +11,16 @@
         <p>@Html.ConvertNewlines(Model.Collection.CollectionSummary)</p>
         <h2>Significance</h2>
         @Html.Raw(Model.Collection.Significance)
-        <div class="subcoll">
-            <h2>Some key sub-collections</h2>
-            @foreach (var subCollectionArticle in Model.SubCollectionArticles)
-            {
-                @Html.Partial("emutile", subCollectionArticle)
-            }
-        </div>
+        @if (Model.SubCollectionArticles.Any())
+        {
+            <div class="subcoll">
+                <h2>Some key sub-collections</h2>
+                @foreach (var subCollectionArticle in Model.SubCollectionArticles)
+                {
+                    @Html.Partial("emutile", subCollectionArticle)
+                }
+            </div>
+        }
     </div>
     <div class="sidecolumn">
         <div class="favorites">
@@ -37,7 +39,6 @@
             }
         </div>
     </div>
-   
     <div class="sidecolumn">
         <div class="socialcite">
             <div class="social">
@@ -80,12 +81,9 @@
                                 <span class="authorbio">@author.Biography</span>
                             </div>
                         }
-                        <div class="clear"></div>
                     </div>
                 }
             </div>
         </div>
     </div>
- 
-
 </div>

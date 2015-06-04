@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using CollectionsOnline.Core.Extensions;
 
 namespace CollectionsOnline.Core.Factories
 {
@@ -23,10 +24,10 @@ namespace CollectionsOnline.Core.Factories
             value = value.Replace("&", "and");
 
             // 4 - Replace all the non-word characters with dashes
-            value = ReplaceNonWordWithDashes(value);
+            value = value.ReplaceNonWordWithDashes();
 
             // 5 - Trim to the max character length allowed, include entire words
-            value = TrimToMaxLength(value, maxLength);
+            value = value.TrimToMaxLength(maxLength, '-');
 
             // 6 - Trim the string of leading/trailing whitespace
             value = value.Trim(' ', '-');
@@ -56,52 +57,6 @@ namespace CollectionsOnline.Core.Factories
             }
 
             return (sb.ToString().Normalize(NormalizationForm.FormC));
-        }
-
-        private string ReplaceNonWordWithDashes(string title)
-        {
-            // Remove Apostrophe Tags
-            title = Regex.Replace(title, "[’'“”\"&]{1,}", "", RegexOptions.None);
-
-            // Replaces all non-alphanumeric character by a space
-            var builder = new StringBuilder();
-            for (int i = 0; i < title.Length; i++)
-            {
-                builder.Append(char.IsLetterOrDigit(title[i]) ? title[i] : ' ');
-            }
-
-            title = builder.ToString();
-
-            // Replace multiple spaces into a single dash
-            title = Regex.Replace(title, "[ ]{1,}", "-", RegexOptions.None);
-
-            return title;
-        }
-
-        private string TrimToMaxLength(string value, int maxLength)
-        {            
-            if (maxLength > 0)
-            {
-                var builder = new StringBuilder();
-
-                // Split string into words
-                foreach (var word in value.Split('-'))
-                {
-                    if (builder.Length + word.Length > maxLength)
-                    {
-                        if (builder.Length == 0)
-                            builder.Append(word);
-
-                        break;
-                    }
-
-                    builder.Append(word + '-');
-                }
-
-                value = builder.ToString();
-            }
-
-            return value;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace CollectionsOnline.Core.Models
         public string OnDisplayLocation {
             get
             {
-                if (string.Equals(Gallery, "Bunjilaka", StringComparison.OrdinalIgnoreCase))
+                if (Gallery.Contains("Bunjilaka"))
                     return "Bunjilaka";
                 if (string.Equals(Venue, "Melbourne Museum", StringComparison.OrdinalIgnoreCase))
                     return "Melbourne Museum";
@@ -23,27 +23,6 @@ namespace CollectionsOnline.Core.Models
                     return "Scienceworks";
                 if (string.Equals(Gallery, "Discovery Centre", StringComparison.OrdinalIgnoreCase))
                     return "Discovery Centre";
-
-                return null;
-            }
-        }
-
-        public string OnDisplayClass
-        {
-            get
-            {
-                if (string.Equals(Gallery, "Bunjilaka", StringComparison.OrdinalIgnoreCase))
-                    return "bunj";
-                if (string.Equals(Venue, "Melbourne Museum", StringComparison.OrdinalIgnoreCase))
-                    return "mm";
-                if (string.Equals(Venue, "Immigration Museum", StringComparison.OrdinalIgnoreCase))
-                    return "im";
-                if (string.Equals(Venue, "Royal Exhibition Building", StringComparison.OrdinalIgnoreCase))
-                    return "mm";
-                if (string.Equals(Venue, "Scienceworks", StringComparison.OrdinalIgnoreCase))
-                    return "sw";
-                if (string.Equals(Gallery, "Discovery Centre", StringComparison.OrdinalIgnoreCase))
-                    return "mm";
 
                 return null;
             }

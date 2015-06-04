@@ -136,10 +136,16 @@
   <ItemGroup>
     <Content Include="content\fonts\entypo-social.svg" />
     <Content Include="content\fonts\entypo.svg" />
-    <Content Include="content\img\about-hero-image.jpg" />
-    <Content Include="content\img\bunj-pattern.png" />
+    <Content Include="content\img\bg-collection-hero.jpg" />
+    <Content Include="content\img\bg-collection-hero-geology.jpg" />
+    <Content Include="content\img\bg-collection-hero-historical-studies.jpg" />
+    <Content Include="content\img\bg-collection-hero-indigenous-cultures.jpg" />
+    <Content Include="content\img\bg-collection-hero-palaeontology.jpg" />
+    <Content Include="content\img\bg-collection-hero-technology-and-society.jpg" />
+    <Content Include="content\img\bg-collection-hero-zoology.jpg" />
+    <Content Include="content\img\bg-on-display-bunjilaka.png" />
     <Content Include="content\img\CreativeVictoriaLogo_Reversed.png" />
-    <Content Include="content\img\im-pattern.png" />
+    <Content Include="content\img\bg-on-display-immigration-museum.png" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-bunjilaka.jpg" />
     <Content Include="content\img\bg-home-hero-birds.jpg" />
@@ -154,8 +160,8 @@
     <Content Include="content\img\img-home-species.jpg" />
     <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-mv-white.png" />
-    <Content Include="content\img\mm-pattern_80.jpg" />
-    <Content Include="content\img\sw-pattern.png" />
+    <Content Include="content\img\bg-on-display-melbourne-museum.jpg" />
+    <Content Include="content\img\bg-on-display-scienceworks.png" />
     <Content Include="content\js\app\map.js" />
     <Content Include="content\js\app\search.js" />
     <Content Include="content\js\app\images.js" />
@@ -168,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
     <Compile Include="Factories\DevelopersViewModelFactory.cs" />
     <Compile Include="Infrastructure\AutomapperConfig.cs" />

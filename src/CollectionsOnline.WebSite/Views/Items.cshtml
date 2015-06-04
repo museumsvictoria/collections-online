@@ -859,19 +859,16 @@
                 </ul>
             </div>
         </section>
-
-
-            @if (Model.Item.MuseumLocation != null)
-            {
-          <aside class="side-content">              
-                <div class="on-display @Model.Item.MuseumLocation.OnDisplayClass">
+        @if (Model.Item.MuseumLocation != null)
+        {
+            <aside class="side-content">              
+                <div class="on-display @Model.Item.MuseumLocation.OnDisplayLocation.ToClass()">
                     On display<br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
                 </div>
-             </aside>           
-            }
-
+                </aside>           
+        }
         <aside class="side-content">
             <div class="sidecolumn">
                 <div class="social">

@@ -554,7 +554,12 @@ button.icon {
 	line-height: 1.4em; 
 	border-bottom: 1px solid #e8e8e8;
     overflow: hidden;
-	//padding: 1em;
+	
+    &:last-child {
+        border:0;
+        margin-bottom:0;
+    }
+
 	& img 
 	{
 		float:left;
@@ -587,9 +592,7 @@ button.icon {
     margin: 0 0 20px;
  
 	}
-
 }
-
 
 #record {    
     //font-weight:300;
@@ -759,29 +762,37 @@ button.icon {
         margin: 0 0 20px;
         padding: 15px 20px 20px;
 	    color: $colour-heading-inverted;
-	        &.mm{
-		        background:url("/content/img/mm-pattern_80.jpg");
-		        //background: rgba(26, 85, 166, 0.7);
+	
+            &.melbourne-museum {
+		        background:url("/content/img/bg-on-display-melbourne-museum.jpg");
 	        }
 	
-	        &.bunj{
-		        background:url("/content/img/bunj-pattern.png");
+	        &.bunjilaka {
+		        background:url("/content/img/bg-on-display-bunjilaka.png");
 	        }
 	
-	        &.im{
-		        background:url("/content/img/im-pattern.png");
+	        &.immigration-museum {
+		        background:url("/content/img/bg-on-display-immigration-museum.png");
 	        }
-	        &.sw{
-		        background:url("/content/img/sw-pattern.png");
+    
+            &.royal-exhibition-building {
+		        background:url("/content/img/bg-on-display-melbourne-museum.jpg");
 	        }
-	
+
+	        &.scienceworks {
+		        background:url("/content/img/bg-on-display-scienceworks.png");
+	        }
+
+            &.discovery-centre {
+		        background:url("/content/img/bg-on-display-melbourne-museum.jpg");
+	        }
+
 	        & .gallery{
 		        font-weight: 300;
 	        }
 	        & .venue{
 		        font-weight: 400;
 	        }
-	
 	        & h2{
 		           font-size: 22px;
 		           font-weight: 400;
@@ -2394,7 +2405,7 @@ $padding-side: 3%;
 
     & .title {
         display: block;
-        padding: 10px $padding-side 20px $padding-side;
+        padding: 10px $padding-side 10px $padding-side;
         font-size: 14px;
         color:$colour-bodytext;
         background: $colour-background-title;
@@ -2420,12 +2431,9 @@ $padding-side: 3%;
             font-weight: 500;
         }
 
-        & .description {
+        .description {
             font-weight: 300;
-            height:75px;
-            overflow: hidden;
             display: block;
-
         }
 
         .list & .heading {
@@ -2621,6 +2629,32 @@ footer {
     display:block;
     width:100%;
     margin-bottom: 50px;
+    height:300px;
+    background: url("/content/img/bg-collection-hero.jpg") no-repeat center center / cover;
+
+    &.geology {
+        background: url("/content/img/bg-collection-hero-geology.jpg") no-repeat center center;
+    }
+
+    &.historical-studies {
+        background: url("/content/img/bg-collection-hero-historical-studies.jpg") no-repeat center center;
+    }
+
+    &.indigenous-cultures {
+        background: url("/content/img/bg-collection-hero-indigenous-cultures.jpg") no-repeat center center;
+    }
+
+    &.palaeontology {
+        background: url("/content/img/bg-collection-hero-palaeontology.jpg") no-repeat center center;
+    }
+
+    &.technology-and-society {
+        background: url("/content/img/bg-collection-hero-technology-and-society.jpg") no-repeat center center;
+    }
+
+    &.zoology {
+        background: url("/content/img/bg-collection-hero-zoology.jpg") no-repeat center center;
+    }
 
     & img {
 	    width:100%;

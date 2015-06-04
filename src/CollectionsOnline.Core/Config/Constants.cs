@@ -108,11 +108,11 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Ground Level", "East", "Gallery 8"),
-                new MuseumLocation { Gallery = "First Peoples", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Bunjilaka - First Peoples", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Ground Level", "East", "Gallery 9"),
-                new MuseumLocation { Gallery = "Kalaya & Milarri Gardens", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Bunjilaka - Kalaya & Milarri Gardens", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Level 1", "East", "Gallery 7"),

@@ -501,7 +501,6 @@
                     @Html.Partial("Taxonomy", Model.Specimen.Taxonomy)
                 </ul>
                 <h3 class="sub-heading">Geospatial Information</h3>
-
                 <div>
                     <div id="mapdata">
                         <ul>
@@ -590,8 +589,6 @@
                                         @for (int i = 0; i < Model.Specimen.Latitudes.Count; i++)
                                         {
                                             @Model.Specimen.Latitudes[i]@(i != Model.Specimen.Latitudes.Count - 1 ? ";" : "")
-
-
                                         }
                                     </p>
                                 </li>
@@ -710,11 +707,12 @@
                     </div>
                     <div id="map"></div>
                 </div>
+            </div>
         </section>
         @if (Model.Specimen.MuseumLocation != null)
         {
             <aside class="side-content">
-                <div class="on-display @Model.Specimen.MuseumLocation.OnDisplayClass">
+                <div class="on-display @Model.Specimen.MuseumLocation.OnDisplayLocation.ToClass()">
                     On display<br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Gallery)">@Model.Specimen.MuseumLocation.Gallery</a><br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Venue)">@Model.Specimen.MuseumLocation.Venue</a>

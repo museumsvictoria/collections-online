@@ -34,10 +34,37 @@ namespace CollectionsOnline.Core.Extensions
             return Regex.Replace(input.ToLower(), @"(?<=(^|[.;:])\s*)[a-z]", (match) => match.Value.ToUpper());
         }
 
-        public static string Truncate(this string input, int maxChars)
+        public static string Truncate(this string input, int maxLength)
         {
-            return input.Length <= maxChars ? input : input.Substring(0, maxChars) + " ...";
+            return input.Length <= maxLength ? input : input.TrimToMaxLength(maxLength, ' ') + " ...";
         }
+
+        public static string TrimToMaxLength(this string input, int maxLength, char separator)
+        {            
+            if (maxLength > 0)
+            {
+                var builder = new StringBuilder();
+
+                // Split string into words
+                foreach (var word in input.Split(separator))
+                {
+                    if (builder.Length + word.Length > maxLength)
+                    {
+                        if (builder.Length == 0)
+                            builder.Append(word);
+
+                        break;
+                    }
+
+                    builder.Append(word + separator);
+                }
+
+                input = builder.ToString();
+            }
+
+            return input;
+        }
+
 
         public static bool Contains(this string input, string valueToCheck, StringComparison comparisonType)
         {
@@ -79,6 +106,26 @@ namespace CollectionsOnline.Core.Extensions
 
             // Remove plural shorthand
             input = input.Replace("(s)", "");
+
+            return input;
+        }
+
+        public static string ReplaceNonWordWithDashes(this string input)
+        {
+            // Remove Apostrophe Tags
+            input = Regex.Replace(input, "[’'“”\"&]{1,}", "", RegexOptions.None);
+
+            // Replaces all non-alphanumeric character by a space
+            var builder = new StringBuilder();
+            for (int i = 0; i < input.Length; i++)
+            {
+                builder.Append(char.IsLetterOrDigit(input[i]) ? input[i] : ' ');
+            }
+
+            input = builder.ToString();
+
+            // Replace multiple spaces into a single dash
+            input = Regex.Replace(input, "[ ]{1,}", "-", RegexOptions.None);
 
             return input;
         }
