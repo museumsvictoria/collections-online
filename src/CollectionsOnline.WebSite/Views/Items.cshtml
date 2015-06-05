@@ -712,11 +712,11 @@
                             </p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.ScientificName))
+                    @if (Model.Item.Taxonomy != null)
                     {
                         <li>
-                            <h3>Scientific Name</h3>
-                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.ScientificNameText)">@Html.Raw(Model.Item.ScientificName)</a></p>
+                            <h3>Taxon Name</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Item.Taxonomy.TaxonName)">@Model.Item.Taxonomy.TaxonName</a></p>
                         </li>
                     }
                     @if (Model.Item.Taxonomy != null && !string.IsNullOrWhiteSpace(Model.Item.Taxonomy.Author))

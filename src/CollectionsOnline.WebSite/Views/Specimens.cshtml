@@ -106,11 +106,11 @@
                             </p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificName))
+                    @if (Model.Specimen.Taxonomy != null)
                     {
                         <li>
-                            <h3>Scientific Name</h3>
-                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.ScientificNameText)">@Html.Raw(Model.Specimen.ScientificName)</a></p>
+                            <h3>Taxon Name</h3>
+                            <p><a href="/search?taxon=@HttpUtility.UrlEncode(Model.Specimen.Taxonomy.TaxonName)">@Model.Specimen.Taxonomy.TaxonName</a></p>
                         </li>
                     }
                     @if (Model.Specimen.Taxonomy != null && !string.IsNullOrWhiteSpace(Model.Specimen.Taxonomy.Author))

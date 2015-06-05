@@ -517,13 +517,6 @@ namespace CollectionsOnline.Import.Factories
 
                 if (taxonomyMap != null)
                 {
-                    // Scientific Name
-                    item.ScientificName = _taxonomyFactory.MakeScientificName(item.QualifierRank,
-                        item.Qualifier, item.Taxonomy.Genus, item.Taxonomy.Subgenus,
-                        item.Taxonomy.Species, item.Taxonomy.Subspecies, item.Taxonomy.Author);
-
-                    item.ScientificNameText = HtmlConverter.HtmlToText(item.ScientificName);
-
                     // Species profile Relationship
                     var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
                     item.RelatedSpeciesIds.AddRange(relatedSpeciesMaps

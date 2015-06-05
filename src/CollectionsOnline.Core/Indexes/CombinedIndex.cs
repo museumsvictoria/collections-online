@@ -78,7 +78,7 @@ namespace CollectionsOnline.Core.Indexes
                     Id = item.Id,
                     DisplayTitle = item.DisplayTitle,
                     SubDisplayTitle = item.RegistrationNumber,
-                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber, item.ObjectSummary, item.PhysicalDescription },
+                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber, item.RegistrationNumber.Replace(" ", ""), item.ObjectSummary, item.PhysicalDescription },
                     Summary = item.Summary,
                     ThumbnailUri = item.ThumbnailUri,
 
@@ -141,8 +141,7 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = item.ArcheologyTechnique,
                     Denomination = new object[] { item.NumismaticsDenomination, item.PhilatelyDenomination },
                     Habitat = new object[] { },
-                    Taxon = new object[] { item.ScientificNameText,
-                        item.Taxonomy.Kingdom,
+                    Taxon = new object[] { item.Taxonomy.Kingdom,
                         item.Taxonomy.Phylum,
                         item.Taxonomy.Subphylum,
                         item.Taxonomy.Superclass,
@@ -184,7 +183,7 @@ namespace CollectionsOnline.Core.Indexes
                             (species.Taxonomy != null)
                             ? new object[]
                             {
-                                species.Taxonomy.Kingdom, species.Taxonomy.Phylum, species.Taxonomy.Subphylum,
+                                species.Taxonomy.TaxonName, species.Taxonomy.Kingdom, species.Taxonomy.Phylum, species.Taxonomy.Subphylum,
                                 species.Taxonomy.Superclass, species.Taxonomy.Class, species.Taxonomy.Subclass,
                                 species.Taxonomy.Superorder, species.Taxonomy.Order, species.Taxonomy.Suborder,
                                 species.Taxonomy.Infraorder, species.Taxonomy.Superfamily, species.Taxonomy.Family,
@@ -264,19 +263,20 @@ namespace CollectionsOnline.Core.Indexes
                     SubDisplayTitle = specimen.RegistrationNumber,
                     Content = new object[]
                     {
-                        specimen.RegistrationNumber, specimen.ScientificGroup, specimen.Category, specimen.CollectionNames, specimen.Discipline,
+                        specimen.ObjectName, specimen.Discipline, specimen.RegistrationNumber, specimen.RegistrationNumber.Replace(" ", ""), specimen.ObjectSummary,
+                        specimen.ScientificGroup, specimen.Category, specimen.CollectionNames, specimen.Discipline,
                         specimen.Sex, specimen.StageOrAge, specimen.Storages.Select(x => string.Format("{0} {1} {2} {3}", x.FixativeTreatment, x.Form, x.Medium, x.Nature)),
                         (specimen.Taxonomy != null)
                             ? new object[]
                             {
-                                specimen.Taxonomy.Kingdom, specimen.Taxonomy.Phylum, specimen.Taxonomy.Subphylum,
+                                specimen.Taxonomy.TaxonName, specimen.Taxonomy.Kingdom, specimen.Taxonomy.Phylum, specimen.Taxonomy.Subphylum,
                                 specimen.Taxonomy.Superclass, specimen.Taxonomy.Class, specimen.Taxonomy.Subclass,
                                 specimen.Taxonomy.Superorder, specimen.Taxonomy.Order, specimen.Taxonomy.Suborder,
                                 specimen.Taxonomy.Infraorder, specimen.Taxonomy.Superfamily, specimen.Taxonomy.Family,
                                 specimen.Taxonomy.Subfamily, specimen.Taxonomy.CommonName, specimen.Taxonomy.OtherCommonNames
                             }
                             : null,
-                        specimen.ScientificNameText, specimen.TypeStatus, specimen.ExpeditionName, specimen.CollectionEventCode,
+                        specimen.TypeStatus, specimen.ExpeditionName, specimen.CollectionEventCode,
                         specimen.SamplingMethod, specimen.CollectedBy, specimen.SiteCode, specimen.Ocean, specimen.Continent,
                         specimen.Country, specimen.State, specimen.District, specimen.Town, specimen.NearestNamedPlace,
                         specimen.PreciseLocation, specimen.GeologyEra, specimen.GeologyPeriod, specimen.GeologyEpoch,
@@ -296,7 +296,7 @@ namespace CollectionsOnline.Core.Indexes
                         ((specimen.DateVisitedFrom.HasValue || !string.IsNullOrWhiteSpace(specimen.CollectedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
                         ((specimen.Latitudes.Any() || specimen.Longitudes.Any()) ? 1 : 0) +
                         Math.Log(specimen.Media.Count + 2, 2) +
-                        ((!string.IsNullOrWhiteSpace(specimen.ScientificName)) ? 1 : 0),
+                        ((specimen.Taxonomy != null) ? 1 : 0),
                     DateModified = specimen.DateModified.Date,
 
                     // Facet fields
@@ -334,8 +334,7 @@ namespace CollectionsOnline.Core.Indexes
                     Technique = (string)null,
                     Denomination = new object[] { },
                     Habitat = new object[] { },
-                    Taxon = new object[] { specimen.ScientificNameText,
-                        specimen.Taxonomy.Kingdom,
+                    Taxon = new object[] { specimen.Taxonomy.Kingdom,
                         specimen.Taxonomy.Phylum,
                         specimen.Taxonomy.Subphylum,
                         specimen.Taxonomy.Superclass,

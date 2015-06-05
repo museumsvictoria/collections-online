@@ -20,8 +20,6 @@ namespace CollectionsOnline.Core.Models
 
         public string DisplayTitle { get; set; }
 
-        public string ScientificNameText { get; set; }
-
         #endregion
 
         public DateTime DateModified { get; set; }
@@ -279,8 +277,6 @@ namespace CollectionsOnline.Core.Models
         public QualifierRankType QualifierRank { get; set; }
 
         public Taxonomy Taxonomy { get; set; }
-
-        public string ScientificName { get; set; }
 
         #endregion
 

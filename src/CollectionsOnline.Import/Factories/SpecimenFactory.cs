@@ -9,7 +9,6 @@ using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
-using CollectionsOnline.Import.Utilities;
 using IMu;
 using NLog;
 using Raven.Abstractions.Extensions;
@@ -282,13 +281,6 @@ namespace CollectionsOnline.Import.Factories
 
                 if (taxonomyMap != null)
                 {
-                    // Scientific Name
-                    specimen.ScientificName = _taxonomyFactory.MakeScientificName(specimen.QualifierRank,
-                        specimen.Qualifier, specimen.Taxonomy.Genus, specimen.Taxonomy.Subgenus,
-                        specimen.Taxonomy.Species, specimen.Taxonomy.Subspecies, specimen.Taxonomy.Author);
-
-                    specimen.ScientificNameText = HtmlConverter.HtmlToText(specimen.ScientificName);
-
                     // Species profile Relationship
                     var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
                     specimen.RelatedSpeciesIds.AddRange(relatedSpeciesMaps
@@ -552,10 +544,17 @@ namespace CollectionsOnline.Import.Factories
                 specimen.DisplayTitle = specimen.PetrologyRockName;
             else if (string.Equals(specimen.Discipline, "Mineralogy", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MineralogySpecies))
                 specimen.DisplayTitle = specimen.MineralogySpecies;
-            else if (!string.IsNullOrWhiteSpace(specimen.ScientificName))
-                specimen.DisplayTitle = specimen.ScientificName;
             else if (specimen.Taxonomy != null)
-                specimen.DisplayTitle = specimen.Taxonomy.TaxonName;
+            {
+                var scientificName = _taxonomyFactory.MakeScientificName(specimen.QualifierRank,
+                    specimen.Qualifier, specimen.Taxonomy.Genus, specimen.Taxonomy.Subgenus,
+                    specimen.Taxonomy.Species, specimen.Taxonomy.Subspecies, specimen.Taxonomy.Author);
+
+                if (!string.IsNullOrWhiteSpace(specimen.Taxonomy.TaxonName))
+                    specimen.DisplayTitle = scientificName;
+                else if (!string.IsNullOrWhiteSpace(specimen.Taxonomy.TaxonName))
+                    specimen.DisplayTitle = specimen.Taxonomy.TaxonName;
+            }
 
             specimen.DisplayTitle = new[]
             {
