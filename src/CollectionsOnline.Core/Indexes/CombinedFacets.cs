@@ -17,7 +17,7 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
-                    Name = x => x.Type
+                    Name = x => x.RecordType
                 },
                 new Facet<CombinedIndexResult>
                 {

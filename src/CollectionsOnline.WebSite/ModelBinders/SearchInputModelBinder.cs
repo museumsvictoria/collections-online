@@ -42,8 +42,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
 
             // Facets
             searchInputModel.Facets = new Dictionary<string, string>();
-            if(query.Type.HasValue)
-                searchInputModel.Facets.Add("Type", query.Type);
+            if(query.RecordType.HasValue)
+                searchInputModel.Facets.Add("RecordType", query.RecordType);
             if (query.Category.HasValue)
                 searchInputModel.Facets.Add("Category", query.Category);
             if (query.HasImages.HasValue)

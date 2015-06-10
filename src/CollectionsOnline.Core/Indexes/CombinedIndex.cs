@@ -36,7 +36,7 @@ namespace CollectionsOnline.Core.Indexes
                     DateModified = article.DateModified.Date,
 
                     // Facet fields
-                    Type = "Article",
+                    RecordType = "Article",
                     Category = (string)null,
                     HasImages = (article.Media.Any()) ? "Yes" : "No",
                     DisplayLocation = new object[] { },
@@ -90,7 +90,7 @@ namespace CollectionsOnline.Core.Indexes
                     DateModified = item.DateModified.Date,
 
                     // Facet fields
-                    Type = "Item",
+                    RecordType = "Item",
                     Category = item.Category,
                     HasImages = (item.Media.Any()) ? "Yes" : "No",
                     DisplayLocation = new object[] { item.MuseumLocation.OnDisplayLocation, item.MuseumLocation != null ? "All venues" : (string)null },
@@ -204,7 +204,7 @@ namespace CollectionsOnline.Core.Indexes
                     DateModified = species.DateModified.Date,
 
                     // Facet fields
-                    Type = "Species",
+                    RecordType = "Species",
                     Category = "Natural Sciences",
                     HasImages = (species.Media.Any()) ? "Yes" : "No",
                     DisplayLocation = new object[] { },
@@ -300,7 +300,7 @@ namespace CollectionsOnline.Core.Indexes
                     DateModified = specimen.DateModified.Date,
 
                     // Facet fields
-                    Type = "Specimen",
+                    RecordType = "Specimen",
                     Category = specimen.Category,
                     HasImages = (specimen.Media.Any()) ? "Yes" : "No",
                     DisplayLocation = new object[] { specimen.MuseumLocation.OnDisplayLocation, specimen.MuseumLocation != null ? "All venues" : (string)null },
@@ -379,7 +379,7 @@ namespace CollectionsOnline.Core.Indexes
             Store(x => x.SubDisplayTitle, FieldStorage.Yes);
             Store(x => x.Summary, FieldStorage.Yes);
             Store(x => x.ThumbnailUri, FieldStorage.Yes);
-            Store(x => x.Type, FieldStorage.Yes);
+            Store(x => x.RecordType, FieldStorage.Yes);
             Store(x => x.Quality, FieldStorage.Yes);
 
             Sort(x => x.Quality, SortOptions.Double);
@@ -419,7 +419,7 @@ namespace CollectionsOnline.Core.Indexes
 
         /* facet fields */
 
-        public string Type { get; set; }
+        public string RecordType { get; set; }
 
         public string Category { get; set; }
 

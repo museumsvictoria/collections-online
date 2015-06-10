@@ -14,7 +14,7 @@ namespace CollectionsOnline.WebSite.Models
 
         public string ThumbnailUri { get; set; }
 
-        public string Type { get; set; }
+        public string RecordType { get; set; }
 
         public double Quality { get; set; }
 

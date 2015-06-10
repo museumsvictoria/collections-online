@@ -27,23 +27,23 @@ namespace CollectionsOnline.WebSite.Queries
                     .DocumentQuery<CombinedIndexResult, CombinedIndex>()
                     .ToFacets("facets/combinedFacets");
 
-                var typeFacet = facetResult.Results["Type"];
+                var recordTypeFacet = facetResult.Results["RecordType"];
 
-                if (typeFacet != null)
+                if (recordTypeFacet != null)
                 {
-                    var articleFacetItem = typeFacet.Values.FirstOrDefault(x => x.Range == "article");
+                    var articleFacetItem = recordTypeFacet.Values.FirstOrDefault(x => x.Range == "article");
                     if (articleFacetItem != null)
                         homeViewModel.ArticleCount = articleFacetItem.Hits;
 
-                    var itemFacetItem = typeFacet.Values.FirstOrDefault(x => x.Range == "item");
+                    var itemFacetItem = recordTypeFacet.Values.FirstOrDefault(x => x.Range == "item");
                     if (itemFacetItem != null)
                         homeViewModel.ItemCount = itemFacetItem.Hits;
 
-                    var speciesFacetItem = typeFacet.Values.FirstOrDefault(x => x.Range == "species");
+                    var speciesFacetItem = recordTypeFacet.Values.FirstOrDefault(x => x.Range == "species");
                     if (speciesFacetItem != null)
                         homeViewModel.SpeciesCount = speciesFacetItem.Hits;
 
-                    var specimenFacetItem = typeFacet.Values.FirstOrDefault(x => x.Range == "specimen");
+                    var specimenFacetItem = recordTypeFacet.Values.FirstOrDefault(x => x.Range == "specimen");
                     if (specimenFacetItem != null)
                         homeViewModel.SpecimenCount = specimenFacetItem.Hits;
                 }

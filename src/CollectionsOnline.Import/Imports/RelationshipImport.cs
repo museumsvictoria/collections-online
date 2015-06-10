@@ -60,7 +60,7 @@ namespace CollectionsOnline.Import.Imports
                         {
                             var relatedArticleIds = relatedDocumentSession
                                 .Query<object, CombinedIndex>()
-                                .Where(x => ((CombinedIndexResult) x).DisplayTitle.In(item.CollectionNames) && ((CombinedIndexResult) x).Type == "article")
+                                .Where(x => ((CombinedIndexResult) x).DisplayTitle.In(item.CollectionNames) && ((CombinedIndexResult) x).RecordType == "article")
                                 .Select(x => ((CombinedIndexResult) x).Id)
                                 .ToList();
                                                         
