@@ -27,17 +27,12 @@ module.exports = {
       var newImage = this.Model[$(e.target).parent().index()];
       
       this.$heroImage.attr('src', newImage.Large.Uri);
-      
-      if (newImage.Caption)
-        this.$heroCaption.html(newImage.Caption);
-      if (newImage.Creators.length > 0)
-        this.$heroCreators.text(newImage.Creators.join(', '));
-      if (newImage.Sources.length > 0)
-        this.$heroSources.text('Source: ' + newImage.Sources.join(', '));
-      if (newImage.Credit)
-        this.$heroCredit.text('Credit: ' + newImage.Credit);
-      if (newImage.Credit)
-        this.$heroRights.text('This image is: ' + newImage.Credit);
+
+      (newImage.Caption) ? this.$heroCaption.html(newImage.Caption) : this.$heroCaption.empty();
+      (newImage.Creators.length > 0) ? this.$heroCreators.text(newImage.Creators.join(', ')) : this.$heroCreators.empty();
+      (newImage.Sources.length > 0) ? this.$heroSources.text('Source: ' + newImage.Sources.join(', ')) : this.$heroSources.empty();
+      (newImage.Credit) ? this.$heroCredit.text('Credit: ' + newImage.Credit) : this.$heroCredit.empty();
+      (newImage.RightsStatement) ? this.$heroRights.text('This image is: ' + newImage.RightsStatement) : this.$heroRights.empty();
     }
   }
 };
