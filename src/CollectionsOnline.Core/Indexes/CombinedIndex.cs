@@ -363,7 +363,8 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.MineralogyClass,
                         specimen.MeteoritesClass,
                         specimen.MeteoritesGroup,
-                        specimen.TektitesClassification },
+                        specimen.TektitesClassification,
+                        specimen.MineralogySpecies },
                     MuseumLocation = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
                     Article = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title)
                 });

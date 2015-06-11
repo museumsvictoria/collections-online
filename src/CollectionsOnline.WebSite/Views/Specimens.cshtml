@@ -242,7 +242,7 @@
                     {
                         <li>
                             <h3>Species</h3>
-                            <p>@Model.Specimen.MineralogySpecies</p>
+                            <p><a href="/search?geotype=@HttpUtility.UrlEncode(Model.Specimen.MineralogySpecies)">@Model.Specimen.MineralogySpecies</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.MineralogyVariety))
@@ -712,7 +712,7 @@
         @if (Model.Specimen.MuseumLocation != null)
         {
             <aside class="side-content">
-                <div class="on-display @Model.Specimen.MuseumLocation.OnDisplayLocation.ToClass()">
+                <div class="on-display @Model.Specimen.MuseumLocation.DisplayLocation.ToClass()">
                     On display<br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Gallery)">@Model.Specimen.MuseumLocation.Gallery</a><br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Venue)">@Model.Specimen.MuseumLocation.Venue</a>
