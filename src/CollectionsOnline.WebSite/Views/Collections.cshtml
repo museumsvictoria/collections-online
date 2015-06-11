@@ -61,11 +61,18 @@
             <div class="cite">
                 <h4>Cite this page</h4>
                 <p>@Html.RenderCitation(Model.Collection)</p>
-                @if (!string.IsNullOrWhiteSpace(Model.Collection.RightsStatement))
-                {
-                    <h4>Rights</h4>
-                    <p>@Model.Collection.RightsStatement</p>
-                }
+                <h4>Rights</h4>
+                <p>
+                    Text on this page is licensed as
+                    <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
+                        <span class="icon-cc" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">CC</span>
+                    </a>
+                    <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
+                        <span class="icon-by" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">BY</span>
+                    </a>
+                </p>
                 @if (Model.Collection.Authors.Any())
                 {
                     <h4>Curators and Collection Managers</h4>

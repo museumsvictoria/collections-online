@@ -8,7 +8,7 @@ namespace CollectionsOnline.Core.Models
 
         public string Gallery { get; set; }
 
-        public string OnDisplayLocation {
+        public string DisplayLocation {
             get
             {
                 if (Gallery.Contains("Bunjilaka"))

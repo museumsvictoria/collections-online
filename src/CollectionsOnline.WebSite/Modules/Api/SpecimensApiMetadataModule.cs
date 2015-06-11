@@ -18,7 +18,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
             using (var documentSession = documentStore.OpenSession())
             {
                 var sampleSpecimen = documentSession.Advanced.DocumentQuery<Specimen, CombinedIndex>()
-                    .WhereEquals("Type", "Specimen")
+                    .WhereEquals("RecordType", "Specimen")
                     .FirstOrDefault();
 
                 Describe["specimens-api-index"] = description =>

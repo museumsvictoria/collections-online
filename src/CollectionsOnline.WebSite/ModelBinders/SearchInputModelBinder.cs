@@ -48,6 +48,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Facets.Add("Category", query.Category);
             if (query.HasImages.HasValue)
                 searchInputModel.Facets.Add("HasImages", query.HasImages);
+            if (query.OnDisplay.HasValue)
+                searchInputModel.Facets.Add("OnDisplay", query.OnDisplay);
             if (query.ItemType.HasValue)
                 searchInputModel.Facets.Add("ItemType", query.ItemType);
             if (query.SpeciesType.HasValue)
@@ -56,6 +58,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Facets.Add("SpeciesEndemicity", query.SpeciesEndemicity);
             if (query.SpecimenScientificGroup.HasValue)
                 searchInputModel.Facets.Add("SpecimenScientificGroup", query.SpecimenScientificGroup);
+            if (query.DisplayLocation.HasValue)
+                searchInputModel.Facets.Add("DisplayLocation", query.DisplayLocation);
 
             // Multi-select Facets
             searchInputModel.MultiFacets = new Dictionary<string, string[]>();
@@ -63,8 +67,6 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.MultiFacets.Add("ArticleType", ((string)query.ArticleType.Value).Split(','));
             if (query.CollectingArea.HasValue)
                 searchInputModel.MultiFacets.Add("CollectingArea", ((string)query.CollectingArea.Value).Split(','));
-            if (query.DisplayLocation.HasValue)
-                searchInputModel.MultiFacets.Add("DisplayLocation", ((string)query.DisplayLocation.Value).Split(','));
 
             // Terms
             searchInputModel.Terms = new Dictionary<string, string>();

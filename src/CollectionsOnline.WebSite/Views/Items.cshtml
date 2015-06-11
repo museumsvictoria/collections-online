@@ -862,7 +862,7 @@
         @if (Model.Item.MuseumLocation != null)
         {
             <aside class="side-content">              
-                <div class="on-display @Model.Item.MuseumLocation.OnDisplayLocation.ToClass()">
+                <div class="on-display @Model.Item.MuseumLocation.DisplayLocation.ToClass()">
                     On display<br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
                     <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
@@ -894,9 +894,13 @@
                 <h4>Rights</h4>
                 <p>
                     Authored text on this page is licensed as
-                    <a class="icon" href="http://creativecommons.org/licenses/by/3.0/au/">
-                        <span class="icon-cc-by" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">CC BY</span>
+                    <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
+                        <span class="icon-cc" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">CC</span>
+                    </a>
+                    <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
+                        <span class="icon-by" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">BY</span>
                     </a>
                 </p>
             </div>

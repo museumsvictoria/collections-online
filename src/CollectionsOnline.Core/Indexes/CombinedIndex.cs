@@ -39,7 +39,8 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Article",
                     Category = (string)null,
                     HasImages = (article.Media.Any()) ? "Yes" : "No",
-                    DisplayLocation = new object[] { },
+                    OnDisplay = (string)null,
+                    DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
                     ItemType = (string)null,
                     SpeciesType = (string)null,
@@ -93,7 +94,8 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Item",
                     Category = item.Category,
                     HasImages = (item.Media.Any()) ? "Yes" : "No",
-                    DisplayLocation = new object[] { item.MuseumLocation.OnDisplayLocation, item.MuseumLocation != null ? "All venues" : (string)null },
+                    OnDisplay = (item.MuseumLocation != null) ? "Yes" : "No",
+                    DisplayLocation = item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
                     SpeciesType = (string)null,
@@ -207,7 +209,8 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Species",
                     Category = "Natural Sciences",
                     HasImages = (species.Media.Any()) ? "Yes" : "No",
-                    DisplayLocation = new object[] { },
+                    OnDisplay = (string)null,
+                    DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
                     ItemType = (string) null,
                     SpeciesType = species.AnimalType,
@@ -303,7 +306,8 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Specimen",
                     Category = specimen.Category,
                     HasImages = (specimen.Media.Any()) ? "Yes" : "No",
-                    DisplayLocation = new object[] { specimen.MuseumLocation.OnDisplayLocation, specimen.MuseumLocation != null ? "All venues" : (string)null },
+                    OnDisplay = (specimen.MuseumLocation != null) ? "Yes" : "No",
+                    DisplayLocation = specimen.MuseumLocation.DisplayLocation,
                     CollectingArea = specimen.CollectingAreas,                    
                     ItemType = specimen.Type,
                     SpeciesType = (string) null,
@@ -425,7 +429,9 @@ namespace CollectionsOnline.Core.Indexes
 
         public string HasImages { get; set; }
 
-        public object[] DisplayLocation { get; set; }
+        public string OnDisplay { get; set; }
+
+        public string DisplayLocation { get; set; }
 
         public object[] CollectingArea { get; set; }
 

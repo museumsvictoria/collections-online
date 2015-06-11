@@ -45,7 +45,6 @@ namespace CollectionsOnline.Import.Factories
                         "DetNarrativeIdentifier",
                         "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                        "rights=NarRightsRef.(SummaryData)",
                         "favorites=[itemspecimen=ObjObjectsRef_tab.(irn,MdaDataSets_tab),ObjObjectNotes_tab]",
                         "subcollections=[article=AssAssociatedWithRef_tab.(irn,DetPurpose_tab),AssAssociatedWithComment_tab]"
                     };
@@ -113,11 +112,6 @@ namespace CollectionsOnline.Import.Factories
             var thumbnail = collection.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
             if (thumbnail != null)
                 collection.ThumbnailUri = thumbnail.Thumbnail.Uri;
-
-            // Rights
-            var rightsMap = map.GetMap("rights");
-            if (rightsMap != null && !string.IsNullOrWhiteSpace(rightsMap.GetEncodedString("SummaryData")))
-                collection.RightsStatement = rightsMap.GetEncodedString("SummaryData");
 
             // Relationships
 

@@ -30,8 +30,6 @@ namespace CollectionsOnline.Core.Models
 
         public string Category { get; set; }
         
-        public string RightsStatement { get; set; }
-
         public IList<Author> Authors { get; set; }
 
         public IList<EmuSummary> FavoriteItems { get; set; }

@@ -17,6 +17,10 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
+                    Name = x => x.OnDisplay
+                },
+                new Facet<CombinedIndexResult>
+                {
                     Name = x => x.RecordType
                 },
                 new Facet<CombinedIndexResult>

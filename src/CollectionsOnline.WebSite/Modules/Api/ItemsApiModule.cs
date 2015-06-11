@@ -19,7 +19,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                 {
                     var items = documentSession.Advanced
                         .DocumentQuery<Item, CombinedIndex>()
-                        .WhereEquals("Type", "Item")
+                        .WhereEquals("RecordType", "Item")
                         .Statistics(out Statistics)
                         .Skip((Page - 1) * PerPage)
                         .Take(PerPage)
