@@ -99,33 +99,46 @@ namespace CollectionsOnline.Import.Factories
             return null;
         }
 
-        public string MakeScientificName(QualifierRankType qualifierRank, string qualifier, string genus,
-            string subgenus, string species, string subspecies, string author)
+        //TODO : Move to own factory
+        public string MakeScientificName(QualifierRankType qualifierRank, string qualifier, Taxonomy taxonomy)
         {
             string scientificName;
 
             if (qualifierRank == QualifierRankType.Species)
             {
-                var taxonFirstPart = new[] {genus, subgenus}.Concatenate(" ");
-                var taxonSecondPart = new[] {species, subspecies}.Concatenate(" ");
+                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus) }.Concatenate(" ");
+                var taxonSecondPart = new[] { taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
                 
                 scientificName = new[]
                 {
                     string.IsNullOrWhiteSpace(taxonFirstPart) ? null : string.Format("<em>{0}</em>", taxonFirstPart),
                     qualifier,
                     string.IsNullOrWhiteSpace(taxonSecondPart) ? null : string.Format("<em>{0}</em>", taxonSecondPart),
-                    author
+                    taxonomy.Author
                 }.Concatenate(" ");
             }
-            else
+            else if (qualifierRank == QualifierRankType.Genus)
             {
-                var taxonFirstPart = new[] { genus, subgenus, species, subspecies }.Concatenate(" ");
+                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus), 
+                    taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
                 
                 scientificName = new[]
                 {
                     qualifier,
                     string.IsNullOrWhiteSpace(taxonFirstPart) ? null : string.Format("<em>{0}</em>", taxonFirstPart),
-                    author
+                    taxonomy.Author
+                }.Concatenate(" ");
+            }
+            else
+            {
+                // If there is no qualifier rank, try to concatenate taxon levels at and below genus, if that is empty instead use the taxon rank
+                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus), 
+                    taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
+
+                scientificName = new[]
+                {
+                    string.IsNullOrWhiteSpace(taxonFirstPart) ? taxonomy.TaxonRank : string.Format("<em>{0}</em>", taxonFirstPart),
+                    taxonomy.Author
                 }.Concatenate(" ");
             }
 

@@ -22,8 +22,8 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedItem.DisplayTitle,
                             SubDisplayTitle = relatedItem.RegistrationNumber,
                             relatedItem.Summary,
-                            relatedItem.ThumbnailUri,                            
-                            Type = "Item"
+                            relatedItem.ThumbnailUri,
+                            RecordType = "Item"
                         },
                     RelatedSpecimens = from specimenId in article.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -35,7 +35,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             SubDisplayTitle = relatedSpecimen.RegistrationNumber,
                             relatedSpecimen.Summary,
                             relatedSpecimen.ThumbnailUri,
-                            Type = "Specimen"
+                            RecordType = "Specimen"
                         },
                     ParentArticle = (LoadDocument<Article>(article.ParentArticleId) != null && !LoadDocument<Article>(article.ParentArticleId).IsHidden) ?
                         new
@@ -44,7 +44,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             LoadDocument<Article>(article.ParentArticleId).DisplayTitle,
                             LoadDocument<Article>(article.ParentArticleId).Summary,
                             LoadDocument<Article>(article.ParentArticleId).ThumbnailUri,
-                            Type = "Article"
+                            RecordType = "Article"
                         } : null,
                     ChildArticles = from articleId in article.ChildArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
@@ -55,7 +55,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedArticle.DisplayTitle,
                             relatedArticle.Summary,
                             relatedArticle.ThumbnailUri,
-                            Type = "Article"
+                            RecordType = "Article"
                         },
                     RelatedArticles = from articleId in article.RelatedArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
@@ -66,7 +66,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedArticle.DisplayTitle,
                             relatedArticle.Summary,
                             relatedArticle.ThumbnailUri,
-                            Type = "Article"
+                            RecordType = "Article"
                         }
                 };
         }

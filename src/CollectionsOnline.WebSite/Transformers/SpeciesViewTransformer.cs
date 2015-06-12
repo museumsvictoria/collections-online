@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             SubDisplayTitle = relatedItem.RegistrationNumber,
                             relatedItem.Summary,
                             relatedItem.ThumbnailUri,
-                            Type = "Item"
+                            RecordType = "Item"
                         },
                     RelatedSpecimens = from specimenId in species.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -34,7 +34,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             SubDisplayTitle = relatedSpecimen.RegistrationNumber,
                             relatedSpecimen.Summary,
                             relatedSpecimen.ThumbnailUri,
-                            Type = "Specimen"
+                            RecordType = "Specimen"
                         }
                 };
         }

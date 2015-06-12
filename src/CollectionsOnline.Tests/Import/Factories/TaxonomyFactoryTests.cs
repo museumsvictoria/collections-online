@@ -13,10 +13,15 @@ namespace CollectionsOnline.Tests.Import.Factories
             // Given
             string result;
             var taxonomyFactory = new TaxonomyFactory();
+            var taxonomy = new Taxonomy
+            {
+                Genus = "Colluricincla",
+                Species = "harmonica",
+                Subspecies = "rufiventris"
+            };
 
             // When
-            result = taxonomyFactory.MakeScientificName(QualifierRankType.None, null, "Colluricincla", null, "harmonica",
-                "rufiventris", null);
+            result = taxonomyFactory.MakeScientificName(QualifierRankType.None, null, taxonomy);
 
             // Then
             result.ShouldBe("<em>Colluricincla harmonica rufiventris</em>");
@@ -28,10 +33,15 @@ namespace CollectionsOnline.Tests.Import.Factories
             // Given
             string result;
             var taxonomyFactory = new TaxonomyFactory();
+            var taxonomy = new Taxonomy
+            {
+                Genus = "Maxomys",
+                Species = "hellwaldii",
+                Author = "(Jentink, 1878)"
+            };
 
             // When
-            result = taxonomyFactory.MakeScientificName(QualifierRankType.Species, "cf", "Maxomys", null, "hellwaldii",
-                null, "(Jentink, 1878)");
+            result = taxonomyFactory.MakeScientificName(QualifierRankType.Species, "cf", taxonomy);
 
             // Then
             result.ShouldBe("<em>Maxomys</em> cf <em>hellwaldii</em> (Jentink, 1878)");
@@ -43,10 +53,15 @@ namespace CollectionsOnline.Tests.Import.Factories
             // Given
             string result;
             var taxonomyFactory = new TaxonomyFactory();
+            var taxonomy = new Taxonomy
+            {
+                Genus = "Austriella",
+                Species = "corrugata",
+                Author = "(Deshayes, 1843)"
+            };
 
             // When
-            result = taxonomyFactory.MakeScientificName(QualifierRankType.Genus, "df", "Austriella", null, "corrugata",
-                null, "(Deshayes, 1843)");
+            result = taxonomyFactory.MakeScientificName(QualifierRankType.Genus, "df", taxonomy);
 
             // Then
             result.ShouldBe("df <em>Austriella corrugata</em> (Deshayes, 1843)");

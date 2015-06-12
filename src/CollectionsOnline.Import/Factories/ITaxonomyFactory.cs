@@ -7,7 +7,6 @@ namespace CollectionsOnline.Import.Factories
     {
         Taxonomy Make(Map map);
 
-        string MakeScientificName(QualifierRankType qualifierRank, string qualifier, string genus, string subgenus,
-            string species, string subspecies, string author);
+        string MakeScientificName(QualifierRankType qualifierRank, string qualifier, Taxonomy taxonomy);
     }
 }

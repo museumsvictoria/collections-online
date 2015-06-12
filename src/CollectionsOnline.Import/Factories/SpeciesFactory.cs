@@ -67,7 +67,6 @@ namespace CollectionsOnline.Import.Factories
                     "SpeEndemicity",
                     "SpeCommercialSpecies",
                     "conservation=[SpeConservationList_tab,SpeStatus_tab]",
-                    "SpeScientificDiagnosis",
                     "SpeWeb",
                     "SpePlant_tab",
                     "SpeFlightStart",
@@ -144,8 +143,6 @@ namespace CollectionsOnline.Import.Factories
                     species.ConservationStatuses.Add(string.Format("{0} {1}", authority, status));
             }
 
-            species.ScientificDiagnosis = map.GetEncodedString("SpeScientificDiagnosis");
-
             // Animal specific fields (spider/butterflies) 
             species.Web = map.GetEncodedString("SpeWeb");
             species.Plants = map.GetEncodedStrings("SpePlant_tab");
@@ -197,11 +194,13 @@ namespace CollectionsOnline.Import.Factories
             // Display Title
             if (species.Taxonomy != null)
             {
+                var scientificName = _taxonomyFactory.MakeScientificName(QualifierRankType.None, null, species.Taxonomy);
+
                 species.DisplayTitle = new[]
                 {
-                    string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName) ? null : string.Format("<em>{0}</em>", species.Taxonomy.TaxonName), 
+                    scientificName, 
                     species.Taxonomy.CommonName
-                }.Concatenate(" ");
+                }.Concatenate(", ");
             }
 
             if (string.IsNullOrWhiteSpace(species.DisplayTitle))

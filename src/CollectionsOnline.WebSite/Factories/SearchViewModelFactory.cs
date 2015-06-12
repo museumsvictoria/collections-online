@@ -34,7 +34,7 @@ namespace CollectionsOnline.WebSite.Factories
             // Build facets
             foreach (var facet in facets.Results)
             {
-                var facetViewModel = new FacetViewModel { Name = facet.Key.Humanize().Pluralize() };
+                var facetViewModel = new FacetViewModel { Name = facet.Key.Humanize() };
 
                 foreach (var facetValue in facet.Value.Values)
                 {

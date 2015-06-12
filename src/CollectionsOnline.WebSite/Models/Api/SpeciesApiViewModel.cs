@@ -48,8 +48,6 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> ConservationStatuses { get; set; }
 
-        public string ScientificDiagnosis { get; set; }
-
         public string Web { get; set; }
 
         public IList<string> Plants { get; set; }

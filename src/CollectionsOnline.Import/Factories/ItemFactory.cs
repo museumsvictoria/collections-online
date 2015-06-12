@@ -490,8 +490,9 @@ namespace CollectionsOnline.Import.Factories
 
             // Taxonomy
             // TODO: make factory method as code duplicated in SpecimenFactory
-            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab"))) ??
-                                    map.GetMaps("identifications").FirstOrDefault(x => string.Equals(x.GetEncodedString("IdeCurrentNameLocal_tab"), "yes", StringComparison.OrdinalIgnoreCase));
+            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab"), StringComparison.OrdinalIgnoreCase)) ??
+                                    map.GetMaps("identifications").FirstOrDefault(x => string.Equals(x.GetEncodedString("IdeCurrentNameLocal_tab"), "yes", StringComparison.OrdinalIgnoreCase)) ??
+                                    map.GetMaps("identifications").FirstOrDefault();
             if (identificationMap != null)
             {
                 // Type Status

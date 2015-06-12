@@ -254,8 +254,9 @@ namespace CollectionsOnline.Import.Factories
 
             // Taxonomy
             // TODO: make factory method as code duplicated in ItemFactory
-            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab"))) ??
-                                    map.GetMaps("identifications").FirstOrDefault(x => string.Equals(x.GetEncodedString("IdeCurrentNameLocal_tab"), "yes", StringComparison.OrdinalIgnoreCase));
+            var identificationMap = map.GetMaps("identifications").FirstOrDefault(x => Constants.TaxonomyTypeStatuses.Contains(x.GetEncodedString("IdeTypeStatus_tab"), StringComparison.OrdinalIgnoreCase)) ??
+                                    map.GetMaps("identifications").FirstOrDefault(x => string.Equals(x.GetEncodedString("IdeCurrentNameLocal_tab"), "yes", StringComparison.OrdinalIgnoreCase)) ??
+                                    map.GetMaps("identifications").FirstOrDefault();
             if (identificationMap != null)
             {
                 // Type Status
@@ -539,21 +540,17 @@ namespace CollectionsOnline.Import.Factories
             if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.TektitesName))
                 specimen.DisplayTitle = specimen.TektitesName;
             else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MeteoritesName))
-                specimen.DisplayTitle = specimen.MeteoritesName;
+                specimen.DisplayTitle = string.Format("{0} meteorite", specimen.MeteoritesName);
             else if (string.Equals(specimen.Discipline, "Petrology", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.PetrologyRockName))
                 specimen.DisplayTitle = specimen.PetrologyRockName;
             else if (string.Equals(specimen.Discipline, "Mineralogy", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MineralogySpecies))
                 specimen.DisplayTitle = specimen.MineralogySpecies;
             else if (specimen.Taxonomy != null)
             {
-                var scientificName = _taxonomyFactory.MakeScientificName(specimen.QualifierRank,
-                    specimen.Qualifier, specimen.Taxonomy.Genus, specimen.Taxonomy.Subgenus,
-                    specimen.Taxonomy.Species, specimen.Taxonomy.Subspecies, specimen.Taxonomy.Author);
+                var scientificName = _taxonomyFactory.MakeScientificName(specimen.QualifierRank, specimen.Qualifier, specimen.Taxonomy);
 
-                if (!string.IsNullOrWhiteSpace(specimen.Taxonomy.TaxonName))
+                if (!string.IsNullOrWhiteSpace(scientificName))
                     specimen.DisplayTitle = scientificName;
-                else if (!string.IsNullOrWhiteSpace(specimen.Taxonomy.TaxonName))
-                    specimen.DisplayTitle = specimen.Taxonomy.TaxonName;
             }
 
             specimen.DisplayTitle = new[]

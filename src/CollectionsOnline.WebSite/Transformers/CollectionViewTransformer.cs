@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             favoriteItem.DisplayTitle,
                             item.Summary,
                             favoriteItem.ThumbnailUri,
-                            Type = "Item"
+                            RecordType = "Item"
                         },
                     FavoriteSpecimens = from specimen in collection.FavoriteSpecimens
                         let favoriteSpecimen = LoadDocument<Specimen>(specimen.Id)
@@ -33,7 +33,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             favoriteSpecimen.DisplayTitle,
                             specimen.Summary,
                             favoriteSpecimen.ThumbnailUri,
-                            Type = "Specimen"
+                            RecordType = "Specimen"
                         },
                     SubCollectionArticles = from article in collection.SubCollectionArticles
                         let subCollectionArticle = LoadDocument<Article>(article.Id)
@@ -44,7 +44,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             subCollectionArticle.DisplayTitle,
                             subCollectionArticle.Summary,
                             subCollectionArticle.ThumbnailUri,
-                            Type = "Article"
+                            RecordType = "Article"
                         }
                 };
         }
