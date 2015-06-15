@@ -61,12 +61,13 @@ namespace CollectionsOnline.Import.Factories
 
                 taxonomy.TaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
 
-                if (higherClassification.SkipWhile(x => x.Key != "Subgenus").All(x => string.IsNullOrWhiteSpace(x.Value)))
+                if (!string.IsNullOrWhiteSpace(taxonomy.TaxonRank))
                 {
-                    if (!string.IsNullOrWhiteSpace(taxonomy.TaxonRank))
-                        taxonomy.TaxonName = higherClassification[taxonomy.TaxonRank];
+                    taxonomy.TaxonName = higherClassification[taxonomy.TaxonRank];
                 }
-                else
+                
+                // If we have any ranks below genus filled then construct a better taxon name
+                if (higherClassification.SkipWhile(x => x.Key != "Subgenus").Any(x => !string.IsNullOrWhiteSpace(x.Value)))
                 {
                     taxonomy.TaxonName = new[]
                     {
@@ -131,13 +132,13 @@ namespace CollectionsOnline.Import.Factories
             }
             else
             {
-                // If there is no qualifier rank, try to concatenate taxon levels at and below genus, if that is empty instead use the taxon rank
+                // If there is no qualifier rank, try to concatenate taxon levels at and below genus, if that is empty instead use the taxon name
                 var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus), 
                     taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
 
                 scientificName = new[]
                 {
-                    string.IsNullOrWhiteSpace(taxonFirstPart) ? taxonomy.TaxonRank : string.Format("<em>{0}</em>", taxonFirstPart),
+                    string.IsNullOrWhiteSpace(taxonFirstPart) ? taxonomy.TaxonName : string.Format("<em>{0}</em>", taxonFirstPart),
                     taxonomy.Author
                 }.Concatenate(" ");
             }
