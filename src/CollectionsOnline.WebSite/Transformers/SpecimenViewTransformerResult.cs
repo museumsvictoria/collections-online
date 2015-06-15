@@ -20,6 +20,8 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public IList<ImageMedia> SpecimenImages { get; set; }
 
+        public IList<FileMedia> SpecimenFiles { get; set; }
+
         public string JsonSpecimenImages { get; set; }
 
         public string JsonSpecimenLatLongs { get; set; }
@@ -31,6 +33,7 @@ namespace CollectionsOnline.WebSite.Transformers
             RelatedSpecies = new List<EmuAggregateRootViewModel>();
             RelatedArticles = new List<EmuAggregateRootViewModel>();
             SpecimenImages = new List<ImageMedia>();
+            SpecimenFiles = new List<FileMedia>();
         }
     }
 }

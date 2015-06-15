@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             SubDisplayTitle = relatedItem.RegistrationNumber,
                             relatedItem.Summary,
                             relatedItem.ThumbnailUri,
-                            Type = "Item"
+                            RecordType = "Item"
                         },
                     RelatedSpecimens = from specimenId in specimen.RelatedSpecimenIds
                         let relatedSpecimen = LoadDocument<Specimen>(specimenId)
@@ -34,7 +34,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             SubDisplayTitle = relatedSpecimen.RegistrationNumber,
                             relatedSpecimen.Summary,
                             relatedSpecimen.ThumbnailUri,
-                            Type = "Item"
+                            RecordType = "Item"
                         },
                     RelatedSpecies = from speciesId in specimen.RelatedSpeciesIds
                         let relatedSpecies = LoadDocument<Species>(speciesId)
@@ -45,7 +45,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedSpecies.DisplayTitle,
                             relatedSpecies.Summary,
                             relatedSpecies.ThumbnailUri,
-                            Type = "Species"
+                            RecordType = "Species"
                         },
                     RelatedArticles = from articleId in specimen.RelatedArticleIds
                         let relatedArticle = LoadDocument<Article>(articleId)
@@ -56,7 +56,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedArticle.DisplayTitle,
                             relatedArticle.Summary,
                             relatedArticle.ThumbnailUri,
-                            Type = "Article"
+                            RecordType = "Article"
                         }
                 };
         }

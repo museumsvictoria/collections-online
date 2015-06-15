@@ -1098,26 +1098,6 @@ button.icon {
 		font-weight: 400;
 		color: #333;
 			&:hover{text-decoration: underline;}
-			&.switch:before{
-			@include border-radius(9px);
-			width:40px;
-			background-color: black;
-			display:inline-block;
-			font-family: "entypo-social";
-			content: "\F307";	
-			font-size: 24px;
-			height: 18px;
-			margin-right: 10px;
-			vertical-align: middle;
-			overflow: hidden;
-			color:white;
-			}	
-			&.switch.active:before{
-				background-color: $colour-primary-green;
-				text-align: right;
-				color:white;
-			}
-	
 		
 			&.item:before{
 			@include icon-item;

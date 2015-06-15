@@ -174,6 +174,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
@@ -347,6 +348,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\scss\_reset.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FileMedia.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

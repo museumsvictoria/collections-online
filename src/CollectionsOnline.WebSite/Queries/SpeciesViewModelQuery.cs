@@ -37,6 +37,7 @@ namespace CollectionsOnline.WebSite.Queries
 
             // Set Media            
             result.SpeciesImages = result.Species.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
+            result.SpeciesFiles = result.Species.Media.Where(x => x is FileMedia).Cast<FileMedia>().ToList();
             result.JsonSpeciesImages = JsonConvert.SerializeObject(result.SpeciesImages);
 
             return result;

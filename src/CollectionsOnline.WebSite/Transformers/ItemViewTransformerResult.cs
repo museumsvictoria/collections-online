@@ -20,7 +20,10 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public IList<ImageMedia> ItemImages { get; set; }
 
+        public IList<FileMedia> ItemFiles { get; set; }
+
         public string JsonItemImages { get; set; }
+        
 
         public ItemViewTransformerResult()
         {
@@ -29,6 +32,7 @@ namespace CollectionsOnline.WebSite.Transformers
             RelatedArticles = new List<EmuAggregateRootViewModel>();
             RelatedSpecies = new List<EmuAggregateRootViewModel>();
             ItemImages = new List<ImageMedia>();
+            ItemFiles = new List<FileMedia>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using CollectionsOnline.Core.Extensions;
 
 namespace CollectionsOnline.Core.Models
 {
@@ -11,8 +12,10 @@ namespace CollectionsOnline.Core.Models
         public string DisplayLocation {
             get
             {
-                if (Gallery.Contains("Bunjilaka"))
+                if (Gallery.Contains("Bunjilaka", StringComparison.OrdinalIgnoreCase))
                     return "Bunjilaka";
+                if (string.Equals(Gallery, "Discovery Centre", StringComparison.OrdinalIgnoreCase))
+                    return "Discovery Centre";
                 if (string.Equals(Venue, "Melbourne Museum", StringComparison.OrdinalIgnoreCase))
                     return "Melbourne Museum";
                 if (string.Equals(Venue, "Immigration Museum", StringComparison.OrdinalIgnoreCase))
@@ -21,8 +24,7 @@ namespace CollectionsOnline.Core.Models
                     return "Royal Exhibition Building";
                 if (string.Equals(Venue, "Scienceworks", StringComparison.OrdinalIgnoreCase))
                     return "Scienceworks";
-                if (string.Equals(Gallery, "Discovery Centre", StringComparison.OrdinalIgnoreCase))
-                    return "Discovery Centre";
+
 
                 return null;
             }

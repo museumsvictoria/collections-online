@@ -38,6 +38,7 @@ namespace CollectionsOnline.WebSite.Queries
 
             // Set Media            
             result.SpecimenImages = result.Specimen.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
+            result.SpecimenFiles = result.Specimen.Media.Where(x => x is FileMedia).Cast<FileMedia>().ToList();
             result.JsonSpecimenImages = JsonConvert.SerializeObject(result.SpecimenImages);
 
             // Map

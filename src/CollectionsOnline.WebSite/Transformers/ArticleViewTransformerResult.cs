@@ -22,6 +22,8 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public IList<ImageMedia> ArticleImages { get; set; }
 
+        public IList<FileMedia> ArticleFiles { get; set; }
+
         public string JsonArticleImages { get; set; }
 
         public ArticleViewTransformerResult()
@@ -31,6 +33,7 @@ namespace CollectionsOnline.WebSite.Transformers
             ChildArticles = new List<EmuAggregateRootViewModel>();
             RelatedArticles = new List<EmuAggregateRootViewModel>();
             ArticleImages = new List<ImageMedia>();
+            ArticleFiles = new List<FileMedia>();
         }
     }
 }

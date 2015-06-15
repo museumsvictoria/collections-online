@@ -16,6 +16,8 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public IList<ImageMedia> SpeciesImages { get; set; }
 
+        public IList<FileMedia> SpeciesFiles { get; set; }
+
         public string JsonSpeciesImages { get; set; }
 
         public SpeciesViewTransformerResult()
@@ -23,6 +25,7 @@ namespace CollectionsOnline.WebSite.Transformers
             RelatedItems = new List<EmuAggregateRootViewModel>();
             RelatedSpecimens = new List<EmuAggregateRootViewModel>();
             SpeciesImages = new List<ImageMedia>();
+            SpeciesFiles = new List<FileMedia>();
         }
     }
 }

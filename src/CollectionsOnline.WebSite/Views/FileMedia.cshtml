@@ -1,0 +1,9 @@
+﻿@using CollectionsOnline.WebSite.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.FileMedia>
+<a href="@Model.File.Uri">
+    <span class="filedesc">@Model.Caption</span>
+    <span class="filesize">
+        (@Model.File.Size.BytesToString())
+        <span class="filetype @Model.File.Extension">@Model.File.Extension.ToUpper()</span>
+    </span>
+</a>
