@@ -56,6 +56,7 @@ nav {
     position: relative;
     text-decoration: none;
     text-transform: uppercase;
+    @include gridle_hide("print");
 
     a {
         color: $colour-heading-inverted;
@@ -157,14 +158,21 @@ button.icon {
 	color: $colour-heading-inverted; 
 
     h1 {
-        @include gridle(8);	
+        @include gridle(8);
+        @include gridle(8,"tablet");	
+        @include gridle_pull(4,"tablet");
 		float:left;
 		direction: ltr;
+
 		font-size: 30px;
 		padding-top: 30px;
 		padding-bottom: 30px;
 		font-weight: 200;
 		line-height: 1.2;
+        @include gridle(12,mobile);
+        @include gridle_state(mobile){
+            padding-left:20px;           
+        }
 		
 		& .item:before{
 		    @include icon-spaced-item;
@@ -186,10 +194,15 @@ button.icon {
     }
 
     & .mediatypes{
-				width:33%;
-			    direction: ltr;
+				@include gridle(4);
+                @include gridle(4, "tablet");
+                @include gridle_push(8, "tablet");
+                @include gridle(12,"mobile");
+                direction: ltr;
 				float: right;
+
 				padding: 30px 0 0;
+                
 		 & .icon-image, .icon-video, .icon-audio, .icon-book
 				{
 					font-size: 40px;
@@ -203,6 +216,9 @@ button.icon {
 						
 						float:left;
 						width:25%;
+                        @include gridle_state("tablet"){
+                            width:50%;
+                        }
 						padding:0 0 7px 7px;
 						
 						& .icon-image:before{
@@ -272,7 +288,8 @@ button.icon {
 	background: $colour-background-dark;
 	@include display-flex();
 	padding-top:10px;
-	
+	@include gridle_hide(mobile);
+    @include gridle_hide("print");
 	&.expanded{   	
 	    	& #more{
 		    	display: none;
@@ -301,8 +318,10 @@ button.icon {
 	    	direction: ltr;
             cursor:pointer;
 			float: left;
+			width: 8.33333%;    
+            @include gridle(2,tablet);
 			padding: 0 0 7px 7px;
-			width: 8.33333%;    	
+	
 			
 			& img {
 				display: block;
@@ -457,6 +476,7 @@ button.icon {
 			margin: 1.5em 0;
 			padding-left: 10px;
 			padding-right: 10px;
+            @include gridle_hide("print");
 			& button		
 				 {
 
@@ -643,7 +663,7 @@ button.icon {
           //  border-bottom:2px solid rgba(72, 141, 217, 0.5);
               border-bottom: 1px dotted;
               color: rgba(25, 102,93, 0.95);
-              white-space: nowrap;
+              //white-space: nowrap;
             &:hover {
               border-bottom: 1px solid;
               color: rgba(25, 102,93, 1);
@@ -793,7 +813,7 @@ button.icon {
 	        & .venue{
 		        font-weight: 400;
 	        }
-	        & h2{
+	        & h4{
 		           font-size: 22px;
 		           font-weight: 400;
 		           padding-left: 0;
@@ -945,7 +965,7 @@ button.icon {
 #related {
    	background-color: $colour-background-midlight;
 	padding: 40px 0px;
-    
+    @include gridle_hide("print");
 
     .related-content {
        // margin:4em 0 2em;
@@ -1076,6 +1096,7 @@ button.icon {
 		        width:100%;
 		        display:block;
 		}	
+        @include gridle_hide("print");
 //start facet addition
 	& .facets{
 	background-color: $colour-background-lightest;
@@ -1227,7 +1248,7 @@ button.icon {
             background: $colour-primary-green;
             height: 70px;
             line-height: 70px;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 300;
         }
 
@@ -1260,6 +1281,8 @@ button.icon {
     }
 
     #search-filter.disabled {
+        height:70px;
+        position:absolute;
         .icon-filter::before {
             -moz-transform: rotate(0);
             -ms-transform: rotate(0);
@@ -1279,7 +1302,13 @@ button.icon {
         padding: 0 0 20px 0px;
         margin-top: 70px;
         flex:1;
+        @include gridle_state("print"){
+            flex:none;
+            margin-top:0px;
+
+        }
         .active-facets {
+            @include gridle_hide("print");
             padding: 20px 0 0 20px;
 
             a {
@@ -1310,6 +1339,7 @@ button.icon {
         .pagination {
 	        width: 100%;
 	        padding: 20px 20px 10px 20px;
+            @include gridle_hide("print");
 	        &.bottom{
 		        padding: 0px 20px 30px 20px;
 
@@ -1489,11 +1519,15 @@ button.icon {
                             @include gridle_state(mobile){
                                 width:100%;
                             }
+                            @include gridle_hide("print");
                         }
                         & .title{
                                 height: 0;
                                 overflow: visible;
                                 padding: 0;
+                                @include gridle_state("print"){
+                                    width:100%;
+                                }
                         }
 
                         & .tile-tag{
@@ -1578,9 +1612,10 @@ button.icon {
     display: none;
     z-index:100;
     clear:both;
+    @include gridle_hide("print");
     &.active {
         display: block;
-        
+          @include gridle_hide("print");
         &.search{
             clear:both;
             margin-left: 300px;
@@ -1590,8 +1625,10 @@ button.icon {
             @include gridle_state(mobile){
                 margin-left:0px;
             }
+              @include gridle_hide("print");
         }
     }
+
 }
 
 #search-bar #search-filter {
@@ -1874,6 +1911,11 @@ button{
         @include gridle(4);
         @include gridle_push(8);
         @include gridle(12,mobile);
+        @include gridle_push(0,mobile);
+        @include gridle_state(mobile){
+            margin-top:15px;
+            margin-bottom: 15px;
+        }
         direction: ltr;
         background-color: #f6f6f6;
         border-radius: 3px;
@@ -1982,6 +2024,7 @@ button{
     @include gridle_pull(4);
     @include gridle(8, tablet);
     @include gridle(12, mobile);
+    @include gridle_pull(0, mobile);
     padding-left: 10px;
     padding-right: 20px;
     direction: ltr;
@@ -2075,7 +2118,9 @@ $padding-side: 3%;
         @include gridle (4, 'tablet');
         @include gridle ( 6, 'mobile' );
         float: left;
-
+        @include gridle_state("print"){
+            float:none;
+        }
         & .description {
             display: none;
         }
@@ -2222,7 +2267,7 @@ $padding-side: 3%;
         float: left;
         padding: 0;
     }
-
+    @include gridle_hide("print");
     .list & {
         width: 100%;
         float: left;
@@ -2437,6 +2482,11 @@ $padding-side: 3%;
     border-radius:5px;
 }
 
+.social{
+        @include gridle_hide("print");
+}
+
+
 /*------------------------------------*\
     $FOOTER
 \*------------------------------------*/
@@ -2444,7 +2494,7 @@ $padding-side: 3%;
 	clear: both;
 	overflow: hidden;
 	background: $colour-background-dark;
-	
+	@include gridle_hide("print");
 	/*
 	& .logos
 	{
@@ -2455,7 +2505,7 @@ $padding-side: 3%;
     padding-left: 10px;
     padding-right: 10px;
     width: 100%;
-	}
+	
 	*/
 }
 
@@ -2466,6 +2516,7 @@ footer {
 	color:$colour-heading-inverted;
 	padding-top:32px;
 	font-weight: 400;
+   @include gridle_hide("print");
 	& .wrapper{
 		padding-bottom: 30px;
         padding-left: 10px;
@@ -2694,6 +2745,8 @@ footer {
 	}
 	& .aboutcontent{
 		width:66.6667%;
+        @include gridle (12,"tablet");
+        @include gridle(12, "mobile");
 	}
 }
 
@@ -2718,11 +2771,14 @@ footer {
         font-size: 17px;
         font-weight: 300;
         margin-bottom: 1.5em;
+        word-wrap:break-word;
         //padding-left: 10px;
     }
 
     & .colldesc {
         @include gridle(8);
+        @include gridle(12,tablet);
+        @include gridle(12,mobile);
         padding-right: 20px;
     }
 
@@ -2745,6 +2801,7 @@ footer {
 
     & .sidecolumn {
         @include gridle(4);
+        clear:right;
         float: right;
         direction: ltr;
         margin-bottom:20px;
