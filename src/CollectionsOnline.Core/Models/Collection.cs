@@ -32,6 +32,8 @@ namespace CollectionsOnline.Core.Models
         
         public IList<Author> Authors { get; set; }
 
+        public IList<Author> Curators { get; set; }
+
         public IList<EmuSummary> FavoriteItems { get; set; }
 
         public IList<EmuSummary> FavoriteSpecimens { get; set; }
@@ -45,6 +47,7 @@ namespace CollectionsOnline.Core.Models
         private void InitializeCollections()
         {
             Authors = new List<Author>();
+            Curators = new List<Author>();
             FavoriteItems = new List<EmuSummary>();
             FavoriteSpecimens = new List<EmuSummary>();
             SubCollectionArticles = new List<EmuSummary>();

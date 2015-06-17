@@ -26,6 +26,8 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public string JsonSpecimenLatLongs { get; set; }
 
+        public IList<KeyValuePair<string, string>> GeoSpatial { get; set; }
+
         public SpecimenViewTransformerResult()
         {
             RelatedItems = new List<EmuAggregateRootViewModel>();
@@ -34,6 +36,7 @@ namespace CollectionsOnline.WebSite.Transformers
             RelatedArticles = new List<EmuAggregateRootViewModel>();
             SpecimenImages = new List<ImageMedia>();
             SpecimenFiles = new List<FileMedia>();
+            GeoSpatial = new List<KeyValuePair<string, string>>();
         }
     }
 }

@@ -20,16 +20,14 @@ module.exports = {
     this.$searchButton = $('.button-search');
     
     // Facets
-    this.$facets = $('.facetgroup h4');
-    
-     
+    this.$facets = $('.facetgroup h4');     
   },
   bindEvents: function () {
     // Search pagination
     this.$pageInput.on('change', this.gotoPage.bind(this));
     
     // Search filter
-    //this.$searchFilterButton.on('click', this.toggleSearchFilter.bind(this));
+    this.$searchFilterButton.on('click', this.toggleSearchFilter.bind(this));
     
     // Search button
     this.$searchButton.on('click', this.toggleSearchButton.bind(this));
