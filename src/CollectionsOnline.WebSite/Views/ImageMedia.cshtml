@@ -1,7 +1,9 @@
 ﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.ImageMedia>
 <figure id="media">
     <div class="imageholder">
+        <a class="previous icon-left-arrow inactive"></a>
         <img src="@Model.Large.Uri" alt="@Model.AlternativeText" />
+        <a class="next icon-right-arrow"></a>
     </div>
     <figcaption>
         <div class="wrapper">
@@ -42,12 +44,12 @@
                 </span>
             </div>
             <div class="media-tools">
-                <button class="icon">
-                    <span class="icon-download" aria-hidden="true"></span>
-                    <span class="icon-label-hidden">Download Media</span>
-                </button>
-                <button class="icon">
-                    <span class="icon-fullscreen" aria-hidden="true"></span>
+                @*<button class="icon">
+                        <span class="icon-download" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">Download Media</span>
+                    </button>*@
+                <button class="icon fullscreen">
+                    <span class="icon" aria-hidden="true"></span>
                     <span class="icon-label-hidden">View full screen</span>
                 </button>
             </div>

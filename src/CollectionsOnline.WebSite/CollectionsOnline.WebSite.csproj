@@ -134,6 +134,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\js\lib\polyfill.object-fit.js" />
+    <None Include="content\scss\lib\_polyfill.object-fit.scss" />
     <Content Include="content\fonts\entypo-social.svg" />
     <Content Include="content\fonts\entypo.svg" />
     <Content Include="content\img\bg-collection-hero.jpg" />
@@ -338,7 +340,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="content\css\" />
-    <Folder Include="content\scss\lib\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\CollectionIndex.cshtml" />
