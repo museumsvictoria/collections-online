@@ -44,6 +44,7 @@ namespace CollectionsOnline.Import.Factories
                         "NarNarrativeSummary",
                         "DetNarrativeIdentifier",
                         "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
+                        "curators=[curator=NarContributorRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)),NarContributorRole_tab]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "favorites=[itemspecimen=ObjObjectsRef_tab.(irn,MdaDataSets_tab),ObjObjectNotes_tab]",
                         "subcollections=[article=AssAssociatedWithRef_tab.(irn,DetPurpose_tab),AssAssociatedWithComment_tab]"
@@ -105,6 +106,21 @@ namespace CollectionsOnline.Import.Factories
                     Biography = x.GetEncodedString("BioLabel"),
                     ProfileImage = _mediaFactory.Make(x.GetMaps("media").FirstOrDefault()) as ImageMedia
                 }).ToList();
+
+            foreach (var curators in map.GetMaps("curators").Where(x => x != null))
+            {
+                var curatorMap = curators.GetMap("curator");
+
+                if (string.Equals(curators.GetEncodedString("NarContributorRole_tab"), "Contributor", StringComparison.OrdinalIgnoreCase))
+                collection.Curators.Add(new Author
+                {
+                    FirstName = curatorMap.GetEncodedString("NamFirst"),
+                    LastName = curatorMap.GetEncodedString("NamLast"),
+                    FullName = curatorMap.GetEncodedString("NamFullName"),
+                    Biography = curatorMap.GetEncodedString("BioLabel"),
+                    ProfileImage = _mediaFactory.Make(curatorMap.GetMaps("media").FirstOrDefault()) as ImageMedia
+                });
+            }
 
             // Media           
             collection.Media = _mediaFactory.Make(map.GetMaps("media"));            

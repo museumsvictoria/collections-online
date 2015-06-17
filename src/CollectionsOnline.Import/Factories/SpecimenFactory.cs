@@ -363,7 +363,8 @@ namespace CollectionsOnline.Import.Factories
 
                 // Lat/Long
                 var latlongMap = siteMap.GetMaps("latlong").FirstOrDefault();
-                if (latlongMap != null)
+                if (latlongMap != null &&
+                    !(string.Equals(specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(specimen.ScientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)))
                 {
                     var decimalLatitudes = (object[])latlongMap["LatLatitudeDecimal_nesttab"];
                     if (decimalLatitudes != null && decimalLatitudes.Any(x => x != null))

@@ -73,19 +73,19 @@
                         <span class="icon-label-hidden">BY</span>
                     </a>
                 </p>
-                @if (Model.Collection.Authors.Any())
+                @if (Model.Collection.Curators.Any())
                 {
                     <h4>Curators and Collection Managers</h4>
                     <div class="authors">
-                        @foreach (var author in Model.Collection.Authors)
+                        @foreach (var curator in Model.Collection.Curators)
                         {
                             <div class="author">
-                                @if (author.ProfileImage != null)
+                                @if (curator.ProfileImage != null)
                                 {
-                                    <img src="@author.ProfileImage.Thumbnail.Uri" alt="@author.ProfileImage.AlternativeText" />
+                                    <img src="@curator.ProfileImage.Thumbnail.Uri" alt="@curator.ProfileImage.AlternativeText" />
                                 }
-                                <span class="authorname">@author.FullName</span>
-                                <span class="authorbio">@author.Biography</span>
+                                <span class="authorname">@curator.FullName</span>
+                                <span class="authorbio">@curator.Biography</span>
                             </div>
                         }
                     </div>
