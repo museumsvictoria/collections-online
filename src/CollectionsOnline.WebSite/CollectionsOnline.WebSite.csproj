@@ -134,6 +134,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\img\bg-on-display-reb.png" />
     <Content Include="content\js\lib\polyfill.object-fit.js" />
     <None Include="content\scss\lib\_polyfill.object-fit.scss" />
     <Content Include="content\fonts\entypo-social.svg" />

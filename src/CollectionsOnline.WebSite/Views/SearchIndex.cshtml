@@ -89,24 +89,24 @@
         <div class="pagination">
             <div class="numbers">
                 <div class="counts">@Model.TotalResults.ToString("N0") results</div>
-            </div>
-            <div class="pages">
-                <a href="@Model.PreviousPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PreviousPageUrl) ? "disabled" : "")">
-                    <span class="icon-left-arrow"></span>
-                    <span class="icon-label-hidden">Previous page</span>
-                </a>
-                <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages.ToString("N0")</span>
-                <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
-                    <span class="icon-label-hidden">Next page</span>
-                    <span class="icon-right-arrow"></span>
-                </a>
-            </div>
-            <div class="options">
+                <div class="pages">
+                    <a href="@Model.PreviousPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.PreviousPageUrl) ? "disabled" : "")">
+                        <span class="icon-left-arrow"></span>
+                        <span class="icon-label-hidden">Previous page</span>
+                    </a>
+                    <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages.ToString("N0")</span>
+                    <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
+                        <span class="icon-label-hidden">Next page</span>
+                        <span class="icon-right-arrow"></span>
+                    </a>
+                </div>
                 <div class="perpage">
                     Results per page
                     <a href="@Model.DefaultPerPageButton.Url" class="button first @(Model.DefaultPerPageButton.Active ? "active" : "")">@Model.DefaultPerPageButton.Name</a>
                     <a href="@Model.MaxPerPageButton.Url" class="button last @(Model.MaxPerPageButton.Active ? "active" : "")">@Model.MaxPerPageButton.Name</a>
                 </div>
+            </div>
+            <div class="options">
                 <div class="order">
                     Order by
                     <a href="@Model.RelevanceSortButton.Url" class="button first @(Model.RelevanceSortButton.Active ? "active" : "")">@Model.RelevanceSortButton.Name</a>

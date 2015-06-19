@@ -15,7 +15,8 @@ body {
 }
 
 a {
-    color: $color-links;
+   // color: $color-links;
+    color: inherit;
     text-decoration:none;
 }
 
@@ -37,8 +38,9 @@ header {
     text-transform: uppercase;
 
     @include gridle_state(mobile) {
-        line-height: 30px;
+        line-height: 50px;
         padding-top: 5px;
+        font-size: 1.2em;
     }
 }
 
@@ -58,12 +60,20 @@ nav {
     text-decoration: none;
     text-transform: uppercase;
     @include gridle_hide("print");
+    @include gridle_state("mobile"){
+        float: none;
+    }
     a {
         color: $colour-heading-inverted;
 	    display: inline-block;
         line-height: 76px;
         padding: 0 20px;
         text-decoration: none;
+        @include gridle_state("mobile"){
+            padding:0 4px 0px 20px;
+            line-height:50px;
+
+        }
        // @include gridle_hide("mobile");
       //  @include gridle_hide("tablet");
        // @include gridle_hide("mobile");
@@ -81,6 +91,10 @@ nav {
         display: inline-block;
         line-height: 76px;
         text-decoration: none;
+        @include gridle_state("mobile"){
+            line-height:50px;
+            float:right;
+        }
     }
 
     .button-search.search {
@@ -623,7 +637,8 @@ button.icon {
 	    {
 			    padding-bottom: 5px;
 			    font-size: 22px;
-			    padding-left: 0px;;
+			    padding-left: 0px;
+                font-weight: 400;
 			    float: none;	
 	    }
 	
@@ -729,6 +744,20 @@ button.icon {
     border-radius: 3px;
     padding: 15px 20px 20px;
     color:  $colour-sidetext;
+    margin-bottom: 20px;
+
+        & .downloads{
+            & a {
+                color: $colour-sidetext;
+                display:block;
+                padding-bottom:10px;
+                &:hover{
+                    text-decoration:underline;
+                }
+            }
+
+        }
+
     }
 
 
@@ -783,7 +812,7 @@ button.icon {
 	        }
     
             &.royal-exhibition-building {
-		        background:url("/content/img/bg-on-display-melbourne-museum.jpg");
+		        background:url("/content/img/bg-on-display-reb.png");
 	        }
 
 	        &.scienceworks {
@@ -805,10 +834,15 @@ button.icon {
 		           font-weight: 400;
 		           padding-left: 0;
 		           margin-bottom: 5px;
+                   color:$colour-heading-inverted;
 	        }
 	        & a{
-		        display:block;
+		       // display:block;
+                border-bottom:1px dotted;
 	        }
+            & a:hover{
+                border-bottom: 1px solid;
+            }
         }
 
         .print {
@@ -844,9 +878,14 @@ button.icon {
         & .social-tools {
 	        margin-bottom: 20px;
 	        margin-top: 6px;
+            height:26px;
 	        & .icon
 	        {
 		         margin: 0 6px 0 0;	    }
+            & a:hover{
+                font-size:17px;
+                color:$colour-heading;
+            }
         }
 
          .cite {
@@ -1092,7 +1131,16 @@ button.icon {
 	float: left;
 	position:relative;
 	padding: 40px 20px 0px 20px;
+
     width:100%;
+    @include gridle_state("tablet"){
+        padding: 40px 20px 20px 20px;
+        margin-bottom: 20px;
+    }
+        @include gridle_state("mobile"){
+        padding: 40px 20px 20px 20px;
+        margin-bottom: 20px;
+    }
 		& a {
 		text-decoration: none;
 		display: block;
@@ -1232,7 +1280,7 @@ button.icon {
             padding: 0 20px;
             display: block;
             color: $color-default;
-            background: $colour-primary-green;
+            background: $colour-background-footerbase;
             height: 70px;
             line-height: 70px;
             font-size: 20px;
@@ -1270,6 +1318,12 @@ button.icon {
     #search-filter.disabled {
         height:70px;
         position:absolute;
+        @include gridle_state("tablet"){
+            position:relative;
+        }
+        @include gridle_state("mobile"){
+            position:relative;
+        }
         .icon-filter::before {
             -moz-transform: rotate(0);
             -ms-transform: rotate(0);
@@ -1289,6 +1343,12 @@ button.icon {
         padding: 0 0 20px 0px;
         margin-top: 70px;
         flex:1;
+        @include gridle_state("tablet"){
+            margin-top:0px;
+        }
+        @include gridle_state("mobile"){
+            margin-top:0px;
+        }
         @include gridle_state("print"){
             flex:none;
             margin-top:0px;
@@ -1324,7 +1384,7 @@ button.icon {
 
         .pagination {
 	        width: 100%;
-	        padding: 20px 20px 10px 20px;
+	        padding: 20px 20px 20px 20px;
             @include gridle_hide("print");
 	        &.bottom{
 		        padding: 0px 20px 30px 20px;
@@ -1352,23 +1412,27 @@ button.icon {
 	        }
 
             div {
-                display: inline-block;
+                display: inline;
                 font-weight: 400;
                 margin-right: 20px;
             }
 
 
             .numbers {
-               display:block;
-               line-height: 40px;
-               width: 100%;
+               display:inline-block;
+              // line-height: 40px;
+              // width: 100%;
+              padding-top:20px;
             }
 
             .options {
-
+                padding-top:20px;
+      
+                display: inline-block;
                 & .viewtype{
 			        line-height: 25px;
 			        font-size: 25px;
+                    vertical-align: middle;
 		        }
         		& a.button{
 		            display: inline-block;
@@ -1381,7 +1445,7 @@ button.icon {
 		            }
 		            &.first{ 
 			            margin-left:5px;
-			            border-right:1px black solid;
+			            //border-right:1px black solid;
 			            &.active{
 			                color:$colour-bodytext;
                             text-decoration: underline;
@@ -1404,6 +1468,62 @@ button.icon {
 		            }
 		        }
             }
+            .perpage, .order {
+                
+                display:inline-block;
+
+        		& a.button{
+		            display: inline-block;
+		            padding: 0 5px;
+		            text-decoration: none; 
+		            color: $colour-sidetext;
+                    background:$colour-background-lightest;
+                    @include border-radius(3);
+                    display: inline-block;
+                    margin-left: 6px;
+                    padding: 2px 10px;
+                    text-decoration: none;
+		            &:hover{text-decoration: underline;}
+		            &.disabled{
+			            color:$colour-sidetext;
+		            }
+		            &.first{ 
+			            margin-left:5px;
+			            //border-right:1px black solid;
+			            &.active{
+			                color:$colour-heading-inverted;
+			                text-decoration: none;
+                            background: $colour-background-dark;
+                            border-radius: 3px;
+                            padding: 2px 10px;
+				            &:hover{text-decoration: none;}
+			             }
+		            }
+		            &.last{
+				        border-left: none;
+					    border-top-left-radius:0px;
+					    border-bottom-left-radius: 0px;	
+			            &.active{
+			                color:$colour-heading-inverted;
+			                text-decoration: none;
+                            background: $colour-background-dark;
+                            border-radius: 3px;
+                            padding: 2px 10px;
+				            &:hover{text-decoration: none;}
+				        }
+			        }
+		            &.active{	
+			                color:$colour-heading-inverted;
+			                text-decoration: none;
+                            background: $colour-background-dark;
+                            border-radius: 3px;
+                            padding: 2px 10px;
+				            &:hover{text-decoration: none;}
+		            }
+		        }
+            }
+
+
 
             .pages a {
                 display: inline-block;
@@ -1524,8 +1644,9 @@ button.icon {
 
            &.list{
                & .tile.full{
-                   @include gridle(6);
-                   width:284px; 
+                   @include gridle(3);
+                   max-width:284px; 
+                   min-width:200px;
                    @include gridle(4, tablet);
                    @include gridle(12, mobile);
                }
@@ -1686,6 +1807,9 @@ button{
 
 #hero {    
     height: 600px;
+    @include gridle_state("mobile"){
+        height:70vh;
+    }
     @include display-flex();
     @include align-items-flex-end();
     
@@ -2093,7 +2217,8 @@ $padding-side: 3%;
         padding-left: 10px;
         padding-right: 10px;
         @include gridle (3);
-        width:284px;
+        max-width:284px;
+        min-width:200px;
         @include gridle (4, 'tablet');
         @include gridle ( 6, 'mobile' );
         float: left;
@@ -2456,7 +2581,19 @@ $padding-side: 3%;
 
 #map {
     height:450px;
-    border-radius:5px;
+    @include border-radius(3);
+    margin-left: -10px;
+    
+
+}
+#mapdata{
+    background: $colour-background-midlight;
+    padding-bottom: 30px;
+    margin-left: -10px;
+    margin-top: 20px;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right:10px;
 }
 
 .social{
@@ -2776,6 +2913,8 @@ footer {
 
     & .sidecolumn {
         @include gridle(4);
+        @include gridle(12,"tablet");
+        @include gridle(12, "mobile");
         clear:right;
         float: right;
         direction: ltr;

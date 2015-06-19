@@ -859,9 +859,9 @@
         {
             <aside class="side-content">              
                 <div class="on-display @Model.Item.MuseumLocation.DisplayLocation.ToClass()">
-                    On display<br />
-                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br />
-                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
+                    <h4>On display</h4>
+                    <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br/>
+                    <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
                 </div>
             </aside>
         }

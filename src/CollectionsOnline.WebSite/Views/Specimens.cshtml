@@ -502,9 +502,10 @@
                 </ul>
                 @if (Model.GeoSpatial.Any())
                 {
-                    <h3 class="sub-heading">Geospatial Information</h3>
+
                     <div>
                         <div id="mapdata">
+                            <h3 class="sub-heading">Geospatial Information</h3>
                             <ul>
                                 @foreach (var geoSpatial in Model.GeoSpatial)
                                 {
@@ -524,9 +525,9 @@
         {
             <aside class="side-content">
                 <div class="on-display @Model.Specimen.MuseumLocation.DisplayLocation.ToClass()">
-                    On display<br />
-                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Gallery)">@Model.Specimen.MuseumLocation.Gallery</a><br />
-                    <a href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Venue)">@Model.Specimen.MuseumLocation.Venue</a>
+                    <h4>On display</h4>
+                    <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Gallery)">@Model.Specimen.MuseumLocation.Gallery</a><br/>
+                    <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Venue)">@Model.Specimen.MuseumLocation.Venue</a>
                 </div>
             </aside>
         }

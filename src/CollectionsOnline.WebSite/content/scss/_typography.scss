@@ -83,6 +83,9 @@
     content: "\e609";
     font-size: 1.5em;
     float:right;
+    .disabled &{
+        content:"\e601";
+    }
 }
 
 .icon-download:before {
