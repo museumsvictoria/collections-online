@@ -143,19 +143,19 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Mind and Body Gallery", Venue = "Melbourne Museum" }
             },
             {
-                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground", "West", "Gallery 1"),
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground Level", "West", "Gallery 1"),
                 new MuseumLocation { Gallery = "Discovery Centre", Venue = "Melbourne Museum" }
             },
             {
-                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground", "Central", string.Empty),
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground Level", "Central", string.Empty),
                 new MuseumLocation { Gallery = "Public Spaces Lower Level", Venue = "Melbourne Museum" }
             },
             {
-                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground", "West", string.Empty),
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground Level", "West", string.Empty),
                 new MuseumLocation { Gallery = "Public Spaces Lower Level", Venue = "Melbourne Museum" }
             },
             {
-                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground", "East", string.Empty),
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "Lower Ground Level", "East", string.Empty),
                 new MuseumLocation { Gallery = "Public Spaces Lower Level", Venue = "Melbourne Museum" }
             },
             {
@@ -247,15 +247,7 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Museum Entrance", Venue = "Immigration Museum" }
             },
             {
-                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Ground Level", "Discovery Centre", string.Empty),
-                new MuseumLocation { Gallery = "Discovery Centre", Venue = "Immigration Museum" }
-            },
-            {
-                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Level 1", "Foyer", string.Empty),
-                new MuseumLocation { Gallery = "Discovery Centre", Venue = "Immigration Museum" }
-            },
-            {
-                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Level 1", "South West", "Vestibule"),
+                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Ground Level", "Central", "Discovery Centre"),
                 new MuseumLocation { Gallery = "Discovery Centre", Venue = "Immigration Museum" }
             },
             {
