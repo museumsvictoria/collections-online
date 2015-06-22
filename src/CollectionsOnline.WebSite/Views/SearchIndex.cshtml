@@ -132,7 +132,7 @@
                         <span class="icon-left-arrow"></span>
                         <span class="icon-label-hidden">Previous page</span>
                     </a>
-                    <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages</span>
+                    <input type="text" pattern="\d*" name="Page" value="@Model.Page" /> of <span class="total">@Model.TotalPages.ToString("N0")</span>
                     <a href="@Model.NextPageUrl" class="button @(string.IsNullOrWhiteSpace(@Model.NextPageUrl) ? "disabled" : "")">
                         <span class="icon-label-hidden">Next page</span>
                         <span class="icon-right-arrow"></span>
