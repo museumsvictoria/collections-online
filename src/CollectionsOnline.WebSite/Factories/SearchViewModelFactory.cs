@@ -90,7 +90,7 @@ namespace CollectionsOnline.WebSite.Factories
                 .Where(y => y.Active)
                 .Select(x => new ActiveFacetValueViewModel
                 {
-                    Facet = x.Facet,
+                    Facet = x.Facet.Humanize(),
                     Name = x.Name,
                     UrlToRemove = x.Url
                 }).ToList();
