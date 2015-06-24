@@ -1,6 +1,9 @@
 ﻿var $ = require('jquery');
 var objectFit = require('object-fit');
 
+require('video.js');
+require('videojs-youtube');
+
 module.exports = {
   init: function () {
     this.cacheElements();
@@ -52,11 +55,6 @@ module.exports = {
       var image = this.Model[this.$activeImage.parent().index()];
 
       var fullscreenImageHeight = window.innerHeight - $('#media figcaption').height();
-
-      //// force small viewport heights to zoom (may be stupid)
-      //if (this.$heroImage.height() >= fullscreenImageHeight)
-      //  fullscreenImageHeight = this.$heroImage.height() * 1.5;      
-
 
       $('html, body').animate({
         scrollTop: this.$heroImage.offset().top
