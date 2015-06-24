@@ -1,6 +1,9 @@
 ﻿var $ = require('jquery');
 var objectFit = require('object-fit');
 
+require('video.js');
+require('videojs-youtube');
+
 module.exports = {
   init: function () {
     this.cacheElements();
@@ -47,37 +50,41 @@ module.exports = {
     this.switchImage($(e.target).parent().index());
   },
   fullscreen: function () {
-    var fullscreenImageHeight = window.innerHeight - $('#media figcaption').height();
+    if (this.Model !== undefined && this.Model.length != 0) {
+      var $this = this;
+      var image = this.Model[this.$activeImage.parent().index()];
 
-    // force small viewport heights to zoom (may be stupid)
-    if (this.$heroImage.height() >= fullscreenImageHeight)
-      fullscreenImageHeight = this.$heroImage.height() * 1.5;
-    
-    $('html, body').animate({
-      scrollTop: this.$heroImage.offset().top
-    }, 200);
+      var fullscreenImageHeight = window.innerHeight - $('#media figcaption').height();
 
-    if (!this.$mediaArea.hasClass('expanded')) {
-      this.$heroImage.animate({
-        'max-height': fullscreenImageHeight
-      }, 200);
-      
-      this.$imageHolder.animate({
-        maxWidth: window.innerWidth
+      $('html, body').animate({
+        scrollTop: this.$heroImage.offset().top
       }, 200);
 
-      this.$mediaArea.addClass('expanded');
-    } else {
-      
-      this.$heroImage.animate({
-        'max-height': this.defaultMaxHeight,
-      }, 200);
-      
-      this.$imageHolder.animate({
-        maxWidth: this.defaultMaxWidth
-      }, 200);
-      
-      this.$mediaArea.removeClass('expanded');
+      if (!this.$mediaArea.hasClass('expanded')) {
+        this.$heroImage.attr('src', image.Large.Uri);
+
+        this.$heroImage.animate({
+          'max-height': fullscreenImageHeight
+        }, 200);
+
+        this.$imageHolder.animate({
+          maxWidth: window.innerWidth
+        }, 200);
+
+        this.$mediaArea.addClass('expanded');
+      } else {
+        this.$heroImage.animate({
+          'max-height': this.defaultMaxHeight,
+        }, 200, function() {
+          $this.$heroImage.attr('src', image.Medium.Uri);
+        });
+
+        this.$imageHolder.animate({
+          maxWidth: this.defaultMaxWidth
+        }, 200);
+
+        this.$mediaArea.removeClass('expanded');        
+      }
     }
   },
   moveTo: function(e) {
@@ -111,7 +118,11 @@ module.exports = {
 
       var newImage = this.Model[index];
 
-      this.$heroImage.attr('src', newImage.Large.Uri);
+      if (this.$mediaArea.hasClass('expanded')) {
+        this.$heroImage.attr('src', newImage.Large.Uri);
+      } else {
+        this.$heroImage.attr('src', newImage.Medium.Uri);
+      }
 
       (newImage.Caption) ? this.$heroCaption.html(newImage.Caption) : this.$heroCaption.empty();
       (newImage.Creators.length > 0) ? this.$heroCreators.text(newImage.Creators.join(', ')) : this.$heroCreators.empty();
