@@ -45,4 +45,14 @@ namespace CollectionsOnline.Core.Models
     {
         public MediaFile File { get; set; }
     }
+
+    public class VideoMedia : Media
+    {
+        public string Uri { get; set; }
+    }
+
+    public class AudioMedia : Media
+    {
+        public MediaFile File { get; set; }
+    }
 }

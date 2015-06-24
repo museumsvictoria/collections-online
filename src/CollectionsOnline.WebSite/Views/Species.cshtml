@@ -15,6 +15,7 @@
     @if (Model.SpeciesImages.Any())
     {
         imageCount = Model.SpeciesImages.Count();
+        videoCount = Model.SpeciesVideos.Count();
         <div class="thumbnails wrapper">
             @foreach (var speciesImage in Model.SpeciesImages)
             {
