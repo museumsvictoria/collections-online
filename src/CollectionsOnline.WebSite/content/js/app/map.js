@@ -13,6 +13,8 @@ module.exports = {
       L.mapbox.accessToken = 'pk.eyJ1IjoibW1hc29uIiwiYSI6IlFtOXZGSW8ifQ.mIKIjLOaVEDuLDQOM-ddzA';
       var map = L.mapbox.map('map', 'mmason.c525da74').setView(this.Model[0], 8);
       var marker = L.marker(this.Model[0]).addTo(map);
+      
+      map.scrollWheelZoom.disable();
     } else {
       $('#map').hide();
     }

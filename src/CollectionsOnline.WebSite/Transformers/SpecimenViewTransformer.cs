@@ -34,7 +34,7 @@ namespace CollectionsOnline.WebSite.Transformers
                             SubDisplayTitle = relatedSpecimen.RegistrationNumber,
                             relatedSpecimen.Summary,
                             relatedSpecimen.ThumbnailUri,
-                            RecordType = "Item"
+                            RecordType = "Specimen"
                         },
                     RelatedSpecies = from speciesId in specimen.RelatedSpeciesIds
                         let relatedSpecies = LoadDocument<Species>(speciesId)
