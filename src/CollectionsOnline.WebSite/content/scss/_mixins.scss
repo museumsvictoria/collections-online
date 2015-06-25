@@ -64,19 +64,34 @@
   display: -webkit-flex;
   display: flex;
 }
-
 @mixin flex-direction($direction){
-	  -webkit-flex-direction: $direction; /* Safari 6.1+ */
+	-ms-flex-direction: $direction;
+    -webkit-flex-direction: $direction; /* Safari 6.1+ */
     flex-direction: $direction; 
+    
 }
 
+@mixin justify-content($position){
+    -webkit-justify-content:$position;
+    justify-content:$position;
+}
+
+@mixin flex-flow-row-nowrap(){
+    -ms-flex-wrap:none;
+    -ms-flex-direction:row;
+    flex-flow: row nowrap;
+   
+}
+
+
 @mixin align-items-flex-end(){
-	  align-items: flex-end;
-  -webkit-align-items: flex-end;
-	
+	 -ms-flex-align: end;
+     -webkit-align-items: flex-end;
+	 align-items: flex-end;
 }
 
 @mixin alignitem-center(){
-	align-items: center;
+	-ms-flex-align: center;
 	-webkit-align-items: center;
+    align-items: center;
 }

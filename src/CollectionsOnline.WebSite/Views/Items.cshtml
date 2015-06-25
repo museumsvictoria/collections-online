@@ -951,6 +951,42 @@
         </div>
     </div>
 }
+@if (Model.Item.Comments.Count > 0)
+{
+    <div id="comments">
+        <div class="wrapper">
+            <h3>Comments</h3>
+            <div id="commentform">
+                <div class="holder">
+                    <h3 id="addheader" style="display: block;">Share your knowledge</h3>
+                    <div id="commentadd" style="display: block;">
+                        <p>
+                            We appreciate your comments and are planning an upgraded system for you to share your knowledge with us.</p>
+                        <p>For now, please visit our <a href="http://museumvictoria.com.au/discoverycentre/ask-us-a-question/ ">Ask the Experts</a> page and get in touch with us there.
+                        </p>
+                        <p>
+                            Museum Victoria does not provide valuations, for more information please visit the valuation
+                            <a href="http://museumvictoria.com.au/discoverycentre/infosheets/valuations/">infosheet</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="comments">
+                @foreach (var comment in Model.Item.Comments.OrderByDescending(c=>c.Created)) {
+                <div class="comment">
+                    <span class="name">@comment.Author</span>
+                    <span class="date">Posted on @comment.Created.ToString("dd MMM yyyy") at @comment.Created.ToString("hh:mm tt")</span>
+                    <span class="commenttext">@comment.Content</span>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    
+}
+
+
 
 @if (Model.JsonItemImages != null)
 {

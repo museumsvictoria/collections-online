@@ -3,9 +3,11 @@
 @{
     Layout = "Layout.cshtml";
 }
-<div class="abouthero @Model.Collection.Category.ToClass()">    
+<div class="abouthero @Model.Collection.Category.ToClass()">   
+    <span class="collcategorybackground"></span>
 </div>
 <div id="collarea" class="container">
+    <span class="collcategory">@Model.Collection.Category</span>
     <div class="colldesc">
         <h1>@Model.Collection.DisplayTitle</h1>
         <p>@Html.ConvertNewlines(Model.Collection.CollectionSummary)</p>
