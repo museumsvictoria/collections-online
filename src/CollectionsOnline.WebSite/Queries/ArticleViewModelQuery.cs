@@ -28,10 +28,9 @@ namespace CollectionsOnline.WebSite.Queries
 
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
 
-            // Set Media
-            result.ArticleImages = result.Article.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
-            result.ArticleFiles = result.Article.Media.Where(x => x is FileMedia).Cast<FileMedia>().ToList();
-            result.JsonArticleImages = JsonConvert.SerializeObject(result.ArticleImages);
+            // Exclude file media as that is handled differently
+            result.ArticleMedia = result.Article.Media.Where(x => !(x is FileMedia)).ToList();
+            result.JsonArticleMedia = JsonConvert.SerializeObject(result.ArticleMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             return result;
         }

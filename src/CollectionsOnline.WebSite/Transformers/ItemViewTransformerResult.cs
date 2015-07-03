@@ -8,6 +8,8 @@ namespace CollectionsOnline.WebSite.Transformers
     {
         public Item Item { get; set; }
 
+        public IList<Media> ItemMedia { get; set; }
+
         public IList<EmuAggregateRootViewModel> RelatedItems { get; set; }
 
         public IList<EmuAggregateRootViewModel> RelatedSpecimens { get; set; }
@@ -18,21 +20,15 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedSpeciesSpecimenItemCount { get; set; }
 
-        public IList<ImageMedia> ItemImages { get; set; }
-
-        public IList<FileMedia> ItemFiles { get; set; }
-
-        public string JsonItemImages { get; set; }
+        public string JsonItemMedia { get; set; }
         
-
         public ItemViewTransformerResult()
         {
+            ItemMedia = new List<Media>();
             RelatedItems = new List<EmuAggregateRootViewModel>();
             RelatedSpecimens = new List<EmuAggregateRootViewModel>();
             RelatedArticles = new List<EmuAggregateRootViewModel>();
             RelatedSpecies = new List<EmuAggregateRootViewModel>();
-            ItemImages = new List<ImageMedia>();
-            ItemFiles = new List<FileMedia>();
         }
     }
 }

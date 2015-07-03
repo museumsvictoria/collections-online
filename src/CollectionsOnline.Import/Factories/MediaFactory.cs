@@ -4,24 +4,30 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using ImageProcessor.Imaging;
 using IMu;
+using NLog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class MediaFactory : IMediaFactory
     {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IImageMediaFactory _imageMediaFactory;
         private readonly IFileMediaFactory _fileMediaFactory;
+        private readonly IVideoMediaFactory _videoMediaFactory;
 
         public MediaFactory(
             IImageMediaFactory imageMediaFactory,
-            IFileMediaFactory fileMediaFactory)
+            IFileMediaFactory fileMediaFactory,
+            IVideoMediaFactory videoMediaFactory)
         {
             _imageMediaFactory = imageMediaFactory;
             _fileMediaFactory = fileMediaFactory;
+            _videoMediaFactory = videoMediaFactory;
         }
 
         public Media Make(Map map, ResizeMode? thumbnailResizeMode)
@@ -113,7 +119,10 @@ namespace CollectionsOnline.Import.Factories
                         Uri = identifier
                     };
 
-                    return videoMedia;
+                    if (_videoMediaFactory.Make(ref videoMedia))
+                    {
+                        return videoMedia;
+                    }
                 }
 
                 // Handle audio
@@ -147,7 +156,24 @@ namespace CollectionsOnline.Import.Factories
         {
             var medias = new List<Media>();
 
-            medias.AddRange(maps.Select(x => Make(x, thumbnailResizeMode)).Where(x => x != null));
+            // Group by mmr irn
+            var groupedMediaMaps = maps
+                .GroupBy(x => x.GetEncodedString("irn"))
+                .ToList();
+
+            // Find and log duplicate mmr irns
+            var duplicateMediaIrns = groupedMediaMaps
+                .Where(x => x.Count() > 1)
+                .Select(x => x.Key)
+                .ToList();
+            if(duplicateMediaIrns.Any())
+                _log.Warn("Duplicate MMR Irns found: {0}", duplicateMediaIrns.Concatenate(", "));
+
+            // Select only distinct mmr maps
+            var distinctMediaMaps = groupedMediaMaps.Select(x => x.First());
+
+            // Create medias
+            medias.AddRange(distinctMediaMaps.Select(x => Make(x, thumbnailResizeMode)).Where(x => x != null));
 
             return medias;
         }

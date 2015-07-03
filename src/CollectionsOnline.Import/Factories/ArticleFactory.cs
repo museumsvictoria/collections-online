@@ -189,6 +189,7 @@ namespace CollectionsOnline.Import.Factories
                 article.Summary = article.ContentText;
 
             // Display Title
+            // TODO: Move to display title factory and encapsulate entire process
             if (!string.IsNullOrWhiteSpace(article.Title))
                 article.DisplayTitle = article.Title;
 

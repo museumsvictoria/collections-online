@@ -38,10 +38,9 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Set Media            
-            result.SpecimenImages = result.Specimen.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
-            result.SpecimenFiles = result.Specimen.Media.Where(x => x is FileMedia).Cast<FileMedia>().ToList();
-            result.JsonSpecimenImages = JsonConvert.SerializeObject(result.SpecimenImages);
+            // Exclude file media as that is handled differently
+            result.SpecimenMedia = result.Specimen.Media.Where(x => !(x is FileMedia)).ToList();
+            result.JsonSpecimenMedia = JsonConvert.SerializeObject(result.SpecimenMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             // TODO: move to view factory and create dedicated view model
             // Set Geospatial

@@ -538,7 +538,8 @@ namespace CollectionsOnline.Import.Factories
                     specimen.AssociatedDate = yearSpan;
             }
 
-            // Display Title
+            // Display Title 
+            // TODO: Move to display title factory and encapsulate entire process
             if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.TektitesName))
                 specimen.DisplayTitle = specimen.TektitesName;
             else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MeteoritesName))

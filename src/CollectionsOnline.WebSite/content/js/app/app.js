@@ -1,11 +1,11 @@
 ﻿var $ = require('jquery');
-var images = require('./images');
+var media = require('./media');
 var search = require('./search');
 var map = require('./map');
 
 var App = {
   init: function() {
-    images.init();
+    media.init();
     search.init();
     map.init();
   }
@@ -14,3 +14,7 @@ var App = {
 $(document).ready(function () {
   App.init();
 });
+
+$.whenArray = function (array) {
+  return $.when.apply(this, array);
+};
