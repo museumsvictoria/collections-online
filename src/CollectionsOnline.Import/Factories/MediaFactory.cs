@@ -158,6 +158,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Group by mmr irn
             var groupedMediaMaps = maps
+                .Where(x => x != null)
                 .GroupBy(x => x.GetEncodedString("irn"))
                 .ToList();
 
@@ -173,7 +174,7 @@ namespace CollectionsOnline.Import.Factories
             var distinctMediaMaps = groupedMediaMaps.Select(x => x.First());
 
             // Create medias
-            medias.AddRange(distinctMediaMaps.Select(x => Make(x, thumbnailResizeMode)).Where(x => x != null));
+            medias.AddRange(distinctMediaMaps.Select(x => Make(x, thumbnailResizeMode)));
 
             return medias;
         }

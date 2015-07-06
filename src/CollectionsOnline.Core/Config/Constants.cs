@@ -21,9 +21,7 @@ namespace CollectionsOnline.Core.Config
 
         public static int SummaryMaxChars = 120;
 
-        public static int HomeMaxRecentResults = 12;
-        
-        public static int HomeHeroBackgroundImages = 5;
+        public static int HomeMaxRecentResults = 12;               
 
         public static string ImuItemQueryString = "Collections Online: Humanities";
 

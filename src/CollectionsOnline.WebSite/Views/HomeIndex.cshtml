@@ -2,7 +2,7 @@
 @{
     Layout = "Layout.cshtml";
 }
-<div id="hero" class="@Model.GetHeroImageClass">
+<div id="hero" style="background: url('@Model.HomeHeroUri') no-repeat center center;">
     <div class="search-area">
         <form method="GET" action="/search" role="form">
             <input type="text" name="query" placeholder="enter search term ..." />

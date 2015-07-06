@@ -4,7 +4,7 @@ using Google.Apis.YouTube.v3;
 using Ninject.Activation;
 using NLog;
 
-namespace CollectionsOnline.Core.Infrastructure
+namespace CollectionsOnline.Import.Infrastructure
 {
     public class YoutubeServiceProvider : Provider<YouTubeService>
     {

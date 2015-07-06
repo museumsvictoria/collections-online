@@ -2,6 +2,8 @@
 using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.WebSite.Factories;
+using CollectionsOnline.WebSite.Infrastructure;
 using CollectionsOnline.WebSite.Models;
 using Raven.Client;
 
@@ -10,11 +12,14 @@ namespace CollectionsOnline.WebSite.Queries
     public class HomeViewModelQuery : IHomeViewModelQuery
     {
         private readonly IDocumentSession _documentSession;
+        private IHomeHeroUriFactory _homeHeroUriFactory;
 
         public HomeViewModelQuery(
-            IDocumentSession documentSession)
+            IDocumentSession documentSession,
+            IHomeHeroUriFactory homeHeroUriFactory)
         {
             _documentSession = documentSession;
+            _homeHeroUriFactory = homeHeroUriFactory;
         }
 
         public HomeIndexViewModel BuildHomeIndex()
@@ -56,6 +61,8 @@ namespace CollectionsOnline.WebSite.Queries
                     .Take(Constants.HomeMaxRecentResults)
                     .SelectFields<EmuAggregateRootViewModel>()
                     .ToList();
+
+                homeViewModel.HomeHeroUri = _homeHeroUriFactory.GetCurrentUri();
 
                 return homeViewModel;
             }

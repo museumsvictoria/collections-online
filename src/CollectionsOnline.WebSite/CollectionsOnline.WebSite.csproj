@@ -148,7 +148,6 @@
     <Content Include="content\img\bg-collection-hero-technology-and-society.jpg" />
     <Content Include="content\img\bg-collection-hero-zoology.jpg" />
     <Content Include="content\img\bg-on-display-bunjilaka.png" />
-    <Content Include="content\img\CreativeVictoriaLogo_Reversed.png" />
     <Content Include="content\img\bg-on-display-immigration-museum.png" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-bunjilaka.jpg" />
@@ -186,6 +185,8 @@
     <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
     <Compile Include="Factories\DevelopersViewModelFactory.cs" />
     <Compile Include="Infrastructure\AutomapperConfig.cs" />
+    <Compile Include="Factories\HomeHeroUriFactory.cs" />
+    <Compile Include="Factories\IHomeHeroUriFactory.cs" />
     <Compile Include="ModelBinders\SearchInputModelBinder.cs" />
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />

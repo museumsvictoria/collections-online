@@ -566,69 +566,7 @@ button.icon {
         }
     }
 
-    /*&.fullscreen {
-        width: 100%;
-        height: 100vh;
-        -webkit-transition: 0.4s;
-        -moz-transition: 0.4s;
-        -ms-transition: 0.4s;
-        -o-transition: 0.4s;
-        transition: 0.4s;
-
-        .media-holder {
-            height: 100vh;
-            width: 100%;
-            max-width: none;
-            overflow: auto;
-            -webkit-transition: 0.4s;
-            -moz-transition: 0.4s;
-            -ms-transition: 0.4s;
-            -o-transition: 0.4s;
-            transition: 0.4s;
-
-        }        
-
-        & img {
-            //height:100%;
-            max-height: none;
-            max-width: none;
-            -webkit-transition: 0.4s;
-            -moz-transition: 0.4s;
-            -ms-transition: 0.4s;
-            -o-transition: 0.4s;
-            transition: 0.4s;
-            margin-bottom: 100px;
-        }
-
-        & figcaption {
-            //height: 40px;
-            position: absolute;
-            bottom: 0;
-            overflow: hidden;
-            width: 100%;
-
-            & .media-tools {
-                & button {
-                    // height:20px;
-                    &.icon.info {
-                        display: inline;
-                    }
-
-                    &#expand {
-                        display: none;
-                    }
-
-                    &#contract {
-                        display: inline;
-                    }
-                }
-
-
-            }
-        }
-    }*/
-
-    .expanded .media-tools button .icon::before {
+    &.expanded .media-tools button .icon::before {
         font-family: "mv-collections";
         content: "\e608";
         font-size: 1.5em;
@@ -1898,27 +1836,7 @@ button{
         height:70vh;
     }
     @include display-flex();
-    @include align-items-flex-end();
-    
-    &.hero-image-1 {
-        background: url("/content/img/bg-home-hero-birds.jpg") no-repeat center center;
-    }
-
-    &.hero-image-2 {
-        background: url("/content/img/bg-home-hero-herpetology.jpg") no-repeat center center;
-    }
-
-    &.hero-image-3 {
-        background: url("/content/img/bg-home-hero-ic.jpg") no-repeat center center;
-    }
-    
-    &.hero-image-4 {
-        background: url("/content/img/bg-home-hero-ornithology.jpg") no-repeat center center;
-    }
-
-    &.hero-image-5 {
-        background: url("/content/img/bg-home-hero-paleontology.jpg") no-repeat center center;
-    }
+    @include align-items-flex-end();    
 
     & .search-area {
         width: 100%;

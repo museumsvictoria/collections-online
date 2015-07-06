@@ -1,6 +1,7 @@
 ﻿using System;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
+using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -24,6 +25,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
         protected override void ConfigureApplicationContainer(IKernel kernel)
         {
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
+            kernel.Bind<IHomeHeroUriFactory>().To<HomeHeroUriFactory>().InSingletonScope();
             kernel.Bind<JsonSerializer>().To<ApiJsonSerializer>();
 
             var documentStore = kernel.Get<IDocumentStore>();
@@ -37,11 +39,12 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
         protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)
         {
-            kernel.Bind<IDocumentSession>().ToProvider<NinjectRavenDocumentSessionProvider>();            
+            kernel.Bind<IDocumentSession>().ToProvider<NinjectRavenDocumentSessionProvider>();
             kernel.Bind(x => x
                 .FromAssemblyContaining(typeof(WebSiteBootstrapper), typeof(SlugFactory))
-                .SelectAllClasses()
+                .SelectAllClasses()                
                 .InNamespaces(new[] { "CollectionsOnline" })
+                .Excluding<HomeHeroUriFactory>()
                 .BindAllInterfaces());
         }
 
