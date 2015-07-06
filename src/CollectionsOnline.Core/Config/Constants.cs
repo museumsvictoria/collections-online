@@ -250,7 +250,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Ground Level", "Central", "Discovery Centre"),
-                new MuseumLocation { Gallery = "Discovery Centre", Venue = "Immigration Museum" }
+                new MuseumLocation { Gallery = "Immigration Discovery Centre", Venue = "Immigration Museum" }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "Level 1", "West", "Gallery 1"),

@@ -14,7 +14,7 @@ namespace CollectionsOnline.Core.Models
             {
                 if (Gallery.Contains("Bunjilaka", StringComparison.OrdinalIgnoreCase))
                     return "Bunjilaka";
-                if (string.Equals(Gallery, "Discovery Centre", StringComparison.OrdinalIgnoreCase))
+                if (Gallery.Contains("Discovery Centre", StringComparison.OrdinalIgnoreCase))
                     return "Discovery Centre";
                 if (string.Equals(Venue, "Melbourne Museum", StringComparison.OrdinalIgnoreCase))
                     return "Melbourne Museum";
@@ -24,7 +24,6 @@ namespace CollectionsOnline.Core.Models
                     return "Royal Exhibition Building";
                 if (string.Equals(Venue, "Scienceworks", StringComparison.OrdinalIgnoreCase))
                     return "Scienceworks";
-
 
                 return null;
             }
