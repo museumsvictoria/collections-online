@@ -827,6 +827,9 @@ button.icon {
 	        &.immigration-museum {
 		        background:url("/content/img/bg-on-display-immigration-museum.png");
 	        }
+            &.immigration-discovery-centre{
+                background:url("/content/img/bg-on-display-immigration-museum.png");
+            }
     
             &.royal-exhibition-building {
 		        background:url("/content/img/bg-on-display-reb.png");
@@ -925,6 +928,7 @@ button.icon {
             
             .icon {
                 color:$color-sub-heading;
+                display: inline-block;
             }
 
             strong {
