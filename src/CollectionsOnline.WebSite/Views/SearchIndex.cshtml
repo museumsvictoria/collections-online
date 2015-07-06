@@ -17,9 +17,9 @@
                 foreach (var value in facet.Values)
                 {
                     var linkClass = "";
-                    if (string.Equals(value.Name, "item") || string.Equals(value.Name, "article") || string.Equals(value.Name, "species") || string.Equals(value.Name, "specimen"))
+                    if ((string.Equals(value.Name, "item", StringComparison.OrdinalIgnoreCase) || string.Equals(value.Name, "article", StringComparison.OrdinalIgnoreCase) || string.Equals(value.Name, "species", StringComparison.OrdinalIgnoreCase) || string.Equals(value.Name, "specimen", StringComparison.OrdinalIgnoreCase)) && string.Equals(facet.Name, "Record type", StringComparison.OrdinalIgnoreCase))
                     {
-                        linkClass = value.Name;
+                        linkClass = value.Name.ToLower();
                     }
                     if (value.Active)
                     {
