@@ -824,12 +824,9 @@ button.icon {
 		        background:url("/content/img/bg-on-display-bunjilaka.png");
 	        }
 	
-	        &.immigration-museum {
+	        &.immigration-museum, &.immigration-discovery-centre {
 		        background:url("/content/img/bg-on-display-immigration-museum.png");
 	        }
-            &.immigration-discovery-centre{
-                background:url("/content/img/bg-on-display-immigration-museum.png");
-            }
     
             &.royal-exhibition-building {
 		        background:url("/content/img/bg-on-display-reb.png");

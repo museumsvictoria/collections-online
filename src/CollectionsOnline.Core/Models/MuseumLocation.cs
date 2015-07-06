@@ -14,8 +14,10 @@ namespace CollectionsOnline.Core.Models
             {
                 if (Gallery.Contains("Bunjilaka", StringComparison.OrdinalIgnoreCase))
                     return "Bunjilaka";
-                if (Gallery.Contains("Discovery Centre", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(Gallery, "Discovery Centre", StringComparison.OrdinalIgnoreCase))
                     return "Discovery Centre";
+                if (string.Equals(Gallery, "Immigration Discovery Centre", StringComparison.OrdinalIgnoreCase))
+                    return "Immigration Discovery Centre";
                 if (string.Equals(Venue, "Melbourne Museum", StringComparison.OrdinalIgnoreCase))
                     return "Melbourne Museum";
                 if (string.Equals(Venue, "Immigration Museum", StringComparison.OrdinalIgnoreCase))
