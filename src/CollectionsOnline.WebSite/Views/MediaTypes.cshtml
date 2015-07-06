@@ -1,0 +1,16 @@
+﻿@using CollectionsOnline.Core.Models
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IList<Media>>
+@if (Model.Any())
+{
+    <div class="mediatypes">
+        <div class="type images @(Model.OfType<ImageMedia>().Any() ? "active" : null)">
+            <div class="icon-image"><p>Images (@(Model.OfType<ImageMedia>().Count()))</p></div>
+        </div>
+        <div class="type videos @(Model.OfType<VideoMedia>().Any() ? "active" : null)">
+            <div class="icon-video"><p>Videos (@(Model.OfType<VideoMedia>().Count()))</p></div>
+        </div>
+        <div class="type audios @(Model.OfType<AudioMedia>().Any() ? "active" : null)">
+            <div class="icon-audio"><p>Audio (@(Model.OfType<AudioMedia>().Count()))</p></div>
+        </div>
+    </div>
+}

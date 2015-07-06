@@ -13,8 +13,6 @@
     "gulp": "^3.8.10",
     "gulp-ruby-sass": "^0.7.1",
     "jquery": "^2.1.3",
-    "video.js": "^4.12.10",
-    "videojs-youtube": "^1.2.12",
     "vinyl-source-stream": "^1.1.0"
   }
 }

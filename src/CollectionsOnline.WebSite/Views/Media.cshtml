@@ -1,0 +1,96 @@
+﻿@using CollectionsOnline.Core.Models
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IList<Media>>
+@if (Model.Any())
+{
+    <figure id="media">
+        <div class="media-holder">
+            <a class="previous icon-left-arrow inactive"></a>
+            <div class="hero-media">
+                @if (Model.First() is ImageMedia)
+                {
+                    var image = Model.First() as ImageMedia;
+                    <img class="image" src="@image.Medium.Uri" alt="@image.AlternativeText" />
+                }
+                else if (Model.First() is VideoMedia)
+                {
+                    var video = Model.First() as VideoMedia;
+                    <img class="video" src="@video.Medium.Uri" alt="@video.Caption" />
+                }
+            </div>
+            <a class="next icon-right-arrow"></a>
+        </div>
+        <figcaption>
+            <div class="wrapper"> 
+                <div class="caption">
+                    <span class="caption-text">
+                        @if (!string.IsNullOrWhiteSpace(Model.First().Caption))
+                        {
+                            @Html.Raw(Model.First().Caption)
+                        }
+                    </span>
+                    <span class="creators">
+                        @for (int i = 0; i < Model.First().Creators.Count; i++)
+                        {
+                            @Model.First().Creators[i]@(i != Model.First().Creators.Count - 1 ? ", " : "")
+                        }
+                    </span>
+                    <span class="sources">
+                        @if (Model.First().Sources.Any())
+                        {
+                            @:Source:
+                            for (int i = 0; i < Model.First().Sources.Count; i++)
+                            {
+                                @Model.First().Sources[i]@(i != Model.First().Sources.Count - 1 ? ", " : "")
+
+                            }
+                        }
+                    </span>
+                    <span class="credit">
+                        @if (!string.IsNullOrWhiteSpace(Model.First().Credit))
+                        {
+                            @:Credit: @Model.First().Credit
+                        }
+                    </span>
+                    <span class="rights-statement">
+                        @if (!string.IsNullOrWhiteSpace(Model.First().RightsStatement))
+                        {
+                            if (Model.First() is ImageMedia)
+                            {
+                                @:This image is: @Model.First().RightsStatement
+                            }
+                            else if (Model.First() is VideoMedia)
+                            {
+                                @:This video is: @Model.First().RightsStatement
+                            }
+                        }
+                    </span>
+                </div>
+                <div class="media-tools">
+                    <button class="icon fullscreen">
+                        <span class="icon" aria-hidden="true"></span>
+                        <span class="icon-label-hidden">View full screen</span>
+                    </button>
+                </div>
+            </div>
+        </figcaption>
+    </figure>
+    <div id="objectthumbs">
+        <div class="thumbnails wrapper">
+            @foreach (var media in Model)
+            {
+                <div class="thumbnail">
+                    @if (media is ImageMedia)
+                    {
+                        var image = media as ImageMedia;
+                        <img @(Html.Raw((image.Irn == Model.First().Irn) ? "class=\" active\"" : null)) src="@image.Thumbnail.Uri" alt="@image.AlternativeText" />
+                    }
+                    else if (media is VideoMedia)
+                    {
+                        var video = Model.Last() as VideoMedia;
+                        <img @(Html.Raw((video.Irn == Model.First().Irn) ? "class=\" active\"" : null)) src="@video.Thumbnail.Uri" alt="@video.Caption" />
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -35,10 +35,9 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Set Media
-            result.ItemImages = result.Item.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
-            result.ItemFiles = result.Item.Media.Where(x => x is FileMedia).Cast<FileMedia>().ToList();
-            result.JsonItemImages = JsonConvert.SerializeObject(result.ItemImages);
+            // Exclude file media as that is handled differently
+            result.ItemMedia = result.Item.Media.Where(x => !(x is FileMedia)).ToList();
+            result.JsonItemMedia = JsonConvert.SerializeObject(result.ItemMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             return result;
         }

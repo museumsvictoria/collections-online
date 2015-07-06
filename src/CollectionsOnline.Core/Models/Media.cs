@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CollectionsOnline.Core.Models
 {
@@ -34,8 +35,6 @@ namespace CollectionsOnline.Core.Models
 
         public ImageMediaFile Thumbnail { get; set; }
 
-        public ImageMediaFile Small { get; set; }
-
         public ImageMediaFile Medium { get; set; }
 
         public ImageMediaFile Large { get; set; }
@@ -49,6 +48,12 @@ namespace CollectionsOnline.Core.Models
     public class VideoMedia : Media
     {
         public string Uri { get; set; }
+
+        public string VideoId { get; set; }
+
+        public ImageMediaFile Thumbnail { get; set; }
+
+        public ImageMediaFile Medium { get; set; }
     }
 
     public class AudioMedia : Media

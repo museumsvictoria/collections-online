@@ -5,6 +5,7 @@ using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
+using Google.Apis.YouTube.v3;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using NLog;
@@ -52,6 +53,9 @@ namespace CollectionsOnline.Import
             // Raven Db Bindings
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
 
+            // Services
+            kernel.Bind<YouTubeService>().ToProvider<YoutubeServiceProvider>().InSingletonScope();
+
             // Bind Imports
             kernel.Bind<IImport>().To<ImuImport<Article>>();
             kernel.Bind<IImport>().To<ImuImport<Species>>();
@@ -61,7 +65,7 @@ namespace CollectionsOnline.Import
 
             // Bind the rest
             kernel.Bind(x => x
-                .FromAssemblyContaining(typeof(Program), typeof(Constants))
+                .FromAssemblyContaining(typeof(Program), typeof(Constants))                
                 .SelectAllClasses()
                 .BindAllInterfaces());
 

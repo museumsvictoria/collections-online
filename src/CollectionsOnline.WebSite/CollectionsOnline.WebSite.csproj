@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\img\bg-on-display-reb.png" />
+    <Content Include="content\js\app\video.js" />
     <Content Include="content\js\lib\polyfill.object-fit.js" />
     <None Include="content\scss\lib\_polyfill.object-fit.scss" />
     <Content Include="content\fonts\entypo-social.svg" />
@@ -168,13 +169,15 @@
     <Content Include="content\img\bg-on-display-scienceworks.png" />
     <Content Include="content\js\app\map.js" />
     <Content Include="content\js\app\search.js" />
-    <Content Include="content\js\app\images.js" />
+    <Content Include="content\js\app\media.js" />
     <Content Include="content\js\app\app.js" />
     <Content Include="content\js\lib\query-string.js" />
     <Content Include="gulpfile.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Media.cshtml" />
+    <Content Include="Views\MediaTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\LongExtensions.cs" />

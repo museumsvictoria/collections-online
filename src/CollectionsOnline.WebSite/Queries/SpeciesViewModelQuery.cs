@@ -21,6 +21,7 @@ namespace CollectionsOnline.WebSite.Queries
         {
             var result = _documentSession.Load<SpeciesViewTransformer, SpeciesViewTransformerResult>(speciesId);
 
+            // Check to see whether there are related specimens
             if (result.Species.Taxonomy != null)
             {
                 var query = _documentSession.Advanced
@@ -29,17 +30,19 @@ namespace CollectionsOnline.WebSite.Queries
                     .Take(1);
 
                 // Dont allow a link to search page if the current species is the only result
-                if (query.SelectFields<CombinedIndexResult>("Id").Select(x => x.Id).Except(new[] {speciesId}).Any())
+                if (query
+                    .SelectFields<CombinedIndexResult>("Id")
+                    .Select(x => x.Id)
+                    .Except(new[] {speciesId})
+                    .Any())
                 {
                     result.RelatedSpecimenCount = query.QueryResult.TotalResults;
                 }
             }
 
-            // Set Media            
-            result.SpeciesImages = result.Species.Media.Where(x => x is ImageMedia).Cast<ImageMedia>().ToList();
-            result.SpeciesFiles = result.Species.Media.Where(x => x is FileMedia).Cast<FileMedia>().ToList();
-            result.SpeciesVideos = result.Species.Media.Where(x => x is VideoMedia).Cast<VideoMedia>().ToList();
-            result.JsonSpeciesImages = JsonConvert.SerializeObject(result.SpeciesImages);
+            // Exclude file media as that is handled differently
+            result.SpeciesMedia = result.Species.Media.Where(x => !(x is FileMedia)).ToList();
+            result.JsonSpeciesMedia = JsonConvert.SerializeObject(result.SpeciesMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             return result;
         }

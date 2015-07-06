@@ -29,42 +29,35 @@ namespace CollectionsOnline.Import.Factories
             // Build a list the various image conversions used in the application
             _imageMediaJobs = new List<ImageMediaJob>
             {
-                //new ImageMediaJob
-                //{
-                //    FileDerivativeType = FileDerivativeType.Original,
-                //    ResizeLayer = new ResizeLayer(new Size(4000, 4000), ResizeMode.Max, upscale:false),
-                //    Quality = 90
-                //},
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Original,
+                    ResizeLayer = new ResizeLayer(new Size(3000, 3000), ResizeMode.Max, upscale:false),
+                    Quality = 90
+                },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Pad),
+                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Crop),
                     BackgroundColor = Color.White,
-                    Quality = 60
+                    Quality = 80
                 },
-                //new ImageMediaJob
-                //{
-                //    FileDerivativeType = FileDerivativeType.Small,
-                //    ResizeLayer = new ResizeLayer(new Size(350, 350)),
-                //    BackgroundColor = Color.White,
-                //    Quality = 70
-                //},
-                //new ImageMediaJob
-                //{
-                //    FileDerivativeType = FileDerivativeType.Medium,
-                //    ResizeLayer = new ResizeLayer(new Size(800, 800), ResizeMode.Max),
-                //    Quality = 60
-                //},
+                new ImageMediaJob
+                {
+                    FileDerivativeType = FileDerivativeType.Medium,
+                    ResizeLayer = new ResizeLayer(new Size(0, 500), ResizeMode.Max),
+                    Quality = 80
+                },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Large,
-                    ResizeLayer = new ResizeLayer(new Size(1040, 1040), ResizeMode.Max, upscale:false),
+                    ResizeLayer = new ResizeLayer(new Size(1500, 1500), ResizeMode.Max, upscale:false),
                     Quality = 80
                 }
             };
         }
 
-        public bool Make(ref ImageMedia imageMedia)
+        public bool Make(ref ImageMedia imageMedia, ResizeMode? thumbnailResizeMode)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -106,6 +99,10 @@ namespace CollectionsOnline.Import.Factories
                         foreach (var imageMediaJob in _imageMediaJobs)
                         {
                             imageFactory.Reset();
+
+                            // Hack for overridding padding
+                            if (imageMediaJob.FileDerivativeType == FileDerivativeType.Thumbnail && thumbnailResizeMode.HasValue)
+                                imageMediaJob.ResizeLayer.ResizeMode = thumbnailResizeMode.Value;
 
                             // Indirectly call graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
                             if (imageMediaJob.ResizeLayer.Upscale == false && (imageFactory.Image.Width < imageMediaJob.ResizeLayer.Size.Width || imageFactory.Image.Height < imageMediaJob.ResizeLayer.Size.Height))

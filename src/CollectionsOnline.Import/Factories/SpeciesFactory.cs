@@ -193,6 +193,7 @@ namespace CollectionsOnline.Import.Factories
                 species.Summary = species.Biology;
 
             // Display Title
+            // TODO: Move to display title factory and encapsulate entire process
             if (species.Taxonomy != null)
             {
                 var scientificName = _taxonomyFactory.MakeScientificName(QualifierRankType.None, null, species.Taxonomy);

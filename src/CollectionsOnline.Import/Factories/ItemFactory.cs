@@ -538,7 +538,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     var sources = accessionMap.GetMaps("source")
                     .Where(x => string.IsNullOrWhiteSpace(x.GetEncodedString("AcqSourceRole_tab")) ||
-                        (!x.GetEncodedString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
+                        (!x.GetEncodedString("AcqSourceRole_tab").Contains("confidential", StringComparison.OrdinalIgnoreCase) &&
                          !x.GetEncodedString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
                          !x.GetEncodedString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
                     .Select(x => _partiesNameFactory.Make(x.GetMap("name"))).ToList();
@@ -621,6 +621,7 @@ namespace CollectionsOnline.Import.Factories
                 item.Summary = item.PhysicalDescription;
 
             // Display Title
+            // TODO: Move to display title factory and encapsulate entire process
             if (string.Equals(map.GetEncodedString("ColCategory"), "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
             {
                 item.DisplayTitle = new[]

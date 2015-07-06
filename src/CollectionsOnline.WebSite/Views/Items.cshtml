@@ -1,60 +1,19 @@
-﻿@using CollectionsOnline.WebSite.Extensions
+﻿@using CollectionsOnline.Core.Models
+@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ItemViewTransformerResult>
 @{
     Layout = "Layout.cshtml";
-    var imageCount = 0;
-    var audioCount = 0;
-    var videoCount = 0;
-    var bookCount = 0;
 }
-@if (Model.ItemImages.FirstOrDefault() != null)
-{
-    @Html.Partial("ImageMedia", Model.ItemImages.First())
-}
-<div  id="objectthumbs">
-    @if (Model.ItemImages.Any())
-    {
-        <div class="thumbnails wrapper">
-            @foreach (var itemImage in Model.ItemImages)
-            {
-                <div class="thumbnail">
-                    @if (itemImage.Thumbnail.Uri == Model.ItemImages.First().Thumbnail.Uri)
-                    {
-                        <img class="active" src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
-                    }
-                    else
-                    {
-                        <img src="@itemImage.Thumbnail.Uri" alt="@itemImage.AlternativeText" />
-                    }
-                </div>
-            }
-        </div>
-    }
-
-</div>
+@Html.Partial("Media", Model.Item.Media)
 <div id="title">
     <div class="wrapper">
-        <div class="mediatypes">
-            <div class="type active images">
-                <div class="icon-image"><p>Images (@Model.ItemImages.Count())</p></div>
-            </div>
-            <div class="type videos">
-                <div class="icon-video"><p>Videos (0)</p></div>
-            </div>
-            <div class="type audios">
-                <div class="icon-audio"><p>Audio (0)</p></div>
-            </div>
-            <div class="type books">
-                <div class="icon-book"><p>Books (0)</p></div>
-            </div>
-        </div>
+        @Html.Partial("MediaTypes", Model.Item.Media)
         <h1>
             <span class="reg-number item">Item @Model.Item.RegistrationNumber</span>
             @Html.Raw(Model.Item.DisplayTitle)
         </h1>
     </div>
 </div>
-
 <div id="record">
     <div class="wrapper">
         <section class="text-content">
@@ -120,8 +79,8 @@
                     <p>@Html.ConvertNewlines(@Model.Item.Significance)</p>
                 }                
             </div>
+            <h2>More Information</h2>
             <div class="detail">
-                <h3> More Information</h3>
                 <ul>
                     @if (@Model.Item.CollectionNames.Any())
                     {
@@ -865,13 +824,13 @@
                 </div>
             </aside>
         }
-        @if (Model.ItemFiles.Any())
+        @if (Model.Item.Media.OfType<FileMedia>().Any())
         {
             <aside class="side-content">
                 <div class="sidecolumn">
                     <div class="downloads">
                         <h4>Associated downloads</h4>
-                        @foreach (var file in Model.ItemFiles)
+                        @foreach (var file in Model.Item.Media.OfType<FileMedia>())
                         {
                             @Html.Partial("FileMedia", file)
                         }
@@ -917,7 +876,6 @@
         </aside>
     </div>
 </div>
-
 @if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || (Model.RelatedSpecies != null && Model.RelatedSpecies.Any()) || Model.RelatedSpeciesSpecimenItemCount > 0)
 {
     <div id="related">
@@ -950,7 +908,7 @@
         </div>
     </div>
 }
-@if (Model.Item.Comments.Count > 0)
+@if (Model.Item.Comments.Any())
 {
     <div id="comments">
         <div class="wrapper">
@@ -981,15 +939,10 @@
             </div>
         </div>
     </div>
-
-    
 }
-
-
-
-@if (Model.JsonItemImages != null)
+@if (Model.JsonItemMedia != null)
 {
     <script>
-        var imagesModel = @Html.Raw(Model.JsonItemImages);
+        var mediaModel = @Html.Raw(Model.JsonItemMedia);
     </script>
 }
