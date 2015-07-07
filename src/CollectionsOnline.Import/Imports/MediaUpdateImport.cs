@@ -50,6 +50,7 @@ namespace CollectionsOnline.Import.Imports
                                     "RigCopyrightStatus",
                                     "RigLicence",
                                     "RigLicenceDetails",
+                                    "ChaRepository_tab",
                                     "AdmPublishWebNoPassword",
                                     "AdmDateModified",
                                     "AdmTimeModified"

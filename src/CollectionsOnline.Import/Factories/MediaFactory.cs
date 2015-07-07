@@ -174,7 +174,7 @@ namespace CollectionsOnline.Import.Factories
             var distinctMediaMaps = groupedMediaMaps.Select(x => x.First());
 
             // Create medias
-            medias.AddRange(distinctMediaMaps.Select(x => Make(x, thumbnailResizeMode)));
+            medias.AddRange(distinctMediaMaps.Select(x => Make(x, thumbnailResizeMode)).Where(x => x != null));
 
             return medias;
         }

@@ -134,6 +134,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\img\bg-home-hero-image-making.jpg" />
+    <Content Include="content\img\bg-home-hero-moreland.jpg" />
+    <Content Include="content\img\bg-home-hero-textiles.jpg" />
     <Content Include="content\img\bg-on-display-reb.png" />
     <Content Include="content\js\app\video.js" />
     <Content Include="content\js\lib\polyfill.object-fit.js" />
@@ -151,7 +154,6 @@
     <Content Include="content\img\bg-on-display-immigration-museum.png" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-bunjilaka.jpg" />
-    <Content Include="content\img\bg-home-hero-birds.jpg" />
     <Content Include="content\img\bg-home-hero-herpetology.jpg" />
     <Content Include="content\img\bg-home-hero-ic.jpg" />
     <Content Include="content\img\bg-home-hero-ornithology.jpg" />
@@ -275,9 +277,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Articles.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\ImageMedia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\scss\gridle\_common-mixins.scss" />

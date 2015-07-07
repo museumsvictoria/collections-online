@@ -131,7 +131,7 @@ namespace CollectionsOnline.Import.Factories
                         // Medium preview placeholder
                         imageFactory.Load(destPathMedium);
 
-                        videoMedia.Thumbnail = new ImageMediaFile
+                        videoMedia.Medium = new ImageMediaFile
                         {
                             Uri = PathFactory.MakeUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium),
                             Size = new FileInfo(destPathMedium).Length,

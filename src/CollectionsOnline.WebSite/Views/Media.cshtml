@@ -17,7 +17,7 @@
                     <img class="video" src="@video.Medium.Uri" alt="@video.Caption" />
                 }
             </div>
-            <a class="next icon-right-arrow"></a>
+            <a class="next icon-right-arrow @((Model.Count > 1) ? null : "inactive")"></a>
         </div>
         <figcaption>
             <div class="wrapper"> 
