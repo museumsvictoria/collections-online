@@ -46,8 +46,7 @@ namespace CollectionsOnline.WebSite.Queries
                 if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
                 {
                     query = query
-                        .Search("Content", searchInputModel.Query)
-                        .OrderByScoreDescending();
+                        .Search("Content", searchInputModel.Query);
 
                     facetQuery = facetQuery
                         .Search("Content", searchInputModel.Query);
@@ -57,7 +56,6 @@ namespace CollectionsOnline.WebSite.Queries
                 switch (searchInputModel.Sort)
                 {                    
                     default:
-                    case "quality":
                         query = query
                             .OrderByDescending(x => x.Quality);
                         break;
@@ -65,6 +63,16 @@ namespace CollectionsOnline.WebSite.Queries
                         query = query
                             .OrderByScoreDescending();
                         break;
+                    case "date":
+                        query = query
+                            .OrderByDescending(x => x.DateModified)
+                            .OrderByDescending(x => x.Quality);
+                        break;
+                }
+
+                if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
+                {
+                    query = query.OrderByScoreDescending();
                 }
 
                 // facet queries

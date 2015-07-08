@@ -31,6 +31,8 @@ namespace CollectionsOnline.WebSite.Models
 
         public ButtonViewModel RelevanceSortButton { get; set; }
 
+        public ButtonViewModel DateSortButton { get; set; }
+
         public ButtonViewModel DefaultPerPageButton { get; set; }
 
         public ButtonViewModel MaxPerPageButton { get; set; }

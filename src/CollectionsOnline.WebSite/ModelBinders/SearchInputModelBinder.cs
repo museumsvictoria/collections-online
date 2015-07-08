@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Models;
 using Nancy;
+using Nancy.Cookies;
 using Nancy.ModelBinding;
 
 namespace CollectionsOnline.WebSite.ModelBinders
@@ -12,7 +13,24 @@ namespace CollectionsOnline.WebSite.ModelBinders
         public object Bind(NancyContext context, Type modelType, object instance, BindingConfig configuration, params string[] blackList)
         {
             var searchInputModel = new SearchInputModel();
+            
             var query = context.Request.Query;
+
+            // Find Cookies            
+            if (context.Request.Cookies.ContainsKey("perPage"))
+            {
+                int perPage;
+                if (int.TryParse(context.Request.Cookies["perPage"], out perPage))
+                    searchInputModel.PerPage = perPage;
+            }
+            if (context.Request.Cookies.ContainsKey("sort"))
+            {
+                searchInputModel.Sort = context.Request.Cookies["sort"];
+            }
+            if (context.Request.Cookies.ContainsKey("view"))
+            {
+                searchInputModel.View = context.Request.Cookies["view"];
+            }
 
             // Bind and normalize the regular stuff
             if (query.Page.HasValue)
@@ -29,6 +47,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Sort = "quality";
             else if (string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "relevance";
+            else if (string.Equals(query.Sort, "date", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.Sort = "date";
 
             if (string.Equals(query.View, "grid", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "grid";
@@ -101,6 +121,11 @@ namespace CollectionsOnline.WebSite.ModelBinders
             if (query.Article.HasValue)
                 searchInputModel.Terms.Add("Article", query.Article);
 
+            // Add Cookies
+            searchInputModel.Cookies.Add(new NancyCookie("perPage", searchInputModel.PerPage.ToString(), true) { Path = "/search" });
+            searchInputModel.Cookies.Add(new NancyCookie("sort", searchInputModel.Sort, true) { Path = "/search" });
+            searchInputModel.Cookies.Add(new NancyCookie("view", searchInputModel.View, true) { Path = "/search" });
+            
             return searchInputModel;
         }
 

@@ -174,6 +174,15 @@ namespace CollectionsOnline.WebSite.Factories
             };
 
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("sort", "date");
+            searchIndexViewModel.DateSortButton = new ButtonViewModel
+            {
+                Name = "Date",
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.Sort == "date"
+            };
+
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("perpage", Core.Config.Constants.PagingPerPageDefault.ToString());
             queryString.Remove("page");
             searchIndexViewModel.DefaultPerPageButton = new ButtonViewModel

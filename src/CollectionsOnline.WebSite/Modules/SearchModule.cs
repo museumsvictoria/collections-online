@@ -14,7 +14,7 @@ namespace CollectionsOnline.WebSite.Modules
             {
                 var searchInputModel = this.Bind<SearchInputModel>();
 
-                return View["SearchIndex", searchViewModelQuery.BuildSearchIndex(searchInputModel)];
+                return View["SearchIndex", searchViewModelQuery.BuildSearchIndex(searchInputModel)].WithCookies(searchInputModel.Cookies);
             };
         }
     }

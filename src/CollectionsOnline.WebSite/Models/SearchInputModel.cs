@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Nancy.Cookies;
 
 namespace CollectionsOnline.WebSite.Models
 {
@@ -23,5 +24,12 @@ namespace CollectionsOnline.WebSite.Models
         public IDictionary<string, string[]> MultiFacets { get; set; }
 
         public IDictionary<string, string> Terms { get; set; }
+
+        public IList<NancyCookie> Cookies { get; set; }
+
+        public SearchInputModel()
+        {
+            Cookies = new List<NancyCookie>();
+        }
     }
 }
