@@ -301,77 +301,85 @@ button.icon {
     }*/
 }
 
-#objectthumbs{
-	background: $colour-background-dark;
-	@include display-flex();
-	padding-top:10px;
-	@include gridle_hide(mobile);
+#objectthumbs {
+    background: $colour-background-dark;
+    @include display-flex();
+    padding-top: 10px;
+    @include gridle_hide(mobile);
     @include gridle_hide("print");
-    @include gridle_state(tablet){
-        padding-left:10px;
-        padding-right:10px;
+
+    @include gridle_state(tablet) {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
-	&.expanded{   	
-	    	& #more{
-		    	display: none;
-	    	}
+    &.expanded {
+        & #more {
+            display: none;
+        }
     }
-	
-	& .thumbnails{
-	direction: ltr;
-    float: left;
-    overflow: auto;
-    padding-left: 10px;
-    padding-right: 10px;
 
-    width: 100%;
-    	    	
-    	& #more{
-		    	height:100%;
-	    	}
-        
-    	& .additional{
-	    	display: none;
-    	}
-    
+    .thumbnails {
+        direction: ltr;
+        float: left;
+        overflow: auto;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: 100%;
 
-    	
-    	& .thumbnail{
-	    	direction: ltr;
-            cursor:pointer;
-			float: left;
-			width: 8.33333%; 
-            @include gridle(2,"tablet"); 
-			padding: 0 0 7px 7px;	        
-			
-			& img {
-				display: block;
-				opacity: 0.5;
-				width: 100%;
-				&.active {
-					box-sizing: border-box;
-					opacity: 1;
-				}
-				
-			}
-			& .more{
-	       background: none repeat scroll 0 0 #000000;
-		   color: #a1a1a1;
-		   display: block;
-		   font-weight: 300;
-		   height: 77px;
-		   line-height: 1.2;
-		   padding-top: 18px;
-		   text-align: center;
-		   & .number{   
-			    	font-weight: 500;}
-		    }
+        #more {
+            height: 100%;
+        }
 
-		}
-    
+        .additional {
+            display: none;
+        }
+
+        .thumbnail {
+            direction: ltr;
+            cursor: pointer;
+            float: left;
+            width: 8.33333%;
+            @include gridle(2,"tablet");
+            padding: 0 0 7px 7px;
+            position: relative;
+            overflow:hidden;
+
+            .video-overlay {
+                position:absolute;
+                top:0;
+                left:0;
+                padding: 0 0 7px 7px;
+                opacity:1;
+            }
+
+            img {
+                display: block;
+                opacity: 0.5;
+                width: 100%;
+
+                &.active {
+                    box-sizing: border-box;
+                    opacity: 1;
+                }                
+            }
+
+            .more {
+                background: none repeat scroll 0 0 #000000;
+                color: #a1a1a1;
+                display: block;
+                font-weight: 300;
+                height: 77px;
+                line-height: 1.2;
+                padding-top: 18px;
+                text-align: center;
+
+                .number {
+                    font-weight: 500;
+                }
+            }
+        }
     }
-    
 }
 
 #media {
