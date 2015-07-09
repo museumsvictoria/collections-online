@@ -61,11 +61,8 @@ module.exports = {
     }
   },
   toggleFacets: function (e) {
-    var facetHeading = $(e.target);
-    var facetGroup = facetHeading.parents('.facetgroup');
-    var facetItems = facetGroup.children('.facetitems');
+    var facetGroup = $(e.target).parent().parent();
 
-    facetHeading.toggleClass('collapsed');
-    facetItems.toggle();
+    facetGroup.toggleClass('collapsed');
   }
 };

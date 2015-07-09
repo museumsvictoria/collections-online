@@ -38,7 +38,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Article",
                     Category = (string)null,
-                    HasImages = (article.Media.Any()) ? "Yes" : "No",
+                    HasImages = (article.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
                     OnDisplay = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
@@ -93,7 +93,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Item",
                     Category = item.Category,
-                    HasImages = (item.Media.Any()) ? "Yes" : "No",
+                    HasImages = (item.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
                     OnDisplay = (item.MuseumLocation != null) ? "Yes" : "No",
                     DisplayLocation = item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
@@ -208,7 +208,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Species",
                     Category = "Natural Sciences",
-                    HasImages = (species.Media.Any()) ? "Yes" : "No",
+                    HasImages = (species.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
                     OnDisplay = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
@@ -305,7 +305,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Specimen",
                     Category = specimen.Category,
-                    HasImages = (specimen.Media.Any()) ? "Yes" : "No",
+                    HasImages = (specimen.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
                     OnDisplay = (specimen.MuseumLocation != null) ? "Yes" : "No",
                     DisplayLocation = specimen.MuseumLocation.DisplayLocation,
                     CollectingArea = specimen.CollectingAreas,                    

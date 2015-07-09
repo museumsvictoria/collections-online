@@ -89,7 +89,9 @@ namespace CollectionsOnline.WebSite.Models
 
         public string Url { get; set; }
 
-        public bool Active { get; set; }
+        public string Class { get; set; }
+
+        public bool Active { get; set; }        
 
         public int Hits { get; set; }
     }
