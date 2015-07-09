@@ -95,7 +95,13 @@ module.exports = {
         // Dont load large media if its even smaller than medium otherwise preload then display large image
         if (!(media.Large.Height < parseInt(this.defaultMaxHeight, 10))) {
           // Enlarge medium image temporarily to provide smooth transition
-          heroMediaImage.height(Math.round((windowWidth / media.Large.Width) * media.Large.Height));
+          var heroMediaImageHeight = Math.round((windowWidth / media.Large.Width) * media.Large.Height);
+
+          // Check to make sure we dont enlarge too much
+          if (heroMediaImageHeight > media.Large.Height)
+            heroMediaImageHeight = media.Large.Height;
+          
+          heroMediaImage.height(heroMediaImageHeight);
           newHeroMediaImageSrc = media.Large.Uri;
         }
       }
