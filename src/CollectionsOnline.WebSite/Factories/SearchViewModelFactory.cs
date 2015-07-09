@@ -49,7 +49,8 @@ namespace CollectionsOnline.WebSite.Factories
                         {
                             Facet = facet.Key,
                             Name = facetValue.Range,
-                            Hits = facetValue.Hits
+                            Hits = facetValue.Hits,
+                            Class = string.Equals(facet.Key, "RecordType", StringComparison.OrdinalIgnoreCase) ? facetValue.Range : null
                         };
 
                         if (facetValues != null && facetValues.Contains(facetValue.Range, StringComparison.OrdinalIgnoreCase))
@@ -78,7 +79,10 @@ namespace CollectionsOnline.WebSite.Factories
 
                 if (facetViewModel.Values.Any())
                 {
-                    facetViewModel.Values = facetViewModel.Values.OrderByDescending(x => x.Hits).ToList();
+                    facetViewModel.Values = facetViewModel.Values
+                        .OrderByDescending(x => x.Active)
+                        .ThenByDescending(x => x.Hits)
+                        .ToList();
 
                     searchIndexViewModel.Facets.Add(facetViewModel);
                 }

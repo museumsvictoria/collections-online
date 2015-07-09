@@ -1133,181 +1133,181 @@ button.icon {
 }
 
 #search {
-   @include display-flex();
-   margin-top:-70px;
-    @include gridle_state(tablet){
-       display:block;
-       margin-top:0px;
-   }
-   @include gridle_state(mobile){
-       display:block;
-       margin-top:0px;
-   }
+    @include display-flex();
+    margin-top: -70px;
+
+    @include gridle_state(tablet) {
+        display: block;
+        margin-top: 0px;
+    }
+
+    @include gridle_state(mobile) {
+        display: block;
+        margin-top: 0px;
+    }
 
     #search-filter {
         background: $colour-background-lightest;
         width: 300px;
-        @include gridle_state(tablet){
-		        width:100%;
-		        display:block;    
-            }
-	    @include gridle_state(mobile){
-		        width:100%;
-		        display:block;
-		}	
+
+        @include gridle_state(tablet) {
+            width: 100%;
+            display: block;
+        }
+
+        @include gridle_state(mobile) {
+            width: 100%;
+            display: block;
+        }
+
         @include gridle_hide("print");
-//start facet addition
-	& .facets{
-	background-color: $colour-background-lightest;
-    color: $colour-bodytext; //to-do rationalise colors
-	direction:ltr;
-	float: left;
-	position:relative;
-	padding: 40px 20px 0px 20px;
+        //start facet addition
+        & .facets {
+            background-color: $colour-background-lightest;
+            color: $colour-bodytext; //to-do rationalise colors
+            direction: ltr;
+            float: left;
+            position: relative;
+            padding: 40px 20px 0px 20px;
+            width: 100%;
 
-    width:100%;
-    @include gridle_state("tablet"){
-        padding: 40px 20px 20px 20px;
-        margin-bottom: 20px;
-    }
-        @include gridle_state("mobile"){
-        padding: 40px 20px 20px 20px;
-        margin-bottom: 20px;
-    }
-		& a {
-		text-decoration: none;
-		display: block;
-		padding: 6px 0px;
-		//color: $colour-bodytext-inverted;
-		line-height:18px;
-		font-size: 14px;
-		font-weight: 400;
-		color: #333;
-			&:hover{text-decoration: underline;}
-		
-			&.item:before{
-			@include icon-item;
-			font-size: 21px;
-			vertical-align: middle;
-			padding-right: 5px;
-			color: #555;
-			}
-			&.article:before{
-			@include icon-article;
-			 font-size: 21px;
-			 vertical-align: middle;
-			 padding-right: 5px;
-			 color: #555;
-			
-			}
-			&.specimen:before{
-			@include icon-specimen;
-					 font-size: 21px;
-					 vertical-align: middle;
-					 padding-right: 5px;
-					 color: #555;	
-			}
-			&.species:before{
-			@include icon-species;
-			 font-size: 21px;
-			 vertical-align: middle;
-			 padding-right: 5px;
-			 color: #555;
-			
-			}
-		} // end a
+            @include gridle_state("tablet") {
+                padding: 40px 20px 20px 20px;
+                margin-bottom: 20px;
+            }
 
-		& h4{
-			   font-size: 18px;
-			   font-weight: 300;
-			    margin: 10px 0 12px;
-				padding: 0 0px 10px;
-			   color: $colour-bodytext-light;
-			   border-bottom: 1px solid #ddd;
-			   line-height: 27px;
-               cursor:pointer;
-			  &:after{
-				  text-align: middle;
-				  font-weight: 400;
-				  font-size: 20px;
-				  float:right;
-                  font-family: "mv-collections";
-				  content:"\e614";
-			  }
-			  &.collapsed{
-				    &:after{
-					  text-align: middle;
-					  font-weight: 400;
-					  font-size: 20px;
-					  float:right;
-                      font-family: "mv-collections";
-					  content:"\e615";
-				  }
-			  }
-		} //end h4
+            @include gridle_state("mobile") {
+                padding: 40px 20px 20px 20px;
+                margin-bottom: 20px;
+            }
 
-		& .badge{
-			font-size:14px;
-			font-weight: 400;
-			color: #555; //to-do rationalise colours
-			padding-left: 3px;
-			
-		}
-	
-		& .facetgroup
-		{
-			& .facetitems{
-			padding: 0px 0px 30px;
-			border-bottom: 1px solid #ddd; //to-do rationalise colour
-            display:none;
-			}
-			
-			& .facetheader{
-						   border-bottom: 1px solid #ddd;
-						   margin-bottom: 12px;
-				& h4 {
-					border-bottom: none;
-					margin-bottom: 0px;
-				}
-			}
-			
-			.selected {
-	        		& a{
-					background: none repeat scroll 0 0 $colour-background-lightest;
-	
-					color: #333;
-					display: inline-block;
-					font-weight:500;
-					line-height: 18px;
-					padding: 6px 0px;
-					font-size: 14px;
-					& span {
-						font-weight:400;
-					}
-					
-					& .group{
-					color:#000;
-					}
-					
-					& .icon-close:before {
-						  font-size: 10px;
-						  font-weight: bold;
-						  padding: 0 0 0 5px;
-					}
-	    		}
-			}
-	
-		}
-	
+            & a {
+                text-decoration: none;
+                display: block;
+                padding: 6px 0px;
+                line-height: 18px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #333;
 
-		
-	}	
+                &:hover {
+                    text-decoration: underline;
+                }
+
+                &.item:before {
+                    @include icon-item;
+                    font-size: 21px;
+                    vertical-align: middle;
+                    padding-right: 5px;
+                    color: #555;
+                }
+
+                &.article:before {
+                    @include icon-article;
+                    font-size: 21px;
+                    vertical-align: middle;
+                    padding-right: 5px;
+                    color: #555;
+                }
+
+                &.specimen:before {
+                    @include icon-specimen;
+                    font-size: 21px;
+                    vertical-align: middle;
+                    padding-right: 5px;
+                    color: #555;
+                }
+
+                &.species:before {
+                    @include icon-species;
+                    font-size: 21px;
+                    vertical-align: middle;
+                    padding-right: 5px;
+                    color: #555;
+                }
+            }
+            // end a
+            h4 {
+                font-size: 18px;
+                font-weight: 300;
+                margin: 10px 0 12px;
+                padding: 0 0px 10px;
+                color: $colour-bodytext-light;
+                border-bottom: 1px solid #ddd;
+                line-height: 27px;
+                cursor: pointer;
+
+                &:after {
+                    text-align: middle;
+                    font-weight: 400;
+                    font-size: 20px;
+                    float: right;
+                    font-family: "mv-collections";
+                    content: "\e614";
+                }
+            }
+            //end h4
+            & .badge {
+                font-size: 14px;
+                font-weight: 400;
+                color: #555; //to-do rationalise colours
+                padding-left: 3px;
+            }
+
+            & .facetgroup {
+                & .facetitems {
+                    padding: 0px 0px 30px;
+                    border-bottom: 1px solid #ddd; //to-do rationalise colour
+                }
+
+                &.collapsed {
+                    h4:after {
+                        text-align: middle;
+                        font-weight: 400;
+                        font-size: 20px;
+                        float: right;
+                        font-family: "mv-collections";
+                        content: "\e615";
+                    }
+
+                    .facetitems {
+                        display: none;
+                    }
+                }
 
 
+                & .facetheader {
+                    border-bottom: 1px solid #ddd;
+                    margin-bottom: 12px;
 
+                    & h4 {
+                        border-bottom: none;
+                        margin-bottom: 0px;
+                    }
+                }
 
+                .active {
+                    background: none repeat scroll 0 0 $colour-background-lightest;
+                    color: #333;
+                    display: inline-block;
+                    font-weight: 500;
+                    line-height: 18px;
+                    padding: 6px 0px;
+                    font-size: 14px;
 
-//end addition
+                    span {
+                        font-weight: 400;
+                    }
+
+                    .icon-close:before {
+                        font-size: 10px;
+                        font-weight: bold;
+                        padding: 0 0 0 5px;
+                    }
+                }
+            }
+        }
+        //end addition
         .button-filter {
             cursor: pointer;
             padding: 0 20px;
@@ -1349,14 +1349,17 @@ button.icon {
     }
 
     #search-filter.disabled {
-        height:70px;
-        position:absolute;
-        @include gridle_state("tablet"){
-            position:relative;
+        height: 70px;
+        position: absolute;
+
+        @include gridle_state("tablet") {
+            position: relative;
         }
-        @include gridle_state("mobile"){
-            position:relative;
+
+        @include gridle_state("mobile") {
+            position: relative;
         }
+
         .icon-filter::before {
             -moz-transform: rotate(0);
             -ms-transform: rotate(0);
@@ -1366,7 +1369,7 @@ button.icon {
         }
 
         .facets {
-            display:none;
+            display: none;
         }
     }
 
@@ -1375,38 +1378,41 @@ button.icon {
         background: #e3e3e3;
         padding: 0 0 20px 0px;
         margin-top: 70px;
-        flex:1;
+        flex: 1;
         -webkit-flex: 1;
-        @include gridle_state("tablet"){
-            margin-top:0px;
+
+        @include gridle_state("tablet") {
+            margin-top: 0px;
         }
-        @include gridle_state("mobile"){
-            margin-top:0px;
+
+        @include gridle_state("mobile") {
+            margin-top: 0px;
         }
-        @include gridle_state("print"){
-            flex:none;
-            margin-top:0px;
+
+        @include gridle_state("print") {
+            flex: none;
+            margin-top: 0px;
         }
+
         .active-facets {
             @include gridle_hide("print");
             padding: 20px 0 0 20px;
 
             a {
                 color: $colour-bodytext;
-               // height: 35px;
                 line-height: 35px;
                 display: inline-block;
-				font-weight:500;
-				line-height: 30px;
-				font-size: 14px;
+                font-weight: 500;
+                line-height: 30px;
+                font-size: 14px;
                 border-radius: 3px;
                 background: $colour-background-lightest;
                 padding: 0 10px;
                 margin: 0 5px 0 0;
- 
-                 & span {
-					font-weight:400;
-				}
+
+                & span {
+                    font-weight: 400;
+                }
 
                 & .icon-close {
                     font-size: 10px;
@@ -1417,33 +1423,42 @@ button.icon {
         }
 
         .pagination {
-	        width: 100%;
-	        padding: 20px 20px 20px 20px;
+            width: 100%;
+            padding: 20px 20px 20px 20px;
             @include gridle_hide("print");
-	        &.bottom{
-		        padding: 0px 20px 30px 20px;
 
-	        }
-            	clear: both;
-		    @include gridle_state(tablet){
-			    padding: 20px;
-			}
-		    @include gridle_state(mobile){
-			    padding: 20px;
-			}
+            &.bottom {
+                padding: 0px 20px 30px 20px;
+            }
+
+            clear: both;
+
+            @include gridle_state(tablet) {
+                padding: 20px;
+            }
+
+            @include gridle_state(mobile) {
+                padding: 20px;
+            }
+
             & .counts {
-		        display: inline-block;
-		        font-size:20px;
-	        }
-            & a.button{
-		        display: inline-block;
-		        padding: 0 5px;
-		        &:hover{text-decoration: underline; }
-		        &.disabled{
-			        color:$colour-sidetext;
-			        text-decoration: none;
-			    }
-	        }
+                display: inline-block;
+                font-size: 20px;
+            }
+
+            & a.button {
+                display: inline-block;
+                padding: 0 5px;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+
+                &.disabled {
+                    color: $colour-sidetext;
+                    text-decoration: none;
+                }
+            }
 
             div {
                 display: inline;
@@ -1453,111 +1468,140 @@ button.icon {
 
 
             .numbers {
-               display:inline-block;
-              // line-height: 40px;
-              // width: 100%;
-              padding-top:20px;
+                display: inline-block;
+                padding-top: 20px;
             }
 
             .options {
-                padding-top:20px;
-      
+                padding-top: 20px;
                 display: inline-block;
-                & .viewtype{
-			        line-height: 25px;
-			        font-size: 25px;
-                    vertical-align: middle;
-		        }
-        		& a.button{
-		            display: inline-block;
-		            padding: 0 5px;
-		            text-decoration: none; 
-		            color: $colour-sidetext;
-		            &:hover{text-decoration: underline;}
-		            &.disabled{
-			            color:$colour-sidetext;
-		            }
-		            &.first{ 
-			            margin-left:5px;
-			            //border-right:1px black solid;
-			            &.active{
-			                color:$colour-bodytext;
-                            text-decoration: underline;
-				            &:hover{text-decoration: none;}
-			             }
-		            }
-		            &.last{
-				        border-left: none;
-					    border-top-left-radius:0px;
-					    border-bottom-left-radius: 0px;	
-			            &.active{
-			                color:$colour-bodytext;
-			                text-decoration: underline;
-				            &:hover{text-decoration: none;}
-				        }
-			        }
-		            &.active{	
-		                color: $colour-bodytext;
-				        &:hover{text-decoration: none;}
-		            }
-		        }
-            }
-            .perpage, .order {
-                
-                display:inline-block;
 
-        		& a.button{
-		            display: inline-block;
-		            padding: 0 5px;
-		            text-decoration: none; 
-		            color: $colour-sidetext;
-                    background:$colour-background-lightest;
+                & .viewtype {
+                    line-height: 25px;
+                    font-size: 25px;
+                    vertical-align: middle;
+                }
+
+                & a.button {
+                    display: inline-block;
+                    padding: 0 5px;
+                    text-decoration: none;
+                    color: $colour-sidetext;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+
+                    &.disabled {
+                        color: $colour-sidetext;
+                    }
+
+                    &.first {
+                        margin-left: 5px;
+                        &.active {
+                            color: $colour-bodytext;
+                            text-decoration: underline;
+
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+
+                    &.last {
+                        border-left: none;
+                        border-top-left-radius: 0px;
+                        border-bottom-left-radius: 0px;
+
+                        &.active {
+                            color: $colour-bodytext;
+                            text-decoration: underline;
+
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+
+                    &.active {
+                        color: $colour-bodytext;
+
+                        &:hover {
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+
+            .perpage, .order {
+                display: inline-block;
+
+                & a.button {
+                    display: inline-block;
+                    padding: 0 5px;
+                    text-decoration: none;
+                    color: $colour-sidetext;
+                    background: $colour-background-lightest;
                     @include border-radius(3);
                     display: inline-block;
                     margin-left: 6px;
                     padding: 2px 10px;
                     text-decoration: none;
-		            &:hover{text-decoration: underline;}
-		            &.disabled{
-			            color:$colour-sidetext;
-		            }
-		            &.first{ 
-			            margin-left:5px;
-			            //border-right:1px black solid;
-			            &.active{
-			                color:$colour-heading-inverted;
-			                text-decoration: none;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+
+                    &.disabled {
+                        color: $colour-sidetext;
+                    }
+
+                    &.first {
+                        margin-left: 5px;
+                        &.active {
+                            color: $colour-heading-inverted;
+                            text-decoration: none;
                             background: $colour-background-dark;
                             border-radius: 3px;
                             padding: 2px 10px;
-				            &:hover{text-decoration: none;}
-			             }
-		            }
-		            &.last{
-				        border-left: none;
-					    border-top-left-radius:0px;
-					    border-bottom-left-radius: 0px;	
-			            &.active{
-			                color:$colour-heading-inverted;
-			                text-decoration: none;
+
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+
+                    &.last {
+                        border-left: none;
+                        border-top-left-radius: 0px;
+                        border-bottom-left-radius: 0px;
+
+                        &.active {
+                            color: $colour-heading-inverted;
+                            text-decoration: none;
                             background: $colour-background-dark;
                             border-radius: 3px;
                             padding: 2px 10px;
-				            &:hover{text-decoration: none;}
-				        }
-			        }
-		            &.active{	
-			                color:$colour-heading-inverted;
-			                text-decoration: none;
-                            background: $colour-background-dark;
-                            border-radius: 3px;
-                            padding: 2px 10px;
-				            &:hover{text-decoration: none;}
-		            }
-		        }
+
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+
+                    &.active {
+                        color: $colour-heading-inverted;
+                        text-decoration: none;
+                        background: $colour-background-dark;
+                        border-radius: 3px;
+                        padding: 2px 10px;
+
+                        &:hover {
+                            text-decoration: none;
+                        }
+                    }
+                }
             }
-
-
 
             .pages a {
                 display: inline-block;
@@ -1568,26 +1612,6 @@ button.icon {
             .pages a.disabled {
                 color: #cccccc;
             }
-/*
-            .order {
-                margin: 0 20px 0 0;
-            }
-
-            .order a, .perpage a {
-                color: #756969;
-                height: 35px;
-                line-height: 35px;
-                display: inline-block;
-                border-radius: 2px;
-                background: $color-default;
-                padding: 0 10px;
-                margin: 0 5px 0 0;
-            }
-
-            .order a.active, .perpage a.active {
-                background: #cccccc;
-            }
-*/
             .icon-left-arrow, .icon-right-arrow {
                 font-size: 0.7em;
             }
@@ -1614,79 +1638,41 @@ button.icon {
             clear: both;
             padding-left: 10px;
             width: 100%;
-            //20/4/2015 - Removed for Design integration
-           /* .item, .specimen, .article, .species {
-                float: left;
-                width: 240px;
-                margin: 20px 0 0 20px;
 
-                a {
-                    display: block;
-                    position: relative;
+            &.grid {
+                & .tile {
+                    & .tileimages {
+                        @include gridle_state(mobile) {
+                            width: 100%;
+                        }
+                    }
 
-                    &:before {
-                        border-bottom-left-radius: 3px;
-                        padding: 10px;
-                        color: $color-default;
-                        text-transform: uppercase;
-                        position: absolute;
-                        font-size: 0.9em;
-                        font-weight: 500;
-                        top: 0;
-                        right: 0;
+                    & .title {
+                        height: 0;
+                        overflow: visible;
+                        padding: 0;
+                    }
+
+                    & .tile-tag {
+                        top: -1.2em;
+                        border-top-right-radius: 3px;
+                    }
+
+                    & .regnum, .heading, .description {
+                        display: none;
                     }
                 }
+            }
 
-                img {
-                    width: 100%;
-                    display: block;
+            &.list {
+                & .tile.full {
+                    @include gridle(3);
+                    max-width: 284px;
+                    min-width: 200px;
+                    @include gridle(4, tablet);
+                    @include gridle(12, mobile);
                 }
-
-                .title {
-                    display: block;
-                    height: 6em;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    background-color: #f9f9f9;
-                    color: #000;
-                    font-weight: 500;
-                    padding: 10px;
-                }
-            }*/
-            &.grid {
-               & .tile{
-                        & .tileimages{
-                            @include gridle_state(mobile){
-                                width:100%;
-                            }
-                        }
-                        & .title{
-                                height: 0;
-                                overflow: visible;
-                                padding: 0;
-                        }
-
-                        & .tile-tag{
-                            top: -1.2em;
-                            border-top-right-radius: 3px;
-                        }
-                        & .regnum, .heading, .description{
-                            display:none;
-                        }
-               }
-           }
-
-           &.list{
-               & .tile.full{
-                   @include gridle(3);
-                   max-width:284px; 
-                   min-width:200px;
-                   @include gridle(4, tablet);
-                   @include gridle(12, mobile);
-               }
-           }
-
-
+            }
         }
 
         .item {
