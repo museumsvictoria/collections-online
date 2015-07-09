@@ -1171,11 +1171,13 @@ button.icon {
             width: 100%;
 
             @include gridle_state("tablet") {
+                display: none; // filter closed by default for tablet
                 padding: 40px 20px 20px 20px;
                 margin-bottom: 20px;
             }
 
             @include gridle_state("mobile") {
+                display:none; // filter closed by default for tablet
                 padding: 40px 20px 20px 20px;
                 margin-bottom: 20px;
             }
@@ -1369,6 +1371,13 @@ button.icon {
 
         .facets {
             display: none;
+            @include gridle_state("tablet"){
+                        display:block;
+              }
+            @include gridle_state("mobile"){
+                display:block;
+            }
+
         }
     }
 
