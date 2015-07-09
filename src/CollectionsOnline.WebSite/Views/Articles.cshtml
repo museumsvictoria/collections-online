@@ -4,10 +4,10 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.ArticleMedia)
+@Html.Partial("Media", Model.ArticleMedia.Where(x => !(x is FileMedia)))
 <div id="title">
     <div class="wrapper">
-        @Html.Partial("MediaTypes", Model.ArticleMedia)
+        @Html.Partial("MediaTypes", Model.ArticleMedia.Where(x => !(x is FileMedia)))
         <h1>
             @Html.Raw(Model.Article.DisplayTitle)<br />
             @if (Model.Article.Types.Any())
