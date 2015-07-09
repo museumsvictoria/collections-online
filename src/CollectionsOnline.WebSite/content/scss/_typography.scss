@@ -83,8 +83,20 @@
     content: "\e609";
     font-size: 1.5em;
     float:right;
+    @include gridle_state("tablet"){
+        content:"\e601";//tablet use of .disabled reversed
+    }
+    @include gridle_state("mobile"){
+        content:"\e601";//mobile use of .disabled reversed
+    }
     .disabled &{
         content:"\e601";
+       @include gridle_state("tablet"){
+        content:"\e609"; //tablet use of .disabled reversed
+            }
+        @include gridle_state("mobile"){
+            content:"\e609"; //mobile use of .disabled reversed
+        }
     }
 }
 

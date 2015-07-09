@@ -1167,10 +1167,12 @@ button.icon {
 
     width:100%;
     @include gridle_state("tablet"){
+        display:none; //for initial state
         padding: 40px 20px 20px 20px;
         margin-bottom: 20px;
     }
         @include gridle_state("mobile"){
+        display:none;//for initial state
         padding: 40px 20px 20px 20px;
         margin-bottom: 20px;
     }
@@ -1178,7 +1180,6 @@ button.icon {
 		text-decoration: none;
 		display: block;
 		padding: 6px 0px;
-		//color: $colour-bodytext-inverted;
 		line-height:18px;
 		font-size: 14px;
 		font-weight: 400;
@@ -1367,6 +1368,12 @@ button.icon {
 
         .facets {
             display:none;
+            @include gridle_state("tablet"){
+                        display:block;
+              }
+            @include gridle_state("mobile"){
+                display:block;
+            }
         }
     }
 
