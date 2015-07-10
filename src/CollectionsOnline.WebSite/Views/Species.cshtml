@@ -401,20 +401,23 @@
                 </ul>
             </div>
         </section>
-        @if (Model.Species.Media.OfType<FileMedia>().Any())
-        {
-            <aside class="side-content">
-                <div class="sidecolumn">
-                    <div class="downloads">
+        
+        <aside class="side-content">
+            <div class="sidecolumn">
+                <div class="downloads">
+                    @if (Model.Species.Media.OfType<FileMedia>().Any())
+                    {
                         <h4>Associated downloads</h4>
-                        @foreach (var file in Model.Species.Media.OfType<FileMedia>())
+                        foreach (var file in Model.Species.Media.OfType<FileMedia>())
                         {
                             @Html.Partial("FileMedia", file)
                         }
-                    </div>
+                    }
+                    <h4>Related Links</h4>
+                    @Html.RenderSpeciesSpecimenLink(Model.Species)
                 </div>
-            </aside>
-        }
+            </div>
+        </aside>
         <aside class="side-content">
             <div class="sidecolumn">
                 <div class="social">
@@ -434,7 +437,6 @@
                         </a>
                     </div>
                 </div>
-
                 <div class="cite">
                     <h4>Cite this page</h4>
                     <p>@Html.RenderCitation(Model.Species)</p>

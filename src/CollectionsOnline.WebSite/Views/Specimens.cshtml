@@ -497,20 +497,24 @@
                 </div>
             </aside>
         }
-        @if (Model.Specimen.Media.OfType<FileMedia>().Any())
-        {
+        
             <aside class="side-content">
                 <div class="sidecolumn">
                     <div class="downloads">
-                        <h4>Associated downloads</h4>
-                        @foreach (var file in Model.Specimen.Media.OfType<FileMedia>())
+                        @if (Model.Specimen.Media.OfType<FileMedia>().Any())
                         {
-                            @Html.Partial("FileMedia", file)
+                            <h4>Associated downloads</h4>
+                            foreach (var file in Model.Specimen.Media.OfType<FileMedia>())
+                            {
+                                @Html.Partial("FileMedia", file)
+                            }
                         }
+                        <h4>Related Links</h4>
+                        @Html.RenderSpeciesSpecimenLink(Model.Specimen)
                     </div>
                 </div>
             </aside>
-        }
+        
         <aside class="side-content">
             <div class="sidecolumn">
                 <div class="social">
