@@ -736,6 +736,7 @@ button.icon {
             
                  & h3 {
                     @include gridle (3);
+                    @include gridle (4,mobile);
                     @include gridle_no_gutter(left);
                     @include gridle_no_gutter(left,tablet);
                     @include gridle_no_gutter(left,mobile);
@@ -752,6 +753,7 @@ button.icon {
 
                & p {
                     @include gridle (9);
+                    @include gridle (8, mobile);
                     @include gridle_no_gutter(right);
                     line-height:1.4em;
                     font-size:15px;
