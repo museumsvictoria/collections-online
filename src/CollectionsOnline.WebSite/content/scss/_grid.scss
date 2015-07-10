@@ -8,6 +8,12 @@
 
 @include gridle_generate_classes ();
 
+@include gridle_register_state ( smallmobile , (
+	max-width : 375px,
+	min-width : 200px,
+	gutter-width : 20px
+) );
+
 @include gridle_register_state ( mobile , (
 	max-width : 500px,
 	min-width : 200px,

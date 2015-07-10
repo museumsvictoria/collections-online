@@ -1103,6 +1103,9 @@ button.icon {
 
         & .tile.full{
             @include gridle(12,"mobile");
+            @include gridle_state(mobile){
+                max-width:none;
+            }
         }
     }
 
@@ -1486,7 +1489,9 @@ button.icon {
             div {
                 display: inline-block;
                 font-weight: 400;
-               
+                & span{
+                    display: inline-block;
+                }
             }
 
 
@@ -1672,6 +1677,7 @@ button.icon {
                     & .tileimages {
                         @include gridle_state(mobile) {
                             width: 100%;
+                            float:none;
                         }
                     }
 
@@ -2256,8 +2262,13 @@ $padding-side: 3%;
         min-width:200px;
         @include gridle (4, 'tablet');
         @include gridle ( 6, 'mobile' );
+        @include gridle (12, 'smallmobile');
         float: left;
-
+        @include gridle_state(smallmobile){
+            float:none;
+            display:block;
+            margin: 0 auto;
+        }
         & .description {
             display: none;
         }
@@ -3034,6 +3045,7 @@ footer {
             width: 100%;
             padding-left: 0px;
             padding-right: 0px;
+            max-width: none;
         }
 
         & .tileimages {
@@ -3063,6 +3075,8 @@ footer {
     & .seeall {
         text-decoration: none;
         color: $colour-sidetext;
+        display:block;
+        clear:both;
 
         &:hover {
             text-decoration: underline;
