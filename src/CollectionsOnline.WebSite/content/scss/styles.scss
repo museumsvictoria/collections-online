@@ -38,9 +38,12 @@ header {
     text-transform: uppercase;
 
     @include gridle_state(mobile) {
-        line-height: 50px;
+        line-height: 25px;
         padding-top: 5px;
+        padding-bottom: 5px;
         font-size: 1.2em;
+        width:100%;
+        
     }
 }
 
@@ -70,9 +73,12 @@ nav {
         padding: 0 20px;
         text-decoration: none;
         @include gridle_state("mobile"){
-            padding:0 4px 0px 20px;
-            line-height:50px;
-
+            padding:0 10px 0px 10px;
+            line-height:44px;
+            &:first-child{
+                padding-left:20px;
+                padding-right:0px;
+            }
         }
        // @include gridle_hide("mobile");
       //  @include gridle_hide("tablet");
@@ -92,8 +98,10 @@ nav {
         line-height: 76px;
         text-decoration: none;
         @include gridle_state("mobile"){
-            line-height:50px;
+            line-height:44px;
             float:right;
+            padding-left:20px;
+            width:100%;
         }
     }
 
@@ -456,12 +464,14 @@ button.icon {
     }
 
     a.next, a.previous {
-        display: flex;
+        //display: flex;
+        @include display-flex();
         cursor: pointer;
         font-size: 30px;
         width: 32px;
         color: $colour-bodytext;
-        align-items:center;
+       // align-items:center;
+        @include alignitem-center();
         align-self:stretch;
         height:100%;
         position:absolute;
@@ -528,7 +538,8 @@ button.icon {
             @include gridle(3);
             float: left;
             direction: ltr;
-            display: flex;
+            //display: flex;
+            @include display-flex();
             float: left;
             justify-content: flex-end;
             margin: 1.5em 0;
@@ -725,6 +736,7 @@ button.icon {
             
                  & h3 {
                     @include gridle (3);
+                    @include gridle (4,mobile);
                     @include gridle_no_gutter(left);
                     @include gridle_no_gutter(left,tablet);
                     @include gridle_no_gutter(left,mobile);
@@ -741,6 +753,7 @@ button.icon {
 
                & p {
                     @include gridle (9);
+                    @include gridle (8, mobile);
                     @include gridle_no_gutter(right);
                     line-height:1.4em;
                     font-size:15px;
@@ -1089,6 +1102,13 @@ button.icon {
         .no-image-label {
             padding-top:4em;
         }
+
+        & .tile.full{
+            @include gridle(12,"mobile");
+            @include gridle_state(mobile){
+                max-width:none;
+            }
+        }
     }
 
     .related-link {
@@ -1171,11 +1191,13 @@ button.icon {
             width: 100%;
 
             @include gridle_state("tablet") {
+                display: none; // filter closed by default for tablet
                 padding: 40px 20px 20px 20px;
                 margin-bottom: 20px;
             }
 
             @include gridle_state("mobile") {
+                display:none; // filter closed by default for tablet
                 padding: 40px 20px 20px 20px;
                 margin-bottom: 20px;
             }
@@ -1369,6 +1391,13 @@ button.icon {
 
         .facets {
             display: none;
+            @include gridle_state("tablet"){
+                        display:block;
+              }
+            @include gridle_state("mobile"){
+                display:block;
+            }
+
         }
     }
 
@@ -1460,25 +1489,32 @@ button.icon {
             }
 
             div {
-                display: inline;
+                display: inline-block;
                 font-weight: 400;
-                margin-right: 20px;
+                & span{
+                    display: inline-block;
+                }
             }
 
 
             .numbers {
                 display: inline-block;
-                padding-top: 20px;
+                & div{
+                        padding-top: 20px; //padding moved to inner divs for proper spacing on mobile.
+                }
             }
 
             .options {
-                padding-top: 20px;
+               
                 display: inline-block;
-
+                & div{
+                    padding-top: 20px; //padding moved to inner divs for proper spacing on mobile.
+                }
                 & .viewtype {
                     line-height: 25px;
                     font-size: 25px;
-                    vertical-align: middle;
+                    vertical-align: bottom;
+                    display:inline-block;
                 }
 
                 & a.button {
@@ -1643,6 +1679,7 @@ button.icon {
                     & .tileimages {
                         @include gridle_state(mobile) {
                             width: 100%;
+                            float:none;
                         }
                     }
 
@@ -1670,6 +1707,15 @@ button.icon {
                     min-width: 200px;
                     @include gridle(4, tablet);
                     @include gridle(12, mobile);
+                    @include gridle_state("mobile"){
+                        max-width:none; // important for mobile.
+                        & .title{
+                            height:auto;
+                        }
+                        & .heading{
+                            height:auto;
+                        }
+                    }
                 }
             }
         }
@@ -1775,7 +1821,8 @@ button.icon {
 
     & form {
         direction: ltr;
-        align-items: center;
+        //align-items: center;
+        @include alignitem-center();
         @include display-flex();
         height: 70px;
         padding: 0 20px;
@@ -1836,12 +1883,11 @@ button{
         width: 100%;
         height: 110px;
         background-color: rgba($colour-highlight-green, 0.9);
-        align-items: center;
+        //align-items: center;
+        @include alignitem-center();
         display: -webkit-box;
         display: -moz-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
+        @include display-flex();
 
         @include gridle-state('tablet') {
             padding: 0 40px;
@@ -1856,9 +1902,7 @@ button{
         width: 66%;
         display: -webkit-box;
         display: -moz-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
+        @include display-flex();
         -webkit-box-pack: center;
         -moz-box-pack: center;
         -ms-flex-pack: center;
@@ -2220,8 +2264,13 @@ $padding-side: 3%;
         min-width:200px;
         @include gridle (4, 'tablet');
         @include gridle ( 6, 'mobile' );
+        @include gridle (12, 'smallmobile');
         float: left;
-
+        @include gridle_state(smallmobile){
+            float:none;
+            display:block;
+            margin: 0 auto;
+        }
         & .description {
             display: none;
         }
@@ -2446,7 +2495,8 @@ $padding-side: 3%;
     & .count-wrapper {
         font-size: 14px;
         line-height: 1em;
-        display: flex;
+        //display: flex;
+        @include display-flex();
         @include flex-direction(column);
         padding: 0 10px;
 
@@ -2997,6 +3047,7 @@ footer {
             width: 100%;
             padding-left: 0px;
             padding-right: 0px;
+            max-width: none;
         }
 
         & .tileimages {
@@ -3026,6 +3077,8 @@ footer {
     & .seeall {
         text-decoration: none;
         color: $colour-sidetext;
+        display:block;
+        clear:both;
 
         &:hover {
             text-decoration: underline;
