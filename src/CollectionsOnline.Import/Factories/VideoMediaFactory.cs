@@ -41,62 +41,70 @@ namespace CollectionsOnline.Import.Factories
                     return true;
                 }
 
-                var request = _youTubeService.Videos.List("snippet");
-                request.Id = videoMedia.VideoId;
-
-                var listResponse = request.Execute();
-
-                var youtubeVideo = listResponse.Items.FirstOrDefault();
-
-                if (youtubeVideo != null)
+                try
                 {
-                    // try and find highest resolution
-                    var thumbnail = youtubeVideo.Snippet.Thumbnails.Maxres ?? youtubeVideo.Snippet.Thumbnails.High;
+                    var request = _youTubeService.Videos.List("snippet");
+                    request.Id = videoMedia.VideoId;
 
-                    using (var imageFactory = new ImageFactory())
-                    using (var webClient = new WebClient())
-                    using (var memoryStream = new MemoryStream(webClient.DownloadData(thumbnail.Url)))
+                    var listResponse = request.Execute();
+
+                    var youtubeVideo = listResponse.Items.FirstOrDefault();
+
+                    if (youtubeVideo != null)
                     {
-                        // Create thumbnail
-                        var destPath = PathFactory.MakeDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail);
+                        // try and find highest resolution
+                        var thumbnail = youtubeVideo.Snippet.Thumbnails.Maxres ?? youtubeVideo.Snippet.Thumbnails.High;
 
-                        imageFactory
-                            .Load(memoryStream)
-                            .Resize(new ResizeLayer(new Size(250, 250), ResizeMode.Crop))
-                            .Quality(80)
-                            .Save(destPath);
-
-                        videoMedia.Thumbnail = new ImageMediaFile
+                        using (var imageFactory = new ImageFactory())
+                        using (var webClient = new WebClient())
+                        using (var memoryStream = new MemoryStream(webClient.DownloadData(thumbnail.Url)))
                         {
-                            Uri = PathFactory.MakeUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail),
-                            Size = new FileInfo(destPath).Length,
-                            Width = imageFactory.Image.Width,
-                            Height = imageFactory.Image.Height
-                        };
+                            // Create thumbnail
+                            var destPath = PathFactory.MakeDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail);
 
-                        // Create medium preview placeholder
-                        imageFactory.Reset();
+                            imageFactory
+                                .Load(memoryStream)
+                                .Resize(new ResizeLayer(new Size(250, 250), ResizeMode.Crop))
+                                .Quality(80)
+                                .Save(destPath);
 
-                        destPath = PathFactory.MakeDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium);
+                            videoMedia.Thumbnail = new ImageMediaFile
+                            {
+                                Uri = PathFactory.MakeUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail),
+                                Size = new FileInfo(destPath).Length,
+                                Width = imageFactory.Image.Width,
+                                Height = imageFactory.Image.Height
+                            };
 
-                        imageFactory
-                            .Resize(new ResizeLayer(new Size(0, 500), ResizeMode.Max))
-                            .Quality(80)
-                            .Save(destPath);
+                            // Create medium preview placeholder
+                            imageFactory.Reset();
 
-                        videoMedia.Medium = new ImageMediaFile
-                        {
-                            Uri = PathFactory.MakeUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium),
-                            Size = new FileInfo(destPath).Length,
-                            Width = imageFactory.Image.Width,
-                            Height = imageFactory.Image.Height
-                        };
+                            destPath = PathFactory.MakeDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium);
+
+                            imageFactory
+                                .Resize(new ResizeLayer(new Size(0, 500), ResizeMode.Max))
+                                .Quality(80)
+                                .Save(destPath);
+
+                            videoMedia.Medium = new ImageMediaFile
+                            {
+                                Uri = PathFactory.MakeUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium),
+                                Size = new FileInfo(destPath).Length,
+                                Width = imageFactory.Image.Width,
+                                Height = imageFactory.Image.Height
+                            };
+                        }
+
+                        stopwatch.Stop();
+                        _log.Trace("Created video preview media in {0} ms", stopwatch.ElapsedMilliseconds);
+
+                        return true;
                     }
-
-                    stopwatch.Stop();
-                    _log.Trace("Created video preview media in {0} ms", stopwatch.ElapsedMilliseconds);
-
-                    return true;
+                }
+                catch (Exception exception)
+                {
+                    _log.Error("Error creating video preview {0}, un-recoverable error, {1}", videoMedia.Irn, exception);
+                    throw;
                 }
             }
 
