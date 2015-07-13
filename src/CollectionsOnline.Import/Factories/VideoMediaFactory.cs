@@ -103,7 +103,7 @@ namespace CollectionsOnline.Import.Factories
                 }
                 catch (Exception exception)
                 {
-                    _log.Error("Error creating video preview {0}, un-recoverable error, {1}", videoMedia.Irn, exception);
+                    _log.Error("Error creating video preview {0}, un-recoverable error", videoMedia.Irn);
                     throw;
                 }
             }
