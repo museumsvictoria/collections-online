@@ -138,7 +138,7 @@ namespace CollectionsOnline.Import.Factories
                 else
                 {
                     // Error is unexpected therefore we want the entire import to fail, re-throw the error.
-                    _log.Error("Error saving file media {0}, un-recoverable error, {1}", irn, exception);
+                    _log.Error("Error saving file media {0}, un-recoverable error", irn);
                     throw;
                 }
             }

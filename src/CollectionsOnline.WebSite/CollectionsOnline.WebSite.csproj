@@ -179,8 +179,11 @@
     </Content>
     <Content Include="Views\Media.cshtml" />
     <Content Include="Views\MediaTypes.cshtml" />
+    <Content Include="Views\UriMedia.cshtml" />
+    <Content Include="Views\FileUriMedia.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Models;
+﻿using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Transformers;
 using Newtonsoft.Json;
 using Raven.Client;
@@ -28,9 +27,8 @@ namespace CollectionsOnline.WebSite.Queries
 
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
 
-            // Exclude file media as that is handled differently
-            result.ArticleMedia = result.Article.Media.Where(x => !(x is FileMedia)).ToList();
-            result.JsonArticleMedia = JsonConvert.SerializeObject(result.ArticleMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            // Create model for use in javascript
+            result.JsonArticleMultimedia = JsonConvert.SerializeObject(result.Article.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             return result;
         }

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Transformers;
 using Newtonsoft.Json;
 using Raven.Client;
@@ -40,9 +41,15 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Exclude file media as that is handled differently
-            result.SpeciesMedia = result.Species.Media.Where(x => !(x is FileMedia)).ToList();
-            result.JsonSpeciesMedia = JsonConvert.SerializeObject(result.SpeciesMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            // Create model for use in javascript
+            result.JsonSpeciesMultimedia = JsonConvert.SerializeObject(result.Species.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+
+            // Uris
+            result.Species.Media.Add(new UriMedia
+            {
+                Caption = string.Format("See {0} in the Atlas of Living Australia", result.Species.Taxonomy.TaxonName),
+                Uri = string.Format("http://bie.ala.org.au/search?q={0}&fq=idxtype:TAXON", result.Species.Taxonomy.TaxonName)
+            });
 
             return result;
         }

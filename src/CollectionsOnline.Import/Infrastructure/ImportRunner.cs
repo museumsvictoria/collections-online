@@ -53,7 +53,7 @@ namespace CollectionsOnline.Import.Infrastructure
                 catch (Exception exception)
                 {
                     hasFailed = true;
-                    _log.Error(exception.ToString);
+                    _log.Error("Error encountered running import, {0}", exception);
                 }
 
                 // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.

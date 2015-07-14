@@ -1,0 +1,34 @@
+﻿@using CollectionsOnline.Core.Models
+@using CollectionsOnline.WebSite.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IList<Media>>
+@if (Model.GetFiles().Any() || Model.GetUris().Any())
+{
+    <aside class="side-content">
+        <div class="sidecolumn">
+            <div class="downloads">
+                @if (Model.GetFiles().Any())
+                {
+                    <h4>Associated downloads</h4>
+                    foreach (FileMedia file in Model.GetFiles())
+                    {
+                        <a href="@file.File.Uri">
+                            <span class="filedesc">@file.Caption</span>
+                            <span class="filesize">
+                                (@file.File.Size.BytesToString())
+                                <span class="filetype @file.File.Extension">@file.File.Extension.ToUpper()</span>
+                            </span>
+                        </a>
+                    }
+                }
+                @if (Model.GetUris().Any())
+                {
+                    <h4>Related Links</h4>
+                    foreach (UriMedia uri in Model.GetUris())
+                    {
+                        <a href="@uri.Uri">@uri.Caption</a>
+                    }
+                }
+            </div>
+        </div>
+    </aside>
+}

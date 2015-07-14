@@ -4,10 +4,10 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.Item.Media.Where(x => !(x is FileMedia)))
+@Html.Partial("Media", Model.Item.Media.GetMultimedia())
 <div id="title">
     <div class="wrapper">
-        @Html.Partial("MediaTypes", Model.Item.Media.Where(x => !(x is FileMedia)))
+        @Html.Partial("MediaTypes", Model.Item.Media.GetMultimedia())
         <h1>
             <span class="reg-number item">Item @Model.Item.RegistrationNumber</span>
             @Html.Raw(Model.Item.DisplayTitle)
@@ -816,7 +816,7 @@
         </section>
         @if (Model.Item.MuseumLocation != null)
         {
-            <aside class="side-content">              
+            <aside class="side-content">
                 <div class="on-display @Model.Item.MuseumLocation.DisplayLocation.ToClass()">
                     <h4>On display</h4>
                     <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br/>
@@ -824,20 +824,7 @@
                 </div>
             </aside>
         }
-        @if (Model.Item.Media.OfType<FileMedia>().Any())
-        {
-            <aside class="side-content">
-                <div class="sidecolumn">
-                    <div class="downloads">
-                        <h4>Associated downloads</h4>
-                        @foreach (var file in Model.Item.Media.OfType<FileMedia>())
-                        {
-                            @Html.Partial("FileMedia", file)
-                        }
-                    </div>
-                </div>
-            </aside>
-        }
+        @Html.Partial("FileUriMedia", Model.Item.Media)
         <aside class="side-content">
             <div class="sidecolumn">
                 <div class="social">
@@ -940,9 +927,9 @@
         </div>
     </div>
 }
-@if (Model.JsonItemMedia != null)
+@if (Model.JsonItemMultimedia != null)
 {
     <script>
-        var mediaModel = @Html.Raw(Model.JsonItemMedia);
+        var mediaModel = @Html.Raw(Model.JsonItemMultimedia);
     </script>
 }

@@ -125,6 +125,27 @@ namespace CollectionsOnline.Import.Factories
                     }
                 }
 
+                // Handle uris
+                if (map.GetEncodedStrings("ChaRepository_tab").Contains(Constants.ImuUriQueryString))
+                {
+                    var uriMedia = new UriMedia
+                    {
+                        Irn = irn,
+                        DateModified = dateModified,
+                        Caption = caption,
+                        Creators = creators,
+                        Sources = sources,
+                        Credit = credit,
+                        RightsStatement = rightsStatement,
+                        RightsStatus = rightsStatus,
+                        Licence = licence,
+                        LicenceDetails = licenceDetails,
+                        Uri = identifier
+                    };
+
+                    return uriMedia;
+                }
+
                 // Handle audio
                 if (string.Equals(mimeType, "audio", StringComparison.OrdinalIgnoreCase))
                 {

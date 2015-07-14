@@ -4,10 +4,10 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.ArticleMedia.Where(x => !(x is FileMedia)))
+@Html.Partial("Media", Model.Article.Media.GetMultimedia())
 <div id="title">
     <div class="wrapper">
-        @Html.Partial("MediaTypes", Model.ArticleMedia.Where(x => !(x is FileMedia)))
+        @Html.Partial("MediaTypes", Model.Article.Media.GetMultimedia())
         <h1>
             @Html.Raw(Model.Article.DisplayTitle)<br />
             @if (Model.Article.Types.Any())
@@ -90,20 +90,7 @@
                 </ul>
             </div>
         </section>
-        @if (Model.Article.Media.OfType<FileMedia>().Any())
-        {
-            <aside class="side-content">
-                <div class="sidecolumn">
-                    <div class="downloads">
-                        <h4>Associated downloads</h4>
-                        @foreach (var file in Model.Article.Media.OfType<FileMedia>())
-                        {
-                            @Html.Partial("FileMedia", file)
-                        }
-                    </div>
-                </div>
-            </aside>
-        }
+        @Html.Partial("FileUriMedia", Model.Article.Media)
         <aside class="side-content">
             <div class="sidecolumn">
                 <div class="social">
@@ -199,9 +186,9 @@
         </div>
     </div>
 }
-@if (Model.JsonArticleMedia != null)
+@if (Model.JsonArticleMultimedia != null)
 {
     <script>
-        var mediaModel = @Html.Raw(Model.JsonArticleMedia);
+        var mediaModel = @Html.Raw(Model.JsonArticleMultimedia);
     </script>
 }
