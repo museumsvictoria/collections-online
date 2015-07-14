@@ -178,7 +178,10 @@ namespace CollectionsOnline.Import.Imports
                                     var item = document as Item;
                                     if (item != null)
                                     {
-                                        var existingMedia = item.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        var existingMedia = item.Media
+                                            .Where(x => x != null)
+                                            .SingleOrDefault(x => x.Irn == mediaIrn);
+
                                         if (existingMedia != null)
                                             item.Media[item.Media.IndexOf(existingMedia)] = media;
 
@@ -189,7 +192,10 @@ namespace CollectionsOnline.Import.Imports
                                     var species = document as Species;
                                     if (species != null)
                                     {
-                                        var existingMedia = species.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        var existingMedia = species.Media
+                                            .Where(x => x != null)
+                                            .SingleOrDefault(x => x.Irn == mediaIrn);
+
                                         if (existingMedia != null)
                                             species.Media[species.Media.IndexOf(existingMedia)] = media;
 
@@ -204,7 +210,10 @@ namespace CollectionsOnline.Import.Imports
                                     var specimen = document as Specimen;
                                     if (specimen != null)
                                     {
-                                        var existingMedia = specimen.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        var existingMedia = specimen.Media
+                                            .Where(x => x != null)
+                                            .SingleOrDefault(x => x.Irn == mediaIrn);
+
                                         if (existingMedia != null)
                                             specimen.Media[specimen.Media.IndexOf(existingMedia)] = media;
 
@@ -215,7 +224,10 @@ namespace CollectionsOnline.Import.Imports
                                     var article = document as Article;
                                     if (article != null)
                                     {
-                                        var existingMedia = article.Media.SingleOrDefault(x => x.Irn == mediaIrn);
+                                        var existingMedia = article.Media
+                                            .Where(x => x != null)
+                                            .SingleOrDefault(x => x.Irn == mediaIrn);
+
                                         if (existingMedia != null)
                                             article.Media[article.Media.IndexOf(existingMedia)] = media;
 

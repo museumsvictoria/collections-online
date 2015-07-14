@@ -179,7 +179,6 @@
     </Content>
     <Content Include="Views\Media.cshtml" />
     <Content Include="Views\MediaTypes.cshtml" />
-    <Content Include="Views\UriMedia.cshtml" />
     <Content Include="Views\FileUriMedia.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -356,9 +355,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\scss\_reset.scss" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\FileMedia.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

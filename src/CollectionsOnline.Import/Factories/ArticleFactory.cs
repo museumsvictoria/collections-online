@@ -98,9 +98,9 @@ namespace CollectionsOnline.Import.Factories
             {
                 article.ContentText = HtmlConverter.HtmlToText(article.Content);
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                _log.Warn("Unable to convert article content html to text, irn:{0}, html:{1}, exception:{2}", map.GetEncodedString("irn"), article.Content, e);
+                _log.Warn("Unable to convert article content html to text, irn:{0}, html:{1}, exception:{2}", map.GetEncodedString("irn"), article.Content, exception);
             }
 
             if(sanitizedResult.HasRemovedTag || sanitizedResult.HasRemovedStyle || sanitizedResult.HasRemovedAttribute)

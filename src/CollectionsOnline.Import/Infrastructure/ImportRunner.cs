@@ -6,6 +6,7 @@ using CollectionsOnline.Import.Imports;
 using NLog;
 using Raven.Abstractions.Data;
 using Raven.Client;
+using Raven.Client.Linq;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Infrastructure
@@ -53,7 +54,8 @@ namespace CollectionsOnline.Import.Infrastructure
                 catch (Exception exception)
                 {
                     hasFailed = true;
-                    _log.Error("Error encountered running import, {0}", exception);
+                    _log.Error("Error encountered running import");
+                    _log.Error(exception);
                 }
 
                 // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.
