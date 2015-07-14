@@ -4,10 +4,10 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.Specimen.Media.Where(x => !(x is FileMedia)))
+@Html.Partial("Media", Model.Specimen.Media.GetMultimedia())
 <div id="title">
     <div class="wrapper">
-        @Html.Partial("MediaTypes", Model.Specimen.Media.Where(x => !(x is FileMedia)))
+        @Html.Partial("MediaTypes", Model.Specimen.Media.GetMultimedia())
         <h1>
             <span class="reg-number specimen">Specimen @Model.Specimen.RegistrationNumber</span>
             @Html.Raw(Model.Specimen.DisplayTitle)
@@ -497,24 +497,7 @@
                 </div>
             </aside>
         }
-        
-            <aside class="side-content">
-                <div class="sidecolumn">
-                    <div class="downloads">
-                        @if (Model.Specimen.Media.OfType<FileMedia>().Any())
-                        {
-                            <h4>Associated downloads</h4>
-                            foreach (var file in Model.Specimen.Media.OfType<FileMedia>())
-                            {
-                                @Html.Partial("FileMedia", file)
-                            }
-                        }
-                        <h4>Related Links</h4>
-                        @Html.RenderSpeciesSpecimenLink(Model.Specimen)
-                    </div>
-                </div>
-            </aside>
-        
+        @Html.Partial("FileUriMedia", Model.Specimen.Media)
         <aside class="side-content">
             <div class="sidecolumn">
                 <div class="social">
@@ -587,10 +570,13 @@
         </div>
     </div>
 }
-@if (Model.JsonSpecimenMedia != null)
-{
-    <script>
-        var mediaModel = @Html.Raw(Model.JsonSpecimenMedia);
-        var latlongsModel = @Html.Raw(Model.JsonSpecimenLatLongs);
-    </script>
-}
+<script>
+    @if (Model.JsonSpecimenMultimedia != null)
+    {
+        @:var mediaModel = @Html.Raw(Model.JsonSpecimenMultimedia);
+    }
+    @if (Model.JsonSpecimenLatLongs != null)
+    {
+        @:var latlongsModel = @Html.Raw(Model.JsonSpecimenLatLongs);
+    }
+</script>

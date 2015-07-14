@@ -101,7 +101,7 @@ namespace CollectionsOnline.Import.Factories
                         return true;
                     }
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     _log.Error("Error creating video preview {0}, un-recoverable error", videoMedia.Irn);
                     throw;

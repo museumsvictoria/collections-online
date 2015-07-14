@@ -11,29 +11,6 @@ namespace CollectionsOnline.WebSite.Extensions
 {
     public static class HtmlHelpersExtensions
     {
-        public static IHtmlString RenderSpeciesSpecimenLink<T>(this HtmlHelpers<T> helper, EmuAggregateRoot document)
-        {
-            var sb = new StringBuilder();
-
-            if (document is Species)
-            {
-                var species = document as Species;
-
-                sb.Append(string.Format("<a href=\"http://bie.ala.org.au/search?q={0}&fq=idxtype:TAXON\">See {1} in the Atlas of Living Australia</a>",
-                    HttpUtility.UrlEncode(species.Taxonomy.TaxonName),
-                    species.Taxonomy.TaxonName));
-            }
-            else if (document is Specimen)
-            {
-                var specimen = document as Specimen;
-
-                sb.Append(string.Format("<a href=\"http://ozcam.ala.org.au/occurrences/search?taxa={0}\">See more specimens of this species in OZCAM</a>",
-                    HttpUtility.UrlEncode(specimen.Taxonomy.TaxonName)));
-            }
-
-            return new NonEncodedHtmlString(sb.ToString());
-        }
-
         public static IHtmlString RenderAssociationDescription<T>(this HtmlHelpers<T> helper, Association association)
         {
             var parts = new List<string>();

@@ -3,6 +3,7 @@ using System.Linq;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy.Helpers;
 using Newtonsoft.Json;
@@ -38,9 +39,8 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Exclude file media as that is handled differently
-            result.SpecimenMedia = result.Specimen.Media.Where(x => !(x is FileMedia)).ToList();
-            result.JsonSpecimenMedia = JsonConvert.SerializeObject(result.SpecimenMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            // Create model for use in javascript
+            result.JsonSpecimenMultimedia = JsonConvert.SerializeObject(result.Specimen.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             // TODO: move to view factory and create dedicated view model
             // Set Geospatial
@@ -99,13 +99,20 @@ namespace CollectionsOnline.WebSite.Queries
             if (!string.IsNullOrWhiteSpace(result.Specimen.GeologyRockType))
                 result.GeoSpatial.Add(new KeyValuePair<string, string>("Rock Type", result.Specimen.GeologyRockType));
 
-            // Map
+            // Create latlong model for use in javascript
             var latlongs = new List<double[]>();
             if (result.Specimen.Latitudes.Any(x => !string.IsNullOrWhiteSpace(x)) && result.Specimen.Longitudes.Any(x => !string.IsNullOrWhiteSpace(x)))
             {
                 latlongs = result.Specimen.Latitudes.Zip(result.Specimen.Longitudes, (lat, lon) => new[] { double.Parse(lat), double.Parse(lon) }).ToList();
             }
-            result.JsonSpecimenLatLongs = JsonConvert.SerializeObject(latlongs); 
+            result.JsonSpecimenLatLongs = JsonConvert.SerializeObject(latlongs);
+
+            // Uris
+            result.Specimen.Media.Add(new UriMedia
+            {
+                Caption = "See more specimens of this species in OZCAM",
+                Uri = string.Format("http://ozcam.ala.org.au/occurrences/search?taxa={0}", result.Specimen.Taxonomy.TaxonName)
+            });
 
             return result;
         }

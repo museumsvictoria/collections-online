@@ -153,7 +153,7 @@ namespace CollectionsOnline.Import.Factories
                 else
                 {
                     // Error is unexpected therefore we want the entire import to fail, re-throw the error.
-                    _log.Error("Error saving image media {0}, un-recoverable error, {1}", imageMedia.Irn, exception);
+                    _log.Error("Error saving image media {0}, un-recoverable error", imageMedia.Irn);
                     throw;
                 }
             }
@@ -163,12 +163,12 @@ namespace CollectionsOnline.Import.Factories
 
         private bool ThereAreExistingMedia(ref ImageMedia imageMedia)
         {
-            // First check to see if we are not overwriting existing data,
-            // then if we find existing files matching all of our image media jobs, use the files on disk instead
+            // First check to see if we are not overwriting existing data,            
             if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
             {
                 var imageMediaIrn = imageMedia.Irn;
 
+                // then if we find existing files matching all of our image media jobs, use the files on disk instead
                 if (_imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, ".jpg", x.FileDerivativeType))))
                 {
                     foreach (var imageMediaJob in _imageMediaJobs)

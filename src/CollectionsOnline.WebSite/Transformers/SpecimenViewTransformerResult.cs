@@ -8,8 +8,6 @@ namespace CollectionsOnline.WebSite.Transformers
     {
         public Specimen Specimen { get; set; }
 
-        public IList<Media> SpecimenMedia { get; set; }
-
         public IList<EmuAggregateRootViewModel> RelatedItems { get; set; }
 
         public IList<EmuAggregateRootViewModel> RelatedSpecimens { get; set; }
@@ -20,7 +18,7 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedSpeciesSpecimenItemCount { get; set; }
 
-        public string JsonSpecimenMedia { get; set; }
+        public string JsonSpecimenMultimedia { get; set; }
 
         public string JsonSpecimenLatLongs { get; set; }
 
@@ -28,7 +26,6 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public SpecimenViewTransformerResult()
         {
-            SpecimenMedia = new List<Media>();
             RelatedItems = new List<EmuAggregateRootViewModel>();
             RelatedSpecimens = new List<EmuAggregateRootViewModel>();
             RelatedSpecies = new List<EmuAggregateRootViewModel>();

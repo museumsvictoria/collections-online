@@ -37,6 +37,8 @@ namespace CollectionsOnline.Core.Config
 
         public static string ImuVideoQueryString = "Video URL";
 
+        public static string ImuUriQueryString = "Webpage Link URL";
+
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(12);
 
         public static TimeSpan ImuOfflineTimeSpanStart = new TimeSpan(19, 00, 0); // 7:00pm

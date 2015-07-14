@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Transformers;
 using Newtonsoft.Json;
 using Raven.Client;
@@ -35,9 +35,8 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Exclude file media as that is handled differently
-            result.ItemMedia = result.Item.Media.Where(x => !(x is FileMedia)).ToList();
-            result.JsonItemMedia = JsonConvert.SerializeObject(result.ItemMedia, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            // Create model for use in javascript
+            result.JsonItemMultimedia = JsonConvert.SerializeObject(result.Item.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             return result;
         }
