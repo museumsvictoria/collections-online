@@ -108,11 +108,16 @@ namespace CollectionsOnline.WebSite.Queries
             result.JsonSpecimenLatLongs = JsonConvert.SerializeObject(latlongs);
 
             // Uris
-            result.Specimen.Media.Add(new UriMedia
+            if (result.Specimen.Taxonomy != null)
             {
-                Caption = "See more specimens of this species in OZCAM",
-                Uri = string.Format("http://ozcam.ala.org.au/occurrences/search?taxa={0}", result.Specimen.Taxonomy.TaxonName)
-            });
+                result.Specimen.Media.Add(new UriMedia
+                {
+                    Caption = "See more specimens of this species in OZCAM",
+                    Uri =
+                        string.Format("http://ozcam.ala.org.au/occurrences/search?taxa={0}",
+                            result.Specimen.Taxonomy.TaxonName)
+                });
+            }
 
             return result;
         }

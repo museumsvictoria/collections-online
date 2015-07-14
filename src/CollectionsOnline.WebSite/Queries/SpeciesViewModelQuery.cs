@@ -45,11 +45,17 @@ namespace CollectionsOnline.WebSite.Queries
             result.JsonSpeciesMultimedia = JsonConvert.SerializeObject(result.Species.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             // Uris
-            result.Species.Media.Add(new UriMedia
+            if (result.Species.Taxonomy != null)
             {
-                Caption = string.Format("See {0} in the Atlas of Living Australia", result.Species.Taxonomy.TaxonName),
-                Uri = string.Format("http://bie.ala.org.au/search?q={0}&fq=idxtype:TAXON", result.Species.Taxonomy.TaxonName)
-            });
+                result.Species.Media.Add(new UriMedia
+                {
+                    Caption =
+                        string.Format("See {0} in the Atlas of Living Australia", result.Species.Taxonomy.TaxonName),
+                    Uri =
+                        string.Format("http://bie.ala.org.au/search?q={0}&fq=idxtype:TAXON",
+                            result.Species.Taxonomy.TaxonName)
+                });
+            }
 
             return result;
         }
