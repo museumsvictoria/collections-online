@@ -476,6 +476,7 @@ button.icon {
         height:100%;
         position:absolute;
         z-index:200;
+        background: rgba(255,255,255,0.5);
 
         &.inactive {
             color: #999;
@@ -486,7 +487,8 @@ button.icon {
         }
 
         &:hover {
-            background:$dim;
+           // background:$dim;
+           background: rgba(255,255,255,0.8);
         }
     }
 
@@ -1408,6 +1410,7 @@ button.icon {
         margin-top: 70px;
         flex: 1;
         -webkit-flex: 1;
+        -ms-flex: 1;
 
         @include gridle_state("tablet") {
             margin-top: 0px;
@@ -1874,7 +1877,8 @@ button{
 #hero {    
     height: 600px;
     @include gridle_state("mobile"){
-        height:70vh;
+        height:50vh;
+        background-size: cover;
     }
     @include display-flex();
     @include align-items-flex-end();    
@@ -1891,10 +1895,12 @@ button{
 
         @include gridle-state('tablet') {
             padding: 0 40px;
+            
         }
 
         @include gridle-state('mobile') {
             padding: 0px 40px;
+            height: 88px;
         }
     }
 
