@@ -402,9 +402,16 @@ namespace CollectionsOnline.Import.Factories
             item.Media = _mediaFactory.Make(map.GetMaps("media"));
             mediaStopwatch.Stop();
 
-            var thumbnail = item.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
-            if (thumbnail != null)
-                item.ThumbnailUri = thumbnail.Thumbnail.Uri;
+            // Assign thumbnail
+            var media = item.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
+
+            var image = media as VideoMedia;
+            if (image != null)
+                item.ThumbnailUri = image.Thumbnail.Uri;
+
+            var video = media as VideoMedia;
+            if (video != null)
+                item.ThumbnailUri = video.Thumbnail.Uri;
             
             // Indigenous Cultures Fields
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();

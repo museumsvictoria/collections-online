@@ -123,11 +123,18 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Media           
-            collection.Media = _mediaFactory.Make(map.GetMaps("media"));            
+            collection.Media = _mediaFactory.Make(map.GetMaps("media"));
 
-            var thumbnail = collection.Media.FirstOrDefault(x => x is ImageMedia) as ImageMedia;
-            if (thumbnail != null)
-                collection.ThumbnailUri = thumbnail.Thumbnail.Uri;
+            // Assign thumbnail
+            var media = collection.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
+
+            var image = media as VideoMedia;
+            if (image != null)
+                collection.ThumbnailUri = image.Thumbnail.Uri;
+
+            var video = media as VideoMedia;
+            if (video != null)
+                collection.ThumbnailUri = video.Thumbnail.Uri;
 
             // Relationships
 
