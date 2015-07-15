@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.WebSite.Factories;
-using CollectionsOnline.WebSite.Infrastructure;
 using CollectionsOnline.WebSite.Models;
 using Raven.Client;
 
