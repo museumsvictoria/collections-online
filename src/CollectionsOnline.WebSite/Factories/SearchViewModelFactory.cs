@@ -208,21 +208,21 @@ namespace CollectionsOnline.WebSite.Factories
 
             // View links
             queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
-            queryString.Set("view", "grid");
-            searchIndexViewModel.GridViewButton = new ButtonViewModel
-            {
-                Name = "Grid",
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
-                Active = searchInputModel.View == "grid" || string.IsNullOrWhiteSpace(searchInputModel.View)
-            };
-
-            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             queryString.Set("view", "list");
             searchIndexViewModel.ListViewButton = new ButtonViewModel
             {
                 Name = "List",
                 Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
-                Active = searchInputModel.View == "list"
+                Active = searchInputModel.View == "list" || string.IsNullOrWhiteSpace(searchInputModel.View)
+            };
+
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("view", "grid");
+            searchIndexViewModel.GridViewButton = new ButtonViewModel
+            {
+                Name = "Grid",
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.View == "grid"
             };
 
             // Build suggestions

@@ -50,10 +50,10 @@ namespace CollectionsOnline.WebSite.ModelBinders
             else if (string.Equals(query.Sort, "date", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "date";
 
-            if (string.Equals(query.View, "grid", StringComparison.OrdinalIgnoreCase))
-                searchInputModel.View = "grid";
-            else if (string.Equals(query.View, "list", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(query.View, "list", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "list";
+            else if (string.Equals(query.View, "grid", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.View = "grid";
 
             searchInputModel.Query = query.Query;
 

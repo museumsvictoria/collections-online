@@ -102,12 +102,12 @@
                     </span>
                 </div>
                 <div class="viewtype">
-                    <a href="@Model.GridViewButton.Url" class="button icon-grid @(Model.GridViewButton.Active ? "active" : "")"></a>
                     <a href="@Model.ListViewButton.Url" class="button icon-list @(Model.ListViewButton.Active ? "active" : "")"></a>
+                    <a href="@Model.GridViewButton.Url" class="button icon-grid @(Model.GridViewButton.Active ? "active" : "")"></a>
                 </div>
             </div>
         </div>
-        <div class="results-area @(Model.GridViewButton.Active ? "grid" : "list")">
+        <div class="results-area @(Model.ListViewButton.Active ? "list" : "grid")">
             @foreach (var result in Model.Results)
             {
                 @Html.Partial("emutile", result)

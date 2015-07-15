@@ -39,6 +39,7 @@ namespace CollectionsOnline.WebSite.Queries
                     Collections = collections
                         .Where(x => x.Media.Any() && x.IsHidden == false)
                         .GroupBy(x => x.Category)
+                        .OrderBy(x => x.Key)
                 };
                 
                 return collectionIndexViewModel;
