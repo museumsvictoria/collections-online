@@ -20,8 +20,6 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedItemSpecimenCount { get; set; }
 
-        public string JsonArticleMultimedia { get; set; }
-
         public ArticleViewTransformerResult()
         {
             RelatedItems = new List<EmuAggregateRootViewModel>();

@@ -183,15 +183,9 @@ namespace CollectionsOnline.Import.Factories
             species.Media = _mediaFactory.Make(map.GetMaps("media"), ResizeMode.Pad);
 
             // Assign thumbnail
-            var media = species.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
-
-            var image = media as VideoMedia;
-            if (image != null)
-                species.ThumbnailUri = image.Thumbnail.Uri;
-
-            var video = media as VideoMedia;
-            if (video != null)
-                species.ThumbnailUri = video.Thumbnail.Uri;
+            var media = species.Media.OfType<IHasThumbnail>().FirstOrDefault();
+            if (media != null)
+                species.ThumbnailUri = media.Thumbnail.Uri;
 
             // Build summary
             if (!string.IsNullOrWhiteSpace(species.GeneralDescription))

@@ -151,15 +151,9 @@ namespace CollectionsOnline.Import.Factories
             article.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Assign thumbnail
-            var media = article.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
-
-            var image = media as VideoMedia;
-            if (image != null)
-                article.ThumbnailUri = image.Thumbnail.Uri;
-            
-            var video = media as VideoMedia;
-            if (video != null)
-                article.ThumbnailUri = video.Thumbnail.Uri;
+            var media = article.Media.OfType<IHasThumbnail>().FirstOrDefault();
+            if (media != null)
+                article.ThumbnailUri = media.Thumbnail.Uri;
 
             // Relationships
 

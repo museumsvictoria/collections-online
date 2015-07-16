@@ -1,4 +1,6 @@
-﻿using CollectionsOnline.Core.Indexes;
+﻿using System.Linq;
+using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Transformers;
 using Newtonsoft.Json;
@@ -26,9 +28,6 @@ namespace CollectionsOnline.WebSite.Queries
                 .Take(1);
 
             result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
-
-            // Create model for use in javascript
-            result.JsonArticleMultimedia = JsonConvert.SerializeObject(result.Article.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
             return result;
         }

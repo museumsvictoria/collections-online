@@ -26,7 +26,7 @@ namespace CollectionsOnline.Core.Models
         public string LicenceDetails { get; set; }
     }
 
-    public class ImageMedia : Media
+    public class ImageMedia : Media, IHasThumbnail
     {
         public string AlternativeText { get; set; }
 
@@ -39,8 +39,10 @@ namespace CollectionsOnline.Core.Models
         public ImageMediaFile Large { get; set; }
     }
 
-    public class VideoMedia : Media
+    public class VideoMedia : Media, IHasThumbnail
     {
+        public string AlternativeText { get; set; }
+
         public string Uri { get; set; }
 
         public string VideoId { get; set; }
@@ -63,5 +65,10 @@ namespace CollectionsOnline.Core.Models
     public class UriMedia : Media
     {
         public string Uri { get; set; }
+    }
+
+    public interface IHasThumbnail
+    {
+        ImageMediaFile Thumbnail { get; set; }        
     }
 }

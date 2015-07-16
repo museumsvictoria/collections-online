@@ -4,10 +4,10 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.Item.Media.GetMultimedia())
+@Html.Partial("Media", Model.Item.Media.WithThumbnails())
 <div id="title">
     <div class="wrapper">
-        @Html.Partial("MediaTypes", Model.Item.Media.GetMultimedia())
+        @Html.Partial("MediaTypes", Model.Item.Media.WithThumbnails())
         <h1>
             <span class="reg-number item">Item @Model.Item.RegistrationNumber</span>
             @Html.Raw(Model.Item.DisplayTitle)
@@ -927,9 +927,9 @@
         </div>
     </div>
 }
-@if (Model.JsonItemMultimedia != null)
+@if (Model.Item.Media.WithThumbnails().Any() != null)
 {
     <script>
-        var mediaModel = @Html.Raw(Model.JsonItemMultimedia);
+        var mediaModel = @Html.ConvertToJson(Model.Item.Media.WithThumbnails());
     </script>
 }

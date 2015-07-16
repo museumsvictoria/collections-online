@@ -14,8 +14,6 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedSpecimenCount { get; set; }
 
-        public string JsonSpeciesMultimedia { get; set; }
-
         public SpeciesViewTransformerResult()
         {
             RelatedItems = new List<EmuAggregateRootViewModel>();

@@ -35,9 +35,6 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Create model for use in javascript
-            result.JsonItemMultimedia = JsonConvert.SerializeObject(result.Item.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-
             return result;
         }
     }

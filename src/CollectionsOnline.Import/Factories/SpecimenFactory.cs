@@ -441,15 +441,9 @@ namespace CollectionsOnline.Import.Factories
             specimen.Media = _mediaFactory.Make(map.GetMaps("media"), specimen.ScientificGroup.Contains("zoology", StringComparison.OrdinalIgnoreCase) ? ResizeMode.Pad : ResizeMode.Crop);
 
             // Assign thumbnail
-            var media = specimen.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
-
-            var image = media as VideoMedia;
-            if (image != null)
-                specimen.ThumbnailUri = image.Thumbnail.Uri;
-
-            var video = media as VideoMedia;
-            if (video != null)
-                specimen.ThumbnailUri = video.Thumbnail.Uri;
+            var media = specimen.Media.OfType<IHasThumbnail>().FirstOrDefault();
+            if (media != null)
+                specimen.ThumbnailUri = media.Thumbnail.Uri;
 
             // Relationships
 

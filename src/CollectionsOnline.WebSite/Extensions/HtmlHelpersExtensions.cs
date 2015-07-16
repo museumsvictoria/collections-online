@@ -6,6 +6,7 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using Nancy.Helpers;
 using Nancy.ViewEngines.Razor;
+using Newtonsoft.Json;
 
 namespace CollectionsOnline.WebSite.Extensions
 {
@@ -94,6 +95,11 @@ namespace CollectionsOnline.WebSite.Extensions
             }
 
             return new NonEncodedHtmlString(result.ToString());
+        }
+
+        public static IHtmlString ConvertToJson<T>(this HtmlHelpers<T> helper, object input)
+        {
+            return new NonEncodedHtmlString(JsonConvert.SerializeObject(input, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects }));
         }
 
         private static string BuildAuthorsCitation(IList<Author> authors)

@@ -403,15 +403,9 @@ namespace CollectionsOnline.Import.Factories
             mediaStopwatch.Stop();
 
             // Assign thumbnail
-            var media = item.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
-
-            var image = media as VideoMedia;
-            if (image != null)
-                item.ThumbnailUri = image.Thumbnail.Uri;
-
-            var video = media as VideoMedia;
-            if (video != null)
-                item.ThumbnailUri = video.Thumbnail.Uri;
+            var media = item.Media.OfType<IHasThumbnail>().FirstOrDefault();
+            if (media != null)
+                item.ThumbnailUri = media.Thumbnail.Uri;
             
             // Indigenous Cultures Fields
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();

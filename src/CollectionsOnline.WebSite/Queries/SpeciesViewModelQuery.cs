@@ -41,9 +41,6 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Create model for use in javascript
-            result.JsonSpeciesMultimedia = JsonConvert.SerializeObject(result.Species.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-
             // Uris
             if (result.Species.Taxonomy != null)
             {

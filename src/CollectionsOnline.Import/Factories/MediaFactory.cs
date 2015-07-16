@@ -109,6 +109,7 @@ namespace CollectionsOnline.Import.Factories
                         Irn = irn,
                         DateModified = dateModified,
                         Caption = caption,
+                        AlternativeText = caption,
                         Creators = creators,
                         Sources = sources,
                         Credit = credit,

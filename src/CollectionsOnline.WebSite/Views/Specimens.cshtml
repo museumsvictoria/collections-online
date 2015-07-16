@@ -4,10 +4,10 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.Specimen.Media.GetMultimedia())
+@Html.Partial("Media", Model.Specimen.Media.WithThumbnails())
 <div id="title">
     <div class="wrapper">
-        @Html.Partial("MediaTypes", Model.Specimen.Media.GetMultimedia())
+        @Html.Partial("MediaTypes", Model.Specimen.Media.WithThumbnails())
         <h1>
             <span class="reg-number specimen">Specimen @Model.Specimen.RegistrationNumber</span>
             @Html.Raw(Model.Specimen.DisplayTitle)
@@ -571,12 +571,12 @@
     </div>
 }
 <script>
-    @if (Model.JsonSpecimenMultimedia != null)
+    @if (Model.Specimen.Media.WithThumbnails().Any())
     {
-        @:var mediaModel = @Html.Raw(Model.JsonSpecimenMultimedia);
+        @:var mediaModel = @Html.ConvertToJson(Model.Specimen.Media.WithThumbnails());
     }
-    @if (Model.JsonSpecimenLatLongs != null)
+    @if (Model.LatLongs.Any())
     {
-        @:var latlongsModel = @Html.Raw(Model.JsonSpecimenLatLongs);
+        @:var latlongsModel = @Html.ConvertToJson(Model.LatLongs);
     }
 </script>
