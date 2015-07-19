@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Infrastructure;
 using IMu;
@@ -150,13 +149,13 @@ namespace CollectionsOnline.Import.Factories
         {
             // First check to see if we are not overwriting existing data,
             // then if we find existing files matching all of our image media jobs, use the files on disk instead
-            if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
-            {
-                if (File.Exists(destPath))
-                {                    
-                    return true;
-                }
-            }
+            //if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
+            //{
+            //    if (File.Exists(destPath))
+            //    {                    
+            //        return true;
+            //    }
+            //}
 
             return false;
         }

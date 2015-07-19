@@ -51,6 +51,8 @@ namespace CollectionsOnline.Import.Factories
                 var rightsStatus = map.GetEncodedString("RigCopyrightStatus");
                 var licence = map.GetEncodedString("RigLicence");
                 var licenceDetails = map.GetEncodedString("RigLicenceDetails");
+
+                var md5Checksum = map.GetEncodedString("ChaMd5Sum");
                 
                 // Handle images
                 if (string.Equals(mimeType, "image", StringComparison.OrdinalIgnoreCase))
@@ -69,7 +71,8 @@ namespace CollectionsOnline.Import.Factories
                         RightsStatement = rightsStatement,
                         RightsStatus = rightsStatus,
                         Licence = licence,
-                        LicenceDetails = licenceDetails
+                        LicenceDetails = licenceDetails,
+                        Md5Checksum = md5Checksum
                     };
 
                     if (_imageMediaFactory.Make(ref imageMedia, thumbnailResizeMode))
@@ -92,12 +95,37 @@ namespace CollectionsOnline.Import.Factories
                         RightsStatement = rightsStatement,
                         RightsStatus = rightsStatus,
                         Licence = licence,
-                        LicenceDetails = licenceDetails
+                        LicenceDetails = licenceDetails,
+                        Md5Checksum = md5Checksum
                     };
 
                     if (_fileMediaFactory.Make(ref fileMedia, Path.GetExtension(identifier)))
                     {
                         return fileMedia;
+                    }
+                }
+
+                // Handle audio
+                if (string.Equals(mimeType, "audio", StringComparison.OrdinalIgnoreCase))
+                {
+                    var audioMedia = new AudioMedia
+                    {
+                        Irn = irn,
+                        DateModified = dateModified,
+                        Caption = caption,
+                        Creators = creators,
+                        Sources = sources,
+                        Credit = credit,
+                        RightsStatement = rightsStatement,
+                        RightsStatus = rightsStatus,
+                        Licence = licence,
+                        LicenceDetails = licenceDetails,
+                        Md5Checksum = md5Checksum
+                    };
+
+                    if (_fileMediaFactory.Make(ref audioMedia, Path.GetExtension(identifier)))
+                    {
+                        return audioMedia;
                     }
                 }
 
@@ -145,29 +173,6 @@ namespace CollectionsOnline.Import.Factories
                     };
 
                     return uriMedia;
-                }
-
-                // Handle audio
-                if (string.Equals(mimeType, "audio", StringComparison.OrdinalIgnoreCase))
-                {
-                    var audioMedia = new AudioMedia
-                    {
-                        Irn = irn,
-                        DateModified = dateModified,
-                        Caption = caption,
-                        Creators = creators,
-                        Sources = sources,
-                        Credit = credit,
-                        RightsStatement = rightsStatement,
-                        RightsStatus = rightsStatus,
-                        Licence = licence,
-                        LicenceDetails = licenceDetails
-                    };
-
-                    if (_fileMediaFactory.Make(ref audioMedia, Path.GetExtension(identifier)))
-                    {
-                        return audioMedia;
-                    }
                 }
             }
 
