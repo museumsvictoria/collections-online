@@ -13,13 +13,13 @@ using Raven.Client.Linq;
 
 namespace CollectionsOnline.Import.Factories
 {
-    public class FileMediaFactory : IFileMediaFactory
+    public class AudioMediaFactory : IAudioMediaFactory
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
 
-        public FileMediaFactory(
+        public AudioMediaFactory(
             IDocumentStore documentStore,
             IImuSessionProvider imuSessionProvider)
         {
@@ -27,14 +27,14 @@ namespace CollectionsOnline.Import.Factories
             _imuSessionProvider = imuSessionProvider;
         }
 
-        public bool Make(ref FileMedia fileMedia, string originalFileExtension)
+        public bool Make(ref AudioMedia audioMedia, string originalFileExtension)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            if (FileExists(ref fileMedia, originalFileExtension))
+            if (FileExists(ref audioMedia, originalFileExtension))
             {
                 stopwatch.Stop();
-                _log.Trace("Loaded existing file media in {0} ms", stopwatch.ElapsedMilliseconds);
+                _log.Trace("Loaded existing audio media in {0} ms", stopwatch.ElapsedMilliseconds);
 
                 return true;
             }
@@ -44,7 +44,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
                 {
-                    imuSession.FindKey(fileMedia.Irn);
+                    imuSession.FindKey(audioMedia.Irn);
                     var result = imuSession.Fetch("start", 0, -1, new[] { "resource" }).Rows[0];
 
                     var resource = result.GetMap("resource");
@@ -56,19 +56,19 @@ namespace CollectionsOnline.Import.Factories
                     var fileStream = resource["file"] as FileStream;
 
                     // Save file stream
-                    using (var file = File.OpenWrite(PathFactory.MakeDestPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None)))
+                    using (var file = File.OpenWrite(PathFactory.MakeDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None)))
                     {
                         fileStream.CopyTo(file);
                         fileStream.Dispose();
 
-                        fileMedia.File = new MediaFile
+                        audioMedia.File = new MediaFile
                         {
-                            Uri = PathFactory.MakeUriPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None),
+                            Uri = PathFactory.MakeUriPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None),
                             Size = file.Length
                         };
 
                         stopwatch.Stop();
-                        _log.Trace("Created new file media in {0} ms", stopwatch.ElapsedMilliseconds);
+                        _log.Trace("Created new audio media in {0} ms", stopwatch.ElapsedMilliseconds);
 
                         return true;
                     }
@@ -79,20 +79,20 @@ namespace CollectionsOnline.Import.Factories
                 if (exception is IMuException && ((IMuException)exception).ID == "MultimediaResourceNotFound")
                 {
                     // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
-                    _log.Warn("Multimedia resource was not found, unable to save image at this time {0}, {1}", fileMedia.Irn, exception);
+                    _log.Warn("Multimedia resource was not found, unable to save image at this time {0}, {1}", audioMedia.Irn, exception);
                 }
                 else
                 {
                     // Error is unexpected therefore we want the entire import to fail, re-throw the error.
-                    _log.Error("Error saving file media {0}, un-recoverable error", fileMedia.Irn);
+                    _log.Error("Error saving file media {0}, un-recoverable error", audioMedia.Irn);
                     throw;
                 }
-            }
+            }           
 
             return false;
         }
 
-        private bool FileExists(ref FileMedia fileMedia, string originalFileExtension)
+        private bool FileExists(ref AudioMedia audioMedia, string originalFileExtension)
         {
             // First check to see if we are not simply overwriting all existing media
             if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
@@ -103,7 +103,7 @@ namespace CollectionsOnline.Import.Factories
             //using (var documentSession = _documentStore.OpenSession())
             //{
             //    // Find the latest document who's media contains the media we are checking
-            //    var mediaIrn = fileMedia.Irn;
+            //    var mediaIrn = audioMedia.Irn;
 
             //    var result = documentSession
             //        .Query<MediaByIrnWithChecksumResult, MediaByIrnWithChecksum>()
@@ -118,22 +118,22 @@ namespace CollectionsOnline.Import.Factories
             //        return false;
             //    }
 
-            //    if (result.Md5Checksum != fileMedia.Md5Checksum)
+            //    if (result.Md5Checksum != audioMedia.Md5Checksum)
             //    {
-            //        _log.Trace("Existing media found however checksum doesnt match... fetching from EMu (existing:{0}, new:{1})", result.Md5Checksum, fileMedia.Md5Checksum);
+            //        _log.Trace("Existing media found however checksum doesnt match... fetching from EMu (existing:{0}, new:{1})", result.Md5Checksum, audioMedia.Md5Checksum);
 
             //        return false;
             //    }
             //}
 
-            var destPath = PathFactory.MakeDestPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None);
+            var destPath = PathFactory.MakeDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None);
 
             // then if we find an existing file, use the files on disk instead
             if (File.Exists(destPath))
             {
-                fileMedia.File = new MediaFile
+                audioMedia.File = new MediaFile
                 {
-                    Uri = PathFactory.MakeUriPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None),
+                    Uri = PathFactory.MakeUriPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None),
                     Size = new FileInfo(destPath).Length
                 };
 

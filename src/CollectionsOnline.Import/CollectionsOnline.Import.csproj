@@ -144,10 +144,12 @@
   <ItemGroup>
     <Compile Include="Extensions\MapExtensions.cs" />
     <Compile Include="Factories\CollectionFactory.cs" />
+    <Compile Include="Factories\FileMediaFactory.cs" />
     <Compile Include="Factories\IEmuAggregateRootFactory.cs" />
     <Compile Include="Factories\IAssociationFactory.cs" />
+    <Compile Include="Factories\IAudioMediaFactory.cs" />
     <Compile Include="Factories\IFileMediaFactory.cs" />
-    <Compile Include="Factories\FileMediaFactory.cs" />
+    <Compile Include="Factories\AudioMediaFactory.cs" />
     <Compile Include="Factories\IVideoMediaFactory.cs" />
     <Compile Include="Factories\VideoMediaFactory.cs" />
     <Compile Include="Factories\IMuseumLocationFactory.cs" />

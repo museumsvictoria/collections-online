@@ -18,15 +18,18 @@ namespace CollectionsOnline.Import.Factories
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IImageMediaFactory _imageMediaFactory;
         private readonly IFileMediaFactory _fileMediaFactory;
+        private readonly IAudioMediaFactory _audioMediaFactory;
         private readonly IVideoMediaFactory _videoMediaFactory;
 
         public MediaFactory(
             IImageMediaFactory imageMediaFactory,
             IFileMediaFactory fileMediaFactory,
+            IAudioMediaFactory audioMediaFactory,
             IVideoMediaFactory videoMediaFactory)
         {
             _imageMediaFactory = imageMediaFactory;
             _fileMediaFactory = fileMediaFactory;
+            _audioMediaFactory = audioMediaFactory;
             _videoMediaFactory = videoMediaFactory;
         }
 
@@ -123,7 +126,7 @@ namespace CollectionsOnline.Import.Factories
                         Md5Checksum = md5Checksum
                     };
 
-                    if (_fileMediaFactory.Make(ref audioMedia, Path.GetExtension(identifier)))
+                    if (_audioMediaFactory.Make(ref audioMedia, Path.GetExtension(identifier)))
                     {
                         return audioMedia;
                     }

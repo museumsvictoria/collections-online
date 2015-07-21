@@ -8,6 +8,7 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Utilities;
+using CsQuery.ExtensionMethods;
 using IMu;
 using NLog;
 using Raven.Abstractions.Commands;
@@ -196,6 +197,9 @@ namespace CollectionsOnline.Import.Factories
 
             if (string.IsNullOrWhiteSpace(article.DisplayTitle))
                 article.DisplayTitle = "Article";
+
+            // Sub Display Title
+            article.SubDisplayTitle = article.Types.Concatenate(", ");
 
             stopwatch.Stop();
             _log.Trace("Completed article creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);

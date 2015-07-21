@@ -22,7 +22,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = article.Id,
                     DisplayTitle = article.DisplayTitle,
-                    SubDisplayTitle = (string)null,
+                    SubDisplayTitle = article.SubDisplayTitle,
                     Content = new object[] { article.DisplayTitle, article.ContentText, article.ContentSummary, article.Keywords },
                     Summary = article.Summary,
                     ThumbnailUri = article.ThumbnailUri,
@@ -79,7 +79,8 @@ namespace CollectionsOnline.Core.Indexes
                     Id = item.Id,
                     DisplayTitle = item.DisplayTitle,
                     SubDisplayTitle = item.RegistrationNumber,
-                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber, item.RegistrationNumber.Replace(" ", ""), item.ObjectSummary, item.PhysicalDescription },
+                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber, item.RegistrationNumber.Replace(" ", ""),
+                        item.ObjectSummary, item.PhysicalDescription, item.CollectionNames, item.Keywords, item.Significance },
                     Summary = item.Summary,
                     ThumbnailUri = item.ThumbnailUri,
 
@@ -308,7 +309,7 @@ namespace CollectionsOnline.Core.Indexes
                     HasImages = (specimen.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
                     OnDisplay = (specimen.MuseumLocation != null) ? "Yes" : "No",
                     DisplayLocation = specimen.MuseumLocation.DisplayLocation,
-                    CollectingArea = specimen.CollectingAreas,                    
+                    CollectingArea = specimen.CollectingAreas,
                     ItemType = specimen.Type,
                     SpeciesType = (string) null,
                     SpeciesEndemicity = (string)null,
