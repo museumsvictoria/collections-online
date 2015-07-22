@@ -18,9 +18,7 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedSpeciesSpecimenItemCount { get; set; }
 
-        public string JsonSpecimenMultimedia { get; set; }
-
-        public string JsonSpecimenLatLongs { get; set; }
+        public IList<double[]> LatLongs { get; set; }
 
         public IList<KeyValuePair<string, string>> GeoSpatial { get; set; }
 

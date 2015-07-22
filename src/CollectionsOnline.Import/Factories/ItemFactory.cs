@@ -135,7 +135,7 @@ namespace CollectionsOnline.Import.Factories
                         "TLDPublicationTypes_tab",
                         "TLSPrimaryRole",
                         "tlparty=TLSPrimaryNameRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "iclocality=[ProStateProvince_tab,ProRegion_tab,ProSpecificLocality_tab]",
                         "ProCountry",
                         "ProCulturalGroups_tab",
@@ -403,15 +403,9 @@ namespace CollectionsOnline.Import.Factories
             mediaStopwatch.Stop();
 
             // Assign thumbnail
-            var media = item.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
-
-            var image = media as VideoMedia;
-            if (image != null)
-                item.ThumbnailUri = image.Thumbnail.Uri;
-
-            var video = media as VideoMedia;
-            if (video != null)
-                item.ThumbnailUri = video.Thumbnail.Uri;
+            var media = item.Media.OfType<IHasThumbnail>().FirstOrDefault();
+            if (media != null)
+                item.ThumbnailUri = media.Thumbnail.Uri;
             
             // Indigenous Cultures Fields
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();

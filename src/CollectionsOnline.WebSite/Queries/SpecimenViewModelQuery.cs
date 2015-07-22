@@ -39,9 +39,6 @@ namespace CollectionsOnline.WebSite.Queries
                 }
             }
 
-            // Create model for use in javascript
-            result.JsonSpecimenMultimedia = JsonConvert.SerializeObject(result.Specimen.Media.GetMultimedia(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-
             // TODO: move to view factory and create dedicated view model
             // Set Geospatial
             if (!string.IsNullOrWhiteSpace(result.Specimen.SiteCode))
@@ -99,13 +96,12 @@ namespace CollectionsOnline.WebSite.Queries
             if (!string.IsNullOrWhiteSpace(result.Specimen.GeologyRockType))
                 result.GeoSpatial.Add(new KeyValuePair<string, string>("Rock Type", result.Specimen.GeologyRockType));
 
-            // Create latlong model for use in javascript
+            // Create Lat Long matched pairs for map use
             var latlongs = new List<double[]>();
             if (result.Specimen.Latitudes.Any(x => !string.IsNullOrWhiteSpace(x)) && result.Specimen.Longitudes.Any(x => !string.IsNullOrWhiteSpace(x)))
             {
-                latlongs = result.Specimen.Latitudes.Zip(result.Specimen.Longitudes, (lat, lon) => new[] { double.Parse(lat), double.Parse(lon) }).ToList();
-            }
-            result.JsonSpecimenLatLongs = JsonConvert.SerializeObject(latlongs);
+                result.LatLongs = result.Specimen.Latitudes.Zip(result.Specimen.Longitudes, (lat, lon) => new[] { double.Parse(lat), double.Parse(lon) }).ToList();
+            }            
 
             // Uris
             if (result.Specimen.Taxonomy != null)

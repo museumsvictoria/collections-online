@@ -1,15 +1,15 @@
 ﻿@using CollectionsOnline.Core.Models
 @using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IList<Media>>
-@if (Model.GetFiles().Any() || Model.GetUris().Any())
+@if (Model.OfType<FileMedia>().Any() || Model.OfType<UriMedia>().Any())
 {
     <aside class="side-content">
         <div class="sidecolumn">
             <div class="downloads">
-                @if (Model.GetFiles().Any())
+                @if (Model.OfType<FileMedia>().Any())
                 {
                     <h4>Associated downloads</h4>
-                    foreach (FileMedia file in Model.GetFiles())
+                    foreach (FileMedia file in Model.OfType<FileMedia>())
                     {
                         <a href="@file.File.Uri">
                             <span class="filedesc">@file.Caption</span>
@@ -20,10 +20,10 @@
                         </a>
                     }
                 }
-                @if (Model.GetUris().Any())
+                @if (Model.OfType<UriMedia>().Any())
                 {
                     <h4>Related Links</h4>
-                    foreach (UriMedia uri in Model.GetUris())
+                    foreach (UriMedia uri in Model.OfType<UriMedia>())
                     {
                         <a href="@uri.Uri">@uri.Caption</a>
                     }

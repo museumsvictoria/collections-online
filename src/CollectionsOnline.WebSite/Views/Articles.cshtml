@@ -4,21 +4,13 @@
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.Article.Media.GetMultimedia())
+@Html.Partial("Media", Model.Article.Media.WithThumbnails())
 <div id="title">
     <div class="wrapper">
-        @Html.Partial("MediaTypes", Model.Article.Media.GetMultimedia())
+        @Html.Partial("MediaTypes", Model.Article.Media.WithThumbnails())
         <h1>
-            @Html.Raw(Model.Article.DisplayTitle)<br />
-            @if (Model.Article.Types.Any())
-            {
-                <span>
-                    @for (int i = 0; i < Model.Article.Types.Count; i++)
-                    {
-                        <a href="/search?articletype=@HttpUtility.UrlEncode(Model.Article.Types[i])">@Model.Article.Types[i]</a>@(i != Model.Article.Types.Count - 1 ? ", " : "")
-                    }
-                </span>
-            }
+            <span class="article"></span>
+            @Html.Raw(Model.Article.DisplayTitle)
         </h1>
     </div>
 </div>
@@ -87,6 +79,18 @@
                             </p>
                         </li>
                     }
+                    @if (Model.Article.Types.Any())
+                    {
+                        <li>
+                            <h3>Article types</h3>
+                            <p>
+                            @for (int i = 0; i < Model.Article.Types.Count; i++)
+                            {
+                                <a href="/search?articletype=@HttpUtility.UrlEncode(Model.Article.Types[i])">@Model.Article.Types[i]</a>@(i != Model.Article.Types.Count - 1 ? ", " : "")
+                            }
+                            </p>
+                        </li>
+                    }                    
                 </ul>
             </div>
         </section>
@@ -186,9 +190,9 @@
         </div>
     </div>
 }
-@if (Model.JsonArticleMultimedia != null)
+@if (Model.Article.Media.WithThumbnails().Any())
 {
     <script>
-        var mediaModel = @Html.Raw(Model.JsonArticleMultimedia);
+        var mediaModel = @Html.ConvertToJson(Model.Article.Media.WithThumbnails());
     </script>
 }

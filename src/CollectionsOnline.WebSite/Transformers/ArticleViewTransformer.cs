@@ -10,6 +10,7 @@ namespace CollectionsOnline.WebSite.Transformers
         public ArticleViewTransformer()
         {
             TransformResults = articles => from article in articles
+                let parentArticle = LoadDocument<Article>(article.ParentArticleId)
                 select new
                 {
                     Article = article,
@@ -37,13 +38,13 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedSpecimen.ThumbnailUri,
                             RecordType = "Specimen"
                         },
-                    ParentArticle = (LoadDocument<Article>(article.ParentArticleId) != null && !LoadDocument<Article>(article.ParentArticleId).IsHidden) ?
+                    ParentArticle = (parentArticle != null && !parentArticle.IsHidden) ?
                         new
                         {
-                            LoadDocument<Article>(article.ParentArticleId).Id,
-                            LoadDocument<Article>(article.ParentArticleId).DisplayTitle,
-                            LoadDocument<Article>(article.ParentArticleId).Summary,
-                            LoadDocument<Article>(article.ParentArticleId).ThumbnailUri,
+                            parentArticle.Id,
+                            parentArticle.DisplayTitle,
+                            parentArticle.Summary,
+                            parentArticle.ThumbnailUri,
                             RecordType = "Article"
                         } : null,
                     ChildArticles = from articleId in article.ChildArticleIds

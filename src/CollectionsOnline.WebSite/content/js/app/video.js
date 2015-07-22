@@ -27,7 +27,7 @@ module.exports = {
   },
   select: function (e) {
     if (this.Video !== undefined) {
-      this.$videoLoaded.replaceWith('<iframe height="' + this.Video.Medium.Height + '" width="' + this.Video.Medium.Width + '" title="' + this.Video.Caption + '" src="http://www.youtube.com/embed/' + this.Video.VideoId + '?cc_load_policy=1&disablekb=0&autoplay=1"></iframe>');
+      this.$videoLoaded.replaceWith('<iframe height="' + this.Video.Medium.Height + '" width="' + this.Video.Medium.Width + '" title="' + this.Video.AlternativeText + '" src="http://www.youtube.com/embed/' + this.Video.VideoId + '?cc_load_policy=1&disablekb=0&autoplay=1"></iframe>');
     }
   }
 };

@@ -8,7 +8,6 @@ namespace CollectionsOnline.Core.Models
 
         public long Size { get; set; }
         
-        // TODO: assign extension on import
         public string Extension
         {
             get

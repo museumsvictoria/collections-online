@@ -64,6 +64,7 @@
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\OrdinalIgnoreCaseTupleComparer.cs" />
     <Compile Include="Indexes\CombinedFacets.cs" />
+    <Compile Include="Indexes\MediaByIrnWithChecksum.cs" />
     <Compile Include="Indexes\CombinedIndex.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentStoreProvider.cs" />

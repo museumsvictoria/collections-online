@@ -8,6 +8,7 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Utilities;
+using CsQuery.ExtensionMethods;
 using IMu;
 using NLog;
 using Raven.Abstractions.Commands;
@@ -50,9 +51,9 @@ namespace CollectionsOnline.Import.Factories
                         "NarNarrativeSummary",
                         "DesType_tab",
                         "DesGeographicLocation_tab",
-                        "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
+                        "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                         "contributors=[contributor=NarContributorRef_tab.(NamFirst,NamLast,NamFullName,BioLabel),NarContributorRole_tab]",
-                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
+                        "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
                         "relatedarticles=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
@@ -151,15 +152,9 @@ namespace CollectionsOnline.Import.Factories
             article.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Assign thumbnail
-            var media = article.Media.FirstOrDefault(x => x is ImageMedia || x is VideoMedia);
-
-            var image = media as VideoMedia;
-            if (image != null)
-                article.ThumbnailUri = image.Thumbnail.Uri;
-            
-            var video = media as VideoMedia;
-            if (video != null)
-                article.ThumbnailUri = video.Thumbnail.Uri;
+            var media = article.Media.OfType<IHasThumbnail>().FirstOrDefault();
+            if (media != null)
+                article.ThumbnailUri = media.Thumbnail.Uri;
 
             // Relationships
 
@@ -202,6 +197,9 @@ namespace CollectionsOnline.Import.Factories
 
             if (string.IsNullOrWhiteSpace(article.DisplayTitle))
                 article.DisplayTitle = "Article";
+
+            // Sub Display Title
+            article.SubDisplayTitle = article.Types.Concatenate(", ");
 
             stopwatch.Stop();
             _log.Trace("Completed article creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);

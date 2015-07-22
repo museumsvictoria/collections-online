@@ -51,6 +51,7 @@ namespace CollectionsOnline.Import.Imports
                                     "RigLicence",
                                     "RigLicenceDetails",
                                     "ChaRepository_tab",
+                                    "ChaMd5Sum",
                                     "AdmPublishWebNoPassword",
                                     "AdmDateModified",
                                     "AdmTimeModified"
@@ -160,6 +161,7 @@ namespace CollectionsOnline.Import.Imports
                                 if (ImportCanceled())
                                     return;
 
+                                // Find associated documents that utilize the media we are updating in order to update any denormalized references
                                 var associatedDocumentBatch = associatedDocumentSession
                                     .Query<object, CombinedIndex>()
                                     .Where(x => ((CombinedIndexResult)x).MediaIrns.Any(y => y == mediaIrn))
