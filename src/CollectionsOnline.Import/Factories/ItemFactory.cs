@@ -24,19 +24,22 @@ namespace CollectionsOnline.Import.Factories
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
         private readonly IAssociationFactory _associationFactory;
+        private readonly ISummaryFactory _summaryFactory;
 
         public ItemFactory(
             IPartiesNameFactory partiesNameFactory,
             IMuseumLocationFactory museumLocationFactory,
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory,
-            IAssociationFactory associationFactory)
+            IAssociationFactory associationFactory,
+            ISummaryFactory summaryFactory)
         {
             _partiesNameFactory = partiesNameFactory;
             _museumLocationFactory = museumLocationFactory;
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
+            _summaryFactory = summaryFactory;
         }
 
         public string ModuleName
@@ -616,10 +619,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Build summary
-            if (!string.IsNullOrWhiteSpace(item.ObjectSummary))
-                item.Summary = item.ObjectSummary;
-            else if (!string.IsNullOrWhiteSpace(item.PhysicalDescription))
-                item.Summary = item.PhysicalDescription;
+            item.Summary = _summaryFactory.Make(item);
 
             // Display Title
             // TODO: Move to display title factory and encapsulate entire process

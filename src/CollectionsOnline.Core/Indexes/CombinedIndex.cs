@@ -22,7 +22,7 @@ namespace CollectionsOnline.Core.Indexes
                     // Content fields
                     Id = article.Id,
                     DisplayTitle = article.DisplayTitle,
-                    SubDisplayTitle = article.SubDisplayTitle,
+                    SubDisplayTitle = (string)null,
                     Content = new object[] { article.DisplayTitle, article.ContentText, article.ContentSummary, article.Keywords },
                     Summary = article.Summary,
                     ThumbnailUri = article.ThumbnailUri,

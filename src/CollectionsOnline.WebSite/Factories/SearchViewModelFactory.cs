@@ -22,6 +22,7 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var searchIndexViewModel = new SearchIndexViewModel
             {
+                Results = results,
                 Query = searchInputModel.Query,
                 TotalResults = totalResults,
                 TotalPages = (totalResults + searchInputModel.PerPage - 1) / searchInputModel.PerPage,
@@ -129,16 +130,6 @@ namespace CollectionsOnline.WebSite.Factories
                 });
             }
 
-            // Build results
-            foreach (var result in results)
-            {
-                // Trim summary to fit
-                if (result.Summary != null)
-                    result.Summary = StringExtensions.Truncate(result.Summary, Core.Config.Constants.SummaryMaxChars);
-
-                searchIndexViewModel.Results.Add(result);
-            }
-
             // Build next prev page links
             var queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             if ((searchInputModel.Page + 1) <= searchIndexViewModel.TotalPages)
@@ -223,6 +214,15 @@ namespace CollectionsOnline.WebSite.Factories
                 Name = "Grid",
                 Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
                 Active = searchInputModel.View == "grid"
+            };
+
+            queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
+            queryString.Set("view", "data");
+            searchIndexViewModel.DataViewButton = new ButtonViewModel
+            {
+                Name = "Data",
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Active = searchInputModel.View == "data"
             };
 
             // Build suggestions

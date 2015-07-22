@@ -23,13 +23,16 @@ namespace CollectionsOnline.Import.Factories
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
+        private readonly ISummaryFactory _summaryFactory;
 
         public SpeciesFactory(
             ITaxonomyFactory taxonomyFactory,
-            IMediaFactory mediaFactory)
+            IMediaFactory mediaFactory,
+            ISummaryFactory summaryFactory)
         {
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
+            _summaryFactory = summaryFactory;
         }
 
         public string ModuleName
@@ -188,10 +191,7 @@ namespace CollectionsOnline.Import.Factories
                 species.ThumbnailUri = media.Thumbnail.Uri;
 
             // Build summary
-            if (!string.IsNullOrWhiteSpace(species.GeneralDescription))
-                species.Summary = species.GeneralDescription;
-            else if (!string.IsNullOrWhiteSpace(species.Biology))
-                species.Summary = species.Biology;
+            species.Summary = _summaryFactory.Make(species);
 
             // Display Title
             // TODO: Move to display title factory and encapsulate entire process

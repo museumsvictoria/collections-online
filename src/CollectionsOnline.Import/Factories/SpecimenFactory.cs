@@ -26,6 +26,7 @@ namespace CollectionsOnline.Import.Factories
         private readonly IMediaFactory _mediaFactory;
         private readonly IAssociationFactory _associationFactory;
         private readonly IMuseumLocationFactory _museumLocationFactory;
+        private readonly ISummaryFactory _summaryFactory;
 
         public SpecimenFactory(
             ISlugFactory slugFactory,
@@ -33,14 +34,16 @@ namespace CollectionsOnline.Import.Factories
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory,
             IAssociationFactory associationFactory,
-            IMuseumLocationFactory museumLocationFactory)
+            IMuseumLocationFactory museumLocationFactory,
+            ISummaryFactory summaryFactory)
         {
             _slugFactory = slugFactory;
             _partiesNameFactory = partiesNameFactory;
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
-            _museumLocationFactory = museumLocationFactory;            
+            _museumLocationFactory = museumLocationFactory;
+            _summaryFactory = summaryFactory;
         }
 
         public string ModuleName
@@ -519,17 +522,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Build summary
-            if(specimen.Taxonomy != null)
-                specimen.Summary = new[]
-                    {
-                        specimen.Taxonomy.CommonName,
-                        new[] {
-                            specimen.Taxonomy.Phylum,
-                            specimen.Taxonomy.Class,
-                            specimen.Taxonomy.Order,
-                            specimen.Taxonomy.Family
-                        }.Concatenate(" ")
-                    }.Concatenate(Environment.NewLine);
+            specimen.Summary = _summaryFactory.Make(specimen);
 
             // Build Associated date
             if (specimen.DateVisitedFrom.HasValue)

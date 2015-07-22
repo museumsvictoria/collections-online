@@ -54,6 +54,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.View = "list";
             else if (string.Equals(query.View, "grid", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "grid";
+            else if (string.Equals(query.View, "data", StringComparison.OrdinalIgnoreCase))
+                searchInputModel.View = "data";
 
             searchInputModel.Query = query.Query;
 

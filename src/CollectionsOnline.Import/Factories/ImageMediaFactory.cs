@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Infrastructure;
 using ImageProcessor;
@@ -12,19 +13,23 @@ using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
 using IMu;
 using NLog;
+using Raven.Client;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class ImageMediaFactory : IImageMediaFactory
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
+        private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IList<ImageMediaJob> _imageMediaJobs;
 
         public ImageMediaFactory(
+            IDocumentStore documentStore,
             IImuSessionProvider imuSessionProvider)
         {
-            _imuSessionProvider = imuSessionProvider;            
+            _documentStore = documentStore;
+            _imuSessionProvider = imuSessionProvider;
 
             // Build a list the various image conversions used in the application
             _imageMediaJobs = new List<ImageMediaJob>
@@ -61,7 +66,7 @@ namespace CollectionsOnline.Import.Factories
         {
             var stopwatch = Stopwatch.StartNew();
 
-            if (ThereAreExistingMedia(ref imageMedia))
+            if (FileExists(ref imageMedia))
             {
                 stopwatch.Stop();
                 _log.Trace("Loaded existing image media resources in {0} ms", stopwatch.ElapsedMilliseconds);
@@ -161,38 +166,53 @@ namespace CollectionsOnline.Import.Factories
             return false;
         }
 
-        private bool ThereAreExistingMedia(ref ImageMedia imageMedia)
+        private bool FileExists(ref ImageMedia imageMedia)
         {
-            // First check to see if we are not overwriting existing data,            
-            if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
+            // First check to see if we are not simply overwriting all existing media
+            if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"])) 
+                return false;
+            
+            var imageMediaIrn = imageMedia.Irn;
+
+            // TODO: restore commented out code when production ready
+            // Check to see whether the file has changed in emu first
+            //using (var documentSession = _documentStore.OpenSession())
+            //{
+            //    // Find the latest document who's media contains the media we are checking
+            //    var result = documentSession
+            //        .Query<MediaByIrnWithChecksumResult, MediaByIrnWithChecksum>()
+            //        .OrderByDescending(x => x.DateModified)
+            //        .FirstOrDefault(x => x.Irn == imageMediaIrn);
+
+            //    // If there are no results that use this image or if existing media checksum does not match the one from emu we need to save file
+            //    if (result == null || result.Md5Checksum != imageMedia.Md5Checksum)
+            //        return false;
+            //}
+
+            // then finally if we find existing files matching all of our image media jobs, use the files on disk instead
+            if (_imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, ".jpg", x.FileDerivativeType))))
             {
-                var imageMediaIrn = imageMedia.Irn;
-
-                // then if we find existing files matching all of our image media jobs, use the files on disk instead
-                if (_imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(imageMediaIrn, ".jpg", x.FileDerivativeType))))
+                foreach (var imageMediaJob in _imageMediaJobs)
                 {
-                    foreach (var imageMediaJob in _imageMediaJobs)
+                    using (var imageFactory = new ImageFactory())
                     {
-                        using (var imageFactory = new ImageFactory())
-                        {
-                            var destPath = PathFactory.MakeDestPath(imageMediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
+                        var destPath = PathFactory.MakeDestPath(imageMediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
                             
-                            imageFactory.Load(destPath);
+                        imageFactory.Load(destPath);
 
-                            // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
-                            typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
-                                .SetValue(imageMedia, new ImageMediaFile
-                                {
-                                    Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
-                                    Size = new FileInfo(destPath).Length,
-                                    Width = imageFactory.Image.Width,
-                                    Height = imageFactory.Image.Height
-                                });
-                        }
+                        // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
+                        typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
+                            .SetValue(imageMedia, new ImageMediaFile
+                            {
+                                Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
+                                Size = new FileInfo(destPath).Length,
+                                Width = imageFactory.Image.Width,
+                                Height = imageFactory.Image.Height
+                            });
                     }
-                    
-                    return true;
                 }
+                    
+                return true;
             }
 
             return false;

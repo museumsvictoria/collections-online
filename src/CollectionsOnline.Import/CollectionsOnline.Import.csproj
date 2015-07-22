@@ -142,6 +142,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\SummaryBuilder.cs" />
     <Compile Include="Extensions\MapExtensions.cs" />
     <Compile Include="Factories\CollectionFactory.cs" />
     <Compile Include="Factories\FileMediaFactory.cs" />
@@ -150,7 +151,9 @@
     <Compile Include="Factories\IAudioMediaFactory.cs" />
     <Compile Include="Factories\IFileMediaFactory.cs" />
     <Compile Include="Factories\AudioMediaFactory.cs" />
+    <Compile Include="Factories\ISummaryFactory.cs" />
     <Compile Include="Factories\IVideoMediaFactory.cs" />
+    <Compile Include="Factories\SummaryFactory.cs" />
     <Compile Include="Factories\VideoMediaFactory.cs" />
     <Compile Include="Factories\IMuseumLocationFactory.cs" />
     <Compile Include="Factories\IMediaFactory.cs" />

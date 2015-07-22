@@ -20,8 +20,6 @@ namespace CollectionsOnline.Core.Models
 
         public string DisplayTitle { get; set; }
 
-        public string SubDisplayTitle { get; set; }
-
         #endregion        
         
         public DateTime DateModified { get; set; }

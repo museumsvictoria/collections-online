@@ -19,9 +19,11 @@ namespace CollectionsOnline.Core.Config
 
         public static int SuggestionsMinResultsSize = 15;
 
-        public static int SummaryMaxChars = 120;
+        public static int SummaryMaxChars = 230;
 
-        public static int HomeMaxRecentResults = 12;               
+        public static int CollectionSummaryMaxChars = 120;
+
+        public static int HomeMaxRecentResults = 12;
 
         public static string ImuItemQueryString = "Collections Online: Humanities";
 
@@ -51,7 +53,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string CurrentApiVersionPath = "/v1";
 
-        public static string ApiBasePath = "/api";        
+        public static string ApiBasePath = "/api";
 
         public static Dictionary<Tuple<string, string, string, string>, MuseumLocation> MuseumLocations = new Dictionary
             <Tuple<string, string, string, string>, MuseumLocation>(new OrdinalIgnoreCaseTupleComparer())

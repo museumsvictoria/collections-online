@@ -8,7 +8,6 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Utilities;
-using CsQuery.ExtensionMethods;
 using IMu;
 using NLog;
 using Raven.Abstractions.Commands;
@@ -23,11 +22,14 @@ namespace CollectionsOnline.Import.Factories
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IMediaFactory _mediaFactory;
+        private readonly ISummaryFactory _summaryFactory;
 
         public ArticleFactory(
-            IMediaFactory mediaFactory)
+            IMediaFactory mediaFactory,
+            ISummaryFactory summaryFactory)
         {
             _mediaFactory = mediaFactory;
+            _summaryFactory = summaryFactory;
         }
 
         public string ModuleName
@@ -184,11 +186,9 @@ namespace CollectionsOnline.Import.Factories
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
                     article.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
             }
+
             // Build summary
-            if (!string.IsNullOrWhiteSpace(article.ContentSummary))
-                article.Summary = article.ContentSummary;
-            else if (!string.IsNullOrWhiteSpace(article.Content))
-                article.Summary = article.ContentText;
+            article.Summary = _summaryFactory.Make(article);
 
             // Display Title
             // TODO: Move to display title factory and encapsulate entire process
@@ -197,9 +197,6 @@ namespace CollectionsOnline.Import.Factories
 
             if (string.IsNullOrWhiteSpace(article.DisplayTitle))
                 article.DisplayTitle = "Article";
-
-            // Sub Display Title
-            article.SubDisplayTitle = article.Types.Concatenate(", ");
 
             stopwatch.Stop();
             _log.Trace("Completed article creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
