@@ -108,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="results-area @(Model.ListViewButton.Active ? "list" : "grid")">
+        <div class="results-area @(Model.ListViewButton.Active ? "list" : "")@(Model.GridViewButton.Active ? "grid" : "")@(Model.DataViewButton.Active ? "data" : "") ">
             @foreach (var result in Model.Results)
             {
                 @Html.Partial("emutile", result)
