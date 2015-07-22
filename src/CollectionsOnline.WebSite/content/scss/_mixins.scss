@@ -95,3 +95,9 @@
 	-webkit-align-items: center;
     align-items: center;
 }
+
+@mixin flex($value){
+    -ms-flex:$value;
+    -webkit-flex:$value;
+    flex:$value;
+}
