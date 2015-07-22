@@ -49,6 +49,9 @@ header {
 
 .brand span {
     color: $colour-highlight-green;
+    @include gridle_state(print){
+        color:black;
+    }
     font-weight: 600;
 
   
@@ -190,6 +193,7 @@ button.icon {
         @include gridle(8);	
         @include gridle(8,"tablet");
         @include gridle_pull(4,"tablet");
+
 		float:left;
 		direction: ltr;
 		font-size: 30px;
@@ -201,6 +205,13 @@ button.icon {
         @include gridle_state("mobile"){
             padding-left:20px;
         }
+        @include gridle_state("print"){
+            width:100%;
+            font-weight:400;
+            padding-right:4em;
+            font-size:18pt;
+        }
+
 		& .item:before{
 		    @include icon-spaced-item;
 		}
@@ -216,6 +227,7 @@ button.icon {
 		& .reg-number{
 			font-weight: 400;
             display:block;
+
 		}
 
     }
@@ -225,6 +237,7 @@ button.icon {
                 @include gridle(4, "tablet");
                 @include gridle_push(8, "tablet");
                 @include gridle(12,"mobile");
+                @include gridle_hide("print");
     		    direction: ltr;
 				float: right;
 				padding: 30px 0 0;
@@ -410,6 +423,9 @@ button.icon {
         @include flex-flow-row-nowrap;
         @include justify-content(center);
         @include alignitem-center;
+        @include gridle_state("print"){
+            max-height:400px;
+        }
 
         .hero-media {
             & iframe {            
@@ -477,7 +493,7 @@ button.icon {
         position:absolute;
         z-index:200;
         background: rgba(255,255,255,0.5);
-
+        @include gridle_hide("print");
         &.inactive {
             color: #999;
         }
@@ -659,6 +675,11 @@ button.icon {
        	@include gridle(8);
 	    @include gridle ( 12 , 'tablet' );
 	    @include gridle ( 12 , 'mobile' );
+        @include gridle_state("print"){
+            width:100%;
+            padding-right:6em;
+            
+        }
 	    float:left;
 	    direction:ltr;
 	    padding-top: 50px;
@@ -668,6 +689,14 @@ button.icon {
 		    font-size: 17px;
 			font-weight: 300;
 			margin-bottom: 1.5em;
+
+            @include gridle_state("print"){
+                font-size:11pt;
+                line-height:normal;
+                width:100%;
+
+            }
+
 	    }
 
         & h2
@@ -694,6 +723,9 @@ button.icon {
 	            padding-bottom: 5px;
 	            font-size: 22px;
                 font-weight: 400;
+                @include gridle_state(print){
+                    font-size:16pt;
+                }
             }           
         }
 
@@ -805,6 +837,9 @@ button.icon {
         @include gridle (4);
     	@include gridle ( 12 , 'tablet' );
 	    @include gridle ( 12 , 'mobile' );
+        @include gridle_state("print"){
+            width:100%;
+        }
 	    float: right;
 	    direction: ltr;
 	  
@@ -1408,9 +1443,7 @@ button.icon {
         background: #e3e3e3;
         padding: 0 0 20px 0px;
         margin-top: 70px;
-        flex: 1;
-        -webkit-flex: 1;
-        -ms-flex: 1;
+        @include flex(1);
 
         @include gridle_state("tablet") {
             margin-top: 0px;
@@ -1857,6 +1890,7 @@ button.icon {
             outline: 0 none;
             padding: 0 1em;
             width: 100%;
+            @include flex(1);
         }
     }
 }
@@ -2704,6 +2738,7 @@ footer {
 			float:left;
 			direction: ltr;
 		}
+        @include gridle_hide("print");
 	}
 	& .footerpromos{
 		float: left;
@@ -2716,6 +2751,7 @@ footer {
 		@include gridle_state('mobile') {
 		    display: none;
 		}
+        @include gridle_hide("print");
 		&.first{
 			padding-left:0px;
 		}
@@ -2799,7 +2835,7 @@ footer {
 			{
 				height: 30px;
 			}
-			
+			@include gridle_hide("print");
 		}
 		& .venueinformation{
 			font-size: 12px;
@@ -2817,6 +2853,7 @@ footer {
 			clear: left;
             margin: 0;
 			//padding-left:10px;
+            @include gridle_hide("print");
 			& li {
 				float: left;
 				margin-right: 13px;
@@ -3443,4 +3480,77 @@ footer {
         border-bottom: 1px solid;
         color: rgba(25, 102,93, 1);
     }
+}
+
+#errordesc {
+    position:relative;
+    padding-bottom:60px;
+    & h2 {
+        float: none;
+        font-size: 22px;
+        padding-bottom: 5px;
+        padding-left: 0px;
+        font-weight:400;
+    }
+
+    & h3 {
+        float: none;
+        font-size: 22px;
+        padding-bottom: 5px;
+        padding-left: 0px;
+        font-weight:400;
+    }
+
+    & p {
+        font-size: 17px;
+        font-weight: 300;
+        margin-bottom: 1.5em;
+        word-wrap: break-word;
+        padding-left: 0px;
+    
+        &.prelist{
+            margin-bottom: 0;
+        }
+     }
+
+
+    & .errorcategory{
+		    color: #fff;
+			display: block;
+			font-size: 30px;
+			font-weight: 300;
+			left: 10px;
+			padding: 10px;
+			position: absolute;
+			top: -115px;
+			width: 100%;
+    }
+    
+    & ul {
+        list-style:inside disc;
+        font-size: 17px;
+        font-weight: 300;
+        margin-bottom: 1.5em;
+        word-wrap: break-word;
+        padding-left: 0px;
+    }
+
+    & .desc {
+         
+        @include gridle(8);
+        padding-right: 20px;
+        @include gridle(12,"tablet");
+        @include gridle(12,"mobile");
+    
+       & a {
+                border-bottom: 1px solid;
+                color: inherit;
+                &:hover {
+                    border-bottom: 1px solid;
+                    color: rgba(25, 102,93, 1);
+                }
+            }       
+    }
+
+   
 }
