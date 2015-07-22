@@ -42,6 +42,8 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Media> Media { get; set; }
 
+        public string YearWritten { get; set; }
+
         public string ParentArticleId { get; set; }
 
         public IList<string> ChildArticleIds { get; set; }

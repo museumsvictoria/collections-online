@@ -55,6 +55,7 @@ namespace CollectionsOnline.Import.Factories
                         "DesGeographicLocation_tab",
                         "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                         "contributors=[contributor=NarContributorRef_tab.(NamFirst,NamLast,NamFullName,BioLabel),NarContributorRole_tab]",
+                        "dates=[NarDate0,NarExplanation_tab]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
@@ -150,7 +151,25 @@ namespace CollectionsOnline.Import.Factories
                        Biography = x.GetEncodedString("BioLabel")
                    }));
 
-            // Media           
+            // Year written
+            var dateWritten = map.GetMaps("dates")
+                .Where(x => x.GetEncodedString("NarExplanation_tab").Contains("date written", StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.GetEncodedString("NarDate0"))
+                .FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(dateWritten))
+            {
+                DateTime parsedDate;
+
+                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                    article.YearWritten = parsedDate.Year.ToString();
+                else if (DateTime.TryParseExact(dateWritten, "/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                    article.YearWritten = parsedDate.Year.ToString(); 
+                else if (DateTime.TryParseExact(dateWritten, "yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                    article.YearWritten = parsedDate.Year.ToString();
+            }
+
+            // Media
             article.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Assign thumbnail

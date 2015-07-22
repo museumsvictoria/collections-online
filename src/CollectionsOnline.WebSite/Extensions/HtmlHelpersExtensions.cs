@@ -48,7 +48,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var article = document as Article;
 
                 sb.Append(BuildAuthorsCitation(article.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}{3} Accessed {4}", article.DateModified.Year, article.Title, helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}{3} Accessed {4}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Species)
             {
