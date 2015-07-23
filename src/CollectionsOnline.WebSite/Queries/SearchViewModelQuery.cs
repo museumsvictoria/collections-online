@@ -42,26 +42,28 @@ namespace CollectionsOnline.WebSite.Queries
                 var facetQuery = _documentSession.Advanced
                     .DocumentQuery<CombinedIndexResult, CombinedIndex>();
 
-                // search query
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
+                // search query (only add AndAlso() after first query)
+                for (int i = 0; i < searchInputModel.Queries.Count; i++)
                 {
-                    query = query
-                        .Search("Content", searchInputModel.Query);
-
-                    facetQuery = facetQuery
-                        .Search("Content", searchInputModel.Query);
+                    if (i == 0)
+                    {
+                        query = query.Search(x => x.Content, searchInputModel.Queries[i]);
+                        facetQuery = facetQuery.Search(x => x.Content, searchInputModel.Queries[i]);
+                    }
+                    else
+                    {
+                        query = query.AndAlso().Search(x => x.Content, searchInputModel.Queries[i]);
+                        facetQuery = facetQuery.AndAlso().Search(x => x.Content, searchInputModel.Queries[i]);                        
+                    }
                 }
 
                 // Add sorting
                 switch (searchInputModel.Sort)
-                {                    
+                {
                     default:
+                    case "quality":
                         query = query
                             .OrderByDescending(x => x.Quality);
-                        break;
-                    case "relevance":
-                        query = query
-                            .OrderByScoreDescending();
                         break;
                     case "date":
                         query = query
@@ -70,7 +72,7 @@ namespace CollectionsOnline.WebSite.Queries
                         break;
                 }
 
-                if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
+                if (searchInputModel.Queries.Any())
                 {
                     query = query.OrderByScoreDescending();
                 }

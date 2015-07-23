@@ -144,8 +144,6 @@
     <Content Include="content\js\app\video.js" />
     <Content Include="content\js\lib\polyfill.object-fit.js" />
     <None Include="content\scss\lib\_polyfill.object-fit.scss" />
-    <Content Include="content\fonts\entypo-social.svg" />
-    <Content Include="content\fonts\entypo.svg" />
     <Content Include="content\img\bg-collection-hero.jpg" />
     <Content Include="content\img\bg-collection-hero-geology.jpg" />
     <Content Include="content\img\bg-collection-hero-historical-studies.jpg" />
@@ -315,16 +313,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="content\scss\_normalize.scss" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="content\fonts\entypo.eot" />
-    <Content Include="content\fonts\entypo.ttf" />
-    <Content Include="content\fonts\entypo.woff" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="content\fonts\entypo-social.eot" />
-    <Content Include="content\fonts\entypo-social.ttf" />
-    <Content Include="content\fonts\entypo-social.woff" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />

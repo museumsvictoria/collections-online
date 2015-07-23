@@ -13,7 +13,7 @@ namespace CollectionsOnline.WebSite.Models
 
         public string View { get; set; }
 
-        public string Query { get; set; }
+        public IList<string> Queries { get; set; }
 
         public int TotalResults { get; set; }
 
@@ -63,6 +63,7 @@ namespace CollectionsOnline.WebSite.Models
 
         public SearchIndexViewModel()
         {
+            Queries = new List<string>();
             Facets = new List<FacetViewModel>();
             Results = new List<EmuAggregateRootViewModel>();
             ActiveFacets = new List<ActiveFacetValueViewModel>();

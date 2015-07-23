@@ -1952,7 +1952,7 @@ button.icon {
 }
 
 button{
-    &.search{
+    &.search, &.search-add{
 	    height: 44px;
 	    margin: 0px;
 	    outline: 0px none;
@@ -1961,6 +1961,11 @@ button{
 	    border-radius: 0px 2px 2px 0px;
 	    color: $colour-heading-inverted;
 	    background: none repeat scroll 0% 0% $colour-background-dark;
+    }
+
+    &.search-add{
+        border-radius: 2px;
+        margin-left:10px;
     }
 }
 

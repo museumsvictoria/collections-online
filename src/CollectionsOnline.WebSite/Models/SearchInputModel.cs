@@ -13,7 +13,7 @@ namespace CollectionsOnline.WebSite.Models
 
         public string View { get; set; }
 
-        public string Query { get; set; }
+        public IList<string> Queries { get; set; }
 
         public string CurrentUrl { get; set; }
 
@@ -29,6 +29,10 @@ namespace CollectionsOnline.WebSite.Models
 
         public SearchInputModel()
         {
+            Queries = new List<string>();
+            Facets = new Dictionary<string, string>();
+            MultiFacets = new Dictionary<string, string[]>();
+            Terms = new Dictionary<string, string>();
             Cookies = new List<NancyCookie>();
         }
     }

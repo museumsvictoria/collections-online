@@ -1,5 +1,4 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.SearchIndexViewModel>
-<header>
+﻿<header>
     <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
     <nav>
         <a @((RenderContext.Context.ResolvedRoute.Description.Name == "collection-index") ? Html.Raw("class=\"active\"") : null) href="/collections">Our collections</a>
@@ -16,11 +15,18 @@
     {
         <div id="search-bar" @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? Html.Raw("class=\"search active\"") : null)>
             <form method="GET" action="/search" role="form">
-                <input type="text" name="query" placeholder="enter search term ..." @((Model != null) ? Html.Raw(string.Format("value=\"{0}\"", Model.Query)) : null)/>
+                <input type="text" name="query" placeholder="enter search term ..." />
                 <button class="search" type="submit">
                     <span class="icon-search" aria-hidden="true"></span>
                     <span class="icon-label-hidden"></span>
                 </button>
+                @if (RenderContext.Context.ResolvedRoute.Description.Name == "search-index")
+                {
+                    <button class="search-add" type="button">
+                        <span class="icon-search-add" aria-hidden="true"></span>
+                        <span class="icon-label-hidden"></span>
+                    </button>
+                }
             </form>
         </div>
     }

@@ -23,7 +23,7 @@ namespace CollectionsOnline.WebSite.Factories
             var searchIndexViewModel = new SearchIndexViewModel
             {
                 Results = results,
-                Query = searchInputModel.Query,
+                Queries = searchInputModel.Queries,
                 TotalResults = totalResults,
                 TotalPages = (totalResults + searchInputModel.PerPage - 1) / searchInputModel.PerPage,
                 Page = searchInputModel.Page,
@@ -100,16 +100,27 @@ namespace CollectionsOnline.WebSite.Factories
                     UrlToRemove = x.Url
                 }).ToList();
 
-            // Build ActiveQuery
-            if (!string.IsNullOrWhiteSpace(searchInputModel.Query))
+            // Build ActiveQueries
+            foreach (var query in searchInputModel.Queries)
             {
                 var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
+                var otherQueries = termQueryString.GetValues("query").Where(x => !string.Equals(x, query));
+
                 termQueryString.Remove("query");
+
+                foreach (var currentQuery in otherQueries)
+                {
+                    termQueryString.Add("query", currentQuery);
+                }
+
+                // remove sort relevance if set
+                if (!string.IsNullOrWhiteSpace(termQueryString["sort"]) && string.Equals(termQueryString["sort"], "relevance", StringComparison.OrdinalIgnoreCase))
+                    termQueryString.Remove("sort");
 
                 searchIndexViewModel.ActiveTerms.Add(new ActiveTermViewModel
                 {
-                    Name = searchInputModel.Query,
+                    Name = query,
                     Term = "Query",
                     UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
@@ -172,7 +183,7 @@ namespace CollectionsOnline.WebSite.Factories
             queryString.Set("sort", "date");
             searchIndexViewModel.DateSortButton = new ButtonViewModel
             {
-                Name = "Date",
+                Name = "Date modified",
                 Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
                 Active = searchInputModel.Sort == "date"
             };

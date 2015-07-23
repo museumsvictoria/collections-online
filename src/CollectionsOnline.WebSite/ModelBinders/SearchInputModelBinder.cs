@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Models;
 using Nancy;
 using Nancy.Cookies;
 using Nancy.ModelBinding;
+using Raven.Abstractions.Extensions;
 
 namespace CollectionsOnline.WebSite.ModelBinders
 {
@@ -15,6 +16,10 @@ namespace CollectionsOnline.WebSite.ModelBinders
             var searchInputModel = new SearchInputModel();
             
             var query = context.Request.Query;
+
+            // Set Query
+            if (query.Query.HasValue && !string.IsNullOrWhiteSpace(query.Query.Value))
+                searchInputModel.Queries.AddRange(((string)query.Query.Value).Split(',').Where(x => !string.IsNullOrWhiteSpace(x)));
 
             // Find Cookies            
             if (context.Request.Cookies.ContainsKey("perPage"))
@@ -43,6 +48,11 @@ namespace CollectionsOnline.WebSite.ModelBinders
             if (searchInputModel.PerPage != Constants.PagingPerPageDefault && searchInputModel.PerPage != Constants.PagingPerPageMax)
                 searchInputModel.PerPage = Constants.PagingPerPageDefault;
 
+            // switch to quality if we have no query
+            if (!searchInputModel.Queries.Any() &&
+                (string.Equals(searchInputModel.Sort, "relevance", StringComparison.OrdinalIgnoreCase) || string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase)))
+                searchInputModel.Sort = "quality";
+
             if (string.Equals(query.Sort, "quality", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "quality";
             else if (string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase))
@@ -57,13 +67,10 @@ namespace CollectionsOnline.WebSite.ModelBinders
             else if (string.Equals(query.View, "data", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "data";
 
-            searchInputModel.Query = query.Query;
-
             searchInputModel.CurrentUrl = string.Format("{0}{1}", context.Request.Url.SiteBase, context.Request.Url.Path);
             searchInputModel.CurrentQueryString = context.Request.Url.Query;
 
             // Facets
-            searchInputModel.Facets = new Dictionary<string, string>();
             if(query.RecordType.HasValue)
                 searchInputModel.Facets.Add("RecordType", query.RecordType);
             if (query.Category.HasValue)
@@ -84,14 +91,12 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Facets.Add("DisplayLocation", query.DisplayLocation);
 
             // Multi-select Facets
-            searchInputModel.MultiFacets = new Dictionary<string, string[]>();
             if (query.ArticleType.HasValue)
                 searchInputModel.MultiFacets.Add("ArticleType", ((string)query.ArticleType.Value).Split(','));
             if (query.CollectingArea.HasValue)
                 searchInputModel.MultiFacets.Add("CollectingArea", ((string)query.CollectingArea.Value).Split(','));
 
             // Terms
-            searchInputModel.Terms = new Dictionary<string, string>();
             if (query.Keyword.HasValue)
                 searchInputModel.Terms.Add("Keyword", query.Keyword);
             if (query.Locality.HasValue)

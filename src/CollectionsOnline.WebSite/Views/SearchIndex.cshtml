@@ -5,8 +5,7 @@
 <div id="search">
     <aside id="search-filter" >
         <a class="button-filter">
-            <span class=" icon-filter-close" aria-hidden="true">
-            </span>
+            <span class="icon-filter-close" aria-hidden="true"></span>
             Filter by
         </a>
         <div class="facets">
@@ -96,7 +95,10 @@
                 <div class="order">
                     Order by
                     <span>
-                        <a href="@Model.RelevanceSortButton.Url" class="button first @(Model.RelevanceSortButton.Active ? "active" : "")">@Model.RelevanceSortButton.Name</a>
+                        @if (Model.Queries.Any())
+                        {
+                            <a href="@Model.RelevanceSortButton.Url" class="button first @(Model.RelevanceSortButton.Active ? "active" : "")">@Model.RelevanceSortButton.Name</a>
+                        }
                         <a href="@Model.QualitySortButton.Url" class="button last @(Model.QualitySortButton.Active ? "active" : "")">@Model.QualitySortButton.Name</a>
                         <a href="@Model.DateSortButton.Url" class="button last @(Model.DateSortButton.Active ? "active" : "")">@Model.DateSortButton.Name</a>
                     </span>
