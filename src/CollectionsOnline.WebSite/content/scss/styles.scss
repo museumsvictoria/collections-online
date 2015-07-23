@@ -1810,70 +1810,7 @@ button.icon {
                                     }
 
             }  
-              &.dataimage{
-                     & .tile.full {
-                                        @include gridle(12);
-                                        max-width: none;
-                                        min-width: 0px;
-                                        padding-left: 10px;
-                                        padding-right: 10px;
-                                        @include gridle_state("mobile"){
-                                            max-width:none; // important for mobile.
-                                            & .title{
-                                                height:auto;
-                                            }
-                                            & .heading{
-                                                height:auto;
-                                            }
-                                        }
-                                    & a{
-                                        @include display-flex;
-                                        @include alignitem-center;
-
-                                    }
-                                    & .tileimages{
-                                           float: left;
-                                           padding: 0;
-                                           @include gridle(4);
-                                           max-width:175px;
-                                    }
-                                        
-                                    & .title{
-                                        height:auto;
-                                        @include gridle(8);
-                                        & .heading{
-                                            font-size: 16px;
-                                            padding-bottom: 8px;
-                                            padding-top: 2px;
-                                            height:auto;
-                                        }
-                                    }
-                                    & .description{
-                                        display:block;
-                                        font-weight: 400;
-                                        font-size: 14px;
-                                        & h5 {
-                                            color: black;
-                                            display: block;
-                                            font-weight: 500;
-                                            font-size: 14px;
-                                            margin-bottom: 0;
-                                            padding-bottom: 6px;
-                                        }
-                                        & span {
-                                            display:inline-block;
-                                            padding-right:12px;
-                                            & strong{
-                                                 color: black;
-                                                 font-weight: 500;
-                                                 padding-right: 4px;
-                                            }
-                                        }
-
-                                    }
-                                    }
-
-            }  
+             
         }
 
         .item {
