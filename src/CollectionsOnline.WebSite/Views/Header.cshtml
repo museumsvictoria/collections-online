@@ -16,7 +16,7 @@
     {
         <div id="search-bar" @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? Html.Raw("class=\"search active\"") : null)>
             <form method="GET" action="/search" role="form">
-                <input type="text" name="query" placeholder="enter search term ..." @((Model != null) ? Html.Raw(string.Format("value=\"{0}\"", Model.Query)) : null)/>
+                <input type="text" name="query" placeholder="Enter a search term or leave blank to browse all records ..." @((Model != null) ? Html.Raw(string.Format("value=\"{0}\"", Model.Query)) : null) />
                 <button class="search" type="submit">
                     <span class="icon-search" aria-hidden="true"></span>
                     <span class="icon-label-hidden"></span>

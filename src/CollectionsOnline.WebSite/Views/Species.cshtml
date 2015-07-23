@@ -458,18 +458,13 @@
     </div>
 </div>
 
-@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedSpecimenCount > 0)
+@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() )
 {
     <div id="related">
         <div class="wrapper">
             <div class="related-content">
                 <h3>Showing related
-                    @if (Model.RelatedSpecimenCount > 0)
-                    {
-                        <div class="related-link">
-                            <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Species.Taxonomy.TaxonName)">See all the things related to this species (@Model.RelatedSpecimenCount) ... </a>
-                        </div>
-                    }            
+          
                 </h3>                
                 @foreach (var relatedItem in Model.RelatedItems)
                 {

@@ -536,20 +536,14 @@
         </aside>
     </div>
 </div>
-@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || (Model.RelatedSpecies != null && Model.RelatedSpecies.Any()) || Model.RelatedSpeciesSpecimenItemCount > 0)
+@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || (Model.RelatedSpecies != null && Model.RelatedSpecies.Any()))
 {
     <div id="related">
         <div class="wrapper">
             <div class="related-content">
                 <h3>
                     Showing related
-                    @if (Model.RelatedSpeciesSpecimenItemCount > 0)
-                    {
-                        <div class="related-link">
-                            <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Specimen.Taxonomy.TaxonName)">See all the things related to this specimen (@Model.RelatedSpeciesSpecimenItemCount) ... </a>
-                        </div>
-                    }
-                </h3>
+               </h3>
                 @foreach (var relatedItem in Model.RelatedItems)
                 {
                     @Html.Partial("emutile", relatedItem)

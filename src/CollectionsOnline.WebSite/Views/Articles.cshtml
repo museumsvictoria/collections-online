@@ -153,18 +153,13 @@
         </aside>
     </div>
 </div>
-@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedItemSpecimenCount > 0)
+@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
 {
     <div id="related">
         <div class="wrapper">
             <div class="related-content">
                 <h3>Showing related
-                    @if (Model.RelatedItemSpecimenCount > 0)
-                    {
-                        <div class="related-link">
-                            <a href="/search?article=@HttpUtility.UrlEncode(@Model.Article.Title)">See all the things related to this article (@Model.RelatedItemSpecimenCount) ... </a>
-                        </div>
-                    }                    
+           
                 </h3>
                 @if (Model.ParentArticle != null)
                 {
