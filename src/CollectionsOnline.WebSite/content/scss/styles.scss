@@ -1809,7 +1809,8 @@ button.icon {
                                     }
                                     }
 
-            }    
+            }  
+             
         }
 
         .item {
@@ -1863,6 +1864,54 @@ button.icon {
         .no-image-label {
             padding-top: 4em;
         }
+    & .noresults{
+           display: table;
+           content: "";
+           clear: both;
+           padding-left: 10px;
+           width: 100%;
+           padding:10px;
+
+        & .pagination{
+            padding-top: 0px;
+            padding-left:10px;
+        }
+        & h1{
+                float: none;
+                font-size: 22px;
+                padding-bottom: 5px;
+                padding-left: 10px;
+                font-weight: 400;
+        }
+
+        & p {
+              font-size: 17px;
+              font-weight: 400;
+              margin-bottom: 1.5em;
+              padding-left: 10px;
+        }
+
+        & ul {
+                font-size: 17px;
+                font-weight: 400;
+                list-style: inside none disc;
+                margin-bottom: 1.5em;
+                padding-left: 10px;
+        }
+        & a {
+             text-decoration: underline;
+        }
+
+    }
+    & .banner{
+        width: 100%;
+        & img{
+            margin: 0px auto;
+            width:100%;
+            max-width: 1194px;
+       }
+
+    }
     }
 }
 
@@ -1970,7 +2019,9 @@ button{
 }
 
 #hero {    
-    height: 600px;
+    height:50vh;
+    max-height: 600px;
+    min-height: 220px;
     @include gridle_state("mobile"){
         height:50vh;
         background-size: cover;

@@ -141,6 +141,7 @@
     <Content Include="content\img\bg-home-hero-moreland.jpg" />
     <Content Include="content\img\bg-home-hero-textiles.jpg" />
     <Content Include="content\img\bg-on-display-reb.png" />
+    <Content Include="content\img\img-search-noresults.jpg" />
     <Content Include="content\js\app\video.js" />
     <Content Include="content\js\lib\polyfill.object-fit.js" />
     <None Include="content\scss\lib\_polyfill.object-fit.scss" />

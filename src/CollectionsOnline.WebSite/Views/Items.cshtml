@@ -863,7 +863,7 @@
         </aside>
     </div>
 </div>
-@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || (Model.RelatedSpecies != null && Model.RelatedSpecies.Any()) || Model.RelatedSpeciesSpecimenItemCount > 0)
+@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || (Model.RelatedSpecies != null && Model.RelatedSpecies.Any()) )
 {
     <div id="related">
         <div class="wrapper">
@@ -886,12 +886,6 @@
                     @Html.Partial("emutile", relatedSpecies)
                 }
             </div>
-            @if (Model.RelatedSpeciesSpecimenItemCount > 0)
-            {
-                <div class="related-link">
-                    <a href="/search?taxon=@HttpUtility.UrlEncode(@Model.Item.Taxonomy.TaxonName)">See all the things related to this item (@Model.RelatedSpeciesSpecimenItemCount) ... </a>
-                </div>
-            }
         </div>
     </div>
 }
