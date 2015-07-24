@@ -5,8 +5,7 @@
   "author": "Michael Mason",
   "license": "MIT",
   "browser": {
-    "query-string": "./content/js/lib/query-string.js",
-    "object-fit": "./content/js/lib/polyfill.object-fit.js"
+    "query-string": "./content/js/lib/query-string.js"
   },
   "devDependencies": {
     "browserify": "^9.0.3",

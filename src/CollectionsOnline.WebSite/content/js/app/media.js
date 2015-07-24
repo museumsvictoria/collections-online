@@ -1,21 +1,13 @@
 ﻿var $ = require('jquery');
-//var objectFit = require('object-fit');
 var video = require('./video.js');
 
 module.exports = {
-  init: function () {
-    // Dont do anything if we have no media model
+  init: function () {    
     this.Model = window.mediaModel;
+    
     if (this.Model !== undefined && this.Model.length != 0) {
       this.cacheElements();
       this.bindEvents();
-
-      video.init();
-
-      //objectFit.polyfill({
-      //  selector: '#media img',
-      //  fittype: 'cover'
-      //});
     }
   },
   cacheElements: function () {       
@@ -39,11 +31,12 @@ module.exports = {
 
     this.$previous = $('.previous');
     this.$next = $('.next');
-
-    if (this.Model !== undefined && this.Model.length <= 1)
-      this.$next.addClass('inactive');
   },
   bindEvents: function () {
+    // init video if first media 
+    if (this.Model[0].$type.indexOf('VideoMedia') > 0) {
+      video.init();
+    }
     this.$thumbs.on('click', 'img', this.select.bind(this));
     this.$fullscreenButton.on('click', this.toggleFullscreen.bind(this));
     this.$previous.on('click', { direction: "previous" }, this.moveTo.bind(this));
@@ -56,11 +49,12 @@ module.exports = {
   },
   toggleFullscreen: function () {
     if (!this.$fullscreenButton.hasClass('disabled')) {
-      var media = this.Model[this.$activeMedia.parent().index()];
+      var currentIndex = Math.max(this.$activeMedia.parent().index(), 0);
+      var media = this.Model[currentIndex];
       var heroMediaImage = $('img', this.$heroMedia);
       var windowWidth = $(window).width();
       var windowHeight = $(window).height();
-      var fullscreenImageHeight = windowHeight - $('#media figcaption').height();
+      var fullscreenImageHeight = windowHeight/* - $('#media figcaption').height()*/;
 
       // Default size
       var newHeroMediaImageSrc = media.Medium.Uri;
