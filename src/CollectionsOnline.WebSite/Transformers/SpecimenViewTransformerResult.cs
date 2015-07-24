@@ -28,6 +28,7 @@ namespace CollectionsOnline.WebSite.Transformers
             RelatedSpecimens = new List<EmuAggregateRootViewModel>();
             RelatedSpecies = new List<EmuAggregateRootViewModel>();
             RelatedArticles = new List<EmuAggregateRootViewModel>();
+            LatLongs = new List<double[]>();
             GeoSpatial = new List<KeyValuePair<string, string>>();
         }
     }

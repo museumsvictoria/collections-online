@@ -48,17 +48,21 @@ namespace CollectionsOnline.WebSite.ModelBinders
             if (searchInputModel.PerPage != Constants.PagingPerPageDefault && searchInputModel.PerPage != Constants.PagingPerPageMax)
                 searchInputModel.PerPage = Constants.PagingPerPageDefault;
 
-            // switch to quality if we have no query
-            if (!searchInputModel.Queries.Any() &&
-                (string.Equals(searchInputModel.Sort, "relevance", StringComparison.OrdinalIgnoreCase) || string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase)))
-                searchInputModel.Sort = "quality";
-
             if (string.Equals(query.Sort, "quality", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "quality";
             else if (string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "relevance";
             else if (string.Equals(query.Sort, "date", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "date";
+
+            // switch to quality if we have no query
+            if (searchInputModel.Queries.All(string.IsNullOrWhiteSpace) &&
+                (string.Equals(searchInputModel.Sort, "relevance", StringComparison.OrdinalIgnoreCase) || string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase)))
+                searchInputModel.Sort = "quality";
+
+            // if a new search set relevance as sort type
+            if (query.Count == 1 && searchInputModel.Queries.Count == 1)
+                searchInputModel.Sort = "relevance";
 
             if (string.Equals(query.View, "list", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "list";

@@ -60,7 +60,6 @@ namespace CollectionsOnline.WebSite.Queries
                 // Add sorting
                 switch (searchInputModel.Sort)
                 {
-                    default:
                     case "quality":
                         query = query
                             .OrderByDescending(x => x.Quality);
