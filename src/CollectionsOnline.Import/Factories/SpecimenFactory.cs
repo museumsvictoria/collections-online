@@ -341,29 +341,20 @@ namespace CollectionsOnline.Import.Factories
                 !((string.Equals(specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(specimen.ScientificGroup, "Geology", StringComparison.OrdinalIgnoreCase))
                 && string.Equals(siteMap.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase)))
             {
-                // Site Code
-                specimen.SiteCode = new[]
+                if (!string.Equals(specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase))
                 {
-                    siteMap.GetEncodedString("SitSiteCode"),
-                    siteMap.GetEncodedString("SitSiteNumber")
-                }.Concatenate("");
+                    // Site Code
+                    specimen.SiteCode = new[]
+                    {
+                        siteMap.GetEncodedString("SitSiteCode"),
+                        siteMap.GetEncodedString("SitSiteNumber")
+                    }.Concatenate("");
 
-                // Locality
-                var geoMap = siteMap.GetMaps("geo").FirstOrDefault();
-                if (geoMap != null)
-                {
-                    specimen.Ocean = geoMap.GetEncodedString("LocOcean_tab");
-                    specimen.Continent = geoMap.GetEncodedString("LocContinent_tab");
-                    specimen.Country = geoMap.GetEncodedString("LocCountry_tab");
-                    specimen.State = geoMap.GetEncodedString("LocProvinceStateTerritory_tab");
-                    specimen.District = geoMap.GetEncodedString("LocDistrictCountyShire_tab");
-                    specimen.Town = geoMap.GetEncodedString("LocTownship_tab");
-                    specimen.NearestNamedPlace = geoMap.GetEncodedString("LocNearestNamedPlace_tab");
+                    // Precise locality
+                    specimen.PreciseLocation = siteMap.GetEncodedString("LocPreciseLocation");
+                    specimen.MinimumElevation = siteMap.GetEncodedString("LocElevationASLFromMt");
+                    specimen.MaximumElevation = siteMap.GetEncodedString("LocElevationASLToMt");
                 }
-
-                specimen.PreciseLocation = siteMap.GetEncodedString("LocPreciseLocation");
-                specimen.MinimumElevation = siteMap.GetEncodedString("LocElevationASLFromMt");
-                specimen.MaximumElevation = siteMap.GetEncodedString("LocElevationASLToMt");
 
                 // Lat/Long
                 var latlongMap = siteMap.GetMaps("latlong").FirstOrDefault();
@@ -390,8 +381,22 @@ namespace CollectionsOnline.Import.Factories
                     specimen.GeoreferenceSource = latlongMap.GetEncodedString("LatDetSource_tab");
                 }
 
+                // Locality
+                var geoMap = siteMap.GetMaps("geo").FirstOrDefault();
+                if (geoMap != null)
+                {
+                    specimen.Ocean = geoMap.GetEncodedString("LocOcean_tab");
+                    specimen.Continent = geoMap.GetEncodedString("LocContinent_tab");
+                    specimen.Country = geoMap.GetEncodedString("LocCountry_tab");
+                    specimen.State = geoMap.GetEncodedString("LocProvinceStateTerritory_tab");
+                    specimen.District = geoMap.GetEncodedString("LocDistrictCountyShire_tab");
+                    specimen.Town = geoMap.GetEncodedString("LocTownship_tab");
+                    specimen.NearestNamedPlace = geoMap.GetEncodedString("LocNearestNamedPlace_tab");
+                }
+
                 // Geology site fields
-                if (!string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && 
+                    !string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase))
                 {
                     specimen.GeologyEra = siteMap.GetEncodedString("EraEra");
                     specimen.GeologyPeriod = siteMap.GetEncodedString("EraAge1");
