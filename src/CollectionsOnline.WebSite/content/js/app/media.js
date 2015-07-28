@@ -31,6 +31,9 @@ module.exports = {
 
     this.$previous = $('.previous');
     this.$next = $('.next');
+    
+    if (this.Model !== undefined && this.Model.length <= 1)
+      this.$next.addClass('inactive');
   },
   bindEvents: function () {
     // init video if first media 
