@@ -234,7 +234,7 @@ namespace CollectionsOnline.Core.Indexes
                     Date = new object[] { },
                     CulturalGroup = new object[] { },
                     Classification = new object[] { },
-                    Name = new object[] { },
+                    Name = new object[] { species.Authors.Select(x => x.FullName) },
                     Technique = (string)null,
                     Denomination = (string)null,
                     Habitat = new object[] { species.Habitats, species.WhereToLook },

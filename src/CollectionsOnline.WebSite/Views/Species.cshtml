@@ -445,7 +445,7 @@
                                 {
                                     <img src="@author.ProfileImage.Thumbnail.Uri" />
                                 }
-                                <span class="authorname">@author.FullName</span>
+                                <span class="authorname"><a href="/search?name=@HttpUtility.UrlEncode(author.FullName)">@author.FullName</a></span>
                                 <span class="authorbio">@author.Biography</span>
                                 <span style="clear:both;display:block"></span>
                                 </div>
