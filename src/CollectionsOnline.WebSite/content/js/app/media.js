@@ -1,5 +1,6 @@
 ﻿var $ = require('jquery');
 var video = require('./video.js');
+var verge = require('verge');
 
 module.exports = {
   init: function () {    
@@ -54,10 +55,10 @@ module.exports = {
     if (!this.$fullscreenButton.hasClass('disabled')) {
       var currentIndex = Math.max(this.$activeMedia.parent().index(), 0);
       var media = this.Model[currentIndex];
-      var heroMediaImage = $('img', this.$heroMedia);
-      var windowWidth = $(window).width();
-      var windowHeight = $(window).height();
-      var fullscreenImageHeight = windowHeight/* - $('#media figcaption').height()*/;
+      var heroMediaImage = $('img', this.$heroMedia);      
+
+      var windowWidth = verge.viewportW();
+      var windowHeight = verge.viewportH();
 
       // Default size
       var newHeroMediaImageSrc = media.Medium.Uri;
@@ -81,12 +82,12 @@ module.exports = {
         // Expand media holder
         this.$mediaHolder.css({
           maxWidth: windowWidth,
-          height: fullscreenImageHeight
+          height: windowHeight
         });
         
         // Allow hero media image to take up max height available
         heroMediaImage.css({
-          maxHeight: fullscreenImageHeight
+          maxHeight: windowHeight
         });
         
         // Dont load large media if its even smaller than medium otherwise preload then display large image

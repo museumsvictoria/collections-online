@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Collections Online Website</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/content/css/styles.css" rel="stylesheet">
+    <script type="text/javascript" src="//use.typekit.net/izq0fed.js"></script>
+    <script type="text/javascript">try { Typekit.load(); } catch (e) { }</script>
+</head>
+<body>
+    <header>
+        <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
+        <nav>
+            <a href="/collections">Our collections</a>
+            <a href="/developers">Our API</a>
+            <a href="#" class="button-search">
+                <span id="search-button-icon" aria-hidden="true" class="icon-search-header"></span>
+                <span class="search-text">Search</span>
+            </a>
+        </nav>
+        <div id="search-bar">
+            <form method="GET" action="/search" role="form">
+                <input type="text" name="query" placeholder="enter search term ..." />
+                <button class="search" type="submit">
+                    <span class="icon-search" aria-hidden="true"></span>
+                    <span class="icon-label-hidden"></span>
+                </button>
+            </form>
+        </div>
+    </header>
+    @RenderBody()
+    <footer>
+        <div class="wrapper">
+            <div class="logos">
+                <img alt="Museum Victoria" src="/content/img/logo-mv.png">
+            </div>
+            <div class="footerpromos">
+                <div class="footerpromo first">
+                    <h2>Visit Us</h2>
+                    <ul>
+                        <li><a href="http://museumvictoria.com.au/melbournemuseum/">Melbourne Museum</a></li>
+                        <li><a href="http://museumvictoria.com.au/scienceworks/">Scienceworks</a></li>
+                        <li><a href="http://museumvictoria.com.au/immigrationmuseum/">Immigration Museum</a></li>
+                        <li><a href="http://museumvictoria.com.au/reb/">Royal Exhibition Building</a></li>
+                    </ul>
+                </div>
+                <div class="footerpromo">
+                    <h2>Memberships</h2>
+                    <ul>
+                        <li><a href="http://museumvictoria.com.au/about/members/how-to-join/">Join MV members</a></li>
+                        <li><a href="http://museumvictoria.com.au/education/mvteachers/">Join MV teachers</a></li>
+                        <li><a href="http://museumvictoria.com.au/about/donations/">MV donations</a></li>
+                    </ul>
+                </div>
+                <div class="footerpromo">
+                    <h2>Links</h2>
+                    <ul>
+                        <li><a href="http://museumvictoria.com.au/about/work-opportunities/employment/">Employment</a></li>
+                        <li><a href="http://museumvictoria.com.au/education/">Education</a></li>
+                        <li><a href="http://museumvictoria.com.au/about/media-centre/">Media</a></li>
+                    </ul>
+                </div>
+            </div> <!--footer promos -->
+        </div>
+        <div class="footerbase">
+            <div class="wrapper">
+                <div class="venueinformation">
+                    <strong>Museum Victoria</strong> &nbsp;&nbsp;|&nbsp;&nbsp; GPO Box 666 Melbourne
+                    3001, Victoria, Australia &nbsp;&nbsp;|&nbsp;&nbsp; Bookings &amp; Enquiries 13
+                    11 02
+                    <ul>
+                        <li class="Copyright">&copy; <strong>MUSEUM</strong> VICTORIA</li>
+                        <li><a href="http://museumvictoria.com.au/footer-links/privacy/">Privacy</a></li>
+                        <li><a href="http://museumvictoria.com.au/footer-links/disclaimer/">Disclaimer</a></li>
+                        <li><a href="http://museumvictoria.com.au/footer-links/conditions-of-use/">Conditions</a></li>
+                        <li><a href="http://museumvictoria.com.au/footer-links/rights/">Rights</a></li>
+                        <li><a href="http://museumvictoria.com.au/footer-links/contact-us/">Contact us</a></li>
+                    </ul>
+                </div>
+                <div class="stategovernmentlinks">
+                    <a href="http://www.vic.gov.au/">
+                        <img src="/content/img/logo-creative-victoria.png" alt="State Government Victoria" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="/content/js/bundle.js"></script>
+</body>
+</html>
