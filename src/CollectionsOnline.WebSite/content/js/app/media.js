@@ -3,7 +3,7 @@ var video = require('./video.js');
 var verge = require('verge');
 
 module.exports = {
-  init: function () {    
+  init: function () {
     this.Model = window.mediaModel;
     
     if (this.Model !== undefined && this.Model.length != 0) {
@@ -55,9 +55,9 @@ module.exports = {
     if (!this.$fullscreenButton.hasClass('disabled')) {
       var currentIndex = Math.max(this.$activeMedia.parent().index(), 0);
       var media = this.Model[currentIndex];
-      var heroMediaImage = $('img', this.$heroMedia);      
+      var heroMediaImage = $('img', this.$heroMedia);
 
-      var windowWidth = verge.viewportW();
+      var windowWidth = $(window).width();
       var windowHeight = verge.viewportH();
 
       // Default size

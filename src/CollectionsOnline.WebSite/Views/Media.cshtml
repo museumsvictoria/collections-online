@@ -72,7 +72,7 @@
                     </span>
                 </div>
                 <div class="media-tools">
-                    <button class="icon fullscreen">
+                    <button class="icon fullscreen @((Model.First() is VideoMedia) ? "disabled" : null)">
                         <span class="icon" aria-hidden="true"></span>
                         <span class="icon-label-hidden">View full screen</span>
                     </button>

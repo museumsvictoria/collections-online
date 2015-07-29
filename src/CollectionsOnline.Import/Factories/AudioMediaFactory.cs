@@ -98,33 +98,32 @@ namespace CollectionsOnline.Import.Factories
             if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
                 return false;
 
-            // TODO: restore commented out code when production ready
+            var mediaIrn = audioMedia.Irn;
+
             // Check to see whether the file has changed in emu first
-            //using (var documentSession = _documentStore.OpenSession())
-            //{
-            //    // Find the latest document who's media contains the media we are checking
-            //    var mediaIrn = audioMedia.Irn;
+            using (var documentSession = _documentStore.OpenSession())
+            {
+                // Find the latest document who's media contains the media we are checking
+                var result = documentSession
+                    .Query<MediaByIrnWithChecksumResult, MediaByIrnWithChecksum>()
+                    .OrderByDescending(x => x.DateModified)
+                    .FirstOrDefault(x => x.Irn == mediaIrn);
 
-            //    var result = documentSession
-            //        .Query<MediaByIrnWithChecksumResult, MediaByIrnWithChecksum>()
-            //        .OrderByDescending(x => x.DateModified)
-            //        .FirstOrDefault(x => x.Irn == mediaIrn);
+                // TODO: restore commented out code when production ready
+                // If there are no results that use this media or if existing media checksum does not match the one from emu we need to save file
+                //if (result == null)
+                //{
+                //    _log.Trace("No existing audio media found matching mmr irn... fetching from EMu");
+                //    return false;
+                //}
 
-            //    // If there are no results that use this media or if existing media checksum does not match the one from emu we need to save file
-            //    if (result == null)
-            //    {
-            //        _log.Trace("No existing media found matching mmr irn... fetching from EMu");
-
-            //        return false;
-            //    }
-
-            //    if (result.Md5Checksum != audioMedia.Md5Checksum)
-            //    {
-            //        _log.Trace("Existing media found however checksum doesnt match... fetching from EMu (existing:{0}, new:{1})", result.Md5Checksum, audioMedia.Md5Checksum);
-
-            //        return false;
-            //    }
-            //}
+                // If existing media checksum does not match the one from emu we need to save file
+                if (result != null && result.Md5Checksum != audioMedia.Md5Checksum)
+                {
+                    _log.Trace("Existing audio media found however checksum doesnt match... fetching from EMu (existing:{0}, new:{1})", result.Md5Checksum, audioMedia.Md5Checksum);
+                    return false;
+                }
+            }
 
             var destPath = PathFactory.MakeDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None);
 
