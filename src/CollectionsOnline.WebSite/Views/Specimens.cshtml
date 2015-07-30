@@ -494,6 +494,18 @@
                     <h4>On display</h4>
                     <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Gallery)">@Model.Specimen.MuseumLocation.Gallery</a><br/>
                     <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Specimen.MuseumLocation.Venue)">@Model.Specimen.MuseumLocation.Venue</a>
+                    @{string venueURL = "";
+                    if (!@Model.Specimen.MuseumLocation.Venue.Contains("Royal"))
+                    {
+                        venueURL = String.Concat("http://museumvictoria.com.au/", Model.Specimen.MuseumLocation.Venue.ToLower().Replace(" ", ""), "/");
+                    }
+                    else
+                    {
+                        venueURL = "http://museumvictoria.com.au/reb/";
+                    }
+
+                    }
+                    <a class="website icon-externallink" href="@venueURL">Visit @Model.Specimen.MuseumLocation.Venue</a>
                 </div>
             </aside>
         }
