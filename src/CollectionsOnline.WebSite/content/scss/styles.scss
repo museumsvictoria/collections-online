@@ -1507,6 +1507,7 @@ button.icon {
             & .counts {
                 display: inline-block;
                 font-size: 20px;
+                margin-right:25px;
             }
 
             & a.button {
@@ -1533,31 +1534,50 @@ button.icon {
 
 
             .numbers {
-                display: inline-block;
+                display: block;
+                width:100%;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 15px;
                 & div{
-                        padding-top: 20px; //padding moved to inner divs for proper spacing on mobile.
+                        padding-top: 5px; //padding moved to inner divs for proper spacing on mobile.
                 }
             }
 
             .options {
                
                 display: inline-block;
+                font-size: 14px;
+                border-bottom: 1px solid #ddd;
+                width:100%;
+                padding-bottom:15px;
                 & div{
-                    padding-top: 20px; //padding moved to inner divs for proper spacing on mobile.
+                    padding-top: 15px; //padding moved to inner divs for proper spacing on mobile.
                 }
                 & .viewtype {
-                    line-height: 25px;
-                    font-size: 25px;
-                    vertical-align: bottom;
+                   
+                    font-size: 14px;
+
                     display:inline-block;
+                    margin-right: 25px;
+
+                    & .buttongroup{
+                        font-size:18px;
+                        vertical-align: middle;
+                        & a.button {
+                           padding: 0 5px;
+                           vertical-align: middle;
+                         }
+                    }
                 }
 
                 & a.button {
                     display: inline-block;
-                    padding: 0 5px;
+                    padding: 5px 8px;
                     text-decoration: none;
-                    color: $colour-sidetext;
-
+                    color: $colour-bodytext;
+                    border-right: 1px solid #999;
+                    background: $colour-button-background;
+                    margin-left:0px;
                     &:hover {
                         text-decoration: underline;
                     }
@@ -1568,9 +1588,11 @@ button.icon {
 
                     &.first {
                         margin-left: 5px;
+                        border-top-left-radius: 3px;
+                        border-bottom-left-radius: 3px;
                         &.active {
                             color: $colour-bodytext;
-                            text-decoration: underline;
+                            //text-decoration: underline;
 
                             &:hover {
                                 text-decoration: none;
@@ -1579,13 +1601,14 @@ button.icon {
                     }
 
                     &.last {
-                        border-left: none;
-                        border-top-left-radius: 0px;
-                        border-bottom-left-radius: 0px;
+                        border-right: none;
+                        border-top-right-radius: 3px;
+                        border-bottom-right-radius: 3px;
 
                         &.active {
                             color: $colour-bodytext;
-                            text-decoration: underline;
+                           
+                            // text-decoration: underline;
 
                             &:hover {
                                 text-decoration: none;
@@ -1595,7 +1618,7 @@ button.icon {
 
                     &.active {
                         color: $colour-bodytext;
-
+                        background: $colour-button-active-background !important;
                         &:hover {
                             text-decoration: none;
                         }
@@ -1605,17 +1628,15 @@ button.icon {
 
             .perpage, .order {
                 display: inline-block;
-
+                margin-right: 25px;
                 & a.button {
                     display: inline-block;
-                    padding: 0 5px;
+                    padding: 5px 8px;
                     text-decoration: none;
-                    color: $colour-sidetext;
-                    background: $colour-background-lightest;
-                    @include border-radius(3);
+                    color: $colour-bodytext;
+                    background: $colour-button-background;
                     display: inline-block;
-                    margin-left: 6px;
-                    padding: 2px 10px;
+                  
                     text-decoration: none;
 
                     &:hover {
@@ -1628,13 +1649,11 @@ button.icon {
 
                     &.first {
                         margin-left: 5px;
-                        &.active {
-                            color: $colour-heading-inverted;
+                        border-top-left-radius: 3px;
+                        border-bottom-left-radius: 3px;
+                        &.active {                  
                             text-decoration: none;
-                            background: $colour-background-dark;
-                            border-radius: 3px;
-                            padding: 2px 10px;
-
+                            background: $colour-button-active-background;
                             &:hover {
                                 text-decoration: none;
                             }
@@ -1642,16 +1661,13 @@ button.icon {
                     }
 
                     &.last {
-                        border-left: none;
-                        border-top-left-radius: 0px;
-                        border-bottom-left-radius: 0px;
+                        border-right: none;
+                        border-top-right-radius: 3px;
+                        border-bottom-left-radius: 3px;
 
                         &.active {
-                            color: $colour-heading-inverted;
                             text-decoration: none;
-                            background: $colour-background-dark;
-                            border-radius: 3px;
-                            padding: 2px 10px;
+                            background: $colour-button-active-background;
 
                             &:hover {
                                 text-decoration: none;
@@ -1660,11 +1676,8 @@ button.icon {
                     }
 
                     &.active {
-                        color: $colour-heading-inverted;
-                        text-decoration: none;
-                        background: $colour-background-dark;
-                        border-radius: 3px;
-                        padding: 2px 10px;
+                            text-decoration: none;
+                            background: $colour-button-active-background;
 
                         &:hover {
                             text-decoration: none;
@@ -1673,15 +1686,21 @@ button.icon {
                 }
             }
 
-            .pages a {
+            .pages{
+                margin-right: 25px;
+
+                 & a {
                 display: inline-block;
                 padding: 0 5px;
                 color: $color;
+                }
+
+                & a.disabled {
+                    color: #cccccc;
+                }
             }
 
-            .pages a.disabled {
-                color: #cccccc;
-            }
+
             .icon-left-arrow, .icon-right-arrow {
                 font-size: 0.7em;
             }

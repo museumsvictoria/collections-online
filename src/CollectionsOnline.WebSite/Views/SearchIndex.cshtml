@@ -80,6 +80,7 @@
         @if (Model.Results.Any())
         { 
             <div class="pagination">
+                
                 <div class="numbers">
                     <div class="counts">@Model.TotalResults.ToString("N0") results</div>
                     <div class="pages">
@@ -93,28 +94,34 @@
                             <span class="icon-right-arrow"></span>
                         </a>
                     </div>
-                    <div class="perpage">
-                        Results per page
-                        <a href="@Model.DefaultPerPageButton.Url" class="button first @(Model.DefaultPerPageButton.Active ? "active" : "")">@Model.DefaultPerPageButton.Name</a>
-                        <a href="@Model.MaxPerPageButton.Url" class="button last @(Model.MaxPerPageButton.Active ? "active" : "")">@Model.MaxPerPageButton.Name</a>
-                    </div>
+
                 </div>
                 <div class="options">
+                    <div class="viewtype">
+                        View type 
+                        <span class="buttongroup">
+                            <a href="@Model.GridViewButton.Url" class="button first icon-grid @(Model.GridViewButton.Active ? "active" : "")"></a><a href="@Model.ListViewButton.Url" class="button icon-list @(Model.ListViewButton.Active ? "active" : "")"></a><a href="@Model.DataViewButton.Url" class="button last icon-data @(Model.DataViewButton.Active ? "active" : "")"></a>
+                        </span>
+                    </div>
                     <div class="order">
                         Order by
                         <span>
                         @if (Model.Queries.Any())
                         {
-                            <a href="@Model.RelevanceSortButton.Url" class="button first @(Model.RelevanceSortButton.Active ? "active" : "")">@Model.RelevanceSortButton.Name</a>
+                            <a href="@Model.RelevanceSortButton.Url" class="button first @(Model.RelevanceSortButton.Active ? "active" : "")">@Model.RelevanceSortButton.Name</a><a href="@Model.QualitySortButton.Url" class="button  @(Model.QualitySortButton.Active ? "active" : "")">@Model.QualitySortButton.Name</a><a href="@Model.DateSortButton.Url" class="button last @(Model.DateSortButton.Active ? "active" : "")">@Model.DateSortButton.Name</a>
                         }
-                            <a href="@Model.QualitySortButton.Url" class="button last @(Model.QualitySortButton.Active ? "active" : "")">@Model.QualitySortButton.Name</a>
-                            <a href="@Model.DateSortButton.Url" class="button last @(Model.DateSortButton.Active ? "active" : "")">@Model.DateSortButton.Name</a>
+                        else
+                        {
+                            <a href="@Model.QualitySortButton.Url" class="button first @(Model.QualitySortButton.Active ? "active" : "")">@Model.QualitySortButton.Name</a><a href="@Model.DateSortButton.Url" class="button last @(Model.DateSortButton.Active ? "active" : "")">@Model.DateSortButton.Name</a>
+                        }
+                          
+                            
                         </span>
                     </div>
-                    <div class="viewtype">
-                        <a href="@Model.ListViewButton.Url" class="button icon-list @(Model.ListViewButton.Active ? "active" : "")"></a>
-                        <a href="@Model.GridViewButton.Url" class="button icon-grid @(Model.GridViewButton.Active ? "active" : "")"></a>
-                        <a href="@Model.DataViewButton.Url" class="button icon-data @(Model.DataViewButton.Active ? "active" : "")"></a>
+
+                    <div class="perpage">
+                        Results per page
+                        <a href="@Model.DefaultPerPageButton.Url" class="button first @(Model.DefaultPerPageButton.Active ? "active" : "")">@Model.DefaultPerPageButton.Name</a><a href="@Model.MaxPerPageButton.Url" class="button last @(Model.MaxPerPageButton.Active ? "active" : "")">@Model.MaxPerPageButton.Name</a>
                     </div>
                 </div>
             </div>
