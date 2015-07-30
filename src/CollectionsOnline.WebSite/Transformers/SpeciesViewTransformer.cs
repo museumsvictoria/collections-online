@@ -35,6 +35,28 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedSpecimen.Summary,
                             relatedSpecimen.ThumbnailUri,
                             RecordType = "Specimen"
+                        },
+                    RelatedArticles = from articleId in species.RelatedArticleIds
+                        let relatedArticle = LoadDocument<Article>(articleId)
+                        where relatedArticle != null && !relatedArticle.IsHidden
+                        select new
+                        {
+                            relatedArticle.Id,
+                            relatedArticle.DisplayTitle,
+                            relatedArticle.Summary,
+                            relatedArticle.ThumbnailUri,
+                            RecordType = "Article"
+                        },
+                    RelatedSpecies = from speciesId in species.RelatedSpeciesIds
+                        let relatedSpecies = LoadDocument<Species>(speciesId)
+                        where relatedSpecies != null && !relatedSpecies.IsHidden
+                        select new
+                        {
+                            relatedSpecies.Id,
+                            relatedSpecies.DisplayTitle,
+                            relatedSpecies.Summary,
+                            relatedSpecies.ThumbnailUri,
+                            RecordType = "Species"
                         }
                 };
         }

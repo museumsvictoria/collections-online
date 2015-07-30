@@ -182,6 +182,7 @@
     <Content Include="Views\FileUriMedia.cshtml" />
     <Content Include="Views\Error\404.cshtml" />
     <None Include="Views\Error\500.cshtml" />
+    <Content Include="Views\ErrorLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ListExtensions.cs" />

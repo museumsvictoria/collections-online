@@ -445,7 +445,7 @@
                                 {
                                     <img src="@author.ProfileImage.Thumbnail.Uri" />
                                 }
-                                <span class="authorname">@author.FullName</span>
+                                <span class="authorname"><a href="/search?name=@HttpUtility.UrlEncode(author.FullName)">@author.FullName</a></span>
                                 <span class="authorbio">@author.Biography</span>
                                 <span style="clear:both;display:block"></span>
                                 </div>
@@ -458,14 +458,12 @@
     </div>
 </div>
 
-@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() )
+@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || Model.RelatedSpecies.Any())
 {
     <div id="related">
         <div class="wrapper">
             <div class="related-content">
-                <h3>Showing related
-          
-                </h3>                
+                <h3>Showing related</h3>                
                 @foreach (var relatedItem in Model.RelatedItems)
                 {
                     @Html.Partial("emutile", relatedItem)
@@ -474,8 +472,15 @@
                 {
                     @Html.Partial("emutile", relatedSpecimen)
                 }
+                @foreach (var relatedArticle in Model.RelatedArticles)
+                {
+                    @Html.Partial("emutile", relatedArticle)
+                }
+                @foreach (var relatedSpecies in Model.RelatedSpecies)
+                {
+                    @Html.Partial("emutile", relatedSpecies)
+                }
             </div>
-
         </div>
     </div>
 }

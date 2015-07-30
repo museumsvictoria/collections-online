@@ -55,7 +55,7 @@ namespace CollectionsOnline.Core.Indexes
                     Date = new object[] { },
                     CulturalGroup = new object[] { },
                     Classification = new object[] { },
-                    Name = new object[] { },
+                    Name = new object[] { article.Authors.Select(x => x.FullName), article.Contributors.Select(x => x.FullName) },
                     Technique = (string)null,
                     Denomination = new object[] { },
                     Habitat = new object[] { },
@@ -79,8 +79,17 @@ namespace CollectionsOnline.Core.Indexes
                     Id = item.Id,
                     DisplayTitle = item.DisplayTitle,
                     SubDisplayTitle = item.RegistrationNumber,
-                    Content = new object[] { item.ObjectName, item.Discipline, item.RegistrationNumber, item.RegistrationNumber.Replace(" ", ""),
-                        item.ObjectSummary, item.PhysicalDescription, item.CollectionNames, item.Keywords, item.Significance },
+                    Content = new object[] 
+                    { 
+                        item.ObjectName, item.Discipline, item.RegistrationNumber, item.RegistrationNumber.Replace(" ", ""),
+                        item.ObjectSummary, item.PhysicalDescription, item.CollectionNames, item.Keywords, item.Significance,
+                        item.Associations.Select(x => string.Format("{0} {1} {2} {3} {4} {5} {6}", x.Name, x.Country, x.Date, x.Locality, x.Region, x.State, x.StreetAddress)),
+                        item.IndigenousCulturesMedium, item.IndigenousCulturesLocalName, item.IndigenousCulturesCulturalGroups, item.IndigenousCulturesLocalities,
+                        item.IndigenousCulturesDate, item.IndigenousCulturesLocalities, item.IndigenousCulturesDescription, item.IndigenousCulturesPhotographer,
+                        item.IndigenousCulturesAuthor, item.IndigenousCulturesIllustrator, item.IndigenousCulturesMaker, item.IndigenousCulturesDate, item.IndigenousCulturesCollector,
+                        item.IndigenousCulturesDateCollected, item.IndigenousCulturesIndividualsIdentified, item.IndigenousCulturesLetterTo, item.IndigenousCulturesLetterFrom,
+                        item.IsdDescriptionOfContent, item.ArcheologyDescription, item.ArcheologyManufactureName, item.ArcheologyManufactureDate, item.TradeLiteraturePrimaryName
+                    },
                     Summary = item.Summary,
                     ThumbnailUri = item.ThumbnailUri,
 
@@ -180,21 +189,20 @@ namespace CollectionsOnline.Core.Indexes
                     Id = species.Id,
                     DisplayTitle = species.DisplayTitle,
                     SubDisplayTitle = (string)null,
-                    Content =
-                        new object[]
+                    Content = new object[]
+                    {
+                        (species.Taxonomy != null)
+                        ? new object[]
                         {
-                            (species.Taxonomy != null)
-                            ? new object[]
-                            {
-                                species.Taxonomy.TaxonName, species.Taxonomy.Kingdom, species.Taxonomy.Phylum, species.Taxonomy.Subphylum,
-                                species.Taxonomy.Superclass, species.Taxonomy.Class, species.Taxonomy.Subclass,
-                                species.Taxonomy.Superorder, species.Taxonomy.Order, species.Taxonomy.Suborder,
-                                species.Taxonomy.Infraorder, species.Taxonomy.Superfamily, species.Taxonomy.Family,
-                                species.Taxonomy.Subfamily, species.Taxonomy.CommonName, species.Taxonomy.OtherCommonNames
-                            }
-                            : null,
-                            species.AnimalType, species.AnimalSubType
-                        },
+                            species.Taxonomy.TaxonName, species.Taxonomy.Kingdom, species.Taxonomy.Phylum, species.Taxonomy.Subphylum,
+                            species.Taxonomy.Superclass, species.Taxonomy.Class, species.Taxonomy.Subclass,
+                            species.Taxonomy.Superorder, species.Taxonomy.Order, species.Taxonomy.Suborder,
+                            species.Taxonomy.Infraorder, species.Taxonomy.Superfamily, species.Taxonomy.Family,
+                            species.Taxonomy.Subfamily, species.Taxonomy.CommonName, species.Taxonomy.OtherCommonNames
+                        }
+                        : null,
+                        species.AnimalType, species.AnimalSubType
+                    },
                     Summary = species.Summary,
                     ThumbnailUri = species.ThumbnailUri,
 
@@ -226,7 +234,7 @@ namespace CollectionsOnline.Core.Indexes
                     Date = new object[] { },
                     CulturalGroup = new object[] { },
                     Classification = new object[] { },
-                    Name = new object[] { },
+                    Name = new object[] { species.Authors.Select(x => x.FullName) },
                     Technique = (string)null,
                     Denomination = (string)null,
                     Habitat = new object[] { species.Habitats, species.WhereToLook },

@@ -6,9 +6,10 @@ module.exports = {
     this.bindEvents();
   },
   cacheElements: function () {
-    this.Video = window.mediaModel[$('.thumbnail img.active').parent().index()];
-           
-    // Replace video preview
+    var currentIndex = Math.max($('#objectthumbs .thumbnail img.active').parent().index(), 0);
+
+    this.Video = window.mediaModel[currentIndex];
+    
     this.$videoLoaded = $([
     '<div class="video loaded" style="background-image: url(' + this.Video.Medium.Uri + ');width:' + this.Video.Medium.Width + 'px;">',
       '<div class="ytp-large-play-button">',
@@ -20,6 +21,7 @@ module.exports = {
     '</div>'
     ].join(''));
 
+    // Replace video preview
     $('.hero-media .video').replaceWith(this.$videoLoaded);
   },
   bindEvents: function () {

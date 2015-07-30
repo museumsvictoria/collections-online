@@ -479,19 +479,17 @@ button.icon {
     }
 
     a.next, a.previous {
-        //display: flex;
         @include display-flex();
         cursor: pointer;
         font-size: 30px;
         width: 32px;
         color: $colour-bodytext;
-       // align-items:center;
         @include alignitem-center();
         align-self:stretch;
         height:100%;
         position:absolute;
         z-index:200;
-        background: rgba(255,255,255,0.5);
+        text-shadow: -1px 0 $colour-heading-inverted, 0 1px $colour-heading-inverted, 1px 0 $colour-heading-inverted, 0 -1px $colour-heading-inverted;
         @include gridle_hide("print");
         &.inactive {
             color: #999;
@@ -502,8 +500,7 @@ button.icon {
         }
 
         &:hover {
-           // background:$dim;
-           background: rgba(255,255,255,0.8);
+           background:$dim;
         }
     }
 

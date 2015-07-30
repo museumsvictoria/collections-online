@@ -78,6 +78,7 @@ namespace CollectionsOnline.Import.Factories
                     "SpeDepth_tab",
                     "SpeWaterColumnLocation_tab",
                     "taxa=TaxTaxaRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab])",
+                    "relatedarticlespecies=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
                     "relateditemspecimens=ObjObjectsRef_tab.(irn,MdaDataSets_tab)",
                     "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                     "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
@@ -168,6 +169,19 @@ namespace CollectionsOnline.Import.Factories
                     species.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
                     species.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+            }
+
+            // Related articles/species 
+            var relatedArticleSpeciesMap = map.GetMaps("relatedarticlespecies");
+            if (relatedArticleSpeciesMap != null)
+            {
+                species.RelatedArticleIds.AddRangeUnique(relatedArticleSpeciesMap
+                    .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                    .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+
+                species.RelatedSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
+                    .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                    .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
             }
 
             // Authors
@@ -283,7 +297,7 @@ namespace CollectionsOnline.Import.Factories
                         new PatchRequest
                         {
                             Type = PatchCommandType.Add,
-                            Name = "RelatedSpeciesIdsRelatedSpeciesIds",
+                            Name = "RelatedSpeciesIds",
                             Value = newDocument.Id
                         }
                     }

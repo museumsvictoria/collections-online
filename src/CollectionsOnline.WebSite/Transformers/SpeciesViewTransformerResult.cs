@@ -12,12 +12,18 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public IList<EmuAggregateRootViewModel> RelatedSpecimens { get; set; }
 
+        public IList<EmuAggregateRootViewModel> RelatedArticles { get; set; }
+
+        public IList<EmuAggregateRootViewModel> RelatedSpecies { get; set; }
+
         public int RelatedSpecimenCount { get; set; }
 
         public SpeciesViewTransformerResult()
         {
             RelatedItems = new List<EmuAggregateRootViewModel>();
             RelatedSpecimens = new List<EmuAggregateRootViewModel>();
+            RelatedArticles = new List<EmuAggregateRootViewModel>();
+            RelatedSpecies = new List<EmuAggregateRootViewModel>();
         }
     }
 }
