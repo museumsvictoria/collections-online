@@ -11,7 +11,7 @@
                     <h4>Associated downloads</h4>
                     foreach (FileMedia file in Model.OfType<FileMedia>())
                     {
-                        <a href="@file.File.Uri">
+                        <a class="icon-downloadlink" href="@file.File.Uri">
                             <span class="filedesc">@file.Caption</span>
                             <span class="filesize">
                                 (@file.File.Size.BytesToString())
@@ -25,7 +25,7 @@
                     <h4>Related Links</h4>
                     foreach (UriMedia uri in Model.OfType<UriMedia>())
                     {
-                        <a href="@uri.Uri">@uri.Caption</a>
+                        <a class="icon-externallink" href="@uri.Uri">@uri.Caption</a>
                     }
                 }
             </div>

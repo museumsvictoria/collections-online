@@ -100,12 +100,29 @@
     }
 }
 
+
 .icon-download:before {
     font-family: "mv-collections";
     content: "\e60b";
     font-size: 1.5em;
 }
-
+.icon-downloadlink:after{
+    font-family: "mv-collections";
+    content: "\e60b";
+    font-size: 1em;
+    padding-left:5px;
+}
+.icon-externallink:after{
+    font-family: "mv-collections";
+    content: "\e605";
+    font-size: 0.8em;
+    padding-left:5px;
+}
+.icon-after:before {
+    font-family: "mv-collections";
+    content: "\e60b";
+    font-size: 1.5em;
+}
 .icon-expand:before {
     font-family: "mv-collections";
     content: "\e60c";
