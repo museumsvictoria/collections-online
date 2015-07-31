@@ -1,0 +1,14 @@
+﻿@using CollectionsOnline.Core.Models
+@using CollectionsOnline.WebSite.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.MuseumLocation>
+@if (Model != null)
+{
+    <aside class="side-content">
+        <div class="on-display @Model.DisplayLocation.ToClass()">
+            <h4>On display</h4>
+            <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(Model.Gallery)">@Model.Gallery</a><br />
+            <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Venue)">@Model.Venue</a>
+            @Html.RenderLocationExternalLink(Model)
+        </div>
+    </aside>
+}

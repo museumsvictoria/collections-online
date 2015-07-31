@@ -79,6 +79,40 @@ namespace CollectionsOnline.WebSite.Extensions
             return new NonEncodedHtmlString(sb.ToString());
         }
 
+        public static IHtmlString RenderLocationExternalLink<T>(this HtmlHelpers<T> helper, MuseumLocation museumLocation)
+        {
+            var sb = new StringBuilder();
+
+            var formatString = "<a class=\"website icon-externallink\" href=\"http://museumvictoria.com.au/{0}/\">Visit {1}</a>";
+
+            switch (museumLocation.DisplayLocation)
+            {
+                case "Bunjilaka":
+                    sb.Append(string.Format(formatString, "bunjilaka", museumLocation.DisplayLocation));
+                    break;
+                case "Discovery Centre":
+                    sb.Append(string.Format(formatString, "melbournemuseum", museumLocation.Venue));
+                    break;
+                case "Immigration Discovery Centre":
+                    sb.Append(string.Format(formatString, "immigrationmuseum", museumLocation.Venue));
+                    break;
+                case "Melbourne Museum":
+                    sb.Append(string.Format(formatString, "melbournemuseum", museumLocation.DisplayLocation));
+                    break;
+                case "Immigration Museum":
+                    sb.Append(string.Format(formatString, "immigrationmuseum", museumLocation.DisplayLocation));
+                    break;
+                case "Royal Exhibition Building":
+                    sb.Append(string.Format(formatString, "reb", museumLocation.DisplayLocation));
+                    break;
+                case "Scienceworks":
+                    sb.Append(string.Format(formatString, "scienceworks", museumLocation.DisplayLocation));
+                    break;
+            }
+
+            return new NonEncodedHtmlString(sb.ToString());
+        }
+
         public static IHtmlString ConvertNewlines<T>(this HtmlHelpers<T> helper, string content)
         {
             return new NonEncodedHtmlString(content.Replace("\n", "<br />"));
@@ -101,7 +135,7 @@ namespace CollectionsOnline.WebSite.Extensions
         {
             return new NonEncodedHtmlString(JsonConvert.SerializeObject(input, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects }));
         }
-
+         
         private static string BuildAuthorsCitation(IList<Author> authors)
         {
             var sb = new StringBuilder();

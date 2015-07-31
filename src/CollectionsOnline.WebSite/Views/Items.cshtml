@@ -814,28 +814,7 @@
                 </ul>
             </div>
         </section>
-        @if (Model.Item.MuseumLocation != null)
-        {
-            <aside class="side-content">
-                <div class="on-display @Model.Item.MuseumLocation.DisplayLocation.ToClass()">
-                    <h4>On display</h4>
-                    <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Gallery)">@Model.Item.MuseumLocation.Gallery</a><br/>
-                    <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Item.MuseumLocation.Venue)">@Model.Item.MuseumLocation.Venue</a>
-                    @{string venueURL = "";
-                      if (!@Model.Item.MuseumLocation.Venue.Contains("Royal"))
-                      {
-                          venueURL = String.Concat("http://museumvictoria.com.au/", Model.Item.MuseumLocation.Venue.ToLower().Replace(" ", ""), "/");
-                      }
-                      else
-                      {
-                          venueURL = "http://museumvictoria.com.au/reb/";  
-                      }
-                          
-                      }
-                    <a class="website icon-externallink" href="@venueURL">Visit @Model.Item.MuseumLocation.Venue</a>
-                </div>
-            </aside>
-        }
+        @Html.Partial("MuseumLocation", Model.Item.MuseumLocation)
         @Html.Partial("FileUriMedia", Model.Item.Media)
         <aside class="side-content">
             <div class="sidecolumn">
