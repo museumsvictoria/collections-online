@@ -64,6 +64,10 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> RelatedSpecimenIds { get; set; }
 
+        public IList<string> RelatedArticleIds { get; set; }
+
+        public IList<string> RelatedSpeciesIds { get; set; }
+
         public IList<Author> Authors { get; set; }
 
         public IList<Media> Media { get; set; }
