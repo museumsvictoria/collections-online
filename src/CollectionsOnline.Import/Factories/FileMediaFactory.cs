@@ -3,8 +3,11 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using IMu;
 using NLog;
@@ -109,13 +112,18 @@ namespace CollectionsOnline.Import.Factories
                     .OrderByDescending(x => x.DateModified)
                     .FirstOrDefault(x => x.Irn == mediaIrn);
 
-                // TODO: restore commented out code when production ready
-                // If there are no results that use this media or if existing media checksum does not match the one from emu we need to save file
-                //if (result == null)
-                //{
-                //    _log.Trace("No existing file media found matching mmr irn... fetching from EMu");
-                //    return false;
-                //}
+                // If all imu imports have run before (not simply loading images from disk) and there are no results that use this media and we need to save file
+                var allImportsComplete = documentSession
+                    .Load<Application>(Constants.ApplicationId)
+                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
+                    .Select(x => x.PreviousDateRun)
+                    .Any(x => x.HasValue);
+
+                if (allImportsComplete && result == null)
+                {
+                    _log.Trace("No existing file media found matching mmr irn... fetching from EMu");
+                    return false;
+                }
 
                 // If existing media checksum does not match the one from emu we need to save file
                 if (result != null && result.Md5Checksum != fileMedia.Md5Checksum)
