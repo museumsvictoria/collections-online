@@ -183,6 +183,8 @@
     <None Include="Views\Error\500.cshtml" />
     <Content Include="Views\ErrorLayout.cshtml" />
     <Content Include="Views\MuseumLocation.cshtml" />
+    <Content Include="Views\SocialLinks.cshtml" />
+    <Content Include="Views\CloseWindow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ListExtensions.cs" />

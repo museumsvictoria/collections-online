@@ -11,6 +11,11 @@ namespace CollectionsOnline.WebSite.Modules
             {
                 return View["HomeIndex", homeViewModelQuery.BuildHomeIndex()];
             };
+
+            Get["home-closewindow", "/closewindow"] = parameters =>
+            {
+                return View["CloseWindow"];
+            };
         }
     }
 }

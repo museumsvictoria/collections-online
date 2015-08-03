@@ -97,24 +97,7 @@
         @Html.Partial("FileUriMedia", Model.Article.Media)
         <aside class="side-content">
             <div class="sidecolumn">
-                <div class="social">
-                    <h4>Share</h4>
-                    <div class="social-tools">
-                        <a class="icon" href="#">
-                            <span class="icon-facebook" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Facebook</span>
-                        </a>
-                        <a class="icon" href="#">
-                            <span class="icon-twitter" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Twitter</span>
-                        </a>
-                        <a class="icon" href="#">
-                            <span class="icon-pintrest" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">Pintrest</span>
-                        </a>
-                    </div>
-                </div>
-
+                @Html.Partial("SocialLinks")
                 <div class="cite">
                     <h4>Cite this page</h4>
                     <p>@Html.RenderCitation(Model.Article)</p>

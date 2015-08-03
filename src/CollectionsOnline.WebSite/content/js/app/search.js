@@ -71,7 +71,7 @@ module.exports = {
 
     facetGroup.toggleClass('collapsed');
   },
-  addSearchTerm: function(e) {
+  addSearchTerm: function() {
     var searchQuery = $('#search-bar input').val();
     if (searchQuery) {
       var querystring = queryString.parse(location.search);
