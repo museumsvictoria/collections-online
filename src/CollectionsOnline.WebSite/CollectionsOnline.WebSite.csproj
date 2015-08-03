@@ -217,6 +217,7 @@
     <Compile Include="Modules\Api\ArticlesApiModule.cs" />
     <Compile Include="Modules\DevelopersModule.cs" />
     <Compile Include="Modules\CollectionsModule.cs" />
+    <Compile Include="Modules\RedirectModule.cs" />
     <Compile Include="Modules\ItemsModule.cs" />
     <Compile Include="Modules\Api\BaseApiModule.cs" />
     <Compile Include="Models\Api\ApiInputModel.cs" />
