@@ -13,54 +13,25 @@
         <p>@Html.ConvertNewlines(Model.Collection.CollectionSummary)</p>
         <h2>Significance</h2>
         @Html.Raw(Model.Collection.Significance)
-        @if (Model.SubCollectionArticles.Any())
-        {
-            <div class="subcoll">
-                <h2>Some key sub-collections</h2>
-                @foreach (var subCollectionArticle in Model.SubCollectionArticles)
-                {
-                    @Html.Partial("emutile", subCollectionArticle)
-                }
-            </div>
-        }
+
+  
     </div>
     <div class="sidecolumn">
-        <div class="favorites">
-            <h4>Our Favourite Items</h4>
-            @foreach (var favoriteItem in Model.FavoriteItems)
-            {
-                @Html.Partial("emutile", favoriteItem)
-            }
-            @foreach (var favoriteSpecimens in Model.FavoriteSpecimens)
-            {
-                @Html.Partial("emutile", favoriteSpecimens)
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.Collection.CollectingArea))
-            {
-                <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Collection.CollectingArea)" class="seeall">See all items in this collection &gt;</a>
-            }
-        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.Collection.CollectingArea))
+        {
+            <div class="seeallcontainer">
+                <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Collection.CollectingArea)" class="seeall">See all items in this collection</a>
+            </div>
+        }
+
+    </div>
+
+    <div class="sidecolumn">
+        @Html.Partial("SocialLinks")
     </div>
     <div class="sidecolumn">
         <div class="socialcite">
-            <div class="social">
-                <h4>Share</h4>
-                <div class="social-tools">
-                    <a class="icon" href="#">
-                        <span class="icon-facebook" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Facebook</span>
-                    </a>
-                    <a class="icon" href="#">
-                        <span class="icon-twitter" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Twitter</span>
-                    </a>
-                    <a class="icon" href="#">
-                        <span class="icon-pintrest" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Pintrest</span>
-                    </a>
-                </div>
-            </div>
-            <div class="cite">
+                <div class="cite">
                 <h4>Cite this page</h4>
                 <p>@Html.RenderCitation(Model.Collection)</p>
                 <h4>Rights</h4>
@@ -95,4 +66,39 @@
             </div>
         </div>
     </div>
+
 </div>
+@if (Model.SubCollectionArticles.Any())
+{   <div id="subcoll"> 
+    <div class="container">
+    <div class="subcoll">
+    
+            <h2>Some key sub-collections</h2>
+            @foreach (var subCollectionArticle in Model.SubCollectionArticles)
+            {
+                @Html.Partial("emutile", subCollectionArticle)
+            }
+       
+    </div>
+     </div>
+   </div>
+}
+@if (Model.FavoriteItems.Any())
+{
+    <div id="favorites">
+     <div class="container">
+         <div class="favorites">
+       
+            <h2>Our Favourite Items</h2>
+            @foreach (var favoriteItem in Model.FavoriteItems)
+            {
+                @Html.Partial("emutile", favoriteItem)
+            }
+            @foreach (var favoriteSpecimens in Model.FavoriteSpecimens)
+            {
+                @Html.Partial("emutile", favoriteSpecimens)
+            }
+        </div>
+    </div>
+    </div>
+}

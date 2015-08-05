@@ -614,8 +614,7 @@ button.icon {
 	margin: 0 0 20px;
 	font-size: 14px;
 	line-height: 1.4em; 
-	border-bottom: 1px solid #e8e8e8;
-    overflow: hidden;
+	   overflow: hidden;
 	
     &:last-child {
         border:0;
@@ -808,13 +807,14 @@ button.icon {
 
     & .sidecolumn{
     width:100%;
-    background-color: $colour-background-lightest;
+    //background-color: $colour-background-lightest;
     border-radius: 3px;
     padding: 15px 20px 20px;
     color:  $colour-sidetext;
-    margin-bottom: 20px;
-
+   // margin-bottom: 20px;
+    border-bottom: 1px solid $colour-background-lightest;
         & .downloads{
+                font-size:14px;
             & a {
                 color: $colour-sidetext;
                 display:block;
@@ -958,20 +958,23 @@ button.icon {
 
          & h4{
 	        font-weight:500;
-	        font-size:17px;
+	        font-size:14px;
 	        margin-bottom:2px;
-	        color: $colour-bodytext-light;
+	        color: $colour-sideheadings;
         }
     
         & .social-tools {
-	        margin-bottom: 20px;
-	        margin-top: 6px;
-            height:26px;
+            display: inline-block;
+            height: 26px;
+            line-height: 26px;
+           // margin-bottom: 20px;
+            margin-top: 6px;
+            font-size:14px;
 	        & .icon
 	        {
 		         margin: 0 6px 0 0;	    }
             & a:hover{
-                font-size:17px;
+             //   font-size:15px;
                 color:$colour-heading;
             }
         }
@@ -1566,11 +1569,12 @@ button.icon {
                 padding-bottom:15px;
                 & div{
                     padding-top: 15px; //padding moved to inner divs for proper spacing on mobile.
+                    font-weight: 300;
                 }
                 & .viewtype {
                    
                     font-size: 14px;
-
+                    font-weight: 300;
                     display:inline-block;
                     margin-right: 25px;
 
@@ -1643,6 +1647,7 @@ button.icon {
             .perpage, .order {
                 display: inline-block;
                 margin-right: 25px;
+                font-weight: 300;
                 & a.button {
                     display: inline-block;
                     padding: 5px 8px;
@@ -2834,6 +2839,8 @@ $padding-side: 3%;
 
 .social{
     @include gridle_hide("print");
+
+
 }
 
 /*------------------------------------*\
@@ -3150,6 +3157,8 @@ footer {
 
 #collarea {
     position:relative;
+    padding-bottom:20px;
+
 
     & h1 {
         float: none;
@@ -3190,24 +3199,13 @@ footer {
         padding-right: 20px;
         @include gridle(12,"tablet");
         @include gridle(12,"mobile");
-    }
-
-    & .subcoll {
-        @include gridle(12);
-        padding-left: 0px;
-        padding-right: 0px;
-        margin-bottom: 50px;
-
-        & h2 {
-            padding-left: 0px;
-            padding-bottom: 15px;
-        }
-
-        & .tile.full{
-            @include gridle(4);
-        }
+            font-size: 17px;
+          font-weight: 300;
+         margin-bottom: 1.5em;
+            word-wrap: break-word;
 
     }
+
 
     & .sidecolumn {
         @include gridle(4);
@@ -3216,23 +3214,31 @@ footer {
         clear:right;
         float: right;
         direction: ltr;
-        margin-bottom:20px;
+        //margin-bottom:20px;
         overflow:hidden;
+        border-bottom: 1px solid $colour-background-lightest;
+        font-size:14px;
+        font-weight: 400;
+          padding: 15px 20px 20px;
+        & p{
+            font-size:inherit;
+            font-weight: 400;
+        }
 
         & h4 {
-            color: #454545;
-            font-size: 17px;
+            color: $colour-sideheadings;
+            font-size: 14px;
             font-weight: 500;
-            margin-bottom: 15px;
+            margin-bottom: 2px;
         }
         & .socialcite{
-            background-color: $colour-background-lightest;
+            //background-color: $colour-background-lightest;
             @include border-radius(3px);
             color: $colour-sidetext;
-            padding: 15px 20px 20px;
+           // padding: 15px 20px 20px;
         }
         & .favorites {
-            background-color: $colour-background-lightest;
+            //background-color: $colour-background-lightest;
             @include border-radius(3px);
             color:  $colour-sidetext;
             padding: 15px 20px 20px;
@@ -3269,18 +3275,86 @@ footer {
         }
     }
 
-    & .seeall {
-        text-decoration: none;
-        color: $colour-sidetext;
-        display:block;
+
+
+
+    & .seeallcontainer{
+   
+        background: $colour-background-lightest none repeat scroll 0 0;
+        border-radius: 3px;
+        display: block;
+       // margin-bottom: 20px;
+        padding: 20px 20px 10px;
+        width: 100%;
+        font-size: 16px;
+          & .seeall {
+                border-bottom: 1px dotted;
+                color: rgba(25, 102, 93, 0.95);
+                display: inline-block;
+                margin-bottom: 20px;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+
+}
+
+#subcoll{
+        background:$colour-background-midlight;
+        padding-top:40px;
+
+        & .subcoll {
+        
+        @include gridle(12);
+
+        padding-left: 0px;
+        padding-right: 0px;
+       // margin-bottom: 20px;
         clear:both;
 
-        &:hover {
-            text-decoration: underline;
+        & h2 {
+            float: none;
+            font-size: 22px;
+            font-weight: 400;
+            padding-bottom: 25px;
+            padding-left: 10px;
+        }
+
+        & .tile.full{
+            @include gridle(3);
+        }
+
+    }
+}
+#favorites{
+           
+    background:$colour-background-midlight;
+    padding-top:40px;
+    & .favorites{
+        @include gridle(12);
+
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-bottom: 20px;
+        clear:both;
+
+        & h2 {
+            float: none;
+            font-size: 22px;
+            font-weight: 400;
+            padding-bottom: 25px;
+            padding-left: 10px;
+        }
+
+        & .tile.full{
+            @include gridle(3);
         }
     }
 }
-
 // Home
 .home .button-search{
 	display: none;
