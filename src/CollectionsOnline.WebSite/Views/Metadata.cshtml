@@ -1,0 +1,23 @@
+﻿@using System.Configuration
+@using CollectionsOnline.WebSite.Models
+@{
+    var metadata = (MetadataViewModel)ViewBag.metadata ?? new MetadataViewModel();
+}
+<title>@(metadata.Title)</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+@if(!string.IsNullOrWhiteSpace(metadata.CanonicalUri))
+{ 
+    <link rel="canonical" href="@metadata.CanonicalUri">
+}
+<meta name="description" content="@metadata.Description" />
+<meta property="fb:app_id" content="@ConfigurationManager.AppSettings["FacebookAppId"]" />
+<meta property="og:title" content="@metadata.Title" />
+<meta property="og:site_name" content="Museum Victoria Collections"/>
+<meta property="og:url" content="@(RenderContext.Context.Request.Url.SiteBase + RenderContext.Context.Request.Path)" />
+<meta property="og:description" content="@metadata.Description"/>
+@foreach (var metaProperty in metadata.MetaProperties)
+{
+    <meta property="@metaProperty.Key" content="@metaProperty.Value" />
+}

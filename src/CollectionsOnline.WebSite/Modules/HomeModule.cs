@@ -1,4 +1,5 @@
-﻿using CollectionsOnline.WebSite.Queries;
+﻿using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Queries;
 using Nancy;
 
 namespace CollectionsOnline.WebSite.Modules
@@ -9,6 +10,13 @@ namespace CollectionsOnline.WebSite.Modules
         {
             Get["home-index", "/"] = parameters =>
             {
+                ViewBag.metadata = new MetadataViewModel
+                {
+                    Description = "Museum Victoria Collections Description goes here",
+                    Title = "Museum Victoria Collections",
+                    CanonicalUri = "http://collections.museumvictoria.com.au/"
+                };
+
                 return View["HomeIndex", homeViewModelQuery.BuildHomeIndex()];
             };
 
