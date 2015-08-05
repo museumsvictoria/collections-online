@@ -1802,6 +1802,7 @@ button.icon {
                                         
                                     & .title{
                                         height:auto;
+                                        @include alignself-flexstart();
                                         & .heading{
                                             font-size: 16px;
                                             padding-bottom: 8px;

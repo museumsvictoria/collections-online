@@ -96,6 +96,12 @@
     align-items: center;
 }
 
+@mixin alignself-flexstart(){
+    -webkit-align-self: flex-start;
+     -ms-align-self:flex-start;
+    align-self:flex-start;
+}
+
 @mixin flex($value){
     -ms-flex:$value;
     -webkit-flex:$value;
