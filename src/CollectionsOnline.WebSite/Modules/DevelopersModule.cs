@@ -9,11 +9,14 @@ namespace CollectionsOnline.WebSite.Modules
     {
         public DevelopersModule(
             IRouteCacheProvider routeCacheProvider,
-            IDevelopersViewModelFactory developersViewModelFactory)
+            IDevelopersViewModelFactory developersViewModelFactory,
+            IMetadataViewModelFactory metadataViewModelFactory)
             : base(Constants.CurrentApiVersionPathSegment)
         {
             Get["developers-index", "/developers"] = parameters =>
             {
+                ViewBag.metadata = metadataViewModelFactory.MakeDevelopersIndex();
+
                 return View["DevelopersIndex", developersViewModelFactory.MakeDevelopersIndex(routeCacheProvider.GetCache(), Request)];
             };
         }
