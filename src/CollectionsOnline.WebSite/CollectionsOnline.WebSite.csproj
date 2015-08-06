@@ -186,6 +186,7 @@
     <Content Include="Views\MuseumLocation.cshtml" />
     <Content Include="Views\SocialLinks.cshtml" />
     <Content Include="Views\CloseWindow.cshtml" />
+    <Content Include="Views\Metadata.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Models\CollectionIndexViewModel.cs" />
+    <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />

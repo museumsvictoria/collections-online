@@ -1,14 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>        
-        <title>Collections Online Website</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=10"/>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link href="/content/css/styles.css" rel="stylesheet">
+    <head>                        
+        @Html.Partial("Metadata")
         <script type="text/javascript" src="//use.typekit.net/izq0fed.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
         <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
+        <link href="/content/css/styles.css" rel="stylesheet">
         <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
     </head>
     <body>
@@ -72,5 +69,17 @@
             </div>
         </footer>
         <script src="/content/js/bundle.js"></script>
+        <script type="application/ld+json">
+        {
+           "@@context": "http://schema.org",
+           "@@type": "WebSite",
+           "url": "http://collections.museumvictoria.com.au/",
+           "potentialAction": {
+             "@@type": "SearchAction",
+             "target": "http://collections.museumvictoria.com.au/search?query={search_term_string}",
+             "query-input": "required name=search_term_string"
+           }
+        }
+        </script>
     </body>
 </html>
