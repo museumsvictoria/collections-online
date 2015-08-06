@@ -9,15 +9,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 @if(!string.IsNullOrWhiteSpace(metadata.CanonicalUri))
 { 
-    <link rel="canonical" href="@metadata.CanonicalUri">
+<link rel="canonical" href="@metadata.CanonicalUri">
 }
-<meta name="description" content="@metadata.Description" />
 <meta property="fb:app_id" content="@ConfigurationManager.AppSettings["FacebookAppId"]" />
+@if (!string.IsNullOrWhiteSpace(metadata.Description))
+{
+<meta property="description" content="@metadata.Description" />
+<meta property="og:description" content="@metadata.Description" />
+<meta property="twitter:description" content="@metadata.Description" />
+}
 <meta property="og:title" content="@metadata.Title" />
 <meta property="og:site_name" content="Museum Victoria Collections"/>
 <meta property="og:url" content="@(RenderContext.Context.Request.Url.SiteBase + RenderContext.Context.Request.Path)" />
-<meta property="og:description" content="@metadata.Description"/>
+<meta property="twitter:title" content="@metadata.Title" />
+<meta property="twitter:site" content="@("@museumvictoria")">
 @foreach (var metaProperty in metadata.MetaProperties)
 {
-    <meta property="@metaProperty.Key" content="@metaProperty.Value" />
+<meta property="@metaProperty.Key" content="@metaProperty.Value" />
 }

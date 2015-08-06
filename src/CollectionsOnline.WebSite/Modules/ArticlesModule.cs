@@ -1,4 +1,5 @@
 ﻿using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Queries;
 using Nancy;
 using Raven.Client;
@@ -9,13 +10,19 @@ namespace CollectionsOnline.WebSite.Modules
     {
         public ArticlesModule(
             IArticleViewModelQuery articleViewModelQuery,
-            IDocumentSession documentSession)            
+            IDocumentSession documentSession,
+            IMetadataViewModelFactory metadataViewModelFactory)            
         {
             Get["/articles/{id}"] = parameters =>
             {
                 var article = documentSession.Load<Article>("articles/" + parameters.id as string);
 
-                return (article == null || article.IsHidden) ? HttpStatusCode.NotFound : View["Articles", articleViewModelQuery.BuildArticle("articles/" + parameters.id)];
+                if (article == null || article.IsHidden) 
+                    return HttpStatusCode.NotFound;                
+                
+                ViewBag.metadata = metadataViewModelFactory.Make(article);
+
+                return View["Articles", articleViewModelQuery.BuildArticle("articles/" + parameters.id)];
             };
         }
     }

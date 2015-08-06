@@ -116,6 +116,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -193,8 +194,10 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Factories\MetadataViewModelFactory.cs" />
     <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
     <Compile Include="Factories\DevelopersViewModelFactory.cs" />
+    <Compile Include="Factories\IMetadataViewModelFactory.cs" />
     <Compile Include="Infrastructure\AutomapperConfig.cs" />
     <Compile Include="Factories\HomeHeroUriFactory.cs" />
     <Compile Include="Factories\IHomeHeroUriFactory.cs" />

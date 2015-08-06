@@ -130,9 +130,11 @@ namespace CollectionsOnline.Core.Extensions
             return input;
         }
 
-        public static string RemoveLineBreaks(this string input, string delimiter)
+        public static string RemoveLineBreaks(this string input, string delimiter = " ")
         {
-            return Regex.Replace(input, @"\r\n?|\n", delimiter);
+            return Regex
+                .Replace(input, @"\r\n?|\n", delimiter)
+                .Trim();
         }
     }
 }

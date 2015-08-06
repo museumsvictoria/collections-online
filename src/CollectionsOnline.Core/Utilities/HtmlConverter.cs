@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using CollectionsOnline.Import.Utilities;
 using Ganss.XSS;
 using HtmlAgilityPack;
 
-namespace CollectionsOnline.Import.Utilities
+namespace CollectionsOnline.Core.Utilities
 {
     public static class HtmlConverter
     {
