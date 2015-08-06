@@ -1596,6 +1596,7 @@ button.icon {
                     border-right: 1px solid #999;
                     background: $colour-button-background;
                     margin-left:0px;
+                    position:relative;
                     &:hover {
                         text-decoration: underline;
                     }
@@ -1637,6 +1638,20 @@ button.icon {
                     &.active {
                         color: $colour-bodytext;
                         background: $colour-button-active-background !important;
+                        &:after {
+				                top: 100%;
+				                left: 50%;
+				                border: solid transparent;
+				                content: " ";
+				                height: 0;
+				                width: 0;
+				                position: absolute;
+				                pointer-events: none;
+				                border-color: rgba(255, 255, 255, 0);
+				                border-top-color: #fff;
+				                border-width: 10px;
+				                margin-left: -10px;
+			                }
                         &:hover {
                             text-decoration: none;
                         }
@@ -1655,7 +1670,7 @@ button.icon {
                     color: $colour-bodytext;
                     background: $colour-button-background;
                     display: inline-block;
-                  
+                    position: relative;
                     text-decoration: none;
 
                     &:hover {
@@ -1673,6 +1688,23 @@ button.icon {
                         &.active {                  
                             text-decoration: none;
                             background: $colour-button-active-background;
+                            &:after {
+				                top: 100%;
+				                left: 50%;
+				                border: solid transparent;
+				                content: " ";
+				                height: 0;
+				                width: 0;
+				                position: absolute;
+				                pointer-events: none;
+				                border-color: rgba(255, 255, 255, 0);
+				                border-top-color: #fff;
+				                border-width: 10px;
+				                margin-left: -10px;
+			                }
+
+
+
                             &:hover {
                                 text-decoration: none;
                             }
@@ -1687,6 +1719,21 @@ button.icon {
                         &.active {
                             text-decoration: none;
                             background: $colour-button-active-background;
+                            &:after {
+				                top: 100%;
+				                left: 50%;
+				                border: solid transparent;
+				                content: " ";
+				                height: 0;
+				                width: 0;
+				                position: absolute;
+				                pointer-events: none;
+				                border-color: rgba(255, 255, 255, 0);
+				                border-top-color: #fff;
+				                border-width: 10px;
+				                margin-left: -10px;
+			                }
+
 
                             &:hover {
                                 text-decoration: none;
@@ -1697,7 +1744,20 @@ button.icon {
                     &.active {
                             text-decoration: none;
                             background: $colour-button-active-background;
-
+                            &:after {
+				                top: 100%;
+				                left: 50%;
+				                border: solid transparent;
+				                content: " ";
+				                height: 0;
+				                width: 0;
+				                position: absolute;
+				                pointer-events: none;
+				                border-color: rgba(255, 255, 255, 0);
+				                border-top-color: #fff;
+				                border-width: 10px;
+				                margin-left: -10px;
+			                }
                         &:hover {
                             text-decoration: none;
                         }
