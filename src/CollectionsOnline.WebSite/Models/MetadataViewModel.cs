@@ -14,6 +14,9 @@ namespace CollectionsOnline.WebSite.Models
         
         public MetadataViewModel()
         {
+            // Defaults
+            Title = "Museum Victoria Collections";
+
             MetaProperties = new List<KeyValuePair<string, string>>();
         }
     }

@@ -14,7 +14,7 @@ namespace CollectionsOnline.Import.Factories
 
             return summaryBuilder
                 .AddHeading(article.Types.Concatenate(", "))
-                .AddText(article.ContentText.RemoveLineBreaks(" "))
+                .AddText(article.ContentText.RemoveLineBreaks())
                 .ToString();
         }
 

@@ -1,8 +1,8 @@
-﻿using CollectionsOnline.Import.Utilities;
+﻿using CollectionsOnline.Core.Utilities;
 using Shouldly;
 using Xunit;
 
-namespace CollectionsOnline.Tests.Import.Utilities
+namespace CollectionsOnline.Tests.Core.Utilities
 {
     public class HtmlConverterTests
     {

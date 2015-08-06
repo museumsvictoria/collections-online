@@ -181,7 +181,7 @@
     <Compile Include="Import\Factories\ArticleFactoryTests.cs" />
     <Compile Include="Import\ImportRunnerTests.cs" />
     <Compile Include="Core\Utilities\NaturalDateConverterTests.cs" />
-    <Compile Include="Import\Utilities\HtmlConverterTests.cs" />
+    <Compile Include="Core\Utilities\HtmlConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
     <Compile Include="Modules\BaseModuleTests.cs" />
