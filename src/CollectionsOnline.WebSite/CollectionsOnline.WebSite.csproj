@@ -175,6 +175,7 @@
     <Content Include="content\js\app\app.js" />
     <Content Include="content\js\lib\query-string.js" />
     <Content Include="gulpfile.js" />
+    <Content Include="robots.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
