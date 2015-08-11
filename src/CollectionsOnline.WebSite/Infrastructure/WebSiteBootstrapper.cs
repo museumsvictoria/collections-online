@@ -82,6 +82,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
             base.ConfigureConventions(conventions);
 
             conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddFile("/robots.txt", "/robots.txt"));
+            conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("", "sitemaps"));
         }
     }
 }

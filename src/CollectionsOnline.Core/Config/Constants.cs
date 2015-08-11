@@ -27,6 +27,10 @@ namespace CollectionsOnline.Core.Config
 
         public static int HomeMaxRecentResults = 12;
 
+        public static int MaxSitemapUrls = 50000;
+
+        public static int PagingStreamSize = 4000;
+
         public static string ImuItemQueryString = "Collections Online: Humanities";
 
         public static string ImuSpeciesQueryString = "Collections Online: Species Profile";
