@@ -4,6 +4,10 @@
 @{
     Layout = "Layout.cshtml";
 }
+@section Head {
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
+}
 @Html.Partial("Media", Model.Specimen.Media.WithThumbnails())
 <div id="title">
     <div class="wrapper">

@@ -112,7 +112,7 @@ namespace CollectionsOnline.WebSite.Factories
             // General metadata
             var metadata = new MetadataViewModel
             {
-                Title = species.DisplayTitle,
+                Title = HtmlConverter.HtmlToText(species.DisplayTitle),
                 MetaProperties = new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>("og:type", "article"),                        
@@ -164,8 +164,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Museum Victoria Collections home page description goes here",
-                Title = "Museum Victoria Collections",
+                Description = "Explore the fascinating collections of Museum Victoria in Melbourne, Australia, featuring over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology.",
+                Title = "Explore Museum Victoria's humanities and natural sciences collections",
                 CanonicalUri = ConfigurationManager.AppSettings["CanonicalSiteBase"]
             };
 
@@ -176,8 +176,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "At Museum Victoria, we have been building and researching our collections since 1854.  Our priceless collections record Australia's environmental and cultural history. They are an irreplaceable resource for understanding the past, reflecting on the present and looking into the future.",
-                Title = "Our Collections at Museum Victoria"
+                Description = "Descriptions of the types of collections held at Museum Victoria in Melbourne, Australia.",
+                Title = "Descriptions of the collections held at Museum Victoria"
             };
 
             return metadata;
@@ -187,8 +187,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Get access to our collections data via our handy web based API.",
-                Title = "Our API"
+                Description = "Use our public API to extract data from over 1.15 million humanities and natural sciences records that document Museum Victoria's collections.",
+                Title = "Developer tools for Museum Victoria Collections"
             };
 
             return metadata;
@@ -198,8 +198,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Search our massive online catalog containing over one million objects and articles.",
-                Title = "Search our Collections"
+                Description = "Search a database of over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology from Museum Victoria's collections.",
+                Title = "Search Museum Victoria's humanities and natural sciences collections"
             };
 
             return metadata;

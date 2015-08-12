@@ -63,6 +63,9 @@ module.exports = {
       // Default size
       var newHeroMediaImageSrc = media.Medium.Uri;
 
+      // Scroll to top
+      $('html, body').scrollTop(heroMediaImage.offset().top);
+
       if (this.$mediaArea.hasClass('expanded')) {
         // Contract media holder
         this.$mediaHolder.css({
@@ -74,11 +77,9 @@ module.exports = {
         heroMediaImage.css({
           maxHeight: this.defaultMaxHeight,
           height: ''
-        });
-      } else {
-        // Scroll to top
-        $('html, body').scrollTop(heroMediaImage.offset().top);
+        });        
         
+      } else {                       
         // Expand media holder
         this.$mediaHolder.css({
           maxWidth: windowWidth,

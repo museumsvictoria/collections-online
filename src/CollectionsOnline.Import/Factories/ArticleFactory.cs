@@ -303,33 +303,42 @@ namespace CollectionsOnline.Import.Factories
             // Parent Article update
             if (!string.Equals(newDocument.ParentArticleId, existingDocument.ParentArticleId, StringComparison.OrdinalIgnoreCase))
             {
-                patchCommands.Add(new PatchCommandData
+                // Remove relationship
+                if (!string.IsNullOrWhiteSpace(existingDocument.ParentArticleId))
                 {
-                    Key = existingDocument.ParentArticleId,
-                    Patches = new[]
+                    patchCommands.Add(new PatchCommandData
                     {
-                        new PatchRequest
+                        Key = existingDocument.ParentArticleId,
+                        Patches = new[]
                         {
-                            Type = PatchCommandType.Remove,
-                            AllPositions = true,
-                            Name = "ChildArticleIds",
-                            Value = newDocument.Id
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Remove,
+                                AllPositions = true,
+                                Name = "ChildArticleIds",
+                                Value = newDocument.Id
+                            }
                         }
-                    }
-                });
-                patchCommands.Add(new PatchCommandData
+                    });
+                }
+
+                // Add relationship
+                if (!string.IsNullOrWhiteSpace(newDocument.ParentArticleId))
                 {
-                    Key = newDocument.ParentArticleId,
-                    Patches = new[]
+                    patchCommands.Add(new PatchCommandData
                     {
-                        new PatchRequest
+                        Key = newDocument.ParentArticleId,
+                        Patches = new[]
                         {
-                            Type = PatchCommandType.Add,
-                            Name = "ChildArticleIds",
-                            Value = newDocument.Id
+                            new PatchRequest
+                            {
+                                Type = PatchCommandType.Add,
+                                Name = "ChildArticleIds",
+                                Value = newDocument.Id
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             documentSession.Advanced.Defer(patchCommands.ToArray());

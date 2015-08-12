@@ -12,7 +12,6 @@ namespace CollectionsOnline.Core.Indexes
         {
             AddMap<Article>(articles =>
                 from article in articles
-                where article.IsHidden == false
                 from media in article.Media.Concat(article.Authors.Where(x => x != null).Select(x => x.ProfileImage))
                 where media != null
                 select new
@@ -24,7 +23,6 @@ namespace CollectionsOnline.Core.Indexes
 
             AddMap<Item>(items =>
                 from item in items
-                where item.IsHidden == false
                 from media in item.Media
                 select new
                 {
@@ -35,7 +33,6 @@ namespace CollectionsOnline.Core.Indexes
 
             AddMap<Species>(speciesDocs =>
                 from species in speciesDocs
-                where species.IsHidden == false
                 from media in species.Media.Concat(species.Authors.Where(x => x != null).Select(x => x.ProfileImage))
                 select new
                 {
@@ -46,7 +43,6 @@ namespace CollectionsOnline.Core.Indexes
 
             AddMap<Specimen>(specimens =>
                 from specimen in specimens
-                where specimen.IsHidden == false
                 from media in specimen.Media
                 select new
                 {
