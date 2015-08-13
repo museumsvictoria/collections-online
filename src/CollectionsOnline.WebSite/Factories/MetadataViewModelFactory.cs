@@ -199,7 +199,7 @@ namespace CollectionsOnline.WebSite.Factories
             var metadata = new MetadataViewModel
             {
                 Description = "Search a database of over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology from Museum Victoria's collections.",
-                Title = "Search Museum Victoria's humanities and natural sciences collections"
+                Title = "Search Museum Victoria's collections"
             };
 
             return metadata;

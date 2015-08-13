@@ -43,8 +43,7 @@ namespace CollectionsOnline.Core.Indexes
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
                     ItemType = (string)null,
-                    SpeciesType = (string)null,
-                    SpeciesEndemicity = (string)null,
+                    SpeciesType = (string)null,                    
                     SpecimenScientificGroup = (string)null,
                     ArticleType = article.Types,
 
@@ -63,7 +62,8 @@ namespace CollectionsOnline.Core.Indexes
                     TypeStatus = (string)null,
                     GeoType = new object[] { },
                     MuseumLocation = new object[] { },
-                    Article = new object[] { }
+                    Article = new object[] { },
+                    SpeciesEndemicity = (string)null,
                 });
 
             AddMap<Item>(items => 
@@ -108,8 +108,7 @@ namespace CollectionsOnline.Core.Indexes
                     DisplayLocation = item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
-                    SpeciesType = (string)null,
-                    SpeciesEndemicity = (string)null,
+                    SpeciesType = (string)null,                    
                     SpecimenScientificGroup = (string)null,
                     ArticleType = new object[] { },
                     
@@ -173,7 +172,8 @@ namespace CollectionsOnline.Core.Indexes
                     TypeStatus = (string)null,
                     GeoType = new object[] { },
                     MuseumLocation = new object[] { item.MuseumLocation.Gallery, item.MuseumLocation.Venue },
-                    Article = LoadDocument<Article>(item.RelatedArticleIds).Select(x => x.Title)
+                    Article = LoadDocument<Article>(item.RelatedArticleIds).Select(x => x.Title),
+                    SpeciesEndemicity = (string)null,
                 });
 
             AddMap<Species>(speciesDocs =>
@@ -222,8 +222,7 @@ namespace CollectionsOnline.Core.Indexes
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
                     ItemType = (string) null,
-                    SpeciesType = species.AnimalType,
-                    SpeciesEndemicity = species.Endemicity,
+                    SpeciesType = species.AnimalType,                    
                     SpecimenScientificGroup = (string) null,
                     ArticleType = new object[] { },
 
@@ -257,7 +256,8 @@ namespace CollectionsOnline.Core.Indexes
                     TypeStatus = (string)null,
                     GeoType = new object[] { },
                     MuseumLocation = new object[] { },
-                    Article = new object[] { }
+                    Article = new object[] { },
+                    SpeciesEndemicity = species.Endemicity,
                 });
 
             AddMap<Specimen>(specimens =>
@@ -319,8 +319,7 @@ namespace CollectionsOnline.Core.Indexes
                     DisplayLocation = specimen.MuseumLocation.DisplayLocation,
                     CollectingArea = specimen.CollectingAreas,
                     ItemType = specimen.Type,
-                    SpeciesType = (string) null,
-                    SpeciesEndemicity = (string)null,
+                    SpeciesType = (string) null,                    
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     ArticleType = new object[] { },
 
@@ -375,7 +374,8 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.TektitesClassification,
                         specimen.MineralogySpecies },
                     MuseumLocation = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
-                    Article = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title)
+                    Article = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title),
+                    SpeciesEndemicity = (string)null,
                 });
             
             Index(x => x.Id, FieldIndexing.No);
@@ -447,9 +447,7 @@ namespace CollectionsOnline.Core.Indexes
 
         public string ItemType { get; set; }
 
-        public string SpeciesType { get; set; }
-
-        public string SpeciesEndemicity { get; set; }
+        public string SpeciesType { get; set; }        
 
         public string SpecimenScientificGroup { get; set; }
 
@@ -486,5 +484,7 @@ namespace CollectionsOnline.Core.Indexes
         public object[] MuseumLocation { get; set; }
 
         public object[] Article { get; set; }
+
+        public string SpeciesEndemicity { get; set; }
     }
 }

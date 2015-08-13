@@ -407,20 +407,20 @@
                 @Html.Partial("SocialLinks")
             </div>
             <div class="sidecolumn">
-             
+
                 <div class="cite">
                     <h4>Cite this page</h4>
                     <p>@Html.RenderCitation(Model.Species)</p>
                     <h4>Rights</h4>
                     <p>
                         We support the <a href="http://opendefinition.org/">open</a> release of data and information about our collections.<br />
-                        Text content on this page is licensed under a Creative Commons Attribution 4.0 licence CC BY<br/>
                         <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
                             <span class="icon-cc" aria-hidden="true"></span>
                             <span class="icon-label-hidden">CC</span>
                             <span class="icon-by" aria-hidden="true"></span>
                             <span class="icon-label-hidden">BY</span>
-                        </a>
+                        </a><br />
+                        Text content on this page is licensed under a Creative Commons Attribution 4.0 licence
                     </p>
                     @if (Model.Species.Authors.Any())
                     {
@@ -429,13 +429,13 @@
                             @foreach (var author in @Model.Species.Authors)
                             {
                                 <div class="author">
-                                @if (author.ProfileImage != null)
-                                {
-                                    <img src="@author.ProfileImage.Thumbnail.Uri" />
-                                }
-                                <span class="authorname"><a href="/search?name=@HttpUtility.UrlEncode(author.FullName)">@author.FullName</a></span>
-                                <span class="authorbio">@author.Biography</span>
-                                <span style="clear:both;display:block"></span>
+                                    @if (author.ProfileImage != null)
+                                    {
+                                        <img src="@author.ProfileImage.Thumbnail.Uri" />
+                                    }
+                                    <span class="authorname"><a href="/search?name=@HttpUtility.UrlEncode(author.FullName)">@author.FullName</a></span>
+                                    <span class="authorbio">@author.Biography</span>
+                                    <span style="clear:both;display:block"></span>
                                 </div>
                             }
                         </div>

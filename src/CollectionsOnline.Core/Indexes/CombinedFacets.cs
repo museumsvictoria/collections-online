@@ -45,10 +45,6 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
-                    Name = x => x.SpeciesEndemicity
-                },
-                new Facet<CombinedIndexResult>
-                {
                     Name = x => x.ArticleType
                 },
                 new Facet<CombinedIndexResult>
