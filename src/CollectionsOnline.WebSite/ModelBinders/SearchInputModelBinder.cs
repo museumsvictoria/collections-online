@@ -71,7 +71,7 @@ namespace CollectionsOnline.WebSite.ModelBinders
             else if (string.Equals(query.View, "data", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "data";
 
-            searchInputModel.CurrentUrl = string.Format("{0}{1}", context.Request.Url.SiteBase, context.Request.Url.Path);
+            searchInputModel.CurrentUrl = context.Request.Url.Path;
             searchInputModel.CurrentQueryString = context.Request.Url.Query;
 
             // Facets
@@ -87,8 +87,6 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Facets.Add("ItemType", query.ItemType);
             if (query.SpeciesType.HasValue)
                 searchInputModel.Facets.Add("SpeciesType", query.SpeciesType);
-            if (query.SpeciesEndemicity.HasValue)
-                searchInputModel.Facets.Add("SpeciesEndemicity", query.SpeciesEndemicity);
             if (query.SpecimenScientificGroup.HasValue)
                 searchInputModel.Facets.Add("SpecimenScientificGroup", query.SpecimenScientificGroup);
             if (query.DisplayLocation.HasValue)
@@ -131,6 +129,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Terms.Add("MuseumLocation", query.MuseumLocation);
             if (query.Article.HasValue)
                 searchInputModel.Terms.Add("Article", query.Article);
+            if (query.SpeciesEndemicity.HasValue)
+                searchInputModel.Terms.Add("SpeciesEndemicity", query.SpeciesEndemicity);
 
             // Add Cookies
             searchInputModel.Cookies.Add(new NancyCookie("perPage", searchInputModel.PerPage.ToString(), true, false, DateTime.Now.AddMonths(3)) { Path = "/search" });

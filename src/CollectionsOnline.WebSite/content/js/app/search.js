@@ -30,16 +30,16 @@ module.exports = {
     this.$pageInput.on('change', this.gotoPage.bind(this));
     
     // Search filter
-    this.$searchFilterButton.on('click', this.toggleSearchFilter.bind(this));
+    this.$searchFilterButton.on('click keydown', this.toggleSearchFilter.bind(this));
     
     // Search menu button
-    this.$searchMenuButton.on('click', this.toggleSearchButton.bind(this));
+    this.$searchMenuButton.on('click keydown', this.toggleSearchButton.bind(this));
     
     // Add search term button
-    this.$searchAddButton.on('click', this.addSearchTerm.bind(this));
+    this.$searchAddButton.on('click keydown', this.addSearchTerm.bind(this));
     
     // Facets
-    this.$facets.on('click', this.toggleFacets.bind(this));
+    this.$facets.on('click keydown', this.toggleFacets.bind(this));
   },
   gotoPage: function (e) {
     var page = $(e.target).val().replace(/\D/g, '');
@@ -55,40 +55,46 @@ module.exports = {
       location.search = queryString.stringify(query);
     }
   },
-  toggleSearchFilter: function() {
-    this.$searchFilter.toggleClass('disabled');
+  toggleSearchFilter: function (e) {
+    if(e.keyCode == 13 || e.type == 'click')
+      this.$searchFilter.toggleClass('disabled');
   },
-  toggleSearchButton: function () {
-
-    if (!$('#search-bar').hasClass('search')) {
-      $('#search-bar').toggle();
-      $('#search-button-icon').toggleClass('icon-search-header');
-      $('#search-button-icon').toggleClass('icon-search-close');
+  toggleSearchButton: function (e) {
+    if (e.keyCode == 13 || e.type == 'click') {
+      if (!$('#search-bar').hasClass('search')) {
+        $('#search-bar').toggle();
+        $('#search-button-icon').toggleClass('icon-search-header');
+        $('#search-button-icon').toggleClass('icon-search-close');
+      }
     }
   },
   toggleFacets: function (e) {
-    var facetGroup = $(e.target).parent().parent();
+    if (e.keyCode == 13 || e.type == 'click') {
+      var facetGroup = $(e.target).parent().parent();
 
-    facetGroup.toggleClass('collapsed');
+      facetGroup.toggleClass('collapsed');
+    }
   },
-  addSearchTerm: function() {
-    var searchQuery = $('#search-bar input').val();
-    if (searchQuery) {
-      var querystring = queryString.parse(location.search);
+  addSearchTerm: function () {
+    if (e.keyCode == 13 || e.type == 'click') {
+      var searchQuery = $('#search-bar input').val();
+      if (searchQuery) {
+        var querystring = queryString.parse(location.search);
 
-      if (!querystring.hasOwnProperty('query'))
-        querystring.query = searchQuery;
-      else if (Array.isArray(querystring.query))
-        querystring.query.push(searchQuery);
-      else {
-        querystring.query = [querystring.query, searchQuery];
+        if (!querystring.hasOwnProperty('query'))
+          querystring.query = searchQuery;
+        else if (Array.isArray(querystring.query))
+          querystring.query.push(searchQuery);
+        else {
+          querystring.query = [querystring.query, searchQuery];
+        }
+
+        // remove empty strings
+        if (Array.isArray(querystring.query))
+          querystring.query = querystring.query.filter(Boolean);
+
+        location.search = queryString.stringify(querystring);
       }
-      
-      // remove empty strings
-      if (Array.isArray(querystring.query))
-        querystring.query = querystring.query.filter(Boolean);
-
-      location.search = queryString.stringify(querystring);
     }
   }
 };

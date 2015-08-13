@@ -1,15 +1,8 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
-using CollectionsOnline.WebSite.Queries;
 using Nancy;
 using Nancy.Metadata.Modules;
-using Newtonsoft.Json;
-using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Modules.Api
 {

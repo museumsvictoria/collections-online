@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /search
+Allow: /
+
+Sitemap: http://collections.museumvictoria.com.au/sitemap.xml

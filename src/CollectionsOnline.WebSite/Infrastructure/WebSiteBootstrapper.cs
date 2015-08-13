@@ -6,6 +6,7 @@ using CollectionsOnline.WebSite.Transformers;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
+using Nancy.Conventions;
 using Nancy.Json;
 using Newtonsoft.Json;
 using Ninject;
@@ -74,6 +75,14 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
             // Automapper configuration
             AutomapperConfig.Initialize();
+        }
+
+        protected override void ConfigureConventions(NancyConventions conventions)
+        {
+            base.ConfigureConventions(conventions);
+
+            conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddFile("/robots.txt", "/robots.txt"));
+            conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("", "sitemaps"));
         }
     }
 }

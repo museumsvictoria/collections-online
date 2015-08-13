@@ -1,6 +1,5 @@
 ﻿using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models;
-using Nancy;
 
 namespace CollectionsOnline.WebSite.Factories
 {
@@ -10,8 +9,18 @@ namespace CollectionsOnline.WebSite.Factories
 
         MetadataViewModel Make(Collection collection);
 
+        MetadataViewModel Make(Item item);
+
+        MetadataViewModel Make(Species species);
+
+        MetadataViewModel Make(Specimen specimen);
+
         MetadataViewModel MakeHomeIndex();
 
         MetadataViewModel MakeCollectionIndex();
+
+        MetadataViewModel MakeDevelopersIndex();
+
+        MetadataViewModel MakeSearchIndex();
     }
 }

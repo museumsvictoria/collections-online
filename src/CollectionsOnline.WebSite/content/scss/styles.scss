@@ -33,6 +33,10 @@ header {
 	overflow: hidden;
 }
 
+a:focus, button:focus, input:focus {
+    outline:thin dotted;
+}
+
 .brand {
     color: #fff;
     display: inline-block;
@@ -1061,6 +1065,7 @@ button.icon {
             .icon {
                 color:$color-sub-heading;
                 display: inline-block;
+                margin:10px 0 3px;
             }
 
             strong {
