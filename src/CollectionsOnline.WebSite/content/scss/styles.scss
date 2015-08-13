@@ -17,6 +17,13 @@ a {
    // color: $color-links;
     color: inherit;
     text-decoration:none;
+        @include gridle_state("print"){
+                  &[href^=http]:after {
+              content:" <" attr(href) "> ";
+           }
+
+           }
+
 }
 
 header {
@@ -44,6 +51,11 @@ header {
         width:100%;
         
     }
+
+    @include gridle_state("print"){
+        color:black;
+    }
+
 }
 
 .brand span {
@@ -209,6 +221,9 @@ button.icon {
             font-weight:400;
             padding-right:4em;
             font-size:18pt;
+            color:black;
+            padding-top:0px;
+            padding-bottom:0px;
         }
 
 		& .item:before{
@@ -226,6 +241,9 @@ button.icon {
 		& .reg-number{
 			font-weight: 400;
             display:block;
+            @include gridle_state("print"){
+                color:black;
+            }
 
 		}
 
@@ -527,7 +545,10 @@ button.icon {
             margin: 1em 0 1.5em;
             line-height: 20px;
             height: 100px;
-
+            @include gridle_state("print"){
+                height:auto;
+                font-size:9pt;
+            }
             & .caption-text {
                 display: block;
             }
@@ -545,6 +566,9 @@ button.icon {
                 display: block;
                 font-size: 14px;
                 font-weight: 300;
+                @include gridle_state("print"){
+                   font-size:9pt;
+                }
             }
         }
         //end caption block
@@ -670,15 +694,17 @@ button.icon {
        	@include gridle(8);
 	    @include gridle ( 12 , 'tablet' );
 	    @include gridle ( 12 , 'mobile' );
-        @include gridle_state("print"){
-            width:100%;
-            padding-right:6em;
-            
-        }
+
 	    float:left;
 	    direction:ltr;
 	    padding-top: 50px;
 	    padding-right:20px;
+        @include gridle_state("print"){
+            width:100%;
+            //padding-right:0em;
+            padding-top: 10px;
+            
+        }
         
         & p {
 		    font-size: 17px;
@@ -687,7 +713,7 @@ button.icon {
 
             @include gridle_state("print"){
                 font-size:11pt;
-                line-height:normal;
+                line-height:15pt;
                 width:100%;
 
             }
@@ -701,6 +727,13 @@ button.icon {
 			    padding-left: 0px;
                 font-weight: 400;
 			    float: none;	
+
+                @include gridle_state("print"){
+                    font-weight:500;
+                    font-size: 11.5pt;
+                    line-height: 15pt;
+                }
+
 	    }
 	
 	   
@@ -719,7 +752,8 @@ button.icon {
 	            font-size: 22px;
                 font-weight: 400;
                 @include gridle_state(print){
-                    font-size:16pt;
+                    font-size:11.5pt;
+                    font-weight:500;
                 }
             }           
         }
@@ -729,6 +763,10 @@ button.icon {
           //  border-bottom:2px solid rgba(72, 141, 217, 0.5);
               border-bottom: 1px dotted;
               color: rgba(25, 102,93, 0.95);
+              @include gridle_state("print"){
+                  color:black;
+                  border-bottom: none;
+              }
               //white-space: nowrap;
             &:hover {
               border-bottom: 1px solid;
@@ -778,6 +816,10 @@ button.icon {
                     padding-right: 10px;
                     padding-bottom: 0px;
                     padding-left: 0px;
+                    @include gridle_state("print"){
+                        font-size: 11.5pt;
+                        line-height: 15pt;
+                    }
                 }
 
                & p {
@@ -789,6 +831,11 @@ button.icon {
                     margin:10px 0 0;
                     padding-left: 10px;
 
+                    @include gridle_state("print"){
+                        font-weight:300;
+                        font-size: 11.5pt;
+                        line-height: 15pt;
+                    }
                 }                 
                 
           }
@@ -802,6 +849,9 @@ button.icon {
 
     & aside:first-of-type{
         margin-top:50px;
+        @include gridle_state("print"){
+            margin-top:0px;
+        }
     }
 
 
@@ -981,13 +1031,20 @@ button.icon {
 
          .cite {
 
-
+    /*             @include gridle_state("print"){
+                 position:fixed;
+                 bottom:0;
+             }
+    */
             h4 {
             /*    color:$color-sub-heading;
                 font-weight:400;
                 font-size:1.6em;
                 margin:0.6em 0;
                 */
+                @include gridle_state("print"){
+                    font-size:9pt;
+                }
             }
 
             p {
@@ -995,6 +1052,10 @@ button.icon {
                 margin:0 0 20px 0px;
                 line-height: 1.4;
                 word-wrap:break-word;
+                
+                @include gridle_state("print"){
+                  running-head: section;
+                }
             }
             
             .icon {
@@ -1215,6 +1276,12 @@ button.icon {
 
     @include gridle_state(mobile) {
         display: block;
+        margin-top: 0px;
+    }
+
+    @include gridle_state("print"){
+
+        display:block;
         margin-top: 0px;
     }
 
@@ -1475,8 +1542,12 @@ button.icon {
         }
 
         .active-facets {
-            @include gridle_hide("print");
+            //@include gridle_hide("print");
             padding: 20px 0 0 20px;
+
+            @include gridle_state("print"){
+                padding: 0 0 0 10px;
+            }
 
             a {
                 color: $colour-bodytext;
@@ -1806,6 +1877,21 @@ button.icon {
             clear: both;
             padding-left: 10px;
             width: 100%;
+            @include gridle_state("print"){
+                display:block;
+         
+               & .tile.full{
+                   border-top:1px solid black;
+                   border-bottom:1px solid black;
+                   page-break-inside:avoid;
+                   padding-left:0;
+                    } 
+
+               & .tile a{
+                   margin-bottom:0px;
+               }
+             }
+
 
             &.grid {
                 & .tile {
@@ -1912,12 +1998,16 @@ button.icon {
                                                 height:auto;
                                             }
                                         }
+
+
+
                                     & .tileimages{
                                         display:none;
                                     }
                                         
                                     & .title{
                                         height:auto;
+                                       
                                         & .heading{
                                             font-size: 16px;
                                             padding-bottom: 8px;
@@ -1948,6 +2038,36 @@ button.icon {
                                         }
 
                                     }
+                                    
+                                    @include gridle_state("print"){
+                                            & .title{
+
+                                                padding-left:0;
+                                                padding-bottom:5px;
+                                                & .heading{
+                                                    padding-bottom:0;
+                                                }
+
+                                                & .regnum{
+
+                                                    padding-bottom:0;
+                                                }
+
+                                                & .description{
+
+                                                    & h5 {
+                                                        padding-bottom:0;
+                                                    }
+                                                }
+                                            }
+
+                                            & .tile-tag{
+                                                padding-left:0;
+                                            }
+
+
+                                        }
+                                    
                                     }
 
             }  
@@ -2062,9 +2182,12 @@ button.icon {
     display: none;
     z-index:100;
     clear:both;
+    @include gridle_hide("print");
+
     &.active {
         display: block;
-        
+        @include gridle_hide("print");      
+
         &.search{
             clear:both;
             margin-left: 300px;
@@ -2109,6 +2232,8 @@ button.icon {
         height: 70px;
         padding: 0 20px;
         background: $colour-primary-green;
+            @include gridle_hide("print");
+
         #search & {
             left: 350px;
             margin-left: 300px;
@@ -2167,6 +2292,7 @@ button{
         height:50vh;
         background-size: cover;
     }
+    @include gridle_hide("print");
     @include display-flex();
     @include align-items-flex-end();    
 
@@ -2976,9 +3102,15 @@ footer {
 	color:$colour-heading-inverted;
 	padding-top:32px;
 	font-weight: 400;
+    @include gridle_state("print"){
+        padding-top:0px;
+    }
 	& .wrapper{
 		padding-bottom: 30px;
         padding-left: 10px;
+        @include gridle_state("print"){
+            padding-bottom:0px;
+        }
 	}
 	
 	& .logos {
@@ -3876,3 +4008,23 @@ footer {
 
    
 }
+
+//Print styles
+
+@page{
+
+   margin:1cm 1.5cm 3cm;
+   
+
+  @bottom-left {
+    margin: 10pt 0 30pt 0;
+    border-top: .25pt solid #666;
+    content: "My book";
+    font-size: 9pt;
+    color: #333;
+    }
+
+  a[href^=http]:after {
+      content:" <" attr(href) "> ";
+   }
+}  
