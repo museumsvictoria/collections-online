@@ -267,6 +267,14 @@
     line-height: 0;
 }
 
+.icon-zero:before {
+    font-family: "mv-collections";
+    content: "\e624";
+    font-size: 1.7em;
+    vertical-align: -0.3em;
+    line-height: 0;
+}
+
 /* Headings */
 /*Further Reading: http:/csswizardry.com/2012/02/pragmatic-practical-font-sizing-in-css/ */
 h1, .alpha   { 

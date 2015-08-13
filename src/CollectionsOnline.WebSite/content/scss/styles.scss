@@ -26,6 +26,10 @@ header {
 	overflow: hidden;
 }
 
+a:focus, button:focus, input:focus {
+    outline:thin dotted;
+}
+
 .brand {
     color: #fff;
     display: inline-block;
@@ -3872,7 +3876,5 @@ footer {
                     color: rgba(25, 102,93, 1);
                 }
             }       
-    }
-
-   
+    }   
 }

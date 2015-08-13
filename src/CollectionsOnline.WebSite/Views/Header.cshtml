@@ -5,7 +5,7 @@
         <a @((RenderContext.Context.ResolvedRoute.Description.Name == "developers-index") ? Html.Raw("class=\"active\"") : null) href="/developers">Our API</a>        
         @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
         {
-            <a href="#" class="button-search @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? "search" : null)">
+            <a class="button-search @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? "search" : null)" tabindex="0">
                 <span id="search-button-icon" aria-hidden="true" class="icon-search-header"></span>
                 <span class="search-text">Search</span>
             </a>
