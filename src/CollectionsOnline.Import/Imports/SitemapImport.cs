@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
 using CollectionsOnline.Core.Indexes;
@@ -70,7 +71,7 @@ namespace CollectionsOnline.Import.Imports
 
                     skip += Constants.PagingStreamSize;
 
-                    if (count == queryHeaderInformation.TotalResults)
+                    if (count == 100000)
                         break;
                 }
             }
@@ -78,6 +79,11 @@ namespace CollectionsOnline.Import.Imports
             // Add the last sitemapNodes to our index
             if(sitemapNodes.Any())
                 sitemapNodeIndexes.Add(sitemapNodes);
+
+            // Create destination folder
+            var directoryInfo = new DirectoryInfo(string.Format("{0}\\sitemaps", ConfigurationManager.AppSettings["WebSitePath"]));
+            if (!directoryInfo.Exists)
+                directoryInfo.Create();
 
             // Create then save sitemaps as xml
             count = 0;
@@ -109,10 +115,11 @@ namespace CollectionsOnline.Import.Imports
                     sitemapUrlset.Add(sitemapUrl);
                 }
 
-                // Save sitemap urlset
-                using (var writer = new StreamWriter(string.Format("{0}\\sitemaps\\sitemap-set-{1}.xml", ConfigurationManager.AppSettings["WebSitePath"], count), false, utf8WithoutBom))
+                // Save sitemap set with gzip compression
+                using (var file = File.Create(string.Format("{0}\\sitemaps\\sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["WebSitePath"], count)))
+                using (var gzip = new GZipStream(file, CompressionMode.Compress, false))
                 {
-                    sitemapUrlset.Save(writer);
+                    sitemapUrlset.Save(gzip);
                 }
             }
 
