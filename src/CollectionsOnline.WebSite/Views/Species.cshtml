@@ -8,7 +8,7 @@
 <div id="title">
     <div class="wrapper">
         @Html.Partial("MediaTypes", Model.Species.Media.WithThumbnails())
-        <h1>
+        <h1 id="maincontent">
             <span class="species"></span>
             @Html.Raw(Model.Species.DisplayTitle)
         </h1>

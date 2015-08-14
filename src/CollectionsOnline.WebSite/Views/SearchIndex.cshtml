@@ -77,7 +77,7 @@
                     <a href="@suggestion.Url">@suggestion.Suggestion</a>
                 }
             </div>
-        }
+        }        
         @if (Model.Results.Any())
         { 
             <div class="pagination">                
@@ -120,8 +120,8 @@
                         <a href="@Model.DefaultPerPageButton.Url" class="button first @(Model.DefaultPerPageButton.Active ? "active" : "")" title="@Constants.PagingPerPageDefault records per page">@Model.DefaultPerPageButton.Name</a><a href="@Model.MaxPerPageButton.Url" class="button last @(Model.MaxPerPageButton.Active ? "active" : "")" title="@Constants.PagingPerPageMax records per page">@Model.MaxPerPageButton.Name</a>
                     </div>
                 </div>
-            </div>
-            <div class="results-area @(Model.ListViewButton.Active ? "list" : "")@(Model.GridViewButton.Active ? "grid" : "")@(Model.DataViewButton.Active ? "data" : "") ">
+            </div>    
+            <div id="maincontent" class="results-area @(Model.ListViewButton.Active ? "list" : "")@(Model.GridViewButton.Active ? "grid" : "")@(Model.DataViewButton.Active ? "data" : "") ">
                 @foreach (var result in Model.Results)
                 {
                     @Html.Partial("emutile", result)
@@ -146,7 +146,7 @@
         }
         else
         {
-            <div class="noresults">
+            <div id="maincontent" class="noresults">
                 <div class="pagination">
                     <div class="numbers">
                         <div class="counts">@Model.TotalResults.ToString("N0") results</div>

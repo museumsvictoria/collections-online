@@ -3885,3 +3885,19 @@ footer {
             }       
     }   
 }
+
+.skipto {
+    display:block;
+    position:absolute;
+    top:-40px;
+    left:50%;
+    color:white;
+    width:160px;
+    font-size:16px;
+    margin-left:-80px;
+    text-align:center;
+
+    &:focus {
+        top:0;
+    }
+}

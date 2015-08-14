@@ -12,7 +12,7 @@
 <div id="title">
     <div class="wrapper">
         @Html.Partial("MediaTypes", Model.Specimen.Media.WithThumbnails())
-        <h1>
+        <h1 id="maincontent">
             <span class="reg-number specimen">Specimen @Model.Specimen.RegistrationNumber</span>
             @Html.Raw(Model.Specimen.DisplayTitle)
         </h1>

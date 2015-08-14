@@ -1,4 +1,5 @@
-﻿<header>
+﻿<a class="skipto" href="#maincontent">Skip to main content</a> 
+<header>
     <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
     <nav>
         <a @((RenderContext.Context.ResolvedRoute.Description.Name == "collection-index") ? Html.Raw("class=\"active\"") : null) href="/collections">Our collections</a>

@@ -8,13 +8,11 @@
 </div>
 <div id="collarea" class="container">
     <span class="collcategory">@Model.Collection.Category</span>
-    <div class="colldesc">
+    <div id="maincontent" class="colldesc">
         <h1>@Model.Collection.DisplayTitle</h1>
         <p>@Html.ConvertNewlines(Model.Collection.CollectionSummary)</p>
         <h2>Significance</h2>
-        @Html.Raw(Model.Collection.Significance)
-
-  
+        @Html.Raw(Model.Collection.Significance)  
     </div>
     <div class="sidecolumn">
         @if (!string.IsNullOrWhiteSpace(Model.Collection.CollectingArea))
@@ -23,9 +21,7 @@
                 <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Collection.CollectingArea)" class="seeall">See all items in this collection</a>
             </div>
         }
-
     </div>
-
     <div class="sidecolumn">
         @Html.Partial("SocialLinks")
     </div>
@@ -66,39 +62,35 @@
             </div>
         </div>
     </div>
-
 </div>
 @if (Model.SubCollectionArticles.Any())
-{   <div id="subcoll"> 
-    <div class="container">
-    <div class="subcoll">
-    
-            <h2>Some key sub-collections</h2>
-            @foreach (var subCollectionArticle in Model.SubCollectionArticles)
-            {
-                @Html.Partial("emutile", subCollectionArticle)
-            }
-       
+{   <div id="subcoll">
+        <div class="container">
+            <div class="subcoll">
+                <h2>Some key sub-collections</h2>
+                @foreach (var subCollectionArticle in Model.SubCollectionArticles)
+                {
+                    @Html.Partial("emutile", subCollectionArticle)
+                }
+            </div>
+        </div>
     </div>
-     </div>
-   </div>
 }
 @if (Model.FavoriteItems.Any())
 {
     <div id="favorites">
-     <div class="container">
-         <div class="favorites">
-       
-            <h2>Our Favourite Items</h2>
-            @foreach (var favoriteItem in Model.FavoriteItems)
-            {
-                @Html.Partial("emutile", favoriteItem)
-            }
-            @foreach (var favoriteSpecimens in Model.FavoriteSpecimens)
-            {
-                @Html.Partial("emutile", favoriteSpecimens)
-            }
+        <div class="container">
+            <div class="favorites">
+                <h2>Our Favourite Items</h2>
+                @foreach (var favoriteItem in Model.FavoriteItems)
+                {
+                    @Html.Partial("emutile", favoriteItem)
+                }
+                @foreach (var favoriteSpecimens in Model.FavoriteSpecimens)
+                {
+                    @Html.Partial("emutile", favoriteSpecimens)
+                }
+            </div>
         </div>
-    </div>
     </div>
 }
