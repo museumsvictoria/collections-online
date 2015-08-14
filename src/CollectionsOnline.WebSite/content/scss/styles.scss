@@ -1063,9 +1063,12 @@ button.icon {
                 line-height: 1.4;
                 word-wrap:break-word;
                 
-                @include gridle_state("print"){
-                  running-head: section;
-                }
+
+            }
+
+            & a.textlink{
+                text-decoration:underline;
+
             }
             
             .icon {
