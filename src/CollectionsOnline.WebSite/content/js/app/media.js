@@ -41,15 +41,32 @@ module.exports = {
     if (this.Model[0].$type.indexOf('VideoMedia') > 0) {
       video.init();
     }
-    this.$thumbs.on('click', 'img', this.select.bind(this));
+    this.$thumbs.on('click keydown', 'img', this.select.bind(this));    
     this.$fullscreenButton.on('click', this.toggleFullscreen.bind(this));
-    this.$previous.on('click', { direction: "previous" }, this.moveTo.bind(this));
-    this.$next.on('click', { direction: "next" }, this.moveTo.bind(this));
+    this.$previous.on('click keydown', { direction: "previous" }, this.moveTo.bind(this));
+    this.$next.on('click keydown', { direction: "next" }, this.moveTo.bind(this));
+
+    $(document).on('keydown', this.handleKey.bind(this));
   },
-  select: function(e) {
-    this.$activeMedia.removeClass('active');
-    this.$activeMedia = $(e.target).addClass('active');
-    this.switchMedia($(e.target).parent().index());
+  handleKey: function (e) {
+    switch (e.which) {
+      case 37: // left arrow
+        this.$previous.triggerHandler('click');
+        break;
+      case 39: // right arrow
+        this.$next.triggerHandler('click');
+        break;
+      case 70: // f
+        this.toggleFullscreen();
+      default: return;
+    }
+  },
+  select: function (e) {
+    if (e.keyCode == 13 || e.type == 'click') {
+      this.$activeMedia.removeClass('active');
+      this.$activeMedia = $(e.target).addClass('active');
+      this.switchMedia($(e.target).parent().index());
+    }
   },
   toggleFullscreen: function () {
     if (!this.$fullscreenButton.hasClass('disabled')) {
@@ -113,25 +130,40 @@ module.exports = {
       this.$mediaArea.toggleClass('expanded');
     }
   },
-  moveTo: function(e) {
-    var moveToIndex = this.$activeMedia.parent().index();
-    
-    if(e.data.direction == "previous")
-      moveToIndex--;
-    else if (e.data.direction == "next")
-      moveToIndex++;
+  moveTo: function (e) {
+    if (e.keyCode == 13 || e.type == 'click') {
+      var moveToIndex = this.$activeMedia.parent().index();
 
-    if (moveToIndex >= 0 && moveToIndex < this.Model.length) {
-      this.$activeMedia.removeClass('active');
-      this.$activeMedia = $('img', this.$thumbs.get(moveToIndex)).addClass('active');
+      if (e.data.direction == "previous")
+        moveToIndex--;
+      else if (e.data.direction == "next")
+        moveToIndex++;
 
-      this.switchMedia(moveToIndex);
+      if (moveToIndex >= 0 && moveToIndex < this.Model.length) {
+        this.$activeMedia.removeClass('active');
+        this.$activeMedia = $('img', this.$thumbs.get(moveToIndex)).addClass('active');
+
+        this.switchMedia(moveToIndex);
+      }
     }
   },
   switchMedia: function (index) {
     var $this = this;
-    this.$next.toggleClass('inactive', index == this.Model.length - 1);
-    this.$previous.toggleClass('inactive', index == 0);
+    if (index == this.Model.length - 1) {
+      this.$next.addClass('inactive');
+      this.$next.attr('tabindex', -1);
+    } else {
+      this.$next.removeClass('inactive');
+      this.$next.attr('tabindex', 0);
+    }
+    
+    if (index == 0) {
+      this.$previous.addClass('inactive');
+      this.$previous.attr('tabindex', -1);
+    } else {
+      this.$previous.removeClass('inactive');
+      this.$previous.attr('tabindex', 0);
+    }
 
     var newMedia = this.Model[index];
 
@@ -168,7 +200,7 @@ module.exports = {
         $this.switchCaption(newMedia);
         video.init();
       });
-    }           
+    }
   },
   switchCaption: function(media) {
     (media.Caption) ? this.$heroCaption.html(media.Caption) : this.$heroCaption.empty();

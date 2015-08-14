@@ -12,9 +12,9 @@
         <div class="facets">
             @foreach (var facet in Model.Facets)
             {
-                <div class="facetgroup@((facet.Values.Any(x => x.Active)) ? null : " collapsed")" tabindex="0">
+                <div class="facetgroup@((facet.Values.Any(x => x.Active)) ? null : " collapsed")">
                     <div class="facetheader">
-                        <h4>@facet.Name</h4>
+                        <h4 tabindex="0">@facet.Name</h4>
                     </div>
                     <div class="facetitems">
                     @foreach (var value in facet.Values)

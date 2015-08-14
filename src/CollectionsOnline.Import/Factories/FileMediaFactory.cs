@@ -58,8 +58,15 @@ namespace CollectionsOnline.Import.Factories
                     // Load file stream
                     var fileStream = resource["file"] as FileStream;
 
+                    var destPath = PathFactory.MakeDestPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None);
+
+                    // Create destination folder
+                    var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(destPath));
+                    if (!directoryInfo.Exists)
+                        directoryInfo.Create();
+
                     // Save file stream
-                    using (var file = File.OpenWrite(PathFactory.MakeDestPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None)))
+                    using (var file = File.OpenWrite(destPath))
                     {
                         fileStream.CopyTo(file);
                         fileStream.Dispose();

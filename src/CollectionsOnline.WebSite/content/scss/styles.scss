@@ -386,6 +386,8 @@ button.icon {
             padding: 0 0 7px 7px;
             position: relative;
             overflow:hidden;
+            
+            
 
             .video-overlay {
                 position:absolute;
@@ -399,6 +401,10 @@ button.icon {
                 display: block;
                 opacity: 0.5;
                 width: 100%;
+
+                &:focus {
+                    outline:thin dotted;
+                }
 
                 &.active {
                     box-sizing: border-box;

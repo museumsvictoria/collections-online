@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
@@ -103,8 +104,9 @@ namespace CollectionsOnline.WebSite.Queries
                 result.LatLongs = result.Specimen.Latitudes.Zip(result.Specimen.Longitudes, (lat, lon) => new[] { double.Parse(lat), double.Parse(lon) }).ToList();
             }            
 
-            // Uris
-            if (result.Specimen.Taxonomy != null)
+            // Add Uris for everything except Paleo and Geology
+            if (result.Specimen.Taxonomy != null &&
+                !(string.Equals(result.Specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(result.Specimen.ScientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)))
             {
                 result.Specimen.Media.Add(new UriMedia
                 {
