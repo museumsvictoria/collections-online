@@ -47,7 +47,7 @@ a:focus, button:focus, input:focus {
     text-decoration: none;
     text-transform: uppercase;
 
-    @include gridle_state(mobile) {
+    @include gridle_state('mobile') {
         line-height: 25px;
         padding-top: 5px;
         padding-bottom: 5px;
@@ -2311,12 +2311,12 @@ button{
         display: -moz-box;
         @include display-flex();
 
-        @include gridle-state('tablet') {
+        @include gridle_state('tablet') {
             padding: 0 40px;
             
         }
 
-        @include gridle-state('mobile') {
+        @include gridle_state('mobile') {
             padding: 0px 40px;
             height: 88px;
         }
@@ -2338,11 +2338,11 @@ button{
         -webkit-align-items: center;
         margin: auto;
 
-        @include gridle-state('tablet') {
+        @include gridle_state('tablet') {
             width: 100%;
         }
 
-        @include gridle-state('mobile') {
+        @include gridle_state('mobile') {
             width: 100%;
         }
 
@@ -2486,6 +2486,7 @@ button{
             margin-top:15px;
             margin-bottom: 15px;
         }
+        @include gridle_hide("print");
         direction: ltr;
         background-color: #f6f6f6;
         border-radius: 3px;
@@ -2587,6 +2588,22 @@ button{
         font-weight: 500;
         margin-bottom: 2px;
     }
+    
+    @include gridle_state("print"){
+        & h1{
+            font-size:16pt;
+        }
+
+        & h2 {
+            font-size:16pt;
+        }
+        & p{
+            font-size: 11.5pt;
+            line-height: normal;
+            margin-bottom: 11.5pt;
+        }
+    }
+
 }
 
 .documentation {
@@ -2634,6 +2651,7 @@ button{
         margin: 10px;
         vertical-align: middle;
         width: 100%;
+        page-break-inside: avoid;
     }
 
     & td {
@@ -2645,6 +2663,27 @@ button{
         border: 1px solid #666;
         padding: 5px;
     }
+
+    @include gridle_state("print"){
+        width: 100%;
+        right:0;
+
+        & p {
+            font-size:11.5pt;
+            line-height: normal;
+            margin-bottom:11.5pt;
+         }
+
+         & code, kbd, pre, samp{
+            font-size: 9pt;
+        }
+
+         & pre{
+             padding: 0 10px;
+     
+         }
+    }
+
 }
 
 // Blocks
@@ -2952,7 +2991,7 @@ $padding-side: 3%;
     direction: ltr;
     margin-bottom: 20px;
     position: relative;
-
+    page-break-inside: avoid;
     & img {
         width: 100%;
         height: 50%;
@@ -2983,6 +3022,8 @@ $padding-side: 3%;
     direction: ltr;
     margin-bottom: 25px;
     color:$colour-bodytext;
+    page-break-inside: avoid;
+
     .collectionareas & {
         @include gridle (4);
         @include gridle (6, tablet);
@@ -3053,6 +3094,18 @@ $padding-side: 3%;
             font-weight: 300;
         }
     }
+
+    @include gridle_state("print"){
+
+        & .title{
+
+            & .description{
+                font-size:9pt;
+                line-height: normal;
+            }
+        }
+    }
+
 }
 
 #map {
@@ -3263,6 +3316,7 @@ footer {
     height:300px;
     position:relative;
     background: url("/content/img/bg-collection-hero.jpg") no-repeat center center / cover;
+    @include gridle_hide("print");
 
     &.geology {
         background: url("/content/img/bg-collection-hero-geology.jpg") no-repeat center center;
@@ -3361,13 +3415,25 @@ footer {
         & h3
         {
             padding-bottom: 15px;
+        
         }
+        @include gridle_state("print"){
+            width: 100%;
+            max-width: none;
+
+
+        }
+
+
+
 	}
 	& .aboutcontent{
 		width:66.6667%;
         @include gridle(12,"tablet");
         @include gridle(12, "mobile");
-        
+        @include gridle_state("print"){
+            width:100%;
+        }
         & h1{
         float: none;
         font-size: 22px;
@@ -3391,9 +3457,39 @@ footer {
         word-wrap: break-word;
         padding-left: 0px;
         }
+        @include gridle_state("print"){
+            & h1{
+                font-size:16pt;
 
+            }
+            & h2{
+                font-size:11.5pt;
+                font-weight: 500;
+            }
+            & p{
+                font-size: 11.5pt;
+                line-height: 15pt;
+                margin-bottom: 11.5pt;
+            }
+        }
 
 	}
+
+    @include gridle_state("print"){
+        & h2 {
+            font-size: 11.5pt;
+            font-weight: 500;
+        }
+        & h3{
+            font-size: 11.5pt;
+            font-weight: 500;
+        }
+        & p{
+            font-size: 11.5pt;
+            line-height: 15pt;
+            margin-bottom: 15pt;
+        }
+    }
 }
 
 #collarea {
@@ -3434,6 +3530,7 @@ footer {
 			position: absolute;
 			top: -115px;
 			width: 100%;
+            @include gridle_hide("print");
     }
     & .colldesc {
         @include gridle(8);
@@ -3520,7 +3617,7 @@ footer {
 
 
     & .seeallcontainer{
-   
+        @include gridle_hide("print");
         background: $colour-background-lightest none repeat scroll 0 0;
         border-radius: 3px;
         display: block;
@@ -3541,7 +3638,31 @@ footer {
             }
         }
 
+    @include gridle_state("print"){
 
+        & h1{
+            font-size: 16pt;
+            line-height: 21pt;
+        }
+
+        & h2{
+            font-size:11.5pt;
+            font-weight:500;
+        }
+        & p{
+            font-size: 11.5pt;
+            line-height: 15pt;
+            margin-bottom: 15pt;
+        }
+        & .sidecolumn{
+            width:100%;
+            border-bottom: none;
+            padding:0 0 0 10px;
+        }
+        & .colldesc{
+            width: 100%;
+        }
+    }
 }
 
 #subcoll{
@@ -3567,6 +3688,16 @@ footer {
 
         & .tile.full{
             @include gridle(3);
+            page-break-inside: avoid;
+        }
+
+        @include gridle_state("print"){
+
+            padding-top:0;
+
+            & h2{
+                font-size: 16pt;
+            }
         }
 
     }
@@ -3593,6 +3724,13 @@ footer {
 
         & .tile.full{
             @include gridle(3);
+            page-break-inside: avoid;
+        }
+    }
+    @include gridle_state("print"){
+        padding-top:0;
+        & h2{
+            font-size: 16pt;
         }
     }
 }
@@ -3603,11 +3741,11 @@ footer {
 
 .home .container
 {
-	@include gridle-state('tablet'){
+	@include gridle_state('tablet'){
 			padding-left:20px;
 			padding-right:20px;
 	}
-	@include gridle-state('mobile'){
+	@include gridle_state('mobile'){
 			padding-left: 20px;
 			padding-right: 20px
 	}
@@ -3632,32 +3770,36 @@ footer {
 			width:100%;
 		}
 		
+
+
 		& .wrapper{
-			@include gridle-state('tablet'){
+			@include gridle_state('tablet'){
 				width: 100%;
 				position:relative;
 				display:block;
 			}
-			@include gridle-state('mobile'){
+			@include gridle_state('mobile'){
 				width: 100%;
 				position:relative;
 				display:block;
 			}
+
 		}
 		
 		& img {
-			@include gridle-state('tablet'){
+			@include gridle_state('tablet'){
 				width:50%;
 				display: block;
 			}
-			@include gridle-state('mobile'){
+			@include gridle_state('mobile'){
 				width:50%;
 				display: block;
 			}
+
 		}
 		.tile-tag{
 			
-		@include gridle-state('tablet'){
+		@include gridle_state('tablet'){
 				left:50%;
 			    right: 0;
 			    top: 0;
@@ -3668,7 +3810,7 @@ footer {
                 @include display-flex;
 
 			}
-		@include gridle-state('mobile'){
+		@include gridle_state('mobile'){
 				left:50%;
 			    right: 0;
 			    top: 0;
@@ -3680,7 +3822,11 @@ footer {
                 padding-top:10%;
 
 			}	
-			
+		
+        @include gridle_state("print"){
+            position:relative;
+            }
+        	
 		}
 		
 	}
@@ -3696,11 +3842,11 @@ footer {
 		margin-bottom: 25px;
 		font-size: 15px;
 		line-height: 20px;
-		@include gridle-state('tablet'){
+		@include gridle_state('tablet'){
 			
 			width: 100%;
 		}
-		@include gridle-state('mobile'){
+		@include gridle_state('mobile'){
 			width: 100%;
 		}
 	}
@@ -3709,6 +3855,28 @@ footer {
 		font-weight: 400;
         font-size:28px;
 	}
+
+    @include gridle_state("print"){
+        padding:0;
+    
+            & p{
+                width: 100%;
+                font-size:11.5pt;
+                line-height:normal;
+            }
+            & h2{
+                font-size:16pt;
+                line-height:normal;
+            }
+
+            & .tile{
+                & .desc{
+                    font-size:11.5pt;
+                    line-height:normal;
+                }
+
+            }
+        }
 }
 #venues-explore{
 	width:100%;
@@ -3727,6 +3895,15 @@ footer {
 		color: $colour-heading-inverted;
         font-size: 28px;
 	}
+
+    @include gridle_state("print"){
+
+        padding-bottom:0;
+
+        & h2{
+            font-size:16pt;
+        }
+    }
 }
 
 #recent-explore{
@@ -3739,7 +3916,7 @@ footer {
 		@include gridle(12, 'mobile');
         min-width:inherit;
         max-width:inherit;
-		
+		page-break-inside:avoid;
 	}
 	& h2{
 		margin-bottom: 25px;
@@ -3754,6 +3931,14 @@ footer {
 		font-size:1.5em; //probable 21px;
 		
 	}
+
+    @include gridle_state("print"){
+
+        & h2{
+            font-size:16pt;
+        }
+    }
+
 }
 
 #comments {
