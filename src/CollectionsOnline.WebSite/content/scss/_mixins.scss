@@ -98,7 +98,7 @@
 
 @mixin alignself-flexstart(){
     -webkit-align-self: flex-start;
-     -ms-align-self:flex-start;
+     -ms-align-self:start;
     align-self:flex-start;
 }
 
