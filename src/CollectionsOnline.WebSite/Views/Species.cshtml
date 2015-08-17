@@ -407,7 +407,6 @@
                 @Html.Partial("SocialLinks")
             </div>
             <div class="sidecolumn">
-
                 <div class="cite">
                     <h4>Cite this page</h4>
                     <p>@Html.RenderCitation(Model.Species)</p>
@@ -421,7 +420,7 @@
                             <span class="icon-label-hidden">BY</span>
                         </a><br />
                         Text content on this page is licensed under a <a class="textlink" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 licence</a>
-</p>
+                    </p>
                     @if (Model.Species.Authors.Any())
                     {
                         <h4>Authors</h4>
@@ -431,7 +430,7 @@
                                 <div class="author">
                                     @if (author.ProfileImage != null)
                                     {
-                                        <img src="@author.ProfileImage.Thumbnail.Uri" />
+                                        <img src="@author.ProfileImage.Thumbnail.Uri" alt="Image of @author.FirstName" />
                                     }
                                     <span class="authorname"><a href="/search?name=@HttpUtility.UrlEncode(author.FullName)">@author.FullName</a></span>
                                     <span class="authorbio">@author.Biography</span>
