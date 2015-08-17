@@ -15,7 +15,7 @@
     @if (RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
     {
         <div id="search-bar" @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? Html.Raw("class=\"search active\"") : null)>
-            <form method="GET" action="/search" role="form">
+            <form method="GET" action="/search" role="search">
                 @if (RenderContext.Context.ResolvedRoute.Description.Name == "search-index")
                 {
                     <input type="text" name="query" placeholder="enter new search term or add to existing search ..." />
@@ -26,13 +26,13 @@
                 }
                 <button class="search" type="submit">
                     <span class="icon-search" aria-hidden="true"></span>
-                    <span class="icon-label-hidden"></span>
+                    <span class="icon-label-hidden">Search</span>
                 </button>
                 @if (RenderContext.Context.ResolvedRoute.Description.Name == "search-index")
                 {
                     <button class="search-add" type="button">
                         <span class="icon-search-add" aria-hidden="true"></span>
-                        <span class="icon-label-hidden"></span>
+                        <span class="icon-label-hidden">Add search term</span>
                     </button>
                 }
             </form>

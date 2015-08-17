@@ -8,6 +8,25 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Search collections" />
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="/content/img/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/content/img/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/content/img/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/content/img/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="/content/img/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/content/img/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="/content/img/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/content/img/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="/content/img/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="/content/img/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="/content/img/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="/content/img/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="/content/img/favicon-128.png" sizes="128x128" />
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="/content/img/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="/content/img/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="/content/img/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="/content/img/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="/content/img/mstile-310x310.png" />
 @if(!string.IsNullOrWhiteSpace(metadata.CanonicalUri))
 { 
 <link rel="canonical" href="@metadata.CanonicalUri">
@@ -15,7 +34,7 @@
 <meta property="fb:app_id" content="@ConfigurationManager.AppSettings["FacebookAppId"]" />
 @if (!string.IsNullOrWhiteSpace(metadata.Description))
 {
-<meta property="description" content="@metadata.Description" />
+<meta name="description" content="@metadata.Description" />
 <meta property="og:description" content="@metadata.Description" />
 <meta property="twitter:description" content="@metadata.Description" />
 }

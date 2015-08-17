@@ -136,13 +136,31 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\img\apple-touch-icon-114x114.png" />
+    <Content Include="content\img\apple-touch-icon-120x120.png" />
+    <Content Include="content\img\apple-touch-icon-144x144.png" />
+    <Content Include="content\img\apple-touch-icon-152x152.png" />
+    <Content Include="content\img\apple-touch-icon-57x57.png" />
+    <Content Include="content\img\apple-touch-icon-60x60.png" />
+    <Content Include="content\img\apple-touch-icon-72x72.png" />
+    <Content Include="content\img\apple-touch-icon-76x76.png" />
     <Content Include="content\img\bg-error-404.jpg" />
     <Content Include="content\img\bg-error-500.jpg" />
     <Content Include="content\img\bg-home-hero-beetles.jpg" />
     <Content Include="content\img\bg-home-hero-image-making.jpg" />
     <Content Include="content\img\bg-home-hero-textiles.jpg" />
     <Content Include="content\img\bg-on-display-reb.png" />
+    <Content Include="content\img\favicon-128.png" />
+    <Content Include="content\img\favicon-16x16.png" />
+    <Content Include="content\img\favicon-196x196.png" />
+    <Content Include="content\img\favicon-32x32.png" />
+    <Content Include="content\img\favicon-96x96.png" />
     <Content Include="content\img\img-search-noresults.jpg" />
+    <Content Include="content\img\mstile-144x144.png" />
+    <Content Include="content\img\mstile-150x150.png" />
+    <Content Include="content\img\mstile-310x150.png" />
+    <Content Include="content\img\mstile-310x310.png" />
+    <Content Include="content\img\mstile-70x70.png" />
     <Content Include="content\js\app\video.js" />
     <Content Include="content\img\bg-collection-hero.jpg" />
     <Content Include="content\img\bg-collection-hero-geology.jpg" />
@@ -174,6 +192,7 @@
     <Content Include="content\js\app\media.js" />
     <Content Include="content\js\app\app.js" />
     <Content Include="content\js\lib\query-string.js" />
+    <Content Include="favicon.ico" />
     <Content Include="gulpfile.js" />
     <Content Include="opensearch.xml" />
     <Content Include="robots.txt" />
