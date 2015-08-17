@@ -75,7 +75,7 @@ module.exports = {
       facetGroup.toggleClass('collapsed');
     }
   },
-  addSearchTerm: function () {
+  addSearchTerm: function (e) {
     if (e.keyCode == 13 || e.type == 'click') {
       var searchQuery = $('#search-bar input').val();
       if (searchQuery) {

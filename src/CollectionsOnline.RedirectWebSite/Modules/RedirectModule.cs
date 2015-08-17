@@ -14,9 +14,9 @@ namespace CollectionsOnline.RedirectWebSite.Modules
 
             Get["/search"] = parameters => new RedirectResponse(string.Format("{0}search", canonicalSiteBase), RedirectResponse.RedirectType.Permanent);
 
-            Get["items/{id:int}/{name*}"] = parameters => new RedirectResponse(string.Format("{0}items/{1}", canonicalSiteBase, parameters.id), RedirectResponse.RedirectType.Permanent);
+            Get["/items/{id:int}/{name*}"] = parameters => new RedirectResponse(string.Format("{0}items/{1}", canonicalSiteBase, parameters.id), RedirectResponse.RedirectType.Permanent);
 
-            Get["themes/{id:int}/{name*}"] = parameters => new RedirectResponse(string.Format("{0}articles/{1}", canonicalSiteBase, parameters.id), RedirectResponse.RedirectType.Permanent);
+            Get["/themes/{id:int}/{name*}"] = parameters => new RedirectResponse(string.Format("{0}articles/{1}", canonicalSiteBase, parameters.id), RedirectResponse.RedirectType.Permanent);
 
             Get["/{everythingelse*}"] = parameters => new RedirectResponse(canonicalSiteBase, RedirectResponse.RedirectType.Permanent);
         }
