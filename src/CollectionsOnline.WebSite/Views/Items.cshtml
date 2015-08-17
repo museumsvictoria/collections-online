@@ -14,7 +14,7 @@
         </h1>
     </div>
 </div>
-<div id="record">
+<div id="record" role="main">
     <div class="wrapper">
         <section class="text-content">
             <div class="summary">
@@ -816,12 +816,11 @@
         </section>
         @Html.Partial("MuseumLocation", Model.Item.MuseumLocation)
         @Html.Partial("FileUriMedia", Model.Item.Media)
-        <aside class="side-content">
+        <aside class="side-content" role="complementary">
             <div class="sidecolumn">
                 @Html.Partial("SocialLinks")
             </div>
             <div class="sidecolumn">
-
                 <div class="cite">
                     <h4>Cite this page</h4>
                     <p>@Html.RenderCitation(Model.Item)</p>

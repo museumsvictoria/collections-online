@@ -22,9 +22,9 @@
     </script>
 </head>
 <body>
-    <header>
+    <header role="banner">
         <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
-        <nav>
+        <nav role="navigation">
             <a href="/collections">Our collections</a>
             <a href="/developers">Our API</a>
             <a href="#" class="button-search">
@@ -33,7 +33,7 @@
             </a>
         </nav>
         <div id="search-bar">
-            <form method="GET" action="/search" role="form">
+            <form method="GET" action="/search" role="search">
                 <input type="text" name="query" placeholder="enter search term ..." />
                 <button class="search" type="submit">
                     <span class="icon-search" aria-hidden="true"></span>
@@ -43,7 +43,7 @@
         </div>
     </header>
     @RenderBody()
-    <footer>
+    <footer role="contentinfo">
         <div class="wrapper">
             <div class="logos">
                 <img alt="Museum Victoria" src="/content/img/logo-mv.png">

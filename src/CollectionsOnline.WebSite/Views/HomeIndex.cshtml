@@ -4,7 +4,7 @@
 }
 <div id="hero" style="background-image: url('@Model.HomeHeroUri'); background-repeat: no-repeat; background-position:center;">
     <div class="search-area">
-        <form method="GET" action="/search" role="form">
+        <form method="GET" action="/search" role="search">
             <input type="text" name="query" placeholder="Enter a search term or leave blank to browse all records ..." />
             <button class="search" type="submit">
                 <span class="icon-search" aria-hidden="true"></span>
@@ -13,7 +13,7 @@
         </form>
     </div>
 </div>
-<div id="home-explore">
+<div id="home-explore" role="main">
     <div class="container">
         <h2 id="maincontent">Explore our collection</h2>
         <p>Explore a wealth of collections and research about natural sciences, history, technology and Indigenous cultures from Museum Victoria in Australia. </p>

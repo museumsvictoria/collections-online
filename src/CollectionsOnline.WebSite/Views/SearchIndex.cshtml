@@ -5,7 +5,7 @@
 }
 <div id="search">
     <aside id="search-filter" >
-        <a class="button-filter" tabindex="0">
+        <a class="button-filter" role="button" tabindex="0">
             <span class="icon-filter-close" aria-hidden="true"></span>
             Filter by
         </a>
@@ -14,7 +14,7 @@
             {
                 <div class="facetgroup@((facet.Values.Any(x => x.Active)) ? null : " collapsed")">
                     <div class="facetheader">
-                        <h4 tabindex="0">@facet.Name</h4>
+                        <h4 role="button" tabindex="0">@facet.Name</h4>
                     </div>
                     <div class="facetitems">
                     @foreach (var value in facet.Values)

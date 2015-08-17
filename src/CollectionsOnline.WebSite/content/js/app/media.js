@@ -96,6 +96,8 @@ module.exports = {
           height: ''
         });        
         
+        // change aria state
+        this.$fullscreenButton.attr('aria-pressed', 'false');
       } else {                       
         // Expand media holder
         this.$mediaHolder.css({
@@ -120,6 +122,9 @@ module.exports = {
           heroMediaImage.height(heroMediaImageHeight);
           newHeroMediaImageSrc = media.Large.Uri;
         }
+        
+        // change aria state
+        this.$fullscreenButton.attr('aria-pressed', 'true');
       }
       
       this.preloadImages(newHeroMediaImageSrc).done(function () {

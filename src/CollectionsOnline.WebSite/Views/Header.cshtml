@@ -1,13 +1,14 @@
 ﻿<a class="skipto" href="#maincontent">Skip to main content</a> 
-<header>
+<header role="banner">
     <a class="brand" href="/">Museum Victoria <span>Collections</span></a>
-    <nav>
+    <nav role="navigation">
         <a @((RenderContext.Context.ResolvedRoute.Description.Name == "collection-index") ? Html.Raw("class=\"active\"") : null) href="/collections">Our collections</a>
         <a @((RenderContext.Context.ResolvedRoute.Description.Name == "developers-index") ? Html.Raw("class=\"active\"") : null) href="/developers">Our API</a>        
         @if (@RenderContext.Context.ResolvedRoute.Description.Name != "home-index")
         {
             <a class="button-search @((RenderContext.Context.ResolvedRoute.Description.Name == "search-index") ? "search" : null)" tabindex="0">
                 <span id="search-button-icon" aria-hidden="true" class="icon-search-header"></span>
+                <span class="icon-label-hidden">Expand search box</span>
                 <span class="search-text">Search</span>
             </a>
         }

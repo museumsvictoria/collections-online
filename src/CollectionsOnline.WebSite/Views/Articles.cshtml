@@ -14,7 +14,7 @@
         </h1>
     </div>
 </div>
-<div id="record">
+<div id="record" role="main">
     <div class="wrapper">
         <section class="text-content">
             <div class="summary">
@@ -95,7 +95,7 @@
             </div>
         </section>
         @Html.Partial("FileUriMedia", Model.Article.Media)
-        <aside class="side-content">
+        <aside class="side-content" role="complementary">
             <div class="sidecolumn">
                 @Html.Partial("SocialLinks")
             </div>

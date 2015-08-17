@@ -8,7 +8,7 @@
 </div>
 <div id="collarea" class="container">
     <span class="collcategory">@Model.Collection.Category</span>
-    <div id="maincontent" class="colldesc">
+    <div id="maincontent" class="colldesc" role="main">
         <h1>@Model.Collection.DisplayTitle</h1>
         <p>@Html.ConvertNewlines(Model.Collection.CollectionSummary)</p>
         <h2>Significance</h2>
@@ -25,7 +25,7 @@
     <div class="sidecolumn">
         @Html.Partial("SocialLinks")
     </div>
-    <div class="sidecolumn">
+    <div class="sidecolumn" role="complementary">
         <div class="socialcite">
                 <div class="cite">
                 <h4>Cite this page</h4>
