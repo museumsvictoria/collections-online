@@ -55,9 +55,9 @@ namespace CollectionsOnline.WebSite.ModelBinders
             else if (string.Equals(query.Sort, "date", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.Sort = "date";
 
-            // switch to quality if we have no query
-            if (searchInputModel.Queries.All(string.IsNullOrWhiteSpace) &&
-                (string.Equals(searchInputModel.Sort, "relevance", StringComparison.OrdinalIgnoreCase) || string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase)))
+            // switch to quality if we have no query or no sort
+            if ((searchInputModel.Queries.All(string.IsNullOrWhiteSpace) && (string.Equals(searchInputModel.Sort, "relevance", StringComparison.OrdinalIgnoreCase) || string.Equals(query.Sort, "relevance", StringComparison.OrdinalIgnoreCase)))
+                || string.IsNullOrWhiteSpace(searchInputModel.Sort))
                 searchInputModel.Sort = "quality";
 
             // if a new search set relevance as sort type

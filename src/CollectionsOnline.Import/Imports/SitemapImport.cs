@@ -71,7 +71,7 @@ namespace CollectionsOnline.Import.Imports
 
                     skip += Constants.PagingStreamSize;
 
-                    if (count == 100000)
+                    if (count == queryHeaderInformation.TotalResults)
                         break;
                 }
             }
@@ -97,7 +97,7 @@ namespace CollectionsOnline.Import.Imports
 
                 sitemapIndex.Add(new XElement(xmlns + "sitemap",
                     new XElement(xmlns + "loc", Uri.EscapeUriString(string.Format("{0}sitemap-set-{1}.xml", ConfigurationManager.AppSettings["CanonicalSiteBase"], count))),
-                    new XElement(xmlns + "lastmod", sitemapNodeIndex.Max(x => x.LastModified).ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture))));
+                    new XElement(xmlns + "lastmod", sitemapNodeIndex.OrderByDescending(x => x.LastModified).Select(x => x.LastModified).First().ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture))));
 
                 var sitemapUrlset = new XElement(xmlns + "urlset");
                 foreach (var sitemapNode in sitemapNodeIndex)

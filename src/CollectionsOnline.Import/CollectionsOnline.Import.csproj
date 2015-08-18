@@ -177,6 +177,7 @@
     <Compile Include="Imports\TaxonomyUpdateImport.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\NetworkShareAccesser.cs" />
     <Compile Include="Infrastructure\ImportRunner.cs" />
     <Compile Include="Imports\ImuImport.cs" />
     <Compile Include="Infrastructure\IImuSessionProvider.cs" />

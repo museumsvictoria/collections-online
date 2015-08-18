@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
@@ -40,12 +41,21 @@ namespace CollectionsOnline.Import.Infrastructure
                 documentSession.SaveChanges();
                 documentSession.Dispose();
 
+                NetworkShareAccesser networkShareAccesser = null;
+                if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["WebSiteDomain"]))
+                {
+                    networkShareAccesser =
+                        NetworkShareAccesser.Access(ConfigurationManager.AppSettings["WebSiteComputer"],
+                            ConfigurationManager.AppSettings["WebSiteDomain"],
+                            ConfigurationManager.AppSettings["WebSiteUser"],
+                            ConfigurationManager.AppSettings["WebSitePassword"]);
+                }
                 try
                 {
                     // Run all imports
                     foreach (var import in _imports.OrderBy(x => x.Order))
                     {
-                        if(Program.ImportCanceled)
+                        if (Program.ImportCanceled)
                             break;
 
                         import.Run();
@@ -56,6 +66,11 @@ namespace CollectionsOnline.Import.Infrastructure
                     hasFailed = true;
                     _log.Error("Error encountered running import");
                     _log.Error(exception);
+                }
+                finally
+                {
+                    if(networkShareAccesser != null)
+                        networkShareAccesser.Dispose();
                 }
 
                 // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.
