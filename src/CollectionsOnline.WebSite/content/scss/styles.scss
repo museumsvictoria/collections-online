@@ -1958,6 +1958,13 @@ button.icon {
                                        padding:0;
                                        width:25%;
                                        max-width:175px;
+                                       min-width:107px;
+                                       @include gridle_state("tablet"){
+                                           min-width:150px;
+                                       }
+                                       @include gridle_state("mobile"){
+                                           width:33%;
+                                       }
                                     }
                                         
                                     & .title{
