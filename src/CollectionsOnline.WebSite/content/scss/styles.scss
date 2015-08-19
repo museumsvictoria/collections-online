@@ -1950,7 +1950,7 @@ button.icon {
                                             }
                                         }
 									& a{
-										@include display-flex;
+										//@include display-flex;
                                         @include alignitem-center;
 										}
                                     & .tileimages{
