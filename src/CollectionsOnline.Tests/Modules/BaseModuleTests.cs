@@ -50,7 +50,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenEnvelopeRequest_GetItems_ReturnsEnvelope()
         {
             // Given When
-            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
                 {
                     with.HttpRequest();
                     with.Query("envelope", "true");
@@ -65,7 +65,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenOnePageRequestAndDefaultPerPage_GetItems_ReturnsOnePage()
         {
             // Given When
-            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("page", "1");
@@ -81,7 +81,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenOnePageRequest_GetItems_ReturnsLinkHeader()
         {
             // Given When
-            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("page", "1");
@@ -95,7 +95,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenPageRequest_GetItems_ReturnsCorrectItem()
         {
             // Given When
-            var result = Browser.Get(string.Format("{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("page", "2");

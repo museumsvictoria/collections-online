@@ -1,12 +1,13 @@
 ﻿@using System.Configuration
+@using CollectionsOnline.WebSite.Extensions
 <div class="social">
     <h4>Share</h4>
     <div class="social-tools">
-        <a class="icon" href="https://www.facebook.com/dialog/share?app_id=@ConfigurationManager.AppSettings["FacebookAppId"]&display=popup&href=@HttpUtility.UrlEncode(RenderContext.Context.Request.Url.SiteBase + RenderContext.Context.Request.Path)&redirect_uri=@RenderContext.Context.Request.Url.SiteBase/closewindow">
+        <a class="icon" href="https://www.facebook.com/dialog/share?app_id=@ConfigurationManager.AppSettings["FacebookAppId"]&display=popup&href=@HttpUtility.UrlEncode(Url.CurrentUrl())&redirect_uri=@HttpUtility.UrlEncode(Url.CurrentBasePath() + "closewindow")">
             <span class="icon-facebook" aria-hidden="true"></span>
             <span class="icon-label-hidden">Facebook</span>
         </a>
-        <a class="icon" href="https://twitter.com/intent/tweet?text=@HttpUtility.UrlEncode("Check out this awesome thing on MV collections!")&url=@HttpUtility.UrlEncode(RenderContext.Context.Request.Url.SiteBase + RenderContext.Context.Request.Path)">
+        <a class="icon" href="https://twitter.com/intent/tweet?text=@HttpUtility.UrlEncode("Check out this awesome thing on MV collections!")&url=@HttpUtility.UrlEncode(Url.CurrentUrl())">
             <span class="icon-twitter" aria-hidden="true"></span>
             <span class="icon-label-hidden">Twitter</span>
         </a>

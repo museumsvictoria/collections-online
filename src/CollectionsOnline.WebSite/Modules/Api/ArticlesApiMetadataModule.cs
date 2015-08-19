@@ -61,7 +61,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.NotFound, "The article could not be found and probably does not exist."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Article, ArticleApiViewModel>(sampleArticle), Formatting.Indented),
-                        ExampleUrl = (sampleArticle != null) ? string.Format("{0}/{1}", Constants.ApiBasePath, sampleArticle.Id) : null,
+                        ExampleUrl = (sampleArticle != null) ? string.Format("/{0}/{1}", Constants.ApiBasePath, sampleArticle.Id) : null,
                     };
                 };
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Text;
 using System.Text.RegularExpressions;
 using CollectionsOnline.Core.Extensions;
@@ -41,6 +42,8 @@ namespace CollectionsOnline.WebSite.Extensions
 
         public static IHtmlString RenderCitation<T>(this HtmlHelpers<T> helper, EmuAggregateRoot document)
         {
+            var currentUrl = string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"].Substring(0, ConfigurationManager.AppSettings["CanonicalSiteBase"].LastIndexOf('/')), helper.RenderContext.Context.Request.Path);
+
             var sb = new StringBuilder();
 
             if (document is Article)
@@ -48,7 +51,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var article = document as Article;
 
                 sb.Append(BuildAuthorsCitation(article.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}{3} Accessed {4}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2} Accessed {3}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Species)
             {
@@ -62,18 +65,18 @@ namespace CollectionsOnline.WebSite.Extensions
                 if (!string.IsNullOrWhiteSpace(species.Taxonomy.CommonName))
                     sb.Append(string.Format("{0} ", species.Taxonomy.CommonName));
 
-                sb.Append(string.Format("in Museum Victoria Collections {0}{1} Accessed {2}", helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("in Museum Victoria Collections {0} Accessed {1}", currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Item || document is Specimen)
             {
-                sb.Append(string.Format("Museum Victoria Collections {0}{1} Accessed {2}", helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("Museum Victoria Collections {0} Accessed {1}", currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Collection)
             {
                 var collection = document as Collection;
 
                 sb.Append(BuildAuthorsCitation(collection.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}{3} Accessed {4}", collection.DateModified.Year, collection.Title, helper.RenderContext.Context.Request.Url.SiteBase, helper.RenderContext.Context.Request.Path, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2} Accessed {3}", collection.DateModified.Year, collection.Title, currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
 
             return new NonEncodedHtmlString(sb.ToString());
@@ -135,7 +138,7 @@ namespace CollectionsOnline.WebSite.Extensions
         {
             return new NonEncodedHtmlString(JsonConvert.SerializeObject(input, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects }));
         }
-         
+
         private static string BuildAuthorsCitation(IList<Author> authors)
         {
             var sb = new StringBuilder();

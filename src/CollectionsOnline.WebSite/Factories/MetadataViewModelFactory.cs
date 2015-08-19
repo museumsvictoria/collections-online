@@ -74,7 +74,7 @@ namespace CollectionsOnline.WebSite.Factories
             // General metadata
             var metadata = new MetadataViewModel
             {
-                Title = item.ObjectName
+                Title = item.DisplayTitle
             };
 
             if (!string.IsNullOrWhiteSpace(item.ObjectSummary))
@@ -210,7 +210,7 @@ namespace CollectionsOnline.WebSite.Factories
             var metaProperties = new List<KeyValuePair<string, string>>();
 
             // Remove trailing slash for building our image uri's
-            var canonicalSiteBase = ConfigurationManager.AppSettings["CanonicalSiteBase"].Substring(0, ConfigurationManager.AppSettings["CanonicalSiteBase"].LastIndexOf('/')); ;
+            var canonicalSiteBase = ConfigurationManager.AppSettings["CanonicalSiteBase"].Substring(0, ConfigurationManager.AppSettings["CanonicalSiteBase"].LastIndexOf('/'));
 
             var image = media.OfType<ImageMedia>().FirstOrDefault();
             var video = media.OfType<VideoMedia>().FirstOrDefault();

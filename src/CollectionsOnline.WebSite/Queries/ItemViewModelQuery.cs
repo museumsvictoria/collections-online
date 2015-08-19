@@ -1,8 +1,7 @@
 ﻿using System.Linq;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Transformers;
-using Newtonsoft.Json;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -19,23 +18,26 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ItemViewTransformerResult BuildItem(string itemId)
         {
-            var result = _documentSession.Load<ItemViewTransformer, ItemViewTransformerResult>(itemId);
-
-            if (result.Item.Taxonomy != null)
+            using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                var query = _documentSession.Advanced
-                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                    .WhereEquals("Taxon", result.Item.Taxonomy.TaxonName)
-                    .Take(1);
+                var result = _documentSession.Load<ItemViewTransformer, ItemViewTransformerResult>(itemId);
 
-                // Dont allow a link to search page if the current item is the only result
-                if (query.SelectFields<CombinedIndexResult>("Id").Select(x => x.Id).Except(new[] { itemId }).Any())
+                if (result.Item.Taxonomy != null)
                 {
-                    result.RelatedSpeciesSpecimenItemCount = query.QueryResult.TotalResults;
-                }
-            }
+                    var query = _documentSession.Advanced
+                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
+                        .WhereEquals("Taxon", result.Item.Taxonomy.TaxonName)
+                        .Take(1);
 
-            return result;
+                    // Dont allow a link to search page if the current item is the only result
+                    if (query.SelectFields<CombinedIndexResult>("Id").Select(x => x.Id).Except(new[] {itemId}).Any())
+                    {
+                        result.RelatedSpeciesSpecimenItemCount = query.QueryResult.TotalResults;
+                    }
+                }
+
+                return result;
+            }
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Linq;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Transformers;
-using Newtonsoft.Json;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -20,41 +19,44 @@ namespace CollectionsOnline.WebSite.Queries
 
         public SpeciesViewTransformerResult BuildSpecies(string speciesId)
         {
-            var result = _documentSession.Load<SpeciesViewTransformer, SpeciesViewTransformerResult>(speciesId);
-
-            // Check to see whether there are related specimens
-            if (result.Species.Taxonomy != null)
+            using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                var query = _documentSession.Advanced
-                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                    .WhereEquals("Taxon", result.Species.Taxonomy.TaxonName)
-                    .Take(1);
+                var result = _documentSession.Load<SpeciesViewTransformer, SpeciesViewTransformerResult>(speciesId);
 
-                // Dont allow a link to search page if the current species is the only result
-                if (query
-                    .SelectFields<CombinedIndexResult>("Id")
-                    .Select(x => x.Id)
-                    .Except(new[] {speciesId})
-                    .Any())
+                // Check to see whether there are related specimens
+                if (result.Species.Taxonomy != null)
                 {
-                    result.RelatedSpecimenCount = query.QueryResult.TotalResults;
+                    var query = _documentSession.Advanced
+                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
+                        .WhereEquals("Taxon", result.Species.Taxonomy.TaxonName)
+                        .Take(1);
+
+                    // Dont allow a link to search page if the current species is the only result
+                    if (query
+                        .SelectFields<CombinedIndexResult>("Id")
+                        .Select(x => x.Id)
+                        .Except(new[] {speciesId})
+                        .Any())
+                    {
+                        result.RelatedSpecimenCount = query.QueryResult.TotalResults;
+                    }
                 }
-            }
 
-            // Uris
-            if (result.Species.Taxonomy != null)
-            {
-                result.Species.Media.Add(new UriMedia
+                // Uris
+                if (result.Species.Taxonomy != null)
                 {
-                    Caption =
-                        string.Format("See {0} in the Atlas of Living Australia", result.Species.Taxonomy.TaxonName),
-                    Uri =
-                        string.Format("http://bie.ala.org.au/search?q={0}&fq=idxtype:TAXON",
-                            result.Species.Taxonomy.TaxonName)
-                });
-            }
+                    result.Species.Media.Add(new UriMedia
+                    {
+                        Caption =
+                            string.Format("See {0} in the Atlas of Living Australia", result.Species.Taxonomy.TaxonName),
+                        Uri =
+                            string.Format("http://bie.ala.org.au/search?q={0}&fq=idxtype:TAXON",
+                                result.Species.Taxonomy.TaxonName)
+                    });
+                }
 
-            return result;
+                return result;
+            }
         }
     }
 }

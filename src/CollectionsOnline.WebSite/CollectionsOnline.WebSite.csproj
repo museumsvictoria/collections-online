@@ -211,6 +211,7 @@
     <Content Include="Views\Metadata.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />

@@ -76,7 +76,7 @@
         </div>
     </div>
 }
-@if (Model.FavoriteItems.Any())
+@if (Model.FavoriteItems.Any() || Model.FavoriteSpecimens.Any())
 {
     <div id="favorites">
         <div class="container">
