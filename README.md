@@ -17,4 +17,4 @@ Images carry open licenses wherever possible or are marked as Public Domain as a
 We also wish to assist users to properly cite information that they have reused. We provide an easy-to-copy statement on every page of content that shows how the information can be referenced. We also provide an attribution to the authors of articles and species profiles. A great deal of work has gone into the research and writing of these pages, and we want to ensure that due credit is given.
 
 ## How can I use it?
-The Collections online source code has been provided for those curious in how it works. As there is a dependency on Museum Victoria’s Collection Management system dont expect it to work out of the box. However please feel free to look at and re-use any parts of the code.
+The Collections online source code has been provided for those curious in how it works. As there is a dependency on Museum Victoria’s Collection Management system don't expect it to work out of the box. However please feel free to look at and re-use any parts of the code.
