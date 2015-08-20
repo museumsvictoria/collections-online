@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-	<ShortName>Search MV Collections</ShortName>
-	<Description>Search our massive online catalog containing over one million objects and articles.</Description>
-	<Url type="text/html" method="get" template="http://collections.museumvictoria.com.au/search?query={searchTerms}"/>
-	<moz:SearchForm>http://collections.museumvictoria.com.au/search</moz:SearchForm>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>MV Collections</ShortName>
+  <Description>Explore Museum Victoria's humanities and natural sciences collections</Description>
+  <Url type="text/html" method="get" template="http://collections.museumvictoria.com.au/search?query={searchTerms}"/>
+  <moz:SearchForm>http://collections.museumvictoria.com.au/search</moz:SearchForm>
 </OpenSearchDescription>
