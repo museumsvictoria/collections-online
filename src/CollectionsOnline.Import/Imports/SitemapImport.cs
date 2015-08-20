@@ -96,7 +96,7 @@ namespace CollectionsOnline.Import.Imports
                 count++;
 
                 sitemapIndex.Add(new XElement(xmlns + "sitemap",
-                    new XElement(xmlns + "loc", Uri.EscapeUriString(string.Format("{0}sitemap-set-{1}.xml", ConfigurationManager.AppSettings["CanonicalSiteBase"], count))),
+                    new XElement(xmlns + "loc", Uri.EscapeUriString(string.Format("{0}sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["CanonicalSiteBase"], count))),
                     new XElement(xmlns + "lastmod", sitemapNodeIndex.OrderByDescending(x => x.LastModified).Select(x => x.LastModified).First().ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture))));
 
                 var sitemapUrlset = new XElement(xmlns + "urlset");
