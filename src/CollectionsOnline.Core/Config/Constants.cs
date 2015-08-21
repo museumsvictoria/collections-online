@@ -47,7 +47,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string ImuUriQueryString = "Webpage Link URL";
 
-        public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(12);
+        public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(24);
 
         public static TimeSpan ImuOfflineTimeSpanStart = new TimeSpan(19, 00, 0); // 7:00pm
         
@@ -59,7 +59,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string CurrentApiVersionPath = "/v1";
 
-        public static string ApiBasePath = "/api";
+        public static string ApiBasePath = "api";
 
         public static Dictionary<Tuple<string, string, string, string>, MuseumLocation> MuseumLocations = new Dictionary
             <Tuple<string, string, string, string>, MuseumLocation>(new OrdinalIgnoreCaseTupleComparer())

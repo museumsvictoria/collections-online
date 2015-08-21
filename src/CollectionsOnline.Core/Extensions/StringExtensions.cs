@@ -36,6 +36,9 @@ namespace CollectionsOnline.Core.Extensions
 
         public static string Truncate(this string input, int maxLength)
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
             return input.Length <= maxLength ? input : input.TrimToMaxLength(maxLength, ' ') + " ...";
         }
 

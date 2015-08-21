@@ -1,4 +1,5 @@
 ﻿using System;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.WebSite.Factories;
@@ -34,8 +35,8 @@ namespace CollectionsOnline.WebSite.Infrastructure
             // Register view transformers
             IndexCreation.CreateIndexes(typeof(ItemViewTransformer).Assembly, documentStore);
 
-            // Bind ravendb miniprofiler
-            MiniProfilerRaven.InitializeFor(documentStore);
+            // Initialize raven miniprofiler
+            MiniProfilerRaven.InitializeFor(documentStore);            
         }
 
         protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)
@@ -63,14 +64,15 @@ namespace CollectionsOnline.WebSite.Infrastructure
             pipelines.BeforeRequest += ctx =>
             {
                 MiniProfiler.Start();
-
+                
                 return null;
             };
 
             pipelines.AfterRequest += ctx =>
             {
                 MiniProfiler.Stop();
-                _log.Trace(MiniProfiler.Current.RenderPlainText().Replace(Environment.NewLine, ""));
+
+                _log.Trace(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
             };
 
             // Automapper configuration

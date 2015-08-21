@@ -90,9 +90,12 @@ namespace CollectionsOnline.WebSite.Factories
             else if (!string.IsNullOrWhiteSpace(item.Significance))
                 metadata.Description = item.Significance;
 
-            metadata.Description = metadata.Description
-                .Truncate(Constants.MetadataDescriptionMaxChars)
-                .RemoveLineBreaks();
+            if (!string.IsNullOrWhiteSpace(metadata.Description))
+            {
+                metadata.Description = metadata.Description
+                    .Truncate(Constants.MetadataDescriptionMaxChars)
+                    .RemoveLineBreaks();
+            }
 
             // Twitter
             if (item.Media.WithThumbnails().Any())
@@ -124,9 +127,12 @@ namespace CollectionsOnline.WebSite.Factories
             else if (!string.IsNullOrWhiteSpace(species.GeneralDescription))
                 metadata.Description = species.GeneralDescription;
 
-            metadata.Description = metadata.Description
-                .Truncate(Constants.MetadataDescriptionMaxChars)
-                .RemoveLineBreaks();
+            if (!string.IsNullOrWhiteSpace(metadata.Description))
+            {
+                metadata.Description = metadata.Description
+                    .Truncate(Constants.MetadataDescriptionMaxChars)
+                    .RemoveLineBreaks();
+            }
 
             if (species.Media.WithThumbnails().Any())
                 metadata.MetaProperties.Add(new KeyValuePair<string, string>("twitter:card", "summary_large_image"));

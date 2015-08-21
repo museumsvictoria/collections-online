@@ -2,6 +2,7 @@
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
+using StackExchange.Profiling;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -19,12 +20,20 @@ namespace CollectionsOnline.WebSite.Queries
         {
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                var result = _documentSession.Load<ArticleViewTransformer, ArticleViewTransformerResult>(articleId);
+                ArticleViewTransformerResult result;
+                using (MiniProfiler.Current.Step("Fetching ArticleViewTransformerResult"))
+                {
+                    result = _documentSession.Load<ArticleViewTransformer, ArticleViewTransformerResult>(articleId);
+                }
 
-                var query = _documentSession.Advanced
-                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                    .WhereEquals("Article", result.Article.Title)
-                    .Take(1);
+                IDocumentQuery<CombinedIndexResult> query;
+                using (MiniProfiler.Current.Step("Fetching RelatedItemSpecimenCount"))
+                {
+                    query = _documentSession.Advanced
+                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
+                        .WhereEquals("Article", result.Article.Title)
+                        .Take(1);
+                }
 
                 result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
 
