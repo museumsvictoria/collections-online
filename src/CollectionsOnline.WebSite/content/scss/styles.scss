@@ -218,7 +218,7 @@ button.icon {
 		line-height: 1.2;
 		@include gridle(12,"mobile");
         @include gridle_state("mobile"){
-            padding-left:20px;
+            padding-left:10px;
         }
         @include gridle_state("print"){
             width:100%;
@@ -1228,7 +1228,14 @@ button.icon {
         }
 
         .no-image-label {
-            padding-top:4em;
+            //padding-top:4em;
+            position:absolute;
+            top:40%;
+          @include gridle_state("mobile"){
+               top:20%;
+               padding-left:10px;
+               padding-right:10px;
+           }
         }
 
         & .tile.full{
@@ -2144,7 +2151,14 @@ button.icon {
         }
 
         .no-image-label {
-            padding-top: 4em;
+           // padding-top: 4em;
+           position:absolute;
+           top:40%;
+           @include gridle_state("mobile"){
+               top:20%;
+               padding-left:10px;
+               padding-right:10px;
+           }
         }
     & .noresults{
            display: table;
