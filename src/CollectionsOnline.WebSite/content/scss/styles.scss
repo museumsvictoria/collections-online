@@ -3299,6 +3299,22 @@ footer {
 			}
 		}
 
+        & .githublink{
+            display:block; 
+            padding-bottom:15px;
+            padding-left:10px; 
+            clear:both;
+            font-size:12px;
+
+                & img{
+               //height:16px;
+                padding-right:5px;
+                vertical-align:middle;
+            }
+                & a{
+                    text-decoration: underline;
+                }
+        }
 
 		& .stategovernmentlinks{
 			float:left;

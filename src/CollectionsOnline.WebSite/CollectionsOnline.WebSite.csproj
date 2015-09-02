@@ -151,6 +151,7 @@
     <Content Include="content\img\favicon-196x196.png" />
     <Content Include="content\img\favicon-32x32.png" />
     <Content Include="content\img\favicon-96x96.png" />
+    <Content Include="content\img\GitHub-Mark-Light-32px.png" />
     <Content Include="content\img\img-search-noresults.jpg" />
     <Content Include="content\img\mstile-144x144.png" />
     <Content Include="content\img\mstile-150x150.png" />
