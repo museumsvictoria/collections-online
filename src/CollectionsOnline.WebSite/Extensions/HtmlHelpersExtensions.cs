@@ -60,10 +60,13 @@ namespace CollectionsOnline.WebSite.Extensions
                 sb.Append(BuildAuthorsCitation(species.Authors));
                 sb.Append(string.Format("({0}) ", species.DateModified.Year));
 
-                if (!string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName))
-                    sb.Append(string.Format("<em>{0}</em> ", species.Taxonomy.TaxonName));
-                if (!string.IsNullOrWhiteSpace(species.Taxonomy.CommonName))
-                    sb.Append(string.Format("{0} ", species.Taxonomy.CommonName));
+                if (species.Taxonomy != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(species.Taxonomy.TaxonName))
+                        sb.Append(string.Format("<em>{0}</em> ", species.Taxonomy.TaxonName));
+                    if (!string.IsNullOrWhiteSpace(species.Taxonomy.CommonName))
+                        sb.Append(string.Format("{0} ", species.Taxonomy.CommonName));
+                }
 
                 sb.Append(string.Format("in Museum Victoria Collections {0} Accessed {1}", currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
