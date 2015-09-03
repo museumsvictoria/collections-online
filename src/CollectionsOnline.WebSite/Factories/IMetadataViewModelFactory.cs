@@ -17,6 +17,8 @@ namespace CollectionsOnline.WebSite.Factories
 
         MetadataViewModel MakeHomeIndex();
 
+        MetadataViewModel MakeAboutIndex();
+
         MetadataViewModel MakeCollectionIndex();
 
         MetadataViewModel MakeDevelopersIndex();

@@ -178,6 +178,17 @@ namespace CollectionsOnline.WebSite.Factories
             return metadata;
         }
 
+        public MetadataViewModel MakeAboutIndex()
+        {
+            var metadata = new MetadataViewModel
+            {
+                Description = "This site allows users to explore the natural sciences and humanities collections of Museum Victoria in Australia, featuring collections of zoology, geology, palaeontology, history, indigenous cultures and technology. Over 1.15 million records were presented at launch in 2015, accompanied by over 150,000 images.",
+                Title = "About Museum Victoria Collections",
+            };
+
+            return metadata;
+        }
+
         public MetadataViewModel MakeCollectionIndex()
         {
             var metadata = new MetadataViewModel

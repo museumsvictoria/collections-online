@@ -21,6 +21,13 @@ namespace CollectionsOnline.WebSite.Modules
             {
                 return View["CloseWindow"];
             };
+
+            Get["home-about-index", "/about"] = parameters =>
+            {
+                ViewBag.metadata = metadataViewModelFactory.MakeAboutIndex();
+
+                return View["AboutIndex"];
+            };
         }
     }
 }

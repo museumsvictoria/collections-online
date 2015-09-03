@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.ModelBinding;
