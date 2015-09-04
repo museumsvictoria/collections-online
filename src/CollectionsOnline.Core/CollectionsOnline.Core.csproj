@@ -109,6 +109,7 @@
     <Compile Include="Utilities\HtmlSanitizerResult.cs" />
     <Compile Include="Utilities\Inflector.cs" />
     <Compile Include="Utilities\NaturalDateConverter.cs" />
+    <Compile Include="Utilities\IdShortener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

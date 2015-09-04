@@ -173,6 +173,7 @@
   <ItemGroup>
     <Compile Include="Core\Extensions\StringExtensionsTests.cs" />
     <Compile Include="Core\Factories\SlugFactoryTests.cs" />
+    <Compile Include="Core\Utilities\IdShortenerTests.cs" />
     <Compile Include="Fakes\FakeArticles.cs" />
     <Compile Include="Fakes\FakeItems.cs" />
     <Compile Include="Fakes\FakeSpecies.cs" />
