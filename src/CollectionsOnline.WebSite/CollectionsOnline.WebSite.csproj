@@ -222,6 +222,7 @@
     <Compile Include="Infrastructure\AutomapperConfig.cs" />
     <Compile Include="Factories\HomeHeroUriFactory.cs" />
     <Compile Include="Factories\IHomeHeroUriFactory.cs" />
+    <Compile Include="Infrastructure\CustomStaticContentConventionBuilder.cs" />
     <Compile Include="Infrastructure\StatusCodeHandler.cs" />
     <Compile Include="ModelBinders\SearchInputModelBinder.cs" />
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />

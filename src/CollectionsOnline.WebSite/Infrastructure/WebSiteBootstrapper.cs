@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
@@ -83,9 +84,16 @@ namespace CollectionsOnline.WebSite.Infrastructure
         {
             base.ConfigureConventions(conventions);
 
-            conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddFile("/robots.txt", "/robots.txt"));
-            conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddFile("/opensearch.xml", "/opensearch.xml"));
-            conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("", "sitemaps"));
+            conventions.StaticContentsConventions.Clear();
+
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddFile("/robots.txt", "/robots.txt"));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddFile("/opensearch.xml", "/opensearch.xml"));            
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/css", new Dictionary<string, string> { {"Cache-Control", "public, max-age=7200" } }));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/fonts", new Dictionary<string, string> { { "Cache-Control", "public, max-age=7200" } }));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/js", new Dictionary<string, string> { { "Cache-Control", "public, max-age=300" } }));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/img", new Dictionary<string, string> { { "Cache-Control", "public, max-age=604800" } }));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/media", new Dictionary<string, string> { { "Cache-Control", "public, max-age=86400" } }));            
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/", contentPath: "/sitemaps"));
         }
     }
 }
