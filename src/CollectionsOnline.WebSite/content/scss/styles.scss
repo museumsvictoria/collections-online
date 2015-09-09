@@ -8,33 +8,30 @@
 
 body {
     background: $colour-background-light;
-	font: 100%/1.5 $font;
-	-webkit-text-size-adjust: 100%;
-	color: $gray-dark;
+    font: 100%/1.5 $font;
+    -webkit-text-size-adjust: 100%;
+    color: $gray-dark;
 }
 
 a {
-   // color: $color-links;
     color: inherit;
-    text-decoration:none;
-        @include gridle_state("print"){
-                  &[href^=http]:after {
-              content:" <" attr(href) "> ";
-           }
+    text-decoration: none;
 
-           }
-
+    @include gridle_state("print") {
+        &[href^=http]:after {
+            content: " <" attr(href) "> ";
+        }
+    }
 }
 
 header {
-    background:$colour-background-dark;
-   // height:76px;  
-   	width:100%;
-	overflow: hidden;
+    background: $colour-background-dark;
+    width: 100%;
+    overflow: hidden;
 }
 
 a:focus, button:focus, input:focus {
-    outline:thin dotted;
+    outline: thin dotted;
 }
 
 .brand {
@@ -52,24 +49,22 @@ a:focus, button:focus, input:focus {
         padding-top: 5px;
         padding-bottom: 5px;
         font-size: 1.2em;
-        width:100%;
-        
+        width: 100%;
     }
 
-    @include gridle_state("print"){
-        color:black;
+    @include gridle_state("print") {
+        color: black;
     }
-
 }
 
 .brand span {
     color: $colour-highlight-green;
-    @include gridle_state(print){
-        color:black;
-    }
-    font-weight: 600;
 
-  
+    @include gridle_state(print) {
+        color: black;
+    }
+
+    font-weight: 600;
 }
 
 nav {
@@ -81,26 +76,27 @@ nav {
     text-decoration: none;
     text-transform: uppercase;
     @include gridle_hide("print");
-    @include gridle_state("mobile"){
+
+    @include gridle_state("mobile") {
         float: none;
     }
+
     a {
         color: $colour-heading-inverted;
-	    display: inline-block;
+        display: inline-block;
         line-height: 76px;
         padding: 0 20px;
         text-decoration: none;
-        @include gridle_state("mobile"){
-            padding:0 10px 0px 10px;
-            line-height:44px;
-            &:first-child{
-                padding-left:20px;
-                padding-right:0px;
+
+        @include gridle_state("mobile") {
+            padding: 0 10px 0px 10px;
+            line-height: 44px;
+
+            &:first-child {
+                padding-left: 20px;
+                padding-right: 0px;
             }
         }
-       // @include gridle_hide("mobile");
-      //  @include gridle_hide("tablet");
-       // @include gridle_hide("mobile");
 
         &:hover {
             cursor: pointer;
@@ -110,237 +106,223 @@ nav {
     .button-search {
         background-color: $colour-primary-green;
         color: $colour-heading-inverted;
-        padding: 0 20px;    
+        padding: 0 20px;
         padding-right: 60px;
         display: inline-block;
         line-height: 76px;
         text-decoration: none;
-        @include gridle_state("mobile"){
-            line-height:44px;
-            float:right;
-            padding-left:20px;
-            width:100%;
+
+        @include gridle_state("mobile") {
+            line-height: 44px;
+            float: right;
+            padding-left: 20px;
+            width: 100%;
         }
     }
 
     .button-search.search {
-        padding:0 20px 0 20px;
+        padding: 0 20px 0 20px;
 
         .icon-search-header {
-            display:none;
+            display: none;
         }
     }
-
-    .search-text{
-		//@include gridle_hide("tablet");			
-	    //@include gridle_hide("mobile");
-	}
 }
 
 button.icon {
-    background:none;
-    border:0;
-    margin:0;
-    padding:0;
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .icon-label-hidden {
-    clip:rect(0 0 0 0);
-    overflow:hidden;
-    position:absolute;
-    height:1px;
-    width:1px;
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+    position: absolute;
+    height: 1px;
+    width: 1px;
 }
 
 .form-search {
-    float:left;
-    background-color:$color-museum-green;
-    height:76px;
+    float: left;
+    background-color: $color-museum-green;
+    height: 76px;
 
     input {
-        background-color:$color-museum-green;
-        color:$color-default;
-        box-sizing:border-box;
-        border:0;
-        padding:0 20px 0 50px;
-        width:170px;
-        line-height:76px;
-        font-size:1.35em;
+        background-color: $color-museum-green;
+        color: $color-default;
+        box-sizing: border-box;
+        border: 0;
+        padding: 0 20px 0 50px;
+        width: 170px;
+        line-height: 76px;
+        font-size: 1.35em;
 
         &::-webkit-input-placeholder {
-            opacity:1;
-            color:$color-default;
+            opacity: 1;
+            color: $color-default;
         }
+
         &::-moz-placeholder {
-            opacity:1;
-            color:$color-default;
+            opacity: 1;
+            color: $color-default;
         }
+
         &:-ms-input-placeholder {
-            opacity:1;
-            color:$color-default;
+            opacity: 1;
+            color: $color-default;
         }
+
         &:-moz-placeholder {
-            opacity:1;
-            color:$color-default;
+            opacity: 1;
+            color: $color-default;
         }
     }
-
 }
 
 .wrapper {
     @include gridle_container();
-    max-width:1040px;
-    margin:0 auto;
+    max-width: 1040px;
+    margin: 0 auto;
 }
 
 #title {
-   	background: $colour-background-dark;
-	color: $colour-heading-inverted; 
-    @include gridle_state(tablet){
-        padding-left:10px;
-        padding-right:10px;
+    background: $colour-background-dark;
+    color: $colour-heading-inverted;
+
+    @include gridle_state(tablet) {
+        padding-left: 10px;
+        padding-right: 10px;
     }
-    @include gridle_state(mobile){
-        padding-left:10px;
-        padding-right:10px;
+
+    @include gridle_state(mobile) {
+        padding-left: 10px;
+        padding-right: 10px;
     }
+
     h1 {
-        @include gridle(8);	
+        @include gridle(8);
         @include gridle(8,"tablet");
         @include gridle_pull(4,"tablet");
+        float: left;
+        direction: ltr;
+        font-size: 30px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        font-weight: 200;
+        line-height: 1.2;
+        @include gridle(12,"mobile");
 
-		float:left;
-		direction: ltr;
-		font-size: 30px;
-		padding-top: 30px;
-		padding-bottom: 30px;
-		font-weight: 200;
-		line-height: 1.2;
-		@include gridle(12,"mobile");
-        @include gridle_state("mobile"){
-            padding-left:10px;
-        }
-        @include gridle_state("print"){
-            width:100%;
-            font-weight:400;
-            padding-right:4em;
-            font-size:18pt;
-            color:black;
-            padding-top:0px;
-            padding-bottom:0px;
+        @include gridle_state("mobile") {
+            padding-left: 10px;
         }
 
-		& .item:before{
-		    @include icon-spaced-item;
-		}
-		& .article:before{
+        @include gridle_state("print") {
+            width: 100%;
+            font-weight: 400;
+            padding-right: 4em;
+            font-size: 18pt;
+            color: black;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+        & .item:before {
+            @include icon-spaced-item;
+        }
+
+        & .article:before {
             @include icon-article();
-		}
-        & .specimen:before{
+        }
+
+        & .specimen:before {
             @include icon-specimen();
         }
-        & .species:before{
+
+        & .species:before {
             @include icon-species();
         }
-		& .reg-number{
-			font-weight: 400;
-            display:block;
-            @include gridle_state("print"){
-                color:black;
+
+        & .reg-number {
+            font-weight: 400;
+            display: block;
+
+            @include gridle_state("print") {
+                color: black;
             }
-
-		}
-
+        }
     }
 
-    & .mediatypes{
-                @include gridle(4);
-                @include gridle(4, "tablet");
-                @include gridle_push(8, "tablet");
-                @include gridle(12,"mobile");
-                @include gridle_hide("print");
-    		    direction: ltr;
-				float: right;
-				padding: 30px 0 0;
-		 & .icon-image, .icon-video, .icon-audio, .icon-book
-				{
-					font-size: 40px;
-					text-align: center;
-					line-height: 35px;
-				}
-				& .type{
-						font-size: 14px;
-						line-height: 16px;
-						text-align: center;
-						
-						float:left;
-						width:25%;
-                        @include gridle_state("tablet"){
-                            width:50%;
-                        }
-						padding:0 0 7px 7px;
-						
-						& .icon-image:before{
-							display:block;
-							padding-top:10px;
-						}
-						& .icon-video:before{
-							display:block;
-							padding-top:10px;
-						}
-						& .icon-audio:before{
-							display:block;
-							padding-top:10px;
-						}
-						& .icon-book:before{
-							display:block;
-							padding-top:10px;
-						}						
-						& div{
-							color:$colour-caption;
-							padding:10px;
-							//background-color: black;
-							line-height: 16px;
-							& p{
-								margin-top: 10px;
-								font-size: 14px;
-								line-height: 20px;
-								text-align: center;
-							}
-						}
-						
-						&.active{
-							& div{
-							//background-color: $colour-objectlink;
-							color:$colour-heading-inverted;
-							}
-						}
-				}
-	 }
+    & .mediatypes {
+        @include gridle(4);
+        @include gridle(4, "tablet");
+        @include gridle_push(8, "tablet");
+        @include gridle(12,"mobile");
+        @include gridle_hide("print");
+        direction: ltr;
+        float: right;
+        padding: 30px 0 0;
 
-  /*  .thumbnails {
-        @include gridle (4);
-        margin:2em 0 1.8em 0;
-        @include gridle_no_gutter(left);
-
-        .thumbnail {
-            @include gridle (3);
-            @include gridle_no_gutter();
-            padding:0 0 7px 7px;
-            cursor:pointer;
-
-            img {
-                width:100%;
-                display:block;                                              
-            }
-
-            img.active {
-                border:2px solid $color-museum-green;
-                box-sizing:border-box;
-            } 
+        & .icon-image, .icon-video, .icon-audio, .icon-book {
+            font-size: 40px;
+            text-align: center;
+            line-height: 35px;
         }
 
-    }*/
+        & .type {
+            font-size: 14px;
+            line-height: 16px;
+            text-align: center;
+            float: left;
+            width: 25%;
+
+            @include gridle_state("tablet") {
+                width: 50%;
+            }
+
+            padding: 0 0 7px 7px;
+
+            & .icon-image:before {
+                display: block;
+                padding-top: 10px;
+            }
+
+            & .icon-video:before {
+                display: block;
+                padding-top: 10px;
+            }
+
+            & .icon-audio:before {
+                display: block;
+                padding-top: 10px;
+            }
+
+            & .icon-book:before {
+                display: block;
+                padding-top: 10px;
+            }
+
+            & div {
+                color: $colour-caption;
+                padding: 10px;
+                line-height: 16px;
+
+                & p {
+                    margin-top: 10px;
+                    font-size: 14px;
+                    line-height: 20px;
+                    text-align: center;
+                }
+            }
+
+            &.active {
+                & div {
+                    color: $colour-heading-inverted;
+                }
+            }
+        }
+    }
 }
 
 #objectthumbs {
@@ -385,16 +367,16 @@ button.icon {
             @include gridle(2,"tablet");
             padding: 0 0 7px 7px;
             position: relative;
-            overflow:hidden;
-            
-            
+            overflow: hidden;
+
+
 
             .video-overlay {
-                position:absolute;
-                top:0;
-                left:0;
+                position: absolute;
+                top: 0;
+                left: 0;
                 padding: 0 0 7px 7px;
-                opacity:1;
+                opacity: 1;
             }
 
             img {
@@ -403,13 +385,13 @@ button.icon {
                 width: 100%;
 
                 &:focus {
-                    outline:thin dotted;
+                    outline: thin dotted;
                 }
 
                 &.active {
                     box-sizing: border-box;
                     opacity: 1;
-                }                
+                }
             }
 
             .more {
@@ -436,8 +418,8 @@ button.icon {
 
     & img {
         max-height: 500px;
-        display:block;
-        max-width:100%;
+        display: block;
+        max-width: 100%;
     }
 
     & .media-holder {
@@ -450,22 +432,23 @@ button.icon {
         @include flex-flow-row-nowrap;
         @include justify-content(center);
         @include alignitem-center;
-        @include gridle_state("print"){
-            max-height:400px;
+
+        @include gridle_state("print") {
+            max-height: 400px;
         }
 
         .hero-media {
-            & iframe {            
-                border:0;
-                display:block;
-                background-color:$black;
-                background-image:url('data:image/gif;base64,R0lGODlhHwAeAMQfADc3N3p6ek1NTYuLi8LCwpWVlXJycmxsbJycnIWFhQwMCnV1dVlZWQAAAJKSkmlpaWVlZaysrENDQykpKSUlJRwcHAQEBFJSUqKioszMzBMTE0lJSR4WGLa2try8vP///yH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEI3RTEzRkQxRjkwMTFFNThFMjI4REQyOUQwNkRGQTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEI3RTEzRkUxRjkwMTFFNThFMjI4REQyOUQwNkRGQTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4QjdFMTNGQjFGOTAxMUU1OEUyMjhERDI5RDA2REZBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4QjdFMTNGQzFGOTAxMUU1OEUyMjhERDI5RDA2REZBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0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');
+            & iframe {
+                border: 0;
+                display: block;
+                background-color: $black;
+                background-image: url('data:image/gif;base64,R0lGODlhHwAeAMQfADc3N3p6ek1NTYuLi8LCwpWVlXJycmxsbJycnIWFhQwMCnV1dVlZWQAAAJKSkmlpaWVlZaysrENDQykpKSUlJRwcHAQEBFJSUqKioszMzBMTE0lJSR4WGLa2try8vP///yH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEI3RTEzRkQxRjkwMTFFNThFMjI4REQyOUQwNkRGQTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEI3RTEzRkUxRjkwMTFFNThFMjI4REQyOUQwNkRGQTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4QjdFMTNGQjFGOTAxMUU1OEUyMjhERDI5RDA2REZBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4QjdFMTNGQzFGOTAxMUU1OEUyMjhERDI5RDA2REZBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0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');
                 background-position: 50% 50%;
                 background-repeat: no-repeat;
             }
 
             .video.loaded {
-                height:500px;
+                height: 500px;
                 background-position: 50% 50%;
                 background-repeat: no-repeat;
                 background-size: cover;
@@ -493,17 +476,16 @@ button.icon {
             &:hover .ytp-large-play-button-svg,
             .ytp-large-play-button:focus .ytp-large-play-button-svg {
                 opacity: 1;
-                fill: #cc181e;                
+                fill: #cc181e;
             }
 
             .video:hover {
-                cursor:pointer;
+                cursor: pointer;
             }
 
-            position:relative;
-            max-width:100%;
+            position: relative;
+            max-width: 100%;
         }
-        
     }
 
     a.next, a.previous {
@@ -513,33 +495,34 @@ button.icon {
         width: 32px;
         color: $colour-bodytext;
         @include alignitem-center();
-        align-self:stretch;
-        height:100%;
-        position:absolute;
-        z-index:200;
+        align-self: stretch;
+        height: 100%;
+        position: absolute;
+        z-index: 200;
         text-shadow: -1px 0 $colour-heading-inverted, 0 1px $colour-heading-inverted, 1px 0 $colour-heading-inverted, 0 -1px $colour-heading-inverted;
         @include gridle_hide("print");
+
         &.inactive {
             color: #999;
         }
 
         &.inactive:hover {
-            background:none;
+            background: none;
         }
 
         &:hover {
-           background:$dim;
+            background: $dim;
         }
     }
 
     a.next {
-        right:0;
-        top:0;
+        right: 0;
+        top: 0;
     }
 
     a.previous {
-        left:0;
-        top:0;
+        left: 0;
+        top: 0;
     }
 
 
@@ -555,10 +538,12 @@ button.icon {
             margin: 1em 0 1.5em;
             line-height: 20px;
             height: 100px;
-            @include gridle_state("print"){
-                height:auto;
-                font-size:9pt;
+
+            @include gridle_state("print") {
+                height: auto;
+                font-size: 9pt;
             }
+
             & .caption-text {
                 display: block;
             }
@@ -576,8 +561,9 @@ button.icon {
                 display: block;
                 font-size: 14px;
                 font-weight: 300;
-                @include gridle_state("print"){
-                   font-size:9pt;
+
+                @include gridle_state("print") {
+                    font-size: 9pt;
                 }
             }
         }
@@ -586,7 +572,6 @@ button.icon {
             @include gridle(3);
             float: left;
             direction: ltr;
-            //display: flex;
             @include display-flex();
             float: left;
             justify-content: flex-end;
@@ -594,6 +579,7 @@ button.icon {
             padding-left: 10px;
             padding-right: 10px;
             @include gridle_hide("print");
+
             & button {
                 background: rgba(0,0,0,0);
                 border: 2px solid $colour-bodytext-inverted;
@@ -624,8 +610,8 @@ button.icon {
                     font-size: 1.5em;
                 }
 
-                &.disabled,  &.disabled:hover{
-                    opacity:0.2;
+                &.disabled, &.disabled:hover {
+                    opacity: 0.2;
                     color: $colour-bodytext-inverted;
                     border: 2px solid $colour-bodytext-inverted;
                 }
@@ -638,330 +624,284 @@ button.icon {
         content: "\e608";
         font-size: 1.5em;
     }
-} 
-
-//author section
-.author
-{
-	display: block;
-	width:100%;
-	margin: 0 0 20px;
-	font-size: 14px;
-	line-height: 1.4em; 
-	   overflow: hidden;
-	
-    &:last-child {
-        border:0;
-        margin-bottom:0;
-    }
-
-	& img 
-	{
-		float:left;
-		width:20%;
-		margin-right:10px;
-		border-radius: 30px;
-		margin-top: 5px;
-		// mobile and tablet image width 10%;
-		@include gridle_state(tablet){
-			width:10%;
-		}
-    
-		
-	}
-	& .authorname
-	{
-		//float:left;
-		
-		font-weight: 500;
-		display: block;
-		//width:90%;
-		//padding:10px;;
-	}
-	
-	& .authorbio
-	{
-	   float: left;
-	   width: 70%;
-    font-weight: 400;
-    margin: 0 0 20px;
- 
-	}
 }
 
-#record {    
-    //font-weight:300;
-    padding-bottom: 40px;
-    @include gridle_state(tablet){
-        padding-left:10px;
-        padding-right:10px;
-    }
-    @include gridle_state(mobile){
-        padding-left:10px;
-        padding-right:10px;
-    }
-    .text-content {
-       	@include gridle(8);
-	    @include gridle ( 12 , 'tablet' );
-	    @include gridle ( 12 , 'mobile' );
+//author section
+.author {
+    display: block;
+    width: 100%;
+    margin: 0 0 20px;
+    font-size: 14px;
+    line-height: 1.4em;
+    overflow: hidden;
 
-	    float:left;
-	    direction:ltr;
-	    padding-top: 50px;
-	    padding-right:20px;
-        @include gridle_state("print"){
-            width:100%;
-            //padding-right:0em;
-            padding-top: 10px;
-            
+    &:last-child {
+        border: 0;
+        margin-bottom: 0;
+    }
+
+    & img {
+        float: left;
+        width: 20%;
+        margin-right: 10px;
+        border-radius: 30px;
+        margin-top: 5px;
+        // mobile and tablet image width 10%;
+        @include gridle_state(tablet) {
+            width: 10%;
         }
-        
+    }
+
+    & .authorname {
+        font-weight: 500;
+        display: block;
+    }
+
+    & .authorbio {
+        float: left;
+        width: 70%;
+        font-weight: 400;
+        margin: 0 0 20px;
+    }
+}
+
+#record {
+    padding-bottom: 40px;
+
+    @include gridle_state(tablet) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    @include gridle_state(mobile) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .text-content {
+        @include gridle(8);
+        @include gridle ( 12, 'tablet' );
+        @include gridle ( 12, 'mobile' );
+        float: left;
+        direction: ltr;
+        padding-top: 50px;
+        padding-right: 20px;
+
+        @include gridle_state("print") {
+            width: 100%;
+            padding-top: 10px;
+        }
+
         & p {
-		    font-size: 17px;
-			font-weight: 300;
-			margin-bottom: 1.5em;
+            font-size: 17px;
+            font-weight: 300;
+            margin-bottom: 1.5em;
 
-            @include gridle_state("print"){
-                font-size:11pt;
-                line-height:15pt;
-                width:100%;
-
+            @include gridle_state("print") {
+                font-size: 11pt;
+                line-height: 15pt;
+                width: 100%;
             }
+        }
 
-	    }
+        & h2 {
+            padding-bottom: 5px;
+            font-size: 22px;
+            padding-left: 0px;
+            font-weight: 400;
+            float: none;
 
-        & h2
-	    {
-			    padding-bottom: 5px;
-			    font-size: 22px;
-			    padding-left: 0px;
-                font-weight: 400;
-			    float: none;	
+            @include gridle_state("print") {
+                font-weight: 500;
+                font-size: 11.5pt;
+                line-height: 15pt;
+            }
+        }
 
-                @include gridle_state("print"){
-                    font-weight:500;
-                    font-size: 11.5pt;
-                    line-height: 15pt;
-                }
 
-	    }
-	
-	   
 
-        .summary {     
-                /*  margin:5em 0 2em;
-                    line-height:1.8em;                
-                    font-size:1.1em;
-                */
+        .summary {
             h3 {
-              /* color:#424242;
-                font-size:1.6em;
-                font-weight:400;
-                margin:1em 0 0.5em;*/               	
-	            padding-bottom: 5px;
-	            font-size: 22px;
+                padding-bottom: 5px;
+                font-size: 22px;
                 font-weight: 400;
-                @include gridle_state(print){
-                    font-size:11.5pt;
-                    font-weight:500;
+
+                @include gridle_state(print) {
+                    font-size: 11.5pt;
+                    font-weight: 500;
                 }
-            }           
+            }
         }
 
         .summary a, .detail a {
-          //  color:#488DD9;            
-          //  border-bottom:2px solid rgba(72, 141, 217, 0.5);
-              border-bottom: 1px dotted;
-              color: rgba(25, 102,93, 0.95);
-              @include gridle_state("print"){
-                  color:black;
-                  border-bottom: none;
-              }
-              //white-space: nowrap;
+            border-bottom: 1px dotted;
+            color: rgba(25, 102,93, 0.95);
+
+            @include gridle_state("print") {
+                color: black;
+                border-bottom: none;
+            }
+
             &:hover {
-              border-bottom: 1px solid;
-              color: rgba(25, 102,93, 1);
+                border-bottom: 1px solid;
+                color: rgba(25, 102,93, 1);
             }
         }
 
         .detail {
 
-           & h3{
-            padding-bottom: 5px;
-			font-size: 22px;
-            font-weight: 400;
-			padding-left: 0px;
-			float: none;
-			margin-top: 0px;
-            &.sub-heading{  
-                
-                font-size: 18px;
-                margin-top: 20px;
-             }
+            & h3 {
+                padding-bottom: 5px;
+                font-size: 22px;
+                font-weight: 400;
+                padding-left: 0px;
+                float: none;
+                margin-top: 0px;
 
-           }
-          &  ul {
-                margin:0;
-                padding:0;
-                padding-bottom:1px; 
-                list-style:none;
-                overflow:hidden;
+                &.sub-heading {
+                    font-size: 18px;
+                    margin-top: 20px;
+                }
             }
 
-          &  li {
-                clear:both;
-            
-                 & h3 {
+            & ul {
+                margin: 0;
+                padding: 0;
+                padding-bottom: 1px;
+                list-style: none;
+                overflow: hidden;
+            }
+
+            & li {
+                clear: both;
+
+                & h3 {
                     @include gridle (3);
                     @include gridle (4,mobile);
                     @include gridle_no_gutter(left);
                     @include gridle_no_gutter(left,tablet);
                     @include gridle_no_gutter(left,mobile);
-                    font-weight:400;
-                    font-size:15px;
-                    color:$colour-sidetext;
-                    line-height:1.4em;
-                    margin:10px 0 0;
-                    color:  $colour-sidetext;
+                    font-weight: 400;
+                    font-size: 15px;
+                    color: $colour-sidetext;
+                    line-height: 1.4em;
+                    margin: 10px 0 0;
+                    color: $colour-sidetext;
                     padding-right: 10px;
                     padding-bottom: 0px;
                     padding-left: 0px;
-                    @include gridle_state("print"){
+
+                    @include gridle_state("print") {
                         font-size: 11.5pt;
                         line-height: 15pt;
                     }
                 }
 
-               & p {
+                & p {
                     @include gridle (9);
                     @include gridle (8, mobile);
                     @include gridle_no_gutter(right);
-                    line-height:1.4em;
-                    font-size:15px;
-                    margin:10px 0 0;
+                    line-height: 1.4em;
+                    font-size: 15px;
+                    margin: 10px 0 0;
                     padding-left: 10px;
 
-                    @include gridle_state("print"){
-                        font-weight:300;
+                    @include gridle_state("print") {
+                        font-weight: 300;
                         font-size: 11.5pt;
                         line-height: 15pt;
                     }
-                }                 
-                
-          }
-
-
-       
+                }
+            }
         }
-
-        
     }
 
-    & aside:first-of-type{
-        margin-top:50px;
-        @include gridle_state("print"){
-            margin-top:0px;
+    & aside:first-of-type {
+        margin-top: 50px;
+
+        @include gridle_state("print") {
+            margin-top: 0px;
         }
     }
 
 
-    & .sidecolumn{
-    width:100%;
-    //background-color: $colour-background-lightest;
-    border-radius: 3px;
-    padding: 15px 20px 20px;
-    color:  $colour-sidetext;
-   // margin-bottom: 20px;
-    border-bottom: 1px solid $colour-background-lightest;
-        & .downloads{
-                font-size:14px;
+    & .sidecolumn {
+        width: 100%;
+        border-radius: 3px;
+        padding: 15px 20px 20px;
+        color: $colour-sidetext;
+        border-bottom: 1px solid $colour-background-lightest;
+
+        & .downloads {
+            font-size: 14px;
+
             & a {
                 color: $colour-sidetext;
-                display:block;
-                padding-bottom:10px;
-                &:hover{
-                    text-decoration:underline;
+                display: block;
+                padding-bottom: 10px;
+
+                &:hover {
+                    text-decoration: underline;
                 }
             }
-
         }
-
     }
 
 
-   & .side-content {
+    & .side-content {
         @include gridle (4);
-    	@include gridle ( 12 , 'tablet' );
-	    @include gridle ( 12 , 'mobile' );
-        @include gridle_state("print"){
-            width:100%;
-        }
-	    float: right;
-	    direction: ltr;
-	  
-   /*     font-weight:500;
-        font-size:1.1em;
-        color:$color-default;
-        margin:5em 0 0;
-    */    
-      /*  .on-display {
-            background: linear-gradient(60deg, #a82912 0%,#a82912 20%,#5f0800 21%,#000000 21%,#000000 51%,#490200 52%,#490200 56%,#000000 57%,#000000 62%,#5f0800 63%,#5f0800 67%,#711300 68%,#711300 98%,#b44b14 99%);
-            margin:0 0 20px;
-            border-radius:3px;
-            padding:20px;
-            line-height:1.7em;
+        @include gridle ( 12, 'tablet' );
+        @include gridle ( 12, 'mobile' );
 
-            a {
-                color:$color-default;
-                border-bottom:2px solid rgba(255, 255, 255, 0.50);
-                font-weight:400;
-
-                &:hover {
-                    border-bottom-color:#fff;
-                }
-            }
+        @include gridle_state("print") {
+            width: 100%;
         }
-*/
-       & .on-display{
-		direction: ltr;
-        border-radius: 3px;
-        line-height: 1.4em;
-        margin: 0 0 20px;
-        padding: 15px 20px 60px;
-        position:relative;
-	    color: $colour-heading-inverted;
-	
+
+        float: right;
+        direction: ltr;
+
+        & .on-display {
+            direction: ltr;
+            border-radius: 3px;
+            line-height: 1.4em;
+            margin: 0 0 20px;
+            padding: 15px 20px 60px;
+            position: relative;
+            color: $colour-heading-inverted;
+
             &.melbourne-museum {
-		        background:url("/content/img/bg-on-display-melbourne-museum.jpg");
-	        }
-	
-	        &.bunjilaka {
-		        background:url("/content/img/bg-on-display-bunjilaka.png");
-	        }
-	
-	        &.immigration-museum, &.immigration-discovery-centre {
-		        background:url("/content/img/bg-on-display-immigration-museum.png");
-	        }
-    
-            &.royal-exhibition-building {
-		        background:url("/content/img/bg-on-display-reb.png");
-	        }
+                background: url("/content/img/bg-on-display-melbourne-museum.jpg");
+            }
 
-	        &.scienceworks {
-		        background:url("/content/img/bg-on-display-scienceworks.png");
-	        }
+            &.bunjilaka {
+                background: url("/content/img/bg-on-display-bunjilaka.png");
+            }
+
+            &.immigration-museum, &.immigration-discovery-centre {
+                background: url("/content/img/bg-on-display-immigration-museum.png");
+            }
+
+            &.royal-exhibition-building {
+                background: url("/content/img/bg-on-display-reb.png");
+            }
+
+            &.scienceworks {
+                background: url("/content/img/bg-on-display-scienceworks.png");
+            }
 
             &.discovery-centre {
-		        background:url("/content/img/bg-on-display-melbourne-museum.jpg");
-	        }
+                background: url("/content/img/bg-on-display-melbourne-museum.jpg");
+            }
 
-	        & .gallery{
-		        font-weight: 300;
-	        }
-	        & .venue{
-		        font-weight: 400;
-	        }
-            & .website{
+            & .gallery {
+                font-weight: 300;
+            }
+
+            & .venue {
+                font-weight: 400;
+            }
+
+            & .website {
                 background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
                 bottom: 0;
                 display: block;
@@ -970,318 +910,240 @@ button.icon {
                 position: absolute;
                 width: 100%;
                 border-bottom: none;
-		        &:hover{
-			        border-bottom: none;
-			        text-decoration: underline;
-		        }
-	        }
+
+                &:hover {
+                    border-bottom: none;
+                    text-decoration: underline;
+                }
+            }
 
 
-	        & h4{
-		           font-size: 22px;
-		           font-weight: 400;
-		           padding-left: 0;
-		           margin-bottom: 5px;
-                   color:$colour-heading-inverted;
-	        }
-	        & a{
-		       // display:block;
-                border-bottom:1px dotted;
-	        }
-            & a:hover{
+            & h4 {
+                font-size: 22px;
+                font-weight: 400;
+                padding-left: 0;
+                margin-bottom: 5px;
+                color: $colour-heading-inverted;
+            }
+
+            & a {
+                border-bottom: 1px dotted;
+            }
+
+            & a:hover {
                 border-bottom: 1px solid;
             }
         }
 
         .print {
-            border-radius:3px;
-            background:#000;
-            color:$color-default;
-            margin-bottom:3px;
-            height:3em;
+            border-radius: 3px;
+            background: #000;
+            color: $color-default;
+            margin-bottom: 3px;
+            height: 3em;
 
             .icon {
-                color:$color-default;
-                border:none;
-                line-height:3em;
-                position:relative;
-                display:inline-block;
-                box-sizing:border-box;
-                width:100%;
-                padding:0;
+                color: $color-default;
+                border: none;
+                line-height: 3em;
+                position: relative;
+                display: inline-block;
+                box-sizing: border-box;
+                width: 100%;
+                padding: 0;
 
                 .icon-label {
-                    padding-left:20px;
+                    padding-left: 20px;
                 }
             }
         }
 
-         & h4{
-	        font-weight:500;
-	        font-size:14px;
-	        margin-bottom:2px;
-	        color: $colour-sideheadings;
+        & h4 {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 2px;
+            color: $colour-sideheadings;
         }
-    
+
         & .social-tools {
             display: inline-block;
             height: 26px;
             line-height: 26px;
-           // margin-bottom: 20px;
             margin-top: 6px;
-            font-size:14px;
-	        & .icon
-	        {
-		         margin: 0 6px 0 0;	    }
-            & a:hover{
-             //   font-size:15px;
-                color:$colour-heading;
+            font-size: 14px;
+
+            & .icon {
+                margin: 0 6px 0 0;
+            }
+
+            & a:hover {
+                color: $colour-heading;
             }
         }
 
-         .cite {
-
-    /*             @include gridle_state("print"){
-                 position:fixed;
-                 bottom:0;
-             }
-    */
-            h4 {
-            /*    color:$color-sub-heading;
-                font-weight:400;
-                font-size:1.6em;
-                margin:0.6em 0;
-                */
-                @include gridle_state("print"){
-                    font-size:9pt;
-                }
+        h4 {
+            @include gridle_state("print") {
+                font-size: 9pt;
             }
-
-            p {
-                font-size: 14px;
-                margin:0 0 20px 0px;
-                line-height: 1.4;
-                word-wrap:break-word;
-                
-
-            }
-
-            & a.textlink{
-                text-decoration:underline;
-            }
-            
-            .icon {
-                color:$color-sub-heading;
-                display: inline-block;
-                margin:10px 0 3px;
-            }
-
-            strong {
-                color:$color-sub-heading;
-                font-weight:500;
-            }
-
-
         }
 
-
-       /*.social {
-            border-radius:3px;
-            background:#000;
-            color:$color-default;
-            height:3em;
-
-            h4 {
-                display:inline-block;
-                margin:0;
-                padding:0 0 0 20px;
-                line-height:3em;
-            }
-
-            .social-tools {
-                display:flex;
-                justify-content:flex-end;
-                float:right;
-
-                .icon {
-                    color:$color-default;
-                    border:none;
-                    border-left:1px solid $color-default;
-                    display:inline-block;
-                    height:3em;
-                    line-height:3em;
-                    box-sizing:border-box;
-                    width:3em;
-                    text-align:center;
-                    margin:0;
-                }
-            }
-            
+        p {
+            font-size: 14px;
+            margin: 0 0 20px 0px;
+            line-height: 1.4;
+            word-wrap: break-word;
         }
-           */ 
-    }    
+
+        & a.textlink {
+            text-decoration: underline;
+        }
+
+        .icon {
+            color: $color-sub-heading;
+            display: inline-block;
+            margin: 10px 0 3px;
+        }
+
+        strong {
+            color: $color-sub-heading;
+            font-weight: 500;
+        }
+    }
 }
-/*
-.cite-content {
-        @include gridle (12);
-        margin:4em 0;
-        
-        .cite {
-            padding:2em;
-            background-color:$color-default;
-            border-radius:3px;
 
-            h4 {
-                color:$color-sub-heading;
-                font-weight:400;
-                font-size:1.6em;
-                margin:0.6em 0;
-            }
-
-            p {
-                font-size:1.1em;
-                margin:0.9em 0;
-            }
-
-            .icon {
-                color:$color-sub-heading;
-            }
-
-            strong {
-                color:$color-sub-heading;
-                font-weight:500;
-            }
-        }
-}
-*/
 #related {
-   	background-color: $colour-background-midlight;
-	padding: 40px 0px;
+    background-color: $colour-background-midlight;
+    padding: 40px 0px;
     @include gridle_hide("print");
-        @include gridle_state(tablet){
-        padding-left:10px;
-        padding-right:10px;
+
+    @include gridle_state(tablet) {
+        padding-left: 10px;
+        padding-right: 10px;
     }
-    @include gridle_state(mobile){
-        padding-left:10px;
-        padding-right:10px;
+
+    @include gridle_state(mobile) {
+        padding-left: 10px;
+        padding-right: 10px;
     }
+
     .related-content {
-       // margin:4em 0 2em;
         @include gridle_parent();
 
         h3 {
             @include gridle (12);
             color: $colour-bodytext;
-	        padding-bottom: 25px;
-	        font-size: 22px;
-            font-weight:400;
+            padding-bottom: 25px;
+            font-size: 22px;
+            font-weight: 400;
         }
 
         .item {
             .icon-item {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-item;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-item;
             }
         }
 
         .article {
             .icon-article {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-article;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-article;
             }
         }
 
         .specimen {
             .icon-specimen {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-specimen;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-specimen;
             }
         }
 
         .species {
             .icon-species {
-                position:absolute;
-                top:0;
-                left:0;
-                font-size:1.5em;
-                padding:0 4px;
-                color:$color-default;
-                background-color:$color-species;
+                position: absolute;
+                top: 0;
+                left: 0;
+                font-size: 1.5em;
+                padding: 0 4px;
+                color: $color-default;
+                background-color: $color-species;
             }
         }
 
         .no-image-label {
-            //padding-top:4em;
-            position:absolute;
-            top:40%;
-          @include gridle_state("mobile"){
-               top:20%;
-               padding-left:10px;
-               padding-right:10px;
-           }
+            position: absolute;
+            top: 40%;
+
+            @include gridle_state("mobile") {
+                top: 20%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
         }
 
-        & .tile.full{
+        & .tile.full {
             @include gridle(12,"mobile");
-            @include gridle_state(mobile){
-                max-width:none;
+
+            @include gridle_state(mobile) {
+                max-width: none;
             }
         }
     }
 
     .related-link {
-		 float:right;
-		 font-weight: 300;
-		 font-size: 18px;
-          & a {
-             color: $colour-sidetext;
-         }
-         & a:hover {
-             text-decoration:underline;
-         }
+        float: right;
+        font-weight: 300;
+        font-size: 18px;
+
+        & a {
+            color: $colour-sidetext;
+        }
+
+        & a:hover {
+            text-decoration: underline;
+        }
     }
 }
 
 .no-image {
-    display:block;
+    display: block;
     position: relative;
-	width: 100%;
-    background:#cccccc;
+    width: 100%;
+    background: #cccccc;
 
     &:before {
-	    content: "";
-	    display: block;
-	    padding-top: 100%;
+        content: "";
+        display: block;
+        padding-top: 100%;
     }
 
     .no-image-label {
         display: block;
-        position:  absolute;
-        color:$color-sub-heading;
-        font-size:1.6em;
-        text-align:center;
-        text-transform:uppercase;
-        font-weight:500;        
-	    top: 0;
-	    left: 0;
-	    bottom: 0;
-	    right: 0;
+        position: absolute;
+        color: $color-sub-heading;
+        font-size: 1.6em;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 500;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
     }
 }
 
@@ -1299,9 +1161,8 @@ button.icon {
         margin-top: 0px;
     }
 
-    @include gridle_state("print"){
-
-        display:block;
+    @include gridle_state("print") {
+        display: block;
         margin-top: 0px;
     }
 
@@ -1337,7 +1198,7 @@ button.icon {
             }
 
             @include gridle_state("mobile") {
-                display:none; // filter closed by default for tablet
+                display: none; // filter closed by default for tablet
                 padding: 40px 20px 20px 20px;
                 margin-bottom: 20px;
             }
@@ -1531,13 +1392,14 @@ button.icon {
 
         .facets {
             display: none;
-            @include gridle_state("tablet"){
-                        display:block;
-              }
-            @include gridle_state("mobile"){
-                display:block;
+
+            @include gridle_state("tablet") {
+                display: block;
             }
 
+            @include gridle_state("mobile") {
+                display: block;
+            }
         }
     }
 
@@ -1562,10 +1424,9 @@ button.icon {
         }
 
         .active-facets {
-            //@include gridle_hide("print");
             padding: 20px 0 0 20px;
 
-            @include gridle_state("print"){
+            @include gridle_state("print") {
                 padding: 0 0 0 10px;
             }
 
@@ -1615,7 +1476,7 @@ button.icon {
             & .counts {
                 display: inline-block;
                 font-size: 20px;
-                margin-right:25px;
+                margin-right: 25px;
             }
 
             & a.button {
@@ -1635,7 +1496,8 @@ button.icon {
             div {
                 display: inline-block;
                 font-weight: 400;
-                & span{
+
+                & span {
                     display: inline-block;
                 }
             }
@@ -1643,39 +1505,41 @@ button.icon {
 
             .numbers {
                 display: block;
-                width:100%;
+                width: 100%;
                 border-bottom: 1px solid #ddd;
                 padding-bottom: 15px;
-                & div{
-                        padding-top: 5px; //padding moved to inner divs for proper spacing on mobile.
+
+                & div {
+                    padding-top: 5px; //padding moved to inner divs for proper spacing on mobile.
                 }
             }
 
             .options {
-               
                 display: inline-block;
                 font-size: 14px;
                 border-bottom: 1px solid #ddd;
-                width:100%;
-                padding-bottom:15px;
-                & div{
+                width: 100%;
+                padding-bottom: 15px;
+
+                & div {
                     padding-top: 15px; //padding moved to inner divs for proper spacing on mobile.
                     font-weight: 300;
                 }
+
                 & .viewtype {
-                   
                     font-size: 14px;
                     font-weight: 300;
-                    display:inline-block;
+                    display: inline-block;
                     margin-right: 25px;
 
-                    & .buttongroup{
-                        font-size:18px;
+                    & .buttongroup {
+                        font-size: 18px;
                         vertical-align: middle;
+
                         & a.button {
-                           padding: 0 5px;
-                           vertical-align: middle;
-                         }
+                            padding: 0 5px;
+                            vertical-align: middle;
+                        }
                     }
                 }
 
@@ -1686,8 +1550,9 @@ button.icon {
                     color: $colour-bodytext;
                     border-right: 1px solid #999;
                     background: $colour-button-background;
-                    margin-left:0px;
-                    position:relative;
+                    margin-left: 0px;
+                    position: relative;
+
                     &:hover {
                         text-decoration: underline;
                     }
@@ -1700,10 +1565,9 @@ button.icon {
                         margin-left: 5px;
                         border-top-left-radius: 3px;
                         border-bottom-left-radius: 3px;
+
                         &.active {
                             color: $colour-bodytext;
-                            //text-decoration: underline;
-
                             &:hover {
                                 text-decoration: none;
                             }
@@ -1717,9 +1581,6 @@ button.icon {
 
                         &.active {
                             color: $colour-bodytext;
-                           
-                            // text-decoration: underline;
-
                             &:hover {
                                 text-decoration: none;
                             }
@@ -1729,20 +1590,22 @@ button.icon {
                     &.active {
                         color: $colour-bodytext;
                         background: $colour-button-active-background !important;
+
                         &:after {
-				                top: 100%;
-				                left: 50%;
-				                border: solid transparent;
-				                content: " ";
-				                height: 0;
-				                width: 0;
-				                position: absolute;
-				                pointer-events: none;
-				                border-color: rgba(255, 255, 255, 0);
-				                border-top-color: $colour-button-active-background;
-				                border-width: 10px;
-				                margin-left: -10px;
-			                }
+                            top: 100%;
+                            left: 50%;
+                            border: solid transparent;
+                            content: " ";
+                            height: 0;
+                            width: 0;
+                            position: absolute;
+                            pointer-events: none;
+                            border-color: rgba(255, 255, 255, 0);
+                            border-top-color: $colour-button-active-background;
+                            border-width: 10px;
+                            margin-left: -10px;
+                        }
+
                         &:hover {
                             text-decoration: none;
                         }
@@ -1754,6 +1617,7 @@ button.icon {
                 display: inline-block;
                 margin-right: 25px;
                 font-weight: 300;
+
                 & a.button {
                     display: inline-block;
                     padding: 5px 8px;
@@ -1776,23 +1640,25 @@ button.icon {
                         margin-left: 5px;
                         border-top-left-radius: 3px;
                         border-bottom-left-radius: 3px;
-                        &.active {                  
+
+                        &.active {
                             text-decoration: none;
                             background: $colour-button-active-background;
+
                             &:after {
-				                top: 100%;
-				                left: 50%;
-				                border: solid transparent;
-				                content: " ";
-				                height: 0;
-				                width: 0;
-				                position: absolute;
-				                pointer-events: none;
-				                border-color: rgba(255, 255, 255, 0);
-				                border-top-color: $colour-button-active-background;
-				                border-width: 10px;
-				                margin-left: -10px;
-			                }
+                                top: 100%;
+                                left: 50%;
+                                border: solid transparent;
+                                content: " ";
+                                height: 0;
+                                width: 0;
+                                position: absolute;
+                                pointer-events: none;
+                                border-color: rgba(255, 255, 255, 0);
+                                border-top-color: $colour-button-active-background;
+                                border-width: 10px;
+                                margin-left: -10px;
+                            }
 
 
 
@@ -1810,20 +1676,21 @@ button.icon {
                         &.active {
                             text-decoration: none;
                             background: $colour-button-active-background;
+
                             &:after {
-				                top: 100%;
-				                left: 50%;
-				                border: solid transparent;
-				                content: " ";
-				                height: 0;
-				                width: 0;
-				                position: absolute;
-				                pointer-events: none;
-				                border-color: rgba(255, 255, 255, 0);
-				                border-top-color: $colour-button-active-background;
-				                border-width: 10px;
-				                margin-left: -10px;
-			                }
+                                top: 100%;
+                                left: 50%;
+                                border: solid transparent;
+                                content: " ";
+                                height: 0;
+                                width: 0;
+                                position: absolute;
+                                pointer-events: none;
+                                border-color: rgba(255, 255, 255, 0);
+                                border-top-color: $colour-button-active-background;
+                                border-width: 10px;
+                                margin-left: -10px;
+                            }
 
 
                             &:hover {
@@ -1833,22 +1700,24 @@ button.icon {
                     }
 
                     &.active {
-                            text-decoration: none;
-                            background: $colour-button-active-background;
-                            &:after {
-				                top: 100%;
-				                left: 50%;
-				                border: solid transparent;
-				                content: " ";
-				                height: 0;
-				                width: 0;
-				                position: absolute;
-				                pointer-events: none;
-				                border-color: rgba(255, 255, 255, 0);
-				                border-top-color: $colour-button-active-background;
-				                border-width: 10px;
-				                margin-left: -10px;
-			                }
+                        text-decoration: none;
+                        background: $colour-button-active-background;
+
+                        &:after {
+                            top: 100%;
+                            left: 50%;
+                            border: solid transparent;
+                            content: " ";
+                            height: 0;
+                            width: 0;
+                            position: absolute;
+                            pointer-events: none;
+                            border-color: rgba(255, 255, 255, 0);
+                            border-top-color: $colour-button-active-background;
+                            border-width: 10px;
+                            margin-left: -10px;
+                        }
+
                         &:hover {
                             text-decoration: none;
                         }
@@ -1856,13 +1725,13 @@ button.icon {
                 }
             }
 
-            .pages{
+            .pages {
                 margin-right: 25px;
 
-                 & a {
-                display: inline-block;
-                padding: 0 5px;
-                color: $color;
+                & a {
+                    display: inline-block;
+                    padding: 0 5px;
+                    color: $color;
                 }
 
                 & a.disabled {
@@ -1897,20 +1766,21 @@ button.icon {
             clear: both;
             padding-left: 10px;
             width: 100%;
-            @include gridle_state("print"){
-                display:block;
-         
-               & .tile.full{
-                   border-top:1px solid black;
-                   border-bottom:1px solid black;
-                   page-break-inside:avoid;
-                   padding-left:0;
-                    } 
 
-               & .tile a{
-                   margin-bottom:0px;
-               }
-             }
+            @include gridle_state("print") {
+                display: block;
+
+                & .tile.full {
+                    border-top: 1px solid black;
+                    border-bottom: 1px solid black;
+                    page-break-inside: avoid;
+                    padding-left: 0;
+                }
+
+                & .tile a {
+                    margin-bottom: 0px;
+                }
+            }
 
 
             &.grid {
@@ -1918,7 +1788,7 @@ button.icon {
                     & .tileimages {
                         @include gridle_state(mobile) {
                             width: 100%;
-                            float:none;
+                            float: none;
                         }
                     }
 
@@ -1941,164 +1811,172 @@ button.icon {
 
             &.list {
                 & .tile.full {
-                                        @include gridle(12);
-                                        max-width: none;
-                                        min-width: 0px;
-                                        padding-left: 10px;
-                                        padding-right: 10px;
-                                        @include gridle_state("mobile"){
-                                            max-width:none; // important for mobile.
-                                            & .title{
-                                                height:auto;
-                                            }
-                                            & .heading{
-                                                height:auto;
-                                            }
-                                        }
-									& a{
-										//@include display-flex;
-                                        @include alignitem-center;
-										}
-                                    & .tileimages{
-                                       float:left;
-                                       padding:0;
-                                       width:25%;
-                                       max-width:175px;
-                                       min-width:107px;
-                                       @include gridle_state("tablet"){
-                                           min-width:150px;
-                                       }
-                                       @include gridle_state("mobile"){
-                                           width:33%;
-                                       }
-                                    }
-                                        
-                                    & .title{
-                                        height:auto;
-                                        @include alignself-flexstart();
-                                        & .heading{
-                                            font-size: 16px;
-                                            padding-bottom: 8px;
-                                            padding-top: 2px;
-                                            height:auto;
-                                        }
-                                    }
-                                    & .description{
-                                        display:block;
-                                        font-weight: 400;
-                                        font-size: 14px;
-                                        & h5 {
-                                            color: black;
-                                            display: block;
-                                            font-weight: 500;
-                                            font-size: 14px;
-                                            margin-bottom: 0;
-                                            padding-bottom: 6px;
-                                        }
-                                        & span {
-                                            display:inline-block;
-                                            padding-right:12px;
-                                            & strong{
-                                                 color: black;
-                                                 font-weight: 500;
-                                                 padding-right: 4px;
-                                            }
-                                        }
+                    @include gridle(12);
+                    max-width: none;
+                    min-width: 0px;
+                    padding-left: 10px;
+                    padding-right: 10px;
 
-                                    }
-                                    }
+                    @include gridle_state("mobile") {
+                        max-width: none; // important for mobile.
+                        & .title {
+                            height: auto;
+                        }
+
+                        & .heading {
+                            height: auto;
+                        }
+                    }
+
+                    & a {
+                        @include alignitem-center;
+                    }
+
+                    & .tileimages {
+                        float: left;
+                        padding: 0;
+                        width: 25%;
+                        max-width: 175px;
+                        min-width: 107px;
+
+                        @include gridle_state("tablet") {
+                            min-width: 150px;
+                        }
+
+                        @include gridle_state("mobile") {
+                            width: 33%;
+                        }
+                    }
+
+                    & .title {
+                        height: auto;
+                        @include alignself-flexstart();
+
+                        & .heading {
+                            font-size: 16px;
+                            padding-bottom: 8px;
+                            padding-top: 2px;
+                            height: auto;
+                        }
+                    }
+
+                    & .description {
+                        display: block;
+                        font-weight: 400;
+                        font-size: 14px;
+
+                        & h5 {
+                            color: black;
+                            display: block;
+                            font-weight: 500;
+                            font-size: 14px;
+                            margin-bottom: 0;
+                            padding-bottom: 6px;
+                        }
+
+                        & span {
+                            display: inline-block;
+                            padding-right: 12px;
+
+                            & strong {
+                                color: black;
+                                font-weight: 500;
+                                padding-right: 4px;
+                            }
+                        }
+                    }
+                }
             }
-        
-            &.data{
-                     & .tile.full {
-                                        @include gridle(12);
-                                        max-width: none;
-                                        min-width: 0px;
-                                        padding-left: 10px;
-                                        padding-right: 10px;
-                                        @include gridle_state("mobile"){
-                                            max-width:none; // important for mobile.
-                                            & .title{
-                                                height:auto;
-                                            }
-                                            & .heading{
-                                                height:auto;
-                                            }
-                                        }
+
+            &.data {
+                & .tile.full {
+                    @include gridle(12);
+                    max-width: none;
+                    min-width: 0px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+
+                    @include gridle_state("mobile") {
+                        max-width: none; // important for mobile.
+                        & .title {
+                            height: auto;
+                        }
+
+                        & .heading {
+                            height: auto;
+                        }
+                    }
 
 
 
-                                    & .tileimages{
-                                        display:none;
-                                    }
-                                        
-                                    & .title{
-                                        height:auto;
-                                       
-                                        & .heading{
-                                            font-size: 16px;
-                                            padding-bottom: 8px;
-                                            padding-top: 2px;
-                                            height:auto;
-                                        }
-                                    }
-                                    & .description{
-                                        display:block;
-                                        font-weight: 400;
-                                        font-size: 14px;
-                                        & h5 {
-                                            color: black;
-                                            display: block;
-                                            font-weight: 500;
-                                            font-size: 14px;
-                                            margin-bottom: 0;
-                                            padding-bottom: 6px;
-                                        }
-                                        & span {
-                                            display:inline-block;
-                                            padding-right:12px;
-                                            & strong{
-                                                 color: black;
-                                                 font-weight: 500;
-                                                 padding-right: 4px;
-                                            }
-                                        }
+                    & .tileimages {
+                        display: none;
+                    }
 
-                                    }
-                                    
-                                    @include gridle_state("print"){
-                                            & .title{
+                    & .title {
+                        height: auto;
 
-                                                padding-left:0;
-                                                padding-bottom:5px;
-                                                & .heading{
-                                                    padding-bottom:0;
-                                                }
+                        & .heading {
+                            font-size: 16px;
+                            padding-bottom: 8px;
+                            padding-top: 2px;
+                            height: auto;
+                        }
+                    }
 
-                                                & .regnum{
+                    & .description {
+                        display: block;
+                        font-weight: 400;
+                        font-size: 14px;
 
-                                                    padding-bottom:0;
-                                                }
+                        & h5 {
+                            color: black;
+                            display: block;
+                            font-weight: 500;
+                            font-size: 14px;
+                            margin-bottom: 0;
+                            padding-bottom: 6px;
+                        }
 
-                                                & .description{
+                        & span {
+                            display: inline-block;
+                            padding-right: 12px;
 
-                                                    & h5 {
-                                                        padding-bottom:0;
-                                                    }
-                                                }
-                                            }
+                            & strong {
+                                color: black;
+                                font-weight: 500;
+                                padding-right: 4px;
+                            }
+                        }
+                    }
 
-                                            & .tile-tag{
-                                                padding-left:0;
-                                            }
+                    @include gridle_state("print") {
+                        & .title {
+                            padding-left: 0;
+                            padding-bottom: 5px;
 
+                            & .heading {
+                                padding-bottom: 0;
+                            }
 
-                                        }
-                                    
-                                    }
+                            & .regnum {
+                                padding-bottom: 0;
+                            }
 
-            }  
-             
+                            & .description {
+
+                                & h5 {
+                                    padding-bottom: 0;
+                                }
+                            }
+                        }
+
+                        & .tile-tag {
+                            padding-left: 0;
+                        }
+                    }
+                }
+            }
         }
 
         .item {
@@ -2150,63 +2028,66 @@ button.icon {
         }
 
         .no-image-label {
-           // padding-top: 4em;
-           position:absolute;
-           top:40%;
-           @include gridle_state("mobile"){
-               top:20%;
-               padding-left:10px;
-               padding-right:10px;
-           }
-        }
-    & .noresults{
-           display: table;
-           content: "";
-           clear: both;
-           padding-left: 10px;
-           width: 100%;
-           padding:10px;
+            position: absolute;
+            top: 40%;
 
-        & .pagination{
-            padding-top: 0px;
-            padding-left:10px;
+            @include gridle_state("mobile") {
+                top: 20%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
         }
-        & h1{
+
+        & .noresults {
+            display: table;
+            content: "";
+            clear: both;
+            padding-left: 10px;
+            width: 100%;
+            padding: 10px;
+
+            & .pagination {
+                padding-top: 0px;
+                padding-left: 10px;
+            }
+
+            & h1 {
                 float: none;
                 font-size: 22px;
                 padding-bottom: 5px;
                 padding-left: 10px;
                 font-weight: 400;
-        }
+            }
 
-        & p {
-              font-size: 17px;
-              font-weight: 400;
-              margin-bottom: 1.5em;
-              padding-left: 10px;
-        }
+            & p {
+                font-size: 17px;
+                font-weight: 400;
+                margin-bottom: 1.5em;
+                padding-left: 10px;
+            }
 
-        & ul {
+            & ul {
                 font-size: 17px;
                 font-weight: 400;
                 list-style: inside none disc;
                 margin-bottom: 1.5em;
                 padding-left: 10px;
-        }
-        & a {
-             text-decoration: underline;
+            }
+
+            & a {
+                text-decoration: underline;
+            }
         }
 
-    }
-    & .banner{
-        width: 100%;
-        & img{
-            margin: 0px auto;
-            width:100%;
-            max-width: 1194px;
-       }
+        & .banner {
+            width: 100%;
 
-    }
+            & img {
+                margin: 0px auto;
+                width: 100%;
+                max-width: 1194px;
+            }
+        }
     }
 }
 
@@ -2214,22 +2095,24 @@ button.icon {
     height: 70px;
     position: relative;
     display: none;
-    z-index:100;
-    clear:both;
+    z-index: 100;
+    clear: both;
     @include gridle_hide("print");
 
     &.active {
         display: block;
-        @include gridle_hide("print");      
+        @include gridle_hide("print");
 
-        &.search{
-            clear:both;
+        &.search {
+            clear: both;
             margin-left: 300px;
-            @include gridle_state(tablet){
-                margin-left:0px;
+
+            @include gridle_state(tablet) {
+                margin-left: 0px;
             }
-            @include gridle_state(mobile){
-                margin-left:0px;
+
+            @include gridle_state(mobile) {
+                margin-left: 0px;
             }
         }
     }
@@ -2260,13 +2143,12 @@ button.icon {
 
     & form {
         direction: ltr;
-        //align-items: center;
         @include alignitem-center();
         @include display-flex();
         height: 70px;
         padding: 0 20px;
         background: $colour-primary-green;
-            @include gridle_hide("print");
+        @include gridle_hide("print");
 
         #search & {
             left: 350px;
@@ -2300,41 +2182,42 @@ button.icon {
     }
 }
 
-button{
-    &.search, &.search-add{
-	    height: 44px;
-	    margin: 0px;
-	    outline: 0px none;
-	    padding: 0px 10px;
-	    border: 0px none;
-	    border-radius: 0px 2px 2px 0px;
-	    color: $colour-heading-inverted;
-	    background: none repeat scroll 0% 0% $colour-background-dark;
+button {
+    &.search, &.search-add {
+        height: 44px;
+        margin: 0px;
+        outline: 0px none;
+        padding: 0px 10px;
+        border: 0px none;
+        border-radius: 0px 2px 2px 0px;
+        color: $colour-heading-inverted;
+        background: none repeat scroll 0% 0% $colour-background-dark;
     }
 
-    &.search-add{
+    &.search-add {
         border-radius: 2px;
-        margin-left:10px;
+        margin-left: 10px;
     }
 }
 
-#hero {    
-    height:50vh;
+#hero {
+    height: 50vh;
     max-height: 600px;
     min-height: 220px;
-    @include gridle_state("mobile"){
-        height:50vh;
+
+    @include gridle_state("mobile") {
+        height: 50vh;
         background-size: cover;
     }
+
     @include gridle_hide("print");
     @include display-flex();
-    @include align-items-flex-end();    
+    @include align-items-flex-end();
 
     & .search-area {
         width: 100%;
         height: 110px;
         background-color: rgba($colour-highlight-green, 0.9);
-        //align-items: center;
         @include alignitem-center();
         display: -webkit-box;
         display: -moz-box;
@@ -2342,7 +2225,6 @@ button{
 
         @include gridle_state('tablet') {
             padding: 0 40px;
-            
         }
 
         @include gridle_state('mobile') {
@@ -2390,115 +2272,6 @@ button{
     }
 }
 
-/*#explore-collection {    
-    background:#1d1d1d;
-
-    .collection-content {
-        @include gridle_parent();
-        
-        h2 {
-            font-size:1.7em;
-            margin:3em 0 0;
-        }
-
-        p, h2 {
-            @include gridle (12);
-            color:$color-default;
-        }
-
-        .explore-type {
-            @include gridle (3);
-
-            a {
-                position:relative;
-                display:block;
-                margin:0 0 5em;
-
-                img {
-                    border-radius:3px;
-                    width:100%;
-                    display:block;
-                }
-
-                .icon-article, .icon-item, .icon-species, .icon-specimen {
-                    border-top-left-radius:3px;
-                    color:$color-default;
-                    top:0;
-                    left:0;
-                    position:absolute;
-                    padding:0 10px;                    
-                    font-size:4em;
-                    display:flex;
-                    align-items:center;
-
-                    .count-wrapper {
-                        display:flex;
-                        flex-direction:column;
-                        padding:0 10px;
-
-                        .type {
-                            font-size:0.3em;
-                        }
-
-                        .count {
-                            font-size:0.3em;
-                            font-weight:300;
-                        }
-                    }
-
-                }
-            }
-        }
-
-        .article {
-            span {
-                background-color:$color-article;
-            }
-        }
-        .item {
-            span {
-                background-color:$color-item;
-            }
-        }
-        .species {
-            span {
-                background-color:$color-species;
-            }
-        }
-        .specimen {
-            span {
-                background-color:$color-specimen;
-            }
-        }
-    }
-}
-
-#explore-venue
-{
-    background:#e2e2e2;
-    .recent-content, .venue-content {
-        @include gridle_parent();
-
-        h2 {
-            @include gridle (12);
-        }
-
-        .tile {
-            @include gridle (3);
-        }
-
-        .venue {
-            @include gridle (6);
-
-            span {
-                font-weight:300;
-                font-size:1.2em;
-                color:#000;
-            }
-        }
-    }
-}*/
-
 // Developers
 
 #developers {
@@ -2507,7 +2280,7 @@ button{
     font-size: 16px;
 
     a {
-        text-decoration:underline;
+        text-decoration: underline;
     }
 
     & .side-column {
@@ -2515,10 +2288,12 @@ button{
         @include gridle_push(8);
         @include gridle(12,mobile);
         @include gridle_push(0, mobile);
-        @include gridle_state(mobile){
-            margin-top:15px;
+
+        @include gridle_state(mobile) {
+            margin-top: 15px;
             margin-bottom: 15px;
         }
+
         @include gridle_hide("print");
         direction: ltr;
         background-color: #f6f6f6;
@@ -2532,65 +2307,67 @@ button{
             font-weight: 500;
             margin-bottom: 2px;
         }
-        & a{
-            color:inherit;
-            text-decoration:none;
+
+        & a {
+            color: inherit;
+            text-decoration: none;
         }
 
         & ul {
             padding-left: 10px;
             margin-bottom: 20px;
             list-style: outside none none;
-            & li{
-			clear:	both;
-			
-			    & h5{ 
-				    color:  $colour-sidetext;
-			        direction: ltr;
-			        float: left;
-			        font-size: 15px;
-			        font-weight: 400;
-			        line-height: 1.4em;
-			        margin: 0.6em 0;
-			        padding-left: 0;
-			        padding-right: 10px;
-			        width: 25%;
-			    }
-			    & p{
-				        direction: ltr;
-					    float: left;
-					    font-size: 15px;
-					    line-height: 1.4em;
-					    margin: 0.6em 0;
-					    padding-left: 10px;
-					    padding-right: 0;
-					    width: 75%;
-			
-			    }
-			    & a{
-				        border-bottom: 1px dotted;
-					    color: rgba(25, 102, 93, 0.95);
-					    white-space: nowrap;
-					    &:hover{
-						    border-bottom: 1px solid;
-					    color: rgba(25, 102, 93, 1);
-					    }
-			    }
-			
-		    }
 
+            & li {
+                clear: both;
+
+                & h5 {
+                    color: $colour-sidetext;
+                    direction: ltr;
+                    float: left;
+                    font-size: 15px;
+                    font-weight: 400;
+                    line-height: 1.4em;
+                    margin: 0.6em 0;
+                    padding-left: 0;
+                    padding-right: 10px;
+                    width: 25%;
+                }
+
+                & p {
+                    direction: ltr;
+                    float: left;
+                    font-size: 15px;
+                    line-height: 1.4em;
+                    margin: 0.6em 0;
+                    padding-left: 10px;
+                    padding-right: 0;
+                    width: 75%;
+                }
+
+                & a {
+                    border-bottom: 1px dotted;
+                    color: rgba(25, 102, 93, 0.95);
+                    white-space: nowrap;
+
+                    &:hover {
+                        border-bottom: 1px solid;
+                        color: rgba(25, 102, 93, 1);
+                    }
+                }
+            }
         }
     }
 
     & h1 {
-        float:none;
-        width:100%;
-        display:inline-block;
+        float: none;
+        width: 100%;
+        display: inline-block;
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 10px;
-        padding-right:10px;
-        font-weight:400;
+        padding-right: 10px;
+        font-weight: 400;
     }
 
     & p {
@@ -2608,7 +2385,7 @@ button{
         padding-right: 10px;
         width: 100%;
         font-weight: 400;
-        direction:ltr;
+        direction: ltr;
     }
 
     & h3 {
@@ -2622,22 +2399,22 @@ button{
         font-weight: 500;
         margin-bottom: 2px;
     }
-    
-    @include gridle_state("print"){
-        & h1{
-            font-size:16pt;
+
+    @include gridle_state("print") {
+        & h1 {
+            font-size: 16pt;
         }
 
         & h2 {
-            font-size:16pt;
+            font-size: 16pt;
         }
-        & p{
+
+        & p {
             font-size: 11.5pt;
             line-height: normal;
             margin-bottom: 11.5pt;
         }
     }
-
 }
 
 .documentation {
@@ -2657,7 +2434,7 @@ button{
         padding: 10px;
         background-color: #f6f6f6;
         border-radius: 3px;
-        color:  $colour-sidetext;
+        color: $colour-sidetext;
         direction: ltr;
     }
 
@@ -2670,14 +2447,12 @@ button{
         float: none;
         font-size: 22px;
         padding-bottom: 5px;
-        //padding-left: 10px;
     }
 
     & p {
         font-size: 17px;
         font-weight: 300;
         margin-bottom: 1.5em;
-        //padding-left: 10px;
     }
 
     & table {
@@ -2698,26 +2473,24 @@ button{
         padding: 5px;
     }
 
-    @include gridle_state("print"){
+    @include gridle_state("print") {
         width: 100%;
-        right:0;
+        right: 0;
 
         & p {
-            font-size:11.5pt;
+            font-size: 11.5pt;
             line-height: normal;
-            margin-bottom:11.5pt;
-         }
+            margin-bottom: 11.5pt;
+        }
 
-         & code, kbd, pre, samp{
+        & code, kbd, pre, samp {
             font-size: 9pt;
         }
 
-         & pre{
-             padding: 0 10px;
-     
-         }
+        & pre {
+            padding: 0 10px;
+        }
     }
-
 }
 
 // Blocks
@@ -2727,7 +2500,7 @@ $padding-side: 3%;
 .tile {
 
     @include gridle ( 3 );
-    
+
     @include gridle ( 3, 'mobile' );
     @include gridle (6, 'tablet');
 
@@ -2753,21 +2526,22 @@ $padding-side: 3%;
     }
 
     &.full {
-        //@include gridle ( 3 );
         padding-left: 10px;
         padding-right: 10px;
         @include gridle (3);
-        max-width:284px;
-        min-width:200px;
+        max-width: 284px;
+        min-width: 200px;
         @include gridle (4, 'tablet');
         @include gridle ( 6, 'mobile' );
         @include gridle (12, 'smallmobile');
         float: left;
-        @include gridle_state(smallmobile){
-            float:none;
-            display:block;
+
+        @include gridle_state(smallmobile) {
+            float: none;
+            display: block;
             margin: 0 auto;
         }
+
         & .description {
             display: none;
         }
@@ -2809,16 +2583,15 @@ $padding-side: 3%;
     }
 
     & .desc {
-        //background-color: $colour-background-dark;
         font-size: 15px;
         font-weight: 300;
         padding: 10px 0px;
         color: $colour-heading-inverted;
         display: block;
-        @include gridle_state(tablet){
-            min-height:4.4em;
-        }
 
+        @include gridle_state(tablet) {
+            min-height: 4.4em;
+        }
     }
 
     & .title {
@@ -2834,7 +2607,6 @@ $padding-side: 3%;
         font-size: 14px;
         background: $colour-background-title;
         height: 145px;
-        
         direction: ltr;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -2850,12 +2622,11 @@ $padding-side: 3%;
             font-weight: 500;
             color: $colour-heading;
             height: 75px;
-            overflow:hidden;
-            display:block;
+            overflow: hidden;
+            display: block;
 
             .grid & {
                 display: none;
-              
             }
         }
 
@@ -2919,6 +2690,7 @@ $padding-side: 3%;
         width: 100%;
         float: left;
         padding: 0;
+
         @include gridle_state('mobile') {
             width: 33%;
             float: left;
@@ -2937,7 +2709,6 @@ $padding-side: 3%;
     direction: ltr;
     color: $colour-bodytext-inverted;
     @include alignitem-center;
-    //border-top-left-radius: 3px;
     color: #fff;
     @include display-flex;
     font-size: 1.5em;
@@ -2992,27 +2763,27 @@ $padding-side: 3%;
     & .count-wrapper {
         font-size: 14px;
         line-height: 1em;
-        //display: flex;
         @include display-flex();
         @include flex-direction(column);
         padding: 0 10px;
 
         .tile.home & {
             font-size: 0.45em;
-            @include gridle_state(tablet){
+
+            @include gridle_state(tablet) {
                 @include alignitem-center;
-                text-align:center;
-            }
-            @include gridle_state(mobile){
-                @include alignitem-center;
-                text-align:center;
+                text-align: center;
             }
 
+            @include gridle_state(mobile) {
+                @include alignitem-center;
+                text-align: center;
+            }
         }
 
         & .type {
             text-transform: capitalize;
-            display:block;
+            display: block;
         }
     }
 }
@@ -3026,6 +2797,7 @@ $padding-side: 3%;
     margin-bottom: 20px;
     position: relative;
     page-break-inside: avoid;
+
     & img {
         width: 100%;
         height: 50%;
@@ -3055,7 +2827,7 @@ $padding-side: 3%;
     float: left;
     direction: ltr;
     margin-bottom: 25px;
-    color:$colour-bodytext;
+    color: $colour-bodytext;
     page-break-inside: avoid;
 
     .collectionareas & {
@@ -3071,7 +2843,6 @@ $padding-side: 3%;
     }
 
     & .desc {
-        //background-color: $colour-background-dark;
         font-size: 15px;
         font-weight: 300;
         padding: 10px 0px;
@@ -3083,7 +2854,7 @@ $padding-side: 3%;
         display: block;
         padding: 10px $padding-side 10px $padding-side;
         font-size: 14px;
-        color:$colour-bodytext;
+        color: $colour-bodytext;
         background: $colour-background-title;
         height: 130px;
         direction: ltr;
@@ -3129,242 +2900,239 @@ $padding-side: 3%;
         }
     }
 
-    @include gridle_state("print"){
+    @include gridle_state("print") {
 
-        & .title{
+        & .title {
 
-            & .description{
-                font-size:9pt;
+            & .description {
+                font-size: 9pt;
                 line-height: normal;
             }
         }
     }
-
 }
 
 #map {
-    height:450px;
+    height: 450px;
     @include border-radius(3);
     margin-left: -10px;
-    
-
 }
-#mapdata{
+
+#mapdata {
     background: $colour-background-midlight;
     padding-bottom: 30px;
     margin-left: -10px;
     margin-top: 20px;
     overflow: hidden;
     padding-left: 10px;
-    padding-right:10px;
-}
-
-.social{
-    @include gridle_hide("print");
-
-
-}
-
-/*------------------------------------*\
-    $FOOTER
-\*------------------------------------*/
-.footer {
-	clear: both;
-	overflow: hidden;
-	background: $colour-background-dark;
-	
-	/*
-	& .logos
-	{
-	@include gridle(12);
-	direction: ltr;
-    float: left;
-    margin: 2em 0;
-    padding-left: 10px;
     padding-right: 10px;
-    width: 100%;
-	}
-	*/
+}
+
+.social {
+    @include gridle_hide("print");
+}
+
+/* FOOTER */
+.footer {
+    clear: both;
+    overflow: hidden;
+    background: $colour-background-dark;
 }
 
 footer {
-	clear: both;
-	overflow: hidden;
-	background: $colour-background-dark;
-	color:$colour-heading-inverted;
-	padding-top:32px;
-	font-weight: 400;
-    @include gridle_state("print"){
-        padding-top:0px;
+    clear: both;
+    overflow: hidden;
+    background: $colour-background-dark;
+    color: $colour-heading-inverted;
+    padding-top: 32px;
+    font-weight: 400;
+
+    @include gridle_state("print") {
+        padding-top: 0px;
     }
-	& .wrapper{
-		padding-bottom: 30px;
+
+    & .wrapper {
+        padding-bottom: 30px;
         padding-left: 10px;
-        @include gridle_state("print"){
-            padding-bottom:0px;
+
+        @include gridle_state("print") {
+            padding-bottom: 0px;
         }
-	}
-	
-	& .logos {
-	    direction: ltr;
+    }
+
+    & .logos {
+        direction: ltr;
         float: left;
         margin: 0 0 0px 0px;
-        padding:0px 20px 10px 10px;
+        padding: 0px 20px 10px 10px;
         @include gridle(12, 'mobile');
-        float:left;
-	    direction: ltr;
-		@include gridle_state('mobile'){
-			float:left;
-			direction: ltr;
-		}
-        @include gridle_hide("print");
-	}
-	& .footerpromos{
-		float: left;
-	}
-	& .footerpromo{
-		@include gridle(4, 'tablet');
-		float:left;
-		direction:ltr;
+        float: left;
+        direction: ltr;
 
-		@include gridle_state('mobile') {
-		    display: none;
-		}
-        @include gridle_hide("print");
-		&.first{
-			padding-left:0px;
-		}
+        @include gridle_state('mobile') {
+            float: left;
+            direction: ltr;
+        }
 
-		padding-left: 20px;
-		padding-right: 20px;
-		border-right: 1px solid #606060;
-		float:left;
-		direction: ltr;
-		
-        & ul{
-			padding-left: 10px;
+        @include gridle_hide("print");
+    }
+
+    & .footerpromos {
+        float: left;
+    }
+
+    & .footerpromo {
+        @include gridle(4, 'tablet');
+        float: left;
+        direction: ltr;
+
+        @include gridle_state('mobile') {
+            display: none;
+        }
+
+        @include gridle_hide("print");
+
+        &.first {
+            padding-left: 0px;
+        }
+
+        padding-left: 20px;
+        padding-right: 20px;
+        border-right: 1px solid #606060;
+        float: left;
+        direction: ltr;
+
+        & ul {
+            padding-left: 10px;
             list-style: outside none none;
             margin: 0;
-			
-			& li{ 
-				line-height: 14px;
-				padding-bottom: 4px;
-			}
-		}
-					& li{ 
-				line-height: 16px;
-			}
-		& h2{
-			font-size: 14px;
-			padding-bottom: 6px;
+
+            & li {
+                line-height: 14px;
+                padding-bottom: 4px;
+            }
+        }
+
+        & li {
+            line-height: 16px;
+        }
+
+        & h2 {
+            font-size: 14px;
+            padding-bottom: 6px;
             font-weight: 400;
             direction: ltr;
             float: left;
             padding-left: 10px;
             padding-right: 10px;
             width: 100%;
-		}
-		& a {
-			font-size: 12px;
-            color:$colour-heading-inverted;
-			&:hover{
-				text-decoration: underline;
-			}
-		}
-	}
-	
-	& .comment{
-		color: $colour-heading-inverted;
-	}
-	
-	& .tweet{
-		color: $colour-heading-inverted;
-	}
+        }
 
-	& h2{
-		color: $colour-heading-inverted;
-	}
-	
-	& .footerbase
-	{
-        width:100%;
-		background-color: #606060;
-		float: left;
-		direction: ltr;
-		padding:20px 0px 0px;
-        padding-left:0px;
-        padding-right:0px;
+        & a {
+            font-size: 12px;
+            color: $colour-heading-inverted;
 
-		& a {
-			font-size: 12px;
-            color:$colour-heading-inverted;
-			&:hover{
-				text-decoration: underline;
-			}
-		}
-
-        & .githublink{
-            display:block; 
-            padding-bottom:15px;
-            padding-left:10px; 
-            clear:both;
-            font-size:12px;
-
-                & img{
-               //height:16px;
-                padding-right:5px;
-                vertical-align:middle;
+            &:hover {
+                text-decoration: underline;
             }
-                & a{
-                    text-decoration: underline;
-                }
+        }
+    }
+
+    & .comment {
+        color: $colour-heading-inverted;
+    }
+
+    & .tweet {
+        color: $colour-heading-inverted;
+    }
+
+    & h2 {
+        color: $colour-heading-inverted;
+    }
+
+    & .footerbase {
+        width: 100%;
+        background-color: #606060;
+        float: left;
+        direction: ltr;
+        padding: 20px 0px 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+
+        & a {
+            font-size: 12px;
+            color: $colour-heading-inverted;
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
-		& .stategovernmentlinks{
-			float:left;
-			font-size:12px;
-			padding-right: 30px;
-			padding-bottom: 20px;
-			padding-left:10px;
-			& img
-			{
-				height: 45px;
-			}
-			@include gridle_hide("print");
-		}
-		& .venueinformation{
-			font-size: 12px;
-			float:left;
-			padding-left: 10px;
-			padding-bottom: 20px;
-			margin-right:20px;
-		}
-        &.wrapper{
-            padding-bottom: 10px
+        & .githublink {
+            display: block;
+            padding-bottom: 15px;
+            padding-left: 10px;
+            clear: both;
+            font-size: 12px;
+
+            & img {
+                padding-right: 5px;
+                vertical-align: middle;
+            }
+
+            & a {
+                text-decoration: underline;
+            }
         }
 
-		& ul {
-            list-style: outside none none;
-			clear: left;
-            margin: 0;
-			//padding-left:10px;
+        & .stategovernmentlinks {
+            float: left;
+            font-size: 12px;
+            padding-right: 30px;
+            padding-bottom: 20px;
+            padding-left: 10px;
+
+            & img {
+                height: 45px;
+            }
+
             @include gridle_hide("print");
-			& li {
-				float: left;
-				margin-right: 13px;
-				font-size: 12px;
-			}
-		}
-	}
+        }
+
+        & .venueinformation {
+            font-size: 12px;
+            float: left;
+            padding-left: 10px;
+            padding-bottom: 20px;
+            margin-right: 20px;
+        }
+
+        &.wrapper {
+            padding-bottom: 10px;
+        }
+
+        & ul {
+            list-style: outside none none;
+            clear: left;
+            margin: 0;
+            @include gridle_hide("print");
+
+            & li {
+                float: left;
+                margin-right: 13px;
+                font-size: 12px;
+            }
+        }
+    }
 }
 
 // Collections
 .collectionshero {
-    display:block;
-    width:100%;
+    display: block;
+    width: 100%;
     margin-bottom: 50px;
-    height:300px;
-    position:relative;
+    height: 300px;
+    position: relative;
     background: url("/content/img/bg-collection-hero.jpg") no-repeat center center / cover;
     @include gridle_hide("print");
 
@@ -3405,25 +3173,25 @@ footer {
     }
 
     & img {
-	    width:100%;
+        width: 100%;
     }
-    & .collcategorybackground{
-		display:block;
-		width:100%;
-		height:65px;
-		background: rgba(0,0,0,0.5);
-		position:absolute;
-		bottom:0px;
-	}
+
+    & .collcategorybackground {
+        display: block;
+        width: 100%;
+        height: 65px;
+        background: rgba(0,0,0,0.5);
+        position: absolute;
+        bottom: 0px;
+    }
 }
 
-.breadcrumb
-{
-	display:block !important;
+.breadcrumb {
+    display: block !important;
 }
 
 .about {
-    padding-bottom:50px;
+    padding-bottom: 50px;
 
     & h1 {
         float: none;
@@ -3483,7 +3251,7 @@ footer {
         }
 
         a {
-            text-decoration:underline;
+            text-decoration: underline;
         }
 
         & h1 {
@@ -3548,8 +3316,8 @@ footer {
 }
 
 #collarea {
-    position:relative;
-    padding-bottom:20px;
+    position: relative;
+    padding-bottom: 20px;
 
 
     & h1 {
@@ -3557,7 +3325,7 @@ footer {
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 0px;
-        font-weight:400;
+        font-weight: 400;
     }
 
     & h2 {
@@ -3565,7 +3333,7 @@ footer {
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 0px;
-        font-weight:400;
+        font-weight: 400;
     }
 
     & p {
@@ -3575,28 +3343,29 @@ footer {
         word-wrap: break-word;
         padding-left: 0px;
     }
-    & .collcategory{
-		    color: #fff;
-			display: block;
-			font-size: 30px;
-			font-weight: 300;
-			left: 10px;
-			padding: 10px;
-			position: absolute;
-			top: -115px;
-			width: 100%;
-            @include gridle_hide("print");
+
+    & .collcategory {
+        color: #fff;
+        display: block;
+        font-size: 30px;
+        font-weight: 300;
+        left: 10px;
+        padding: 10px;
+        position: absolute;
+        top: -115px;
+        width: 100%;
+        @include gridle_hide("print");
     }
+
     & .colldesc {
         @include gridle(8);
         padding-right: 20px;
         @include gridle(12,"tablet");
         @include gridle(12,"mobile");
-            font-size: 17px;
-          font-weight: 300;
-         margin-bottom: 1.5em;
-            word-wrap: break-word;
-
+        font-size: 17px;
+        font-weight: 300;
+        margin-bottom: 1.5em;
+        word-wrap: break-word;
     }
 
 
@@ -3604,17 +3373,17 @@ footer {
         @include gridle(4);
         @include gridle(12,"tablet");
         @include gridle(12, "mobile");
-        clear:right;
+        clear: right;
         float: right;
         direction: ltr;
-        //margin-bottom:20px;
-        overflow:hidden;
+        overflow: hidden;
         border-bottom: 1px solid $colour-background-lightest;
-        font-size:14px;
+        font-size: 14px;
         font-weight: 400;
-          padding: 15px 20px 20px;
-        & p{
-            font-size:inherit;
+        padding: 15px 20px 20px;
+
+        & p {
+            font-size: inherit;
             font-weight: 400;
         }
 
@@ -3624,16 +3393,15 @@ footer {
             font-weight: 500;
             margin-bottom: 2px;
         }
-        & .socialcite{
-            //background-color: $colour-background-lightest;
+
+        & .socialcite {
             @include border-radius(3px);
             color: $colour-sidetext;
-           // padding: 15px 20px 20px;
         }
+
         & .favorites {
-            //background-color: $colour-background-lightest;
             @include border-radius(3px);
-            color:  $colour-sidetext;
+            color: $colour-sidetext;
             padding: 15px 20px 20px;
         }
 
@@ -3671,67 +3439,68 @@ footer {
 
 
 
-    & .seeallcontainer{
+    & .seeallcontainer {
         @include gridle_hide("print");
         background: $colour-background-lightest none repeat scroll 0 0;
         border-radius: 3px;
         display: block;
-       // margin-bottom: 20px;
         padding: 20px 20px 10px;
         width: 100%;
         font-size: 16px;
-          & .seeall {
-                border-bottom: 1px dotted;
-                color: rgba(25, 102, 93, 0.95);
-                display: inline-block;
-                margin-bottom: 20px;
-                text-decoration: none;
 
-                &:hover {
-                    border-bottom: 1px solid;
-                }
+        & .seeall {
+            border-bottom: 1px dotted;
+            color: rgba(25, 102, 93, 0.95);
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+
+            &:hover {
+                border-bottom: 1px solid;
             }
         }
+    }
 
-    @include gridle_state("print"){
+    @include gridle_state("print") {
 
-        & h1{
+        & h1 {
             font-size: 16pt;
             line-height: 21pt;
         }
 
-        & h2{
-            font-size:11.5pt;
-            font-weight:500;
+        & h2 {
+            font-size: 11.5pt;
+            font-weight: 500;
         }
-        & p{
+
+        & p {
             font-size: 11.5pt;
             line-height: 15pt;
             margin-bottom: 15pt;
         }
-        & .sidecolumn{
-            width:100%;
+
+        & .sidecolumn {
+            width: 100%;
             border-bottom: none;
-            padding:0 0 0 10px;
+            padding: 0 0 0 10px;
         }
-        & .colldesc{
+
+        & .colldesc {
             width: 100%;
         }
     }
 }
 
-#subcoll{
-        background:$colour-background-midlight;
-        padding-top:40px;
+#subcoll {
+    background: $colour-background-midlight;
+    padding-top: 40px;
 
-        & .subcoll {
-        
+    & .subcoll {
+
         @include gridle(12);
-
         padding-left: 0px;
         padding-right: 0px;
-       // margin-bottom: 20px;
-        clear:both;
+        clear: both;
 
         & h2 {
             float: none;
@@ -3741,33 +3510,31 @@ footer {
             padding-left: 10px;
         }
 
-        & .tile.full{
+        & .tile.full {
             @include gridle(3);
             page-break-inside: avoid;
         }
 
-        @include gridle_state("print"){
+        @include gridle_state("print") {
+            padding-top: 0;
 
-            padding-top:0;
-
-            & h2{
+            & h2 {
                 font-size: 16pt;
             }
         }
-
     }
 }
-#favorites{
-           
-    background:$colour-background-midlight;
-    padding-top:40px;
-    & .favorites{
-        @include gridle(12);
 
+#favorites {
+    background: $colour-background-midlight;
+    padding-top: 40px;
+
+    & .favorites {
+        @include gridle(12);
         padding-left: 0px;
         padding-right: 0px;
         margin-bottom: 20px;
-        clear:both;
+        clear: both;
 
         & h2 {
             float: none;
@@ -3777,223 +3544,224 @@ footer {
             padding-left: 10px;
         }
 
-        & .tile.full{
+        & .tile.full {
             @include gridle(3);
             page-break-inside: avoid;
         }
     }
-    @include gridle_state("print"){
-        padding-top:0;
-        & h2{
+
+    @include gridle_state("print") {
+        padding-top: 0;
+
+        & h2 {
             font-size: 16pt;
         }
     }
 }
 // Home
-.home .button-search{
-	display: none;
+.home .button-search {
+    display: none;
 }
 
-.home .container
-{
-	@include gridle_state('tablet'){
-			padding-left:20px;
-			padding-right:20px;
-	}
-	@include gridle_state('mobile'){
-			padding-left: 20px;
-			padding-right: 20px
-	}
+.home .container {
+    @include gridle_state('tablet') {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    @include gridle_state('mobile') {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
-#home-explore{
-	width:100%;
-	direction: ltr;
-	background: $colour-background-dark;
-	display:block;
-	color:$colour-heading-inverted;
-	padding: 60px 0px 0px;
-	& .tile.full{
-			@include gridle(3);
-			@include gridle(3,'tablet');
-			
-	
-	}
-	
-	& .tile{
-		@include gridle_state('mobile'){
-			width:100%;
-		}
-		
+#home-explore {
+    width: 100%;
+    direction: ltr;
+    background: $colour-background-dark;
+    display: block;
+    color: $colour-heading-inverted;
+    padding: 60px 0px 0px;
+
+    & .tile.full {
+        @include gridle(3);
+        @include gridle(3,'tablet');
+    }
+
+    & .tile {
+        @include gridle_state('mobile') {
+            width: 100%;
+        }
 
 
-		& .wrapper{
-			@include gridle_state('tablet'){
-				width: 100%;
-				position:relative;
-				display:block;
-			}
-			@include gridle_state('mobile'){
-				width: 100%;
-				position:relative;
-				display:block;
-			}
 
-		}
-		
-		& img {
-			@include gridle_state('tablet'){
-				width:50%;
-				display: block;
-			}
-			@include gridle_state('mobile'){
-				width:50%;
-				display: block;
-			}
-
-		}
-		.tile-tag{
-			
-		@include gridle_state('tablet'){
-				left:50%;
-			    right: 0;
-			    top: 0;
-			    width: 50%;
-			    height:100%;
-                @include alignitem-center;
-                @include flex-direction(column);
-                @include display-flex;
-
-			}
-		@include gridle_state('mobile'){
-				left:50%;
-			    right: 0;
-			    top: 0;
-			    width: 50%;
-			    height:100%;
-                @include alignitem-center;
-                @include flex-direction(column);
-                @include display-flex;
-                padding-top:10%;
-
-			}	
-		
-        @include gridle_state("print"){
-            position:relative;
-            }
-        	
-		}
-		
-	}
-	
-	& p{
-		//@include gridle(12);
-		width:50%;
-		display: block;
-		padding-left: 10px;
-		direction: ltr;
-		font-weight: 300;
-		line-height: 22px;
-		margin-bottom: 25px;
-		font-size: 15px;
-		line-height: 20px;
-		@include gridle_state('tablet'){
-			
-			width: 100%;
-		}
-		@include gridle_state('mobile'){
-			width: 100%;
-		}
-	}
-	& h2, & h1 {
-		margin-bottom: 7px;
-		font-weight: 400;
-        font-size:28px;
-	}
-
-    @include gridle_state("print"){
-        padding:0;
-    
-            & p{
+        & .wrapper {
+            @include gridle_state('tablet') {
                 width: 100%;
-                font-size:11.5pt;
-                line-height:normal;
-            }
-            & h2{
-                font-size:16pt;
-                line-height:normal;
+                position: relative;
+                display: block;
             }
 
-            & .tile{
-                & .desc{
-                    font-size:11.5pt;
-                    line-height:normal;
-                }
-
+            @include gridle_state('mobile') {
+                width: 100%;
+                position: relative;
+                display: block;
             }
         }
-}
-#venues-explore{
-	width:100%;
-	direction: ltr;
-	background: $colour-background-dark;
-	display:block;
-	color:$colour-bodytext-light;
-	padding-bottom: 50px;
-	& p{
-		@include gridle(12);
-		direction: ltr;
-	}
-		& h2{
-		margin-bottom: 25px;
-		font-weight: 400;
-		color: $colour-heading-inverted;
+
+        & img {
+            @include gridle_state('tablet') {
+                width: 50%;
+                display: block;
+            }
+
+            @include gridle_state('mobile') {
+                width: 50%;
+                display: block;
+            }
+        }
+
+        .tile-tag {
+
+            @include gridle_state('tablet') {
+                left: 50%;
+                right: 0;
+                top: 0;
+                width: 50%;
+                height: 100%;
+                @include alignitem-center;
+                @include flex-direction(column);
+                @include display-flex;
+            }
+
+            @include gridle_state('mobile') {
+                left: 50%;
+                right: 0;
+                top: 0;
+                width: 50%;
+                height: 100%;
+                @include alignitem-center;
+                @include flex-direction(column);
+                @include display-flex;
+                padding-top: 10%;
+            }
+
+            @include gridle_state("print") {
+                position: relative;
+            }
+        }
+    }
+
+    & p {
+        width: 50%;
+        display: block;
+        padding-left: 10px;
+        direction: ltr;
+        font-weight: 300;
+        line-height: 22px;
+        margin-bottom: 25px;
+        font-size: 15px;
+        line-height: 20px;
+
+        @include gridle_state('tablet') {
+            width: 100%;
+        }
+
+        @include gridle_state('mobile') {
+            width: 100%;
+        }
+    }
+
+    & h2, & h1 {
+        margin-bottom: 7px;
+        font-weight: 400;
         font-size: 28px;
-	}
+    }
 
-    @include gridle_state("print"){
+    @include gridle_state("print") {
+        padding: 0;
 
-        padding-bottom:0;
+        & p {
+            width: 100%;
+            font-size: 11.5pt;
+            line-height: normal;
+        }
 
-        & h2{
-            font-size:16pt;
+        & h2 {
+            font-size: 16pt;
+            line-height: normal;
+        }
+
+        & .tile {
+            & .desc {
+                font-size: 11.5pt;
+                line-height: normal;
+            }
         }
     }
 }
 
-#recent-explore{
-	
-	padding: 40px 0px 50px;
+#venues-explore {
+    width: 100%;
+    direction: ltr;
+    background: $colour-background-dark;
+    display: block;
+    color: $colour-bodytext-light;
+    padding-bottom: 50px;
 
-	& .tile.full{
-		@include gridle(3);
-		@include gridle(4,'tablet');
-		@include gridle(12, 'mobile');
-        min-width:inherit;
-        max-width:inherit;
-		page-break-inside:avoid;
-	}
-	& h2{
-		margin-bottom: 25px;
-		font-weight: 400;
-        font-size: 28px;
-	}
-	& .count {
-		display: none;
-	}
-	& .tile-tag
-	{
-		font-size:1.5em; //probable 21px;
-		
-	}
-
-    @include gridle_state("print"){
-
-        & h2{
-            font-size:16pt;
-        }
+    & p {
+        @include gridle(12);
+        direction: ltr;
     }
 
+    & h2 {
+        margin-bottom: 25px;
+        font-weight: 400;
+        color: $colour-heading-inverted;
+        font-size: 28px;
+    }
+
+    @include gridle_state("print") {
+        padding-bottom: 0;
+
+        & h2 {
+            font-size: 16pt;
+        }
+    }
+}
+
+#recent-explore {
+    padding: 40px 0px 50px;
+
+    & .tile.full {
+        @include gridle(3);
+        @include gridle(4,'tablet');
+        @include gridle(12, 'mobile');
+        min-width: inherit;
+        max-width: inherit;
+        page-break-inside: avoid;
+    }
+
+    & h2 {
+        margin-bottom: 25px;
+        font-weight: 400;
+        font-size: 28px;
+    }
+
+    & .count {
+        display: none;
+    }
+
+    & .tile-tag {
+        font-size: 1.5em;
+    }
+
+    @include gridle_state("print") {
+
+        & h2 {
+            font-size: 16pt;
+        }
+    }
 }
 
 #comments {
@@ -4140,7 +3908,6 @@ footer {
             color: #454545;
             font-size: 15px;
             font-weight: 300;
-            //margin-left: 15px;
             padding: 10px;
             border: none;
         }
@@ -4175,6 +3942,7 @@ footer {
 .colldesc a {
     border-bottom: 1px dotted;
     color: rgba(25, 102,93, 0.95);
+
     &:hover {
         border-bottom: 1px solid;
         color: rgba(25, 102,93, 1);
@@ -4182,14 +3950,15 @@ footer {
 }
 
 #errordesc {
-    position:relative;
-    padding-bottom:60px;
+    position: relative;
+    padding-bottom: 60px;
+
     & h2 {
         float: none;
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 0px;
-        font-weight:400;
+        font-weight: 400;
     }
 
     & h3 {
@@ -4197,7 +3966,7 @@ footer {
         font-size: 22px;
         padding-bottom: 5px;
         padding-left: 0px;
-        font-weight:400;
+        font-weight: 400;
     }
 
     & p {
@@ -4206,27 +3975,27 @@ footer {
         margin-bottom: 1.5em;
         word-wrap: break-word;
         padding-left: 0px;
-    
-        &.prelist{
+
+        &.prelist {
             margin-bottom: 0;
         }
-     }
-
-
-    & .errorcategory{
-		    color: #fff;
-			display: block;
-			font-size: 30px;
-			font-weight: 300;
-			left: 10px;
-			padding: 10px;
-			position: absolute;
-			top: -115px;
-			width: 100%;
     }
-    
+
+
+    & .errorcategory {
+        color: #fff;
+        display: block;
+        font-size: 30px;
+        font-weight: 300;
+        left: 10px;
+        padding: 10px;
+        position: absolute;
+        top: -115px;
+        width: 100%;
+    }
+
     & ul {
-        list-style:inside disc;
+        list-style: inside disc;
         font-size: 17px;
         font-weight: 300;
         margin-bottom: 1.5em;
@@ -4235,57 +4004,55 @@ footer {
     }
 
     & .desc {
-         
+
         @include gridle(8);
         padding-right: 20px;
         @include gridle(12,"tablet");
         @include gridle(12,"mobile");
-    
-       & a {
-                border-bottom: 1px solid;
-                color: inherit;
-                &:hover {
-                    border-bottom: 1px solid;
-                    color: rgba(25, 102,93, 1);
-                }
-            }       
-    }
 
-   
+        & a {
+            border-bottom: 1px solid;
+            color: inherit;
+
+            &:hover {
+                border-bottom: 1px solid;
+                color: rgba(25, 102,93, 1);
+            }
+        }
+    }
 }
 
 //Print styles
 
-@page{
+@page {
+    margin: 1cm 1.5cm 3cm;
 
-   margin:1cm 1.5cm 3cm;
-   
 
-  @bottom-left {
-    margin: 10pt 0 30pt 0;
-    border-top: .25pt solid #666;
-    content: "My book";
-    font-size: 9pt;
-    color: #333;
+    @bottom-left {
+        margin: 10pt 0 30pt 0;
+        border-top: .25pt solid #666;
+        content: "My book";
+        font-size: 9pt;
+        color: #333;
     }
 
-  a[href^=http]:after {
+    a [href^=http]:after {
       content:" <" attr(href) "> ";
-   }
-}  
+   };
+}
 
 .skipto {
-    display:block;
-    position:absolute;
-    top:-40px;
-    left:50%;
-    color:white;
-    width:160px;
-    font-size:16px;
-    margin-left:-80px;
-    text-align:center;
+    display: block;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    color: white;
+    width: 160px;
+    font-size: 16px;
+    margin-left: -80px;
+    text-align: center;
 
     &:focus {
-        top:0;
+        top: 0;
     }
 }
