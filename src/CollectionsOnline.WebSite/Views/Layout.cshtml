@@ -2,7 +2,7 @@
 <html>
     <head>                        
         @Html.Partial("Metadata")        
-        <link href="/content/css/styles.css" rel="stylesheet">        
+        <link href="/content/static/styles.css" rel="stylesheet">
         @if (IsSectionDefined("Head"))
         {
             @RenderSection("Head")
@@ -80,7 +80,7 @@
                 </div>
             </div>
         </footer>
-        <script src="/content/js/bundle.js"></script>
+        <script src="/content/static/bundle.js"></script>
         <script type="application/ld+json">
         {
            "@@context": "http://schema.org",

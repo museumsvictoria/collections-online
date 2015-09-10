@@ -372,7 +372,6 @@
     <Content Include="Views\EmuTile.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="content\css\" />
     <Folder Include="content\scss\lib\" />
   </ItemGroup>
   <ItemGroup>

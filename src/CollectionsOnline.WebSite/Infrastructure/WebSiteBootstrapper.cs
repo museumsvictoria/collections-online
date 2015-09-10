@@ -65,7 +65,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
             pipelines.BeforeRequest += ctx =>
             {
                 MiniProfiler.Start();
-                
+
                 return null;
             };
 
@@ -82,17 +82,16 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
         protected override void ConfigureConventions(NancyConventions conventions)
         {
-            base.ConfigureConventions(conventions);
+            base.ConfigureConventions(conventions);            
 
             conventions.StaticContentsConventions.Clear();
 
             conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddFile("/robots.txt", "/robots.txt"));
-            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddFile("/opensearch.xml", "/opensearch.xml"));            
-            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/css", new Dictionary<string, string> { {"Cache-Control", "public, max-age=7200" } }));
-            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/fonts", new Dictionary<string, string> { { "Cache-Control", "public, max-age=7200" } }));
-            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/js", new Dictionary<string, string> { { "Cache-Control", "public, max-age=300" } }));
-            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/img", new Dictionary<string, string> { { "Cache-Control", "public, max-age=604800" } }));
-            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/media", new Dictionary<string, string> { { "Cache-Control", "public, max-age=86400" } }));            
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddFile("/opensearch.xml", "/opensearch.xml"));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/fonts", new Dictionary<string, string> { { "Cache-Control", string.Format("public, max-age={0}", (int)TimeSpan.FromDays(1).TotalSeconds) } }));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/img", new Dictionary<string, string> { { "Cache-Control", string.Format("public, max-age={0}", (int)TimeSpan.FromDays(7).TotalSeconds) } }));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/static", new Dictionary<string, string> { { "Cache-Control", string.Format("public, max-age={0}", (int)TimeSpan.FromDays(365).TotalSeconds) } }));
+            conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/content/media", new Dictionary<string, string> { { "Cache-Control", string.Format("public, max-age={0}", (int)TimeSpan.FromDays(1).TotalSeconds) } }));            
             conventions.StaticContentsConventions.Add(CustomStaticContentConventionBuilder.AddDirectory("/", contentPath: "/sitemaps"));
         }
     }

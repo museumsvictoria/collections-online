@@ -1,4 +1,4 @@
-/// <vs AfterBuild='build-js, build-css' SolutionOpened='watch' />
+/// <vs AfterBuild='build-html' SolutionOpened='watch' />
 // Steps to build
 // 1. install node: http://nodejs.org/download/
 // 2. install gulp globally: npm install -g gulp
@@ -15,29 +15,50 @@ var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
 var browserify = require('browserify');
+var del = require('del');
+var CacheBuster = require('gulp-cachebust');
+var cachebust = new CacheBuster({ checksumLength: 16 });
 
 var filePaths = {
-  css: { src: './content/scss/styles.scss', dest: './content/css' }
+  css: { src: './content/scss/styles.scss', dest: './dist/css', devdest: './content/static' },
+  js: { src: './content/js/app/app.js', dest: './dist/js', devdest: './content/static' },
+  html: { src: './Views/*Layout.cshtml', dest: './dist/cshtml' },
 };
 
-gulp.task('build-css', function () {
-    return gulp.src(filePaths.css.src)
-        .pipe(sass({ noCache: true, sourcemap: false }))
-        .pipe(minifyCss())
-        .pipe(gulp.dest(filePaths.css.dest));
+gulp.task('build-css', function () {  
+  return gulp.src(filePaths.css.src)
+    .pipe(sass({ noCache: true, sourcemap: false }))
+    .pipe(minifyCss())
+    .pipe(gulp.dest(filePaths.css.devdest))
+    .pipe(cachebust.resources())
+    .pipe(gulp.dest(filePaths.css.dest));
 });
 
 // Watch Task.
-gulp.task('watch', function () {
+gulp.task('watch', function() {
   gulp.watch('./content/scss/**/*.scss', ['build-css']);
   gulp.watch('./content/js/app/*.js', ['build-js']);
 });
 
-gulp.task('build-js', function () {
-  return browserify('./content/js/app/app.js')
+gulp.task('build-js', function() {
+  return browserify(filePaths.js.src)
     .bundle()
     .pipe(source('bundle.js'))
+    .pipe(gulp.dest(filePaths.js.devdest))
     .pipe(buffer())
     .pipe(uglify())
-    .pipe(gulp.dest('./content/js/'));
+    .pipe(cachebust.resources())
+    .pipe(gulp.dest(filePaths.js.dest));
 });
+
+gulp.task('build-html', ['build-css', 'build-js'], function () {
+  return gulp.src(filePaths.html.src)
+      .pipe(cachebust.references())
+      .pipe(gulp.dest(filePaths.html.dest));
+});
+
+gulp.task('clean', function () {
+  return del([filePaths.css.dest, filePaths.js.dest]);
+});
+
+gulp.task('default', ['clean', 'build-html']);

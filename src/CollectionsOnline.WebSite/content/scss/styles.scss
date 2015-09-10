@@ -4027,7 +4027,6 @@ footer {
 @page {
     margin: 1cm 1.5cm 3cm;
 
-
     @bottom-left {
         margin: 10pt 0 30pt 0;
         border-top: .25pt solid #666;
@@ -4038,7 +4037,7 @@ footer {
 
     a [href^=http]:after {
       content:" <" attr(href) "> ";
-   };
+    }
 }
 
 .skipto {
