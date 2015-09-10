@@ -10,7 +10,5 @@ namespace CollectionsOnline.WebSite.Models
         public string ApiRootUrl { get; set; }
 
         public string ApiCurrentVersionRootUrl { get; set; }
-
-        public string PagingPageSizeMax { get; set; }
     }
 }

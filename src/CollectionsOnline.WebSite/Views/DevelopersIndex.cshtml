@@ -1,4 +1,5 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.DevelopersIndexViewModel>
+﻿@using CollectionsOnline.Core.Config
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.DevelopersIndexViewModel>
 @{
     Layout = "Layout.cshtml";
 }
@@ -29,8 +30,8 @@
         <pre>@Model.ApiCurrentVersionRootUrl</pre>
     
         <h2 id="pagination">Pagination</h2>
-        <p>Requests that return multiple objects will by default display 30 objects per request.  You can specify more objects to return by specifiying a <em>?limit</em> query string parameter up to a maximum of @Model.PagingPageSizeMax objects.</p>
-        <p>You can also specify an object offset in order to retrieve results for different pages via a <em>?offset</em> query string parameter.</p>
+        <p>Requests that return multiple objects will by default display @Constants.PagingPerPageDefault objects per request, you can increase this to @Constants.PagingPerPageMax by using a <em>?perpage</em> query string parameter.  At this stage you can only specifiy those two values.</p>
+        <p>You can also specify a page parameter to retrieve results from different pages via a <em>?page</em> query string parameter.</p>
         <h4>Link Header</h4>
         <p>The actual pagination information is stored in the response headers.  In order to allow easy traversing of data sets refer to the <a href="http://tools.ietf.org/html/rfc5988">Link header</a> to get the next page of objects in your request. E.g</p>
         <pre>Link: &lt;@Model.ApiRootUrl/items?perpage=50&amp;page=3&gt;; rel=&quot;next&quot;,&lt;@Model.ApiRootUrl/items?perpage=50&gt;; rel=&quot;prev&quot;</pre>
