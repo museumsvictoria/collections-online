@@ -10,8 +10,10 @@
 
 var gulp = require('gulp');
 var sass = require('gulp-ruby-sass');
-
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var uglify = require('gulp-uglify');
+var minifyCss = require('gulp-minify-css');
 var browserify = require('browserify');
 
 var filePaths = {
@@ -20,7 +22,8 @@ var filePaths = {
 
 gulp.task('build-css', function () {
     return gulp.src(filePaths.css.src)
-        .pipe(sass({ noCache: true, sourcemap: true }))
+        .pipe(sass({ noCache: true, sourcemap: false }))
+        .pipe(minifyCss())
         .pipe(gulp.dest(filePaths.css.dest));
 });
 
@@ -32,7 +35,9 @@ gulp.task('watch', function () {
 
 gulp.task('build-js', function () {
   return browserify('./content/js/app/app.js')
-     .bundle()
-     .pipe(source('bundle.js'))
-     .pipe(gulp.dest('./content/js/'));
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest('./content/js/'));
 });
