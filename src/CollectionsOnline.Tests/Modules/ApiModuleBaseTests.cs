@@ -18,9 +18,9 @@ using Xunit;
 
 namespace CollectionsOnline.Tests.Modules
 {
-    public class BaseModuleTests : RavenDbTestBase
+    public class ApiModuleBaseTests : RavenDbTestBase
     {
-        public BaseModuleTests()
+        public ApiModuleBaseTests()
         {
             DataToBeSeeded = new List<IEnumerable>
                 {
@@ -50,7 +50,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenEnvelopeRequest_GetItems_ReturnsEnvelope()
         {
             // Given When
-            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiPathBase, Constants.CurrentApiVersionPath), with =>
                 {
                     with.HttpRequest();
                     with.Query("envelope", "true");
@@ -65,13 +65,11 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenOnePageRequestAndDefaultPerPage_GetItems_ReturnsOnePage()
         {
             // Given When
-            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiPathBase, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("page", "1");
             });
-
-            var fdasfa = result.Body.DeserializeJson<IEnumerable<Item>>();
 
             // Then
             result.Body.DeserializeJson<IEnumerable<Item>>().Count().ShouldBe(Constants.PagingPerPageDefault);
@@ -81,7 +79,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenOnePageRequest_GetItems_ReturnsLinkHeader()
         {
             // Given When
-            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiPathBase, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("page", "1");
@@ -95,7 +93,7 @@ namespace CollectionsOnline.Tests.Modules
         public void GivenPageRequest_GetItems_ReturnsCorrectItem()
         {
             // Given When
-            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiBasePath, Constants.CurrentApiVersionPath), with =>
+            var result = Browser.Get(string.Format("/{0}{1}/items", Constants.ApiPathBase, Constants.CurrentApiVersionPath), with =>
             {
                 with.HttpRequest();
                 with.Query("page", "2");

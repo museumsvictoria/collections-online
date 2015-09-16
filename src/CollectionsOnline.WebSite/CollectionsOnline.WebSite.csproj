@@ -247,7 +247,7 @@
     <Compile Include="Modules\CollectionsModule.cs" />
     <Compile Include="Modules\RedirectModule.cs" />
     <Compile Include="Modules\ItemsModule.cs" />
-    <Compile Include="Modules\Api\BaseApiModule.cs" />
+    <Compile Include="Modules\Api\ApiModuleBase.cs" />
     <Compile Include="Models\Api\ApiInputModel.cs" />
     <Compile Include="Modules\Api\ItemsApiModule.cs" />
     <Compile Include="Modules\Api\SpeciesApiModule.cs" />

@@ -59,7 +59,7 @@ namespace CollectionsOnline.Core.Config
 
         public static string CurrentApiVersionPath = "/v1";
 
-        public static string ApiBasePath = "api";
+        public static string ApiPathBase = "api";
 
         public static Dictionary<Tuple<string, string, string, string>, MuseumLocation> MuseumLocations = new Dictionary
             <Tuple<string, string, string, string>, MuseumLocation>(new OrdinalIgnoreCaseTupleComparer())

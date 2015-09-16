@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -185,7 +186,7 @@
     <Compile Include="Core\Utilities\HtmlConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
-    <Compile Include="Modules\BaseModuleTests.cs" />
+    <Compile Include="Modules\ApiModuleBaseTests.cs" />
     <Compile Include="Modules\ArticleApiModuleTests.cs" />
     <Compile Include="Modules\SpecimenApiModuleTests.cs" />
     <Compile Include="Modules\SpeciesApiModuleTests.cs" />

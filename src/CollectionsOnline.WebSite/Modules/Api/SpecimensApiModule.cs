@@ -9,7 +9,7 @@ using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Modules.Api
 {
-    public class SpecimensApiModule : BaseApiModule
+    public class SpecimensApiModule : ApiModuleBase
     {
         public SpecimensApiModule(IDocumentSession documentSession)
             : base("/specimens")

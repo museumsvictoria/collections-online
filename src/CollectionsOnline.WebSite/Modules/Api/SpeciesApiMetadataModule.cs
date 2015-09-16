@@ -61,7 +61,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.NotFound, "The species could not be found and probably does not exist."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Species, SpeciesApiViewModel>(sampleSpecies), Formatting.Indented),
-                        ExampleUrl = (sampleSpecies != null) ? string.Format("/{0}/{1}", Constants.ApiBasePath, sampleSpecies.Id) : null,
+                        ExampleUrl = (sampleSpecies != null) ? string.Format("/{0}/{1}", Constants.ApiPathBase, sampleSpecies.Id) : null,
                     };
                 };
             }

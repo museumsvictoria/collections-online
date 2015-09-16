@@ -9,10 +9,10 @@ using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Modules.Api
 {
-    public abstract class BaseApiModule : NancyModule
+    public abstract class ApiModuleBase : NancyModule
     {
-        protected BaseApiModule(string modulePath = "")
-            : base(string.Format("/{0}{1}{2}", Constants.ApiBasePath, Constants.CurrentApiVersionPathSegment, modulePath))
+        protected ApiModuleBase(string modulePath = "")
+            : base(string.Format("/{0}{1}{2}", Constants.ApiPathBase, Constants.CurrentApiVersionPathSegment, modulePath))
         {
             Before += context =>
                 {
@@ -27,6 +27,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         Context.Response.Headers["Link"] = BuildLinkHeader();
                         Context.Response.Headers["Total-Results"] = Statistics.TotalResults.ToString();
+                        Context.Response.Headers["Total-Pages"] = ((Statistics.TotalResults + PerPage - 1) / PerPage).ToString();
                     }
                 };
         }
@@ -43,6 +44,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Link = BuildLinkHeader(),
                             TotalResults = Statistics.TotalResults,
+                            TotalPages = ((Statistics.TotalResults + PerPage - 1) / PerPage),
                         },
                         Response = model,
                         Status = httpStatus

@@ -61,7 +61,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.NotFound, "The specimen could not be found and probably does not exist."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Specimen, SpecimenApiViewModel>(sampleSpecimen), Formatting.Indented),
-                        ExampleUrl = (sampleSpecimen != null) ? string.Format("/{0}/{1}", Constants.ApiBasePath, sampleSpecimen.Id) : null,
+                        ExampleUrl = (sampleSpecimen != null) ? string.Format("/{0}/{1}", Constants.ApiPathBase, sampleSpecimen.Id) : null,
                     };
                 };
             }
