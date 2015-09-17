@@ -45,7 +45,7 @@ namespace CollectionsOnline.WebSite.ModelBinders
             if (queryString.Query.HasValue && !string.IsNullOrWhiteSpace(queryString.Query.Value))
                 searchInputModel.Queries.AddRange(((string)queryString.Query.Value).Split(',').Where(x => !string.IsNullOrWhiteSpace(x)));
 
-            // Set curent url for use in building links set to canonical if request from Api
+            // Set curent url for use in building links (set to canonical if request from Api)
             searchInputModel.CurrentUrl = context.Request.Path.StartsWith(string.Format("/{0}", Constants.ApiPathBase)) ? 
                 string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"].Substring(0, ConfigurationManager.AppSettings["CanonicalSiteBase"].LastIndexOf('/')), context.Request.Url.Path) : 
                 context.Request.Url.Path;
