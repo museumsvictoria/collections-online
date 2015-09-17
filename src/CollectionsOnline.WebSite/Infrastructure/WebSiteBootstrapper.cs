@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
@@ -37,7 +38,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
             IndexCreation.CreateIndexes(typeof(ItemViewTransformer).Assembly, documentStore);
 
             // Initialize raven miniprofiler
-            MiniProfilerRaven.InitializeFor(documentStore);            
+            MiniProfilerRaven.InitializeFor(documentStore);
         }
 
         protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)
@@ -72,6 +73,9 @@ namespace CollectionsOnline.WebSite.Infrastructure
             pipelines.AfterRequest += ctx =>
             {
                 MiniProfiler.Stop();
+
+                // Remove un-needed mini profiler header
+                HttpContext.Current.Response.Headers.Remove("X-MiniProfiler-Ids");
 
                 _log.Trace(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
             };

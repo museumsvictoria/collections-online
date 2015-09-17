@@ -58,7 +58,7 @@ gulp.task('build-html', ['build-css', 'build-js'], function () {
 });
 
 gulp.task('clean', function () {
-  return del([filePaths.css.dest, filePaths.js.dest]);
+  return del(['./dist/css', './dist/js']);
 });
 
 gulp.task('default', ['clean', 'build-html']);
