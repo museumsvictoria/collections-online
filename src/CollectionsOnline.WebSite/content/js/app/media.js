@@ -188,12 +188,14 @@ module.exports = {
 
       this.preloadImages(newHeroImage.attr('src')).done(function () {
         $this.$heroMedia.html(newHeroImage);
+        newHeroImage.removeAttr('width');
+        newHeroImage.removeAttr('height');
         $this.switchCaption(newMedia);
       });
     } else if (newMedia.$type.indexOf('VideoMedia') > 0) {
       // Handle Videos      
       if (this.$mediaArea.hasClass('expanded')) {
-        this.toggleFullscreen();        
+        this.toggleFullscreen();
       }
 
       var newHeroVideo = $('<img/>', { 'alt': newMedia.Caption, 'src': newMedia.Medium.Uri, 'class': 'video' });
@@ -202,6 +204,8 @@ module.exports = {
       
       this.preloadImages(newHeroVideo.attr('src')).done(function () {
         $this.$heroMedia.html(newHeroVideo);
+        newHeroVideo.removeAttr('width');
+        newHeroVideo.removeAttr('height');
         $this.switchCaption(newMedia);
         video.init();
       });
