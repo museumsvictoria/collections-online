@@ -74,14 +74,15 @@ namespace CollectionsOnline.WebSite.Infrastructure
             {
                 MiniProfiler.Stop();
 
-                // Remove un-needed mini profiler header
-                HttpContext.Current.Response.Headers.Remove("X-MiniProfiler-Ids");
-
-                _log.Trace(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
+                if (MiniProfiler.Current != null)
+                    _log.Trace(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
             };
 
             // Automapper configuration
             AutomapperConfig.Initialize();
+
+            // Fix error handling when compiling for release
+            StaticConfiguration.DisableErrorTraces = false;
         }
 
         protected override void ConfigureConventions(NancyConventions conventions)

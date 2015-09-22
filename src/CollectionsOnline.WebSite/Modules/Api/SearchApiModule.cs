@@ -14,7 +14,11 @@ namespace CollectionsOnline.WebSite.Modules.Api
             {
                 var searchInputModel = this.Bind<SearchInputModel>();
 
-                return BuildResponse(searchViewModelQuery.BuildSearchIndex(searchInputModel));
+                var searchApiViewModel = searchViewModelQuery.BuildSearchApi(searchInputModel);
+
+                Statistics = searchApiViewModel.Statistics;
+
+                return BuildResponse(searchApiViewModel.Results);
             };
         }
     }

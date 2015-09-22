@@ -6,6 +6,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 {
     public class ItemApiViewModel : AggregateRoot
     {
+        public string RecordType { get; set; }
+
         public IList<CommentApiViewModel> Comments { get; set; }
 
         public DateTime DateModified { get; set; }
@@ -233,7 +235,5 @@ namespace CollectionsOnline.WebSite.Models.Api
         public QualifierRankType QualifierRank { get; set; }
 
         public Taxonomy Taxonomy { get; set; }
-
-        public string ScientificName { get; set; }
     }
 }

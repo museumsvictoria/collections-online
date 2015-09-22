@@ -191,9 +191,11 @@
     <Content Include="content\js\app\app.js" />
     <Content Include="content\js\lib\query-string.js" />
     <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
     <Content Include="opensearch.xml" />
     <Content Include="robots.txt" />
+    <Content Include="Views\Error\500.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -215,10 +217,14 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Factories\ISearchViewModelFactory.cs" />
     <Compile Include="Factories\MetadataViewModelFactory.cs" />
     <Compile Include="Factories\IDevelopersViewModelFactory.cs" />
     <Compile Include="Factories\DevelopersViewModelFactory.cs" />
     <Compile Include="Factories\IMetadataViewModelFactory.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\AutomapperConfig.cs" />
     <Compile Include="Factories\HomeHeroUriFactory.cs" />
     <Compile Include="Factories\IHomeHeroUriFactory.cs" />
@@ -231,6 +237,8 @@
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Models\CollectionIndexViewModel.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
+    <Compile Include="Models\SearchApiViewModel.cs" />
+    <Compile Include="Models\SearchInputModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiMetadataModule.cs" />
@@ -280,10 +288,8 @@
     <Compile Include="Queries\IItemViewModelQuery.cs" />
     <Compile Include="Queries\ItemViewModelQuery.cs" />
     <Compile Include="Models\SearchIndexViewModel.cs" />
-    <Compile Include="Models\SearchInputModel.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Queries\ISearchViewModelQuery.cs" />
-    <Compile Include="Factories\ISearchViewModelFactory.cs" />
     <Compile Include="Queries\SearchViewModelQuery.cs" />
     <Compile Include="Factories\SearchViewModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

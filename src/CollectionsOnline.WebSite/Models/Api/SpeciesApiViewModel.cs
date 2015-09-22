@@ -6,6 +6,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 {
     public class SpeciesApiViewModel : AggregateRoot
     {
+        public string RecordType { get; set; }
+
         public DateTime DateModified { get; set; }
 
         public string AnimalType { get; set; }

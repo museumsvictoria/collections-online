@@ -6,6 +6,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 {
     public class SpecimenApiViewModel : AggregateRoot
     {
+        public string RecordType { get; set; }
+
         public DateTime DateModified { get; set; }
 
         public string Category { get; set; }
@@ -51,7 +53,7 @@ namespace CollectionsOnline.WebSite.Models.Api
         public MuseumLocation MuseumLocation { get; set; }
 
         public IList<Media> Media { get; set; }
-
+        
         public string NumberOfSpecimens { get; set; }
 
         public string ClutchSize { get; set; }
@@ -73,8 +75,6 @@ namespace CollectionsOnline.WebSite.Models.Api
         public QualifierRankType QualifierRank { get; set; }
 
         public Taxonomy Taxonomy { get; set; }
-
-        public string ScientificName { get; set; }        
 
         public string ExpeditionName { get; set; }
 
@@ -199,5 +199,7 @@ namespace CollectionsOnline.WebSite.Models.Api
         public string PetrologyRockName { get; set; }
 
         public string PetrologyRockDescription { get; set; }
+
+        public string PetrologyMineralsPresent { get; set; }
     }
 }

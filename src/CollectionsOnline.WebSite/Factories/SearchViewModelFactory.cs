@@ -14,7 +14,6 @@ namespace CollectionsOnline.WebSite.Factories
         public SearchIndexViewModel MakeSearchIndex(
             IList<EmuAggregateRootViewModel> results,
             FacetResults facets,
-            List<string> suggestions,
             int totalResults,
             SearchInputModel searchInputModel,
             long queryTimeElapsed,
@@ -236,16 +235,6 @@ namespace CollectionsOnline.WebSite.Factories
                 Active = searchInputModel.View == "data"
             };
 
-            // Build suggestions
-            foreach (var suggestion in suggestions)
-            {
-                searchIndexViewModel.Suggestions.Add(new SuggestionViewModel
-                {
-                    Suggestion = suggestion,
-                    Url = String.Concat(searchInputModel.CurrentUrl, "?query=", HttpUtility.UrlEncode(suggestion))
-                });
-            }
-            
             return searchIndexViewModel;
         }
     }

@@ -6,6 +6,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 {
     public class ArticleApiViewModel : AggregateRoot
     {
+        public string RecordType { get; set; }
+
         public DateTime DateModified { get; set; }
 
         public string Title { get; set; }

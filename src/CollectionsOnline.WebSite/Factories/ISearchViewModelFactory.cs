@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.WebSite.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using Raven.Abstractions.Data;
 
 namespace CollectionsOnline.WebSite.Factories
@@ -10,8 +10,7 @@ namespace CollectionsOnline.WebSite.Factories
         SearchIndexViewModel MakeSearchIndex(
             IList<EmuAggregateRootViewModel> results,
             FacetResults facets, 
-            List<string> suggestions, 
-            int totalResults, 
+            int totalResults,
             SearchInputModel searchInputModel, 
             long queryTimeElapsed, 
             long facetTimeElapsed);

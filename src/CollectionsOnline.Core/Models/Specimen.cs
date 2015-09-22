@@ -36,7 +36,7 @@ namespace CollectionsOnline.Core.Models
 
         public string Type { get; set; }
 
-        public IList<string> Classifications { get; set; }                
+        public IList<string> Classifications { get; set; }
 
         public string ObjectName { get; set; }
 
@@ -81,7 +81,7 @@ namespace CollectionsOnline.Core.Models
         public string TypeStatus { get; set; }
 
         public string IdentifiedBy { get; set; }
-        
+
         public string DateIdentified { get; set; }
 
         public string Qualifier { get; set; }

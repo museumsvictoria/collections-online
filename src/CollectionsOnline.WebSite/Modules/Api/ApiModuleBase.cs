@@ -69,9 +69,9 @@ namespace CollectionsOnline.WebSite.Modules.Api
         private void BindApiInput()
         {
             var apiInputModel = this.Bind<ApiInputModel>();
-
+            
             if (apiInputModel.Page <= 0)
-                Page = 1;
+                apiInputModel.Page = 1;
 
             if (apiInputModel.PerPage != Constants.PagingPerPageDefault && apiInputModel.PerPage != Constants.PagingPerPageMax)
                 apiInputModel.PerPage = Constants.PagingPerPageDefault;
