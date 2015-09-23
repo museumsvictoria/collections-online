@@ -58,7 +58,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
             pipelines.OnError += (ctx, ex) =>
             {
-                _log.Error(ex);
+                _log.Error("pipelines.OnError occured [url:{0}]: {1}", ctx.Request.Url, ex);
 
                 return null;
             };

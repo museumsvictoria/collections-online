@@ -24,7 +24,7 @@ namespace CollectionsOnline.WebSite
         {
             // Capture any errors occurring before the nancy pipeline
             var error = Server.GetLastError();
-            _log.Error(string.Format("Application_Error occured: {0}", error));
+            _log.Error("Application_Error occured [url:{0}]: {1}", Request.Url, error);
 
             Server.ClearError();
 
