@@ -34,7 +34,7 @@
         <p>You can also specify a page parameter to retrieve results from different pages via a <em>?page</em> query string parameter.</p>
         <h4>Link Header</h4>
         <p>The actual pagination information is stored in the response headers.  In order to allow easy traversing of data sets refer to the <a href="http://tools.ietf.org/html/rfc5988">Link header</a> to get the next page of objects in your request. E.g</p>
-        <pre>Link: &lt;@Model.ApiRootUrl/items?perpage=50&amp;page=3&gt;; rel=&quot;next&quot;,&lt;@Model.ApiRootUrl/items?perpage=50&gt;; rel=&quot;prev&quot;</pre>
+        <pre>Link: &lt;@Model.ApiRootUrl/items?perpage=@Constants.PagingPerPageDefault&amp;page=3&gt;; rel=&quot;next&quot;,&lt;@Model.ApiRootUrl/items?perpage=@Constants.PagingPerPageDefault&gt;; rel=&quot;prev&quot;</pre>
         <p>The total results is also stored in the response headers. E.g</p>
         <pre>Total-Results: 87366</pre>
     
