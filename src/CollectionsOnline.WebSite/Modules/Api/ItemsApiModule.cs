@@ -3,7 +3,6 @@ using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Raven.Client;
@@ -31,8 +30,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
             Get["items-api-by-id", "/{id}"] = parameters =>
                 {
                     var item = documentSession.Load<Item>("items/" + parameters.id as string);
-
-                    return (item == null || item.IsHidden) ? BuildErrorResponse(HttpStatusCode.NotFound, "Item {0} not found", parameters.id) : BuildResponse(Mapper.Map<Item, ItemApiViewModel>(item));
+                    
+                    return (item == null || item.IsHidden) ? HttpStatusCode.NotFound : BuildResponse(Mapper.Map<Item, ItemApiViewModel>(item));
                 };
         }
     }

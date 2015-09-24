@@ -31,7 +31,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                 {
                     var specimen = documentSession.Load<Specimen>("specimens/" + parameters.id as string);
 
-                    return (specimen == null || specimen.IsHidden) ? BuildErrorResponse(HttpStatusCode.NotFound, "Specimen {0} not found", parameters.id) : BuildResponse(Mapper.Map<Specimen, SpecimenApiViewModel>(specimen));
+                    return (specimen == null || specimen.IsHidden) ? HttpStatusCode.NotFound : BuildResponse(Mapper.Map<Specimen, SpecimenApiViewModel>(specimen));
                 };
         }
     }

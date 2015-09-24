@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using AutoMapper;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
@@ -31,7 +32,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                 {
                     var article = documentSession.Load<Article>("articles/" + parameters.id as string);
 
-                    return (article == null || article.IsHidden) ? BuildErrorResponse(HttpStatusCode.NotFound, "Article {0} not found", parameters.id) : BuildResponse(Mapper.Map<Article, ArticleApiViewModel>(article));
+                    return (article == null || article.IsHidden) ? HttpStatusCode.NotFound : BuildResponse(Mapper.Map<Article, ArticleApiViewModel>(article));
                 };
         }
     }

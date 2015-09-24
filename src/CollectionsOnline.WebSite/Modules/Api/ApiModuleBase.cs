@@ -61,11 +61,6 @@ namespace CollectionsOnline.WebSite.Modules.Api
             return Response.AsJson(model).WithStatusCode(httpStatus);
         }
 
-        protected Response BuildErrorResponse(HttpStatusCode httpStatus, string message, params object[] args)
-        {
-            return BuildResponse(new { Error = string.Format(message, args) }, httpStatus);
-        }
-
         private void BindApiInput()
         {
             var apiInputModel = this.Bind<ApiInputModel>();

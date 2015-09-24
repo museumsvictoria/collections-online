@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using Nancy.ErrorHandling;
+using Nancy.Responses;
 using Nancy.ViewEngines;
 
 namespace CollectionsOnline.WebSite.Infrastructure
@@ -11,10 +11,14 @@ namespace CollectionsOnline.WebSite.Infrastructure
     {
         private static IList<HttpStatusCode> _handles = new List<HttpStatusCode>();
         private IViewRenderer _viewRenderer;
+        private IEnumerable<ISerializer> _serializers;
 
-        public StatusCodeHandler(IViewRenderer viewRenderer)
+        public StatusCodeHandler(
+            IViewRenderer viewRenderer,
+            IEnumerable<ISerializer> serializers)
         {
             _viewRenderer = viewRenderer;
+            _serializers = serializers;
 
             _handles.Add(HttpStatusCode.NotFound);
             _handles.Add(HttpStatusCode.InternalServerError);
@@ -27,16 +31,22 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
         public void Handle(HttpStatusCode statusCode, NancyContext context)
         {
-            try
+            Response response;
+
+            // Force json if request from api, otherwise return view
+            if (context.Request.Path.Contains("api"))
             {
-                var response = _viewRenderer.RenderView(context, string.Format("Error/{0}.cshtml", (int)statusCode));
-                response.StatusCode = statusCode;
-                context.Response = response;
+                response = new JsonResponse(new {Error = string.Format("{0} - {1}", (int) statusCode, statusCode)},
+                    _serializers.FirstOrDefault(s => s.CanSerialize("application/json")));
             }
-            catch (Exception)
+            else
             {
-                context.Response.StatusCode = statusCode;
+                response = _viewRenderer.RenderView(context, string.Format("Error/{0}.cshtml", (int)statusCode));                    
             }
+
+            response.WithStatusCode(statusCode);
+
+            context.Response = response;
         }
     }
 }
