@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using AutoMapper;
-using CollectionsOnline.Core.Indexes;
+﻿using AutoMapper;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models.Api;
+using CollectionsOnline.WebSite.Queries;
 using Nancy;
 using Raven.Client;
 
@@ -12,21 +9,17 @@ namespace CollectionsOnline.WebSite.Modules.Api
 {
     public class ArticlesApiModule : ApiModuleBase
     {
-        public ArticlesApiModule(IDocumentSession documentSession)
+        public ArticlesApiModule(
+            IDocumentSession documentSession,
+            IArticleViewModelQuery articleViewModelQuery)
             : base("/articles")
         {
             Get["articles-api-index", "/"] = parameters =>
-                {
-                    var articles = documentSession.Advanced
-                        .DocumentQuery<Article, CombinedIndex>()
-                        .WhereEquals("RecordType", "Article")
-                        .Statistics(out Statistics)
-                        .Skip((Page - 1) * PerPage)
-                        .Take(PerPage)
-                        .ToList();
+            {
+                var apiViewModel = articleViewModelQuery.BuildArticleApiIndex(ApiInputModel);
 
-                    return BuildResponse(Mapper.Map<IEnumerable<Article>, IEnumerable<ArticleApiViewModel>>(articles));
-                };
+                return BuildResponse(apiViewModel.Results, apiPageInfo: apiViewModel.ApiPageInfo);
+            };
 
             Get["articles-api-by-id", "/{id}"] = parameters =>
                 {

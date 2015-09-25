@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
 
@@ -57,6 +59,27 @@ namespace CollectionsOnline.WebSite.Queries
 
                 return result;
             }
+        }
+
+        public ApiViewModel BuildSpeciesApiIndex(ApiInputModel apiInputModel)
+        {
+            using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
+            {
+                RavenQueryStatistics statistics;
+                var results = _documentSession.Advanced
+                    .DocumentQuery<dynamic, CombinedIndex>()
+                    .WhereEquals("RecordType", "Species")
+                    .Statistics(out statistics)
+                    .Skip((apiInputModel.Page - 1) * apiInputModel.PerPage)
+                    .Take(apiInputModel.PerPage);
+
+                return new ApiViewModel
+                {
+                    Results = results.Cast<Species>().Select<Species, dynamic>(Mapper.Map<Species, SpeciesApiViewModel>).ToList(),
+                    ApiPageInfo = new ApiPageInfo(statistics.TotalResults, apiInputModel.PerPage)
+                };
+            }
+
         }
     }
 }

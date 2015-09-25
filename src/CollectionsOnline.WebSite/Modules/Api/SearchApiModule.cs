@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using CollectionsOnline.WebSite.Models;
+﻿using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Queries;
 using Nancy.ModelBinding;
 
@@ -12,13 +11,11 @@ namespace CollectionsOnline.WebSite.Modules.Api
         {
             Get["search-api", ""] = parameters =>
             {
-                var searchInputModel = this.Bind<SearchInputModel>();
+                var searchApiInputModel = this.Bind<SearchApiInputModel>();
+                
+                var apiViewModel = searchViewModelQuery.BuildSearchApi(searchApiInputModel, ApiInputModel);
 
-                var searchApiViewModel = searchViewModelQuery.BuildSearchApi(searchInputModel);
-
-                Statistics = searchApiViewModel.Statistics;
-
-                return BuildResponse(searchApiViewModel.Results);
+                return BuildResponse(apiViewModel.Results, apiPageInfo: apiViewModel.ApiPageInfo);
             };
         }
     }

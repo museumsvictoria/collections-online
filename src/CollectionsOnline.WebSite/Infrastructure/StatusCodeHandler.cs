@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CollectionsOnline.Core.Config;
 using Nancy;
 using Nancy.ErrorHandling;
 using Nancy.Responses;
@@ -34,7 +35,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
             Response response;
 
             // Force json if request from api, otherwise return view
-            if (context.Request.Path.Contains("api"))
+            if (context.Request.Path.StartsWith(string.Format("/{0}", Constants.ApiPathBase)))
             {
                 response = new JsonResponse(new {Error = string.Format("{0} - {1}", (int) statusCode, statusCode)},
                     _serializers.FirstOrDefault(s => s.CanSerialize("application/json")));

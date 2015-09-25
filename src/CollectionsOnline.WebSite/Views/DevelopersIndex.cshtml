@@ -10,7 +10,7 @@
         @foreach (var apiOperationMetadata in @Model.OperationMetadata)
         {   <h4>
             <a href="#@apiOperationMetadata.Name.ToLower()">@apiOperationMetadata.Name</a>
-            </h4>
+        </h4>
             <ul>
                 @foreach (var metadata in apiOperationMetadata.Metadata)
                 {
@@ -28,19 +28,18 @@
         <h2 id="versions">Versions</h2>
         <p>At this time the API supports one version only, this is the default version returned via the root uri. It can also be accessed via the following uri for future versions.</p>
         <pre>@Model.ApiCurrentVersionRootUrl</pre>
-    
+
         <h2 id="pagination">Pagination</h2>
         <p>Requests that return multiple objects will by default display @Constants.PagingPerPageDefault objects per request, you can increase this to @Constants.PagingPerPageMax by using a <em>?perpage</em> query string parameter.  At this stage you can only specifiy those two values.</p>
         <p>You can also specify a page parameter to retrieve results from different pages via a <em>?page</em> query string parameter.</p>
         <h4>Link Header</h4>
         <p>The actual pagination information is stored in the response headers.  In order to allow easy traversing of data sets refer to the <a href="http://tools.ietf.org/html/rfc5988">Link header</a> to get the next page of objects in your request. E.g</p>
         <pre>Link: &lt;@Model.ApiRootUrl/items?perpage=@Constants.PagingPerPageDefault&amp;page=3&gt;; rel=&quot;next&quot;,&lt;@Model.ApiRootUrl/items?perpage=@Constants.PagingPerPageDefault&gt;; rel=&quot;prev&quot;</pre>
-        <p>The total results is also stored in the response headers. E.g</p>
-        <pre>Total-Results: 87366</pre>
-    
-        <h2 id="response-envelope">Response Envelope</h2>
+        <p>The total results and total pages is also stored in the response headers. E.g</p>
+        <pre>Total-Results: 87366<br />Total-Pages: 2185</pre>
+        <h4 id="response-envelope">Response Envelope</h4>
         <p>In order to make debuging with the api easy, we have included a way to encapsulate all the data needed for a response in the body of the response without having to dive into the actual headers. In order to do this simply add the value <em>?envelope=true</em> to the query string</p>
-    
+
         @foreach (var apiOperationMetadata in @Model.OperationMetadata)
         {
             <h2 id="@apiOperationMetadata.Name.ToLower()">Operations about @apiOperationMetadata.Name</h2>

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.ModelBinding;
-using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Modules.Api
 {
@@ -21,30 +22,52 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     return null;
                 };
 
-            After += context =>
+            After += ctx =>
                 {
-                    if (Statistics != null && !Envelope)
+                    // Encode response if client accepts
+                    if (ctx.Request.Headers.AcceptEncoding.Any(x => x.Contains("gzip")))
                     {
-                        Context.Response.Headers["Link"] = BuildLinkHeader();
-                        Context.Response.Headers["Total-Results"] = Statistics.TotalResults.ToString();
-                        Context.Response.Headers["Total-Pages"] = ((Statistics.TotalResults + PerPage - 1) / PerPage).ToString();
+                        var jsonData = new MemoryStream();
+                        ctx.Response.Contents.Invoke(jsonData);
+                        jsonData.Position = 0;
+                        if (jsonData.Length < 4096)
+                        {
+                            ctx.Response.Contents = stream =>
+                            {
+                                jsonData.CopyTo(stream);
+                                stream.Flush();
+                            };
+                        }
+                        else
+                        {
+                            ctx.Response.WithHeader("Content-Encoding", "gzip");
+                            ctx.Response.WithHeader("Vary", "Accept-Encoding");
+                            ctx.Response.Contents = stream =>
+                            {
+                                using (var gzip = new GZipStream(stream, CompressionMode.Compress))
+                                {
+                                    jsonData.CopyTo(gzip);
+                                }
+                            };
+                        }
                     }
                 };
         }
 
-        protected Response BuildResponse(object model, HttpStatusCode httpStatus = HttpStatusCode.OK)
+        protected Response BuildResponse(object model, HttpStatusCode httpStatus = HttpStatusCode.OK, ApiPageInfo apiPageInfo = null)
         {
-            if (Envelope)
+            if (ApiInputModel.Envelope)
             {
-                if (Statistics != null)
+                // Check if we have pagination information to return
+                if(apiPageInfo != null)
                 {
                     return Response.AsJson(new
                     {
                         Headers = new
                         {
-                            Link = BuildLinkHeader(),
-                            TotalResults = Statistics.TotalResults,
-                            TotalPages = ((Statistics.TotalResults + PerPage - 1) / PerPage),
+                            Link = BuildLinkHeader(apiPageInfo),
+                            TotalResults = apiPageInfo.TotalResults,
+                            TotalPages = apiPageInfo.TotalPages,
                         },
                         Response = model,
                         Status = httpStatus
@@ -58,45 +81,56 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     });
             }
 
-            return Response.AsJson(model).WithStatusCode(httpStatus);
+            var response = Response
+                .AsJson(model)
+                .WithStatusCode(httpStatus);
+
+            // No envelope but we have pagination infomation to return
+            if (apiPageInfo != null)
+            {
+                response
+                    .WithHeader("Link", BuildLinkHeader(apiPageInfo))
+                    .WithHeader("Total-Results", apiPageInfo.TotalResults.ToString())
+                    .WithHeader("Total-Pages", apiPageInfo.TotalPages.ToString());
+            }
+            
+            return response;
         }
 
         private void BindApiInput()
         {
             var apiInputModel = this.Bind<ApiInputModel>();
-            
+
             if (apiInputModel.Page <= 0)
                 apiInputModel.Page = 1;
 
             if (apiInputModel.PerPage != Constants.PagingPerPageDefault && apiInputModel.PerPage != Constants.PagingPerPageMax)
                 apiInputModel.PerPage = Constants.PagingPerPageDefault;
 
-            Page = apiInputModel.Page;
-            PerPage = apiInputModel.PerPage;
-            Envelope = apiInputModel.Envelope;
+            ApiInputModel = apiInputModel;
         }
 
-        private string BuildLinkHeader()
+        private string BuildLinkHeader(ApiPageInfo apiPageInfo)
         {
             var queryString = HttpUtility.ParseQueryString(Request.Url.Query);
             var url = Request.Url;
-            var totalPages = (Statistics.TotalResults + PerPage - 1) / PerPage;
+            var totalPages = apiPageInfo.TotalPages;
             var links = new List<string>();
 
             // Next
-            if ((Page + 1) <= totalPages)
+            if ((ApiInputModel.Page + 1) <= totalPages)
             {
-                queryString.Set("page", (Page + 1).ToString());
+                queryString.Set("page", (ApiInputModel.Page + 1).ToString());
 
                 url.Query = "?" + queryString;
                 links.Add(string.Format("<{0}>; rel=\"next\"", url));
             }
 
             // Prev
-            if ((Page - 1) >= 1)
+            if ((ApiInputModel.Page - 1) >= 1)
             {
-                queryString.Set("page", (Page - 1).ToString());
-                if ((Page - 1) == 1)
+                queryString.Set("page", (ApiInputModel.Page - 1).ToString());
+                if ((ApiInputModel.Page - 1) == 1)
                 {
                     queryString.Remove("page");
                 }
@@ -109,14 +143,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
                 return links.Aggregate((lp1, lp2) => lp1 + "," + lp2);
 
             return string.Empty;
-        }
+        }        
 
-        protected int Page { get; private set; }
-
-        protected int PerPage { get; private set; }
-
-        protected bool Envelope { get; private set; }
-
-        public RavenQueryStatistics Statistics;
+        protected ApiInputModel ApiInputModel { get; private set; }
     }
 }

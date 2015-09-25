@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy.Helpers;
 using Raven.Client;
@@ -151,6 +153,23 @@ namespace CollectionsOnline.WebSite.Queries
 
                 return result;
             }
+        }
+
+        public ApiViewModel BuildSpecimenApiIndex(ApiInputModel apiInputModel)
+        {
+            RavenQueryStatistics statistics;
+            var results = _documentSession.Advanced
+                .DocumentQuery<dynamic, CombinedIndex>()
+                .WhereEquals("RecordType", "Specimen")
+                .Statistics(out statistics)
+                .Skip((apiInputModel.Page - 1) * apiInputModel.PerPage)
+                .Take(apiInputModel.PerPage);
+
+            return new ApiViewModel
+            {
+                Results = results.Cast<Specimen>().Select<Specimen, dynamic>(Mapper.Map<Specimen, SpecimenApiViewModel>).ToList(),
+                ApiPageInfo = new ApiPageInfo(statistics.TotalResults, apiInputModel.PerPage)
+            };
         }
     }
 }

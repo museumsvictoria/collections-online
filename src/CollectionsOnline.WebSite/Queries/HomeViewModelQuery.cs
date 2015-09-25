@@ -12,7 +12,7 @@ namespace CollectionsOnline.WebSite.Queries
     public class HomeViewModelQuery : IHomeViewModelQuery
     {
         private readonly IDocumentSession _documentSession;
-        private IHomeHeroUriFactory _homeHeroUriFactory;
+        private readonly IHomeHeroUriFactory _homeHeroUriFactory;
 
         public HomeViewModelQuery(
             IDocumentSession documentSession,

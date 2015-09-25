@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using AutoMapper;
 using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
@@ -119,31 +122,31 @@ namespace CollectionsOnline.WebSite.Queries
             }
         }
 
-        public SearchApiViewModel BuildSearchApi(SearchInputModel searchInputModel)
+        public ApiViewModel BuildSearchApi(SearchApiInputModel searchApiInputModel, ApiInputModel apiInputModel)
         {
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 // perform query
                 var query = _documentSession.Advanced
                     .DocumentQuery<dynamic, CombinedIndex>()
-                    .Skip((searchInputModel.Page - 1)*searchInputModel.PerPage)
-                    .Take(searchInputModel.PerPage);
+                    .Skip((apiInputModel.Page - 1) * apiInputModel.PerPage)
+                    .Take(apiInputModel.PerPage);
 
                 // search query (only add AndAlso() after first query)
-                for (int i = 0; i < searchInputModel.Queries.Count; i++)
+                for (int i = 0; i < searchApiInputModel.Queries.Count; i++)
                 {
                     if (i == 0)
                     {
-                        query = query.Search("Content", searchInputModel.Queries[i]);
+                        query = query.Search("Content", searchApiInputModel.Queries[i]);
                     }
                     else
                     {
-                        query = query.AndAlso().Search("Content", searchInputModel.Queries[i]);
+                        query = query.AndAlso().Search("Content", searchApiInputModel.Queries[i]);
                     }
                 }
 
                 // Add sorting
-                switch (searchInputModel.Sort)
+                switch (searchApiInputModel.Sort)
                 {
                     case "quality":
                         query = query
@@ -156,19 +159,26 @@ namespace CollectionsOnline.WebSite.Queries
                         break;
                 }
 
-                if (searchInputModel.Queries.Any())
+                if (searchApiInputModel.Queries.Any())
                 {
                     query = query.OrderByScoreDescending();
                 }
 
+                // DateModified
+                if (searchApiInputModel.MinDateModified.HasValue)
+                    query = query.AndAlso().WhereGreaterThanOrEqual("DateModified", searchApiInputModel.MinDateModified);
+
+                if (searchApiInputModel.MaxDateModified.HasValue)
+                    query = query.AndAlso().WhereLessThanOrEqual("DateModified", searchApiInputModel.MinDateModified);
+
                 // facet queries
-                foreach (var facet in searchInputModel.Facets)
+                foreach (var facet in searchApiInputModel.Facets)
                 {
                     query = query.AndAlso().WhereEquals(facet.Key, facet.Value);
                 }
 
                 // multiple facet queries
-                foreach (var multiFacets in searchInputModel.MultiFacets)
+                foreach (var multiFacets in searchApiInputModel.MultiFacets)
                 {
                     foreach (var facetValue in multiFacets.Value)
                     {
@@ -177,20 +187,35 @@ namespace CollectionsOnline.WebSite.Queries
                 }
 
                 // term queries
-                foreach (var term in searchInputModel.Terms)
+                foreach (var term in searchApiInputModel.Terms)
                 {
                     query = query.AndAlso().WhereEquals(term.Key, term.Value);
                 }
-
+                
                 RavenQueryStatistics statistics;
-                var results = query
-                    .Statistics(out statistics)
-                    .ToList();
+                query = query
+                    .Statistics(out statistics);
 
-                return new SearchApiViewModel()
+                var results = new List<dynamic>();
+                foreach (var result in query)
+                {
+                    if(result is Article)
+                        results.Add(Mapper.Map<Article, ArticleApiViewModel>(result));
+
+                    if (result is Item)
+                        results.Add(Mapper.Map<Item, ItemApiViewModel>(result));
+
+                    if (result is Species)
+                        results.Add(Mapper.Map<Species, SpeciesApiViewModel>(result));
+
+                    if (result is Specimen)
+                        results.Add(Mapper.Map<Specimen, SpecimenApiViewModel>(result));
+                }
+
+                return new ApiViewModel
                 {
                     Results = results,
-                    Statistics = statistics
+                    ApiPageInfo = new ApiPageInfo(statistics.TotalResults, apiInputModel.PerPage)
                 };
             }
         }

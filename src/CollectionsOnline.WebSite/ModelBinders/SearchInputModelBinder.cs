@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
 using Nancy;
 using Nancy.Cookies;
@@ -17,7 +18,7 @@ namespace CollectionsOnline.WebSite.ModelBinders
             var queryString = context.Request.Query;
             var searchInputModel = new SearchInputModel();
 
-            // Find Cookies            
+            // Find Cookies
             if (context.Request.Cookies.ContainsKey("perPage"))
             {
                 int perPage;
@@ -41,15 +42,12 @@ namespace CollectionsOnline.WebSite.ModelBinders
             else if (string.Equals(context.Request.Query.View, "data", StringComparison.OrdinalIgnoreCase))
                 searchInputModel.View = "data";
 
-            // Set Query            
+            // Set Queries
             if (queryString.Query.HasValue && !string.IsNullOrWhiteSpace(queryString.Query.Value))
                 searchInputModel.Queries.AddRange(((string)queryString.Query.Value).Split(',').Where(x => !string.IsNullOrWhiteSpace(x)));
 
-            // Set curent url for use in building links (set to canonical if request from Api)
-            searchInputModel.CurrentUrl = context.Request.Path.StartsWith(string.Format("/{0}", Constants.ApiPathBase)) ? 
-                string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"].Substring(0, ConfigurationManager.AppSettings["CanonicalSiteBase"].LastIndexOf('/')), context.Request.Url.Path) : 
-                context.Request.Url.Path;
-
+            // Set urls
+            searchInputModel.CurrentUrl = context.Request.Url.Path;
             searchInputModel.CurrentQueryString = context.Request.Url.Query;
 
             // Bind and normalize the regular stuff

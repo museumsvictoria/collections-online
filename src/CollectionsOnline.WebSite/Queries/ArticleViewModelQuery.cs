@@ -1,5 +1,11 @@
-﻿using CollectionsOnline.Core.Config;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Core.Models;
+using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
 using StackExchange.Profiling;
@@ -38,6 +44,26 @@ namespace CollectionsOnline.WebSite.Queries
                 result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
 
                 return result;
+            }
+        }
+
+        public ApiViewModel BuildArticleApiIndex(ApiInputModel apiInputModel)
+        {
+            using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
+            {
+                RavenQueryStatistics statistics;
+                var results = _documentSession.Advanced
+                    .DocumentQuery<dynamic, CombinedIndex>()
+                    .WhereEquals("RecordType", "Article")
+                    .Statistics(out statistics)
+                    .Skip((apiInputModel.Page - 1) * apiInputModel.PerPage)
+                    .Take(apiInputModel.PerPage);
+
+                return new ApiViewModel
+                {
+                    Results = results.Cast<Article>().Select<Article, dynamic>(Mapper.Map<Article, ArticleApiViewModel>).ToList(),
+                    ApiPageInfo = new ApiPageInfo(statistics.TotalResults, apiInputModel.PerPage)
+                };
             }
         }
     }

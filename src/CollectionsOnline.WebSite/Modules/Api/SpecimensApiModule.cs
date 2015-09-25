@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using CollectionsOnline.Core.Indexes;
+﻿using AutoMapper;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models.Api;
+using CollectionsOnline.WebSite.Queries;
 using Nancy;
 using Raven.Client;
 
@@ -11,20 +9,16 @@ namespace CollectionsOnline.WebSite.Modules.Api
 {
     public class SpecimensApiModule : ApiModuleBase
     {
-        public SpecimensApiModule(IDocumentSession documentSession)
+        public SpecimensApiModule(
+            IDocumentSession documentSession,
+            ISpecimenViewModelQuery specimenViewModelQuery)
             : base("/specimens")
         {
             Get["specimens-api-index", "/"] = parameters =>
                 {
-                    var specimens = documentSession.Advanced
-                        .DocumentQuery<Specimen, CombinedIndex>()
-                        .WhereEquals("RecordType", "Specimen")
-                        .Statistics(out Statistics)
-                        .Skip((Page - 1) * PerPage)
-                        .Take(PerPage)
-                        .ToList();
+                    var apiViewModel = specimenViewModelQuery.BuildSpecimenApiIndex(ApiInputModel);
 
-                    return BuildResponse(Mapper.Map<IEnumerable<Specimen>, IEnumerable<SpecimenApiViewModel>>(specimens));
+                    return BuildResponse(apiViewModel.Results, apiPageInfo: apiViewModel.ApiPageInfo);
                 };
 
             Get["specimens-api-by-id", "/{id}"] = parameters =>
