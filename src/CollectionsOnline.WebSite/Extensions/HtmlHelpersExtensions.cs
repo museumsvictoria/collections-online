@@ -42,7 +42,7 @@ namespace CollectionsOnline.WebSite.Extensions
 
         public static IHtmlString RenderCitation<T>(this HtmlHelpers<T> helper, EmuAggregateRoot document)
         {
-            var currentUrl = string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"].Substring(0, ConfigurationManager.AppSettings["CanonicalSiteBase"].LastIndexOf('/')), helper.RenderContext.Context.Request.Path);
+            var currentUrl = string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"], helper.RenderContext.Context.Request.Path);
 
             var sb = new StringBuilder();
 

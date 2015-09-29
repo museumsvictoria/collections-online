@@ -24,8 +24,8 @@ namespace CollectionsOnline.WebSite.Factories
                         Metadata = x.SelectMany(y => y).Where(y => y != null).GroupBy(y => y.Path).Select(y => y.First())
                     })
                     .Where(x => x.Metadata.Any()),
-                ApiRootUrl = string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"], Constants.ApiPathBase),
-                ApiCurrentVersionRootUrl = string.Format("{0}{1}{2}", ConfigurationManager.AppSettings["CanonicalSiteBase"], Constants.ApiPathBase, Constants.CurrentApiVersionPath),
+                ApiRootUrl = string.Format("{0}/{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"], Constants.ApiPathBase),
+                ApiCurrentVersionRootUrl = string.Format("{0}/{1}{2}", ConfigurationManager.AppSettings["CanonicalSiteBase"], Constants.ApiPathBase, Constants.CurrentApiVersionPath),
             };
         }
     }

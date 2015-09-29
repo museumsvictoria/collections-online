@@ -227,7 +227,7 @@ namespace CollectionsOnline.WebSite.Factories
             var metaProperties = new List<KeyValuePair<string, string>>();
 
             // Remove trailing slash for building our image uri's
-            var canonicalSiteBase = ConfigurationManager.AppSettings["CanonicalSiteBase"].Substring(0, ConfigurationManager.AppSettings["CanonicalSiteBase"].LastIndexOf('/'));
+            var canonicalSiteBase = ConfigurationManager.AppSettings["CanonicalSiteBase"];
 
             var image = media.OfType<ImageMedia>().FirstOrDefault();
             var video = media.OfType<VideoMedia>().FirstOrDefault();
