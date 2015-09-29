@@ -234,9 +234,13 @@
     <Compile Include="ModelBinders\SearchInputModelBinder.cs" />
     <Compile Include="Models\Api\ApiPageInfo.cs" />
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />
+    <Compile Include="Models\Api\AuthorApiViewModel.cs" />
+    <Compile Include="Models\Api\MediaApiViewModel.cs" />
+    <Compile Include="Models\Api\MediaFileApiViewModel.cs" />
     <Compile Include="Models\Api\SearchApiInputModel.cs" />
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
+    <Compile Include="Models\Api\TaxonomyApiViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Models\CollectionIndexViewModel.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />

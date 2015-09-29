@@ -22,11 +22,11 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> Types { get; set; }
 
-        public IList<Author> Authors { get; set; }
+        public IList<AuthorApiViewModel> Authors { get; set; }
 
-        public IList<Author> Contributors { get; set; }
+        public IList<AuthorApiViewModel> Contributors { get; set; }
 
-        public IList<Media> Media { get; set; }
+        public IList<MediaApiViewModel> Media { get; set; }
 
         public string YearWritten { get; set; }
 

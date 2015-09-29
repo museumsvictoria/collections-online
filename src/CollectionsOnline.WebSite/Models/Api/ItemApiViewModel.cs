@@ -62,7 +62,7 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> RelatedSpeciesIds { get; set; }
 
-        public IList<Media> Media { get; set; }
+        public IList<MediaApiViewModel> Media { get; set; }
 
         public string AcquisitionInformation { get; set; }
 
@@ -232,8 +232,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public string Qualifier { get; set; }
 
-        public QualifierRankType QualifierRank { get; set; }
+        public string QualifierRank { get; set; }
 
-        public Taxonomy Taxonomy { get; set; }
+        public TaxonomyApiViewModel Taxonomy { get; set; }
     }
 }

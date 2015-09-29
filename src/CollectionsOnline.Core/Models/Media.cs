@@ -75,7 +75,7 @@ namespace CollectionsOnline.Core.Models
 
     public interface IHasThumbnail
     {
-        ImageMediaFile Thumbnail { get; set; }        
+        ImageMediaFile Thumbnail { get; set; }
     }
 
     public interface IHasChecksum

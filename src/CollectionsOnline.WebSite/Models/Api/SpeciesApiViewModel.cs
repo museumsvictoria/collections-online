@@ -70,10 +70,10 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<string> RelatedSpeciesIds { get; set; }
 
-        public IList<Author> Authors { get; set; }
+        public IList<AuthorApiViewModel> Authors { get; set; }
 
-        public IList<Media> Media { get; set; }
+        public IList<MediaApiViewModel> Media { get; set; }
 
-        public Taxonomy Taxonomy { get; set; }
+        public TaxonomyApiViewModel Taxonomy { get; set; }
     }
 }

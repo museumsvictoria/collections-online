@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Configuration;
+using AutoMapper;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.WebSite.Models.Api;
@@ -21,6 +22,27 @@ namespace CollectionsOnline.WebSite.Infrastructure
                 cfg.CreateMap<Specimen, SpecimenApiViewModel>()
                     .ForMember(dest => dest.RecordType, opt => opt.UseValue("specimen"));
                 cfg.CreateMap<Comment, CommentApiViewModel>();
+
+                cfg.CreateMap<MediaFile, MediaFileApiViewModel>()
+                    .BeforeMap((src, dest) => src.Uri = string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"], src.Uri))
+                    .Include<ImageMediaFile, ImageMediaFileApiViewModel>();
+                cfg.CreateMap<ImageMediaFile, ImageMediaFileApiViewModel>();
+
+                cfg.CreateMap<Media, MediaApiViewModel>()
+                    .Include<ImageMedia, ImageMediaApiViewModel>()
+                    .Include<VideoMedia, VideoMediaApiViewModel>()
+                    .Include<AudioMedia, AudioMediaApiViewModel>()
+                    .Include<FileMedia, FileMediaApiViewModel>()
+                    .Include<UriMedia, UriMediaApiViewModel>();
+                cfg.CreateMap<ImageMedia, ImageMediaApiViewModel>();
+                cfg.CreateMap<VideoMedia, VideoMediaApiViewModel>();
+                cfg.CreateMap<AudioMedia, AudioMediaApiViewModel>();
+                cfg.CreateMap<FileMedia, FileMediaApiViewModel>();
+                cfg.CreateMap<UriMedia, UriMediaApiViewModel>();
+
+                cfg.CreateMap<Taxonomy, TaxonomyApiViewModel>();
+
+                cfg.CreateMap<Author, AuthorApiViewModel>();
             });
         }
     }
