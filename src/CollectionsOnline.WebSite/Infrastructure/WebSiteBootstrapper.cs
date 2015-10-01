@@ -81,8 +81,8 @@ namespace CollectionsOnline.WebSite.Infrastructure
             // Automapper configuration
             AutomapperConfig.Initialize();
 
-            // Fix error handling when compiling for release
-            StaticConfiguration.DisableErrorTraces = false;
+            // See https://github.com/NancyFx/Nancy/issues/2052
+            StaticConfiguration.DisableErrorTraces = true;
         }
 
         protected override void ConfigureConventions(NancyConventions conventions)

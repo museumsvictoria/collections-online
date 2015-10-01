@@ -51,8 +51,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             new ApiParameter
                             {
                                 Parameter = "Id",
-                                Description = "Id of specimen to be retrieved",
-                                Type = "Integer"
+                                Necessity = "required",
+                                Description = "Id of specimen to be retrieved"
                             }
                         },
                         StatusCodes = new Dictionary<HttpStatusCode, string>

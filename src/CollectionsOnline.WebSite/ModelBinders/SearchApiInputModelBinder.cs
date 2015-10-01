@@ -51,10 +51,10 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 }
             }
 
-            // Set include
-            bool include = false;
-            if (queryString.Include.HasValue && bool.TryParse(queryString.Include, out include))
-                searchApiInputModel.Include = include;
+            // Set include TODO:to implement 
+            //bool include = false;
+            //if (queryString.Include.HasValue && bool.TryParse(queryString.Include, out include))
+            //    searchApiInputModel.Include = include;
 
             // switch to quality if we have no query or no sort
             if ((searchApiInputModel.Queries.All(string.IsNullOrWhiteSpace) && (string.Equals(searchApiInputModel.Sort, "relevance", StringComparison.OrdinalIgnoreCase) || string.Equals(queryString.Sort, "relevance", StringComparison.OrdinalIgnoreCase)))

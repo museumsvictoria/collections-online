@@ -46,13 +46,13 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         Method = description.Method,
                         Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
                         Description = "Returns a single article by Id.",
-                        Parameters = new []
+                        Parameters = new[]
                         {
                             new ApiParameter
                             {
                                 Parameter = "Id",
-                                Description = "Id of article to be retrieved",
-                                Type = "Integer"
+                                Necessity = "required",
+                                Description = "Id of article to be retrieved."
                             }
                         },
                         StatusCodes = new Dictionary<HttpStatusCode, string>

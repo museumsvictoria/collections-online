@@ -165,11 +165,12 @@ namespace CollectionsOnline.WebSite.Queries
                 }
 
                 // DateModified
-                if (searchApiInputModel.MinDateModified.HasValue)
+                if (searchApiInputModel.MinDateModified.HasValue && searchApiInputModel.MaxDateModified.HasValue)
+                    query = query.AndAlso().WhereBetweenOrEqual("DateModified", searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified);
+                else if (searchApiInputModel.MinDateModified.HasValue)
                     query = query.AndAlso().WhereGreaterThanOrEqual("DateModified", searchApiInputModel.MinDateModified);
-
-                if (searchApiInputModel.MaxDateModified.HasValue)
-                    query = query.AndAlso().WhereLessThanOrEqual("DateModified", searchApiInputModel.MinDateModified);
+                else if (searchApiInputModel.MaxDateModified.HasValue)
+                    query = query.AndAlso().WhereLessThanOrEqual("DateModified", searchApiInputModel.MaxDateModified);
 
                 // facet queries
                 foreach (var facet in searchApiInputModel.Facets)

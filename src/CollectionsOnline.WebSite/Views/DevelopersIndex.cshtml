@@ -42,81 +42,104 @@
 
         @foreach (var apiOperationMetadata in @Model.OperationMetadata)
         {
-            <h2 id="@apiOperationMetadata.Name.ToLower()">Operations about @apiOperationMetadata.Name</h2>
-
-            foreach (var metadata in apiOperationMetadata.Metadata)
-            {
-                <div id="@metadata.Name">
-                    <h3>@metadata.Method</h3>
-                    <h4>@metadata.Path</h4>
-
-                    @if (!string.IsNullOrEmpty(metadata.Description))
-                    {
-                        <strong>Description</strong>
-                        <p>@metadata.Description</p>
-                    }
-
-                    @if (metadata.Parameters != null)
-                    {
-                        <strong>Parameters</strong>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Parameter</th>
-                                    <th>Type</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var parameter in metadata.Parameters)
-                                {
+            <div class="endpoint">
+                <h2 id="@apiOperationMetadata.Name.ToLower()">Operations about @apiOperationMetadata.Name</h2>
+                @foreach (var metadata in apiOperationMetadata.Metadata)
+                {
+                    <div id="@metadata.Name">
+                        <p>
+                            <h3>@metadata.Method</h3>
+                            <h4>@metadata.Path</h4>
+                            <br />
+                            @if (!string.IsNullOrEmpty(metadata.Description))
+                            {
+                                <strong>Description</strong>
+                            <p>@metadata.Description</p>
+                            }
+                            @if (!string.IsNullOrEmpty(metadata.ExampleUrl))
+                            {
+                                <strong>Example URL</strong>
+                                <a href="@metadata.ExampleUrl">@metadata.ExampleUrl</a><br />
+                            }
+                        </p>
+                        @if (metadata.Parameters.Any())
+                        {
+                            <strong>Parameters</strong>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>@parameter.Parameter</td>
-                                        <td>@parameter.Type</td>
-                                        <td>@parameter.Description</td>
+                                        <th>Parameter</th>
+                                        <th>Description</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-
-                    @if (metadata.StatusCodes != null)
-                    {
-                        <strong>Valid response status codes</strong>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>HTTP status code</th>
-                                    <th>Name</th>
-                                    <th>Reason</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var statusCode in metadata.StatusCodes)
-                                {
+                                </thead>
+                                <tbody>
+                                    @foreach (var parameter in metadata.Parameters)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <code>@parameter.Parameter</code><br />
+                                                (@parameter.Necessity)
+                                            </td>
+                                            <td>
+                                                <p>@Html.Raw(parameter.Description)</p>
+                                                @if (parameter.ValidValues.Any())
+                                                {
+                                                    <p>
+                                                        <strong>Valid values:</strong><br />
+                                                        @foreach (var validValue in parameter.ValidValues)
+                                                        {
+                                                            <code>@validValue.Name</code><br />
+                                                            <span>@validValue.Description</span><br />
+                                                        }
+                                                    </p>
+                                                }
+                                                @if (parameter.ExampleValues.Any())
+                                                {
+                                                    <p>
+                                                        <strong>Example values:</strong><br />
+                                                        @foreach (var exampleValue in parameter.ExampleValues)
+                                                        {
+                                                            <code>@exampleValue</code><br />
+                                                        }
+                                                    </p>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        @if (metadata.StatusCodes.Any())
+                        {
+                            <strong>Valid response status codes</strong>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>@((int)statusCode.Key)</td>
-                                        <td>@statusCode.Key</td>
-                                        <td>@statusCode.Value</td>
+                                        <th>HTTP status code</th>
+                                        <th>Name</th>
+                                        <th>Reason</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-
-                    @if (!string.IsNullOrEmpty(metadata.SampleResponse))
-                    {
-                        <strong>Sample Response</strong>
-                        <pre>@metadata.SampleResponse</pre>
-                    }
-
-                    @if (!string.IsNullOrEmpty(metadata.ExampleUrl))
-                    {
-                        <strong>Example URL</strong>
-                        <a href="@metadata.ExampleUrl">@metadata.ExampleUrl</a>
-                    }
-                </div>
-            }
+                                </thead>
+                                <tbody>
+                                    @foreach (var statusCode in metadata.StatusCodes)
+                                    {
+                                        <tr>
+                                            <td>@((int)statusCode.Key)</td>
+                                            <td>@statusCode.Key</td>
+                                            <td>@statusCode.Value</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        @if (!string.IsNullOrEmpty(metadata.SampleResponse))
+                        {
+                            <strong>Sample Response</strong>
+                            <pre>@metadata.SampleResponse</pre>
+                        }
+                    </div>
+                }
+            </div>
         }
     </div>
 </div>
