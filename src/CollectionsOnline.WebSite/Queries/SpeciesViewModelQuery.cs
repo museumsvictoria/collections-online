@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
@@ -44,8 +46,9 @@ namespace CollectionsOnline.WebSite.Queries
                     }
                 }
 
-                // Uris
-                if (result.Species.Taxonomy != null)
+                // Add UriMedia link to ALA (except for fossils)
+                if (result.Species.Taxonomy != null &&
+                    !(result.Species.AnimalType.Contains("fossil", StringComparison.OrdinalIgnoreCase) || result.Species.AnimalSubType.Contains("fossil", StringComparison.OrdinalIgnoreCase)))
                 {
                     result.Species.Media.Add(new UriMedia
                     {
