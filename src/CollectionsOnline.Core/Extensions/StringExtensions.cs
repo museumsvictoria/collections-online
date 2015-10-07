@@ -139,5 +139,10 @@ namespace CollectionsOnline.Core.Extensions
                 .Replace(input, @"\r\n?|\n", delimiter)
                 .Trim();
         }
+
+        public static string RemoveNonWordCharacters(this string input)
+        {
+            return Regex.Replace(input, @"[^\w\s]", string.Empty);
+        }
     }
 }

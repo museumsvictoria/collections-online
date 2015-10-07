@@ -1,5 +1,7 @@
-﻿using CollectionsOnline.Core.Models;
+﻿using System.Collections.Generic;
+using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Factories;
+using IMu;
 using Shouldly;
 using Xunit;
 
@@ -65,6 +67,60 @@ namespace CollectionsOnline.Tests.Import.Factories
 
             // Then
             result.ShouldBe("df <em>Austriella corrugata</em> (Deshayes, 1843)");
+        }
+
+        [Fact]
+        public void MakeTaxonomy_WithInvalidGenusCharacters_AreRemoved()
+        {
+            // Given
+            var map = MakeEmptyTaxonomyMap();
+            map["ClaGenus"] = "Calymenise\" or \"tulabile blumabacka\"";
+            var taxonomyFactory = new TaxonomyFactory();
+
+            // When
+            var result = taxonomyFactory.Make(map);
+
+            // Then
+            result.Genus.ShouldBe("Calymenise or tulabile blumabacka");
+        }
+
+        private Map MakeEmptyTaxonomyMap()
+        {
+            var map = new Map
+            {
+                {"irn", default(int).ToString()},
+                {"ClaKingdom", string.Empty},
+                {"ClaPhylum", string.Empty},
+                {"ClaSubphylum", string.Empty},
+                {"ClaSuperclass", string.Empty},
+                {"ClaClass", string.Empty},
+                {"ClaSubclass", string.Empty},
+                {"ClaSuperorder", string.Empty},
+                {"ClaOrder", string.Empty},
+                {"ClaSuborder", string.Empty},
+                {"ClaInfraorder", string.Empty},
+                {"ClaSuperfamily", string.Empty},
+                {"ClaFamily", string.Empty},
+                {"ClaSubfamily", string.Empty},
+                {"ClaGenus", string.Empty},
+                {"ClaSubgenus", string.Empty},
+                {"ClaSpecies", string.Empty},
+                {"ClaSubspecies", string.Empty},
+                {"AutAuthorString", string.Empty},
+                {"ClaApplicableCode", string.Empty},
+                {
+                    "comname", new Map[]
+                    {
+                        new Map
+                        {
+                            {"ComStatus_tab", string.Empty},
+                            {"ComName_tab", string.Empty}
+                        }
+                    }
+                }
+            };
+            
+            return map;
         }
     }
 }

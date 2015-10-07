@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CollectionsOnline.Core.Extensions;
 using IMu;
 
 namespace CollectionsOnline.Import.Extensions
@@ -23,6 +24,11 @@ namespace CollectionsOnline.Import.Extensions
                     .ToList();
 
             return new List<string>();
+        }
+
+        public static string GetCleanEncodedString(this Map map, string name)
+        {
+            return EncodeString(map.GetString(name)).RemoveNonWordCharacters();
         }
 
         private static string EncodeString(string value)
