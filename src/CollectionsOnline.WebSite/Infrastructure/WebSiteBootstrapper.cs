@@ -33,7 +33,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
             var documentStore = kernel.Get<IDocumentStore>();
 
-            // Register view transformers
+            // Register view transformers from website 
             IndexCreation.CreateIndexes(typeof(ItemViewTransformer).Assembly, documentStore);
 
             // Initialize raven miniprofiler

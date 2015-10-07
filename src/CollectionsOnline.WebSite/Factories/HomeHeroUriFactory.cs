@@ -15,6 +15,9 @@ namespace CollectionsOnline.WebSite.Factories
             var imagesPath = new DirectoryInfo(string.Format("{0}\\content\\img", AppDomain.CurrentDomain.BaseDirectory));
             var baseUri = new Uri(AppDomain.CurrentDomain.BaseDirectory);
 
+            // Return if img directory does not exist
+            if (!imagesPath.Exists) return;
+
             foreach (var image in imagesPath.EnumerateFiles().Where(x => x.Name.Contains("bg-home-hero")))
             {
                 _homeHeroUris.Add(string.Format("/{0}", baseUri.MakeRelativeUri(new Uri(image.FullName))));

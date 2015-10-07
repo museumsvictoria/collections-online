@@ -117,6 +117,10 @@
       <HintPath>..\packages\Ninject.Extensions.ChildKernel.3.2.0.0\lib\net45-full\Ninject.Extensions.ChildKernel.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject.Extensions.Conventions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.9.1.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
@@ -205,6 +209,7 @@
     <Compile Include="Core\Utilities\HtmlConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
+    <Compile Include="Website\WebsiteBootstrapper.cs" />
     <Compile Include="Website\Modules\ApiModuleBaseTests.cs" />
     <Compile Include="Website\Modules\ArticleApiModuleTests.cs" />
     <Compile Include="Website\Modules\SpecimenApiModuleTests.cs" />
