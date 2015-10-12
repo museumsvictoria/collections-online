@@ -80,8 +80,22 @@ namespace CollectionsOnline.Tests.Import.Factories
             // When
             var result = taxonomyFactory.Make(map);
 
-            // Then
+            // Then;
             result.Genus.ShouldBe("Calymenise or tulabile blumabacka");
+        }
+
+        [Fact]
+        public void MakeTaxonomy_WithNullField_ReturnsNull()
+        {
+            // Given
+            var map = MakeEmptyTaxonomyMap();
+            var taxonomyFactory = new TaxonomyFactory();
+
+            // When
+            var result = taxonomyFactory.Make(map);
+
+            // Then;
+            result.Genus.ShouldBe(null);
         }
 
         private Map MakeEmptyTaxonomyMap()
@@ -89,32 +103,32 @@ namespace CollectionsOnline.Tests.Import.Factories
             var map = new Map
             {
                 {"irn", default(int).ToString()},
-                {"ClaKingdom", string.Empty},
-                {"ClaPhylum", string.Empty},
-                {"ClaSubphylum", string.Empty},
-                {"ClaSuperclass", string.Empty},
-                {"ClaClass", string.Empty},
-                {"ClaSubclass", string.Empty},
-                {"ClaSuperorder", string.Empty},
-                {"ClaOrder", string.Empty},
-                {"ClaSuborder", string.Empty},
-                {"ClaInfraorder", string.Empty},
-                {"ClaSuperfamily", string.Empty},
-                {"ClaFamily", string.Empty},
-                {"ClaSubfamily", string.Empty},
-                {"ClaGenus", string.Empty},
-                {"ClaSubgenus", string.Empty},
-                {"ClaSpecies", string.Empty},
-                {"ClaSubspecies", string.Empty},
-                {"AutAuthorString", string.Empty},
-                {"ClaApplicableCode", string.Empty},
+                {"ClaKingdom", null},
+                {"ClaPhylum", null},
+                {"ClaSubphylum", null},
+                {"ClaSuperclass", null},
+                {"ClaClass", null},
+                {"ClaSubclass", null},
+                {"ClaSuperorder", null},
+                {"ClaOrder", null},
+                {"ClaSuborder", null},
+                {"ClaInfraorder", null},
+                {"ClaSuperfamily", null},
+                {"ClaFamily", null},
+                {"ClaSubfamily", null},
+                {"ClaGenus", null},
+                {"ClaSubgenus", null},
+                {"ClaSpecies", null},
+                {"ClaSubspecies", null},
+                {"AutAuthorString", null},
+                {"ClaApplicableCode", null},
                 {
-                    "comname", new Map[]
+                    "comname", new[]
                     {
                         new Map
                         {
-                            {"ComStatus_tab", string.Empty},
-                            {"ComName_tab", string.Empty}
+                            {"ComStatus_tab", null},
+                            {"ComName_tab", null}
                         }
                     }
                 }

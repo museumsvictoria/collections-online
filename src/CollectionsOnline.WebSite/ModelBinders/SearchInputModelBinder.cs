@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
 using Nancy;
 using Nancy.Cookies;

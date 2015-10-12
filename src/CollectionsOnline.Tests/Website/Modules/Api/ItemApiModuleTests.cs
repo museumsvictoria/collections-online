@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Tests.Fakes;
 using Nancy;
@@ -10,7 +9,7 @@ using Raven.Tests.Helpers;
 using Shouldly;
 using Xunit;
 
-namespace CollectionsOnline.Tests.Website.Modules
+namespace CollectionsOnline.Tests.Website.Modules.Api
 {
     public class ItemApiModuleTests : RavenTestBase
     {

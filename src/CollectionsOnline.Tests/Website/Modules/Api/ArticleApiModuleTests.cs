@@ -9,7 +9,7 @@ using Raven.Tests.Helpers;
 using Shouldly;
 using Xunit;
 
-namespace CollectionsOnline.Tests.Website.Modules
+namespace CollectionsOnline.Tests.Website.Modules.Api
 {
     public class ArticleApiModuleTests : RavenTestBase
     {

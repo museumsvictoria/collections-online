@@ -214,11 +214,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
     <Compile Include="Website\WebsiteBootstrapper.cs" />
-    <Compile Include="Website\Modules\ApiModuleBaseTests.cs" />
-    <Compile Include="Website\Modules\ArticleApiModuleTests.cs" />
-    <Compile Include="Website\Modules\SpecimenApiModuleTests.cs" />
-    <Compile Include="Website\Modules\SpeciesApiModuleTests.cs" />
-    <Compile Include="Website\Modules\ItemApiModuleTests.cs" />
+    <Compile Include="Website\Modules\Api\ApiModuleBaseTests.cs" />
+    <Compile Include="Website\Modules\Api\ArticleApiModuleTests.cs" />
+    <Compile Include="Website\Modules\Api\SpecimenApiModuleTests.cs" />
+    <Compile Include="Website\Modules\Api\SpeciesApiModuleTests.cs" />
+    <Compile Include="Website\Modules\Api\ItemApiModuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
+using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy;
@@ -27,61 +28,70 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
         protected override void ConfigureApplicationContainer(IKernel kernel)
         {
-            kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
-            kernel.Bind<IHomeHeroUriFactory>().To<HomeHeroUriFactory>().InSingletonScope();
-            kernel.Bind<JsonSerializer>().To<ApiJsonSerializer>();
+            using (new StopwatchTimer("NinjectNancyBootstrapper ConfigureApplicationContainer complete", _log))
+            {
+                kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
+                kernel.Bind<IHomeHeroUriFactory>().To<HomeHeroUriFactory>().InSingletonScope();
+                kernel.Bind<JsonSerializer>().To<ApiJsonSerializer>();
 
-            var documentStore = kernel.Get<IDocumentStore>();
+                var documentStore = kernel.Get<IDocumentStore>();
 
-            // Register view transformers from website 
-            IndexCreation.CreateIndexes(typeof(ItemViewTransformer).Assembly, documentStore);
+                // Register view transformers from website 
+                using (new StopwatchTimer("Created website indexes and transformers", _log))
+                {
+                    IndexCreation.CreateIndexes(typeof (ItemViewTransformer).Assembly, documentStore);
+                }
 
-            // Initialize raven miniprofiler
-            MiniProfilerRaven.InitializeFor(documentStore);
+                // Initialize raven miniprofiler
+                MiniProfilerRaven.InitializeFor(documentStore);
+            }
         }
 
         protected override void ConfigureRequestContainer(IKernel kernel, NancyContext context)
         {
             kernel.Bind<IDocumentSession>().ToProvider<NinjectRavenDocumentSessionProvider>();
             kernel.Bind(x => x
-                .FromAssemblyContaining(typeof(WebSiteBootstrapper), typeof(SlugFactory))
-                .SelectAllClasses()                
-                .InNamespaces(new[] { "CollectionsOnline" })
+                .FromAssemblyContaining(typeof (WebSiteBootstrapper), typeof (SlugFactory))
+                .SelectAllClasses()
+                .InNamespaces(new[] {"CollectionsOnline"})
                 .Excluding<HomeHeroUriFactory>()
                 .BindAllInterfaces());
         }
 
         protected override void ApplicationStartup(IKernel container, IPipelines pipelines)
         {
-            JsonSettings.MaxJsonLength = Int32.MaxValue;
-
-            pipelines.OnError += (ctx, ex) =>
+            using (new StopwatchTimer("NinjectNancyBootstrapper ApplicationStartup complete", _log))
             {
-                _log.Error("pipelines.OnError occured [url:{0}]: {1}", ctx.Request.Url, ex);
+                JsonSettings.MaxJsonLength = Int32.MaxValue;
 
-                return null;
-            };
+                pipelines.OnError += (ctx, ex) =>
+                {
+                    _log.Error("pipelines.OnError occured [url:{0}]: {1}", ctx.Request.Url, ex);
 
-            pipelines.BeforeRequest += ctx =>
-            {
-                MiniProfiler.Start();
+                    return null;
+                };
 
-                return null;
-            };
+                pipelines.BeforeRequest += ctx =>
+                {
+                    MiniProfiler.Start();
 
-            pipelines.AfterRequest += ctx =>
-            {
-                MiniProfiler.Stop();
+                    return null;
+                };
 
-                if (MiniProfiler.Current != null)
-                    _log.Trace(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
-            };
+                pipelines.AfterRequest += ctx =>
+                {
+                    MiniProfiler.Stop();
 
-            // Automapper configuration
-            AutomapperConfig.Initialize();
+                    if (MiniProfiler.Current != null)
+                        _log.Trace(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
+                };
 
-            // See https://github.com/NancyFx/Nancy/issues/2052
-            StaticConfiguration.DisableErrorTraces = true;
+                // Automapper configuration
+                AutomapperConfig.Initialize();
+
+                // See https://github.com/NancyFx/Nancy/issues/2052
+                StaticConfiguration.DisableErrorTraces = true;
+            }
         }
 
         protected override void ConfigureConventions(NancyConventions conventions)

@@ -111,6 +111,7 @@
     <Compile Include="Utilities\Inflector.cs" />
     <Compile Include="Utilities\NaturalDateConverter.cs" />
     <Compile Include="Utilities\IdShortener.cs" />
+    <Compile Include="Utilities\StopwatchTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

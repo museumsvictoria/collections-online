@@ -2,6 +2,7 @@
 using CollectionsOnline.Core.Indexes;
 using System.Configuration;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Core.Utilities;
 using Ninject.Activation;
 using NLog;
 using Raven.Client;
@@ -17,39 +18,48 @@ namespace CollectionsOnline.Core.Infrastructure
         protected override IDocumentStore CreateInstance(IContext context)
         {
             // Connect to raven db instance
-            _log.Debug("Initializing document store");
-            var documentStore = new DocumentStore
+            IDocumentStore documentStore;
+            using (new StopwatchTimer("Initialized raven document store", _log))
             {
-                Url = ConfigurationManager.AppSettings["DatabaseUrl"],
-                DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
-            }.Initialize();
+                documentStore = new DocumentStore
+                {
+                    Url = ConfigurationManager.AppSettings["DatabaseUrl"],
+                    DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
+                }.Initialize();
+            }
 
             // Ensure DB exists
             documentStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
 
-            // Create indexes and store facets
-            IndexCreation.CreateIndexes(typeof(CombinedIndex).Assembly, documentStore);
-
-            using (var documentSession = documentStore.OpenSession())
+            // Create core indexes and store facets
+            using (new StopwatchTimer("Ensured Core indexes and facets have been created", _log))
             {
-                documentSession.Store(new CombinedFacets());
-                documentSession.SaveChanges();
+                IndexCreation.CreateIndexes(typeof (CombinedIndex).Assembly, documentStore);
+
+                using (var documentSession = documentStore.OpenSession())
+                {
+                    documentSession.Store(new CombinedFacets());
+                    documentSession.SaveChanges();
+                }
             }
 
             // Ensure we have a application document
-            using (var documentSession = documentStore.OpenSession())
+            using (new StopwatchTimer("Ensured Application document has been created", _log))
             {
-                var application = documentSession.Load<Application>(Constants.ApplicationId);
-
-                if (application == null)
+                using (var documentSession = documentStore.OpenSession())
                 {
-                    _log.Debug("Creating new application document store");
-                    application = new Application();
-                    documentSession.Store(application);
-                }
+                    var application = documentSession.Load<Application>(Constants.ApplicationId);
 
-                documentSession.SaveChanges();
-            }          
+                    if (application == null)
+                    {
+                        _log.Debug("Creating new application document store");
+                        application = new Application();
+                        documentSession.Store(application);
+                    }
+
+                    documentSession.SaveChanges();
+                }
+            }
 
             return documentStore;
         }

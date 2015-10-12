@@ -4,7 +4,6 @@ using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.ModelBinding;
 using Raven.Abstractions.Extensions;
-using Raven.Client.Linq;
 
 namespace CollectionsOnline.WebSite.ModelBinders
 {

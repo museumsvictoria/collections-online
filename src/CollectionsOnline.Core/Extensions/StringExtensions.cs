@@ -31,6 +31,9 @@ namespace CollectionsOnline.Core.Extensions
 
         public static string ToSentenceCase(this string input)
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
             return Regex.Replace(input.ToLower(), @"(?<=(^|[.;:])\s*)[a-z]", (match) => match.Value.ToUpper());
         }
 
@@ -43,7 +46,10 @@ namespace CollectionsOnline.Core.Extensions
         }
 
         public static string TrimToMaxLength(this string input, int maxLength, char separator)
-        {            
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
             if (maxLength > 0)
             {
                 var builder = new StringBuilder();
@@ -135,6 +141,9 @@ namespace CollectionsOnline.Core.Extensions
 
         public static string RemoveLineBreaks(this string input, string delimiter = " ")
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
             return Regex
                 .Replace(input, @"\r\n?|\n", delimiter)
                 .Trim();
@@ -142,6 +151,9 @@ namespace CollectionsOnline.Core.Extensions
 
         public static string RemoveNonWordCharacters(this string input)
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
             return Regex.Replace(input, @"[^\w\s]", string.Empty);
         }
     }
