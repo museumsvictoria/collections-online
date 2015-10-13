@@ -19,10 +19,6 @@ namespace CollectionsOnline.WebSite.Models
 
         public int TotalPages { get; set; }
 
-        public long QueryTimeElapsed { get; set; }
-
-        public long FacetTimeElapsed { get; set; }
-
         public string NextPageUrl { get; set; }
 
         public string PreviousPageUrl { get; set; }

@@ -99,7 +99,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Client.3.0.3800\lib\net45\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\packages\RavenDB.Database.3.0.3800\lib\net45\Raven.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
@@ -272,6 +272,7 @@
     <Compile Include="Modules\ArticlesModule.cs" />
     <Compile Include="Queries\ArticleViewModelQuery.cs" />
     <Compile Include="Queries\ICollectionViewModelQuery.cs" />
+    <Compile Include="Queries\QueryBuilder.cs" />
     <Compile Include="Transformers\CollectionViewTransformer.cs" />
     <Compile Include="Transformers\ArticleViewTransformer.cs" />
     <Compile Include="Modules\HomeModule.cs" />

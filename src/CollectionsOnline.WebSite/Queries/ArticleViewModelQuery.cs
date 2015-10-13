@@ -24,6 +24,7 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ArticleViewTransformerResult BuildArticle(string articleId)
         {
+            using (MiniProfiler.Current.Step("Build Article view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 ArticleViewTransformerResult result;
@@ -49,6 +50,7 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ApiViewModel BuildArticleApiIndex(ApiInputModel apiInputModel)
         {
+            using (MiniProfiler.Current.Step("Build Article Api Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 RavenQueryStatistics statistics;

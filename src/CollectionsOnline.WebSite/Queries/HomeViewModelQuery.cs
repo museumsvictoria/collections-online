@@ -24,7 +24,7 @@ namespace CollectionsOnline.WebSite.Queries
 
         public HomeIndexViewModel BuildHomeIndex()
         {
-            using (MiniProfiler.Current.Step("Build Home Index"))
+            using (MiniProfiler.Current.Step("Build Home Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))            
             {
                 var homeViewModel = new HomeIndexViewModel();

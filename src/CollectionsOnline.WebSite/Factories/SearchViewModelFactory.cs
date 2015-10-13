@@ -15,9 +15,7 @@ namespace CollectionsOnline.WebSite.Factories
             IList<EmuAggregateRootViewModel> results,
             FacetResults facets,
             int totalResults,
-            SearchInputModel searchInputModel,
-            long queryTimeElapsed,
-            long facetTimeElapsed)
+            SearchInputModel searchInputModel)
         {
             var searchIndexViewModel = new SearchIndexViewModel
             {
@@ -27,8 +25,6 @@ namespace CollectionsOnline.WebSite.Factories
                 TotalPages = (totalResults + searchInputModel.PerPage - 1) / searchInputModel.PerPage,
                 Page = searchInputModel.Page,
                 PerPage = searchInputModel.PerPage,
-                QueryTimeElapsed = queryTimeElapsed,
-                FacetTimeElapsed = facetTimeElapsed
             };
 
             // Build facets

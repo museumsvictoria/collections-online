@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using CollectionsOnline.WebSite.Models;
-using CollectionsOnline.WebSite.Models.Api;
 using Raven.Abstractions.Data;
 
 namespace CollectionsOnline.WebSite.Factories
@@ -11,8 +10,6 @@ namespace CollectionsOnline.WebSite.Factories
             IList<EmuAggregateRootViewModel> results,
             FacetResults facets, 
             int totalResults,
-            SearchInputModel searchInputModel, 
-            long queryTimeElapsed, 
-            long facetTimeElapsed);
+            SearchInputModel searchInputModel);
     }
 }

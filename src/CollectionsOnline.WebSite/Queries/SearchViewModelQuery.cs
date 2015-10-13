@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using Raven.Client;
+using StackExchange.Profiling;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -27,178 +27,81 @@ namespace CollectionsOnline.WebSite.Queries
 
         public SearchIndexViewModel BuildSearchIndex(SearchInputModel searchInputModel)
         {
+            using (MiniProfiler.Current.Step("Build Search Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                var queryStopwatch = new Stopwatch();
-                var facetStopwatch = new Stopwatch();
+                RavenQueryStatistics statistics;
+                IList<EmuAggregateRootViewModel> results;
 
-                // perform query
-                queryStopwatch.Start();
-                var query = _documentSession.Advanced
-                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                    .Skip((searchInputModel.Page - 1) * searchInputModel.PerPage)
-                    .Take(searchInputModel.PerPage);
+                var query = QueryBuilder<EmuAggregateRootViewModel>.BuildIndexQuery(_documentSession, searchInputModel.Page, searchInputModel.PerPage, searchInputModel.Sort, searchInputModel.Queries, searchInputModel.Facets, searchInputModel.MultiFacets, searchInputModel.Terms);
+                var facetQuery = QueryBuilder<EmuAggregateRootViewModel>.BuildIndexQuery(_documentSession, searchInputModel.Page, searchInputModel.PerPage, searchInputModel.Sort, searchInputModel.Queries, searchInputModel.Facets, searchInputModel.MultiFacets, searchInputModel.Terms);
 
-                // get facets
-                facetStopwatch.Start();
-                var facetQuery = _documentSession.Advanced
-                    .DocumentQuery<CombinedIndexResult, CombinedIndex>();
-
-                // search query (only add AndAlso() after first query)
-                for (int i = 0; i < searchInputModel.Queries.Count; i++)
+                try
                 {
-                    if (i == 0)
+                    results = query
+                        .SelectFields<EmuAggregateRootViewModel>()
+                        .Statistics(out statistics)
+                        .ToList();
+                }
+                catch (Exception exception)
+                {
+                    if (IsParseException(exception))
                     {
-                        query = query.Search(x => x.Content, searchInputModel.Queries[i]);
-                        facetQuery = facetQuery.Search(x => x.Content, searchInputModel.Queries[i]);
+                        // Re-build and escape search query
+                        query = QueryBuilder<EmuAggregateRootViewModel>.BuildIndexQuery(_documentSession, searchInputModel.Page, searchInputModel.PerPage, searchInputModel.Sort, searchInputModel.Queries, searchInputModel.Facets, searchInputModel.MultiFacets, searchInputModel.Terms, escapeQueryOptions:EscapeQueryOptions.EscapeAll);
+                        facetQuery = QueryBuilder<EmuAggregateRootViewModel>.BuildIndexQuery(_documentSession, searchInputModel.Page, searchInputModel.PerPage, searchInputModel.Sort, searchInputModel.Queries, searchInputModel.Facets, searchInputModel.MultiFacets, searchInputModel.Terms, escapeQueryOptions: EscapeQueryOptions.EscapeAll);
+
+                        results = query
+                            .SelectFields<EmuAggregateRootViewModel>()
+                            .Statistics(out statistics)
+                            .ToList();
                     }
                     else
-                    {
-                        query = query.AndAlso().Search(x => x.Content, searchInputModel.Queries[i]);
-                        facetQuery = facetQuery.AndAlso().Search(x => x.Content, searchInputModel.Queries[i]);                        
-                    }
+                        throw;
                 }
-
-                // Add sorting
-                switch (searchInputModel.Sort)
-                {
-                    case "quality":
-                        query = query
-                            .OrderByDescending(x => x.Quality);
-                        break;
-                    case "date":
-                        query = query
-                            .OrderByDescending(x => x.DateModified)
-                            .OrderByDescending(x => x.Quality);
-                        break;
-                }
-
-                if (searchInputModel.Queries.Any())
-                {
-                    query = query.OrderByScoreDescending();
-                }
-
-                // facet queries
-                foreach (var facet in searchInputModel.Facets)
-                {
-                    query = query.AndAlso().WhereEquals(facet.Key, facet.Value);
-                    facetQuery = facetQuery.AndAlso().WhereEquals(facet.Key, facet.Value);
-                }
-
-                // multiple facet queries
-                foreach (var multiFacets in searchInputModel.MultiFacets)
-                {
-                    foreach (var facetValue in multiFacets.Value)
-                    {
-                        query = query.AndAlso().WhereEquals(multiFacets.Key, facetValue);
-                        facetQuery = facetQuery.AndAlso().WhereEquals(multiFacets.Key, facetValue);
-                    }
-                }
-
-                // term queries
-                foreach (var term in searchInputModel.Terms)
-                {
-                    query = query.AndAlso().WhereEquals(term.Key, term.Value);
-                    facetQuery = facetQuery.AndAlso().WhereEquals(term.Key, term.Value);
-                }
-
-                RavenQueryStatistics statistics;
-                var results = query
-                    .SelectFields<EmuAggregateRootViewModel>()
-                    .Statistics(out statistics)
-                    .ToList();
-                queryStopwatch.Stop();
-
+                
                 var facets = facetQuery.ToFacets("facets/combinedFacets");
-                facetStopwatch.Stop();
 
                 return _searchViewModelFactory.MakeSearchIndex(
                     results,
                     facets,
                     statistics.TotalResults,
-                    searchInputModel,
-                    queryStopwatch.ElapsedMilliseconds,
-                    facetStopwatch.ElapsedMilliseconds);
+                    searchInputModel);
             }
         }
 
         public ApiViewModel BuildSearchApi(SearchApiInputModel searchApiInputModel, ApiInputModel apiInputModel)
         {
+            using (MiniProfiler.Current.Step("Build Search Api view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                // perform query
-                var query = _documentSession.Advanced
-                    .DocumentQuery<dynamic, CombinedIndex>()
-                    .Skip((apiInputModel.Page - 1) * apiInputModel.PerPage)
-                    .Take(apiInputModel.PerPage);
+                RavenQueryStatistics statistics;
+                IList<dynamic> queryResults;
+                var results = new List<dynamic>();
+                var query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, apiInputModel.Page, apiInputModel.PerPage, searchApiInputModel.Sort, searchApiInputModel.Queries, searchApiInputModel.Facets, searchApiInputModel.MultiFacets, searchApiInputModel.Terms, searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified);
 
-                // search query (only add AndAlso() after first query)
-                for (int i = 0; i < searchApiInputModel.Queries.Count; i++)
+                try
                 {
-                    if (i == 0)
+                    queryResults = query
+                        .Statistics(out statistics)
+                        .ToList();
+                }
+                catch (Exception exception)
+                {
+                    if (IsParseException(exception))
                     {
-                        query = query.Search("Content", searchApiInputModel.Queries[i]);
+                        // Re-build and escape search query
+                        query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, apiInputModel.Page, apiInputModel.PerPage, searchApiInputModel.Sort, searchApiInputModel.Queries, searchApiInputModel.Facets, searchApiInputModel.MultiFacets, searchApiInputModel.Terms, searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified, EscapeQueryOptions.EscapeAll);
+
+                        queryResults = query
+                            .Statistics(out statistics)
+                            .ToList();
                     }
                     else
-                    {
-                        query = query.AndAlso().Search("Content", searchApiInputModel.Queries[i]);
-                    }
+                        throw;
                 }
 
-                // Add sorting
-                switch (searchApiInputModel.Sort)
-                {
-                    case "quality":
-                        query = query
-                            .OrderByDescending("Quality");
-                        break;
-                    case "date":
-                        query = query
-                            .OrderByDescending("DateModified")
-                            .OrderByDescending("Quality");
-                        break;
-                }
-
-                if (searchApiInputModel.Queries.Any())
-                {
-                    query = query.OrderByScoreDescending();
-                }
-
-                // DateModified
-                if (searchApiInputModel.MinDateModified.HasValue && searchApiInputModel.MaxDateModified.HasValue)
-                    query = query.AndAlso().WhereBetweenOrEqual("DateModified", searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified);
-                else if (searchApiInputModel.MinDateModified.HasValue)
-                    query = query.AndAlso().WhereGreaterThanOrEqual("DateModified", searchApiInputModel.MinDateModified);
-                else if (searchApiInputModel.MaxDateModified.HasValue)
-                    query = query.AndAlso().WhereLessThanOrEqual("DateModified", searchApiInputModel.MaxDateModified);
-
-                // facet queries
-                foreach (var facet in searchApiInputModel.Facets)
-                {
-                    query = query.AndAlso().WhereEquals(facet.Key, facet.Value);
-                }
-
-                // multiple facet queries
-                foreach (var multiFacets in searchApiInputModel.MultiFacets)
-                {
-                    foreach (var facetValue in multiFacets.Value)
-                    {
-                        query = query.AndAlso().WhereEquals(multiFacets.Key, facetValue);
-                    }
-                }
-
-                // term queries
-                foreach (var term in searchApiInputModel.Terms)
-                {
-                    query = query.AndAlso().WhereEquals(term.Key, term.Value);
-                }
-                
-                RavenQueryStatistics statistics;
-                query = query
-                    .Statistics(out statistics);
-
-                var results = new List<dynamic>();
-                foreach (var result in query)
+                foreach (var result in queryResults)
                 {
                     if(result is Article)
                         results.Add(Mapper.Map<Article, ArticleApiViewModel>(result));
@@ -219,6 +122,12 @@ namespace CollectionsOnline.WebSite.Queries
                     ApiPageInfo = new ApiPageInfo(statistics.TotalResults, apiInputModel.PerPage)
                 };
             }
+        }
+
+        private bool IsParseException(Exception exception)
+        {
+            return (exception is InvalidOperationException && exception.Message.Contains("Query failed")) &&
+                   (exception.InnerException != null && exception.InnerException.Message.Contains("ParseException"));
         }
     }
 }

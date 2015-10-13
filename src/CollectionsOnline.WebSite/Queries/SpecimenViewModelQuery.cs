@@ -10,6 +10,7 @@ using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy.Helpers;
 using Raven.Client;
+using StackExchange.Profiling;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -25,6 +26,7 @@ namespace CollectionsOnline.WebSite.Queries
 
         public SpecimenViewTransformerResult BuildSpecimen(string specimenId)
         {
+            using (MiniProfiler.Current.Step("Build Specimen view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 var result = _documentSession.Load<SpecimenViewTransformer, SpecimenViewTransformerResult>(specimenId);
@@ -128,13 +130,10 @@ namespace CollectionsOnline.WebSite.Queries
                     result.GeoSpatial.Add(new KeyValuePair<string, string>("Rock Type", result.Specimen.GeologyRockType));
 
                 // Create Lat Long matched pairs for map use
-                var latlongs = new List<double[]>();
                 if (result.Specimen.Latitudes.Any(x => !string.IsNullOrWhiteSpace(x)) &&
                     result.Specimen.Longitudes.Any(x => !string.IsNullOrWhiteSpace(x)))
                 {
-                    result.LatLongs =
-                        result.Specimen.Latitudes.Zip(result.Specimen.Longitudes,
-                            (lat, lon) => new[] {double.Parse(lat), double.Parse(lon)}).ToList();
+                    result.LatLongs = result.Specimen.Latitudes.Zip(result.Specimen.Longitudes, (lat, lon) => new[] {double.Parse(lat), double.Parse(lon)}).ToList();
                 }
 
                 // Add Uris for everything except Paleo and Geology
@@ -145,9 +144,7 @@ namespace CollectionsOnline.WebSite.Queries
                     result.Specimen.Media.Add(new UriMedia
                     {
                         Caption = "See more specimens of this species in OZCAM",
-                        Uri =
-                            string.Format("http://ozcam.ala.org.au/occurrences/search?taxa={0}",
-                                result.Specimen.Taxonomy.TaxonName)
+                        Uri = string.Format("http://ozcam.ala.org.au/occurrences/search?taxa={0}", result.Specimen.Taxonomy.TaxonName)
                     });
                 }
 
@@ -157,19 +154,23 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ApiViewModel BuildSpecimenApiIndex(ApiInputModel apiInputModel)
         {
-            RavenQueryStatistics statistics;
-            var results = _documentSession.Advanced
-                .DocumentQuery<dynamic, CombinedIndex>()
-                .WhereEquals("RecordType", "Specimen")
-                .Statistics(out statistics)
-                .Skip((apiInputModel.Page - 1) * apiInputModel.PerPage)
-                .Take(apiInputModel.PerPage);
-
-            return new ApiViewModel
+            using (MiniProfiler.Current.Step("Build Specimen Api Index view model"))
+            using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                Results = results.Cast<Specimen>().Select<Specimen, dynamic>(Mapper.Map<Specimen, SpecimenApiViewModel>).ToList(),
-                ApiPageInfo = new ApiPageInfo(statistics.TotalResults, apiInputModel.PerPage)
-            };
+                RavenQueryStatistics statistics;
+                var results = _documentSession.Advanced
+                    .DocumentQuery<dynamic, CombinedIndex>()
+                    .WhereEquals("RecordType", "Specimen")
+                    .Statistics(out statistics)
+                    .Skip((apiInputModel.Page - 1)*apiInputModel.PerPage)
+                    .Take(apiInputModel.PerPage);
+
+                return new ApiViewModel
+                {
+                    Results = results.Cast<Specimen>().Select<Specimen, dynamic>(Mapper.Map<Specimen, SpecimenApiViewModel>).ToList(),
+                    ApiPageInfo = new ApiPageInfo(statistics.TotalResults, apiInputModel.PerPage)
+                };
+            }
         }
     }
 }

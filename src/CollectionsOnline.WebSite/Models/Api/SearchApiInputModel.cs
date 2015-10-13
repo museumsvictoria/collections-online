@@ -11,8 +11,6 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public DateTime? MaxDateModified { get; set; }
 
-        public bool Include { get; set; }
-
         public IList<string> Queries { get; set; }
 
         public IDictionary<string, string> Facets { get; set; }
