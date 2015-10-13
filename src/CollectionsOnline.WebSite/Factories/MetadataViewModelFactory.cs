@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using CollectionsOnline.Core.Config;
@@ -151,8 +152,45 @@ namespace CollectionsOnline.WebSite.Factories
             var metadata = new MetadataViewModel
             {
                 Title = HtmlConverter.HtmlToText(specimen.DisplayTitle),
-                Description = HtmlConverter.HtmlToText(specimen.Summary),
             };
+
+            if (!string.IsNullOrWhiteSpace(specimen.ObjectSummary))
+                metadata.Description = specimen.ObjectSummary;
+            else if (!string.IsNullOrWhiteSpace(specimen.IsdDescriptionOfContent))
+                metadata.Description = specimen.IsdDescriptionOfContent;
+            else if (!string.IsNullOrWhiteSpace(specimen.Significance))
+                metadata.Description = specimen.Significance;
+            else if (string.IsNullOrWhiteSpace(metadata.Description))
+                metadata.Description = string.Equals(specimen.ScientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)
+                    ? new[]
+                    {
+                        specimen.MineralogyTypeOfType,
+                        specimen.MineralogyClass,
+                        specimen.MeteoritesClass,
+                        specimen.MineralogyGroup,
+                        specimen.MeteoritesGroup,
+                        specimen.TektitesClassification,
+                        specimen.TektitesShape
+                    }.Concatenate(", ")
+                    : new[]
+                    {
+                        (specimen.Taxonomy == null)
+                            ? null
+                            : new[]
+                            {
+                                specimen.Taxonomy.CommonName,
+                                specimen.Taxonomy.TaxonName
+                            }.Concatenate(", "),
+                        specimen.Country,
+                        specimen.State
+                    }.Concatenate(", ");
+
+            if (!string.IsNullOrWhiteSpace(metadata.Description))
+            {
+                metadata.Description = metadata.Description
+                    .Truncate(Constants.MetadataDescriptionMaxChars)
+                    .RemoveLineBreaks();
+            }
 
             // Twitter
             if(specimen.Media.WithThumbnails().Any())
