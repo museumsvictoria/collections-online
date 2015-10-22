@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -9,18 +8,17 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using ImageProcessor.Imaging;
 using IMu;
-using NLog;
 using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class SpeciesFactory : IEmuAggregateRootFactory<Species>
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
         private readonly ISummaryFactory _summaryFactory;
@@ -100,8 +98,6 @@ namespace CollectionsOnline.Import.Factories
 
         public Species MakeDocument(Map map)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var species = new Species();
 
             species.Id = "species/" + map.GetEncodedString("irn");
@@ -223,8 +219,7 @@ namespace CollectionsOnline.Import.Factories
             if (string.IsNullOrWhiteSpace(species.DisplayTitle))
                 species.DisplayTitle = "Species";
 
-            stopwatch.Stop();
-            _log.Trace("Completed species creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
+            Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", species.Id, species.Media.Count);
             
             return species;
         }

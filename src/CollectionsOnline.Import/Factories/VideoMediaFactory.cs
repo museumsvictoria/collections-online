@@ -9,13 +9,12 @@ using CollectionsOnline.Core.Models;
 using Google.Apis.YouTube.v3;
 using ImageProcessor;
 using ImageProcessor.Imaging;
-using NLog;
+using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class VideoMediaFactory : IVideoMediaFactory
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly YouTubeService _youTubeService;
 
         public VideoMediaFactory(
@@ -36,7 +35,7 @@ namespace CollectionsOnline.Import.Factories
                 if (ThereAreExistingMedia(ref videoMedia))
                 {
                     stopwatch.Stop();
-                    _log.Trace("Loaded existing video preview media in {0} ms", stopwatch.ElapsedMilliseconds);
+                    Log.Logger.Debug("Found existing video preview {Irn} in {ElapsedMilliseconds} ms", videoMedia.Irn, stopwatch.ElapsedMilliseconds);
 
                     return true;
                 }
@@ -68,6 +67,11 @@ namespace CollectionsOnline.Import.Factories
                                 .Quality(80)
                                 .Save(destPath);
 
+                            stopwatch.Stop();
+                            Log.Logger.Debug("Loaded video preview {Irn} in {ElapsedMilliseconds} ms", videoMedia.Irn, stopwatch.ElapsedMilliseconds);
+                            stopwatch.Reset();
+                            stopwatch.Start();
+
                             videoMedia.Thumbnail = new ImageMediaFile
                             {
                                 Uri = PathFactory.MakeUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail),
@@ -96,14 +100,14 @@ namespace CollectionsOnline.Import.Factories
                         }
 
                         stopwatch.Stop();
-                        _log.Trace("Created video preview media in {0} ms", stopwatch.ElapsedMilliseconds);
+                        Log.Logger.Debug("Completed video preview {Irn} creation in {ElapsedMilliseconds} ms", videoMedia.Irn, stopwatch.ElapsedMilliseconds);
 
                         return true;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    _log.Error("Error creating video preview {0}, un-recoverable error", videoMedia.Irn);
+                    Log.Logger.Fatal(ex, "Unexpected error occured creating video preview {Irn}", videoMedia.Irn);
                     throw;
                 }
             }

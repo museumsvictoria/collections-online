@@ -7,18 +7,17 @@ using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Infrastructure;
 using IMu;
-using NLog;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
 using Raven.Json.Linq;
+using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Imports
 {
-    public class TaxonomyUpdateImport : IImport
+    public class TaxonomyUpdateImport : ImuImportBase
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly ITaxonomyFactory _taxonomyFactory;
@@ -33,179 +32,167 @@ namespace CollectionsOnline.Import.Imports
             _taxonomyFactory = taxonomyFactory;
         }
 
-        public void Run()
+        public override void Run()
         {
-            ImportCache importCache;
-            var columns = new[]
-                                {
-                                    "irn",
-                                    "ClaKingdom",
-                                    "ClaPhylum",
-                                    "ClaSubphylum",
-                                    "ClaSuperclass",
-                                    "ClaClass",
-                                    "ClaSubclass",
-                                    "ClaSuperorder",
-                                    "ClaOrder",
-                                    "ClaSuborder",
-                                    "ClaInfraorder",
-                                    "ClaSuperfamily",
-                                    "ClaFamily",
-                                    "ClaSubfamily",
-                                    "ClaGenus",
-                                    "ClaSubgenus",
-                                    "ClaSpecies",
-                                    "ClaSubspecies",
-                                    "AutAuthorString",
-                                    "ClaApplicableCode",
-                                    "comname=[ComName_tab,ComStatus_tab]"
-                                };
-            var moduleName = "etaxonomy";
+            using (Log.Logger.BeginTimedOperation("Taxonomy Update Import starting", "TaxonomyUpdateImport.Run"))
+            { 
+                ImportCache importCache;
+                var columns = new[]
+                                    {
+                                        "irn",
+                                        "ClaKingdom",
+                                        "ClaPhylum",
+                                        "ClaSubphylum",
+                                        "ClaSuperclass",
+                                        "ClaClass",
+                                        "ClaSubclass",
+                                        "ClaSuperorder",
+                                        "ClaOrder",
+                                        "ClaSuborder",
+                                        "ClaInfraorder",
+                                        "ClaSuperfamily",
+                                        "ClaFamily",
+                                        "ClaSubfamily",
+                                        "ClaGenus",
+                                        "ClaSubgenus",
+                                        "ClaSpecies",
+                                        "ClaSubspecies",
+                                        "AutAuthorString",
+                                        "ClaApplicableCode",
+                                        "comname=[ComName_tab,ComStatus_tab]"
+                                    };
+                var moduleName = "etaxonomy";
 
-            using (var documentSession = _documentStore.OpenSession())
-            using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
-            {
-                // Check to see whether we need to run import, so grab the previous date run of any imports that utilize taxonomy.
-                var previousDateRun = documentSession
-                    .Load<Application>(Constants.ApplicationId)
-                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(Species).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Specimen).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Item).Name, StringComparison.OrdinalIgnoreCase))
-                    .Select(x => x.PreviousDateRun)
-                    .OrderBy(x => x)
-                    .FirstOrDefault(x => x.HasValue);
-
-                // Exit current import if it has never run.
-                if (!previousDateRun.HasValue)
-                    return;
-
-                // Check for existing import in case we need to resume.
-                var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
-
-                // Exit current import if it had completed previous time it was run.
-                if (importStatus.IsFinished)
+                using (var documentSession = _documentStore.OpenSession())
+                using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
                 {
-                    return;
+                    // Check to see whether we need to run import, so grab the previous date run of any imports that utilize taxonomy.
+                    var previousDateRun = documentSession
+                        .Load<Application>(Constants.ApplicationId)
+                        .ImportStatuses.Where(x => x.ImportType.Contains(typeof(Species).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Specimen).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Item).Name, StringComparison.OrdinalIgnoreCase))
+                        .Select(x => x.PreviousDateRun)
+                        .OrderBy(x => x)
+                        .FirstOrDefault(x => x.HasValue);
+
+                    // Exit current import if it has never run.
+                    if (!previousDateRun.HasValue)
+                        return;
+
+                    // Check for existing import in case we need to resume.
+                    var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
+
+                    // Exit current import if it had completed previous time it was run.
+                    if (importStatus.IsFinished)
+                    {
+                        Log.Logger.Information("Import finished last time... skipping");
+                        return;
+                    }                    
+
+                    // Check for existing cached results
+                    importCache = documentSession.Load<ImportCache>("importCaches/taxonomy");
+                    if (importCache == null)
+                    {
+                        Log.Logger.Information("Caching {Name} results", GetType().Name);
+                        importCache = new ImportCache { Id = "importCaches/taxonomy" };
+
+                        var terms = new Terms();
+                        terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
+
+                        var hits = imuSession.FindTerms(terms);
+
+                        Log.Logger.Information("Found {Hits} records where {@Terms}", hits, terms.List);
+
+                        var cachedCurrentOffset = 0;
+                        while (true)
+                        {
+                            if (ImportCanceled())
+                                return;
+
+                            var results = imuSession.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
+
+                            if (results.Count == 0)
+                                break;
+
+                            importCache.Irns.AddRange(results.Rows.Select(x => long.Parse(x.GetEncodedString("irn"))));
+
+                            cachedCurrentOffset += results.Count;
+
+                            Log.Logger.Information("{Name} cache progress... {Offset}/{TotalResults}", GetType().Name, cachedCurrentOffset, hits);
+                        }
+
+                        // Store cached result
+                        documentSession.Store(importCache);
+                        documentSession.SaveChanges();
+
+                        Log.Logger.Information("Caching of {Name} results complete", GetType().Name);
+                    }
+                    else
+                    {
+                        Log.Logger.Information("Cached results found, resuming {Name} import.", GetType().Name);
+                    }
                 }
 
-                _log.Debug("Starting {0} import", GetType().Name);
-
-                // Check for existing cached results
-                importCache = documentSession.Load<ImportCache>("importCaches/taxonomy");
-                if (importCache == null)
+                // Perform import
+                while (true)
                 {
-                    importCache = new ImportCache { Id = "importCaches/taxonomy" };
-
-                    var terms = new Terms();
-                    terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
-
-                    var hits = imuSession.FindTerms(terms);
-
-                    _log.Debug("Caching {0} search results. {1} Hits", GetType().Name, hits);
-
-                    var cachedCurrentOffset = 0;
-                    while (true)
+                    using (var documentSession = _documentStore.OpenSession())
+                    using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
                     {
                         if (ImportCanceled())
                             return;
 
-                        var results = imuSession.Fetch("start", cachedCurrentOffset, Constants.CachedDataBatchSize, new[] { "irn" });
+                        var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
 
-                        if (results.Count == 0)
+                        var cachedResultBatch = importCache.Irns
+                            .Skip(importStatus.CurrentImportCacheOffset)
+                            .Take(Constants.DataBatchSize)
+                            .ToList();
+
+                        if (cachedResultBatch.Count == 0)
                             break;
 
-                        importCache.Irns.AddRange(results.Rows.Select(x => long.Parse(x.GetEncodedString("irn"))));
+                        imuSession.FindKeys(cachedResultBatch);
 
-                        cachedCurrentOffset += results.Count;
+                        var results = imuSession.Fetch("start", 0, -1, columns);
 
-                        _log.Debug("{0} cache progress... {1}/{2}", GetType().Name, cachedCurrentOffset, hits);
-                    }
+                        Log.Logger.Debug("Fetched {RecordCount} taxonomy records from Imu", cachedResultBatch.Count);
 
-                    // Store cached result
-                    documentSession.Store(importCache);
-                    documentSession.SaveChanges();
-
-                    _log.Debug("Caching of {0} search results complete, beginning import.", GetType().Name);
-                }
-                else
-                {
-                    _log.Debug("Cached search results found, resuming {0} import.", GetType().Name);
-                }
-            }
-
-            // Perform import
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());
-
-                    var cachedResultBatch = importCache.Irns
-                        .Skip(importStatus.CurrentImportCacheOffset)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if (cachedResultBatch.Count == 0)
-                        break;
-
-                    var stopwatch = Stopwatch.StartNew();
-
-                    imuSession.FindKeys(cachedResultBatch);
-
-                    var results = imuSession.Fetch("start", 0, -1, columns);
-
-                    stopwatch.Stop();
-                    _log.Trace("Found and fetched {0} taxonomy records in {1} ms", cachedResultBatch.Count, stopwatch.ElapsedMilliseconds);
-
-                    foreach (var row in results.Rows)
-                    {
-                        // Update taxonomy on items, species and specimens
-                        _documentStore.DatabaseCommands.UpdateByIndex(
-                            "CombinedIndex",
-                            new IndexQuery { Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn")) },
-                            new[]
-                            {
-                                new PatchRequest
+                        foreach (var row in results.Rows)
+                        {
+                            // Update taxonomy on items, species and specimens
+                            _documentStore.DatabaseCommands.UpdateByIndex(
+                                "CombinedIndex",
+                                new IndexQuery { Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn")) },
+                                new[]
                                 {
-                                    Type = PatchCommandType.Set,
-                                    Name = "Taxonomy",
-                                    Value = RavenJObject.FromObject(_taxonomyFactory.Make(row))
-                                }
-                            });
+                                    new PatchRequest
+                                    {
+                                        Type = PatchCommandType.Set,
+                                        Name = "Taxonomy",
+                                        Value = RavenJObject.FromObject(_taxonomyFactory.Make(row))
+                                    }
+                                });
+                        }
+
+                        importStatus.CurrentImportCacheOffset += results.Count;
+
+                        Log.Logger.Information("{Name} import progress... {Offset}/{TotalResults}", GetType().Name, importStatus.CurrentImportCacheOffset, importCache.Irns.Count);
+                        documentSession.SaveChanges();
                     }
+                }
 
-                    importStatus.CurrentImportCacheOffset += results.Count;
-
-                    _log.Debug("{0} import progress... {1}/{2}", GetType().Name, importStatus.CurrentImportCacheOffset, importCache.Irns.Count);
+                using (var documentSession = _documentStore.OpenSession())
+                {
+                    // Mark import status as finished
+                    documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString(), importCache.DateCreated);
                     documentSession.SaveChanges();
                 }
-            }
-
-            _log.Debug("{0} import complete", GetType().Name);
-
-            using (var documentSession = _documentStore.OpenSession())
-            {
-                documentSession.Load<Application>(Constants.ApplicationId).ImportFinished(GetType().ToString(), importCache.DateCreated);
-                documentSession.SaveChanges();
             }
         }
 
-        public int Order
+        public override int Order
         {
             get { return 10; }
-        }
-
-        private bool ImportCanceled()
-        {
-            if (DateTime.Now.TimeOfDay > Constants.ImuOfflineTimeSpanStart && DateTime.Now.TimeOfDay < Constants.ImuOfflineTimeSpanEnd)
-            {
-                _log.Warn("Imu about to go offline, canceling all imports");
-                Program.ImportCanceled = true;
-            }
-
-            return Program.ImportCanceled;
-        }
+        }        
     }
 }

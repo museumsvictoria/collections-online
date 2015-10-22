@@ -8,32 +8,33 @@ using CollectionsOnline.Import.Infrastructure;
 using Google.Apis.YouTube.v3;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using NLog;
 using Raven.Client;
+using Serilog;
 
 namespace CollectionsOnline.Import
 {
     class Program
     {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
         private static IKernel _kernel;
 
         public static volatile bool ImportCanceled = false;
 
         static void Main(string[] args)
         {
+            SerilogConfig.Initialize();
+
             // Set up Ctrl+C handling 
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
-                _log.Warn("Canceling all imports");
+                Log.Logger.Warning("Canceling all imports");
 
                 eventArgs.Cancel = true;
                 ImportCanceled = true;
             };
 
             // Log any exceptions that are not handled
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) => _log.Error(eventArgs.ExceptionObject);                                    
-
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) => Log.Logger.Fatal((Exception)eventArgs.ExceptionObject, "Unhandled Exception occured in import");
+                
             _kernel = CreateKernel();
 
             _kernel.Get<ImportRunner>().Run();

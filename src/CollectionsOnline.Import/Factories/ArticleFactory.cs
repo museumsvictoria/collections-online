@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -9,18 +8,17 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
 using IMu;
-using NLog;
 using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class ArticleFactory : IEmuAggregateRootFactory<Article>
     {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IMediaFactory _mediaFactory;
         private readonly ISummaryFactory _summaryFactory;
 
@@ -79,8 +77,6 @@ namespace CollectionsOnline.Import.Factories
 
         public Article MakeDocument(Map map)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var article = new Article();
 
             article.Id = "articles/" + map.GetEncodedString("irn");
@@ -102,17 +98,13 @@ namespace CollectionsOnline.Import.Factories
             {
                 article.ContentText = HtmlConverter.HtmlToText(article.Content);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                _log.Warn("Unable to convert article content html to text, irn:{0}, html:{1}, exception:{2}", map.GetEncodedString("irn"), article.Content, exception);
+                Log.Logger.Warning(ex, "Unable to convert {Id} content html to text {Content}", article.Id, article.Content);
             }
 
             if(sanitizedResult.HasRemovedTag || sanitizedResult.HasRemovedStyle || sanitizedResult.HasRemovedAttribute)
-                _log.Trace("Suspected obsolete HTML, consider reviewing narrative with irn {0} (removedTag:{1}, removedStyle:{2}, removedAttribute:{3})", 
-                    map.GetEncodedString("irn"), 
-                    sanitizedResult.HasRemovedTag, 
-                    sanitizedResult.HasRemovedStyle, 
-                    sanitizedResult.HasRemovedAttribute);
+                Log.Logger.Warning("Poorly formatted HTML detected, consider reviewing {Id} {@Reason}", article.Id, new {sanitizedResult.HasRemovedTag, sanitizedResult.HasRemovedStyle, sanitizedResult.HasRemovedAttribute});
             
             article.ContentSummary = map.GetEncodedString("NarNarrativeSummary");
 
@@ -217,8 +209,7 @@ namespace CollectionsOnline.Import.Factories
             if (string.IsNullOrWhiteSpace(article.DisplayTitle))
                 article.DisplayTitle = "Article";
 
-            stopwatch.Stop();
-            _log.Trace("Completed article creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
+            Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", article.Id, article.Media.Count);
 
             return article;
         }

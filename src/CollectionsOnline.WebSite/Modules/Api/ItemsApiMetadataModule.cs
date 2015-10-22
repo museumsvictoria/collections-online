@@ -3,12 +3,12 @@ using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Metadata.Modules;
 using Newtonsoft.Json;
 using Raven.Client;
+using Serilog;
 
 namespace CollectionsOnline.WebSite.Modules.Api
 {
@@ -16,7 +16,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
     {
         public ItemsApiMetadataModule(IDocumentStore documentStore)
         {
-            using (new StopwatchTimer("Creation of Items Api Metadata complete"))
+            Log.Logger.Debug("Creating Item Api Metadata");
+
             using (var documentSession = documentStore.OpenSession())
             {
                 var sampleItem = documentSession.Advanced.DocumentQuery<Item, CombinedIndex>()

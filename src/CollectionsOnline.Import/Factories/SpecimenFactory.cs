@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -11,15 +10,14 @@ using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
 using ImageProcessor.Imaging;
 using IMu;
-using NLog;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class SpecimenFactory : IEmuAggregateRootFactory<Specimen>
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly ISlugFactory _slugFactory;
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
@@ -145,8 +143,6 @@ namespace CollectionsOnline.Import.Factories
 
         public Specimen MakeDocument(Map map)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var specimen = new Specimen();
 
             specimen.Id = "specimens/" + map.GetEncodedString("irn");
@@ -564,8 +560,7 @@ namespace CollectionsOnline.Import.Factories
             if (string.IsNullOrWhiteSpace(specimen.DisplayTitle))
                 specimen.DisplayTitle = "Specimen";
 
-            stopwatch.Stop();
-            _log.Trace("Completed specimen creation for catalog record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
+            Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", specimen.Id, specimen.Media.Count);
             
             return specimen;
         }

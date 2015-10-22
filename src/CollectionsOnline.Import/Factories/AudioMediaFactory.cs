@@ -10,15 +10,14 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using IMu;
-using NLog;
 using Raven.Client;
 using Raven.Client.Linq;
+using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class AudioMediaFactory : IAudioMediaFactory
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
 
@@ -37,7 +36,7 @@ namespace CollectionsOnline.Import.Factories
             if (FileExists(ref audioMedia, originalFileExtension))
             {
                 stopwatch.Stop();
-                _log.Trace("Loaded existing audio media in {0} ms", stopwatch.ElapsedMilliseconds);
+                Log.Logger.Debug("Found existing audio {Irn} in {ElapsedMilliseconds} ms", audioMedia.Irn, stopwatch.ElapsedMilliseconds);
 
                 return true;
             }
@@ -78,26 +77,29 @@ namespace CollectionsOnline.Import.Factories
                         };
 
                         stopwatch.Stop();
-                        _log.Trace("Created new audio media in {0} ms", stopwatch.ElapsedMilliseconds);
+                        Log.Logger.Debug("Completed audio {Irn} creation in {ElapsedMilliseconds} ms", audioMedia.Irn, stopwatch.ElapsedMilliseconds);
 
                         return true;
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                if (exception is IMuException && ((IMuException)exception).ID == "MultimediaResourceNotFound")
+                if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResolutionNotFound")
                 {
-                    // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
-                    _log.Warn("Multimedia resource was not found, unable to save image at this time {0}, {1}", audioMedia.Irn, exception);
+                    Log.Logger.Warning(ex, "Multimedia resolution not found, unable to save audio {Irn}", audioMedia.Irn);
+                }
+                else if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResourceNotFound")
+                {
+                    Log.Logger.Warning(ex, "Multimedia resource not found, unable to save audio {Irn}", audioMedia.Irn);
                 }
                 else
                 {
-                    // Error is unexpected therefore we want the entire import to fail, re-throw the error.
-                    _log.Error("Error saving file media {0}, un-recoverable error", audioMedia.Irn);
+                    // Error is unexpected therefore we want the entire import to fail
+                    Log.Logger.Fatal(ex, "Unexpected error occured creating audio {Irn}", audioMedia.Irn);
                     throw;
                 }
-            }           
+            }     
 
             return false;
         }
@@ -127,14 +129,12 @@ namespace CollectionsOnline.Import.Factories
                     .Any(x => x.HasValue);
 
                 if (allImportsComplete && result == null)
-                {
-                    _log.Trace("No existing audio media found matching mmr irn... fetching from EMu");
                     return false;
-                }
+                
                 // If existing media checksum does not match the one from emu we need to save file
                 if (result != null && result.Md5Checksum != audioMedia.Md5Checksum)
                 {
-                    _log.Trace("Existing audio media found however checksum doesnt match... fetching from EMu (existing:{0}, new:{1})", result.Md5Checksum, audioMedia.Md5Checksum);
+                    Log.Logger.Warning("Existing audio {Irn} found but checksum {ExistingChecksum} did not match new audio {NewChecksum}", audioMedia.Irn, result.Md5Checksum, audioMedia.Md5Checksum);
                     return false;
                 }
             }

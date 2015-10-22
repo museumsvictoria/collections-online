@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -8,17 +7,15 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
-using CollectionsOnline.Import.Utilities;
 using IMu;
-using NLog;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class ItemFactory : IEmuAggregateRootFactory<Item>
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly IMuseumLocationFactory _museumLocationFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
@@ -200,8 +197,6 @@ namespace CollectionsOnline.Import.Factories
 
         public Item MakeDocument(Map map)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var item = new Item();
 
             item.Id = "items/" + map.GetEncodedString("irn");
@@ -401,9 +396,7 @@ namespace CollectionsOnline.Import.Factories
             item.TradeLiteraturePrimaryName = _partiesNameFactory.Make(map.GetMap("tlparty"));
 
             // Media
-            var mediaStopwatch = Stopwatch.StartNew();
             item.Media = _mediaFactory.Make(map.GetMaps("media"));
-            mediaStopwatch.Stop();
 
             // Assign thumbnail
             var media = item.Media.OfType<IHasThumbnail>().FirstOrDefault();
@@ -639,9 +632,8 @@ namespace CollectionsOnline.Import.Factories
 
             if (string.IsNullOrWhiteSpace(item.DisplayTitle))
                 item.DisplayTitle = "Item";
-            
-            stopwatch.Stop();
-            _log.Trace("Completed item creation for Catalog record with irn {0}, elapsed time {1} ms, media creation took {2} ms ({3} media)", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds, mediaStopwatch.ElapsedMilliseconds, item.Media.Count);
+
+            Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", item.Id, item.Media.Count);
 
             return item;
         }

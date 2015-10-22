@@ -109,16 +109,24 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ninject.extensions.conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.1.2\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Client.3.0.3800\lib\net45\Raven.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Client.3.0.3800\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.10\lib\net45\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.10\lib\net45\Serilog.FullNetFx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SerilogMetrics, Version=1.0.29.0, Culture=neutral, PublicKeyToken=d4b150f150627b06, processorArchitecture=MSIL">
+      <HintPath>..\packages\SerilogMetrics.1.0.29\lib\net45\SerilogMetrics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -173,6 +181,7 @@
     <Compile Include="Factories\SpecimenFactory.cs" />
     <Compile Include="Factories\SpeciesFactory.cs" />
     <Compile Include="Factories\ItemFactory.cs" />
+    <Compile Include="Imports\ImuImportBase.cs" />
     <Compile Include="Imports\IImport.cs" />
     <Compile Include="Imports\SitemapImport.cs" />
     <Compile Include="Imports\RelationshipImport.cs" />

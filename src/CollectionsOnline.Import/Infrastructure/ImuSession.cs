@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using IMu;
-using NLog;
 
 namespace CollectionsOnline.Import.Infrastructure
 {
     public class ImuSession : IDisposable
-    {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+    {        
         private Session _session;
         private Module _module;
         private bool _disposed;
 
         public ImuSession(string moduleName, string host, int port)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             _session = new Session(host, port);
             _session.Connect();
 
             _module = new Module(moduleName, _session);
-
-            stopwatch.Stop();
-            _log.Trace("Created Imu session {0}:{1} in {2} ms", host, port, stopwatch.ElapsedMilliseconds);
         }
 
         public long FindKey(long irn)

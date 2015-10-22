@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -7,15 +6,14 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
 using IMu;
-using NLog;
 using Raven.Client;
+using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class CollectionFactory : IEmuAggregateRootFactory<Collection>
     {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IMediaFactory _mediaFactory;
 
         public CollectionFactory(
@@ -66,8 +64,6 @@ namespace CollectionsOnline.Import.Factories
 
         public Collection MakeDocument(Map map)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var collection = new Collection();
 
             collection.Id = "collections/" + map.GetEncodedString("irn");
@@ -85,11 +81,7 @@ namespace CollectionsOnline.Import.Factories
             collection.Significance = sanitizedResult.Html;
 
             if(sanitizedResult.HasRemovedTag || sanitizedResult.HasRemovedStyle || sanitizedResult.HasRemovedAttribute)
-                _log.Trace("Suspected obsolete HTML, consider reviewing narrative with irn {0} (removedTag:{1}, removedStyle:{2}, removedAttribute:{3})", 
-                    map.GetEncodedString("irn"), 
-                    sanitizedResult.HasRemovedTag, 
-                    sanitizedResult.HasRemovedStyle, 
-                    sanitizedResult.HasRemovedAttribute);
+                Log.Logger.Warning("Poorly formatted HTML detected, consider reviewing {Id} {@Reason}", collection.Id, new { sanitizedResult.HasRemovedTag, sanitizedResult.HasRemovedStyle, sanitizedResult.HasRemovedAttribute });
 
             collection.CollectionSummary = map.GetEncodedString("NarNarrativeSummary");
 
@@ -176,9 +168,8 @@ namespace CollectionsOnline.Import.Factories
                 collection.DisplayTitle = collection.Title;
             else
                 collection.DisplayTitle = "Collection Overview";
-           
-            stopwatch.Stop();
-            _log.Trace("Completed collection overview creation for narrative record with irn {0}, elapsed time {1} ms", map.GetEncodedString("irn"), stopwatch.ElapsedMilliseconds);
+
+            Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", collection.Id, collection.Media.Count);
 
             return collection;
         }

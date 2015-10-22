@@ -2,66 +2,60 @@
 using CollectionsOnline.Core.Indexes;
 using System.Configuration;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Core.Utilities;
 using Ninject.Activation;
-using NLog;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
+using Serilog;
+using Serilog.Events;
 
 namespace CollectionsOnline.Core.Infrastructure
 {
     public class NinjectRavenDocumentStoreProvider : Provider<IDocumentStore>
     {
-        private static readonly Logger _log = LogManager.GetCurrentClassLogger();
-
         protected override IDocumentStore CreateInstance(IContext context)
         {
-            // Connect to raven db instance
-            IDocumentStore documentStore;
-            using (new StopwatchTimer("Initialized raven document store", _log))
+            using (Log.Logger.BeginTimedOperation("Create new instance of DocumentStore", "NinjectRavenDocumentStoreProvider.CreateInstance", LogEventLevel.Debug))
             {
-                documentStore = new DocumentStore
+                // Connect to raven db instance
+                Log.Logger.Debug("Initialize Raven document store");
+                var documentStore = new DocumentStore
                 {
                     Url = ConfigurationManager.AppSettings["DatabaseUrl"],
                     DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
                 }.Initialize();
-            }
 
-            // Ensure DB exists
-            documentStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
+                // Ensure DB exists
+                Log.Logger.Debug("Ensure the Database {DatabaseName} Exists", ConfigurationManager.AppSettings["DatabaseName"]);
+                documentStore.DatabaseCommands.GlobalAdmin.EnsureDatabaseExists(ConfigurationManager.AppSettings["DatabaseName"]);
 
-            // Create core indexes and store facets
-            using (new StopwatchTimer("Ensured Core indexes and facets have been created", _log))
-            {
-                IndexCreation.CreateIndexes(typeof (CombinedIndex).Assembly, documentStore);
-
+                // Create core indexes and store facets
+                Log.Logger.Debug("Ensure Core indexes and facets are created");
+                IndexCreation.CreateIndexes(typeof(CombinedIndex).Assembly, documentStore);
                 using (var documentSession = documentStore.OpenSession())
                 {
                     documentSession.Store(new CombinedFacets());
                     documentSession.SaveChanges();
                 }
-            }
 
-            // Ensure we have a application document
-            using (new StopwatchTimer("Ensured Application document has been created", _log))
-            {
+                // Ensure we have a application document
+                Log.Logger.Debug("Ensure Application document has been created");
                 using (var documentSession = documentStore.OpenSession())
                 {
                     var application = documentSession.Load<Application>(Constants.ApplicationId);
 
                     if (application == null)
                     {
-                        _log.Debug("Creating new application document store");
+                        Log.Logger.Information("Creating new application document store");
                         application = new Application();
                         documentSession.Store(application);
                     }
 
                     documentSession.SaveChanges();
                 }
-            }
 
-            return documentStore;
+                return documentStore; 
+            }
         }
     }
 }

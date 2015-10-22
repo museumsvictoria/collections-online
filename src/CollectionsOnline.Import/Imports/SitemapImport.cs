@@ -7,16 +7,15 @@ using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
 using CollectionsOnline.Core.Indexes;
-using NLog;
 using Raven.Abstractions.Data;
 using Raven.Client;
+using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Imports
 {
     public class SitemapImport : IImport
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
 
         public SitemapImport(IDocumentStore documentStore)
@@ -25,111 +24,110 @@ namespace CollectionsOnline.Import.Imports
         }
 
         public void Run()
-        {            
-            _log.Debug("Beginning sitemap creation");
+        {
+            using (Log.Logger.BeginTimedOperation("Sitemap creation starting", "SitemapImport.Run"))
+            {
+                var count = 0;
 
-            var count = 0;
-
-            var sitemapNodes = new List<SitemapNode>();
-            var sitemapNodeIndexes = new List<List<SitemapNode>>();
-            var skip = 0;
+                var sitemapNodes = new List<SitemapNode>();
+                var sitemapNodeIndexes = new List<List<SitemapNode>>();
+                var skip = 0;
             
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
+                while (true)
                 {
-                    var query = documentSession.Advanced
-                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                        .SelectFields<SitemapResult>()
-                        .Skip(skip)
-                        .Take(Constants.PagingStreamSize);
-
-                    QueryHeaderInformation queryHeaderInformation;
-                    var enumerator = documentSession.Advanced.Stream(query, out queryHeaderInformation);
-
-                    // Create all sitemap nodes
-                    while (enumerator.MoveNext())
+                    using (var documentSession = _documentStore.OpenSession())
                     {
-                        if (ImportCanceled())
-                            return;
+                        var query = documentSession.Advanced
+                            .DocumentQuery<CombinedIndexResult, CombinedIndex>()
+                            .SelectFields<SitemapResult>()
+                            .Skip(skip)
+                            .Take(Constants.PagingStreamSize);
 
-                        sitemapNodes.Add(new SitemapNode(new Uri(string.Format("{0}/{1}",
-                            ConfigurationManager.AppSettings["CanonicalSiteBase"], enumerator.Current.Document.Id)),
-                            enumerator.Current.Document.DateModified));
+                        QueryHeaderInformation queryHeaderInformation;
+                        var enumerator = documentSession.Advanced.Stream(query, out queryHeaderInformation);
 
-                        count++;
-
-                        // Add sitemap to urlset once we reach our maximum url limit and create a new list to hold the next batch
-                        if (count % Constants.MaxSitemapUrls == 0)
+                        // Create all sitemap nodes
+                        while (enumerator.MoveNext())
                         {
-                            sitemapNodeIndexes.Add(sitemapNodes);
-                            sitemapNodes = new List<SitemapNode>();
+                            if (ImportCanceled())
+                                return;
+
+                            sitemapNodes.Add(new SitemapNode(new Uri(string.Format("{0}/{1}",
+                                ConfigurationManager.AppSettings["CanonicalSiteBase"], enumerator.Current.Document.Id)),
+                                enumerator.Current.Document.DateModified));
+
+                            count++;
+
+                            // Add sitemap to urlset once we reach our maximum url limit and create a new list to hold the next batch
+                            if (count % Constants.MaxSitemapUrls == 0)
+                            {
+                                sitemapNodeIndexes.Add(sitemapNodes);
+                                sitemapNodes = new List<SitemapNode>();
+                            }
                         }
+
+                        Log.Logger.Information("Sitemap progress... {Offset}/{TotalResults}", count, queryHeaderInformation.TotalResults);
+
+                        skip += Constants.PagingStreamSize;
+
+                        if (count == queryHeaderInformation.TotalResults)
+                            break;
                     }
-
-                    _log.Trace("Sitemap caching progress... {0}/{1}", count, queryHeaderInformation.TotalResults);
-
-                    skip += Constants.PagingStreamSize;
-
-                    if (count == queryHeaderInformation.TotalResults)
-                        break;
                 }
-            }
 
-            // Add the last sitemapNodes to our index
-            if(sitemapNodes.Any())
-                sitemapNodeIndexes.Add(sitemapNodes);
+                // Add the last sitemapNodes to our index
+                if(sitemapNodes.Any())
+                    sitemapNodeIndexes.Add(sitemapNodes);
 
-            // Create destination folder
-            var directoryInfo = new DirectoryInfo(string.Format("{0}\\sitemaps", ConfigurationManager.AppSettings["WebSitePath"]));
-            if (!directoryInfo.Exists)
-                directoryInfo.Create();
+                // Create destination folder
+                var directoryInfo = new DirectoryInfo(string.Format("{0}\\sitemaps", ConfigurationManager.AppSettings["WebSitePath"]));
+                if (!directoryInfo.Exists)
+                    directoryInfo.Create();
 
-            // Create then save sitemaps as xml
-            count = 0;
-            XNamespace xmlns = "http://www.sitemaps.org/schemas/sitemap/0.9";
-            var utf8WithoutBom = new System.Text.UTF8Encoding(false);
-            var sitemapIndex = new XElement(xmlns + "sitemapindex");
+                // Create then save sitemaps as xml
+                count = 0;
+                XNamespace xmlns = "http://www.sitemaps.org/schemas/sitemap/0.9";
+                var utf8WithoutBom = new System.Text.UTF8Encoding(false);
+                var sitemapIndex = new XElement(xmlns + "sitemapindex");
 
-            foreach (var sitemapNodeIndex in sitemapNodeIndexes)
-            {
-                count++;
-
-                sitemapIndex.Add(new XElement(xmlns + "sitemap",
-                    new XElement(xmlns + "loc", Uri.EscapeUriString(string.Format("{0}/sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["CanonicalSiteBase"], count))),
-                    new XElement(xmlns + "lastmod", sitemapNodeIndex.OrderByDescending(x => x.LastModified).Select(x => x.LastModified).First().ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture))));
-
-                var sitemapUrlset = new XElement(xmlns + "urlset");
-                foreach (var sitemapNode in sitemapNodeIndex)
+                foreach (var sitemapNodeIndex in sitemapNodeIndexes)
                 {
-                    var sitemapUrl = new XElement(xmlns + "url",
-                        new XElement(xmlns + "loc", Uri.EscapeUriString(sitemapNode.Url.AbsoluteUri)),
-                        new XElement(xmlns + "lastmod", sitemapNode.LastModified.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture)),
-                        new XElement(xmlns + "changefreq", sitemapNode.Frequency.ToString().ToLowerInvariant()));
+                    count++;
 
-                    if (sitemapNode.Priority.HasValue)
+                    sitemapIndex.Add(new XElement(xmlns + "sitemap",
+                        new XElement(xmlns + "loc", Uri.EscapeUriString(string.Format("{0}/sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["CanonicalSiteBase"], count))),
+                        new XElement(xmlns + "lastmod", sitemapNodeIndex.OrderByDescending(x => x.LastModified).Select(x => x.LastModified).First().ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture))));
+
+                    var sitemapUrlset = new XElement(xmlns + "urlset");
+                    foreach (var sitemapNode in sitemapNodeIndex)
                     {
-                        sitemapUrl.Add(new XElement(xmlns + "priority", sitemapNode.Priority.ToString().ToLowerInvariant()));
+                        var sitemapUrl = new XElement(xmlns + "url",
+                            new XElement(xmlns + "loc", Uri.EscapeUriString(sitemapNode.Url.AbsoluteUri)),
+                            new XElement(xmlns + "lastmod", sitemapNode.LastModified.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture)),
+                            new XElement(xmlns + "changefreq", sitemapNode.Frequency.ToString().ToLowerInvariant()));
+
+                        if (sitemapNode.Priority.HasValue)
+                        {
+                            sitemapUrl.Add(new XElement(xmlns + "priority", sitemapNode.Priority.ToString().ToLowerInvariant()));
+                        }
+
+                        sitemapUrlset.Add(sitemapUrl);
                     }
 
-                    sitemapUrlset.Add(sitemapUrl);
+                    // Save sitemap set with gzip compression
+                    using (var file = File.Create(string.Format("{0}\\sitemaps\\sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["WebSitePath"], count)))
+                    using (var gzip = new GZipStream(file, CompressionMode.Compress, false))
+                    {
+                        sitemapUrlset.Save(gzip);
+                    }
                 }
 
-                // Save sitemap set with gzip compression
-                using (var file = File.Create(string.Format("{0}\\sitemaps\\sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["WebSitePath"], count)))
-                using (var gzip = new GZipStream(file, CompressionMode.Compress, false))
+                // Save sitemap index
+                using (var fileWriter = new StreamWriter(string.Format("{0}\\sitemaps\\sitemap.xml", ConfigurationManager.AppSettings["WebSitePath"]), false, utf8WithoutBom))
                 {
-                    sitemapUrlset.Save(gzip);
+                    sitemapIndex.Save(fileWriter);
                 }
             }
-
-            // Save sitemap index
-            using (var fileWriter = new StreamWriter(string.Format("{0}\\sitemaps\\sitemap.xml", ConfigurationManager.AppSettings["WebSitePath"]), false, utf8WithoutBom))
-            {
-                sitemapIndex.Save(fileWriter);
-            }
-
-            _log.Debug("Sitemap creation complete");
         }
 
         public int Order

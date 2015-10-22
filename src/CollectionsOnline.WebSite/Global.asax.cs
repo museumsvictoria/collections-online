@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Web;
+using CollectionsOnline.WebSite.Extensions;
 using Nancy;
-using NLog;
+using Serilog;
 
 namespace CollectionsOnline.WebSite
 {
     public class Global : HttpApplication
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
-
         protected void Application_EndRequest(object sender, EventArgs e)
         {
             // Remove headers that are not needed
@@ -23,8 +22,9 @@ namespace CollectionsOnline.WebSite
         protected void Application_Error(object sender, EventArgs e)
         {
             // Capture any errors occurring before the nancy pipeline
-            var error = Server.GetLastError();
-            _log.Error("Application_Error occured [url:{0}]: {1}", Request.Url, error);
+            var ex = Server.GetLastError();
+
+            Log.Logger.Fatal(ex, "Unhandled Exception occured in System.Web pipeline {@HttpParams}", Request.RenderParams());
 
             Server.ClearError();
 

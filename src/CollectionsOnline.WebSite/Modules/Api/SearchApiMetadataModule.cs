@@ -3,6 +3,7 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Metadata.Modules;
+using Serilog;
 
 namespace CollectionsOnline.WebSite.Modules.Api
 {
@@ -10,6 +11,8 @@ namespace CollectionsOnline.WebSite.Modules.Api
     {
         public SearchApiMetadataModule()
         {
+            Log.Logger.Debug("Creating Search Api Metadata");
+
             Describe["search-api"] = description =>
             {
                 return new ApiMetadata

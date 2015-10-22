@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
-using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy;
@@ -14,9 +13,10 @@ using Nancy.Json;
 using Newtonsoft.Json;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using NLog;
 using Raven.Client;
 using Raven.Client.Indexes;
+using Serilog;
+using Serilog.Events;
 using StackExchange.Profiling;
 using StackExchange.Profiling.RavenDb;
 
@@ -24,11 +24,11 @@ namespace CollectionsOnline.WebSite.Infrastructure
 {
     public class WebSiteBootstrapper : NinjectNancyBootstrapper 
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
-
         protected override void ConfigureApplicationContainer(IKernel kernel)
         {
-            using (new StopwatchTimer("NinjectNancyBootstrapper ConfigureApplicationContainer complete", _log))
+            SerilogConfig.Initialize();
+
+            using (Log.Logger.BeginTimedOperation("Configure application scope dependencies", "WebSiteBootstrapper.ConfigureApplicationContainer"))
             {
                 kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
                 kernel.Bind<IHomeHeroUriFactory>().To<HomeHeroUriFactory>().InSingletonScope();
@@ -37,10 +37,8 @@ namespace CollectionsOnline.WebSite.Infrastructure
                 var documentStore = kernel.Get<IDocumentStore>();
 
                 // Register view transformers from website 
-                using (new StopwatchTimer("Created website indexes and transformers", _log))
-                {
-                    IndexCreation.CreateIndexes(typeof (ItemViewTransformer).Assembly, documentStore);
-                }
+                Log.Logger.Debug("Ensure Website indexes and transformers are created");
+                IndexCreation.CreateIndexes(typeof (ItemViewTransformer).Assembly, documentStore);
 
                 // Initialize raven miniprofiler
                 MiniProfilerRaven.InitializeFor(documentStore);
@@ -60,13 +58,13 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
         protected override void ApplicationStartup(IKernel container, IPipelines pipelines)
         {
-            using (new StopwatchTimer("NinjectNancyBootstrapper ApplicationStartup complete", _log))
+            using (Log.Logger.BeginTimedOperation("Application starting up", "WebSiteBootstrapper.ApplicationStartup"))
             {
                 JsonSettings.MaxJsonLength = Int32.MaxValue;
 
                 pipelines.OnError += (ctx, ex) =>
                 {
-                    _log.Error("pipelines.OnError occured [url:{0}]: {1}", ctx.Request.Url, ex);
+                    Log.Logger.Fatal(ex, "Unhandled Exception occured in Nancy pipeline {Url}", ctx.Request.Url);
 
                     return null;
                 };
@@ -83,7 +81,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
                     MiniProfiler.Stop();
 
                     if (MiniProfiler.Current != null)
-                        _log.Trace(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
+                        Log.Logger.Debug(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
                 };
 
                 // Automapper configuration

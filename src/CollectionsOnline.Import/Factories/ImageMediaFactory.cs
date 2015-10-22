@@ -14,15 +14,14 @@ using ImageProcessor;
 using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
 using IMu;
-using NLog;
 using Raven.Client;
 using CollectionsOnline.Core.Extensions;
+using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class ImageMediaFactory : IImageMediaFactory
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IList<ImageMediaJob> _imageMediaJobs;
@@ -72,7 +71,7 @@ namespace CollectionsOnline.Import.Factories
             if (FileExists(ref imageMedia))
             {
                 stopwatch.Stop();
-                _log.Trace("Loaded existing image media resources in {0} ms", stopwatch.ElapsedMilliseconds);
+                Log.Logger.Debug("Found existing image {Irn} in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
 
                 return true;
             }
@@ -96,13 +95,6 @@ namespace CollectionsOnline.Import.Factories
                     {
                         imageFactory
                             .Load(fileStream);
-
-                        stopwatch.Stop();
-                        _log.Trace("Loaded image media resource FileStream in {0} ms ({1} kbytes, {2} width, {3} height)", stopwatch.ElapsedMilliseconds, (fileStream.Length / 1024f).ToString("N"), imageFactory.Image.Width,
-                            imageFactory.Image.Height);
-
-                        stopwatch.Reset();
-                        stopwatch.Start();
 
                         foreach (var imageMediaJob in _imageMediaJobs)
                         {
@@ -141,27 +133,25 @@ namespace CollectionsOnline.Import.Factories
                     }
 
                     stopwatch.Stop();
-                    _log.Trace("Created all derivative image media in {0} ms", stopwatch.ElapsedMilliseconds);
+                    Log.Logger.Debug("Completed image {Irn} creation in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
 
                     return true;
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                if (exception is IMuException && ((IMuException)exception).ID == "MultimediaResolutionNotFound")
+                if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResolutionNotFound")
                 {
-                    // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
-                    _log.Warn("Multimedia resolution was not found, Unable to save image at this time {0}, {1}", imageMedia.Irn, exception);
+                    Log.Logger.Warning(ex, "Multimedia resolution not found, unable to save image {Irn}", imageMedia.Irn);
                 }
-                else if (exception is IMuException && ((IMuException)exception).ID == "MultimediaResourceNotFound")
+                else if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResourceNotFound")
                 {
-                    // Error is a known issue that will be picked up in subsequent imports once the data is fixed. So we don't need to re-throw exception.
-                    _log.Warn("Multimedia resource was not found, unable to save image at this time {0}, {1}", imageMedia.Irn, exception);
+                    Log.Logger.Warning(ex, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
                 }
                 else
                 {
-                    // Error is unexpected therefore we want the entire import to fail, re-throw the error.
-                    _log.Error("Error saving image media {0}, un-recoverable error", imageMedia.Irn);
+                    // Error is unexpected therefore we want the entire import to fail
+                    Log.Logger.Fatal(ex, "Unexpected error occured creating image {Irn}", imageMedia.Irn);
                     throw;
                 }
             }
@@ -194,15 +184,12 @@ namespace CollectionsOnline.Import.Factories
                     .Any(x => x.HasValue);
 
                 if (allImportsComplete && result == null)
-                {
-                    _log.Trace("No existing image media found matching mmr irn... fetching from EMu");
                     return false;
-                }
 
                 // If existing media checksum does not match the one from emu we need to save file
                 if (result != null && result.Md5Checksum != imageMedia.Md5Checksum)
                 {
-                    _log.Trace("Existing image media found however checksum doesnt match... fetching from EMu (existing:{0}, new:{1})", result.Md5Checksum, imageMedia.Md5Checksum);
+                    Log.Logger.Warning("Existing image {Irn} found but checksum {ExistingChecksum} did not match new image {NewChecksum}", imageMedia.Irn, result.Md5Checksum, imageMedia.Md5Checksum);
                     return false;
                 }
             }

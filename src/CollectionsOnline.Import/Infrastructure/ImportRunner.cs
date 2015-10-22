@@ -4,17 +4,15 @@ using System.Configuration;
 using System.Linq;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
-using NLog;
 using Raven.Abstractions.Data;
 using Raven.Client;
-using Raven.Client.Linq;
+using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Infrastructure
 {
     public class ImportRunner
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IDocumentStore _documentStore;
         private readonly IEnumerable<IImport> _imports;
 
@@ -28,78 +26,78 @@ namespace CollectionsOnline.Import.Infrastructure
 
         public void Run()
         {
-            var hasFailed = false;
+            var importHasFailed = false;
 
-            _log.Debug("Data Import begining");
-
-            var documentSession = _documentStore.OpenSession();
-            var application = documentSession.Load<Application>(Constants.ApplicationId);
-
-            if (!application.ImportsRunning)
+            using (Log.Logger.BeginTimedOperation("Emu data Import starting", "ImportRunner.Run"))
             {
-                application.RunAllImports();
-                documentSession.SaveChanges();
-                documentSession.Dispose();
+                var documentSession = _documentStore.OpenSession();
+                var application = documentSession.Load<Application>(Constants.ApplicationId);
 
-                NetworkShareAccesser networkShareAccesser = null;
-                if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["WebSiteDomain"]))
+                if (!application.ImportsRunning)
                 {
-                    networkShareAccesser =
-                        NetworkShareAccesser.Access(ConfigurationManager.AppSettings["WebSiteComputer"],
-                            ConfigurationManager.AppSettings["WebSiteDomain"],
-                            ConfigurationManager.AppSettings["WebSiteUser"],
-                            ConfigurationManager.AppSettings["WebSitePassword"]);
-                }
-                try
-                {
-                    // Run all imports
-                    foreach (var import in _imports.OrderBy(x => x.Order))
+                    application.RunAllImports();
+                    documentSession.SaveChanges();
+                    documentSession.Dispose();
+
+                    NetworkShareAccesser networkShareAccesser = null;
+                    if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["WebSiteDomain"]))
                     {
-                        if (Program.ImportCanceled)
-                            break;
-
-                        import.Run();
+                        networkShareAccesser =
+                            NetworkShareAccesser.Access(ConfigurationManager.AppSettings["WebSiteComputer"],
+                                ConfigurationManager.AppSettings["WebSiteDomain"],
+                                ConfigurationManager.AppSettings["WebSiteUser"],
+                                ConfigurationManager.AppSettings["WebSitePassword"]);
                     }
-                }
-                catch (Exception exception)
-                {
-                    hasFailed = true;
-                    _log.Error("Error encountered running import");
-                    _log.Error(exception);
-                }
-                finally
-                {
-                    if(networkShareAccesser != null)
-                        networkShareAccesser.Dispose();
-                }
+                    try
+                    {
+                        // Run all imports
+                        foreach (var import in _imports.OrderBy(x => x.Order))
+                        {
+                            if (Program.ImportCanceled)
+                                break;
 
-                // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.
-                documentSession = _documentStore.OpenSession();
-                application = documentSession.Load<Application>(Constants.ApplicationId);
+                            import.Run();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        importHasFailed = true;
+                        Log.Logger.Error(ex, "Exception occured running import");
+                    }
+                    finally
+                    {
+                        if (networkShareAccesser != null)
+                            networkShareAccesser.Dispose();
+                    }
 
-                if (Program.ImportCanceled || hasFailed)
-                {
-                    _log.Debug("All imports finished (cancelled or failed)");
-                    application.FinishedAllImports();
+                    // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.
+                    documentSession = _documentStore.OpenSession();
+                    application = documentSession.Load<Application>(Constants.ApplicationId);
+
+                    if (Program.ImportCanceled || importHasFailed)
+                    {
+                        Log.Logger.Information("Import has been stopped prematurely {@Reason}", new { Program.ImportCanceled, importHasFailed });
+                        application.FinishedAllImports();
+                    }
+                    else
+                    {
+                        Log.Logger.Information("All imports finished successfully");
+                        application.FinishedAllImportsSuccessfully();
+
+                        // Delete all import caches
+                        _documentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery {Query = "Tag:ImportCaches"}, new BulkOperationOptions {AllowStale = true});
+                    }
+
+                    // Force aggressive cache check
+                    _documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
+
+                    documentSession.SaveChanges();
+                    documentSession.Dispose();
                 }
                 else
                 {
-                    _log.Debug("All imports finished succesfully");
-                    application.FinishedAllImportsSuccessfully();
-
-                    // Delete all import caches
-                    _documentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery { Query = "Tag:ImportCaches" }, new BulkOperationOptions { AllowStale = true });
+                    Log.Logger.Information("Another import is currently running... cancelling import");
                 }
-                
-                // Force aggressive cache check
-                _documentStore.Conventions.ShouldAggressiveCacheTrackChanges = true;
-
-                documentSession.SaveChanges();
-                documentSession.Dispose();
-            }
-            else
-            {
-                _log.Debug("Another data import is currently running... exiting");
             }
         }
     }

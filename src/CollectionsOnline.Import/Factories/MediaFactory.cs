@@ -4,18 +4,16 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using ImageProcessor.Imaging;
 using IMu;
-using NLog;
+using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class MediaFactory : IMediaFactory
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly IImageMediaFactory _imageMediaFactory;
         private readonly IFileMediaFactory _fileMediaFactory;
         private readonly IAudioMediaFactory _audioMediaFactory;
@@ -175,6 +173,8 @@ namespace CollectionsOnline.Import.Factories
                         Uri = identifier
                     };
 
+                    Log.Logger.Debug("Completed uri {Irn} creation", uriMedia.Irn);
+
                     return uriMedia;
                 }
             }
@@ -198,7 +198,7 @@ namespace CollectionsOnline.Import.Factories
                 .Select(x => x.Key)
                 .ToList();
             if(duplicateMediaIrns.Any())
-                _log.Warn("Duplicate MMR Irns found: {0}", duplicateMediaIrns.Concatenate(", "));
+                Log.Logger.Warning("Duplicate MMR Irns detected {@DuplicateMediaIrns}", duplicateMediaIrns);
 
             // Select only distinct mmr maps
             var distinctMediaMaps = groupedMediaMaps.Select(x => x.First());
