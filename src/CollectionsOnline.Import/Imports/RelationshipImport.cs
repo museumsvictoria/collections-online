@@ -76,7 +76,7 @@ namespace CollectionsOnline.Import.Imports
                         documentSession.Dispose();
 
                         if (foundRelatedArticleCount > 0)
-                            Log.Logger.Information("Found {RelatedArticleCount} related articles via collection name", foundRelatedArticleCount);
+                            Log.Logger.Debug("Found {RelatedArticleCount} related articles via collection name", foundRelatedArticleCount);
                         Log.Logger.Information("Relationship import progress... {Offset}/{TotalResults}", currentOffset, importCacheItemIds.Count);
                     }
                 }
