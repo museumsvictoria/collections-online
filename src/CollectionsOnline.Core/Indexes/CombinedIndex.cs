@@ -16,7 +16,6 @@ namespace CollectionsOnline.Core.Indexes
                 select new
                 {
                     // Update fields
-                    MediaIrns = new object[] { article.Media.Select(x => x.Irn), article.Authors.Select(x => x.ProfileImage.Irn) },
                     TaxonomyIrn = 0,
 
                     // Content fields
@@ -72,7 +71,6 @@ namespace CollectionsOnline.Core.Indexes
                 select new
                 {
                     // Update fields
-                    MediaIrns = item.Media.Select(x => x.Irn),
                     TaxonomyIrn = item.Taxonomy.Irn,
 
                     // Content fields
@@ -182,7 +180,6 @@ namespace CollectionsOnline.Core.Indexes
                 select new
                 {
                     // Update fields
-                    MediaIrns = new object[] { species.Media.Select(x => x.Irn), species.Authors.Select(x => x.ProfileImage.Irn) },
                     TaxonomyIrn = species.Taxonomy.Irn,
 
                     // Content fields
@@ -266,7 +263,6 @@ namespace CollectionsOnline.Core.Indexes
                 select new
                 {
                     // Update fields
-                    MediaIrns = specimen.Media.Select(x => x.Irn),
                     TaxonomyIrn = specimen.Taxonomy.Irn,
 
                     // Content fields
@@ -385,7 +381,6 @@ namespace CollectionsOnline.Core.Indexes
             Index(x => x.Summary, FieldIndexing.No);
             Index(x => x.ThumbnailUri, FieldIndexing.No);
 
-            Index(x => x.MediaIrns, FieldIndexing.NotAnalyzed);
             Index(x => x.TaxonomyIrn, FieldIndexing.NotAnalyzed);
 
             Store(x => x.Id, FieldStorage.Yes);
@@ -410,8 +405,6 @@ namespace CollectionsOnline.Core.Indexes
     public class CombinedIndexResult
     {
         /* Update fields */
-        public long[] MediaIrns { get; set; }
-
         public long TaxonomyIrn { get; set; }
 
         /* Content/Order fields */
