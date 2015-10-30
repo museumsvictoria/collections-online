@@ -41,6 +41,8 @@ namespace CollectionsOnline.WebSite.Infrastructure
                 cfg.CreateMap<UriMedia, UriMediaApiViewModel>();
 
                 cfg.CreateMap<Taxonomy, TaxonomyApiViewModel>();
+                cfg.CreateMap<CollectionEvent, CollectionEventApiViewModel>();
+                cfg.CreateMap<CollectionSite, CollectionSiteApiViewModel>();
 
                 cfg.CreateMap<Author, AuthorApiViewModel>();
             });

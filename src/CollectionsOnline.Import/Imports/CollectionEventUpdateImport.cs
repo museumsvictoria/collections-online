@@ -1,74 +1,61 @@
 ﻿using System;
 using System.Linq;
-using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Infrastructure;
 using IMu;
-using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
-using Raven.Json.Linq;
 using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Imports
 {
-    public class TaxonomyUpdateImport : ImuImportBase
+    public class CollectionEventUpdateImport : ImuImportBase
     {
         private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
-        private readonly ITaxonomyFactory _taxonomyFactory;
+        private readonly ICollectionEventFactory _collectionEventFactory;
 
-        public TaxonomyUpdateImport(
+        public CollectionEventUpdateImport(
             IDocumentStore documentStore,
             IImuSessionProvider imuSessionProvider,
-            ITaxonomyFactory taxonomyFactory)
+            ICollectionEventFactory collectionEventFactory)
         {
             _documentStore = documentStore;
             _imuSessionProvider = imuSessionProvider;
-            _taxonomyFactory = taxonomyFactory;
+            _collectionEventFactory = collectionEventFactory;
         }
 
         public override void Run()
         {
-            using (Log.Logger.BeginTimedOperation("Taxonomy Update Import starting", "TaxonomyUpdateImport.Run"))
+            using (Log.Logger.BeginTimedOperation("Collection Event Update Import starting", "CollectionEventUpdateImport.Run"))
             { 
                 ImportCache importCache;
-                var columns = new[]
-                                    {
+                var columns = new[] {
                                         "irn",
-                                        "ClaKingdom",
-                                        "ClaPhylum",
-                                        "ClaSubphylum",
-                                        "ClaSuperclass",
-                                        "ClaClass",
-                                        "ClaSubclass",
-                                        "ClaSuperorder",
-                                        "ClaOrder",
-                                        "ClaSuborder",
-                                        "ClaInfraorder",
-                                        "ClaSuperfamily",
-                                        "ClaFamily",
-                                        "ClaSubfamily",
-                                        "ClaGenus",
-                                        "ClaSubgenus",
-                                        "ClaSpecies",
-                                        "ClaSubspecies",
-                                        "AutAuthorString",
-                                        "ClaApplicableCode",
-                                        "comname=[ComName_tab,ComStatus_tab]"
+                                        "ExpExpeditionName",
+                                        "ColCollectionEventCode",
+                                        "ColCollectionMethod",
+                                        "ColDateVisitedFrom",
+                                        "ColDateVisitedTo",
+                                        "ColTimeVisitedFrom",
+                                        "ColTimeVisitedTo",
+                                        "AquDepthToMet",
+                                        "AquDepthFromMet",
+                                        "collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)"
                                     };
-                var moduleName = "etaxonomy";
 
                 using (var documentSession = _documentStore.OpenSession())
-                using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
+                using (var imuSession = _imuSessionProvider.CreateInstance("ecollectionevents"))
                 {
-                    // Check to see whether we need to run import, so grab the previous date run of any imports that utilize taxonomy.
+                    // Check to see whether we need to run import, so grab the earliest previous date run of any imports that utilize collection event.
                     var previousDateRun = documentSession
                         .Load<Application>(Constants.ApplicationId)
-                        .ImportStatuses.Where(x => x.ImportType.Contains(typeof(Species).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Specimen).Name, StringComparison.OrdinalIgnoreCase) || x.ImportType.Contains(typeof(Item).Name, StringComparison.OrdinalIgnoreCase))
+                        .ImportStatuses.Where(x => x.ImportType.Contains(typeof(Specimen).Name, StringComparison.OrdinalIgnoreCase))
                         .Select(x => x.PreviousDateRun)
                         .OrderBy(x => x)
                         .FirstOrDefault(x => x.HasValue);
@@ -88,14 +75,14 @@ namespace CollectionsOnline.Import.Imports
                     {
                         Log.Logger.Information("Import finished last time... skipping");
                         return;
-                    }                    
+                    }
 
                     // Check for existing cached results
-                    importCache = documentSession.Load<ImportCache>("importCaches/taxonomy");
+                    importCache = documentSession.Load<ImportCache>("importCaches/collectionevent");
                     if (importCache == null)
                     {
                         Log.Logger.Information("Caching {Name} results", GetType().Name);
-                        importCache = new ImportCache { Id = "importCaches/taxonomy" };
+                        importCache = new ImportCache { Id = "importCaches/collectionevent" };
 
                         var terms = new Terms();
                         terms.Add("AdmDateModified", previousDateRun.Value.ToString("MMM dd yyyy"), ">=");
@@ -138,7 +125,7 @@ namespace CollectionsOnline.Import.Imports
                 while (true)
                 {
                     using (var documentSession = _documentStore.OpenSession())
-                    using (var imuSession = _imuSessionProvider.CreateInstance(moduleName))
+                    using (var imuSession = _imuSessionProvider.CreateInstance("ecollectionevents"))
                     {
                         if (ImportCanceled())
                             return;
@@ -157,23 +144,44 @@ namespace CollectionsOnline.Import.Imports
 
                         var results = imuSession.Fetch("start", 0, -1, columns);
 
-                        Log.Logger.Debug("Fetched {RecordCount} taxonomy records from Imu", cachedResultBatch.Count);
+                        Log.Logger.Debug("Fetched {RecordCount} collection event records from Imu", cachedResultBatch.Count);
 
                         foreach (var row in results.Rows)
                         {
-                            // Update taxonomy on items, species and specimens
-                            _documentStore.DatabaseCommands.UpdateByIndex(
-                                "CombinedIndex",
-                                new IndexQuery { Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn")) },
-                                new[]
+                            var collectionEventIrn = long.Parse(row.GetString("irn"));
+
+                            var count = 0;
+                            while (true)
+                            {
+                                using (var associatedDocumentSession = _documentStore.OpenSession())
                                 {
-                                    new PatchRequest
+                                    if (ImportCanceled())
+                                        return;
+
+                                    // Find associated documents that utilize the media we are updating in order to update any denormalized references
+                                    var associatedDocumentBatch = associatedDocumentSession
+                                        .Query<object, CombinedIndex>()
+                                        .Where(x => ((CombinedIndexResult)x).CollectionEventIrn == collectionEventIrn)
+                                        .Skip(count)
+                                        .Take(Constants.DataBatchSize)
+                                        .ToList();
+
+                                    if (associatedDocumentBatch.Count == 0)
+                                        break;
+
+                                    foreach (var document in associatedDocumentBatch)
                                     {
-                                        Type = PatchCommandType.Set,
-                                        Name = "Taxonomy",
-                                        Value = RavenJObject.FromObject(_taxonomyFactory.Make(row))
+                                        var specimen = document as Specimen;
+
+                                        Log.Logger.Debug("Updating Collection Event on {DocumentId}", specimen.Id);
+                                        specimen.CollectionEvent = _collectionEventFactory.Make(row);
                                     }
-                                });
+
+                                    // Save any changes
+                                    associatedDocumentSession.SaveChanges();
+                                    count += associatedDocumentBatch.Count;
+                                }
+                            }
                         }
 
                         importStatus.CurrentImportCacheOffset += results.Count;
@@ -181,7 +189,7 @@ namespace CollectionsOnline.Import.Imports
                         Log.Logger.Information("{Name} import progress... {Offset}/{TotalResults}", GetType().Name, importStatus.CurrentImportCacheOffset, importCache.Irns.Count);
                         documentSession.SaveChanges();
                     }
-                }
+                }              
 
                 using (var documentSession = _documentStore.OpenSession())
                 {
@@ -195,6 +203,6 @@ namespace CollectionsOnline.Import.Imports
         public override int Order
         {
             get { return 10; }
-        }        
+        }
     }
 }

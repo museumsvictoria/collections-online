@@ -100,7 +100,6 @@ namespace CollectionsOnline.Import.Factories
             return null;
         }
 
-        //TODO : Move to own factory
         public string MakeScientificName(QualifierRankType qualifierRank, string qualifier, Taxonomy taxonomy)
         {
             string scientificName;

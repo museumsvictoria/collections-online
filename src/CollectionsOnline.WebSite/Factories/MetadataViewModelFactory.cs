@@ -181,8 +181,13 @@ namespace CollectionsOnline.WebSite.Factories
                                 specimen.Taxonomy.CommonName,
                                 specimen.Taxonomy.TaxonName
                             }.Concatenate(", "),
-                        specimen.Country,
-                        specimen.State
+                        (specimen.CollectionSite == null)
+                            ? null
+                            : new[]
+                            {
+                                specimen.CollectionSite.Country,
+                                specimen.CollectionSite.State
+                            }.Concatenate(", "),
                     }.Concatenate(", ");
 
             if (!string.IsNullOrWhiteSpace(metadata.Description))

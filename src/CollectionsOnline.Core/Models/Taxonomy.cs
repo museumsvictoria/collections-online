@@ -9,7 +9,7 @@ namespace CollectionsOnline.Core.Models
             InitializeCollections();
         }
 
-        public long Irn { get; set; }        
+        public long Irn { get; set; }
 
         public string Kingdom { get; set; }
 

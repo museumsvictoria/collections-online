@@ -352,61 +352,64 @@
                             <p>@Html.RenderAssociationDescription(association)</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.ExpeditionName))
+                    @if (Model.Specimen.CollectionEvent != null)
                     {
-                        <li>
-                            <h3>Expedition Name</h3>
-                            <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Specimen.ExpeditionName)">@Model.Specimen.ExpeditionName</a></p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectedBy))
-                    {
-                        <li>
-                            <h3>Collected By</h3>
-                            <p>@Model.Specimen.CollectedBy</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEventCode))
-                    {
-                        <li>
-                            <h3>Collection Event Code</h3>
-                            <p>@Model.Specimen.CollectionEventCode</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.SamplingMethod))
-                    {
-                        <li>
-                            <h3>Sampling Method</h3>
-                            <p>@Model.Specimen.SamplingMethod</p>
-                        </li>
-                    }
-                    @if (Model.Specimen.DateVisitedFrom.HasValue)
-                    {
-                        <li>
-                            <h3>Date Visited From</h3>
-                            <p>@Model.Specimen.DateVisitedFrom.Value.ToString(Model.Specimen.DateVisitedFrom.Value == Model.Specimen.DateVisitedFrom.Value.Date ? "d" : "g")</p>
-                        </li>
-                    }
-                    @if (Model.Specimen.DateVisitedTo.HasValue)
-                    {
-                        <li>
-                            <h3>Date Visited To</h3>
-                            <p>@Model.Specimen.DateVisitedTo.Value.ToString(Model.Specimen.DateVisitedTo.Value == Model.Specimen.DateVisitedTo.Value.Date ? "d" : "g")</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.DepthTo))
-                    {
-                        <li>
-                            <h3>Depth To (m)</h3>
-                            <p>@Model.Specimen.DepthTo</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.DepthFrom))
-                    {
-                        <li>
-                            <h3>Depth From (m)</h3>
-                            <p>@Model.Specimen.DepthFrom</p>
-                        </li>
+                        if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEvent.ExpeditionName))
+                        {
+                            <li>
+                                <h3>Expedition Name</h3>
+                                <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Specimen.CollectionEvent.ExpeditionName)">@Model.Specimen.CollectionEvent.ExpeditionName</a></p>
+                            </li>
+                        }
+                        if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEvent.CollectedBy))
+                        {
+                            <li>
+                                <h3>Collected By</h3>
+                                <p>@Model.Specimen.CollectionEvent.CollectedBy</p>
+                            </li>
+                        }
+                        if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEvent.CollectionEventCode))
+                        {
+                            <li>
+                                <h3>Collection Event Code</h3>
+                                <p>@Model.Specimen.CollectionEvent.CollectionEventCode</p>
+                            </li>
+                        }
+                        if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEvent.SamplingMethod))
+                        {
+                            <li>
+                                <h3>Sampling Method</h3>
+                                <p>@Model.Specimen.CollectionEvent.SamplingMethod</p>
+                            </li>
+                        }
+                        if (Model.Specimen.CollectionEvent.DateVisitedFrom.HasValue)
+                        {
+                            <li>
+                                <h3>Date Visited From</h3>
+                                <p>@Model.Specimen.CollectionEvent.DateVisitedFrom.Value.ToString(Model.Specimen.CollectionEvent.DateVisitedFrom.Value == Model.Specimen.CollectionEvent.DateVisitedFrom.Value.Date ? "d" : "g")</p>
+                            </li>
+                        }
+                        if (Model.Specimen.CollectionEvent.DateVisitedTo.HasValue)
+                        {
+                            <li>
+                                <h3>Date Visited To</h3>
+                                <p>@Model.Specimen.CollectionEvent.DateVisitedTo.Value.ToString(Model.Specimen.CollectionEvent.DateVisitedTo.Value == Model.Specimen.CollectionEvent.DateVisitedTo.Value.Date ? "d" : "g")</p>
+                            </li>
+                        }
+                        if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEvent.DepthTo))
+                        {
+                            <li>
+                                <h3>Depth To (m)</h3>
+                                <p>@Model.Specimen.CollectionEvent.DepthTo</p>
+                            </li>
+                        }
+                        if (!string.IsNullOrWhiteSpace(Model.Specimen.CollectionEvent.DepthFrom))
+                        {
+                            <li>
+                                <h3>Depth From (m)</h3>
+                                <p>@Model.Specimen.CollectionEvent.DepthFrom</p>
+                            </li>
+                        }
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.Category))
                     {

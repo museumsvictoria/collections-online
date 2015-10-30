@@ -249,6 +249,8 @@
     <Compile Include="Models\Api\SearchApiInputModel.cs" />
     <Compile Include="Models\Api\SpecimenApiViewModel.cs" />
     <Compile Include="Models\Api\SpeciesApiViewModel.cs" />
+    <Compile Include="Models\Api\CollectionSiteApiViewModel.cs" />
+    <Compile Include="Models\Api\CollectionEventApiViewModel.cs" />
     <Compile Include="Models\Api\TaxonomyApiViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Models\CollectionIndexViewModel.cs" />

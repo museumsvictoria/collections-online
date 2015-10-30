@@ -17,6 +17,8 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     TaxonomyIrn = 0,
+                    CollectionEventIrn = 0,
+                    CollectionSiteIrn = 0,
 
                     // Content fields
                     Id = article.Id,
@@ -72,6 +74,8 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     TaxonomyIrn = item.Taxonomy.Irn,
+                    CollectionEventIrn = 0,
+                    CollectionSiteIrn = 0,
 
                     // Content fields
                     Id = item.Id,
@@ -106,7 +110,7 @@ namespace CollectionsOnline.Core.Indexes
                     DisplayLocation = item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
-                    SpeciesType = (string)null,                    
+                    SpeciesType = (string)null,
                     SpecimenScientificGroup = (string)null,
                     ArticleType = new object[] { },
                     
@@ -181,6 +185,8 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     TaxonomyIrn = species.Taxonomy.Irn,
+                    CollectionEventIrn = 0,
+                    CollectionSiteIrn = 0,
 
                     // Content fields
                     Id = species.Id,
@@ -264,6 +270,8 @@ namespace CollectionsOnline.Core.Indexes
                 {
                     // Update fields
                     TaxonomyIrn = specimen.Taxonomy.Irn,
+                    CollectionEventIrn = specimen.CollectionEvent.Irn,
+                    CollectionSiteIrn = specimen.CollectionSite.Irn,
 
                     // Content fields
                     Id = specimen.Id,
@@ -284,12 +292,26 @@ namespace CollectionsOnline.Core.Indexes
                                 specimen.Taxonomy.Subfamily, specimen.Taxonomy.CommonName, specimen.Taxonomy.OtherCommonNames
                             }
                             : null,
-                        specimen.TypeStatus, specimen.ExpeditionName, specimen.CollectionEventCode,
-                        specimen.SamplingMethod, specimen.CollectedBy, specimen.SiteCode, specimen.Ocean, specimen.Continent,
-                        specimen.Country, specimen.State, specimen.District, specimen.Town, specimen.NearestNamedPlace,
-                        specimen.PreciseLocation, specimen.GeologyEra, specimen.GeologyPeriod, specimen.GeologyEpoch,
-                        specimen.GeologyStage, specimen.GeologyGroup, specimen.GeologyFormation, specimen.GeologyMember,
-                        specimen.GeologyRockType, specimen.PetrologyRockClass,  specimen.PetrologyRockGroup, specimen.PetrologyRockName,
+                        specimen.TypeStatus, 
+                        (specimen.CollectionEvent != null)
+                            ? new object[]
+                            {
+                                specimen.CollectionEvent.ExpeditionName, specimen.CollectionEvent.CollectionEventCode,
+                                specimen.CollectionEvent.SamplingMethod, specimen.CollectionEvent.CollectedBy
+                            }
+                            : null,
+                        (specimen.CollectionSite != null)
+                            ? new object[]
+                            {
+                                specimen.CollectionSite.SiteCode, specimen.CollectionSite.Ocean, specimen.CollectionSite.Continent,
+                                specimen.CollectionSite.Country, specimen.CollectionSite.State, specimen.CollectionSite.District, 
+                                specimen.CollectionSite.Town, specimen.CollectionSite.NearestNamedPlace, specimen.CollectionSite.PreciseLocation, 
+                                specimen.CollectionSite.GeologyEra, specimen.CollectionSite.GeologyPeriod, specimen.CollectionSite.GeologyEpoch,
+                                specimen.CollectionSite.GeologyStage, specimen.CollectionSite.GeologyGroup, specimen.CollectionSite.GeologyFormation, 
+                                specimen.CollectionSite.GeologyMember, specimen.CollectionSite.GeologyRockType,
+                            }
+                            : null,
+                        specimen.PetrologyRockClass,  specimen.PetrologyRockGroup, specimen.PetrologyRockName,
                         specimen.PetrologyMineralsPresent, specimen.MineralogySpecies, specimen.MineralogyVariety, specimen.MineralogyGroup,
                         specimen.MineralogyClass, specimen.MineralogyAssociatedMatrix, specimen.MineralogyTypeOfType, specimen.MeteoritesName,
                         specimen.MeteoritesClass, specimen.MeteoritesGroup, specimen.MeteoritesType, specimen.MeteoritesMinerals, 
@@ -301,10 +323,11 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Sort fields
                     Quality =
-                        ((specimen.DateVisitedFrom.HasValue || !string.IsNullOrWhiteSpace(specimen.CollectedBy) || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
-                        ((specimen.Latitudes.Any() || specimen.Longitudes.Any()) ? 1 : 0) +
+                        ((specimen.CollectionEvent != null || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
+                        ((specimen.CollectionSite != null) ? 1 : 0) +
                         Math.Log(specimen.Media.Count + 2, 2) +
-                        ((specimen.Taxonomy != null) ? 1 : 0),
+                        ((specimen.Taxonomy != null) ? 1 : 0) +
+                        ((!string.IsNullOrWhiteSpace(specimen.ObjectSummary)) ? 2 : 0),
                     DateModified = specimen.DateModified.Date,
 
                     // Facet fields
@@ -320,18 +343,19 @@ namespace CollectionsOnline.Core.Indexes
                     ArticleType = new object[] { },
 
                     // Term fields
-                    Keyword = new object[] { specimen.Keywords, specimen.ExpeditionName },
+                    Keyword = new object[] { specimen.Keywords, specimen.CollectionEvent != null ? specimen.CollectionEvent.ExpeditionName : null },
                     Locality = new object[] { specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Locality)).Select(x => x.Locality), 
                         specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
                         specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
                         specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country),
-                        specimen.Ocean,
-                        specimen.Continent,
-                        specimen.Country,
-                        specimen.State,
-                        specimen.District,
-                        specimen.Town,
-                        specimen.NearestNamedPlace,
+                        (specimen.CollectionSite != null)
+                            ? new object[]
+                            {
+                                specimen.CollectionSite.Ocean, specimen.CollectionSite.Continent, specimen.CollectionSite.Country,
+                                specimen.CollectionSite.State, specimen.CollectionSite.District, specimen.CollectionSite.Town, 
+                                specimen.CollectionSite.NearestNamedPlace
+                            }
+                            : null,
                         specimen.TektitesLocalStrewnfield, 
                         specimen.TektitesGlobalStrewnfield },
                     Collection = new object[] { specimen.CollectionNames, specimen.Discipline },
@@ -396,8 +420,6 @@ namespace CollectionsOnline.Core.Indexes
 
             Analyzers.Add(x => x.Content, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
 
-            //Suggestion(x => x.Content);
-
             TermVector(x => x.Content, FieldTermVector.Yes);
         }
     }
@@ -406,6 +428,10 @@ namespace CollectionsOnline.Core.Indexes
     {
         /* Update fields */
         public long TaxonomyIrn { get; set; }
+
+        public long CollectionEventIrn { get; set; }
+
+        public long CollectionSiteIrn { get; set; }
 
         /* Content/Order fields */
         public string Id { get; set; }

@@ -95,12 +95,14 @@
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\Collection.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\CollectionSite.cs" />
     <Compile Include="Models\EmuSummary.cs" />
     <Compile Include="Models\FileDerivativeType.cs" />
     <Compile Include="Models\ImportCache.cs" />
     <Compile Include="Models\MediaFile.cs" />
     <Compile Include="Models\QualifierRankType.cs" />
     <Compile Include="Models\Storage.cs" />
+    <Compile Include="Models\CollectionEvent.cs" />
     <Compile Include="Models\Taxonomy.cs" />
     <Compile Include="Models\MuseumLocation.cs" />
     <Compile Include="Models\Dimension.cs" />

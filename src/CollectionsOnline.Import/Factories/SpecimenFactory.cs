@@ -4,9 +4,7 @@ using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
-using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
 using ImageProcessor.Imaging;
 using IMu;
@@ -18,26 +16,29 @@ namespace CollectionsOnline.Import.Factories
 {
     public class SpecimenFactory : IEmuAggregateRootFactory<Specimen>
     {
-        private readonly ISlugFactory _slugFactory;
         private readonly IPartiesNameFactory _partiesNameFactory;
         private readonly ITaxonomyFactory _taxonomyFactory;
+        private readonly ICollectionEventFactory _collectionEventFactory;
+        private readonly ICollectionSiteFactory _collectionSiteFactory;
         private readonly IMediaFactory _mediaFactory;
         private readonly IAssociationFactory _associationFactory;
         private readonly IMuseumLocationFactory _museumLocationFactory;
         private readonly ISummaryFactory _summaryFactory;
 
         public SpecimenFactory(
-            ISlugFactory slugFactory,
             IPartiesNameFactory partiesNameFactory,
             ITaxonomyFactory taxonomyFactory,
+            ICollectionEventFactory collectionEventFactory,
+            ICollectionSiteFactory collectionSiteFactory,
             IMediaFactory mediaFactory,
             IAssociationFactory associationFactory,
             IMuseumLocationFactory museumLocationFactory,
             ISummaryFactory summaryFactory)
         {
-            _slugFactory = slugFactory;
             _partiesNameFactory = partiesNameFactory;
             _taxonomyFactory = taxonomyFactory;
+            _collectionEventFactory = collectionEventFactory;
+            _collectionSiteFactory = collectionSiteFactory;
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
             _museumLocationFactory = museumLocationFactory;
@@ -63,13 +64,13 @@ namespace CollectionsOnline.Import.Factories
                         "ColTypeOfItem",
                         "AdmDateModified",
                         "AdmTimeModified",
-                        "colevent=ColCollectionEventRef.(ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedFrom,ColDateVisitedTo,ColTimeVisitedFrom,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab],AdmPublishWebNoPassword),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName))",
+                        "colevent=ColCollectionEventRef.(irn,ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedFrom,ColDateVisitedTo,ColTimeVisitedFrom,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab],AdmPublishWebNoPassword),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName))",
                         "SpeNoSpecimens",
                         "BirTotalClutchSize",
                         "SpeSex_tab",
                         "SpeStageAge_tab",
                         "storage=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab]",
-                        "site=SitSiteRef.(SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab],AdmPublishWebNoPassword)",
+                        "site=SitSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab],AdmPublishWebNoPassword)",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab],relatedspecies=<enarratives:TaxTaxaRef_tab>.(irn,DetPurpose_tab))]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
@@ -292,118 +293,14 @@ namespace CollectionsOnline.Import.Factories
 
             // Collection Event
             var collectionEventMap = map.GetMap("colevent");
-            if (collectionEventMap != null)
-            {
-                specimen.ExpeditionName = collectionEventMap.GetEncodedString("ExpExpeditionName");
-                specimen.CollectionEventCode = collectionEventMap.GetEncodedString("ColCollectionEventCode");
-                specimen.SamplingMethod = collectionEventMap.GetEncodedString("ColCollectionMethod");
-
-                DateTime dateVisitedFrom;
-                if (DateTime.TryParseExact(collectionEventMap.GetEncodedString("ColDateVisitedFrom"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out dateVisitedFrom))
-                {
-                    TimeSpan timeVisitedFrom;
-                    if (TimeSpan.TryParseExact(collectionEventMap.GetEncodedString("ColTimeVisitedFrom"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedFrom))
-                    {
-                        dateVisitedFrom += timeVisitedFrom;
-                    }
-
-                    specimen.DateVisitedFrom = dateVisitedFrom;
-                }
-
-                DateTime dateVisitedTo;
-                if (DateTime.TryParseExact(collectionEventMap.GetEncodedString("ColDateVisitedTo"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out dateVisitedTo))
-                {
-                    TimeSpan timeVisitedTo;
-                    if (TimeSpan.TryParseExact(collectionEventMap.GetEncodedString("ColTimeVisitedTo"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedTo))
-                    {
-                        dateVisitedTo += timeVisitedTo;
-                    }
-
-                    specimen.DateVisitedTo = dateVisitedTo;
-                }
-
-                specimen.DepthTo = collectionEventMap.GetEncodedString("AquDepthToMet");
-                specimen.DepthFrom = collectionEventMap.GetEncodedString("AquDepthFromMet");
-
-                specimen.CollectedBy = collectionEventMap.GetMaps("collectors").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate(", ");
-            }
+            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap);
 
             // Sites
-            var siteMap = map.GetMap("site");
-            if (siteMap == null && collectionEventMap != null)
-                siteMap = collectionEventMap.GetMap("site");
+            var collectionSiteMap = map.GetMap("site");
+            if (collectionSiteMap == null && collectionEventMap != null)
+                collectionSiteMap = collectionEventMap.GetMap("site");
 
-            if (siteMap != null &&
-                !((string.Equals(specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(specimen.ScientificGroup, "Geology", StringComparison.OrdinalIgnoreCase))
-                && string.Equals(siteMap.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase)))
-            {
-                if (!string.Equals(specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase))
-                {
-                    // Site Code
-                    specimen.SiteCode = new[]
-                    {
-                        siteMap.GetEncodedString("SitSiteCode"),
-                        siteMap.GetEncodedString("SitSiteNumber")
-                    }.Concatenate("");
-
-                    // Precise locality
-                    specimen.PreciseLocation = siteMap.GetEncodedString("LocPreciseLocation");
-                    specimen.MinimumElevation = siteMap.GetEncodedString("LocElevationASLFromMt");
-                    specimen.MaximumElevation = siteMap.GetEncodedString("LocElevationASLToMt");
-                }
-
-                // Lat/Long
-                var latlongMap = siteMap.GetMaps("latlong").FirstOrDefault();
-                if (latlongMap != null &&
-                    !(string.Equals(specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(specimen.ScientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)))
-                {
-                    var decimalLatitudes = (object[])latlongMap["LatLatitudeDecimal_nesttab"];
-                    if (decimalLatitudes != null && decimalLatitudes.Any(x => x != null))
-                        specimen.Latitudes.AddRange(decimalLatitudes.Where(x => x != null).Select(x => x.ToString()));
-
-                    var decimalLongitudes = ((object[])latlongMap["LatLongitudeDecimal_nesttab"]);
-                    if (decimalLongitudes != null && decimalLongitudes.Any(x => x != null))
-                        specimen.Longitudes.AddRange(decimalLongitudes.Where(x => x != null).Select(x => x.ToString()));
-
-                    specimen.GeodeticDatum = (string.IsNullOrWhiteSpace(latlongMap.GetEncodedString("LatDatum_tab"))) ? "WGS84" : latlongMap.GetEncodedString("LatDatum_tab");
-                    specimen.SiteRadius = latlongMap.GetEncodedString("LatRadiusNumeric_tab");
-                    specimen.GeoreferenceBy = _partiesNameFactory.Make(latlongMap.GetMap("determinedBy"));
-
-                    DateTime georeferenceDate;
-                    if (DateTime.TryParseExact(latlongMap.GetEncodedString("LatDetDate0"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out georeferenceDate))
-                        specimen.GeoreferenceDate = georeferenceDate.ToString("s");
-
-                    specimen.GeoreferenceProtocol = latlongMap.GetEncodedString("LatLatLongDetermination_tab");
-                    specimen.GeoreferenceSource = latlongMap.GetEncodedString("LatDetSource_tab");
-                }
-
-                // Locality
-                var geoMap = siteMap.GetMaps("geo").FirstOrDefault();
-                if (geoMap != null)
-                {
-                    specimen.Ocean = geoMap.GetEncodedString("LocOcean_tab");
-                    specimen.Continent = geoMap.GetEncodedString("LocContinent_tab");
-                    specimen.Country = geoMap.GetEncodedString("LocCountry_tab");
-                    specimen.State = geoMap.GetEncodedString("LocProvinceStateTerritory_tab");
-                    specimen.District = geoMap.GetEncodedString("LocDistrictCountyShire_tab");
-                    specimen.Town = geoMap.GetEncodedString("LocTownship_tab");
-                    specimen.NearestNamedPlace = geoMap.GetEncodedString("LocNearestNamedPlace_tab");
-                }
-
-                // Geology site fields
-                if (!string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && 
-                    !string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase))
-                {
-                    specimen.GeologyEra = siteMap.GetEncodedString("EraEra");
-                    specimen.GeologyPeriod = siteMap.GetEncodedString("EraAge1");
-                    specimen.GeologyEpoch = siteMap.GetEncodedString("EraAge2");
-                    specimen.GeologyStage = siteMap.GetEncodedString("EraMvStage");
-                    specimen.GeologyGroup = siteMap.GetEncodedStrings("EraMvGroup_tab").Concatenate(", ");
-                    specimen.GeologyFormation = siteMap.GetEncodedStrings("EraMvRockUnit_tab").Concatenate(", ");
-                    specimen.GeologyMember = siteMap.GetEncodedStrings("EraMvMember_tab").Concatenate(", ");
-                    specimen.GeologyRockType = siteMap.GetEncodedStrings("EraLithology_tab").Concatenate(", ");
-                }
-            }
+            specimen.CollectionSite = _collectionSiteFactory.Make(collectionSiteMap, specimen.Discipline, specimen.ScientificGroup);
                 
             // Discipline specific fields
             // Palaeontology
@@ -524,14 +421,6 @@ namespace CollectionsOnline.Import.Factories
 
             // Build summary
             specimen.Summary = _summaryFactory.Make(specimen);
-
-            // Build Associated date
-            if (specimen.DateVisitedFrom.HasValue)
-            {
-                var yearSpan = NaturalDateConverter.ConvertToYearSpan(specimen.DateVisitedFrom.Value.Year.ToString(CultureInfo.InvariantCulture));
-                if(!string.IsNullOrWhiteSpace(yearSpan))
-                    specimen.AssociatedDate = yearSpan;
-            }
 
             // Display Title 
             // TODO: Move to display title factory and encapsulate entire process

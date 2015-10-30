@@ -14,8 +14,6 @@ namespace CollectionsOnline.Core.Models
 
         public string Summary { get; set; }
 
-        public string AssociatedDate { get; set; }
-
         public string ThumbnailUri { get; set; }
 
         public string DisplayTitle { get; set; }
@@ -90,89 +88,13 @@ namespace CollectionsOnline.Core.Models
 
         public Taxonomy Taxonomy { get; set; }
 
-        public string ExpeditionName { get; set; }
+        public CollectionEvent CollectionEvent { get; set; }
 
-        public string CollectionEventCode { get; set; }
-
-        public string SamplingMethod { get; set; }
-
-        public DateTime? DateVisitedFrom { get; set; }
-
-        public DateTime? DateVisitedTo { get; set; }
-
-        public string DepthTo { get; set; }
-
-        public string DepthFrom { get; set; }
-
-        public string CollectedBy { get; set; }
-
-        public string SiteCode { get; set; }
-
-        public string Ocean { get; set; }
-
-        public string Continent { get; set; }
-
-        public string Country { get; set; }
-
-        public string State { get; set; }
-
-        public string District { get; set; }
-
-        public string Town { get; set; }
-
-        public string NearestNamedPlace { get; set; }
-
-        public string PreciseLocation { get; set; }
-
-        public string MinimumElevation { get; set; }
-
-        public string MaximumElevation { get; set; }
-
-        public IList<string> Latitudes { get; set; }
-
-        public IList<string> Longitudes { get; set; }
-
-        public string GeodeticDatum { get; set; }
-
-        public string SiteRadius { get; set; }
-
-        public string GeoreferenceBy { get; set; }
-
-        public string GeoreferenceDate { get; set; }
-
-        public string GeoreferenceProtocol { get; set; }
-
-        public string GeoreferenceSource { get; set; }
-
-        #region Geology
-
-        public string GeologyEra { get; set; }
-
-        public string GeologyPeriod { get; set; }
-
-        public string GeologyEpoch { get; set; }
-
-        public string GeologyStage { get; set; }
-
-        public string GeologyGroup { get; set; }
-
-        public string GeologyFormation { get; set; }
-
-        public string GeologyMember { get; set; }
-
-        public string GeologyRockType { get; set; }
-
-        #endregion
-
-        #region Palaeontology
+        public CollectionSite CollectionSite { get; set; }
 
         public string PalaeontologyDateCollectedFrom { get; set; }
 
         public string PalaeontologyDateCollectedTo { get; set; }
-
-        #endregion
-
-        #region Mineralogy
 
         public string MineralogySpecies { get; set; }
 
@@ -187,10 +109,6 @@ namespace CollectionsOnline.Core.Models
         public string MineralogyType { get; set; }
 
         public string MineralogyTypeOfType { get; set; }
-
-        #endregion
-
-        #region Meteorites
 
         public string MeteoritesName { get; set; }
 
@@ -210,10 +128,6 @@ namespace CollectionsOnline.Core.Models
 
         public string MeteoritesDateFound { get; set; }
 
-        #endregion
-
-        #region Tektites
-
         public string TektitesName { get; set; }
 
         public string TektitesClassification { get; set; }
@@ -224,10 +138,6 @@ namespace CollectionsOnline.Core.Models
 
         public string TektitesGlobalStrewnfield { get; set; }
 
-        #endregion
-
-        #region Petrology
-
         public string PetrologyRockClass { get; set; }
 
         public string PetrologyRockGroup { get; set; }
@@ -237,8 +147,6 @@ namespace CollectionsOnline.Core.Models
         public string PetrologyRockDescription { get; set; }
 
         public string PetrologyMineralsPresent { get; set; }
-
-        #endregion
 
         private void InitializeCollections()
         {
@@ -253,8 +161,6 @@ namespace CollectionsOnline.Core.Models
             Keywords = new List<string>();
             Media = new List<Media>();
             Storages = new List<Storage>();
-            Latitudes = new List<string>();
-            Longitudes = new List<string>();
         }
     }
 }

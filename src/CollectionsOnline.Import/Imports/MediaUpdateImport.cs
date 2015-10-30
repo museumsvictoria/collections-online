@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Import.Extensions;
@@ -76,7 +75,10 @@ namespace CollectionsOnline.Import.Imports
 
                     // Exit current import if it has never run.
                     if (!previousDateRun.HasValue)
+                    {
+                        Log.Logger.Information("Dependant imports have never been run... skipping");
                         return;
+                    }
 
                     // Check for existing import in case we need to resume.
                     var importStatus = documentSession.Load<Application>(Constants.ApplicationId).GetImportStatus(GetType().ToString());

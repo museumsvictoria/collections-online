@@ -158,16 +158,20 @@
   <ItemGroup>
     <Compile Include="Builders\SummaryBuilder.cs" />
     <Compile Include="Extensions\MapExtensions.cs" />
+    <Compile Include="Factories\CollectionSiteFactory.cs" />
     <Compile Include="Factories\CollectionFactory.cs" />
     <Compile Include="Factories\FileMediaFactory.cs" />
+    <Compile Include="Factories\ICollectionSiteFactory.cs" />
     <Compile Include="Factories\IEmuAggregateRootFactory.cs" />
     <Compile Include="Factories\IAssociationFactory.cs" />
     <Compile Include="Factories\IAudioMediaFactory.cs" />
     <Compile Include="Factories\IFileMediaFactory.cs" />
     <Compile Include="Factories\AudioMediaFactory.cs" />
     <Compile Include="Factories\ISummaryFactory.cs" />
+    <Compile Include="Factories\ICollectionEventFactory.cs" />
     <Compile Include="Factories\IVideoMediaFactory.cs" />
     <Compile Include="Factories\SummaryFactory.cs" />
+    <Compile Include="Factories\CollectionEventFactory.cs" />
     <Compile Include="Factories\VideoMediaFactory.cs" />
     <Compile Include="Factories\IMuseumLocationFactory.cs" />
     <Compile Include="Factories\IMediaFactory.cs" />
@@ -181,8 +185,10 @@
     <Compile Include="Factories\SpecimenFactory.cs" />
     <Compile Include="Factories\SpeciesFactory.cs" />
     <Compile Include="Factories\ItemFactory.cs" />
+    <Compile Include="Imports\CollectionSiteUpdateImport.cs" />
     <Compile Include="Imports\ImuImportBase.cs" />
     <Compile Include="Imports\IImport.cs" />
+    <Compile Include="Imports\CollectionEventUpdateImport.cs" />
     <Compile Include="Imports\SitemapImport.cs" />
     <Compile Include="Imports\RelationshipImport.cs" />
     <Compile Include="Imports\MediaUpdateImport.cs" />
