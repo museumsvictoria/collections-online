@@ -1,5 +1,14 @@
 User-agent: *
 Disallow: /search
+Disallow: /search.php
+Disallow: /browser.php
+Disallow: /results.php
+Disallow: /resultsns.php
+Disallow: /results-browse.php
+Disallow: /object.php
+Disallow: /imagedisplay.php
+Disallow: /webmedia.php
+Disallow: /browser_mapper.php
 Allow: /
 
 Sitemap: http://collections.museumvictoria.com.au/sitemap.xml
