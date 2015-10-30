@@ -181,7 +181,7 @@ namespace CollectionsOnline.Import.Factories
                     .Load<Application>(Constants.ApplicationId)
                     .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
                     .Select(x => x.PreviousDateRun)
-                    .Any(x => x.HasValue);
+                    .All(x => x.HasValue);
 
                 if (allImportsComplete && result == null)
                     return false;

@@ -13,7 +13,6 @@ namespace CollectionsOnline.Import.Factories
             var summaryBuilder = new SummaryBuilder();
 
             return summaryBuilder
-                .AddHeading(article.Types.Concatenate(", "))
                 .AddText(article.ContentText.RemoveLineBreaks())
                 .ToString();
         }
@@ -68,10 +67,10 @@ namespace CollectionsOnline.Import.Factories
                             specimen.Taxonomy.Class,
                             specimen.Taxonomy.Order
                         }.Concatenate(", "))
-                    .AddField("Collected", new[]
+                    .AddField("Collected", (specimen.CollectionSite == null) ? null : new[]
                         {
-                            specimen.Country,
-                            specimen.State
+                            specimen.CollectionSite.Country,
+                            specimen.CollectionSite.State
                         }.Concatenate(", "));
             }
 

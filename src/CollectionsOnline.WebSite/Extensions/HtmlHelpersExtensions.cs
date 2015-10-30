@@ -51,7 +51,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var article = document as Article;
 
                 sb.Append(BuildAuthorsCitation(article.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2} Accessed {3}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}<br/>Accessed {3}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Species)
             {
@@ -68,18 +68,18 @@ namespace CollectionsOnline.WebSite.Extensions
                         sb.Append(string.Format("{0} ", species.Taxonomy.CommonName));
                 }
 
-                sb.Append(string.Format("in Museum Victoria Collections {0} Accessed {1}", currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("in Museum Victoria Collections {0}<br/>Accessed {1}", currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Item || document is Specimen)
             {
-                sb.Append(string.Format("Museum Victoria Collections {0} Accessed {1}", currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("Museum Victoria Collections {0}<br/>Accessed {1}", currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
             else if(document is Collection)
             {
                 var collection = document as Collection;
 
                 sb.Append(BuildAuthorsCitation(collection.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2} Accessed {3}", collection.DateModified.Year, collection.Title, currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}<br/>Accessed {3}", collection.DateModified.Year, collection.Title, currentUrl, DateTime.UtcNow.ToString("dd MMMM yyyy")));
             }
 
             return new NonEncodedHtmlString(sb.ToString());
@@ -148,21 +148,22 @@ namespace CollectionsOnline.WebSite.Extensions
 
             for (int i = 0; i < authors.Count; i++)
             {
-                if (authors[i].FirstName != null && authors[i].LastName != null)
+                var author = new[]
                 {
-                    sb.Append(string.Format("{0}, {1}.", authors[i].LastName, authors[i].FirstName.Substring(0, 1)));
+                    authors[i].LastName,
+                    (!string.IsNullOrWhiteSpace(authors[i].FirstName)) ? authors[i].FirstName.Substring(0, 1) : null
+                }.Concatenate(", ");
+                
+                author = !string.IsNullOrWhiteSpace(author) ? string.Format("{0}.", author) : authors[i].FullName;
+
+                if (!string.IsNullOrWhiteSpace(author))
+                {
+                    sb.Append(author);
 
                     if (i < authors.Count - 1)
-                    {
-                        sb.Append(", ");
-
-                        if (i == authors.Count - 2)
-                            sb.Append(" and ");
-                    }
+                        sb.Append(i == authors.Count - 2 ? " and " : ", ");
                     else
-                    {
                         sb.Append(" ");
-                    }
                 }
             }
 
