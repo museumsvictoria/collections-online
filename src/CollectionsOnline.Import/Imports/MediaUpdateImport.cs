@@ -164,6 +164,9 @@ namespace CollectionsOnline.Import.Imports
                         {
                             var media = _mediaFactory.Make(row);
 
+                            // Dont patch and documents if media is null
+                            if (media == null) continue;
+
                             // Document media patch request
                             var mediaDocumentIds = new List<string>();
                             mediaDocumentIds.AddRange(row
