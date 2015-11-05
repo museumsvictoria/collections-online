@@ -10,8 +10,7 @@ namespace CollectionsOnline.WebSite.Modules
         public DevelopersModule(
             IRouteCacheProvider routeCacheProvider,
             IDevelopersViewModelFactory developersViewModelFactory,
-            IMetadataViewModelFactory metadataViewModelFactory)
-            : base(Constants.CurrentApiVersionPathSegment)
+            IMetadataViewModelFactory metadataViewModelFactory)            
         {
             Get["developers-index", "/developers"] = parameters =>
             {

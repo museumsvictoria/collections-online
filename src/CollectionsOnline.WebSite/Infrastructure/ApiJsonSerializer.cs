@@ -8,7 +8,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
         public ApiJsonSerializer()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver();
-            Formatting = Formatting.Indented;
+            Formatting = Formatting.None;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                 {
                     Name = description.Name,
                     Method = description.Method,
-                    Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                    Path = description.Path,
                     Description = "Search the collection. All parameters used should be UTF-8 URL-Encoded strings.",
                     Parameters = new[]
                     {
@@ -270,7 +270,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         { HttpStatusCode.OK, "A bunch of things were able to be searched ok." }
                     },
-                    ExampleUrl = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                    ExampleUrl = description.Path,
                 };
             };
         }

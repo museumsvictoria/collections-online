@@ -22,7 +22,7 @@ namespace CollectionsOnline.Tests.Website.Modules.Api
                 var browser = new Browser(new WebsiteBootstrapper(documentStore));
 
                 // When
-                var result = browser.Get(string.Format("/{0}{1}/species", Constants.ApiPathBase, Constants.CurrentApiVersionPath), with => with.HttpRequest());
+                var result = browser.Get(string.Format("{0}/species", Constants.ApiPathBase), with => with.HttpRequest());
 
                 // Then
                 result.Body.DeserializeJson<IEnumerable<Species>>().Count().ShouldBe(5);
@@ -38,7 +38,7 @@ namespace CollectionsOnline.Tests.Website.Modules.Api
                 var browser = new Browser(new WebsiteBootstrapper(documentStore));
 
                 // When
-                var result = browser.Get(string.Format("/{0}{1}/species/6", Constants.ApiPathBase, Constants.CurrentApiVersionPath), with => with.HttpRequest());
+                var result = browser.Get(string.Format("{0}/species/6", Constants.ApiPathBase), with => with.HttpRequest());
 
                 // Then
                 result.StatusCode.ShouldBe(HttpStatusCode.NotFound);

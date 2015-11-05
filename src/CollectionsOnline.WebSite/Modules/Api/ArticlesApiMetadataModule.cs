@@ -30,14 +30,14 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         Name = description.Name,
                         Method = description.Method,
-                        Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        Path = description.Path,
                         Description = "Returns a bunch of articles.",
                         StatusCodes = new Dictionary<HttpStatusCode, string>
                         {
                             {HttpStatusCode.OK, "A bunch of articles were able to be retrieved ok."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(new[] { Mapper.Map<Article, ArticleApiViewModel>(sampleArticle) }, Formatting.Indented),
-                        ExampleUrl = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty)
+                        ExampleUrl = description.Path
                     };
                 };
 
@@ -47,7 +47,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         Name = description.Name,
                         Method = description.Method,
-                        Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        Path = description.Path,
                         Description = "Returns a single article by Id.",
                         Parameters = new[]
                         {
@@ -64,7 +64,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.NotFound, "The article could not be found and probably does not exist."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Article, ArticleApiViewModel>(sampleArticle), Formatting.Indented),
-                        ExampleUrl = (sampleArticle != null) ? string.Format("/{0}/{1}", Constants.ApiPathBase, sampleArticle.Id) : null,
+                        ExampleUrl = (sampleArticle != null) ? string.Format("{0}/{1}", Constants.ApiPathBase, sampleArticle.Id) : null,
                     };
                 };
             }

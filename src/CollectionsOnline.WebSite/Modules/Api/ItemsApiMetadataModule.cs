@@ -30,14 +30,14 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         Name = description.Name,
                         Method = description.Method,
-                        Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        Path = description.Path,
                         Description = "Returns a bunch of items.",
                         StatusCodes = new Dictionary<HttpStatusCode, string>
                         {
                             {HttpStatusCode.OK, "A bunch of items were able to be retrieved ok."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(new[] { Mapper.Map<Item, ItemApiViewModel>(sampleItem) }, Formatting.Indented),
-                        ExampleUrl = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        ExampleUrl = description.Path,
                     };
                 };
 
@@ -47,7 +47,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         Name = description.Name,
                         Method = description.Method,
-                        Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        Path = description.Path,
                         Description = "Returns a single item by Id.",
                         Parameters = new[]
                         {
@@ -64,7 +64,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.NotFound, "The item could not be found and probably does not exist."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Item, ItemApiViewModel>(sampleItem), Formatting.Indented),
-                        ExampleUrl = (sampleItem != null) ? string.Format("/{0}/{1}", Constants.ApiPathBase, sampleItem.Id) : null,
+                        ExampleUrl = (sampleItem != null) ? string.Format("{0}/{1}", Constants.ApiPathBase, sampleItem.Id) : null,
                     };
                 };
             }

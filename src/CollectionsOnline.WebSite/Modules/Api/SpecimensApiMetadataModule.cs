@@ -30,14 +30,14 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         Name = description.Name,
                         Method = description.Method,
-                        Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        Path = description.Path,
                         Description = "Returns a bunch of specimens.",
                         StatusCodes = new Dictionary<HttpStatusCode, string>
                         {
                             {HttpStatusCode.OK, "A bunch of specimens were able to be retrieved ok."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(new[] { Mapper.Map<Specimen, SpecimenApiViewModel>(sampleSpecimen) }, Formatting.Indented),
-                        ExampleUrl = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        ExampleUrl = description.Path,
                     };
                 };
 
@@ -47,7 +47,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     {
                         Name = description.Name,
                         Method = description.Method,
-                        Path = description.Path.Replace(Constants.CurrentApiVersionPathSegment, string.Empty),
+                        Path = description.Path,
                         Description = "Returns a single specimen by Id.",
                         Parameters = new[]
                         {
@@ -64,7 +64,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.NotFound, "The specimen could not be found and probably does not exist."}
                         },
                         SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Specimen, SpecimenApiViewModel>(sampleSpecimen), Formatting.Indented),
-                        ExampleUrl = (sampleSpecimen != null) ? string.Format("/{0}/{1}", Constants.ApiPathBase, sampleSpecimen.Id) : null,
+                        ExampleUrl = (sampleSpecimen != null) ? string.Format("{0}/{1}", Constants.ApiPathBase, sampleSpecimen.Id) : null,
                     };
                 };
             }

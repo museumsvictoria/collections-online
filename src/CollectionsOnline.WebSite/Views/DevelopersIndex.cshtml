@@ -25,10 +25,6 @@
         <p>The root uri for the current version is located at</p>
         <pre>@Model.ApiRootUrl</pre>
 
-        <h2 id="versions">Versions</h2>
-        <p>At this time the API supports one version only, this is the default version returned via the root uri. It can also be accessed via the following uri for future versions.</p>
-        <pre>@Model.ApiCurrentVersionRootUrl</pre>
-
         <h2 id="pagination">Pagination</h2>
         <p>Requests that return multiple objects will by default display @Constants.PagingPerPageDefault objects per request, you can increase this to @Constants.PagingPerPageMax by using a <em>?perpage</em> query string parameter.</p>
         <p>You can also specify a page parameter to retrieve results from different pages via a <em>?page</em> query string parameter.</p>

@@ -13,12 +13,12 @@ namespace CollectionsOnline.WebSite.Modules.Api
     public abstract class ApiModuleBase : NancyModule
     {
         protected ApiModuleBase(string modulePath = "")
-            : base(string.Format("/{0}{1}{2}", Constants.ApiPathBase, Constants.CurrentApiVersionPathSegment, modulePath))
+            : base(string.Format("{0}{1}", Constants.ApiPathBase, modulePath))
         {
             Before += context =>
                 {
                     BindApiInput();
-
+                     
                     return null;
                 };
 
@@ -92,7 +92,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     .WithHeader("Link", BuildLinkHeader(apiPageInfo))
                     .WithHeader("Total-Results", apiPageInfo.TotalResults.ToString())
                     .WithHeader("Total-Pages", apiPageInfo.TotalPages.ToString());
-            }
+            }           
             
             return response;
         }

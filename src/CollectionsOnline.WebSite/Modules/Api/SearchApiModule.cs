@@ -9,7 +9,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
         public SearchApiModule(ISearchViewModelQuery searchViewModelQuery)
             : base("/search")
         {
-            Get["search-api", ""] = parameters =>
+            Get["search-api", "/"] = parameters =>
             {
                 var searchApiInputModel = this.Bind<SearchApiInputModel>();
                 
