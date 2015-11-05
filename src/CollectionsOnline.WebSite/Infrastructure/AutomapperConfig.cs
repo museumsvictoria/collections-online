@@ -23,8 +23,9 @@ namespace CollectionsOnline.WebSite.Infrastructure
                     .ForMember(dest => dest.RecordType, opt => opt.UseValue("specimen"));
                 cfg.CreateMap<Comment, CommentApiViewModel>();
 
+                // Prevent double handling of adding site base to uri
                 cfg.CreateMap<MediaFile, MediaFileApiViewModel>()
-                    .BeforeMap((src, dest) => src.Uri = string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"], src.Uri))
+                    .BeforeMap((src, dest) => src.Uri = src.Uri.Contains(ConfigurationManager.AppSettings["CanonicalSiteBase"]) ? src.Uri : string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"], src.Uri))
                     .Include<ImageMediaFile, ImageMediaFileApiViewModel>();
                 cfg.CreateMap<ImageMediaFile, ImageMediaFileApiViewModel>();
 
