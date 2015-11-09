@@ -134,9 +134,9 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Terms.Add("SpeciesEndemicity", queryString.SpeciesEndemicity);
 
             // Add Cookies
-            searchInputModel.Cookies.Add(new NancyCookie("perPage", searchInputModel.PerPage.ToString(), true, false, DateTime.Now.AddMonths(3)) { Path = "/search" });
-            searchInputModel.Cookies.Add(new NancyCookie("sort", searchInputModel.Sort, true, false, DateTime.Now.AddMonths(3)) { Path = "/search" });
-            searchInputModel.Cookies.Add(new NancyCookie("view", searchInputModel.View, true, false, DateTime.Now.AddMonths(3)) { Path = "/search" });
+            searchInputModel.Cookies.Add(new NancyCookie("perPage", searchInputModel.PerPage.ToString(), true, false, DateTime.UtcNow.AddMonths(3)) { Path = "/search" });
+            searchInputModel.Cookies.Add(new NancyCookie("sort", searchInputModel.Sort, true, false, DateTime.UtcNow.AddMonths(3)) { Path = "/search" });
+            searchInputModel.Cookies.Add(new NancyCookie("view", searchInputModel.View, true, false, DateTime.UtcNow.AddMonths(3)) { Path = "/search" });
             
             return searchInputModel;
         }

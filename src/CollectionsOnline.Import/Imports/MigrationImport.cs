@@ -93,7 +93,7 @@ namespace CollectionsOnline.Import.Imports
                                 {
                                     Author = comments[i].Name,
                                     Content = comments[i].Message,
-                                    Created = comments[i].Created,
+                                    Created = ((DateTime)comments[i].Created).ToUniversalTime(),
                                     Email = comments[i].Email
                                 });
                             }

@@ -206,7 +206,8 @@ namespace CollectionsOnline.Import.Factories
             item.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
-                new CultureInfo("en-AU"));
+                new CultureInfo("en-AU")).ToUniversalTime();
+
             item.Category = map.GetEncodedString("ColCategory");
             item.Discipline = map.GetEncodedString("ColDiscipline");
             item.Type = map.GetEncodedString("ColTypeOfItem");

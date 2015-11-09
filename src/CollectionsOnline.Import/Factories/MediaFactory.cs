@@ -38,7 +38,12 @@ namespace CollectionsOnline.Import.Factories
                 map.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuMultimediaQueryString))
             {
                 var irn = long.Parse(map.GetEncodedString("irn"));
-                var dateModified = DateTime.ParseExact(string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")), "dd/MM/yyyy HH:mm", new CultureInfo("en-AU"));
+                
+                var dateModified = DateTime.ParseExact(
+                    string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")), 
+                    "dd/MM/yyyy HH:mm", 
+                    new CultureInfo("en-AU")).ToUniversalTime();
+
                 var mimeType = map.GetEncodedString("MulMimeType");
                 var identifier = map.GetEncodedString("MulIdentifier");
 

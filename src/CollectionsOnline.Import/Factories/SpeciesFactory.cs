@@ -107,7 +107,7 @@ namespace CollectionsOnline.Import.Factories
             species.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
-                new CultureInfo("en-AU"));
+                new CultureInfo("en-AU")).ToUniversalTime();
 
             species.AnimalType = map.GetEncodedString("SpeTaxonGroup");
             species.AnimalSubType = map.GetEncodedString("SpeTaxonSubGroup");

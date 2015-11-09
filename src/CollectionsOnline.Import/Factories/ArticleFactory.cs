@@ -86,7 +86,8 @@ namespace CollectionsOnline.Import.Factories
             article.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
-                new CultureInfo("en-AU"));
+                new CultureInfo("en-AU")).ToUniversalTime();
+
             article.Title = map.GetEncodedString("NarTitle");
             article.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab"));
 

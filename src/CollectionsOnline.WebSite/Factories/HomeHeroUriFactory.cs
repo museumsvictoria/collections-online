@@ -27,7 +27,7 @@ namespace CollectionsOnline.WebSite.Factories
         public string GetCurrentUri()
         {
             // Return uri based on day of year
-            return _homeHeroUris.Any() ? _homeHeroUris[DateTime.Now.DayOfYear % _homeHeroUris.Count] : String.Empty;
+            return _homeHeroUris.Any() ? _homeHeroUris[DateTime.UtcNow.DayOfYear % _homeHeroUris.Count] : String.Empty;
         }
     }
 }

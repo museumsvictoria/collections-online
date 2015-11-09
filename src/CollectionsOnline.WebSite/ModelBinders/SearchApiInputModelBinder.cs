@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
@@ -31,7 +32,7 @@ namespace CollectionsOnline.WebSite.ModelBinders
             {
                 try
                 {
-                    searchApiInputModel.MinDateModified = Convert.ChangeType(queryString.MinDateModified, typeof(DateTime));
+                    searchApiInputModel.MinDateModified = DateTime.Parse(queryString.MinDateModified, new CultureInfo("en-AU"), DateTimeStyles.AdjustToUniversal);
                 }
                 catch
                 {
@@ -42,18 +43,13 @@ namespace CollectionsOnline.WebSite.ModelBinders
             {
                 try
                 {
-                    searchApiInputModel.MaxDateModified = Convert.ChangeType(queryString.MaxDateModified, typeof(DateTime));
+                    searchApiInputModel.MaxDateModified = DateTime.Parse(queryString.MaxDateModified, new CultureInfo("en-AU"), DateTimeStyles.AdjustToUniversal);
                 }
                 catch
                 {
                     searchApiInputModel.MaxDateModified = null;
                 }
             }
-
-            // Set include TODO:to implement 
-            //bool include = false;
-            //if (queryString.Include.HasValue && bool.TryParse(queryString.Include, out include))
-            //    searchApiInputModel.Include = include;
 
             // switch to quality if we have no query or no sort
             if ((searchApiInputModel.Queries.All(string.IsNullOrWhiteSpace) && (string.Equals(searchApiInputModel.Sort, "relevance", StringComparison.OrdinalIgnoreCase) || string.Equals(queryString.Sort, "relevance", StringComparison.OrdinalIgnoreCase)))

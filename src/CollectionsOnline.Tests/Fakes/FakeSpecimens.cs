@@ -18,7 +18,7 @@ namespace CollectionsOnline.Tests.Fakes
             return Builder<Specimen>
                 .CreateNew()
                 .With(x => x.Id = id)
-                .With(x => x.DateModified = GetRandom.DateTime(DateTime.Now.AddYears(-2), DateTime.Now.AddDays(-1)))
+                .With(x => x.DateModified = GetRandom.DateTime(DateTime.UtcNow.AddYears(-2), DateTime.UtcNow.AddDays(-1)))
                 .Build();
         }
 

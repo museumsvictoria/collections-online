@@ -39,7 +39,7 @@ namespace CollectionsOnline.Tests.Fakes
             return Builder<Item>
                 .CreateNew()
                 .With(x => x.Id = id)
-                .With(x => x.DateModified = GetRandom.DateTime(DateTime.Now.AddYears(-2), DateTime.Now.AddDays(-1)))
+                .With(x => x.DateModified = GetRandom.DateTime(DateTime.UtcNow.AddYears(-2), DateTime.UtcNow.AddDays(-1)))
                 .With(x => x.Category = "History & Technology")
                 .With(x => x.Type = Types[GetRandom.Int(0, Types.Length - 1)])
                 .With(x => x.Discipline = Disciplines[GetRandom.Int(0, Disciplines.Length - 1)])

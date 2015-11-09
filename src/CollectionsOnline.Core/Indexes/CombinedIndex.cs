@@ -34,7 +34,7 @@ namespace CollectionsOnline.Core.Indexes
                         ((article.Keywords.Any()) ? 1 : 0) +
                         Math.Log(article.Media.Count + 2, 2) +
                         ((article.ChildArticleIds.Any()) ? 1 : 0),
-                    DateModified = article.DateModified.Date,
+                    DateModified = article.DateModified,
 
                     // Facet fields
                     RecordType = "Article",
@@ -100,7 +100,7 @@ namespace CollectionsOnline.Core.Indexes
                         ((!string.IsNullOrWhiteSpace(item.PhysicalDescription) || !string.IsNullOrWhiteSpace(item.ObjectSummary) || !string.IsNullOrWhiteSpace(item.Significance) || !string.IsNullOrWhiteSpace(item.IsdDescriptionOfContent)) ? 1 : 0) + 
                         Math.Log(item.Media.Count + 2, 2) +
                         ((item.Associations.Any()) ? 1 : 0),
-                    DateModified = item.DateModified.Date,
+                    DateModified = item.DateModified,
 
                     // Facet fields
                     RecordType = "Item",
@@ -215,7 +215,7 @@ namespace CollectionsOnline.Core.Indexes
                         ((!string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
                         Math.Log(species.Media.Count + 2, 2) +
                         ((species.RelatedItemIds.Any() || species.RelatedSpecimenIds.Any()) ? 1 : 0),
-                    DateModified = species.DateModified.Date,
+                    DateModified = species.DateModified,
 
                     // Facet fields
                     RecordType = "Species",
@@ -328,7 +328,7 @@ namespace CollectionsOnline.Core.Indexes
                         Math.Log(specimen.Media.Count + 2, 2) +
                         ((specimen.Taxonomy != null) ? 1 : 0) +
                         ((!string.IsNullOrWhiteSpace(specimen.ObjectSummary)) ? 2 : 0),
-                    DateModified = specimen.DateModified.Date,
+                    DateModified = specimen.DateModified,
 
                     // Facet fields
                     RecordType = "Specimen",
@@ -416,7 +416,6 @@ namespace CollectionsOnline.Core.Indexes
             Store(x => x.Quality, FieldStorage.Yes);
 
             Sort(x => x.Quality, SortOptions.Double);
-            Sort(x => x.DateModified, SortOptions.String);
 
             Analyzers.Add(x => x.Content, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
 

@@ -153,7 +153,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
-                new CultureInfo("en-AU"));
+                new CultureInfo("en-AU")).ToUniversalTime();
 
             specimen.Category = map.GetEncodedString("ColCategory");
             specimen.ScientificGroup = map.GetEncodedString("ColScientificGroup");

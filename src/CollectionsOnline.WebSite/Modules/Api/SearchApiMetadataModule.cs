@@ -59,15 +59,15 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "mindatemodified",
                             Necessity = "optional",
-                            Description = "Minimum date a record was modified in ISO 8601 format. Records with a modified date greater than or equal to this value will be returned. At the moment the time component is ignored and dates are stored and retrieved as local time.",
-                            ExampleValues = new[] { "2014-06-21" }
+                            Description = "Minimum date a record was modified in ISO 8601 UTC format. Records with a modified date greater than or equal to this value will be returned.",
+                            ExampleValues = new[] { "2014-06-21T12:00:00Z" }
                         },
                         new ApiParameter
                         {
                             Parameter = "maxdatemodified",
                             Necessity = "optional",
-                            Description = "Maximum date a record was modified in ISO 8601 format. Records with a modified date less than or equal to this value will be returned. At the moment the time component is ignored and dates are stored and retrieved as local time.",
-                            ExampleValues = new[] { "2015-09-30" }
+                            Description = "Maximum date a record was modified in ISO 8601 UTC format. Records with a modified date less than or equal to this value will be returned.",
+                            ExampleValues = new[] { "2015-11-06T00:00:00Z" }
                         },
                         new ApiParameter
                         {

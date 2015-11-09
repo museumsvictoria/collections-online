@@ -897,7 +897,7 @@
                 @foreach (var comment in Model.Item.Comments.OrderByDescending(c=>c.Created)) {
                 <div class="comment">
                     <span class="name">@comment.Author</span>
-                    <span class="date">Posted on @comment.Created.ToString("dd MMM yyyy") at @comment.Created.ToString("hh:mm tt")</span>
+                    <span class="date">Posted on @comment.Created.ToLocalTime().ToString("dd MMM yyyy \"at\" hh:mm tt \"GMT\"zzz")</span>
                     <span class="commenttext">@comment.Content</span>
                 </div>
                 }
