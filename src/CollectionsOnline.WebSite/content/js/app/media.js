@@ -1,11 +1,12 @@
 ﻿var $ = require('jquery');
 var video = require('./video.js');
 var verge = require('verge');
+require('audioplayer');
 
 module.exports = {
   init: function () {
     this.Model = window.mediaModel;
-    
+
     if (this.Model !== undefined && this.Model.length != 0) {
       this.cacheElements();
       this.bindEvents();
@@ -41,10 +42,15 @@ module.exports = {
     if (this.Model[0].$type.indexOf('VideoMedia') > 0) {
       video.init();
     }
+    // init audio if first media
+    if (this.Model[0].$type.indexOf('AudioMedia') > 0) {
+      $('audio').audioPlayer();
+      this.$heroMedia.addClass('audio-loaded');
+    }
     this.$thumbs.on('click keydown', 'img', this.select.bind(this));    
     this.$fullscreenButton.on('click', this.toggleFullscreen.bind(this));
     this.$previous.on('click keydown', { direction: "previous" }, this.moveTo.bind(this));
-    this.$next.on('click keydown', { direction: "next" }, this.moveTo.bind(this));
+    this.$next.on('click keydown', { direction: "next" }, this.moveTo.bind(this));    
 
     $(document).on('keydown', this.handleKey.bind(this));
   },
@@ -94,7 +100,7 @@ module.exports = {
         heroMediaImage.css({
           maxHeight: this.defaultMaxHeight,
           height: ''
-        });        
+        });
         
         // change aria state
         this.$fullscreenButton.attr('aria-pressed', 'false');
@@ -172,6 +178,8 @@ module.exports = {
 
     var newMedia = this.Model[index];
 
+    this.$heroMedia.removeClass('audio-loaded');
+
     if (newMedia.$type.indexOf('ImageMedia') > 0) {
       // Handle Images
       var newHeroImage = $('<img/>', { 'alt': newMedia.AlternativeText });
@@ -209,6 +217,31 @@ module.exports = {
         $this.switchCaption(newMedia);
         video.init();
       });
+    } else if (newMedia.$type.indexOf('AudioMedia') > 0) {
+      // Handle Audio
+      if (this.$mediaArea.hasClass('expanded')) {
+        var heroMediaImage = $('img', this.$heroMedia);
+        $('html, body').scrollTop(heroMediaImage.offset().top);
+        this.$mediaHolder.css({
+          maxWidth: this.defaultMaxWidth,
+          height: ''
+        });
+        heroMediaImage.css({
+          maxHeight: this.defaultMaxHeight,
+          height: ''
+        });
+        this.$fullscreenButton.attr('aria-pressed', 'false');
+      }
+
+      var newHeroAudio = $('<audio preload="metadata" controls><source src="' + newMedia.File.Uri + '" type="audio/mpeg"/><audio/>');
+
+      this.$fullscreenButton.addClass('disabled');
+
+      $this.$heroMedia.html(newHeroAudio);
+      this.$heroMedia.addClass('audio-loaded');
+      $this.switchCaption(newMedia);
+
+      $('audio').audioPlayer();
     }
   },
   switchCaption: function(media) {
@@ -216,7 +249,14 @@ module.exports = {
     (media.Creators.length > 0) ? this.$heroCreators.text(media.Creators.join(', ')) : this.$heroCreators.empty();
     (media.Sources.length > 0) ? this.$heroSources.text('Source: ' + media.Sources.join(', ')) : this.$heroSources.empty();
     (media.Credit) ? this.$heroCredit.text('Credit: ' + media.Credit) : this.$heroCredit.empty();
-    var rightsLabel = (media.$type.indexOf('ImageMedia') > 0) ? 'This image is: ' : 'This video is: ';
+
+    var rightsLabel;
+    if (media.$type.indexOf('ImageMedia') > 0)
+      rightsLabel = 'This image is: ';
+    else if (media.$type.indexOf('VideoMedia') > 0)
+      rightsLabel = 'This video is: ';
+    else if(media.$type.indexOf('AudioMedia') > 0)
+      rightsLabel = 'This audio is: ';    
     (media.RightsStatement) ? this.$heroRights.text(rightsLabel + media.RightsStatement) : this.$heroRights.empty();
   },
   preloadImages: function(srcs) {

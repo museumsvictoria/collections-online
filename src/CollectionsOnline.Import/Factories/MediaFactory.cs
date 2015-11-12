@@ -126,7 +126,14 @@ namespace CollectionsOnline.Import.Factories
                         RightsStatus = rightsStatus,
                         Licence = licence,
                         LicenceDetails = licenceDetails,
-                        Md5Checksum = md5Checksum
+                        Md5Checksum = md5Checksum,
+                        Thumbnail = new ImageMediaFile
+                        {
+                            Uri = "/content/img/img-audio-thumbnail.png",
+                            Height = 250,
+                            Width = 250,
+                            Size = 2841
+                        }
                     };
 
                     if (_audioMediaFactory.Make(ref audioMedia, Path.GetExtension(identifier)))

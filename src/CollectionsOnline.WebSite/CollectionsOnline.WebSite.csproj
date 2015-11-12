@@ -161,6 +161,7 @@
     <Content Include="content\img\favicon-32x32.png" />
     <Content Include="content\img\favicon-96x96.png" />
     <Content Include="content\img\GitHub-Mark-Light-32px.png" />
+    <Content Include="content\img\img-audio-thumbnail.png" />
     <Content Include="content\img\img-search-noresults.jpg" />
     <Content Include="content\img\mstile-144x144.png" />
     <Content Include="content\img\mstile-150x150.png" />
@@ -197,7 +198,9 @@
     <Content Include="content\js\app\search.js" />
     <Content Include="content\js\app\media.js" />
     <Content Include="content\js\app\app.js" />
+    <Content Include="content\js\lib\audioplayer.js" />
     <Content Include="content\js\lib\query-string.js" />
+    <None Include="content\scss\lib\_audioplayer.scss" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
@@ -396,9 +399,7 @@
   <ItemGroup>
     <Content Include="Views\EmuTile.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="content\scss\lib\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Views\CollectionIndex.cshtml" />
   </ItemGroup>

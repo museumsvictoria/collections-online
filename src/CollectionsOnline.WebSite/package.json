@@ -5,7 +5,8 @@
   "author": "Michael Mason",
   "license": "MIT",
   "browser": {
-    "query-string": "./content/js/lib/query-string.js"
+    "query-string": "./content/js/lib/query-string.js",
+    "audioplayer": "./content/js/lib/audioplayer.js"
   },
   "devDependencies": {
     "browserify": "^9.0.3",

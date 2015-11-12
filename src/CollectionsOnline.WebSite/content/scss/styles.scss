@@ -5,6 +5,7 @@
 @import 'grid';
 @import "typography";
 @import "layout";
+@import "lib/audioplayer";
 
 body {
     background: $colour-background-light;
@@ -431,7 +432,7 @@ button.icon {
         @include display-flex;
         @include flex-flow-row-nowrap;
         @include justify-content(center);
-        @include alignitem-center;
+        @include alignitem-center;        
 
         @include gridle_state("print") {
             max-height: 400px;
@@ -4059,4 +4060,15 @@ footer {
     &:focus {
         top: 0;
     }
+}
+
+.audioplayer
+{
+    margin:10pc 3pc;
+    min-width:20pc;
+}
+
+.hero-media.audio-loaded
+{
+    flex-grow:1;
 }

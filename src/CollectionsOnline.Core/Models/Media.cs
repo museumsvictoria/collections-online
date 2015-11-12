@@ -54,9 +54,11 @@ namespace CollectionsOnline.Core.Models
         public ImageMediaFile Medium { get; set; }
     }
 
-    public class AudioMedia : Media, IHasChecksum
+    public class AudioMedia : Media, IHasThumbnail, IHasChecksum
     {
         public MediaFile File { get; set; }
+
+        public ImageMediaFile Thumbnail { get; set; }
 
         public string Md5Checksum { get; set; }
     }
