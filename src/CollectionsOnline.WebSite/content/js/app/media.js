@@ -231,6 +231,7 @@ module.exports = {
           height: ''
         });
         this.$fullscreenButton.attr('aria-pressed', 'false');
+        this.$mediaArea.toggleClass('expanded');
       }
 
       var newHeroAudio = $('<audio preload="metadata" controls><source src="' + newMedia.File.Uri + '" type="audio/mpeg"/><audio/>');
