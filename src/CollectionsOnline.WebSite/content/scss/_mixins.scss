@@ -67,22 +67,20 @@
 @mixin flex-direction($direction){
 	-ms-flex-direction: $direction;
     -webkit-flex-direction: $direction; /* Safari 6.1+ */
-    flex-direction: $direction; 
-    
+    flex-direction: $direction;    
 }
 
 @mixin justify-content($position){
     -webkit-justify-content:$position;
     justify-content:$position;
+    -ms-flex-pack:$position;
 }
 
 @mixin flex-flow-row-nowrap(){
     -ms-flex-wrap:none;
     -ms-flex-direction:row;
-    flex-flow: row nowrap;
-   
+    flex-flow: row nowrap;   
 }
-
 
 @mixin align-items-flex-end(){
 	 -ms-flex-align: end;

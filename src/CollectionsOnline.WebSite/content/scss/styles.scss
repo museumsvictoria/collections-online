@@ -432,7 +432,7 @@ button.icon {
         @include display-flex;
         @include flex-flow-row-nowrap;
         @include justify-content(center);
-        @include alignitem-center;        
+        @include alignitem-center;
 
         @include gridle_state("print") {
             max-height: 400px;
