@@ -58,7 +58,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var species = document as Species;
 
                 sb.Append(BuildAuthorsCitation(species.Authors));
-                sb.Append(string.Format("({0}) ", species.DateModified.Year));
+                sb.Append(string.Format("({0}) ", (!string.IsNullOrWhiteSpace(species.YearWritten)) ? species.YearWritten : species.DateModified.Year.ToString()));
 
                 if (species.Taxonomy != null)
                 {

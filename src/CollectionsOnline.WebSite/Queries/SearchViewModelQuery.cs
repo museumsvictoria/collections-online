@@ -45,7 +45,7 @@ namespace CollectionsOnline.WebSite.Queries
                 }
                 catch (Exception exception)
                 {
-                    if (IsParseException(exception))
+                    if (IsQueryFailedException(exception))
                     {
                         // Re-build and escape search query
                         query = QueryBuilder<EmuAggregateRootViewModel>.BuildIndexQuery(_documentSession, searchInputModel.Page, searchInputModel.PerPage, searchInputModel.Sort, searchInputModel.Queries, searchInputModel.Facets, searchInputModel.MultiFacets, searchInputModel.Terms, escapeQueryOptions:EscapeQueryOptions.EscapeAll);
@@ -88,7 +88,7 @@ namespace CollectionsOnline.WebSite.Queries
                 }
                 catch (Exception exception)
                 {
-                    if (IsParseException(exception))
+                    if (IsQueryFailedException(exception))
                     {
                         // Re-build and escape search query
                         query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, apiInputModel.Page, apiInputModel.PerPage, searchApiInputModel.Sort, searchApiInputModel.Queries, searchApiInputModel.Facets, searchApiInputModel.MultiFacets, searchApiInputModel.Terms, searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified, EscapeQueryOptions.EscapeAll);
@@ -124,10 +124,9 @@ namespace CollectionsOnline.WebSite.Queries
             }
         }
 
-        private bool IsParseException(Exception exception)
+        private bool IsQueryFailedException(Exception exception)
         {
-            return (exception is InvalidOperationException && exception.Message.Contains("Query failed")) &&
-                   (exception.InnerException != null && exception.InnerException.Message.Contains("ParseException"));
+            return (exception is InvalidOperationException && exception.Message.Contains("Query failed"));
         }
     }
 }

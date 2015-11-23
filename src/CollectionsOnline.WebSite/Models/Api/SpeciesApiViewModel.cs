@@ -72,6 +72,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<AuthorApiViewModel> Authors { get; set; }
 
+        public string YearWritten { get; set; }
+
         public IList<MediaApiViewModel> Media { get; set; }
 
         public TaxonomyApiViewModel Taxonomy { get; set; }

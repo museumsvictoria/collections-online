@@ -84,7 +84,9 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Author> Authors { get; set; }
 
-        public IList<Media> Media { get; set; }
+        public string YearWritten { get; set; }
+
+        public IList<Media> Media { get; set; }        
 
         public Taxonomy Taxonomy { get; set; }
 
