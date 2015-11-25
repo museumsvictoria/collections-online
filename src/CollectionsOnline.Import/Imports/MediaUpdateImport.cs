@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Infrastructure;
 using IMu;
-using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
-using Raven.Abstractions.Indexing;
 using Raven.Client;
-using Raven.Json.Linq;
 using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
@@ -23,6 +19,7 @@ namespace CollectionsOnline.Import.Imports
         private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IMediaFactory _mediaFactory;
+        private readonly IList<DocumentMediaUpdateJob> _documentMediaUpdateJobs;
 
         public MediaUpdateImport(
             IDocumentStore documentStore,
@@ -32,7 +29,51 @@ namespace CollectionsOnline.Import.Imports
             _documentStore = documentStore;
             _imuSessionProvider = imuSessionProvider;
             _mediaFactory = mediaFactory;
+            _documentMediaUpdateJobs = new List<DocumentMediaUpdateJob>
+            {
+                new DocumentMediaUpdateJob
+                {
+                    JobType = JobType.Media,
+                    GetDocumentIds = map => map
+                        .GetMaps("narmedia")
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn")))
+                        .Concat(map
+                        .GetMaps("catmedia")
+                        .Where(x => x != null && x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
+                        .Select(x => "items/" + x.GetEncodedString("irn")))
+                        .Concat(map
+                        .GetMaps("narmedia")
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                        .Select(x => "species/" + x.GetEncodedString("irn")))
+                        .Concat(map
+                        .GetMaps("catmedia")
+                        .Where(x => x != null && x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+                        .Select(x => "specimens/" + x.GetEncodedString("irn")))
+                },
+                new DocumentMediaUpdateJob
+                {
+                    JobType = JobType.ProfileImage,
+                    GetDocumentIds = map => map
+                        .GetMaps("parmedia")
+                        .SelectMany(x => x.GetMaps("narmedia"))
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
+                        .Select(x => "articles/" + x.GetEncodedString("irn"))
+                        .Concat(map
+                        .GetMaps("parmedia")
+                        .SelectMany(x => x.GetMaps("narmedia"))
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                        .Select(x => "species/" + x.GetEncodedString("irn")))
+                        .Concat(map
+                        .GetMaps("parmedia")
+                        .SelectMany(x => x.GetMaps("narmedia"))
+                        .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuCollectionQueryString))
+                        .Select(x => "collections/" + x.GetEncodedString("irn")))
+                }
+            };
         }
+
+
 
         public override void Run()
         {
@@ -164,16 +205,100 @@ namespace CollectionsOnline.Import.Imports
 
                         foreach (var row in results.Rows)
                         {
+                            if (ImportCanceled())
+                                return;
+
                             var mediaIrn = long.Parse(row.GetEncodedString("irn"));
                             var media = _mediaFactory.Make(row);
 
-                            UpdateItemMedia(row, media, mediaIrn);
-                            UpdateArticleMedia(row, media, mediaIrn);
-                            UpdateSpeciesMedia(row, media, mediaIrn);
-                            UpdateSpecimenMedia(row, media, mediaIrn);
-                            UpdateArticleProfileMedia(row, media, mediaIrn);
-                            UpdateSpeciesProfileMedia(row, media, mediaIrn);
-                            UpdateCollectionProfileMedia(row, media, mediaIrn);
+                            foreach (var documentMediaUpdateJob in _documentMediaUpdateJobs)
+                            {
+                                var count = 0;
+                                var documentIds = documentMediaUpdateJob.GetDocumentIds(row);
+
+                                while (true)
+                                {
+                                    using (var documentMediaUpdateSession = _documentStore.OpenSession())
+                                    {
+                                        if (ImportCanceled())
+                                            return;
+
+                                        var documentIdsBatch = documentIds
+                                            .Skip(count)
+                                            .Take(Constants.DataBatchSize)
+                                            .ToList();
+
+                                        if (documentIdsBatch.Count == 0)
+                                            break;
+
+                                        foreach (var documentId in documentIdsBatch)
+                                        {
+                                            var document = documentMediaUpdateSession.Load<dynamic>(documentId);
+
+                                            if (document == null) continue;
+
+                                            // Update Media
+                                            if (documentMediaUpdateJob.JobType == JobType.Media)
+                                            {
+                                                IList<Media> documentMedia = document.Media;
+
+                                                // Add/Replace
+                                                if (media != null)
+                                                {
+                                                    var existingMedia = documentMedia
+                                                        .Where(x => x != null)
+                                                        .SingleOrDefault(x => x.Irn == mediaIrn);
+
+                                                    if (existingMedia != null)
+                                                    {
+                                                        Log.Logger.Debug("Updating media on {Id}", documentId);
+                                                        document.Media[document.Media.IndexOf(existingMedia)] = media;
+                                                    }
+                                                    else
+                                                    {
+                                                        Log.Logger.Debug("Adding media on {Id}", documentId);
+                                                        document.Media.Add(media);
+                                                    }
+                                                }
+                                                // Remove/Media
+                                                else
+                                                {
+                                                    var existingMedia = documentMedia
+                                                        .Where(x => x != null)
+                                                        .SingleOrDefault(x => x.Irn == mediaIrn);
+
+                                                    if (existingMedia != null)
+                                                    {
+                                                        Log.Logger.Debug("Removing media on {Id}", documentId);
+                                                        document.Media.Remove(existingMedia);
+                                                    }
+                                                }
+
+                                                // Assign thumbnail
+                                                var mediaWithThumbnail = documentMedia.OfType<IHasThumbnail>().FirstOrDefault();
+                                                document.ThumbnailUri = mediaWithThumbnail != null ? mediaWithThumbnail.Thumbnail.Uri : null;
+                                            }
+                                            // Update ProfileImages
+                                            else if(documentMediaUpdateJob.JobType == JobType.ProfileImage)
+                                            {
+                                                IList<Author> documentAuthors = document.Authors;
+
+                                                // Add/Replace
+                                                var author = documentAuthors.FirstOrDefault(x => x.ProfileImage.Irn == mediaIrn);
+
+                                                if (author != null)
+                                                {
+                                                    Log.Logger.Debug("Updating {FullName} profileImage on {Id}", author.FullName, documentId);
+                                                    author.ProfileImage = media != null ? media as ImageMedia : null;
+                                                }
+                                            }
+                                        }
+
+                                        count += documentIdsBatch.Count;
+                                        documentMediaUpdateSession.SaveChanges();
+                                    }
+                                }
+                            }
                         }
 
                         importStatus.CurrentImportCacheOffset += results.Count;
@@ -192,417 +317,22 @@ namespace CollectionsOnline.Import.Imports
             }
         }
 
-        private void UpdateArticleMedia(Map map, Media media, long mediaIrn)
-        {
-            var count = 0;
-
-            var articleDocumentIds = map
-                .GetMaps("narmedia")
-                .Where(x => x != null && x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuArticleQueryString))
-                .Select(x => long.Parse(x.GetEncodedString("irn")))
-                .ToList();
-
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var articleDocumentIdBatch = articleDocumentIds
-                        .Skip(count)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if(articleDocumentIdBatch.Count == 0)
-                        break;
-
-                    foreach (var articleDocumentId in articleDocumentIdBatch)
-                    {
-                        var article = documentSession.Load<Article>(articleDocumentId);
-
-                        if (article != null)
-                        {
-                            // Add/Replace
-                            if (media != null)
-                            {
-                                var existingMedia = article.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    article.Media[article.Media.IndexOf(existingMedia)] = media;
-                                else
-                                    article.Media.Add(media);
-                            }
-                            // Remove/Media
-                            else
-                            {
-                                var existingMedia = article.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    article.Media.Remove(existingMedia);
-                            }
-
-                            // Assign thumbnail
-                            var mediaWithThumbnail = article.Media.OfType<IHasThumbnail>().FirstOrDefault();
-                            article.ThumbnailUri = mediaWithThumbnail != null ? mediaWithThumbnail.Thumbnail.Uri : null;
-                        }
-                    }
-
-                    count += articleDocumentIdBatch.Count;
-                    documentSession.SaveChanges();
-                }
-            }
-        }
-
-        private void UpdateItemMedia(Map map, Media media, long mediaIrn)
-        {
-            var count = 0;
-
-            var itemDocumentIds = map
-                .GetMaps("catmedia")
-                .Where(x => x != null && x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                .Select(x => long.Parse(x.GetEncodedString("irn")))
-                .ToList();
-
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var itemDocumentIdBatch = itemDocumentIds
-                        .Skip(count)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if (itemDocumentIdBatch.Count == 0)
-                        break;
-
-                    foreach (var itemDocumentId in itemDocumentIdBatch)
-                    {
-                        var item = documentSession.Load<Item>(itemDocumentId);
-
-                        if (item != null)
-                        {
-                            // Add/Replace
-                            if (media != null)
-                            {
-                                var existingMedia = item.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    item.Media[item.Media.IndexOf(existingMedia)] = media;
-                                else
-                                    item.Media.Add(media);
-                            }
-                            // Remove/Media
-                            else
-                            {
-                                var existingMedia = item.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    item.Media.Remove(existingMedia);
-                            }
-
-                            // Assign thumbnail
-                            var mediaWithThumbnail = item.Media.OfType<IHasThumbnail>().FirstOrDefault();
-                            item.ThumbnailUri = mediaWithThumbnail != null ? mediaWithThumbnail.Thumbnail.Uri : null;
-                        }
-                    }
-
-                    count += itemDocumentIdBatch.Count;
-                    documentSession.SaveChanges();
-                }
-            }
-        }
-
-        private void UpdateSpeciesMedia(Map map, Media media, long mediaIrn)
-        {
-            var count = 0;
-
-            var speciesDocumentIds = map
-                .GetMaps("narmedia")
-                .Where(x => x != null && x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpeciesQueryString))
-                .Select(x => long.Parse(x.GetEncodedString("irn")))
-                .ToList();
-
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var speciesDocumentIdBatch = speciesDocumentIds
-                        .Skip(count)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if (speciesDocumentIdBatch.Count == 0)
-                        break;
-
-                    foreach (var speciesDocumentId in speciesDocumentIdBatch)
-                    {
-                        var species = documentSession.Load<Species>(speciesDocumentId);
-
-                        if (species != null)
-                        {
-                            // Add/Replace
-                            if (media != null)
-                            {
-                                var existingMedia = species.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    species.Media[species.Media.IndexOf(existingMedia)] = media;
-                                else
-                                    species.Media.Add(media);
-                            }
-                            // Remove/Media
-                            else
-                            {
-                                var existingMedia = species.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    species.Media.Remove(existingMedia);
-                            }
-
-                            // Assign thumbnail
-                            var mediaWithThumbnail = species.Media.OfType<IHasThumbnail>().FirstOrDefault();
-                            species.ThumbnailUri = mediaWithThumbnail != null ? mediaWithThumbnail.Thumbnail.Uri : null;
-                        }
-                    }
-
-                    count += speciesDocumentIdBatch.Count;
-                    documentSession.SaveChanges();
-                }
-            }
-        }
-
-        private void UpdateSpecimenMedia(Map map, Media media, long mediaIrn)
-        {
-            var count = 0;
-
-            var specimenDocumentIds = map
-                .GetMaps("catmedia")
-                .Where(x => x != null && x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                .Select(x => long.Parse(x.GetEncodedString("irn")))
-                .ToList();
-
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var specimenDocumentIdBatch = specimenDocumentIds
-                        .Skip(count)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if (specimenDocumentIdBatch.Count == 0)
-                        break;
-
-                    foreach (var specimenDocumentId in specimenDocumentIdBatch)
-                    {
-                        var specimen = documentSession.Load<Specimen>(specimenDocumentId);
-
-                        if (specimen != null)
-                        {
-                            // Add/Replace
-                            if (media != null)
-                            {
-                                var existingMedia = specimen.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    specimen.Media[specimen.Media.IndexOf(existingMedia)] = media;
-                                else
-                                    specimen.Media.Add(media);
-                            }
-                            // Remove/Media
-                            else
-                            {
-                                var existingMedia = specimen.Media
-                                    .Where(x => x != null)
-                                    .SingleOrDefault(x => x.Irn == mediaIrn);
-
-                                if (existingMedia != null)
-                                    specimen.Media.Remove(existingMedia);
-                            }
-
-                            // Assign thumbnail
-                            var mediaWithThumbnail = specimen.Media.OfType<IHasThumbnail>().FirstOrDefault();
-                            specimen.ThumbnailUri = mediaWithThumbnail != null ? mediaWithThumbnail.Thumbnail.Uri : null;
-                        }
-                    }
-
-                    count += specimenDocumentIdBatch.Count;
-                    documentSession.SaveChanges();
-                }
-            }
-        }
-
-        private void UpdateArticleProfileMedia(Map map, Media media, long mediaIrn)
-        {
-            var count = 0;
-
-            var articleDocumentIds = map
-                .GetMaps("parmedia")
-                .SelectMany(x => x.GetMaps("narmedia"))
-                .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                .Select(x => long.Parse(x.GetEncodedString("irn")))
-                .ToList();
-
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var articleDocumentIdBatch = articleDocumentIds
-                        .Skip(count)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if (articleDocumentIdBatch.Count == 0)
-                        break;
-
-                    foreach (var articleDocumentId in articleDocumentIdBatch)
-                    {
-                        var article = documentSession.Load<Article>(articleDocumentId);
-
-                        if (article != null)
-                        {
-                            // Add/Replace
-                            var author = article.Authors.FirstOrDefault(x => x.ProfileImage.Irn == mediaIrn);
-
-                            if (author != null)
-                            {
-                                author.ProfileImage = media != null ? media as ImageMedia : null;
-                            }
-                        }
-                    }
-
-                    count += articleDocumentIdBatch.Count;
-                    documentSession.SaveChanges();
-                }
-            }
-        }
-
-        private void UpdateSpeciesProfileMedia(Map map, Media media, long mediaIrn)
-        {
-            var count = 0;
-
-            var speciesDocumentIds = map
-                .GetMaps("parmedia")
-                .SelectMany(x => x.GetMaps("narmedia"))
-                .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                .Select(x => long.Parse(x.GetEncodedString("irn")))
-                .ToList();
-
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var speciesDocumentIdBatch = speciesDocumentIds
-                        .Skip(count)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if (speciesDocumentIdBatch.Count == 0)
-                        break;
-
-                    foreach (var speciesDocumentId in speciesDocumentIdBatch)
-                    {
-                        var species = documentSession.Load<Species>(speciesDocumentId);
-
-                        if (species != null)
-                        {
-                            // Add/Replace
-                            var author = species.Authors.FirstOrDefault(x => x.ProfileImage.Irn == mediaIrn);
-
-                            if (author != null)
-                            {
-                                author.ProfileImage = media != null ? media as ImageMedia : null;
-                            }
-                        }
-                    }
-
-                    count += speciesDocumentIdBatch.Count;
-                    documentSession.SaveChanges();
-                }
-            }
-        }
-
-        private void UpdateCollectionProfileMedia(Map map, Media media, long mediaIrn)
-        {
-            var count = 0;
-
-            var collectionDocumentIds = map
-                .GetMaps("parmedia")
-                .SelectMany(x => x.GetMaps("narmedia"))
-                .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuCollectionQueryString))
-                .Select(x => long.Parse(x.GetEncodedString("irn")))
-                .ToList();
-
-            while (true)
-            {
-                using (var documentSession = _documentStore.OpenSession())
-                {
-                    if (ImportCanceled())
-                        return;
-
-                    var collectionDocumentIdBatch = collectionDocumentIds
-                        .Skip(count)
-                        .Take(Constants.DataBatchSize)
-                        .ToList();
-
-                    if (collectionDocumentIdBatch.Count == 0)
-                        break;
-
-                    foreach (var collectionDocumentId in collectionDocumentIdBatch)
-                    {
-                        var collection = documentSession.Load<Species>(collectionDocumentId);
-
-                        if (collection != null)
-                        {
-                            // Add/Replace
-                            var author = collection.Authors.FirstOrDefault(x => x.ProfileImage.Irn == mediaIrn);
-
-                            if (author != null)
-                            {
-                                author.ProfileImage = media != null ? media as ImageMedia : null;
-                            }
-                        }
-                    }
-
-                    count += collectionDocumentIdBatch.Count;
-                    documentSession.SaveChanges();
-                }
-            }
-        }
-
         public override int Order
         {
             get { return 10; }
+        }
+
+        private class DocumentMediaUpdateJob
+        {
+            public Func<Map, IEnumerable<string>> GetDocumentIds { get; set; }
+
+            public JobType JobType { get; set; }
+        }
+
+        private enum JobType
+        {
+            Media,
+            ProfileImage
         }
     }
 }
