@@ -203,6 +203,7 @@ namespace CollectionsOnline.Import.Imports
 
                         Log.Logger.Debug("Fetched {RecordCount} multimedia records from Imu", cachedResultBatch.Count);
 
+                        // Process updated media
                         foreach (var row in results.Rows)
                         {
                             if (ImportCanceled())
@@ -211,10 +212,11 @@ namespace CollectionsOnline.Import.Imports
                             var mediaIrn = long.Parse(row.GetEncodedString("irn"));
                             var media = _mediaFactory.Make(row);
 
+                            // Update documents that use media
                             foreach (var documentMediaUpdateJob in _documentMediaUpdateJobs)
                             {
                                 var count = 0;
-                                var documentIds = documentMediaUpdateJob.GetDocumentIds(row);
+                                var documentIds = documentMediaUpdateJob.GetDocumentIds(row).ToList();
 
                                 while (true)
                                 {
