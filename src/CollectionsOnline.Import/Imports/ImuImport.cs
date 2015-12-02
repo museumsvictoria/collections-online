@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using CollectionsOnline.Core.Config;
@@ -10,7 +9,6 @@ using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Infrastructure;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
-using Raven.Client.Linq;
 using Serilog;
 
 namespace CollectionsOnline.Import.Imports
