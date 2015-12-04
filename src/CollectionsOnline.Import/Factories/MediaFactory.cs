@@ -220,5 +220,23 @@ namespace CollectionsOnline.Import.Factories
 
             return medias;
         }
+
+        public IList<string> MakeImageLicences(IEnumerable<Media> media)
+        {
+            var imageLicences = new List<string>();
+
+            foreach (var imageMedia in media.OfType<ImageMedia>())
+            {
+                if (string.Equals(imageMedia.RightsStatus, "Copyright Expired: Public Domain", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(imageMedia.Licence, "No Known Restriction", StringComparison.OrdinalIgnoreCase))
+                    imageLicences.Add("Public Domain");
+
+                if (string.Equals(imageMedia.RightsStatus, "In Copyright: MV Copyright", StringComparison.OrdinalIgnoreCase) &&
+                    imageMedia.Licence.StartsWith("CC BY", StringComparison.OrdinalIgnoreCase))
+                        imageLicences.Add(imageMedia.Licence);
+            }
+
+            return imageLicences.Distinct().ToList();
+        }
     }
 }

@@ -50,6 +50,10 @@ namespace CollectionsOnline.Core.Indexes
                 new Facet<CombinedIndexResult>
                 {
                     Name = x => x.DisplayLocation
+                },
+                new Facet<CombinedIndexResult>
+                {
+                    Name = x => x.ImageLicence
                 }
             };
         }

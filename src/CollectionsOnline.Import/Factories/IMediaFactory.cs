@@ -10,5 +10,7 @@ namespace CollectionsOnline.Import.Factories
         Media Make(Map map, ResizeMode? thumbnailResizeMode = null);
 
         IList<Media> Make(IEnumerable<Map> maps, ResizeMode? thumbnailResizeMode = null);
+
+        IList<string> MakeImageLicences(IEnumerable<Media> media);
     }
 }

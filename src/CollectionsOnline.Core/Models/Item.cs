@@ -20,6 +20,8 @@ namespace CollectionsOnline.Core.Models
 
         public string DisplayTitle { get; set; }
 
+        public IList<string> ImageLicences { get; set; }
+
         #endregion
 
         public DateTime DateModified { get; set; }

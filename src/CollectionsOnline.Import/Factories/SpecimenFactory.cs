@@ -346,6 +346,9 @@ namespace CollectionsOnline.Import.Factories
             if (media != null)
                 specimen.ThumbnailUri = media.Thumbnail.Uri;
 
+            // Image Licences
+            specimen.ImageLicences = _mediaFactory.MakeImageLicences(specimen.Media);
+
             // Relationships
 
             // Related items/specimens (directly related)

@@ -403,6 +403,9 @@ namespace CollectionsOnline.Import.Factories
             var media = item.Media.OfType<IHasThumbnail>().FirstOrDefault();
             if (media != null)
                 item.ThumbnailUri = media.Thumbnail.Uri;
+
+            // Image Licences
+            item.ImageLicences = _mediaFactory.MakeImageLicences(item.Media);
             
             // Indigenous Cultures Fields
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();

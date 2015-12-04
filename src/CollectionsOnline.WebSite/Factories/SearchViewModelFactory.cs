@@ -43,9 +43,9 @@ namespace CollectionsOnline.WebSite.Factories
 
                         var facetValueViewModel = new FacetValueViewModel
                         {
-                            Facet = facet.Key,
-                            Name = facetValue.Range.Transform(To.TitleCase),
+                            Facet = facet.Key,                            
                             Hits = facetValue.Hits,
+                            Name = facetValue.Range.Transform(facetValue.Range.StartsWith("cc by") ? To.UpperCase : To.TitleCase),
                             Class = string.Equals(facet.Key, "RecordType", StringComparison.OrdinalIgnoreCase) ? facetValue.Range : null
                         };
 

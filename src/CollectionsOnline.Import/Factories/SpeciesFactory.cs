@@ -219,6 +219,9 @@ namespace CollectionsOnline.Import.Factories
             if (media != null)
                 species.ThumbnailUri = media.Thumbnail.Uri;
 
+            // Image Licences
+            species.ImageLicences = _mediaFactory.MakeImageLicences(species.Media);
+
             // Build summary
             species.Summary = _summaryFactory.Make(species);
 

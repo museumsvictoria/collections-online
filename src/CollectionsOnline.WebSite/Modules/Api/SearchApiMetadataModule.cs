@@ -134,6 +134,13 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         },
                         new ApiParameter
                         {
+                            Parameter = "imagelicence",
+                            Necessity = "optional",
+                            Description = "The open access licences that are attributed to a records images. Can contain one or more values. In order to add more terms repeat the query parameter as follows \"imagelicence=public+domain&imagelicence=cc+by\". Parameter is considered a facet.",
+                            ExampleValues = new[] { "public domain", "cc by" }
+                        },
+                        new ApiParameter
+                        {
                             Parameter = "articletype",
                             Necessity = "optional",
                             Description = "The type of article, will only return article records. Can contain one or more values. In order to add more terms repeat the query parameter as follows \"articletype=party&articletype=physical+object\". Parameter is considered a facet.",

@@ -170,6 +170,9 @@ namespace CollectionsOnline.Import.Factories
             if (media != null)
                 article.ThumbnailUri = media.Thumbnail.Uri;
 
+            // Image Licences
+            article.ImageLicences = _mediaFactory.MakeImageLicences(article.Media);
+
             // Relationships
 
             // parent article

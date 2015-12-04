@@ -83,6 +83,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchApiInputModel.MultiFacets.Add("ArticleType", ((string)queryString.ArticleType.Value).Split(','));
             if (queryString.CollectingArea.HasValue)
                 searchApiInputModel.MultiFacets.Add("CollectingArea", ((string)queryString.CollectingArea.Value).Split(','));
+            if (queryString.ImageLicence.HasValue)
+                searchApiInputModel.MultiFacets.Add("ImageLicence", ((string)queryString.ImageLicence.Value).Split(','));
 
             // Terms
             if (queryString.Keyword.HasValue)
