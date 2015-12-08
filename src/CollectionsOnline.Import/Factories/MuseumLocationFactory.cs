@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
@@ -23,7 +25,15 @@ namespace CollectionsOnline.Import.Factories
                 map.GetEncodedString("LocLevel3") ?? string.Empty,
                 map.GetEncodedString("LocLevel4") ?? string.Empty);
 
-            return Constants.MuseumLocations.ContainsKey(locationKey) ? Constants.MuseumLocations[locationKey] : null;
+            var location = Constants.MuseumLocations.Where(x =>
+                StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item1, locationKey.Item1) &&
+                StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item2, locationKey.Item2) &&
+                StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item3, locationKey.Item3) &&
+                (StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item4, locationKey.Item4) || x.Key.Item4 == null))
+                .Select(x => new { x.Key, x.Value })
+                .FirstOrDefault();
+
+            return location != null ? location.Value : null;
         }
     }
 }

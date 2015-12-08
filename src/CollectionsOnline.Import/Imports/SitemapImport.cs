@@ -64,9 +64,7 @@ namespace CollectionsOnline.Import.Imports
                                 sitemapNodeIndexes.Add(sitemapNodes);
                                 sitemapNodes = new List<SitemapNode>();
                             }
-                        }
-
-                        Log.Logger.Information("Sitemap progress... {Offset}/{TotalResults}", count, queryHeaderInformation.TotalResults);
+                        }                        
 
                         skip += Constants.PagingStreamSize;
 
