@@ -85,7 +85,6 @@
     <Compile Include="DesignByContract\Ensures.cs" />
     <Compile Include="Extensions\ExpandoObjectExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
-    <Compile Include="Extensions\OrdinalIgnoreCaseTupleComparer.cs" />
     <Compile Include="Indexes\CombinedFacets.cs" />
     <Compile Include="Indexes\MediaByIrnWithChecksum.cs" />
     <Compile Include="Indexes\CombinedIndex.cs" />
