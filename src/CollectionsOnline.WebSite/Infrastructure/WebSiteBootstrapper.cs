@@ -16,7 +16,6 @@ using Ninject.Extensions.Conventions;
 using Raven.Client;
 using Raven.Client.Indexes;
 using Serilog;
-using Serilog.Events;
 using StackExchange.Profiling;
 using StackExchange.Profiling.RavenDb;
 
