@@ -11,10 +11,13 @@ namespace CollectionsOnline.WebSite.Extensions
         /// <returns>string suitable for use as a class</returns>
         public static string ToClass(this string input)
         {
-            return input
-                .ToLowerInvariant()
-                .Replace("&", "and")
-                .ReplaceNonWordWithDashes();
+            if(!string.IsNullOrWhiteSpace(input))
+                return input
+                    .ToLowerInvariant()
+                    .Replace("&", "and")
+                    .ReplaceNonWordWithDashes();
+
+            return input;
         }
     }
 }

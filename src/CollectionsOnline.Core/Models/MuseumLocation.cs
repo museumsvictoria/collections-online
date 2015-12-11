@@ -26,6 +26,8 @@ namespace CollectionsOnline.Core.Models
                     return "Royal Exhibition Building";
                 if (string.Equals(Venue, "Scienceworks", StringComparison.OrdinalIgnoreCase))
                     return "Scienceworks";
+                if (string.Equals(Venue, "Pumping Station", StringComparison.OrdinalIgnoreCase))
+                    return "Scienceworks";
 
                 return null;
             }
