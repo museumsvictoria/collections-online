@@ -11,6 +11,7 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using ImageProcessor;
+using ImageProcessor.Common.Exceptions;
 using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
 using IMu;
@@ -147,6 +148,10 @@ namespace CollectionsOnline.Import.Factories
                 else if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResourceNotFound")
                 {
                     Log.Logger.Warning(ex, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
+                }
+                else if (ex is ImageFormatException)
+                {
+                    Log.Logger.Warning(ex, "Multimedia resource is not an image format that is recognized, unable to save image {Irn}", imageMedia.Irn);
                 }
                 else
                 {
