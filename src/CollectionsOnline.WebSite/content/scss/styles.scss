@@ -3747,7 +3747,7 @@ footer {
 
     .xmas-tile {
         @include gridle (4);
-        @include gridle (4, tablet);
+        @include gridle (6, tablet);
         @include gridle (12, mobile);
         direction: ltr;
         margin-bottom: 20px;
@@ -3763,16 +3763,12 @@ footer {
         }
 
         .holder {
-            top: 80%;
-            left: 50%;
-            position: absolute;
-            -moz-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            -o-transform: translate(-50%, -50%);
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            text-align: center;
-            width: 85%;
+            position:absolute;
+            bottom:5px;
+            left:0;
+            right:0;
+            padding:18px;
+            text-align:center;
 
             .message {
                 font-weight: 500;
