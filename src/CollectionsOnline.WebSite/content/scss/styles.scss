@@ -605,12 +605,6 @@ button.icon {
                     display: none;
                 }
 
-                .icon::before {
-                    font-family: "mv-collections";
-                    content: "\e60c";
-                    font-size: 1.5em;
-                }
-
                 &.disabled, &.disabled:hover {
                     opacity: 0.2;
                     color: $colour-bodytext-inverted;
@@ -620,10 +614,35 @@ button.icon {
         }
     }
 
-    &.expanded .media-tools button .icon::before {
+    &.expanded .media-tools button .icon-expand::before {
         font-family: "mv-collections";
         content: "\e608";
         font-size: 1.5em;
+    }
+}
+
+#reuse {
+    background:#171717;
+    color:$color-default;
+    padding:1em 0;
+    font-size:14px;
+
+    .wrapper {
+        padding-left:10px;
+        padding-right:10px;
+
+        
+    }
+
+    h3 {
+        font-size:22px;
+        font-weight:400;
+        padding-bottom:5px;
+    }
+
+    h4 {
+        font-size:18px;
+        font-weight:300;
     }
 }
 

@@ -24,6 +24,18 @@ namespace CollectionsOnline.Core.Models
         public string Licence { get; set; }
 
         public string LicenceDetails { get; set; }
+
+        public bool PermissionRequired
+        {
+            get
+            {
+                if ((string.Equals(this.RightsStatus, "Copyright Expired: Public Domain", StringComparison.OrdinalIgnoreCase) && string.Equals(this.Licence, "No Known Restriction", StringComparison.OrdinalIgnoreCase)) ||
+                    (this.RightsStatus.StartsWith("In Copyright", StringComparison.OrdinalIgnoreCase) && this.Licence.StartsWith("CC BY", StringComparison.OrdinalIgnoreCase)))
+                    return false;
+
+                return true;
+            }
+        }
     }
 
     public class ImageMedia : Media, IHasThumbnail, IHasChecksum
