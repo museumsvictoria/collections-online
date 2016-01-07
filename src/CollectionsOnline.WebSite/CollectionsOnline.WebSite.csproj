@@ -164,12 +164,6 @@
     <Content Include="content\img\GitHub-Mark-Light-32px.png" />
     <Content Include="content\img\img-audio-thumbnail.png" />
     <Content Include="content\img\img-search-noresults.jpg" />
-    <Content Include="content\img\img-xmas-1.jpg" />
-    <Content Include="content\img\img-xmas-2.jpg" />
-    <Content Include="content\img\img-xmas-3.jpg" />
-    <Content Include="content\img\img-xmas-4.jpg" />
-    <Content Include="content\img\img-xmas-5.jpg" />
-    <Content Include="content\img\img-xmas-6.jpg" />
     <Content Include="content\img\mstile-144x144.png" />
     <Content Include="content\img\mstile-150x150.png" />
     <Content Include="content\img\mstile-310x150.png" />

@@ -3754,57 +3754,6 @@ footer {
     }
 }
 
-#xmas-explore {
-    width: 100%;
-    padding: 40px 0px 0px;
-
-    h2 {
-        margin-bottom: 25px;
-        font-weight: 400;
-        font-size: 28px;
-    }
-
-    .xmas-tile {
-        @include gridle (4);
-        @include gridle (6, tablet);
-        @include gridle (12, mobile);
-        direction: ltr;
-        margin-bottom: 20px;
-        position: relative;
-        page-break-inside: avoid;
-
-        img {
-            width: 100%;
-            height: 50%;
-            display: block;
-            border-radius: 3px;
-            margin-bottom: 5px;
-        }
-
-        .holder {
-            position:absolute;
-            bottom:5px;
-            left:0;
-            right:0;
-            padding:18px;
-            text-align:center;
-
-            .message {
-                font-weight: 500;
-                font-size: 20px;
-                margin-bottom: 10px;
-                display: block;
-            }
-
-            .title {
-                font-weight: 300;
-                font-size: 12px;
-                display: block;
-            }
-        }
-    }
-}
-
 #recent-explore {
     padding: 40px 0px 50px;
 
