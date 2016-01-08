@@ -11,7 +11,8 @@ namespace CollectionsOnline.WebSite.Modules
         public ArticlesModule(
             IArticleViewModelQuery articleViewModelQuery,
             IDocumentSession documentSession,
-            IMetadataViewModelFactory metadataViewModelFactory)            
+            IMetadataViewModelFactory metadataViewModelFactory,
+            IMediaResponseQuery mediaResponseQuery)
         {
             Get["/articles/{id}"] = parameters =>
             {
@@ -24,6 +25,8 @@ namespace CollectionsOnline.WebSite.Modules
 
                 return View["Articles", articleViewModelQuery.BuildArticle("articles/" + parameters.id)];
             };
+
+            Get["/articles/{id}/media/{mediaId}/{size}"] = parameters => mediaResponseQuery.BuildMediaResponse("articles/" + parameters.id, parameters.mediaId, parameters.size);
         }
     }
 }

@@ -10,7 +10,8 @@ namespace CollectionsOnline.WebSite.Modules
         public SpeciesModule(
             ISpeciesViewModelQuery speciesViewModelQuery,
             IDocumentSession documentSession,
-            IMetadataViewModelFactory metadataViewModelFactory)            
+            IMetadataViewModelFactory metadataViewModelFactory,
+            IMediaResponseQuery mediaResponseQuery)            
         {
             Get["/species/{id}"] = parameters =>
             {
@@ -23,6 +24,8 @@ namespace CollectionsOnline.WebSite.Modules
                 
                 return View["Species", speciesViewModelQuery.BuildSpecies("species/" + parameters.id)];
             };
+
+            Get["/species/{id}/media/{mediaId}/{size}"] = parameters => mediaResponseQuery.BuildMediaResponse("species/" + parameters.id, parameters.mediaId, parameters.size);
         }
     }
 }

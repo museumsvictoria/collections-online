@@ -23,6 +23,8 @@ namespace CollectionsOnline.Core.Config
 
         public static int MetadataDescriptionMaxChars = 400;
 
+        public static int FileMaxChars = 160;
+
         public static int CollectionSummaryMaxChars = 120;
 
         public static int HomeMaxRecentResults = 12;

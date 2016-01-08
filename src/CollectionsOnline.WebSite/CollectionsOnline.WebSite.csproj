@@ -256,6 +256,7 @@
     <Compile Include="Models\Api\CollectionSiteApiViewModel.cs" />
     <Compile Include="Models\Api\CollectionEventApiViewModel.cs" />
     <Compile Include="Models\Api\TaxonomyApiViewModel.cs" />
+    <Compile Include="Models\MediaViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Models\CollectionIndexViewModel.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
@@ -282,7 +283,9 @@
     <Compile Include="Modules\Api\ItemsApiModule.cs" />
     <Compile Include="Modules\Api\SpeciesApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiModule.cs" />
+    <Compile Include="Queries\MediaResponseQuery.cs" />
     <Compile Include="Queries\CollectionViewModelQuery.cs" />
+    <Compile Include="Queries\IMediaResponseQuery.cs" />
     <Compile Include="Queries\IArticleViewModelQuery.cs" />
     <Compile Include="Modules\ArticlesModule.cs" />
     <Compile Include="Queries\ArticleViewModelQuery.cs" />

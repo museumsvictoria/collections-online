@@ -11,7 +11,8 @@ namespace CollectionsOnline.WebSite.Modules
         public SpecimensModule(
             ISpecimenViewModelQuery specimenViewModelQuery,
             IDocumentSession documentSession,
-            IMetadataViewModelFactory metadataViewModelFactory)            
+            IMetadataViewModelFactory metadataViewModelFactory,
+            IMediaResponseQuery mediaResponseQuery)           
         {
             Get["/specimens/{id}"] = parameters =>
             {
@@ -24,6 +25,8 @@ namespace CollectionsOnline.WebSite.Modules
                 
                 return View["Specimens", specimenViewModelQuery.BuildSpecimen("specimens/" + parameters.id)];
             };
+
+            Get["/specimens/{id}/media/{mediaId}/{size}"] = parameters => mediaResponseQuery.BuildMediaResponse("specimens/" + parameters.id, parameters.mediaId, parameters.size);
         }
     }
 }

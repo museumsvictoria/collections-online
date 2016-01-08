@@ -1,34 +1,35 @@
 ﻿@using CollectionsOnline.Core.Models
 @using CollectionsOnline.WebSite.Extensions
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<Media>>
-@if (Model.Any())
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Models.MediaViewModel>
+@if (Model.Medias.Any())
 {
+    var first = Model.Medias.First();
     <figure id="media">
         <div class="media-holder">
-            @if (Model.Count() > 1)
+            @if (Model.Medias.Count() > 1)
             {
                 <a class="previous icon-left-arrow inactive" role="button" tabindex="-1"></a>
             }
             <div class="hero-media">
-                @if (Model.First() is ImageMedia)
+                @if (first is ImageMedia)
                 {
-                    var image = Model.First() as ImageMedia;
+                    var image = first as ImageMedia;
                     <img class="image" src="@image.Medium.Uri" alt="@(image.AlternativeText ?? image.Caption)" />
                 }
-                else if (Model.First() is VideoMedia)
+                else if (first is VideoMedia)
                 {
-                    var video = Model.First() as VideoMedia;
+                    var video = first as VideoMedia;
                     <img class="video" src="@video.Medium.Uri" alt="@(video.AlternativeText ?? video.Caption)" />
                 }
-                else if (Model.First() is AudioMedia)
+                else if (first is AudioMedia)
                 {
-                    var audio = Model.First() as AudioMedia;
+                    var audio = first as AudioMedia;
                     <audio preload="metadata" controls>
                         <source src="@audio.File.Uri" type="audio/mpeg" />
                     </audio>
                 }
             </div>
-            @if (Model.Count() > 1)
+            @if (Model.Medias.Count() > 1)
             {
                 <a class="next icon-right-arrow" role="button" tabindex="0"></a>
             }
@@ -37,57 +38,57 @@
             <div class="wrapper">
                 <div class="caption" aria-live="polite" aria-atomic="true">
                     <span class="caption-text">
-                        @if (!string.IsNullOrWhiteSpace(Model.First().Caption))
+                        @if (!string.IsNullOrWhiteSpace(first.Caption))
                         {
-                            @Html.Raw(Model.First().Caption)
+                            @Html.Raw(first.Caption)
                         }
                     </span>
                     <span class="creators">
-                        @for (int i = 0; i < Model.First().Creators.Count; i++)
+                        @for (int i = 0; i < first.Creators.Count; i++)
                         {
-                            @Model.First().Creators[i]@(i != Model.First().Creators.Count - 1 ? ", " : "")
+                            @first.Creators[i]@(i != first.Creators.Count - 1 ? ", " : "")
                         }
                     </span>
                     <span class="sources">
-                        @if (Model.First().Sources.Any())
+                        @if (first.Sources.Any())
                         {
                             @:Source:
-                            for (int i = 0; i < Model.First().Sources.Count; i++)
+                            for (int i = 0; i < first.Sources.Count; i++)
                             {
-                                @Model.First().Sources[i]@(i != Model.First().Sources.Count - 1 ? ", " : "")
+                                @first.Sources[i]@(i != first.Sources.Count - 1 ? ", " : "")
                             }
                         }
                     </span>
                     <span class="credit">
-                        @if (!string.IsNullOrWhiteSpace(Model.First().Credit))
+                        @if (!string.IsNullOrWhiteSpace(first.Credit))
                         {
-                            @:Credit: @Model.First().Credit
+                            @:Credit: @first.Credit
                         }
                     </span>
                     <span class="rights-statement">
-                        @if (!string.IsNullOrWhiteSpace(Model.First().RightsStatement))
+                        @if (!string.IsNullOrWhiteSpace(first.RightsStatement))
                         {
-                            if (Model.First() is ImageMedia)
+                            if (first is ImageMedia)
                             {
-                                @:This image is: @Model.First().RightsStatement
+                                @:This image is: @first.RightsStatement
                             }
-                            else if (Model.First() is VideoMedia)
+                            else if (first is VideoMedia)
                             {
-                                @:This video is: @Model.First().RightsStatement
+                                @:This video is: @first.RightsStatement
                             }
-                            else if (Model.First() is AudioMedia)
+                            else if (first is AudioMedia)
                             {
-                                @:This audio is: @Model.First().RightsStatement
+                                @:This audio is: @first.RightsStatement
                             }
                         }
                     </span>
                 </div>
                 <div class="media-tools">
-                    <button class="icon reuse @((Model.First() is VideoMedia || Model.First() is AudioMedia) ? "disabled" : null)" aria-pressed="false">
+                    <button class="icon reuse @((first is VideoMedia || first is AudioMedia) ? "disabled" : null)" aria-pressed="false">
                         <span class="icon-download" aria-hidden="true"></span>
                         <span class="icon-label-hidden">View full screen</span>
                     </button>
-                    <button class="icon fullscreen @((Model.First() is VideoMedia || Model.First() is AudioMedia) ? "disabled" : null)" aria-pressed="false">
+                    <button class="icon fullscreen @((first is VideoMedia || first is AudioMedia) ? "disabled" : null)" aria-pressed="false">
                         <span class="icon-expand" aria-hidden="true"></span>
                         <span class="icon-label-hidden">View full screen</span>
                     </button>
@@ -100,11 +101,11 @@
             <h3>Reuse this image</h3>
             <div class="rights-status">
                 <h4>Rights status</h4>
-                <p class="rights-statement">@Model.First().RightsStatement</p>
-                <p>Is permission required to reuse this image? <span class="permission-required">@(Model.First().PermissionRequired ? "Yes" : "No")</span></p>
+                <p class="rights-statement">@first.RightsStatement</p>
+                <p>Is permission required to reuse this image? <span class="permission-required">@(first.PermissionRequired ? "Yes" : "No")</span></p>
                 <h4>Conditions of use</h4>
                 <p class="conditions">
-                @if (Model.First().PermissionRequired)
+                @if (first.PermissionRequired)
                 {
                     @:Museum Victoria does not own the copyright in all the material on this website. In some cases copyright belongs to third parties and has been published here under a licence agreement: this does not authorise you to copy that material. You may be required to obtain permission from the copyright owner. <br/>
                     <br/>
@@ -116,35 +117,35 @@
                     <br/>
                     @:Images marked as Public Domain have, to the best of Museum Victoria’s knowledge, no copyright or intellectual property rights that would restrict their free download and reuse. Images marked with a Creative Commons (CC) license may be downloaded and reused in accordance with the conditions of the relevant <a href="http://creativecommons.org.au/learn/licences/">CC license</a>. Please acknowledge Museum Victoria and cite the URL for the image so that others can also find it.
                 }
-                </p>                               
+                </p>
             </div>
             <div class="attribution">
                 <h4>Attribution</h4>
                 <div class="creators">
-                    @for (int i = 0; i < Model.First().Creators.Count; i++)
+                    @for (int i = 0; i < first.Creators.Count; i++)
                     {
-                        @Model.First().Creators[i]@(i != Model.First().Creators.Count - 1 ? ", " : "")
+                        @first.Creators[i]@(i != first.Creators.Count - 1 ? ", " : "")
                     }
                 </div>
                 <div class="sources">
-                    @if (Model.First().Sources.Any())
+                    @if (first.Sources.Any())
                     {
-                        for (int i = 0; i < Model.First().Sources.Count; i++)
+                        for (int i = 0; i < first.Sources.Count; i++)
                         {
-                            @Model.First().Sources[i]@(i != Model.First().Sources.Count - 1 ? ", " : "")
+                            @first.Sources[i]@(i != first.Sources.Count - 1 ? ", " : "")
                         }
                     }
                 </div>
                 <div class="credit">
-                    @if (!string.IsNullOrWhiteSpace(Model.First().Credit))
+                    @if (!string.IsNullOrWhiteSpace(first.Credit))
                     {
-                        @Model.First().Credit
+                        @first.Credit
                     }
                 </div>
                 <div class="rights-statement">
-                    @if (!string.IsNullOrWhiteSpace(Model.First().RightsStatement))
+                    @if (!string.IsNullOrWhiteSpace(first.RightsStatement))
                     {
-                        @Model.First().RightsStatement
+                        @first.RightsStatement
                     }
                 </div>
             </div>
@@ -168,7 +169,7 @@
                 </fieldset>
             </form>
             <div class="download">
-                @if (Model.First().PermissionRequired)
+                @if (first.PermissionRequired)
                 {
                     <a href="http://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/">
                         <span class="title">Request image</span>                        
@@ -176,28 +177,28 @@
                 }
                 else
                 {
-                    if (Model.First() is ImageMedia)
+                    if (first is ImageMedia)
                     {
-                        var imageMedia = (ImageMedia)Model.First();
+                        var imageMedia = (ImageMedia)first;
 
                         if (imageMedia.Medium != null)
                         {
-                            <a href="@imageMedia.Medium.Uri">
-                                <span class="title">Download medium image</span>
+                            <a href="/@Model.DocumentId/media/@imageMedia.Irn/small">
+                                <span class="title">Download small image</span>
                                 <span class="sub-title">@imageMedia.Medium.Extension @imageMedia.Medium.Width x @imageMedia.Medium.Height, @imageMedia.Medium.Size.BytesToString()</span>
                             </a>
                         }
-                        if (imageMedia.Large != null)
+                        if (imageMedia.Large != null && (imageMedia.Medium.Height < imageMedia.Large.Height && imageMedia.Medium.Width < imageMedia.Large.Width))
                         {
-                            <a href="@imageMedia.Large.Uri">
-                                <span class="title">Download large image</span>
+                            <a href="/@Model.DocumentId/media/@imageMedia.Irn/medium">
+                                <span class="title">Download medium image</span>
                                 <span class="sub-title">@imageMedia.Large.Extension @imageMedia.Large.Width x @imageMedia.Large.Height, @imageMedia.Large.Size.BytesToString()</span>
                             </a>
                         }
-                        if (imageMedia.Original != null)
+                        if (imageMedia.Original != null && (imageMedia.Medium.Height < imageMedia.Original.Height && imageMedia.Medium.Width < imageMedia.Original.Width))
                         {
-                            <a href="@imageMedia.Original.Uri">
-                                <span class="title">Download orginal image</span>
+                            <a href="/@Model.DocumentId/media/@imageMedia.Irn/large">
+                                <span class="title">Download large image</span>
                                 <span class="sub-title">@imageMedia.Original.Extension @imageMedia.Original.Width x @imageMedia.Original.Height, @imageMedia.Original.Size.BytesToString()</span>
                             </a>
                         }
@@ -206,17 +207,17 @@
             </div>
         </div>
     </div>
-    if (Model.Count() > 1)
+    if (Model.Medias.Count() > 1)
     {
         <div id="objectthumbs">
             <div class="thumbnails wrapper">
-                @foreach (var media in Model)
+                @foreach (var media in Model.Medias)
                 {
                     if (media is ImageMedia)
                     {
                         var image = media as ImageMedia;
                         <div class="thumbnail" role="button" aria-label="Thumbnail">
-                            <img tabindex="0" @(Html.Raw((image.Irn == Model.First().Irn) ? "class=\"active\"" : null)) src="@image.Thumbnail.Uri" alt="@(image.AlternativeText ?? image.Caption)" />
+                            <img tabindex="0" @(Html.Raw((image.Irn == first.Irn) ? "class=\"active\"" : null)) src="@image.Thumbnail.Uri" alt="@(image.AlternativeText ?? image.Caption)" />
                         </div>
                     }
                     else if (media is VideoMedia)
@@ -224,14 +225,14 @@
                         var video = media as VideoMedia;
                         <div class="thumbnail" role="button" aria-label="Thumbnail">
                             <img class="video-overlay" alt="youtube play button" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6CAYAAACI7Fo9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjE0ODBGQUUyNDcwMTFFNUFFRDRDREE5NTgzQzkwQzkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjE0ODBGQUYyNDcwMTFFNUFFRDRDREE5NTgzQzkwQzkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2MTQ4MEZBQzI0NzAxMUU1QUVENENEQTk1ODNDOTBDOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2MTQ4MEZBRDI0NzAxMUU1QUVENENEQTk1ODNDOTBDOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pnu2DecAAAQpSURBVHja7N1PiMxxHMbx3wrtTsppc9iS8v9PESLk4ELhwEEicXLYg6RIKSkXKcSJ4kJELhQiJyWKEAcHByVxkIMUQ6LxTDMHFymz0/Ld16ue9v5p32Z+2d3paTQaFVC2UU4AQgeEDggdEDogdEDogNABoYPQAaEDQgeEDggdEDogdEDoIHRA6IDQAaEDQgeEDggdEDoIHRA6IHRA6IDQAaEDQgeEDggdhA4IHRA6IHRA6IDQAaEDQgehA0IHhA4IHRA6IHRA6IDQQeiA0AGhA0IHhA4IHRA6IHRA6CB0QOiA0AGhA0IHhA4IHRA6CB0QOiB0QOiA0AGhA0IHhA5CB4QOCB0QOiB0QOiA0AGhA0IHoQNCB4QOCB0QOiB0QOiA0EHogNCB/9JoJ+hMvV7vz5cT2fqs10WG1Pfsbra1Vqu9cY6/19NoNFyhs9Bv5csql+iqmwl9tTMIfThD/5YvY1yiu6/sCd2NPaMPK9+AHjGFDggdEDogdEDogNBB6IDQAaEDQmcoPM6+OgNCL9v5bHp2ySkQetleZ5uyZdkD50DoZbufLcm2ZG+dA6GXq/n7xheyqdmBrO4kCL1cX7KD2bTsXPsfAIROoZpv4bdli7J7ziF0yvYoW55tzF45h9Ap+/n9cjYz25d9chKhU67mD9gcyqZkZzy/C52yvcu2Z/OzO84hdMr2NFtRtf4m/UvnEDplu5rNynZnH51D6JSr+ffpj1atH7g5lf1wEqFTrvfZYDY3u+0cQqdsz6vWR02tzV44h9Ap241sTrYz++AcQgf+UT7Tij9Zkx3JZjiF0CnP7OxYttIpvHWnPP3ZyeyZyL2iU56x2Y5sfzbeOYROeda1n8MnO4XQKc+89nP4CqfwjE55JmSnsyci94pOeXqzXVXrj0+Mcw6hU5aebEN2OJvkHEKnPAuz41XrQx7wjE5hBrKz2UOR4xW9PH3ZnmxvVnMOhF7ec/jm9nP4gHMg9PIsrVr/H77YKfCMXp6J2cWq9UksIuf3b/caDX/auxP1en24Dvi4av2GWe9IuHOtVuvx3eat+0i0wAnw1h0QOggdEDogdEDogNABoQNCB4TeFV+doOs+O4HQh9t1J+i6a07QGT/r3rnB9tfmZ5T1OceQv1u68suN+Ut+ew28dQeEDggdEDogdEDogNABoYPQAaEDQgeEDggdEDogdEDoIHRA6IDQAaEDQgeEDggdEDoI3QlA6IDQAaEDQgeEDggdEDogdBA6IHRA6IDQAaEDQgeEDggdhA4IHRA6IHRA6IDQAaEDQgehA0IHhA4IHRA6IHRA6IDQAaGD0AGhA0IHhA4IHRA6IHRA6CB0QOiA0AGhA0IHhA4IHRA6CB0QOiB0QOiA0AGhA0IHhA4IHYQOCB0QOiB0QOiA0AGhA0IHoQNCB4QO/KN+CjAABshpQyAya6gAAAAASUVORK5CYII=" />
-                            <img tabindex="0" @(Html.Raw((video.Irn == Model.First().Irn) ? "class=\"active\"" : null)) src="@video.Thumbnail.Uri" alt="@(video.AlternativeText ?? video.Caption)" />
+                            <img tabindex="0" @(Html.Raw((video.Irn == first.Irn) ? "class=\"active\"" : null)) src="@video.Thumbnail.Uri" alt="@(video.AlternativeText ?? video.Caption)" />
                         </div>
                     }
                     else if (media is AudioMedia)
                     {
                         var audio = media as AudioMedia;
                         <div class="thumbnail" role="button" aria-label="Thumbnail">
-                            <img tabindex="0" @(Html.Raw((audio.Irn == Model.First().Irn) ? "class=\"active\"" : null)) src="@audio.Thumbnail.Uri" alt="@(audio.Caption)" />
+                            <img tabindex="0" @(Html.Raw((audio.Irn == first.Irn) ? "class=\"active\"" : null)) src="@audio.Thumbnail.Uri" alt="@(audio.Caption)" />
                         </div>
                     }
                 }

@@ -1,10 +1,11 @@
 ﻿@using CollectionsOnline.Core.Models
 @using CollectionsOnline.WebSite.Extensions
+@using CollectionsOnline.WebSite.Models
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ArticleViewTransformerResult>
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", Model.Article.Media.WithThumbnails())
+@Html.Partial("Media", new MediaViewModel { Medias = Model.Article.Media.WithThumbnails(), DocumentId = Model.Article.Id })
 <div id="title">
     <div class="wrapper">
         @Html.Partial("MediaTypes", Model.Article.Media.WithThumbnails())

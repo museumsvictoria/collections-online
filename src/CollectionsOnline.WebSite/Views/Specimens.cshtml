@@ -1,5 +1,6 @@
 ﻿@using CollectionsOnline.Core.Models
 @using CollectionsOnline.WebSite.Extensions
+@using CollectionsOnline.WebSite.Models
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.SpecimenViewTransformerResult>
 @{
     Layout = "Layout.cshtml";
@@ -8,7 +9,7 @@
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
 }
-@Html.Partial("Media", Model.Specimen.Media.WithThumbnails())
+@Html.Partial("Media", new MediaViewModel { Medias = Model.Specimen.Media.WithThumbnails(), DocumentId = Model.Specimen.Id })
 <div id="title">
     <div class="wrapper">
         @Html.Partial("MediaTypes", Model.Specimen.Media.WithThumbnails())
