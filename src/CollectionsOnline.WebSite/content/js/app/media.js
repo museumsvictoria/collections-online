@@ -27,6 +27,7 @@ module.exports = {
     this.$heroRights = $('.rights-statement', this.$mediaArea);
 
     this.$fullscreenButton = $('button.fullscreen');
+    this.$reuseButton = $('button.reuse');
     
     this.defaultMaxHeight = $('img', this.$heroMedia).css('max-height');
     this.defaultMaxWidth = this.$mediaHolder.css('max-width');
@@ -49,6 +50,7 @@ module.exports = {
     }
     this.$thumbs.on('click keydown', 'img', this.select.bind(this));    
     this.$fullscreenButton.on('click', this.toggleFullscreen.bind(this));
+    this.$reuseButton.on('click', this.toggleReuse.bind(this));
     this.$previous.on('click keydown', { direction: "previous" }, this.moveTo.bind(this));
     this.$next.on('click keydown', { direction: "next" }, this.moveTo.bind(this));    
 
@@ -140,6 +142,9 @@ module.exports = {
       
       this.$mediaArea.toggleClass('expanded');
     }
+  },
+  toggleReuse: function(e) {
+    $('#reuse').toggle();
   },
   moveTo: function (e) {
     if (e.keyCode == 13 || e.type == 'click') {

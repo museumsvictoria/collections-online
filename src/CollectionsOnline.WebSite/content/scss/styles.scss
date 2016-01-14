@@ -623,26 +623,150 @@ button.icon {
 
 #reuse {
     background:#171717;
-    color:$color-default;
-    padding:1em 0;
+    color:$colour-bodytext-inverted;
+    padding:2em 0;
     font-size:14px;
-
-    .wrapper {
-        padding-left:10px;
-        padding-right:10px;
-
-        
-    }
+    display:none;
 
     h3 {
         font-size:22px;
         font-weight:400;
-        padding-bottom:5px;
+        @include gridle(12);
+        color:$colour-heading-inverted;
     }
 
-    h4 {
+    h4, legend {
         font-size:18px;
         font-weight:300;
+        padding-bottom:5px;
+        color:$colour-heading-inverted;
+    }
+
+    .rights {
+        margin-top:20px;
+        @include gridle(6);
+        @include gridle ( 12, 'mobile' );
+        
+
+        .status {
+            .statement, .permission {
+                display:inline-block;
+                color:$colour-heading-inverted;
+                font-weight:500;
+            }
+        }
+
+        .attribution {
+            margin-top:20px;
+            color:$colour-heading-inverted;
+            font-weight:500;
+        }               
+    }
+
+    .share {
+        margin-top:20px;
+        @include gridle(6);
+        @include gridle ( 12, 'mobile' );
+
+        fieldset {
+            border:0;
+            padding:0;
+            margin:0;
+        }
+
+        select {
+            display:block;
+            border:0;
+            color:$colour-button-text;
+            @include border-radius(2px);
+            padding:5px;
+        }
+
+        textarea {
+            display:block;
+            width:100%;
+            height:5em;
+            border:0;
+            color:$colour-button-text;
+            @include border-radius(2px);
+        }
+
+        label {
+            color:$colour-heading-inverted;
+            margin:15px 0 10px;
+            display:block;
+        }
+
+        button {
+            color:$colour-button-text;
+            background:$colour-button-background;
+            border:0;
+            padding:5px;
+            margin-top:15px;
+            @include border-radius(2px);
+
+            &:hover {
+                background:$colour-heading-inverted;
+            }
+        }
+    }
+
+    .download {
+        margin-top:10px;
+
+        a:hover {
+            background:$colour-heading-inverted;
+        }
+
+        .link {
+            color:$colour-button-text;
+            background:$colour-button-background;
+            @include border-radius(2px);
+            padding:10px 10px 10px 40px;
+            display:inline-block;
+            position:relative;
+            margin-bottom:10px;
+
+            .title {
+                margin-bottom:5px;
+            }
+
+            .sub-title {
+                color:$color-sub-heading;
+            }
+
+            &:before {
+                font-weight: 400;
+                font-size: 20px;
+                font-family: "mv-collections";
+                content: "\e60b";
+                position:absolute;
+                left:10px;
+                top:5px;
+            }
+
+            &:last-of-type {
+                margin-bottom:0;
+            }
+        }
+
+        .request {
+            color:$colour-button-text;
+            background:$colour-button-background;
+            @include border-radius(2px);
+            padding:10px;
+            display:inline-block;
+        }
+    }
+
+    .conditions {
+        margin-top:20px;
+        @include gridle(12);
+
+        .statement {
+            font-size:12px;
+            color:$color-sub-heading;
+        }
     }
 }
 
