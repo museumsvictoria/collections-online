@@ -57,6 +57,9 @@ module.exports = {
     $(document).on('keydown', this.handleKey.bind(this));
   },
   handleKey: function (e) {
+    if ($('input,textarea').is(':focus'))
+      return;
+
     switch (e.which) {
       case 37: // left arrow
         this.$previous.triggerHandler('click');

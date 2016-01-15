@@ -30,7 +30,7 @@ namespace CollectionsOnline.Core.Models
             get
             {
                 if ((string.Equals(this.RightsStatus, "Copyright Expired: Public Domain", StringComparison.OrdinalIgnoreCase) && string.Equals(this.Licence, "No Known Restriction", StringComparison.OrdinalIgnoreCase)) ||
-                    (this.RightsStatus.StartsWith("In Copyright", StringComparison.OrdinalIgnoreCase) && this.Licence.StartsWith("CC BY", StringComparison.OrdinalIgnoreCase)))
+                    ((this.RightsStatus == null || this.RightsStatus.StartsWith("In Copyright", StringComparison.OrdinalIgnoreCase)) && (this.Licence == null || this.Licence.StartsWith("CC BY", StringComparison.OrdinalIgnoreCase))))
                     return false;
 
                 return true;

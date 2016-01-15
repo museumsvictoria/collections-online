@@ -124,7 +124,7 @@
                         </span>
                     </p>
                 </div>
-                <div class="attribution">
+                <div class="attribution @((first.PermissionRequired) ? "disabled" : null)">
                     <h4>Attribute this image</h4>
                     <div class="creators">
                         @for (int i = 0; i < first.Creators.Count; i++)
