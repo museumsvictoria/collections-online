@@ -42,3 +42,10 @@ $(document).ready(function () {
 $.whenArray = function (array) {
   return $.when.apply(this, array);
 };
+
+Math.log = (function () {
+  var log = Math.log;
+  return function (n, base) {
+    return log(n) / (base ? log(base) : 1);
+  };
+})();

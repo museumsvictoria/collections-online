@@ -1,5 +1,4 @@
-﻿using CollectionsOnline.Core.Config;
-using CollectionsOnline.WebSite.Factories;
+﻿using CollectionsOnline.WebSite.Factories;
 using Nancy;
 using Nancy.Routing;
 

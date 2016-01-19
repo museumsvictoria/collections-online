@@ -224,6 +224,8 @@
     <Content Include="Views\Metadata.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Handlers\IMediaReuseCommandHandler.cs" />
+    <Compile Include="Commands\Handlers\MediaReuseCommandHandler.cs" />
     <Compile Include="Extensions\HttpRequestExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -261,6 +263,7 @@
     <Compile Include="Models\CollectionIndexViewModel.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\ApiViewModel.cs" />
+    <Compile Include="Commands\MediaReuseCommand.cs" />
     <Compile Include="Models\SearchInputModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
@@ -274,6 +277,7 @@
     <Compile Include="Models\Api\CommentApiViewModel.cs" />
     <Compile Include="Models\Api\ItemApiViewModel.cs" />
     <Compile Include="Modules\Api\ArticlesApiModule.cs" />
+    <Compile Include="Modules\MediaReusesModule.cs" />
     <Compile Include="Modules\DevelopersModule.cs" />
     <Compile Include="Modules\CollectionsModule.cs" />
     <Compile Include="Modules\RedirectModule.cs" />

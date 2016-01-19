@@ -544,29 +544,6 @@ button.icon {
                 height: auto;
                 font-size: 9pt;
             }
-
-            & .caption-text {
-                display: block;
-            }
-
-            & .creators {
-                display: block;
-            }
-
-            & .credit {
-                display: block;
-            }
-
-            & .rights-statement {
-                float: none;
-                display: block;
-                font-size: 14px;
-                font-weight: 300;
-
-                @include gridle_state("print") {
-                    font-size: 9pt;
-                }
-            }
         }
         //end caption block
         & .media-tools {
@@ -628,6 +605,10 @@ button.icon {
     font-size:14px;
     display:none;
 
+    .disabled {
+        display:none;
+    }
+
     h3 {
         font-size:22px;
         font-weight:400;
@@ -646,11 +627,9 @@ button.icon {
         margin-top:20px;
         @include gridle(6);
         @include gridle ( 12, 'mobile' );
-        
 
         .status {
-            .statement, .permission {
-                display:inline-block;
+            .rights-statement, .permission {
                 color:$colour-heading-inverted;
                 font-weight:500;
             }
@@ -660,17 +639,17 @@ button.icon {
             margin-top:20px;
             color:$colour-heading-inverted;
             font-weight:500;
-
-            &.disabled {
-                display:none;
-            }
-        }               
+        }
     }
 
     .share {
         margin-top:20px;
         @include gridle(6);
         @include gridle ( 12, 'mobile' );
+
+        h4 {
+            margin-top:15px;
+        }
 
         fieldset {
             border:0;

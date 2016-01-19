@@ -97,6 +97,7 @@
     <Compile Include="Models\CollectionSite.cs" />
     <Compile Include="Models\EmuSummary.cs" />
     <Compile Include="Models\FileDerivativeType.cs" />
+    <Compile Include="Models\MediaReuse.cs" />
     <Compile Include="Models\ImportCache.cs" />
     <Compile Include="Models\MediaFile.cs" />
     <Compile Include="Models\QualifierRankType.cs" />

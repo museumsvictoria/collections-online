@@ -12,7 +12,7 @@ module.exports = {
       this.bindEvents();
     }
   },
-  cacheElements: function () {       
+  cacheElements: function () {
     this.$thumbs = $('#objectthumbs .thumbnail');
     this.$activeMedia = $('#objectthumbs .thumbnail img.active');
     
@@ -20,11 +20,14 @@ module.exports = {
     this.$mediaHolder = $('.media-holder', this.$mediaArea);
     this.$heroMedia = $('.hero-media', this.$mediaArea);
     
-    this.$heroCaption = $('.caption-text', this.$mediaArea);
-    this.$heroCreators = $('.creators', this.$mediaArea);
-    this.$heroSources = $('.sources', this.$mediaArea);
-    this.$heroCredit = $('.credit', this.$mediaArea);
-    this.$heroRights = $('.rights-statement', this.$mediaArea);
+    this.$caption = $('.caption-text');
+    this.$creators = $('.creators');
+    this.$sources = $('.sources');
+    this.$sourcesQualifier = $('.sources-qualifier');
+    this.$credit = $('.credit');
+    this.$creditQualifier = $('.credit-qualifier');
+    this.$rightsStatement = $('.rights-statement');
+    this.$rightsStatementQualifier = $('.rights-statement-qualifier');
 
     this.$fullscreenButton = $('button.fullscreen');
     this.$reuseButton = $('button.reuse');
@@ -37,6 +40,9 @@ module.exports = {
     
     if (this.Model !== undefined && this.Model.length <= 1)
       this.$next.addClass('inactive');
+
+    this.$reuseArea = $('#reuse');
+    this.$reuseForm = $('form.share', this.$reuseArea);
   },
   bindEvents: function () {
     // init video if first media 
@@ -52,7 +58,8 @@ module.exports = {
     this.$fullscreenButton.on('click', this.toggleFullscreen.bind(this));
     this.$reuseButton.on('click', this.toggleReuse.bind(this));
     this.$previous.on('click keydown', { direction: "previous" }, this.moveTo.bind(this));
-    this.$next.on('click keydown', { direction: "next" }, this.moveTo.bind(this));    
+    this.$next.on('click keydown', { direction: "next" }, this.moveTo.bind(this));
+    this.$reuseForm.on('submit', this.submitReuseForm.bind(this));
 
     $(document).on('keydown', this.handleKey.bind(this));
   },
@@ -149,6 +156,29 @@ module.exports = {
   toggleReuse: function(e) {
     $('#reuse').toggle();
   },
+  submitReuseForm: function (e) {
+    e.preventDefault();
+
+    var data = this.$reuseForm.serializeArray();
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].name == 'usage' && data[i].value == 'not-selected')
+        return;
+    }
+
+    $.ajax({
+      url: '/mediareuses',
+      method: 'POST',
+      data: data
+    }).done(function() {
+      $('.input-group', this.$reuseForm).addClass('disabled');
+      $('.input-group select', this.$reuseForm).val('not-selected');
+      $('.input-group textarea', this.$reuseForm).val('');
+      $('.form-response', this.$reuseForm).html('<h4>Thank you for your submission!</h4>').removeClass('disabled');
+    }).fail(function () {
+      $('.input-group', this.$reuseForm).addClass('disabled');
+      $('.form-response', this.$reuseForm).html('<h4>Something went wrong receiving your submission, please try again later.</h4>').removeClass('disabled');
+    });
+  },
   moveTo: function (e) {
     if (e.keyCode == 13 || e.type == 'click') {
       var moveToIndex = this.$activeMedia.parent().index();
@@ -201,12 +231,14 @@ module.exports = {
       }
             
       this.$fullscreenButton.removeClass('disabled');
+      this.$reuseButton.removeClass('disabled');
 
       this.preloadImages(newHeroImage.attr('src')).done(function () {
         $this.$heroMedia.html(newHeroImage);
         newHeroImage.removeAttr('width');
         newHeroImage.removeAttr('height');
         $this.switchCaption(newMedia);
+        $this.switchReuse(newMedia);
       });
     } else if (newMedia.$type.indexOf('VideoMedia') > 0) {
       // Handle Videos      
@@ -217,6 +249,9 @@ module.exports = {
       var newHeroVideo = $('<img/>', { 'alt': newMedia.Caption, 'src': newMedia.Medium.Uri, 'class': 'video' });
       
       this.$fullscreenButton.addClass('disabled');
+      this.$reuseButton.addClass('disabled');
+      if (this.$reuseArea.is(':visible'))
+        this.toggleReuse();
       
       this.preloadImages(newHeroVideo.attr('src')).done(function () {
         $this.$heroMedia.html(newHeroVideo);
@@ -245,6 +280,9 @@ module.exports = {
       var newHeroAudio = $('<audio preload="metadata" controls><source src="' + newMedia.File.Uri + '" type="audio/mpeg"/><audio/>');
 
       this.$fullscreenButton.addClass('disabled');
+      this.$reuseButton.addClass('disabled');
+      if (this.$reuseArea.is(':visible'))
+        this.toggleReuse();
 
       $this.$heroMedia.html(newHeroAudio);
       this.$heroMedia.addClass('audio-loaded');
@@ -254,19 +292,84 @@ module.exports = {
     }
   },
   switchCaption: function(media) {
-    (media.Caption) ? this.$heroCaption.html(media.Caption) : this.$heroCaption.empty();
-    (media.Creators.length > 0) ? this.$heroCreators.text(media.Creators.join(', ')) : this.$heroCreators.empty();
-    (media.Sources.length > 0) ? this.$heroSources.text('Source: ' + media.Sources.join(', ')) : this.$heroSources.empty();
-    (media.Credit) ? this.$heroCredit.text('Credit: ' + media.Credit) : this.$heroCredit.empty();
+    (media.Caption) ? this.$caption.html(media.Caption) : this.$caption.empty();
 
-    var rightsLabel;
-    if (media.$type.indexOf('ImageMedia') > 0)
-      rightsLabel = 'This image is: ';
-    else if (media.$type.indexOf('VideoMedia') > 0)
-      rightsLabel = 'This video is: ';
-    else if(media.$type.indexOf('AudioMedia') > 0)
-      rightsLabel = 'This audio is: ';    
-    (media.RightsStatement) ? this.$heroRights.text(rightsLabel + media.RightsStatement) : this.$heroRights.empty();
+    (media.Creators.length > 0) ? this.$creators.html(media.Creators.join(', ')) : this.$creators.empty();
+
+    if (media.Sources.length > 0) {
+      this.$sources.html(media.Sources.join(', '));
+      this.$sourcesQualifier.html('Source:');
+    } else {
+      this.$sources.empty();
+      this.$sourcesQualifier.empty();
+    }
+
+    if (media.Credit) {
+      this.$credit.html(media.Credit);
+      this.$creditQualifier.html('Credit:');
+    } else {
+      this.$credit.empty();
+      this.$creditQualifier.empty();
+    }
+
+    if (media.RightsStatement) {
+      this.$rightsStatement.html(media.RightsStatement);
+      if (media.$type.indexOf('ImageMedia') > 0)
+        this.$rightsStatementQualifier.html('This image is:');
+      else if (media.$type.indexOf('VideoMedia') > 0)
+        this.$rightsStatementQualifier.html('This video is:');
+      else if (media.$type.indexOf('AudioMedia') > 0)
+        this.$rightsStatementQualifier.html('This audio is:');
+    } else {
+      this.$rightsStatement.empty();
+      this.$rightsStatementQualifier.empty();
+    }
+  },
+  switchReuse: function (media) {
+    var documentId = $('#documentid', this.$reuseForm).val();
+
+    if (media.PermissionRequired) {
+      $('.permission', this.$reuseArea).html('No <span class="icon"><span class="icon-close2" aria-hidden="true"></span><span class="icon-label-hidden">Cross</span></span>');
+      $('.attribution', this.$reuseArea).addClass('disabled');      
+      $('.download', this.$reuseArea).html('<a class="request" href="http://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/"><span class="title">Request image</span></a>');
+      $('.share', this.$reuseArea).addClass('disabled');
+      $('.statement', this.$reuseArea).html('Museum Victoria does not own the copyright in all the material on this website. In some cases copyright belongs to third parties and has been published here under a licence agreement: this does not authorise you to copy that material. You may be required to obtain permission from the copyright owner.<br/><br/>Some unpublished material may require permission for reuse even if it is very old. Orphan works, where the copyright owner is unknown, also require permission for reuse. Indigenous works may have additional legal and cultural issues. You may be required to seek cultural clearances from Aboriginal and Torres Strait Islander communities, families, individuals or organisations before you reproduce Aboriginal and Torres Strait Islander material.');
+    } else {
+      $('.permission', this.$reuseArea).html('Yes <span class="icon"><span class="icon-tick" aria-hidden="true"></span><span class="icon-label-hidden">Tick</span></span>');
+      $('.attribution', this.$reuseArea).removeClass('disabled');
+
+      var downloadImagesHtml = ['<h4>Download images</h4>'];
+      if (media.Medium) {
+        downloadImagesHtml.push(
+          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/small">',
+          '  <span class="title">Small</span>',
+          '  <span class="sub-title">(' + media.Medium.Width + ' x ' + media.Medium.Height + ', ' + this.bytesToString(media.Medium.Size) + ')</span>',
+          '</a><br/>');
+      }
+      if (media.Large && (media.Medium.Height < media.Large.Height && media.Medium.Width < media.Large.Width)) {
+        downloadImagesHtml.push(
+          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/medium">',
+          '  <span class="title">Medium</span>',
+          '  <span class="sub-title">(' + media.Large.Width + ' x ' + media.Large.Height + ', ' + this.bytesToString(media.Large.Size) + ')</span>',
+          '</a><br/>');
+      }
+      if (media.Original && (media.Large.Height < media.Original.Height && media.Large.Width < media.Original.Width)) {
+        downloadImagesHtml.push(
+          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/large">',
+          '  <span class="title">Large</span>',
+          '  <span class="sub-title">(' + media.Original.Width + ' x ' + media.Original.Height + ', ' + this.bytesToString(media.Original.Size) + ')</span>',
+          '</a><br/>');
+      }
+      $('.download', this.$reuseArea).html(downloadImagesHtml.join('\n'));
+
+      $('.share', this.$reuseArea).removeClass('disabled');
+      $('.input-group', this.$reuseForm).removeClass('disabled');
+      $('.form-response', this.$reuseForm).addClass('disabled');
+
+      $('#mediaid', this.$reuseForm).val(media.Irn);
+
+      $('.statement', this.$reuseArea).html('Museum Victoria supports and encourages public access to our collection by offering image downloads for reuse.<br/><br/>Images marked as Public Domain have, to the best of Museum Victoria’s knowledge, no copyright or intellectual property rights that would restrict their free download and reuse. Images marked with a Creative Commons (CC) license may be downloaded and reused in accordance with the conditions of the relevant <a href="http://creativecommons.org.au/learn/licences/">CC license</a>. Please acknowledge Museum Victoria and cite the URL for the image so that others can also find it.');
+    }
   },
   preloadImages: function(srcs) {
     var dfd = $.Deferred(),
@@ -296,4 +399,15 @@ module.exports = {
     $.whenArray(promises).done(dfd.resolve);
     return dfd.promise();
   },
+  bytesToString: function(bytes) {
+    var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
+    if (bytes === 0)
+      return bytes + unit[0];
+
+    bytes = Math.abs(bytes);
+    var place = Math.floor(Math.log(bytes, 1024));
+    var num = bytes / Math.pow(1024, place);
+
+    return (Math.sign(bytes) * num.toFixed(1)) + units[place];
+  }
 };
