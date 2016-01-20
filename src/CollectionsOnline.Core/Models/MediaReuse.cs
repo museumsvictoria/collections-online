@@ -13,6 +13,6 @@
 
         public string DocumentId { get; set; }
 
-        public long MediaId { get; set; }
+        public Media Media { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using CollectionsOnline.Core.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CollectionsOnline.Core.Models;
 using Raven.Client;
 
 namespace CollectionsOnline.WebSite.Commands.Handlers
@@ -16,10 +18,16 @@ namespace CollectionsOnline.WebSite.Commands.Handlers
 
         public void Handle(MediaReuseCommand mediaReuseCommand)
         {
+            var document = _documentSession.Load<dynamic>(mediaReuseCommand.DocumentId);
+            IList<Media> documentMedia = document.Media;
+
+            var media = documentMedia
+                .Single(x => x.Irn == mediaReuseCommand.MediaId);
+
             var mediaReuse = new MediaReuse
             {
                 DocumentId = mediaReuseCommand.DocumentId,
-                MediaId = mediaReuseCommand.MediaId,
+                Media = media,
                 Usage = mediaReuseCommand.Usage,
                 UsageMore = mediaReuseCommand.UsageMore
             };

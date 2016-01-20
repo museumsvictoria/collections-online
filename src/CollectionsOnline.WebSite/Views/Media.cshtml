@@ -135,7 +135,7 @@
                     </p>
                 </div>
                 <div class="attribution @((first.PermissionRequired) ? "disabled" : null)">
-                    <h4>Attribute this image</h4>
+                    <h4 @((!first.Creators.Any() && !first.Sources.Any() && string.IsNullOrWhiteSpace(first.Credit) && string.IsNullOrWhiteSpace(first.RightsStatement)) ? Html.Raw("class=\"disabled\"") : null)>Attribute this image</h4>
                     <div class="creators">
                         @for (int i = 0; i < first.Creators.Count; i++)
                         {

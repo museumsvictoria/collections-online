@@ -10,6 +10,7 @@ module.exports = {
     if (this.Model !== undefined && this.Model.length != 0) {
       this.cacheElements();
       this.bindEvents();
+      this.reuseCheck();
     }
   },
   cacheElements: function () {
@@ -62,6 +63,12 @@ module.exports = {
     this.$reuseForm.on('submit', this.submitReuseForm.bind(this));
 
     $(document).on('keydown', this.handleKey.bind(this));
+  },
+  reuseCheck: function name() {
+    if ($.storageAvailable('localStorage') && localStorage.getItem('sharedMediaId' + $('#mediaid', this.$reuseForm).val())) {
+      $('.input-group', this.$reuseForm).addClass('disabled');
+      $('.form-response', this.$reuseForm).html('<h4>Thank you for your previous submission!</h4>').removeClass('disabled');
+    }
   },
   handleKey: function (e) {
     if ($('input,textarea').is(':focus'))
@@ -174,6 +181,11 @@ module.exports = {
       $('.input-group select', this.$reuseForm).val('not-selected');
       $('.input-group textarea', this.$reuseForm).val('');
       $('.form-response', this.$reuseForm).html('<h4>Thank you for your submission!</h4>').removeClass('disabled');
+
+      if ($.storageAvailable('localStorage')) {
+        localStorage.setItem('sharedMediaId' + $('#mediaid', this.$reuseForm).val(), true);
+      }
+
     }).fail(function () {
       $('.input-group', this.$reuseForm).addClass('disabled');
       $('.form-response', this.$reuseForm).html('<h4>Something went wrong receiving your submission, please try again later.</h4>').removeClass('disabled');
@@ -330,13 +342,17 @@ module.exports = {
 
     if (media.PermissionRequired) {
       $('.permission', this.$reuseArea).html('No <span class="icon"><span class="icon-close2" aria-hidden="true"></span><span class="icon-label-hidden">Cross</span></span>');
-      $('.attribution', this.$reuseArea).addClass('disabled');      
+      $('.attribution', this.$reuseArea).addClass('disabled');
+      $('.attribution h4', this.$reuseArea).removeClass('disabled');
       $('.download', this.$reuseArea).html('<a class="request" href="http://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/"><span class="title">Request image</span></a>');
       $('.share', this.$reuseArea).addClass('disabled');
       $('.statement', this.$reuseArea).html('Museum Victoria does not own the copyright in all the material on this website. In some cases copyright belongs to third parties and has been published here under a licence agreement: this does not authorise you to copy that material. You may be required to obtain permission from the copyright owner.<br/><br/>Some unpublished material may require permission for reuse even if it is very old. Orphan works, where the copyright owner is unknown, also require permission for reuse. Indigenous works may have additional legal and cultural issues. You may be required to seek cultural clearances from Aboriginal and Torres Strait Islander communities, families, individuals or organisations before you reproduce Aboriginal and Torres Strait Islander material.');
     } else {
       $('.permission', this.$reuseArea).html('Yes <span class="icon"><span class="icon-tick" aria-hidden="true"></span><span class="icon-label-hidden">Tick</span></span>');
       $('.attribution', this.$reuseArea).removeClass('disabled');
+
+      if (!(media.Creators.length > 0) && !(media.Sources.length > 0) && !media.Credit && !media.RightsStatement)
+        $('.attribution h4', this.$reuseArea).addClass('disabled');
 
       var downloadImagesHtml = ['<h4>Download images</h4>'];
       if (media.Medium) {
@@ -370,6 +386,8 @@ module.exports = {
 
       $('.statement', this.$reuseArea).html('Museum Victoria supports and encourages public access to our collection by offering image downloads for reuse.<br/><br/>Images marked as Public Domain have, to the best of Museum Victoria’s knowledge, no copyright or intellectual property rights that would restrict their free download and reuse. Images marked with a Creative Commons (CC) license may be downloaded and reused in accordance with the conditions of the relevant <a href="http://creativecommons.org.au/learn/licences/">CC license</a>. Please acknowledge Museum Victoria and cite the URL for the image so that others can also find it.');
     }
+    
+    this.reuseCheck();
   },
   preloadImages: function(srcs) {
     var dfd = $.Deferred(),
