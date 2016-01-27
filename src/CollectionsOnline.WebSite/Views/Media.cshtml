@@ -94,11 +94,11 @@
                     </div>
                 </div>
                 <div class="media-tools">
-                    <button class="icon reuse @(!(first is ImageMedia) ? "disabled" : null)" aria-pressed="false">
+                    <button class="icon reuse @(!(first is ImageMedia) ? "disabled" : null)" aria-pressed="false" title="Reuse this image">
                         <span class="icon-reuse" aria-hidden="true"></span>
                         <span class="icon-label-hidden">Reuse image</span>
                     </button>
-                    <button class="icon fullscreen @(!(first is ImageMedia) ? "disabled" : null)" aria-pressed="false">
+                    <button class="icon fullscreen @(!(first is ImageMedia) ? "disabled" : null)" aria-pressed="false" title="Toggle fullscreen">
                         <span class="icon-expand" aria-hidden="true"></span>
                         <span class="icon-label-hidden">View full screen</span>
                     </button>
@@ -180,21 +180,21 @@
 
                         if (imageMedia.Medium != null)
                         {
-                            <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/small">
+                            <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/small" rel="nofollow">
                                 <span class="title">Small</span>
                                 <span class="sub-title">(@imageMedia.Medium.Width x @imageMedia.Medium.Height, @imageMedia.Medium.Size.BytesToString())</span>
                             </a><br/>
                         }
                         if (imageMedia.Large != null && (imageMedia.Medium.Height < imageMedia.Large.Height && imageMedia.Medium.Width < imageMedia.Large.Width))
                         {
-                            <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/medium">
+                            <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/medium" rel="nofollow">
                                 <span class="title">Medium</span>
                                 <span class="sub-title">(@imageMedia.Large.Width x @imageMedia.Large.Height, @imageMedia.Large.Size.BytesToString())</span>
                             </a><br />
                         }
                         if (imageMedia.Original != null && (imageMedia.Large.Height < imageMedia.Original.Height && imageMedia.Large.Width < imageMedia.Original.Width))
                         {
-                            <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/large">
+                            <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/large" rel="nofollow">
                                 <span class="title">Large</span>
                                 <span class="sub-title">(@imageMedia.Original.Width x @imageMedia.Original.Height, @imageMedia.Original.Size.BytesToString())</span>
                             </a><br />
@@ -210,7 +210,7 @@
                     <h4 class="form-response disabled"></h4>
                     <div class="input-group">
                         <label for="usage">What’s your intended use for this image?</label>
-                        <select name="usage">
+                        <select name="usage" aria-required="true">
                             <option value="not-selected">Please select an option</option>
                             <option value="Research">Scholarly or professional research </option>
                             <option value="School">For school, university, etc.</option>
@@ -221,7 +221,7 @@
                             <option value="Other">Make something else interesting</option>
                         </select>
                         <label for="usagemore">Could you please tell us more?</label>
-                        <textarea name="usagemore"></textarea>
+                        <textarea name="usagemore" aria-required="false"></textarea>
                         <button type="submit">Submit</button>
                         <input id="documentid" type="hidden" name="documentId" value="@Model.DocumentId" />
                         <input id="mediaid" type="hidden" name="mediaId" value="@first.Irn" />

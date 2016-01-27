@@ -44,6 +44,7 @@ module.exports = {
 
     this.$reuseArea = $('#reuse');
     this.$reuseForm = $('form.share', this.$reuseArea);
+    this.$reuseLinks = $('.download .link', this.$reuseArea);
   },
   bindEvents: function () {
     // init video if first media 
@@ -61,6 +62,7 @@ module.exports = {
     this.$previous.on('click keydown', { direction: "previous" }, this.moveTo.bind(this));
     this.$next.on('click keydown', { direction: "next" }, this.moveTo.bind(this));
     this.$reuseForm.on('submit', this.submitReuseForm.bind(this));
+    this.$reuseLinks.on('click', this.downloadMedia.bind(this));
 
     $(document).on('keydown', this.handleKey.bind(this));
   },
@@ -190,6 +192,16 @@ module.exports = {
       $('.input-group', this.$reuseForm).addClass('disabled');
       $('.form-response', this.$reuseForm).html('<h4>Something went wrong receiving your submission, please try again later.</h4>').removeClass('disabled');
     });
+  },
+  downloadMedia: function(e) {
+    if (window.ga.loaded) {
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Downloads',
+        eventAction: 'Image',
+        eventLabel: $(e.currentTarget).attr('href')
+      });
+    }
   },
   moveTo: function (e) {
     if (e.keyCode == 13 || e.type == 'click') {
@@ -357,21 +369,21 @@ module.exports = {
       var downloadImagesHtml = ['<h4>Download images</h4>'];
       if (media.Medium) {
         downloadImagesHtml.push(
-          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/small">',
+          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/small" rel="nofollow">',
           '  <span class="title">Small</span>',
           '  <span class="sub-title">(' + media.Medium.Width + ' x ' + media.Medium.Height + ', ' + this.bytesToString(media.Medium.Size) + ')</span>',
           '</a><br/>');
       }
       if (media.Large && (media.Medium.Height < media.Large.Height && media.Medium.Width < media.Large.Width)) {
         downloadImagesHtml.push(
-          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/medium">',
+          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/medium" rel="nofollow">',
           '  <span class="title">Medium</span>',
           '  <span class="sub-title">(' + media.Large.Width + ' x ' + media.Large.Height + ', ' + this.bytesToString(media.Large.Size) + ')</span>',
           '</a><br/>');
       }
       if (media.Original && (media.Large.Height < media.Original.Height && media.Large.Width < media.Original.Width)) {
         downloadImagesHtml.push(
-          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/large">',
+          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/large" rel="nofollow">',
           '  <span class="title">Large</span>',
           '  <span class="sub-title">(' + media.Original.Width + ' x ' + media.Original.Height + ', ' + this.bytesToString(media.Original.Size) + ')</span>',
           '</a><br/>');
