@@ -9,6 +9,7 @@ using CollectionsOnline.Core.Utilities;
 using Nancy;
 using Nancy.Responses;
 using Raven.Client;
+using Serilog;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -54,17 +55,24 @@ namespace CollectionsOnline.WebSite.Queries
                 return HttpStatusCode.NotFound;
 
             var filePath = Path.GetFullPath(string.Format("{0}\\{1}", AppDomain.CurrentDomain.BaseDirectory, imageMediaFile.Uri));
-            var response = new StreamResponse(() => new FileStream(filePath, FileMode.Open), "image/jpeg");
+            var response = new StreamResponse(() => new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read), "image/jpeg");
 
-            response.WithHeader("Content-Disposition",
-                string.Format("attachment; filename={0}-{1}-{2}.jpg",
+            if (!string.IsNullOrWhiteSpace(media.Caption))
+            {
+                response.WithHeader("Content-Disposition", string.Format("attachment; filename={0}-{1}-{2}.jpg",
                     HtmlConverter.HtmlToText(media.Caption)
-                        .ToLower()                       
+                        .ToLower()
                         .Truncate(Constants.FileMaxChars)
                         .RemoveLineBreaks()
                         .ReplaceNonWordWithDashes(),
-                        media.Irn,
-                        size));
+                    media.Irn,
+                    size));
+            }
+            else
+            {
+                response.WithHeader("Content-Disposition",
+                    string.Format("attachment; filename={0}-{1}.jpg", media.Irn, size));
+            }
 
             return response;
         }
