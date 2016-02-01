@@ -9,7 +9,6 @@ using CollectionsOnline.Core.Utilities;
 using Nancy;
 using Nancy.Responses;
 using Raven.Client;
-using Serilog;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -61,10 +60,10 @@ namespace CollectionsOnline.WebSite.Queries
             {
                 response.WithHeader("Content-Disposition", string.Format("attachment; filename={0}-{1}-{2}.jpg",
                     HtmlConverter.HtmlToText(media.Caption)
-                        .ToLower()
-                        .Truncate(Constants.FileMaxChars)
-                        .RemoveLineBreaks()
-                        .ReplaceNonWordWithDashes(),
+                    .ToLower()
+                    .Truncate(Constants.FileMaxChars)
+                    .RemoveLineBreaks()
+                    .ReplaceNonWordWithDashes(),
                     media.Irn,
                     size));
             }

@@ -136,6 +136,9 @@ namespace CollectionsOnline.Core.Extensions
             // Replace multiple spaces into a single dash
             input = Regex.Replace(input, "[ ]{1,}", "-", RegexOptions.None);
 
+            // Trim unwanted dashes
+            input = input.Trim('-');
+
             return input;
         }
 

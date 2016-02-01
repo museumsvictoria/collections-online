@@ -371,21 +371,21 @@ module.exports = {
         downloadImagesHtml.push(
           '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/small" rel="nofollow">',
           '  <span class="title">Small</span>',
-          '  <span class="sub-title">(' + media.Medium.Width + ' x ' + media.Medium.Height + ', ' + this.bytesToString(media.Medium.Size) + ')</span>',
+          '  <span class="sub-title">(' + media.Medium.Width + ' x ' + media.Medium.Height + ', ' + media.Medium.SizeShortened + ')</span>',
           '</a><br/>');
       }
       if (media.Large && (media.Medium.Height < media.Large.Height && media.Medium.Width < media.Large.Width)) {
         downloadImagesHtml.push(
           '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/medium" rel="nofollow">',
           '  <span class="title">Medium</span>',
-          '  <span class="sub-title">(' + media.Large.Width + ' x ' + media.Large.Height + ', ' + this.bytesToString(media.Large.Size) + ')</span>',
+          '  <span class="sub-title">(' + media.Large.Width + ' x ' + media.Large.Height + ', ' + media.Large.SizeShortened + ')</span>',
           '</a><br/>');
       }
       if (media.Original && (media.Large.Height < media.Original.Height && media.Large.Width < media.Original.Width)) {
         downloadImagesHtml.push(
           '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/large" rel="nofollow">',
           '  <span class="title">Large</span>',
-          '  <span class="sub-title">(' + media.Original.Width + ' x ' + media.Original.Height + ', ' + this.bytesToString(media.Original.Size) + ')</span>',
+          '  <span class="sub-title">(' + media.Original.Width + ' x ' + media.Original.Height + ', ' + media.Original.SizeShortened + ')</span>',
           '</a><br/>');
       }
       $('.download', this.$reuseArea).html(downloadImagesHtml.join('\n'));
@@ -428,16 +428,5 @@ module.exports = {
 
     $.whenArray(promises).done(dfd.resolve);
     return dfd.promise();
-  },
-  bytesToString: function(bytes) {
-    var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
-    if (bytes === 0)
-      return bytes + unit[0];
-
-    bytes = Math.abs(bytes);
-    var place = Math.floor(Math.log(bytes, 1024));
-    var num = bytes / Math.pow(1024, place);
-
-    return (Math.sign(bytes) * num.toFixed(1)) + units[place];
   }
 };

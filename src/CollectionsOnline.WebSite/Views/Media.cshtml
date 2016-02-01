@@ -182,21 +182,21 @@
                         {
                             <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/small" rel="nofollow">
                                 <span class="title">Small</span>
-                                <span class="sub-title">(@imageMedia.Medium.Width x @imageMedia.Medium.Height, @imageMedia.Medium.Size.BytesToString())</span>
+                                <span class="sub-title">(@imageMedia.Medium.Width x @imageMedia.Medium.Height, @imageMedia.Medium.SizeShortened)</span>
                             </a><br/>
                         }
                         if (imageMedia.Large != null && (imageMedia.Medium.Height < imageMedia.Large.Height && imageMedia.Medium.Width < imageMedia.Large.Width))
                         {
                             <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/medium" rel="nofollow">
                                 <span class="title">Medium</span>
-                                <span class="sub-title">(@imageMedia.Large.Width x @imageMedia.Large.Height, @imageMedia.Large.Size.BytesToString())</span>
+                                <span class="sub-title">(@imageMedia.Large.Width x @imageMedia.Large.Height, @imageMedia.Large.SizeShortened)</span>
                             </a><br />
                         }
                         if (imageMedia.Original != null && (imageMedia.Large.Height < imageMedia.Original.Height && imageMedia.Large.Width < imageMedia.Original.Width))
                         {
                             <a class="link" href="/@Model.DocumentId/media/@imageMedia.Irn/large" rel="nofollow">
                                 <span class="title">Large</span>
-                                <span class="sub-title">(@imageMedia.Original.Width x @imageMedia.Original.Height, @imageMedia.Original.Size.BytesToString())</span>
+                                <span class="sub-title">(@imageMedia.Original.Width x @imageMedia.Original.Height, @imageMedia.Original.SizeShortened)</span>
                             </a><br />
                         }
                     }
