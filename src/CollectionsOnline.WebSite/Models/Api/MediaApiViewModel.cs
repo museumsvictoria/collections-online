@@ -28,6 +28,8 @@ namespace CollectionsOnline.WebSite.Models.Api
     {
         public string AlternativeText { get; set; }
 
+        public ImageMediaFileApiViewModel Original { get; set; }
+
         public ImageMediaFileApiViewModel Thumbnail { get; set; }
 
         public ImageMediaFileApiViewModel Medium { get; set; }
