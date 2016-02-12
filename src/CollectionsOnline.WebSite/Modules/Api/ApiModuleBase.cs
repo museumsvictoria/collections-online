@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -113,7 +114,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
         private string BuildLinkHeader(ApiPageInfo apiPageInfo)
         {
             var queryString = HttpUtility.ParseQueryString(Request.Url.Query);
-            var url = Request.Url;
+            
             var totalPages = apiPageInfo.TotalPages;
             var links = new List<string>();
 
@@ -122,8 +123,9 @@ namespace CollectionsOnline.WebSite.Modules.Api
             {
                 queryString.Set("page", (ApiInputModel.Page + 1).ToString());
 
-                url.Query = "?" + queryString;
-                links.Add(string.Format("<{0}>; rel=\"next\"", url));
+                var path = queryString.HasKeys() ? string.Format("{0}?", Request.Url.Path) : Request.Url.Path;
+
+                links.Add(string.Format("<{0}{1}{2}>; rel=\"next\"", ConfigurationManager.AppSettings["CanonicalSiteBase"], path, queryString));
             }
 
             // Prev
@@ -135,8 +137,9 @@ namespace CollectionsOnline.WebSite.Modules.Api
                     queryString.Remove("page");
                 }
 
-                url.Query = "?" + queryString;
-                links.Add(string.Format("<{0}>; rel=\"prev\"", url));
+                var path = queryString.HasKeys() ? string.Format("{0}?", Request.Url.Path) : Request.Url.Path;
+
+                links.Add(string.Format("<{0}{1}{2}>; rel=\"prev\"", ConfigurationManager.AppSettings["CanonicalSiteBase"], path, queryString));
             }
 
             if(links.Any())
