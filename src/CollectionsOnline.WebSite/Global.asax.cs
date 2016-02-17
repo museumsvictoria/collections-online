@@ -24,7 +24,7 @@ namespace CollectionsOnline.WebSite
             // Capture any errors occurring before the nancy pipeline
             var ex = Server.GetLastError();
 
-            Log.Logger.Fatal(ex, "Unhandled Exception occured in System.Web pipeline {@HttpParams}", Request.RenderParams());
+            Log.Logger.Fatal(ex, "Unhandled Exception occured in System.Web pipeline {Url} {@HttpParams}", Request.Url, Request.RenderParams());
 
             Server.ClearError();
 

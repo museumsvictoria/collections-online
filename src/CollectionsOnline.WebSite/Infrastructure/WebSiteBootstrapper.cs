@@ -5,6 +5,7 @@ using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Transformers;
+using CollectionsOnline.WebSite.Extensions;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
@@ -63,7 +64,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
 
                 pipelines.OnError += (ctx, ex) =>
                 {
-                    Log.Logger.Fatal(ex, "Unhandled Exception occured in Nancy pipeline {Url}", ctx.Request.Url);
+                    Log.Logger.Fatal(ex, "Unhandled Exception occured in Nancy pipeline {Url} {@Headers}", ctx.Request.Url, ctx.Request.Headers.RenderHeaders());
 
                     return null;
                 };

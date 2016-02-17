@@ -3,10 +3,10 @@ using System.Configuration;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Web;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
+using Nancy.Helpers;
 using Nancy.ModelBinding;
 
 namespace CollectionsOnline.WebSite.Modules.Api

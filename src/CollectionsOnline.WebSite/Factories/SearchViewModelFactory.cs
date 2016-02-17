@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.WebSite.Models;
 using Humanizer;
+using Nancy.Helpers;
 using Raven.Abstractions.Data;
 
 namespace CollectionsOnline.WebSite.Factories
@@ -135,7 +135,7 @@ namespace CollectionsOnline.WebSite.Factories
                     UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
                 });
             }
-
+            
             // Build next prev page links
             var queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
             if ((searchInputModel.Page + 1) <= searchIndexViewModel.TotalPages)
