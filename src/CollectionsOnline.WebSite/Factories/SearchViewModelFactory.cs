@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Models;
 using Humanizer;
+using Nancy.Extensions;
 using Nancy.Helpers;
 using Raven.Abstractions.Data;
 
@@ -39,17 +41,17 @@ namespace CollectionsOnline.WebSite.Factories
                         var facetValueQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
                         facetValueQueryString.Remove("page");
 
-                        var facetValues = facetValueQueryString.GetValues(facet.Key.ToLower());
+                        var facetValues = facetValueQueryString.GetQueryStringValues(facet.Key.ToLower());
 
                         var facetValueViewModel = new FacetValueViewModel
                         {
-                            Facet = facet.Key,                            
+                            Facet = facet.Key,
                             Hits = facetValue.Hits,
                             Name = facetValue.Range.Transform(facetValue.Range.StartsWith("cc by") ? To.UpperCase : To.TitleCase),
                             Class = string.Equals(facet.Key, "RecordType", StringComparison.OrdinalIgnoreCase) ? facetValue.Range : null
                         };
 
-                        if (facetValues != null && facetValues.Contains(facetValue.Range, StringComparison.OrdinalIgnoreCase))
+                        if (facetValues != null && facetValues.Any(x => string.Equals(x, facetValue.Range, StringComparison.OrdinalIgnoreCase)))
                         {
                             facetValueQueryString.Remove(facet.Key.ToLower());
 
@@ -66,7 +68,7 @@ namespace CollectionsOnline.WebSite.Factories
                         }
 
                         facetValueViewModel.Url = (facetValueQueryString.Count > 0)
-                            ? String.Concat(searchInputModel.CurrentUrl, "?", facetValueQueryString)
+                            ? String.Concat(searchInputModel.CurrentUrl, "?", facetValueQueryString.RenderQueryString())
                             : searchInputModel.CurrentUrl;
 
                         facetViewModel.Values.Add(facetValueViewModel);
@@ -100,7 +102,7 @@ namespace CollectionsOnline.WebSite.Factories
             {
                 var termQueryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
 
-                var otherQueries = termQueryString.GetValues("query").Where(x => !string.Equals(x, query));
+                var otherQueries = termQueryString.GetQueryStringValues("query").Where(x => !string.Equals(x, query));
 
                 termQueryString.Remove("query");
 
@@ -117,7 +119,7 @@ namespace CollectionsOnline.WebSite.Factories
                 {
                     Name = query,
                     Term = "Query",
-                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString.RenderQueryString()) : searchInputModel.CurrentUrl
                 });
             }
             
@@ -132,7 +134,7 @@ namespace CollectionsOnline.WebSite.Factories
                 {
                     Name = term.Value,
                     Term = term.Key,
-                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString) : searchInputModel.CurrentUrl
+                    UrlToRemove = (termQueryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", termQueryString.RenderQueryString()) : searchInputModel.CurrentUrl
                 });
             }
             
@@ -141,17 +143,18 @@ namespace CollectionsOnline.WebSite.Factories
             if ((searchInputModel.Page + 1) <= searchIndexViewModel.TotalPages)
             {
                 queryString.Set("page", (searchInputModel.Page + 1).ToString());
-                searchIndexViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString);
+                searchIndexViewModel.NextPageUrl = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString());
             }
 
             if ((searchInputModel.Page - 1) >= 1)
             {
+                queryString = HttpUtility.ParseQueryString(searchInputModel.CurrentQueryString);
                 queryString.Set("page", (searchInputModel.Page - 1).ToString());
                 if ((searchInputModel.Page - 1) == 1)
                 {
                     queryString.Remove("page");
                 }
-                searchIndexViewModel.PreviousPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString) : searchInputModel.CurrentUrl;
+                searchIndexViewModel.PreviousPageUrl = (queryString.Count > 0) ? String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()) : searchInputModel.CurrentUrl;
             }
 
             // Build sort links
@@ -161,7 +164,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.QualitySortButton = new ButtonViewModel
             {
                 Name = "Quality",
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.Sort == "quality" || string.IsNullOrWhiteSpace(searchInputModel.Sort)
             };
 
@@ -170,7 +173,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.RelevanceSortButton = new ButtonViewModel
             {
                 Name = "Relevance",
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.Sort == "relevance"
             };
 
@@ -179,7 +182,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.DateSortButton = new ButtonViewModel
             {
                 Name = "Date modified",
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.Sort == "date"
             };
 
@@ -189,7 +192,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.DefaultPerPageButton = new ButtonViewModel
             {
                 Name = Core.Config.Constants.PagingPerPageDefault.ToString(),
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.PerPage == Core.Config.Constants.PagingPerPageDefault
             };
 
@@ -199,7 +202,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.MaxPerPageButton = new ButtonViewModel
             {
                 Name = Core.Config.Constants.PagingPerPageMax.ToString(),
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.PerPage == Core.Config.Constants.PagingPerPageMax
             };
 
@@ -209,7 +212,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.ListViewButton = new ButtonViewModel
             {
                 Name = "List",
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.View == "list" || string.IsNullOrWhiteSpace(searchInputModel.View)
             };
 
@@ -218,7 +221,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.GridViewButton = new ButtonViewModel
             {
                 Name = "Grid",
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.View == "grid"
             };
 
@@ -227,7 +230,7 @@ namespace CollectionsOnline.WebSite.Factories
             searchIndexViewModel.DataViewButton = new ButtonViewModel
             {
                 Name = "Data",
-                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString),
+                Url = String.Concat(searchInputModel.CurrentUrl, "?", queryString.RenderQueryString()),
                 Active = searchInputModel.View == "data"
             };
 

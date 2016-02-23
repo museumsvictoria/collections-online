@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Helpers;
@@ -125,7 +126,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
 
                 var path = queryString.HasKeys() ? string.Format("{0}?", Request.Url.Path) : Request.Url.Path;
 
-                links.Add(string.Format("<{0}{1}{2}>; rel=\"next\"", ConfigurationManager.AppSettings["CanonicalSiteBase"], path, queryString));
+                links.Add(string.Format("<{0}{1}{2}>; rel=\"next\"", ConfigurationManager.AppSettings["CanonicalSiteBase"], path, queryString.RenderQueryString()));
             }
 
             // Prev
@@ -139,7 +140,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
 
                 var path = queryString.HasKeys() ? string.Format("{0}?", Request.Url.Path) : Request.Url.Path;
 
-                links.Add(string.Format("<{0}{1}{2}>; rel=\"prev\"", ConfigurationManager.AppSettings["CanonicalSiteBase"], path, queryString));
+                links.Add(string.Format("<{0}{1}{2}>; rel=\"prev\"", ConfigurationManager.AppSettings["CanonicalSiteBase"], path, queryString.RenderQueryString()));
             }
 
             if(links.Any())

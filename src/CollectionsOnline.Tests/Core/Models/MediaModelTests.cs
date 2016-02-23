@@ -16,7 +16,7 @@ namespace CollectionsOnline.Tests.Core.Models
             var result = media.PermissionRequired;
 
             // Then
-            result.ShouldBe(false);
+            result.ShouldBe(true);
         }
 
         [Fact]

@@ -227,6 +227,7 @@
     <Compile Include="Commands\Handlers\IMediaReuseCommandHandler.cs" />
     <Compile Include="Commands\Handlers\MediaReuseCommandHandler.cs" />
     <Compile Include="Extensions\HttpRequestExtensions.cs" />
+    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\HtmlHelpersExtensions.cs" />
