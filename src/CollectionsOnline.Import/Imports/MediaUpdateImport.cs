@@ -289,7 +289,7 @@ namespace CollectionsOnline.Import.Imports
                                                 IList<Author> documentAuthors = document.Authors;
 
                                                 // Add/Replace
-                                                var author = documentAuthors.FirstOrDefault(x => x.ProfileImage.Irn == mediaIrn);
+                                                var author = documentAuthors.FirstOrDefault(x => x.ProfileImage != null && x.ProfileImage.Irn == mediaIrn);
 
                                                 if (author != null)
                                                 {
