@@ -163,7 +163,12 @@ module.exports = {
     }
   },
   toggleReuse: function(e) {
-    $('#reuse').toggle();
+    if (!$('#reuse').is(':visible')) {
+      $('#reuse').show();
+      $('html, body').scrollTop($('#reuse').offset().top + $('#reuse').outerHeight() - verge.viewportH());
+    } else {
+      $('#reuse').hide();
+    }
   },
   submitReuseForm: function (e) {
     e.preventDefault();
