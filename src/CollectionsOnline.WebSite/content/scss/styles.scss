@@ -736,22 +736,27 @@ button.icon {
         }
 
         .request {
-            color:$colour-button-text;
-            background:$colour-button-background;
-            @include border-radius(2px);
-            padding:10px 10px 10px 40px;
-            display:inline-block;
-            position:relative;
+            margin-top:0;
+        }
+    }
 
-            &:before {
-                font-weight: 400;
-                font-size: 20px;
-                font-family: "mv-collections";
-                content: "\e901";
-                position:absolute;
-                left:10px;
-                top:5px;
-            }
+    .request {
+        color:$colour-button-text;
+        background:$colour-button-background;
+        @include border-radius(2px);
+        padding:10px 10px 10px 40px;
+        display:inline-block;
+        position:relative;
+        margin-top:20px;
+
+        &:before {
+            font-weight: 400;
+            font-size: 20px;
+            font-family: "mv-collections";
+            content: "\e901";
+            position:absolute;
+            left:10px;
+            top:5px;
         }
     }
 
@@ -1008,6 +1013,15 @@ button.icon {
             padding: 15px 20px 60px;
             position: relative;
             color: $colour-heading-inverted;
+
+            &.not {
+                background: $colour-background-footerbase;
+                padding-bottom:15px;
+                
+                p {
+                    margin:0;
+                }
+            }
 
             &.melbourne-museum {
                 background: url("/content/img/bg-on-display-melbourne-museum.jpg");

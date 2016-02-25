@@ -357,6 +357,8 @@ module.exports = {
   switchReuse: function (media) {
     var documentId = $('#documentid', this.$reuseForm).val();
 
+    $('.non-commercial', this.$reuseArea).toggleClass('disabled', media.Licence != 'CC BY-NC');
+
     if (media.PermissionRequired) {
       $('.permission', this.$reuseArea).html('No <span class="icon"><span class="icon-close2" aria-hidden="true"></span><span class="icon-label-hidden">Cross</span></span>');
       $('.attribution', this.$reuseArea).addClass('disabled');
@@ -365,8 +367,24 @@ module.exports = {
       $('.share', this.$reuseArea).addClass('disabled');
       $('.statement', this.$reuseArea).html('Museum Victoria does not own the copyright in all the material on this website. In some cases copyright belongs to third parties and has been published here under a licence agreement: this does not authorise you to copy that material. You may be required to obtain permission from the copyright owner.<br/><br/>Some unpublished material may require permission for reuse even if it is very old. Orphan works, where the copyright owner is unknown, also require permission for reuse. Indigenous works may have additional legal and cultural issues. You may be required to seek cultural clearances from Aboriginal and Torres Strait Islander communities, families, individuals or organisations before you reproduce Aboriginal and Torres Strait Islander material.');
     } else {
-      $('.permission', this.$reuseArea).html('Yes <span class="icon"><span class="icon-tick" aria-hidden="true"></span><span class="icon-label-hidden">Tick</span></span>');
-      $('.attribution', this.$reuseArea).removeClass('disabled');
+      var permissionHtml = [
+        'Yes',
+        '<span class="icon">',
+        '  <span class="icon-tick" aria-hidden="true">',
+        '  <span class="icon-label-hidden">Tick</span>'
+      ];
+      if (media.Licence == 'CC BY-NC') {
+        permissionHtml.push(
+          '<br/>',
+          '<span>* For non-commercial uses only. If you wish to use this image for a commercial purpose, please contact us.</span>'
+        );
+      }
+      permissionHtml.push(
+        '</span>'
+      );
+      $('.permission', this.$reuseArea).html(permissionHtml.join('\n'));
+
+      $('.attribution', this.$reuseArea).removeClass('disabled');      
 
       if (!(media.Creators.length > 0) && !(media.Sources.length > 0) && !media.Credit && !media.RightsStatement)
         $('.attribution h4', this.$reuseArea).addClass('disabled');

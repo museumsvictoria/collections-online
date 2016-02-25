@@ -129,11 +129,21 @@
                                 <span class="icon">
                                     <span class="icon-tick" aria-hidden="true"></span>
                                     <span class="icon-label-hidden">Tick</span>
+                                @if (first.Licence == "CC BY-NC")
+                                {
+                                    <br/>
+                                    <span>* For non-commercial uses only. If you wish to use this image for a commercial purpose, please contact us.</span>
+                                }
                                 </span>
                             }
                         </span>
                     </p>
                 </div>
+                <div class="non-commercial @((first.Licence == "CC BY-NC") ? null : "disabled")">
+                    <a class="request" href="http://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/">
+                        <span class="title">Request image</span>
+                    </a>
+                </div>                
                 <div class="attribution @((first.PermissionRequired) ? "disabled" : null)">
                     <h4 @((!first.Creators.Any() && !first.Sources.Any() && string.IsNullOrWhiteSpace(first.Credit) && string.IsNullOrWhiteSpace(first.RightsStatement)) ? Html.Raw("class=\"disabled\"") : null)>Attribute this image</h4>
                     <div class="creators">
