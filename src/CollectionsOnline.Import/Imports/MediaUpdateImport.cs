@@ -225,9 +225,10 @@ namespace CollectionsOnline.Import.Imports
                                         if (ImportCanceled())
                                             return;
 
+                                        // Use a lower batch size otherwise we will hit the ravendb limit due to load operation below
                                         var documentIdsBatch = documentIds
                                             .Skip(count)
-                                            .Take(Constants.DataBatchSize)
+                                            .Take(Constants.DataLoadBatchSize)
                                             .ToList();
 
                                         if (documentIdsBatch.Count == 0)
