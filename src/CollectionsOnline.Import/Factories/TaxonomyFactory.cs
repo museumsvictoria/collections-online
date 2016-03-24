@@ -33,8 +33,8 @@ namespace CollectionsOnline.Import.Factories
                     Subgenus = map.GetCleanEncodedString("ClaSubgenus"),
                     Species = map.GetCleanEncodedString("ClaSpecies"),
                     Subspecies = map.GetCleanEncodedString("ClaSubspecies"),
-                    Author = map.GetCleanEncodedString("AutAuthorString"),
-                    Code = map.GetCleanEncodedString("ClaApplicableCode")
+                    Author = map.GetEncodedString("AutAuthorString"),
+                    Code = map.GetEncodedString("ClaApplicableCode")
                 };
 
                 //higherClassification
