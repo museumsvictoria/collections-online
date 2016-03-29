@@ -7,6 +7,7 @@ using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Metadata.Modules;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Raven.Client;
 using Serilog;
 
@@ -17,6 +18,12 @@ namespace CollectionsOnline.WebSite.Modules.Api
         public ItemsApiMetadataModule(IDocumentStore documentStore)
         {
             Log.Logger.Debug("Creating Item Api Metadata");
+
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented
+            };
 
             using (var documentSession = documentStore.OpenSession())
             {
@@ -36,7 +43,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             {HttpStatusCode.OK, "A bunch of items were able to be retrieved ok."}
                         },
-                        SampleResponse = JsonConvert.SerializeObject(new[] { Mapper.Map<Item, ItemApiViewModel>(sampleItem) }, Formatting.Indented),
+                        SampleResponse = JsonConvert.SerializeObject(new[] { Mapper.Map<Item, ItemApiViewModel>(sampleItem) }, jsonSerializerSettings),
                         ExampleUrl = description.Path,
                     };
                 };
@@ -63,7 +70,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.OK, "The item was found and retrieved ok."},
                             {HttpStatusCode.NotFound, "The item could not be found and probably does not exist."}
                         },
-                        SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Item, ItemApiViewModel>(sampleItem), Formatting.Indented),
+                        SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Item, ItemApiViewModel>(sampleItem), jsonSerializerSettings),
                         ExampleUrl = (sampleItem != null) ? string.Format("{0}/{1}", Constants.ApiPathBase, sampleItem.Id) : null,
                     };
                 };

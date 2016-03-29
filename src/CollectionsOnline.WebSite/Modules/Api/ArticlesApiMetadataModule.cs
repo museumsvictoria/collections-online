@@ -7,6 +7,7 @@ using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Metadata.Modules;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Raven.Client;
 using Serilog;
 
@@ -17,6 +18,12 @@ namespace CollectionsOnline.WebSite.Modules.Api
         public ArticlesApiMetadataModule(IDocumentStore documentStore)
         {
             Log.Logger.Debug("Creating Article Api Metadata");
+
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented
+            };
 
             using (var documentSession = documentStore.OpenSession())
             {
@@ -36,7 +43,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             {HttpStatusCode.OK, "A bunch of articles were able to be retrieved ok."}
                         },
-                        SampleResponse = JsonConvert.SerializeObject(new[] { Mapper.Map<Article, ArticleApiViewModel>(sampleArticle) }, Formatting.Indented),
+                        SampleResponse = JsonConvert.SerializeObject(new[] { Mapper.Map<Article, ArticleApiViewModel>(sampleArticle) }, jsonSerializerSettings),
                         ExampleUrl = description.Path
                     };
                 };
@@ -63,7 +70,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             {HttpStatusCode.OK, "The article was found and retrieved ok."},
                             {HttpStatusCode.NotFound, "The article could not be found and probably does not exist."}
                         },
-                        SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Article, ArticleApiViewModel>(sampleArticle), Formatting.Indented),
+                        SampleResponse = JsonConvert.SerializeObject(Mapper.Map<Article, ArticleApiViewModel>(sampleArticle), jsonSerializerSettings),
                         ExampleUrl = (sampleArticle != null) ? string.Format("{0}/{1}", Constants.ApiPathBase, sampleArticle.Id) : null,
                     };
                 };
