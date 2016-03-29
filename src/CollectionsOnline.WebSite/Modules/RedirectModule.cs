@@ -42,7 +42,7 @@ namespace CollectionsOnline.WebSite.Modules
             // Sam the koala
             Get["/items/1550331/{name?}"] = parameters => new RedirectResponse("/specimens/1487596", RedirectResponse.RedirectType.Permanent);
 
-            Get["/items/{id:int}/{name?}"] = parameters => new RedirectResponse(string.Format("/items/{0}", parameters.id), RedirectResponse.RedirectType.Permanent);
+            Get["/items/{id:int}/{name}"] = parameters => new RedirectResponse(string.Format("/items/{0}", parameters.id), RedirectResponse.RedirectType.Permanent);
 
             Get["/themes/{id:int}/{name?}"] = parameters => new RedirectResponse(string.Format("/articles/{0}", parameters.id), RedirectResponse.RedirectType.Permanent);
 
