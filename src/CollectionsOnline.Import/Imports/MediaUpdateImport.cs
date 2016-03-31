@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Infrastructure;
+using ImageProcessor.Imaging;
 using IMu;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.Import.Imports
@@ -100,7 +101,7 @@ namespace CollectionsOnline.Import.Imports
                                         "AdmPublishWebNoPassword",
                                         "AdmDateModified",
                                         "AdmTimeModified",
-                                        "catmedia=<ecatalogue:MulMultiMediaRef_tab>.(irn,MdaDataSets_tab)",
+                                        "catmedia=<ecatalogue:MulMultiMediaRef_tab>.(irn,MdaDataSets_tab,ColScientificGroup)",
                                         "narmedia=<enarratives:MulMultiMediaRef_tab>.(irn,DetPurpose_tab)",
                                         "parmedia=<eparties:MulMultiMediaRef_tab>.(narmedia=<enarratives:NarAuthorsRef_tab>.(irn,DetPurpose_tab))"
                                     };
@@ -210,7 +211,7 @@ namespace CollectionsOnline.Import.Imports
                                 return;
 
                             var mediaIrn = long.Parse(row.GetEncodedString("irn"));
-                            var media = _mediaFactory.Make(row);
+                            var media = _mediaFactory.Make(row, GetResizeMode(row));
 
                             // Update documents that use media
                             foreach (var documentMediaUpdateJob in _documentMediaUpdateJobs)
@@ -277,7 +278,7 @@ namespace CollectionsOnline.Import.Imports
                                                     }
                                                 }
 
-                                                // Assign thumbnail
+                                                // Re-Assign thumbnail
                                                 var mediaWithThumbnail = documentMedia.OfType<IHasThumbnail>().FirstOrDefault();
                                                 document.ThumbnailUri = mediaWithThumbnail != null ? mediaWithThumbnail.Thumbnail.Uri : null;
 
@@ -321,6 +322,22 @@ namespace CollectionsOnline.Import.Imports
                     documentSession.SaveChanges();
                 }
             }
+        }
+
+        private ResizeMode? GetResizeMode(Map map)
+        {
+            // Pad media if we find any catalogue records that are marked specimen and are zoology records
+            if (map.GetMaps("catmedia").Any(x => x != null &&
+                x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString) &&
+                x.GetEncodedString("ColScientificGroup").Contains("zoology", StringComparison.OrdinalIgnoreCase)))
+                return ResizeMode.Pad;
+
+            // Pad media if we find media is used on a species record
+            if (map.GetMaps("narmedia").Any(x => x != null &&
+                x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString)))
+                return ResizeMode.Pad;
+
+            return null;
         }
 
         public override int Order

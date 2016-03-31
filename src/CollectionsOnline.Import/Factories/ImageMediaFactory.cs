@@ -134,7 +134,7 @@ namespace CollectionsOnline.Import.Factories
                     }
 
                     stopwatch.Stop();
-                    Log.Logger.Debug("Completed image {Irn} creation in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
+                    Log.Logger.Debug("Completed image {Irn} creation in {ElapsedMilliseconds} ms, thumbnail mode was {thumbnailResizeMode}", imageMedia.Irn, stopwatch.ElapsedMilliseconds, thumbnailResizeMode);
 
                     return true;
                 }
