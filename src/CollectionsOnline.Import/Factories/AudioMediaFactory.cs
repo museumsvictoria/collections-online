@@ -65,7 +65,7 @@ namespace CollectionsOnline.Import.Factories
                         directoryInfo.Create();
 
                     // Save file stream
-                    using (var file = File.OpenWrite(destPath))
+                    using (var file = File.Open(destPath, FileMode.Create, FileAccess.Write))
                     {
                         fileStream.CopyTo(file);
                         fileStream.Dispose();
