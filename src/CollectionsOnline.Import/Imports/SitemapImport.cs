@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
 using CollectionsOnline.Core.Indexes;
+using CollectionsOnline.Import.Factories;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Serilog;
@@ -78,9 +79,7 @@ namespace CollectionsOnline.Import.Imports
                     sitemapNodeIndexes.Add(sitemapNodes);
 
                 // Create destination folder
-                var directoryInfo = new DirectoryInfo(string.Format("{0}\\sitemaps", ConfigurationManager.AppSettings["WebSitePath"]));
-                if (!directoryInfo.Exists)
-                    directoryInfo.Create();
+                PathFactory.CreateDestPath(string.Format("{0}\\sitemaps", ConfigurationManager.AppSettings["WebSitePath"]));                
 
                 // Create then save sitemaps as xml
                 count = 0;

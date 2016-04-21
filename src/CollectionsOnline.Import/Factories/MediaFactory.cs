@@ -6,7 +6,6 @@ using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
-using ImageProcessor.Imaging;
 using IMu;
 using Serilog;
 
@@ -31,7 +30,7 @@ namespace CollectionsOnline.Import.Factories
             _videoMediaFactory = videoMediaFactory;
         }
 
-        public Media Make(Map map, ResizeMode? thumbnailResizeMode)
+        public Media Make(Map map)
         {
             if (map != null &&
                 string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "yes", StringComparison.OrdinalIgnoreCase) &&
@@ -81,7 +80,7 @@ namespace CollectionsOnline.Import.Factories
                         Md5Checksum = md5Checksum
                     };
 
-                    if (_imageMediaFactory.Make(ref imageMedia, thumbnailResizeMode))
+                    if (_imageMediaFactory.Make(ref imageMedia))
                     {
                         return imageMedia;
                     }
@@ -194,7 +193,7 @@ namespace CollectionsOnline.Import.Factories
             return null;
         }
 
-        public IList<Media> Make(IEnumerable<Map> maps, ResizeMode? thumbnailResizeMode)
+        public IList<Media> Make(IEnumerable<Map> maps)
         {
             var medias = new List<Media>();
 
@@ -216,7 +215,7 @@ namespace CollectionsOnline.Import.Factories
             var distinctMediaMaps = groupedMediaMaps.Select(x => x.First());
 
             // Create medias
-            medias.AddRange(distinctMediaMaps.Select(x => Make(x, thumbnailResizeMode)).Where(x => x != null));
+            medias.AddRange(distinctMediaMaps.Select(Make).Where(x => x != null));
 
             return medias;
         }

@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using CollectionsOnline.Core.Models;
-using ImageProcessor.Imaging;
 using IMu;
 
 namespace CollectionsOnline.Import.Factories
 {
     public interface IMediaFactory
     {
-        Media Make(Map map, ResizeMode? thumbnailResizeMode = null);
+        Media Make(Map map);
 
-        IList<Media> Make(IEnumerable<Map> maps, ResizeMode? thumbnailResizeMode = null);
+        IList<Media> Make(IEnumerable<Map> maps);
 
         IList<string> MakeImageLicences(IEnumerable<Media> media);
     }

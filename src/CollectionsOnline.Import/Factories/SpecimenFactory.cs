@@ -6,7 +6,6 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
-using ImageProcessor.Imaging;
 using IMu;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
@@ -339,7 +338,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.PetrologyMineralsPresent = map.GetEncodedString("RocMainMineralsPresent");
 
             // Media
-            specimen.Media = _mediaFactory.Make(map.GetMaps("media"), specimen.ScientificGroup.Contains("zoology", StringComparison.OrdinalIgnoreCase) ? ResizeMode.Pad : ResizeMode.Crop);
+            specimen.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Assign thumbnail
             var media = specimen.Media.OfType<IHasThumbnail>().FirstOrDefault();

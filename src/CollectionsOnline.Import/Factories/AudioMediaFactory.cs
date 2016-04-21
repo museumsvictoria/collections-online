@@ -59,11 +59,6 @@ namespace CollectionsOnline.Import.Factories
 
                     var destPath = PathFactory.MakeDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None);
 
-                    // Create destination folder
-                    var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(destPath));
-                    if (!directoryInfo.Exists)
-                        directoryInfo.Create();
-
                     // Save file stream
                     using (var file = File.Open(destPath, FileMode.Create, FileAccess.Write))
                     {
@@ -72,7 +67,7 @@ namespace CollectionsOnline.Import.Factories
 
                         audioMedia.File = new MediaFile
                         {
-                            Uri = PathFactory.MakeUriPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None),
+                            Uri = PathFactory.BuildUriPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None),
                             Size = file.Length
                         };
 
@@ -139,14 +134,14 @@ namespace CollectionsOnline.Import.Factories
                 }
             }
 
-            var destPath = PathFactory.MakeDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None);
+            var destPath = PathFactory.GetDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None);
 
             // then if we find an existing file, use the files on disk instead
             if (File.Exists(destPath))
             {
                 audioMedia.File = new MediaFile
                 {
-                    Uri = PathFactory.MakeUriPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None),
+                    Uri = PathFactory.BuildUriPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None),
                     Size = new FileInfo(destPath).Length
                 };
 

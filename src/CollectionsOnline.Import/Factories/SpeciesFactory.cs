@@ -6,7 +6,6 @@ using AutoMapper;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
-using ImageProcessor.Imaging;
 using IMu;
 using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
@@ -212,7 +211,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // Media
-            species.Media = _mediaFactory.Make(map.GetMaps("media"), ResizeMode.Pad);
+            species.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Assign thumbnail
             var media = species.Media.OfType<IHasThumbnail>().FirstOrDefault();
