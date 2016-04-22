@@ -40,9 +40,8 @@ namespace CollectionsOnline.Import.Factories
                     FileDerivativeType = FileDerivativeType.Original,
                     Transform = (image, map) =>
                     {
-                        image.Resize(new MagickGeometry(3000) { Greater = true });
-                        image.Format = MagickFormat.Jpg;
-                        image.Quality = 88;
+                        image.Resize(new MagickGeometry(3000) { Greater = true });                        
+                        image.Quality = 86;                                                
                         return image;
                     }
                 },
@@ -54,16 +53,14 @@ namespace CollectionsOnline.Import.Factories
                         if (NeedsPadding(map))
                         {
                             image.Resize(new MagickGeometry(250));
-                            image.Extent(250, 250, MagickColors.White);
+                            image.Extent(new MagickGeometry(250), Gravity.Center, MagickColors.White);
                         }
                         else
                         {
                             image.Resize(new MagickGeometry(250) { FillArea = true });
                             image.Crop(250, 250, Gravity.Center);
                         }
-
-                        image.Format = MagickFormat.Jpg;
-                        image.Quality = 65;
+                        image.Quality = 70;
                         return image;
                     }
                 },
@@ -73,8 +70,7 @@ namespace CollectionsOnline.Import.Factories
                     Transform = (image, map) =>
                     {
                         image.Resize(new MagickGeometry(0, 500));
-                        image.Format = MagickFormat.Jpg;
-                        image.Quality = 78;
+                        image.Quality = 75;
                         return image;
                     }
                 },
@@ -84,8 +80,7 @@ namespace CollectionsOnline.Import.Factories
                     Transform = (image, map) =>
                     {
                         image.Resize(new MagickGeometry(1500) { Greater = true });
-                        image.Format = MagickFormat.Jpg;
-                        image.Quality = 78;
+                        image.Quality = 75;
                         return image;
                     }
                 }
@@ -119,8 +114,6 @@ namespace CollectionsOnline.Import.Factories
                     
                     using (var originalImage = new MagickImage(fileStream))
                     {
-                        var optimizer = new ImageOptimizer();
-
                         foreach (var imageMediaJob in _imageMediaJobs)
                         {
                             var destPath = PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
@@ -128,8 +121,21 @@ namespace CollectionsOnline.Import.Factories
 
                             using (var image = imageMediaJob.Transform(originalImage.Clone(), result))
                             {
+                                // Save profiles if there are any
+                                var profile = image.GetColorProfile();
+
+                                // Strip exif and any profiles
+                                image.Strip();
+
+                                // Add original profile back
+                                if (profile != null)
+                                    image.AddProfile(profile);
+
+                                // Use jpeg format
+                                image.Format = MagickFormat.Jpeg;
+
+                                // Write image to disk
                                 image.Write(destPath);
-                                optimizer.LosslessCompress(destPath);
 
                                 // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
                                 typeof(ImageMedia)
