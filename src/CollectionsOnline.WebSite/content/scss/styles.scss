@@ -2351,6 +2351,16 @@ button {
     &.search-add {
         border-radius: 2px;
         margin-left: 10px;
+
+        .title {
+            line-height:44px;
+            text-transform:uppercase;
+        }
+
+        .icon-search-add {
+            position:relative;
+            top:3px;
+        }
     }
 }
 
