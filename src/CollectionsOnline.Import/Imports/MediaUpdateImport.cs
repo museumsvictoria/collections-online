@@ -3,7 +3,6 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Factories;
 using CollectionsOnline.Import.Infrastructure;
-using ImageProcessor.Imaging;
 using IMu;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
@@ -211,7 +210,7 @@ namespace CollectionsOnline.Import.Imports
                                 return;
 
                             var mediaIrn = long.Parse(row.GetEncodedString("irn"));
-                            var media = _mediaFactory.Make(row, GetResizeMode(row));
+                            var media = _mediaFactory.Make(row);
 
                             // Update documents that use media
                             foreach (var documentMediaUpdateJob in _documentMediaUpdateJobs)
@@ -322,22 +321,6 @@ namespace CollectionsOnline.Import.Imports
                     documentSession.SaveChanges();
                 }
             }
-        }
-
-        private ResizeMode? GetResizeMode(Map map)
-        {
-            // Pad media if we find any catalogue records that are marked specimen and are zoology records
-            if (map.GetMaps("catmedia").Any(x => x != null &&
-                x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString) &&
-                x.GetEncodedString("ColScientificGroup").Contains("zoology", StringComparison.OrdinalIgnoreCase)))
-                return ResizeMode.Pad;
-
-            // Pad media if we find media is used on a species record
-            if (map.GetMaps("narmedia").Any(x => x != null &&
-                x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString)))
-                return ResizeMode.Pad;
-
-            return null;
         }
 
         public override int Order

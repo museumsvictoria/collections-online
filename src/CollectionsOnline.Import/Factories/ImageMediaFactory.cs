@@ -8,12 +8,10 @@ using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Import.Extensions;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
-using ImageProcessor;
-using ImageProcessor.Common.Exceptions;
-using ImageProcessor.Imaging;
-using ImageProcessor.Imaging.Formats;
+using ImageMagick;
 using IMu;
 using Raven.Client;
 using CollectionsOnline.Core.Extensions;
@@ -40,32 +38,56 @@ namespace CollectionsOnline.Import.Factories
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Original,
-                    ResizeLayer = new ResizeLayer(new Size(3000, 3000), ResizeMode.Max, upscale:false),
-                    Quality = 90
+                    Transform = (image, map) =>
+                    {
+                        image.Resize(new MagickGeometry(3000) { Greater = true });                        
+                        image.Quality = 86;                                                
+                        return image;
+                    }
                 },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    ResizeLayer = new ResizeLayer(new Size(250, 250), ResizeMode.Crop),
-                    BackgroundColor = Color.White,
-                    Quality = 80
+                    Transform = (image, map) =>
+                    {
+                        if (NeedsPadding(map))
+                        {
+                            image.Resize(new MagickGeometry(250));
+                            image.Extent(new MagickGeometry(250), Gravity.Center, MagickColors.White);
+                        }
+                        else
+                        {
+                            image.Resize(new MagickGeometry(250) { FillArea = true });
+                            image.Crop(250, 250, Gravity.Center);
+                        }
+                        image.Quality = 70;
+                        return image;
+                    }
                 },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Medium,
-                    ResizeLayer = new ResizeLayer(new Size(0, 500), ResizeMode.Max),
-                    Quality = 80
+                    Transform = (image, map) =>
+                    {
+                        image.Resize(new MagickGeometry(0, 500));
+                        image.Quality = 75;
+                        return image;
+                    }
                 },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Large,
-                    ResizeLayer = new ResizeLayer(new Size(1500, 1500), ResizeMode.Max, upscale:false),
-                    Quality = 80
+                    Transform = (image, map) =>
+                    {
+                        image.Resize(new MagickGeometry(1500) { Greater = true });
+                        image.Quality = 75;
+                        return image;
+                    }
                 }
             };
         }
 
-        public bool Make(ref ImageMedia imageMedia, ResizeMode? thumbnailResizeMode)
+        public bool Make(ref ImageMedia imageMedia)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -83,58 +105,55 @@ namespace CollectionsOnline.Import.Factories
                 using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
                 {
                     imuSession.FindKey(imageMedia.Irn);
-                    var result = imuSession.Fetch("start", 0, -1, new[] { "resource" }).Rows[0];
+                    var result = imuSession.Fetch("start", 0, -1, Columns).Rows[0];
 
                     var resource = result.GetMap("resource");
-
                     if (resource == null)
                         throw new IMuException("MultimediaResourceNotFound");
-
                     var fileStream = resource["file"] as FileStream;
-
-                    using (var imageFactory = new ImageFactory())
+                    
+                    using (var originalImage = new MagickImage(fileStream))
                     {
-                        imageFactory
-                            .Load(fileStream);
-
                         foreach (var imageMediaJob in _imageMediaJobs)
                         {
-                            imageFactory.Reset();
-
-                            // Hack for overridding padding
-                            if (imageMediaJob.FileDerivativeType == FileDerivativeType.Thumbnail && thumbnailResizeMode.HasValue)
-                                imageMediaJob.ResizeLayer.ResizeMode = thumbnailResizeMode.Value;
-
-                            // Indirectly call graphics.drawimage to get around multi layer tiff images causing gdi exceptions when image is not resized.
-                            if (imageMediaJob.ResizeLayer.Upscale == false && (imageFactory.Image.Width < imageMediaJob.ResizeLayer.Size.Width || imageFactory.Image.Height < imageMediaJob.ResizeLayer.Size.Height))
-                                imageFactory.Brightness(0);
-
-                            imageFactory
-                                .Resize(imageMediaJob.ResizeLayer)
-                                .Format(new JpegFormat())
-                                .Quality(imageMediaJob.Quality);
-
-                            if (imageMediaJob.BackgroundColor.HasValue)
-                                imageFactory.BackgroundColor(imageMediaJob.BackgroundColor.Value);
-
                             var destPath = PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
+                            var uriPath = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
 
-                            imageFactory.Save(destPath);
+                            using (var image = imageMediaJob.Transform(originalImage.Clone(), result))
+                            {
+                                // Save profiles if there are any
+                                var profile = image.GetColorProfile();
 
-                            // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
-                            typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
-                                .SetValue(imageMedia, new ImageMediaFile
-                                {
-                                    Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
-                                    Size = new FileInfo(destPath).Length,
-                                    Width = imageFactory.Image.Width,
-                                    Height = imageFactory.Image.Height
-                                });
+                                // Strip exif and any profiles
+                                image.Strip();
+
+                                // Add original profile back
+                                if (profile != null)
+                                    image.AddProfile(profile);
+
+                                // Use jpeg format
+                                image.Format = MagickFormat.Jpeg;
+
+                                // Write image to disk
+                                image.Write(destPath);
+
+                                // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
+                                typeof(ImageMedia)
+                                    .GetProperties()
+                                    .First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
+                                    .SetValue(imageMedia, new ImageMediaFile
+                                    {
+                                        Uri = uriPath,
+                                        Size = new FileInfo(destPath).Length,
+                                        Width = image.Width,
+                                        Height = image.Height
+                                    });
+                            }
                         }
                     }
 
                     stopwatch.Stop();
-                    Log.Logger.Debug("Completed image {Irn} creation in {ElapsedMilliseconds} ms, thumbnail mode was {thumbnailResizeMode}", imageMedia.Irn, stopwatch.ElapsedMilliseconds, thumbnailResizeMode);
+                    Log.Logger.Debug("Completed image {Irn} creation in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
 
                     return true;
                 }
@@ -149,7 +168,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     Log.Logger.Warning(ex, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
                 }
-                else if (ex is ImageFormatException)
+                else if (ex is MagickException)
                 {
                     Log.Logger.Warning(ex, "Multimedia resource is not an image format that is recognized, unable to save image {Irn}", imageMedia.Irn);
                 }
@@ -200,24 +219,22 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // then check whether media exists on disk for all media jobs
-            if (_imageMediaJobs.All(x => File.Exists(PathFactory.MakeDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
+            if (_imageMediaJobs.All(x => File.Exists(PathFactory.GetDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
             {
                 foreach (var imageMediaJob in _imageMediaJobs)
                 {
-                    using (var imageFactory = new ImageFactory())
-                    {
-                        var destPath = PathFactory.MakeDestPath(mediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
-                            
-                        imageFactory.Load(destPath);
+                    var destPath = PathFactory.GetDestPath(mediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
 
+                    using (var image = new MagickImage(destPath))
+                    {
                         // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
                         typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
                             .SetValue(imageMedia, new ImageMediaFile
                             {
-                                Uri = PathFactory.MakeUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
+                                Uri = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
                                 Size = new FileInfo(destPath).Length,
-                                Width = imageFactory.Image.Width,
-                                Height = imageFactory.Image.Height
+                                Width = image.Width,
+                                Height = image.Height
                             });
                     }
                 }
@@ -228,15 +245,38 @@ namespace CollectionsOnline.Import.Factories
             return false;
         }
 
+        private string[] Columns
+        {
+            get
+            {
+                return new[]
+                {
+                    "resource",
+                    "catmedia=<ecatalogue:MulMultiMediaRef_tab>.(irn,MdaDataSets_tab,ColScientificGroup)",
+                    "narmedia=<enarratives:MulMultiMediaRef_tab>.(irn,DetPurpose_tab)",
+                    "parmedia=<eparties:MulMultiMediaRef_tab>.(narmedia=<enarratives:NarAuthorsRef_tab>.(irn,DetPurpose_tab))"
+                };
+            }
+        }
+
+        private bool NeedsPadding(Map map)
+        {
+            // Pad media if we find any catalogue records that are marked specimen and are zoology records or we find media is used on a species record
+            if (map.GetMaps("catmedia").Any(x => x != null &&
+                x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString) &&
+                x.GetEncodedString("ColScientificGroup").Contains("zoology", StringComparison.OrdinalIgnoreCase)) ||
+                map.GetMaps("narmedia").Any(x => x != null &&
+                x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString)))
+                return true;
+
+            return false;
+        }
+
         private class ImageMediaJob
         {
             public FileDerivativeType FileDerivativeType { get; set; }
 
-            public ResizeLayer ResizeLayer { get; set; }
-
-            public int Quality { get; set; }
-
-            public Color? BackgroundColor { get; set; }
+            public Func<MagickImage, Map, MagickImage> Transform { get; set; }
         }
     }
 }
