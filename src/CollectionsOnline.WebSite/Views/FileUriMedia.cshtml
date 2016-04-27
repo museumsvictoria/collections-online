@@ -25,7 +25,19 @@
                     <h4>Related Links</h4>
                     foreach (UriMedia uri in Model.OfType<UriMedia>())
                     {
-                        <a class="icon-externallink" href="@uri.Uri">@uri.Caption</a>
+                        if (uri.Uri.StartsWith("http://ozcam.ala.org.au"))
+                        {
+                            <a class="icon-externallink ala" href="@uri.Uri">@uri.Caption</a>
+                        }
+                        else if (uri.Uri.StartsWith("http://www.biodiversitylibrary.org"))
+                        {
+                            <a class="icon-externallink bhl" href="@uri.Uri">@uri.Caption</a>
+                        }
+                        else
+                        {
+                            <a class="icon-externallink" href="@uri.Uri">@uri.Caption</a>
+                        }
+
                     }
                 }
             </div>

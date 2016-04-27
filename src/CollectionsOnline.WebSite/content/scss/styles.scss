@@ -989,6 +989,20 @@ button.icon {
                     text-decoration: underline;
                 }
             }
+
+            .ala:before {
+                content:"";
+                background:url("/content/img/logo-ala.png") no-repeat;
+                background-size:20px;
+                padding-left:25px;
+            }
+
+            .bhl:before {
+                content:"";
+                background:url("/content/img/logo-bhl.png") no-repeat;
+                background-size:20px;
+                padding-left:25px;
+            }
         }
     }
 
