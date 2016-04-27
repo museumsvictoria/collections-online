@@ -25,7 +25,7 @@
                     <h4>Related Links</h4>
                     foreach (UriMedia uri in Model.OfType<UriMedia>())
                     {
-                        if (uri.Uri.StartsWith("http://ozcam.ala.org.au"))
+                        if (uri.Uri.Contains("ala.org.au"))
                         {
                             <a class="icon-externallink ala" href="@uri.Uri">@uri.Caption</a>
                         }
