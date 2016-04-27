@@ -1,10 +1,10 @@
 ﻿@font-face {
     font-family: 'mv-collections';
-    src:url("../fonts/mv-collections.eot?v=247");
-    src:url("../fonts/mv-collections.eot?#iefix&?v=247") format("embedded-opentype"), 
-        url("../fonts/mv-collections.woff?v=247") format("woff"), 
-        url("../fonts/mv-collections.ttf?v=247") format("truetype"), 
-        url("../fonts/mv-collections.svg?v=247") format("svg");
+    src:url("../fonts/mv-collections.eot?v=248");
+    src:url("../fonts/mv-collections.eot?#iefix&?v=248") format("embedded-opentype"), 
+        url("../fonts/mv-collections.woff?v=248") format("woff"), 
+        url("../fonts/mv-collections.ttf?v=248") format("truetype"), 
+        url("../fonts/mv-collections.svg?v=248") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -225,9 +225,15 @@
     content: "\e61b";
 }
 
-.icon-search-add:before {
+.icon-search-add-plus:before {
     font-family: "mv-collections";
     content: "\e621";
+    font-size: 1.7em;
+}
+
+.icon-search-add-search:before {
+    font-family: "mv-collections";
+    content: "\e902";
     font-size: 1.7em;
 }
 

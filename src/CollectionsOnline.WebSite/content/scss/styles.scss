@@ -2364,16 +2364,22 @@ button {
 
     &.search-add {
         border-radius: 2px;
-        margin-left: 10px;
+        margin-left: 10px;        
 
         .title {
             line-height:44px;
             text-transform:uppercase;
         }
 
-        .icon-search-add {
+        .icon-search-add-search {
+            position:absolute;
+            top:21px;
+        }
+
+        .icon-search-add-plus {
             position:relative;
             top:3px;
+            color:$colour-primary-green;
         }
     }
 }
