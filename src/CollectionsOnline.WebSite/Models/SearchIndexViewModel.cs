@@ -39,6 +39,8 @@ namespace CollectionsOnline.WebSite.Models
 
         public ButtonViewModel DataViewButton { get; set; }
 
+        public string CsvDownloadUrl { get; set; }
+
         public IList<FacetViewModel> Facets { get; set; }
 
         public int TotalFacetValues

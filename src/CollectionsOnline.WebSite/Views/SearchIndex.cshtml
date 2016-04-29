@@ -119,6 +119,11 @@
                         Results per page
                         <a href="@Model.DefaultPerPageButton.Url" class="button first @(Model.DefaultPerPageButton.Active ? "active" : "")" title="@Constants.PagingPerPageDefault records per page">@Model.DefaultPerPageButton.Name</a><a href="@Model.MaxPerPageButton.Url" class="button last @(Model.MaxPerPageButton.Active ? "active" : "")" title="@Constants.PagingPerPageMax records per page">@Model.MaxPerPageButton.Name</a>
                     </div>
+                    <div class="download">
+                        <a class="link" href="@Model.CsvDownloadUrl" rel="nofollow">
+                            <span class="title">CSV Download</span>
+                        </a>
+                    </div>
                 </div>
             </div>    
             <div id="maincontent" class="results-area @(Model.ListViewButton.Active ? "list" : "")@(Model.GridViewButton.Active ? "grid" : "")@(Model.DataViewButton.Active ? "data" : "") ">

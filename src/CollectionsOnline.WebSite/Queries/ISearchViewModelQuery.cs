@@ -7,6 +7,8 @@ namespace CollectionsOnline.WebSite.Queries
     {
         SearchIndexViewModel BuildSearchIndex(SearchInputModel searchInputModel);
 
+        SearchIndexCsvModel BuiSearchIndexCsv(SearchInputModel searchInputModel);
+
         ApiViewModel BuildSearchApi(SearchApiInputModel searchApiInputModel, ApiInputModel apiInputModel);
     }
 }

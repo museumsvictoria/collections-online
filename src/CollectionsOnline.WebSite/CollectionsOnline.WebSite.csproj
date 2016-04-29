@@ -42,8 +42,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
@@ -260,12 +260,14 @@
     <Compile Include="Models\Api\CollectionSiteApiViewModel.cs" />
     <Compile Include="Models\Api\CollectionEventApiViewModel.cs" />
     <Compile Include="Models\Api\TaxonomyApiViewModel.cs" />
+    <Compile Include="Models\EmuAggregateRootCsvModel.cs" />
     <Compile Include="Models\MediaViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Models\CollectionIndexViewModel.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\ApiViewModel.cs" />
     <Compile Include="Commands\MediaReuseCommand.cs" />
+    <Compile Include="Models\SearchIndexViewModel.cs" />
     <Compile Include="Models\SearchInputModel.cs" />
     <Compile Include="Modules\Api\SearchApiMetadataModule.cs" />
     <Compile Include="Modules\Api\SearchApiModule.cs" />
@@ -289,6 +291,8 @@
     <Compile Include="Modules\Api\ItemsApiModule.cs" />
     <Compile Include="Modules\Api\SpeciesApiModule.cs" />
     <Compile Include="Modules\Api\SpecimensApiModule.cs" />
+    <Compile Include="Queries\ICsvResponseQuery.cs" />
+    <Compile Include="Queries\CsvResponseQuery.cs" />
     <Compile Include="Queries\MediaResponseQuery.cs" />
     <Compile Include="Queries\CollectionViewModelQuery.cs" />
     <Compile Include="Queries\IMediaResponseQuery.cs" />
@@ -319,7 +323,7 @@
     <Compile Include="Queries\SpeciesViewModelQuery.cs" />
     <Compile Include="Queries\IItemViewModelQuery.cs" />
     <Compile Include="Queries\ItemViewModelQuery.cs" />
-    <Compile Include="Models\SearchIndexViewModel.cs" />
+    <Compile Include="Models\SearchIndexCsvModels.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Queries\ISearchViewModelQuery.cs" />
     <Compile Include="Queries\SearchViewModelQuery.cs" />

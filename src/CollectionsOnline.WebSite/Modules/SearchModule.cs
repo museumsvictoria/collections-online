@@ -10,7 +10,8 @@ namespace CollectionsOnline.WebSite.Modules
     {
         public SearchModule(
             ISearchViewModelQuery searchViewModelQuery,
-            IMetadataViewModelFactory metadataViewModelFactory)
+            IMetadataViewModelFactory metadataViewModelFactory,
+            ICsvResponseQuery csvResponseQuery)
         {
             Get["search-index", "/search"] = parameters =>
             {
@@ -19,6 +20,13 @@ namespace CollectionsOnline.WebSite.Modules
                 ViewBag.metadata = metadataViewModelFactory.MakeSearchIndex();
 
                 return View["SearchIndex", searchViewModelQuery.BuildSearchIndex(searchInputModel)].WithCookies(searchInputModel.Cookies);
+            };
+
+            Get["search-index-csv", "/search.csv"] = parameters =>
+            {
+                var searchInputModel = this.Bind<SearchInputModel>();
+
+                return csvResponseQuery.BuildCsvResponse(searchViewModelQuery.BuiSearchIndexCsv(searchInputModel));
             };
         }
     }

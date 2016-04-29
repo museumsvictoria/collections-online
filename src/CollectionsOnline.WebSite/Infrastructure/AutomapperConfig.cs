@@ -2,6 +2,7 @@
 using AutoMapper;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
+using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 
 namespace CollectionsOnline.WebSite.Infrastructure
@@ -13,6 +14,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
             // Automapper configuration
             Mapper.Initialize(cfg =>
             {
+                // Api view models
                 cfg.CreateMap<Article, ArticleApiViewModel>()
                     .ForMember(dest => dest.RecordType, opt => opt.UseValue("article"));
                 cfg.CreateMap<Item, ItemApiViewModel>()
@@ -29,6 +31,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
                     .Include<ImageMediaFile, ImageMediaFileApiViewModel>();
                 cfg.CreateMap<ImageMediaFile, ImageMediaFileApiViewModel>();
 
+                // Api media view models
                 cfg.CreateMap<Media, MediaApiViewModel>()
                     .Include<ImageMedia, ImageMediaApiViewModel>()
                     .Include<VideoMedia, VideoMediaApiViewModel>()
@@ -41,10 +44,10 @@ namespace CollectionsOnline.WebSite.Infrastructure
                 cfg.CreateMap<FileMedia, FileMediaApiViewModel>();
                 cfg.CreateMap<UriMedia, UriMediaApiViewModel>();
 
+                // Api Sub objects 
                 cfg.CreateMap<Taxonomy, TaxonomyApiViewModel>();
                 cfg.CreateMap<CollectionEvent, CollectionEventApiViewModel>();
                 cfg.CreateMap<CollectionSite, CollectionSiteApiViewModel>();
-
                 cfg.CreateMap<Author, AuthorApiViewModel>();
             });
         }

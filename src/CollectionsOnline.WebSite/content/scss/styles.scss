@@ -1779,6 +1779,26 @@ button.icon {
                         }
                     }
                 }
+
+                .download .link {
+                    @include border-radius(3px);
+                    display:inline-block;
+                    padding:6px 8px 6px 28px;
+                    color: $colour-bodytext;
+                    background: $colour-button-background;
+                    position:relative;
+
+                    &:before {
+                        font-weight: 400;
+                        font-size: 14px;
+                        font-family: "mv-collections";
+                        content: "\e60b";
+                        position:absolute;
+                        left:8px;
+                        top:6px;
+                    }
+
+                }
             }
 
             .perpage, .order {

@@ -234,6 +234,8 @@ namespace CollectionsOnline.WebSite.Factories
                 Active = searchInputModel.View == "data"
             };
 
+            searchIndexViewModel.CsvDownloadUrl = String.Concat(searchInputModel.CurrentUrl, ".csv", searchInputModel.CurrentQueryString);
+
             return searchIndexViewModel;
         }
     }

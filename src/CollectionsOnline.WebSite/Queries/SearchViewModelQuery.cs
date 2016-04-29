@@ -70,6 +70,48 @@ namespace CollectionsOnline.WebSite.Queries
             }
         }
 
+        public SearchIndexCsvModel BuiSearchIndexCsv(SearchInputModel searchInputModel)
+        {
+            using (MiniProfiler.Current.Step("Build Search Index CSV model"))
+            using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
+            {
+                var results = new List<EmuAggregateRootCsvModel>();
+                IList<dynamic> queryResults;
+
+                var query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, searchInputModel.Page, searchInputModel.PerPage, searchInputModel.Sort, searchInputModel.Queries, searchInputModel.Facets, searchInputModel.MultiFacets, searchInputModel.Terms);
+
+                try
+                {
+                    queryResults = query
+                        .ToList();
+                }
+                catch (Exception exception)
+                {
+                    if (IsQueryFailedException(exception))
+                    {
+                        // Re-build and escape search query
+                        query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, searchInputModel.Page, searchInputModel.PerPage, searchInputModel.Sort, searchInputModel.Queries, searchInputModel.Facets, searchInputModel.MultiFacets, searchInputModel.Terms, escapeQueryOptions: EscapeQueryOptions.EscapeAll);
+
+                        queryResults = query
+                            .ToList();
+                    }
+                    else
+                        throw;
+                }
+
+                foreach (var queryResult in queryResults)
+                {
+                    results.Add(Mapper.DynamicMap<EmuAggregateRootCsvModel>(queryResult));
+                }
+
+                return new SearchIndexCsvModel
+                {
+                    Results = new List<EmuAggregateRootCsvModel>(),
+                    SearchInputModel = searchInputModel
+                };
+            }
+        }
+
         public ApiViewModel BuildSearchApi(SearchApiInputModel searchApiInputModel, ApiInputModel apiInputModel)
         {
             using (MiniProfiler.Current.Step("Build Search Api view model"))
