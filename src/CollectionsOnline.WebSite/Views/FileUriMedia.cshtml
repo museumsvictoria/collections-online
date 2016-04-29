@@ -25,11 +25,11 @@
                     <h4>Related Links</h4>
                     foreach (UriMedia uri in Model.OfType<UriMedia>())
                     {
-                        if (uri.Uri.Contains("ala.org.au"))
+                        if (uri.Uri.Contains("ozcam.ala.org.au"))
                         {
-                            <a class="icon-externallink ala" href="@uri.Uri">@uri.Caption</a>
+                            <a class="icon-externallink ozcam" href="@uri.Uri">@uri.Caption</a>
                         }
-                        else if (uri.Uri.StartsWith("http://www.biodiversitylibrary.org"))
+                        else if (uri.Uri.Contains("biodiversitylibrary.org"))
                         {
                             <a class="icon-externallink bhl" href="@uri.Uri">@uri.Caption</a>
                         }
