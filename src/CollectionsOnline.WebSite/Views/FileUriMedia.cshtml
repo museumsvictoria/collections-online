@@ -33,6 +33,10 @@
                         {
                             <a class="icon-externallink bhl" href="@uri.Uri">@uri.Caption</a>
                         }
+                        else if (uri.Uri.Contains("trove.nla.gov.au"))
+                        {
+                            <a class="icon-externallink trove" href="@uri.Uri">@uri.Caption</a>
+                        }
                         else
                         {
                             <a class="icon-externallink" href="@uri.Uri">@uri.Caption</a>

@@ -997,6 +997,13 @@ button.icon {
                 padding-left:25px;
             }
 
+            .trove:before {
+                content:"";
+                background:url("/content/img/logo-trove.png") no-repeat;
+                background-size:20px;
+                padding-left:25px;
+            }
+
             .bhl:before {
                 content:"";
                 background:url("/content/img/logo-bhl.png") no-repeat;
