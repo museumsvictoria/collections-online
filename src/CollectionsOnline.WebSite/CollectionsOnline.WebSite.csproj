@@ -166,6 +166,8 @@
     <Content Include="content\img\img-search-noresults.jpg" />
     <Content Include="content\img\logo-ala.png" />
     <Content Include="content\img\logo-bhl.png" />
+    <Content Include="content\img\logo-ozcam.png" />
+    <Content Include="content\img\logo-trove.png" />
     <Content Include="content\img\mstile-144x144.png" />
     <Content Include="content\img\mstile-150x150.png" />
     <Content Include="content\img\mstile-310x150.png" />

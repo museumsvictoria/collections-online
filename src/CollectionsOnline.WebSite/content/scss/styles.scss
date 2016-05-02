@@ -990,18 +990,25 @@ button.icon {
                 }
             }
 
-            .ala:before {
-                content:"";
-                background:url("/content/img/logo-ala.png") no-repeat;
-                background-size:20px;
+            .ozcam:before, .ala:before, .bhl:before, .trove:before{
+                content:"";                
                 padding-left:25px;
             }
 
+            .ozcam:before {
+                background:url("/content/img/logo-ozcam.png") no-repeat / 20px;
+            }
+
+            .ala:before {
+                background:url("/content/img/logo-ala.png") no-repeat / 20px;
+            }
+
             .bhl:before {
-                content:"";
-                background:url("/content/img/logo-bhl.png") no-repeat;
-                background-size:20px;
-                padding-left:25px;
+                background:url("/content/img/logo-bhl.png") no-repeat / 20px;
+            }
+
+            .trove:before {
+                background:url("/content/img/logo-trove.png") no-repeat / 20px;
             }
         }
     }
