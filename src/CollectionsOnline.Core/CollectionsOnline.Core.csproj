@@ -95,6 +95,7 @@
     <Compile Include="Models\Collection.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\CollectionSite.cs" />
+    <Compile Include="Models\Licence.cs" />
     <Compile Include="Models\EmuSummary.cs" />
     <Compile Include="Models\FileDerivativeType.cs" />
     <Compile Include="Models\MediaReuse.cs" />

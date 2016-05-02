@@ -17,17 +17,20 @@ namespace CollectionsOnline.Import.Factories
         private readonly IFileMediaFactory _fileMediaFactory;
         private readonly IAudioMediaFactory _audioMediaFactory;
         private readonly IVideoMediaFactory _videoMediaFactory;
+        private readonly ILicenceFactory _licenceFactory;
 
         public MediaFactory(
             IImageMediaFactory imageMediaFactory,
             IFileMediaFactory fileMediaFactory,
             IAudioMediaFactory audioMediaFactory,
-            IVideoMediaFactory videoMediaFactory)
+            IVideoMediaFactory videoMediaFactory,
+            ILicenceFactory licenceFactory)
         {
             _imageMediaFactory = imageMediaFactory;
             _fileMediaFactory = fileMediaFactory;
             _audioMediaFactory = audioMediaFactory;
             _videoMediaFactory = videoMediaFactory;
+            _licenceFactory = licenceFactory;
         }
 
         public Media Make(Map map)
@@ -53,10 +56,7 @@ namespace CollectionsOnline.Import.Factories
                 var sources = map.GetEncodedStrings("RigSource_tab");
                 var credit = map.GetEncodedString("RigAcknowledgementCredit");
                 var rightsStatement = map.GetEncodedString("RigCopyrightStatement");
-                var rightsStatus = map.GetEncodedString("RigCopyrightStatus");
-                var licence = map.GetEncodedString("RigLicence");
-                var licenceDetails = map.GetEncodedString("RigLicenceDetails");
-
+                var licence = _licenceFactory.MakeMediaLicence(map.GetEncodedString("RigLicence"));
                 var md5Checksum = map.GetEncodedString("ChaMd5Sum");
                 
                 // Handle images
@@ -74,9 +74,7 @@ namespace CollectionsOnline.Import.Factories
                         Sources = sources,
                         Credit = credit,
                         RightsStatement = rightsStatement,
-                        RightsStatus = rightsStatus,
                         Licence = licence,
-                        LicenceDetails = licenceDetails,
                         Md5Checksum = md5Checksum
                     };
 
@@ -98,9 +96,7 @@ namespace CollectionsOnline.Import.Factories
                         Sources = sources,
                         Credit = credit,
                         RightsStatement = rightsStatement,
-                        RightsStatus = rightsStatus,
                         Licence = licence,
-                        LicenceDetails = licenceDetails,
                         Md5Checksum = md5Checksum
                     };
 
@@ -122,9 +118,7 @@ namespace CollectionsOnline.Import.Factories
                         Sources = sources,
                         Credit = credit,
                         RightsStatement = rightsStatement,
-                        RightsStatus = rightsStatus,
                         Licence = licence,
-                        LicenceDetails = licenceDetails,
                         Md5Checksum = md5Checksum,
                         Thumbnail = new ImageMediaFile
                         {
@@ -154,9 +148,7 @@ namespace CollectionsOnline.Import.Factories
                         Sources = sources,
                         Credit = credit,
                         RightsStatement = rightsStatement,
-                        RightsStatus = rightsStatus,
                         Licence = licence,
-                        LicenceDetails = licenceDetails,
                         Uri = identifier
                     };
 
@@ -178,9 +170,7 @@ namespace CollectionsOnline.Import.Factories
                         Sources = sources,
                         Credit = credit,
                         RightsStatement = rightsStatement,
-                        RightsStatus = rightsStatus,
                         Licence = licence,
-                        LicenceDetails = licenceDetails,
                         Uri = identifier
                     };
 
@@ -218,24 +208,6 @@ namespace CollectionsOnline.Import.Factories
             medias.AddRange(distinctMediaMaps.Select(Make).Where(x => x != null));
 
             return medias;
-        }
-
-        public IList<string> MakeImageLicences(IEnumerable<Media> media)
-        {
-            var imageLicences = new List<string>();
-
-            foreach (var imageMedia in media.OfType<ImageMedia>())
-            {
-                if (string.Equals(imageMedia.RightsStatus, "Copyright Expired: Public Domain", StringComparison.OrdinalIgnoreCase) &&
-                    string.Equals(imageMedia.Licence, "No Known Restriction", StringComparison.OrdinalIgnoreCase))
-                    imageLicences.Add("Public Domain");
-
-                if (string.Equals(imageMedia.RightsStatus, "In Copyright: MV Copyright", StringComparison.OrdinalIgnoreCase) &&
-                    imageMedia.Licence.StartsWith("CC BY", StringComparison.OrdinalIgnoreCase))
-                        imageLicences.Add(imageMedia.Licence);
-            }
-
-            return imageLicences.Distinct().ToList();
         }
     }
 }

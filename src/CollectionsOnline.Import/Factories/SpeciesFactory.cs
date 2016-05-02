@@ -156,6 +156,9 @@ namespace CollectionsOnline.Import.Factories
             var taxonomyMap = map.GetMaps("taxa").FirstOrDefault();
             species.Taxonomy = _taxonomyFactory.Make(taxonomyMap);
 
+            // Licence
+            species.Licence = Constants.Licences[LicenceType.CcBy];
+
             // Relationships
 
             // Related items/specimens (directly related)
@@ -217,9 +220,6 @@ namespace CollectionsOnline.Import.Factories
             var media = species.Media.OfType<IHasThumbnail>().FirstOrDefault();
             if (media != null)
                 species.ThumbnailUri = media.Thumbnail.Uri;
-
-            // Image Licences
-            species.ImageLicences = _mediaFactory.MakeImageLicences(species.Media);
 
             // Build summary
             species.Summary = _summaryFactory.Make(species);

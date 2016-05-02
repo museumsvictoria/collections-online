@@ -22,6 +22,7 @@ namespace CollectionsOnline.Import.Factories
         private readonly IMediaFactory _mediaFactory;
         private readonly IAssociationFactory _associationFactory;
         private readonly ISummaryFactory _summaryFactory;
+        private readonly ILicenceFactory _licenceFactory;
 
         public ItemFactory(
             IPartiesNameFactory partiesNameFactory,
@@ -29,7 +30,8 @@ namespace CollectionsOnline.Import.Factories
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory,
             IAssociationFactory associationFactory,
-            ISummaryFactory summaryFactory)
+            ISummaryFactory summaryFactory,
+            ILicenceFactory licenceFactory)
         {
             _partiesNameFactory = partiesNameFactory;
             _museumLocationFactory = museumLocationFactory;
@@ -37,6 +39,7 @@ namespace CollectionsOnline.Import.Factories
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
             _summaryFactory = summaryFactory;
+            _licenceFactory = licenceFactory;
         }
 
         public string ModuleName
@@ -403,9 +406,6 @@ namespace CollectionsOnline.Import.Factories
             var media = item.Media.OfType<IHasThumbnail>().FirstOrDefault();
             if (media != null)
                 item.ThumbnailUri = media.Thumbnail.Uri;
-
-            // Image Licences
-            item.ImageLicences = _mediaFactory.MakeImageLicences(item.Media);
             
             // Indigenous Cultures Fields
             var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();
@@ -569,6 +569,9 @@ namespace CollectionsOnline.Import.Factories
 
             // Object Location
             item.MuseumLocation = _museumLocationFactory.Make(map.GetMap("location"));
+
+            // Licence
+            item.Licence = _licenceFactory.MakeItemSpecimenLicence(map);
 
             // Relationships
 
