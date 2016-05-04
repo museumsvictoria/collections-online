@@ -8,6 +8,7 @@ using CollectionsOnline.Core.Models;
 using Nancy.Helpers;
 using Nancy.ViewEngines.Razor;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace CollectionsOnline.WebSite.Extensions
 {
@@ -139,7 +140,10 @@ namespace CollectionsOnline.WebSite.Extensions
 
         public static IHtmlString ConvertToJson<T>(this HtmlHelpers<T> helper, object input)
         {
-            return new NonEncodedHtmlString(JsonConvert.SerializeObject(input, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects }));
+            var jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            jsonSerializerSettings.Converters.Add(new StringEnumConverter());
+
+            return new NonEncodedHtmlString(JsonConvert.SerializeObject(input, jsonSerializerSettings));
         }
 
         private static string BuildAuthorsCitation(IList<Author> authors)
