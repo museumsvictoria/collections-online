@@ -8,6 +8,8 @@ namespace CollectionsOnline.WebSite.Models.Api
     {
         public string RecordType { get; set; }
 
+        public LicenceApiViewModel Licence { get; set; }
+
         public DateTime DateModified { get; set; }
 
         public string Title { get; set; }

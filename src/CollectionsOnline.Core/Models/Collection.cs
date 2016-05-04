@@ -18,6 +18,8 @@ namespace CollectionsOnline.Core.Models
 
         public string DisplayTitle { get; set; }
 
+        public Licence Licence { get; set; }
+
         #endregion
         
         public DateTime DateModified { get; set; }

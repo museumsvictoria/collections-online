@@ -226,6 +226,7 @@
     <Content Include="Views\SocialLinks.cshtml" />
     <Content Include="Views\CloseWindow.cshtml" />
     <Content Include="Views\Metadata.cshtml" />
+    <Content Include="Views\RecordLicence.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Handlers\IMediaReuseCommandHandler.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Models\Api\ApiPageInfo.cs" />
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />
     <Compile Include="Models\Api\AuthorApiViewModel.cs" />
+    <Compile Include="Models\Api\LicenceApiViewModel.cs" />
     <Compile Include="Models\Api\MediaApiViewModel.cs" />
     <Compile Include="Models\Api\MediaFileApiViewModel.cs" />
     <Compile Include="Models\Api\SearchApiInputModel.cs" />
@@ -413,7 +415,7 @@
     <Content Include="Views\Taxonomy.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\EmuTile.cshtml" />
+    <Content Include="Views\RecordTile.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

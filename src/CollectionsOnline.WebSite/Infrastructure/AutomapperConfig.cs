@@ -48,6 +48,7 @@ namespace CollectionsOnline.WebSite.Infrastructure
                 cfg.CreateMap<Taxonomy, TaxonomyApiViewModel>();
                 cfg.CreateMap<CollectionEvent, CollectionEventApiViewModel>();
                 cfg.CreateMap<CollectionSite, CollectionSiteApiViewModel>();
+                cfg.CreateMap<Licence, LicenceApiViewModel>();
                 cfg.CreateMap<Author, AuthorApiViewModel>();
             });
         }

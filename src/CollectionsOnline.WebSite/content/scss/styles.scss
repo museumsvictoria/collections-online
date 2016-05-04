@@ -540,6 +540,10 @@ button.icon {
             line-height: 20px;
             height: 100px;
 
+            a {
+                text-decoration:underline;
+            }
+
             @include gridle_state("print") {
                 height: auto;
                 font-size: 9pt;
@@ -3649,10 +3653,17 @@ footer {
                 width: 33%;
             }
         }
+
+        a.textlink {
+            text-decoration: underline;
+        }
+
+        .icon {
+            color: $color-sub-heading;
+            display: inline-block;
+            margin: 10px 0 3px;
+        }
     }
-
-
-
 
     & .seeallcontainer {
         @include gridle_hide("print");

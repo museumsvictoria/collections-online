@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Models;
 using Raven.Abstractions.Indexing;
@@ -47,7 +48,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesType = (string)null,                    
                     SpecimenScientificGroup = (string)null,
                     ArticleType = article.Types,
-                    ImageLicence = article.ImageLicences,
+                    ImageLicence = article.Media.Where(x => string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)).Select(x => x.Licence.ShortName),
 
                     // Term fields
                     Keyword = article.Keywords,
@@ -114,7 +115,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesType = (string)null,
                     SpecimenScientificGroup = (string)null,
                     ArticleType = new object[] { },
-                    ImageLicence = item.ImageLicences,
+                    ImageLicence = item.Media.Where(x => string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)).Select(x => x.Licence.ShortName),
                     
                     // Term fields
                     Keyword = new object[] { item.Keywords,
@@ -230,7 +231,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesType = species.AnimalType,                    
                     SpecimenScientificGroup = (string) null,
                     ArticleType = new object[] { },
-                    ImageLicence = species.ImageLicences,
+                    ImageLicence = species.Media.Where(x => string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)).Select(x => x.Licence.ShortName),
 
                     // Term fields
                     Keyword = new object[] { species.ConservationStatuses, species.AnimalSubType },
@@ -344,7 +345,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesType = (string) null,                    
                     SpecimenScientificGroup = specimen.ScientificGroup,
                     ArticleType = new object[] { },
-                    ImageLicence = specimen.ImageLicences,
+                    ImageLicence = specimen.Media.Where(x => string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)).Select(x => x.Licence.ShortName),
 
                     // Term fields
                     Keyword = new object[] { specimen.Keywords, specimen.CollectionEvent != null ? specimen.CollectionEvent.ExpeditionName : null },

@@ -8,8 +8,6 @@ namespace CollectionsOnline.Import.Factories
     {
         Media Make(Map map);
 
-        IList<Media> Make(IEnumerable<Map> maps);
-
-        IList<string> MakeImageLicences(IEnumerable<Media> media);
+        IList<Media> Make(IEnumerable<Map> maps);        
     }
 }

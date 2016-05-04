@@ -167,9 +167,11 @@
     <Compile Include="Factories\IAudioMediaFactory.cs" />
     <Compile Include="Factories\IFileMediaFactory.cs" />
     <Compile Include="Factories\AudioMediaFactory.cs" />
+    <Compile Include="Factories\ILicenceFactory.cs" />
     <Compile Include="Factories\ISummaryFactory.cs" />
     <Compile Include="Factories\ICollectionEventFactory.cs" />
     <Compile Include="Factories\IVideoMediaFactory.cs" />
+    <Compile Include="Factories\LicenceFactory.cs" />
     <Compile Include="Factories\SummaryFactory.cs" />
     <Compile Include="Factories\CollectionEventFactory.cs" />
     <Compile Include="Factories\VideoMediaFactory.cs" />

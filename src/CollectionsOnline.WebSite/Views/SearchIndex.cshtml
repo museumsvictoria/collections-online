@@ -129,7 +129,7 @@
             <div id="maincontent" class="results-area @(Model.ListViewButton.Active ? "list" : "")@(Model.GridViewButton.Active ? "grid" : "")@(Model.DataViewButton.Active ? "data" : "") ">
                 @foreach (var result in Model.Results)
                 {
-                    @Html.Partial("emutile", result)
+                    @Html.Partial("RecordTile", result)
                 }
             </div>
             <div class="pagination">

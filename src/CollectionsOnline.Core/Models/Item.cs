@@ -20,7 +20,7 @@ namespace CollectionsOnline.Core.Models
 
         public string DisplayTitle { get; set; }
 
-        public IList<string> ImageLicences { get; set; }
+        public Licence Licence { get; set; }
 
         #endregion
 

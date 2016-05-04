@@ -23,6 +23,7 @@ namespace CollectionsOnline.Import.Factories
         private readonly IAssociationFactory _associationFactory;
         private readonly IMuseumLocationFactory _museumLocationFactory;
         private readonly ISummaryFactory _summaryFactory;
+        private readonly ILicenceFactory _licenceFactory;
 
         public SpecimenFactory(
             IPartiesNameFactory partiesNameFactory,
@@ -32,7 +33,8 @@ namespace CollectionsOnline.Import.Factories
             IMediaFactory mediaFactory,
             IAssociationFactory associationFactory,
             IMuseumLocationFactory museumLocationFactory,
-            ISummaryFactory summaryFactory)
+            ISummaryFactory summaryFactory,
+            ILicenceFactory licenceFactory)
         {
             _partiesNameFactory = partiesNameFactory;
             _taxonomyFactory = taxonomyFactory;
@@ -42,6 +44,7 @@ namespace CollectionsOnline.Import.Factories
             _associationFactory = associationFactory;
             _museumLocationFactory = museumLocationFactory;
             _summaryFactory = summaryFactory;
+            _licenceFactory = licenceFactory;
         }
 
         public string ModuleName
@@ -148,7 +151,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.Id = "specimens/" + map.GetEncodedString("irn");
 
             specimen.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
-
+            
             specimen.DateModified = DateTime.ParseExact(
                 string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
                 "dd/MM/yyyy HH:mm",
@@ -345,8 +348,8 @@ namespace CollectionsOnline.Import.Factories
             if (media != null)
                 specimen.ThumbnailUri = media.Thumbnail.Uri;
 
-            // Image Licences
-            specimen.ImageLicences = _mediaFactory.MakeImageLicences(specimen.Media);
+            // Licence
+            specimen.Licence = _licenceFactory.MakeItemSpecimenLicence(map);
 
             // Relationships
 

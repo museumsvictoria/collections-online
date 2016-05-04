@@ -280,9 +280,6 @@ namespace CollectionsOnline.Import.Imports
                                                 // Re-Assign thumbnail
                                                 var mediaWithThumbnail = documentMedia.OfType<IHasThumbnail>().FirstOrDefault();
                                                 document.ThumbnailUri = mediaWithThumbnail != null ? mediaWithThumbnail.Thumbnail.Uri : null;
-
-                                                // Image Licences
-                                                document.ImageLicences = _mediaFactory.MakeImageLicences(document.Media);
                                             }
                                             // Update ProfileImages
                                             else if(documentMediaUpdateJob.JobType == JobType.ProfileImage)

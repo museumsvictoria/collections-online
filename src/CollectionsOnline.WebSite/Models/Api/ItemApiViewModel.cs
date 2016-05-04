@@ -10,6 +10,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public IList<CommentApiViewModel> Comments { get; set; }
 
+        public LicenceApiViewModel Licence { get; set; }
+
         public DateTime DateModified { get; set; }
 
         public string Category { get; set; }
