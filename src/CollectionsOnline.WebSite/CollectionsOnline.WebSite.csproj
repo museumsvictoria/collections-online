@@ -254,6 +254,7 @@
     <Compile Include="Models\Api\ApiPageInfo.cs" />
     <Compile Include="Models\Api\ApiOperationMetadata.cs" />
     <Compile Include="Models\Api\AuthorApiViewModel.cs" />
+    <Compile Include="Models\Api\LicenceApiViewModel.cs" />
     <Compile Include="Models\Api\MediaApiViewModel.cs" />
     <Compile Include="Models\Api\MediaFileApiViewModel.cs" />
     <Compile Include="Models\Api\SearchApiInputModel.cs" />

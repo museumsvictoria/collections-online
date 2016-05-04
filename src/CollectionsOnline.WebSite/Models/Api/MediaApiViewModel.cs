@@ -16,6 +16,8 @@ namespace CollectionsOnline.WebSite.Models.Api
         public string Credit { get; set; }
 
         public string RightsStatement { get; set; }
+
+        public LicenceApiViewModel Licence { get; set; }
     }
 
     public class ImageMediaApiViewModel : MediaApiViewModel

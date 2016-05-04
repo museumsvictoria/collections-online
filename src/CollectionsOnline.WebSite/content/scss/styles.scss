@@ -540,6 +540,10 @@ button.icon {
             line-height: 20px;
             height: 100px;
 
+            a {
+                text-decoration:underline;
+            }
+
             @include gridle_state("print") {
                 height: auto;
                 font-size: 9pt;
