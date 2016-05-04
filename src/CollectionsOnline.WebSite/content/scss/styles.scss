@@ -3633,6 +3633,18 @@ footer {
                 width: 33%;
             }
         }
+
+        a.textlink {
+            text-decoration: underline;
+        }
+
+        .icon {
+            color: $color-sub-heading;
+            display: inline-block;
+            margin: 10px 0 3px;
+        }
+
+
     }
 
 

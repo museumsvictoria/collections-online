@@ -506,22 +506,7 @@
                 <div class="cite">
                     <h4>Cite this page</h4>
                     <p>@Html.RenderCitation(Model.Specimen)</p>
-                    <h4>Rights</h4>
-                    <p>
-                        We support the <a class="textlink" href="http://opendefinition.org/">open</a> release of data and information about our collections.<br />
-                        <a class="icon" href="https://creativecommons.org/publicdomain/zero/1.0/">
-                            <span class="icon-zero" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">CC0</span>
-                        </a><br />
-                        Data in Specimen Details, Taxonomy and Geospatial Information is released as <a class="textlink" href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons Zero</a><br />
-                        <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
-                            <span class="icon-cc" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">CC</span>
-                            <span class="icon-by" aria-hidden="true"></span>
-                            <span class="icon-label-hidden">BY</span>
-                        </a><br />
-                        All other text content is licensed under a <a class="textlink" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 licence</a>
-                    </p>
+                    @Html.Partial("RecordLicence", Model.Specimen.Licence)
                 </div>
             </div>
         </aside>
@@ -537,19 +522,19 @@
                </h3>
                 @foreach (var relatedItem in Model.RelatedItems)
                 {
-                    @Html.Partial("emutile", relatedItem)
+                    @Html.Partial("RecordTile", relatedItem)
                 }
                 @foreach (var relatedSpecimen in Model.RelatedSpecimens)
                 {
-                    @Html.Partial("emutile", relatedSpecimen)
+                    @Html.Partial("RecordTile", relatedSpecimen)
                 }
                 @foreach (var relatedArticle in Model.RelatedArticles)
                 {
-                    @Html.Partial("emutile", relatedArticle)
+                    @Html.Partial("RecordTile", relatedArticle)
                 }
                 @foreach (var relatedSpecies in Model.RelatedSpecies)
                 {
-                    @Html.Partial("emutile", relatedSpecies)
+                    @Html.Partial("RecordTile", relatedSpecies)
                 }
             </div>
         </div>

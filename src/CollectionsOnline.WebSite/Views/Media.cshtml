@@ -94,13 +94,17 @@
                     </div>
                     <div>
                         <span class="licence-qualifier">
-                            @if (first.Licence != null)
-                            {
-                                @:Licence:
-                            }
+                            Licence:
                         </span>
                         <span class="licence">
-                            <a class="@first.Licence.Type.ToString().ToLower()" href="@first.Licence.Uri">@first.Licence.Name</a>
+                            @if (string.IsNullOrWhiteSpace(first.Licence.Uri))
+                            {
+                                @first.Licence.Name
+                            }
+                            else
+                            {
+                                <a class="@first.Licence.Type.ToString().ToLower()" href="@first.Licence.Uri">@first.Licence.Name</a>
+                            }
                         </span>
                     </div>
                 </div>

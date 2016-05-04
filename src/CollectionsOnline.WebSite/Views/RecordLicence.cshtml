@@ -1,0 +1,30 @@
+﻿@using CollectionsOnline.Core.Models
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.Licence>
+<h4>Rights</h4>
+<p>
+    We support the <a class="textlink" href="http://opendefinition.org">open</a> release of data and information about our collections.<br />
+    @if (Model.Type == LicenceType.Cc0)
+    {
+        <a class="icon" href="https://creativecommons.org/publicdomain/zero/1.0">
+            <span class="icon-zero" aria-hidden="true"></span>
+            <span class="icon-label-hidden">CC0</span>
+        </a><br />
+    }
+    else if (Model.Type == LicenceType.CcBy)
+    {
+        <a class="icon" href="https://creativecommons.org/licenses/by/4.0">
+            <span class="icon-cc" aria-hidden="true"></span>
+            <span class="icon-label-hidden">CC</span>
+            <span class="icon-by" aria-hidden="true"></span>
+            <span class="icon-label-hidden">BY</span>
+        </a><br />
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.Uri))
+    {
+        @:Text content on this page is licensed under a Creative Commons <a class="textlink" href="@Model.Uri">@Model.Name</a> licence
+    }
+    else
+    {
+        @:Text content on this page is licensed under a @Model.Name licence        
+    }
+</p>

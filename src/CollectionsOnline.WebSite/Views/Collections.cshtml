@@ -30,18 +30,7 @@
                 <div class="cite">
                 <h4>Cite this page</h4>
                 <p>@Html.RenderCitation(Model.Collection)</p>
-                <h4>Rights</h4>
-                <p>
-                    Text on this page is licensed as
-                    <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
-                        <span class="icon-cc" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">CC</span>
-                    </a>
-                    <a class="icon" href="https://creativecommons.org/licenses/by/4.0/">
-                        <span class="icon-by" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">BY</span>
-                    </a>
-                </p>
+                @Html.Partial("RecordLicence", Model.Collection.Licence)
                 @if (Model.Collection.Curators.Any())
                 {
                     <h4>Curators and Collection Managers</h4>
@@ -70,7 +59,7 @@
                 <h2>Some key sub-collections</h2>
                 @foreach (var subCollectionArticle in Model.SubCollectionArticles)
                 {
-                    @Html.Partial("emutile", subCollectionArticle)
+                    @Html.Partial("RecordTile", subCollectionArticle)
                 }
             </div>
         </div>
@@ -84,11 +73,11 @@
                 <h2>Our Favourite Items</h2>
                 @foreach (var favoriteItem in Model.FavoriteItems)
                 {
-                    @Html.Partial("emutile", favoriteItem)
+                    @Html.Partial("RecordTile", favoriteItem)
                 }
                 @foreach (var favoriteSpecimens in Model.FavoriteSpecimens)
                 {
-                    @Html.Partial("emutile", favoriteSpecimens)
+                    @Html.Partial("RecordTile", favoriteSpecimens)
                 }
             </div>
         </div>

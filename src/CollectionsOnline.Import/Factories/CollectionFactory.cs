@@ -122,6 +122,9 @@ namespace CollectionsOnline.Import.Factories
             if (media != null)
                 collection.ThumbnailUri = media.Thumbnail.Uri;
 
+            // Licence
+            collection.Licence = Constants.Licences[LicenceType.CcBy];
+
             // Relationships
 
             // Favorites

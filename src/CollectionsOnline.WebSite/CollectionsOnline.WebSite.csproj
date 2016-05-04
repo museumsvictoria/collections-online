@@ -226,6 +226,7 @@
     <Content Include="Views\SocialLinks.cshtml" />
     <Content Include="Views\CloseWindow.cshtml" />
     <Content Include="Views\Metadata.cshtml" />
+    <Content Include="Views\RecordLicence.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Handlers\IMediaReuseCommandHandler.cs" />
@@ -410,7 +411,7 @@
     <Content Include="Views\Taxonomy.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\EmuTile.cshtml" />
+    <Content Include="Views\RecordTile.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
