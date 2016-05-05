@@ -106,7 +106,7 @@ module.exports = {
       var windowHeight = verge.viewportH();
 
       // Default size
-      var newHeroMediaImageSrc = media.Medium.Uri;
+      var newHeroMediaImageSrc = media.Small.Uri;
 
       // Scroll to top
       $('html, body').scrollTop(heroMediaImage.offset().top);
@@ -138,17 +138,17 @@ module.exports = {
           maxHeight: windowHeight
         });
         
-        // Dont load large media if its even smaller than medium otherwise preload then display large image
-        if (!(media.Large.Height < parseInt(this.defaultMaxHeight, 10))) {
-          // Enlarge medium image temporarily to provide smooth transition
-          var heroMediaImageHeight = Math.round((windowWidth / media.Large.Width) * media.Large.Height);
+        // Dont load meidum media if its even smaller than small otherwise preload then display medium image
+        if (!(media.Medium.Height < parseInt(this.defaultMaxHeight, 10))) {
+          // Enlarge small image temporarily to provide smooth transition
+          var heroMediaImageHeight = Math.round((windowWidth / media.Medium.Width) * media.Medium.Height);
 
           // Check to make sure we dont enlarge too much
-          if (heroMediaImageHeight > media.Large.Height)
-            heroMediaImageHeight = media.Large.Height;
+          if (heroMediaImageHeight > media.Medium.Height)
+            heroMediaImageHeight = media.Medium.Height;
           
           heroMediaImage.height(heroMediaImageHeight);
-          newHeroMediaImageSrc = media.Large.Uri;
+          newHeroMediaImageSrc = media.Medium.Uri;
         }
         
         // change aria state
@@ -254,10 +254,10 @@ module.exports = {
       newHeroImage.css({
         maxHeight: $('img', this.$heroMedia).css('max-height')
       });
-      if (this.$mediaArea.hasClass('expanded') && !(newMedia.Large.Height < parseInt(this.defaultMaxHeight, 10))) {
-        newHeroImage.attr('src', newMedia.Large.Uri);
-      } else {
+      if (this.$mediaArea.hasClass('expanded') && !(newMedia.Medium.Height < parseInt(this.defaultMaxHeight, 10))) {
         newHeroImage.attr('src', newMedia.Medium.Uri);
+      } else {
+        newHeroImage.attr('src', newMedia.Small.Uri);
       }
             
       this.$fullscreenButton.removeClass('disabled');
@@ -276,7 +276,7 @@ module.exports = {
         this.toggleFullscreen();
       }
 
-      var newHeroVideo = $('<img/>', { 'alt': newMedia.Caption, 'src': newMedia.Medium.Uri, 'class': 'video' });
+      var newHeroVideo = $('<img/>', { 'alt': newMedia.Caption, 'src': newMedia.Small.Uri, 'class': 'video' });
       
       this.$fullscreenButton.addClass('disabled');
       this.$reuseButton.addClass('disabled');
@@ -390,25 +390,25 @@ module.exports = {
         $('.attribution h4', this.$reuseArea).addClass('disabled');
 
       var downloadImagesHtml = ['<h4>Download images</h4>'];
-      if (media.Medium) {
+      if (media.Small) {
         downloadImagesHtml.push(
           '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/small" rel="nofollow">',
           '  <span class="title">Small</span>',
+          '  <span class="sub-title">(' + media.Small.Width + ' x ' + media.Small.Height + ', ' + media.Small.SizeShortened + ')</span>',
+          '</a><br/>');
+      }
+      if (media.Medium && (media.Small.Height < media.Medium.Height && media.Small.Width < media.Medium.Width)) {
+        downloadImagesHtml.push(
+          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/medium" rel="nofollow">',
+          '  <span class="title">Medium</span>',
           '  <span class="sub-title">(' + media.Medium.Width + ' x ' + media.Medium.Height + ', ' + media.Medium.SizeShortened + ')</span>',
           '</a><br/>');
       }
       if (media.Large && (media.Medium.Height < media.Large.Height && media.Medium.Width < media.Large.Width)) {
         downloadImagesHtml.push(
-          '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/medium" rel="nofollow">',
-          '  <span class="title">Medium</span>',
-          '  <span class="sub-title">(' + media.Large.Width + ' x ' + media.Large.Height + ', ' + media.Large.SizeShortened + ')</span>',
-          '</a><br/>');
-      }
-      if (media.Original && (media.Large.Height < media.Original.Height && media.Large.Width < media.Original.Width)) {
-        downloadImagesHtml.push(
           '<a class="link" href="/' + documentId + '/media/' + media.Irn + '/large" rel="nofollow">',
           '  <span class="title">Large</span>',
-          '  <span class="sub-title">(' + media.Original.Width + ' x ' + media.Original.Height + ', ' + media.Original.SizeShortened + ')</span>',
+          '  <span class="sub-title">(' + media.Large.Width + ' x ' + media.Large.Height + ', ' + media.Large.SizeShortened + ')</span>',
           '</a><br/>');
       }
       $('.download', this.$reuseArea).html(downloadImagesHtml.join('\n'));

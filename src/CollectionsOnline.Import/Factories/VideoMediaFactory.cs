@@ -56,7 +56,7 @@ namespace CollectionsOnline.Import.Factories
                         using (var memoryStream = new MemoryStream(webClient.DownloadData(thumbnail.Url)))
                         using (var thumbnailImage = new MagickImage(memoryStream))
                         {
-                            var mediumImage = thumbnailImage.Clone();
+                            var smallImage = thumbnailImage.Clone();
 
                             // Create thumbnail
                             var destPath = PathFactory.MakeDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail);
@@ -78,19 +78,19 @@ namespace CollectionsOnline.Import.Factories
                                 Height = thumbnailImage.Height
                             };
 
-                            // Create medium preview placeholder
-                            destPath = PathFactory.MakeDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium);
+                            // Create small preview placeholder
+                            destPath = PathFactory.MakeDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Small);
 
-                            mediumImage.Resize(new MagickGeometry(0, 500));
-                            mediumImage.Quality = 80;
-                            mediumImage.Write(destPath);
+                            smallImage.Resize(new MagickGeometry(0, 500));
+                            smallImage.Quality = 80;
+                            smallImage.Write(destPath);
 
-                            videoMedia.Medium = new ImageMediaFile
+                            videoMedia.Small = new ImageMediaFile
                             {
-                                Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium),
+                                Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Small),
                                 Size = new FileInfo(destPath).Length,
-                                Width = mediumImage.Width,
-                                Height = mediumImage.Height
+                                Width = smallImage.Width,
+                                Height = smallImage.Height
                             };
                         }
 
@@ -117,12 +117,12 @@ namespace CollectionsOnline.Import.Factories
             if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
             {
                 var destPathThumbnail = PathFactory.GetDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail);
-                var destPathMedium = PathFactory.GetDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium);
+                var destPathSmall = PathFactory.GetDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Small);
 
                 if (File.Exists(destPathThumbnail) &&
-                    File.Exists(destPathMedium))
+                    File.Exists(destPathSmall))
                 {
-                    using (var image = new MagickImage(destPathMedium))
+                    using (var image = new MagickImage(destPathSmall))
                     {
                         videoMedia.Thumbnail = new ImageMediaFile
                         {
@@ -133,13 +133,13 @@ namespace CollectionsOnline.Import.Factories
                         };
                     }
 
-                    // Medium preview placeholder
-                    using (var image = new MagickImage(destPathMedium))
+                    // Small preview placeholder
+                    using (var image = new MagickImage(destPathSmall))
                     {
-                        videoMedia.Medium = new ImageMediaFile
+                        videoMedia.Small = new ImageMediaFile
                         {
                             Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium),
-                            Size = new FileInfo(destPathMedium).Length,
+                            Size = new FileInfo(destPathSmall).Length,
                             Width = image.Width,
                             Height = image.Height
                         };
