@@ -276,16 +276,16 @@ namespace CollectionsOnline.WebSite.Factories
             var video = media.OfType<VideoMedia>().FirstOrDefault();
             if (image != null)
             {
-                metaProperties.Add(new KeyValuePair<string, string>("og:image", string.Format("{0}{1}", canonicalSiteBase, image.Large.Uri)));
+                metaProperties.Add(new KeyValuePair<string, string>("og:image", string.Format("{0}{1}", canonicalSiteBase, image.Medium.Uri)));
                 metaProperties.Add(new KeyValuePair<string, string>("og:image:type", "image/jpeg"));
-                metaProperties.Add(new KeyValuePair<string, string>("og:image:width", image.Large.Width.ToString()));
-                metaProperties.Add(new KeyValuePair<string, string>("og:image:height", image.Large.Height.ToString()));
-                metaProperties.Add(new KeyValuePair<string, string>("twitter:image", string.Format("{0}{1}", canonicalSiteBase, image.Medium.Uri)));
+                metaProperties.Add(new KeyValuePair<string, string>("og:image:width", image.Medium.Width.ToString()));
+                metaProperties.Add(new KeyValuePair<string, string>("og:image:height", image.Medium.Height.ToString()));
+                metaProperties.Add(new KeyValuePair<string, string>("twitter:image", string.Format("{0}{1}", canonicalSiteBase, image.Small.Uri)));
             }
             if (video != null)
             {
                 if (image == null)
-                    metaProperties.Add(new KeyValuePair<string, string>("og:image", string.Format("{0}{1}", canonicalSiteBase, video.Medium.Uri)));
+                    metaProperties.Add(new KeyValuePair<string, string>("og:image", string.Format("{0}{1}", canonicalSiteBase, video.Small.Uri)));
 
                 metaProperties.Add(new KeyValuePair<string, string>("og:video", string.Format("https://www.youtube.com/embed/{0}", video.VideoId)));
                 metaProperties.Add(new KeyValuePair<string, string>("og:video:type", "application/x-shockwave-flash"));

@@ -1,12 +1,11 @@
 ﻿namespace CollectionsOnline.Core.Models
 {
     public enum FileDerivativeType
-    {
-        None,
-        Original,
-        Thumbnail,
-        Small,
+    {        
+        Large,
         Medium,
-        Large
+        Small,
+        Thumbnail,
+        None
     }
 }

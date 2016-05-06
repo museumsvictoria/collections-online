@@ -26,13 +26,13 @@ namespace CollectionsOnline.Core.Models
     {
         public string AlternativeText { get; set; }
 
-        public ImageMediaFile Original { get; set; }
-
-        public ImageMediaFile Thumbnail { get; set; }
+        public ImageMediaFile Large { get; set; }
 
         public ImageMediaFile Medium { get; set; }
 
-        public ImageMediaFile Large { get; set; }
+        public ImageMediaFile Small { get; set; }
+
+        public ImageMediaFile Thumbnail { get; set; }
 
         public string Md5Checksum { get; set; }
     }
@@ -47,7 +47,7 @@ namespace CollectionsOnline.Core.Models
 
         public ImageMediaFile Thumbnail { get; set; }
 
-        public ImageMediaFile Medium { get; set; }
+        public ImageMediaFile Small { get; set; }
     }
 
     public class AudioMedia : Media, IHasThumbnail, IHasChecksum

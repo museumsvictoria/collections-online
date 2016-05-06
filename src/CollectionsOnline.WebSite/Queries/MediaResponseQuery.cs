@@ -37,16 +37,17 @@ namespace CollectionsOnline.WebSite.Queries
                 return HttpStatusCode.NotFound;
 
             ImageMediaFile imageMediaFile = null;
+
             switch (size)
             {
                 case "small":
-                    imageMediaFile = media.Medium;
+                    imageMediaFile = media.Small;
                     break;
                 case "medium":
-                    imageMediaFile = media.Large;
+                    imageMediaFile = media.Medium;
                     break;
                 case "large":
-                    imageMediaFile = media.Original;
+                    imageMediaFile = media.Large;
                     break;
             }
 

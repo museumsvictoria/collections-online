@@ -396,6 +396,46 @@ namespace CollectionsOnline.Core.Config
             },
         };
 
+        public static Dictionary<LicenceType, Licence> Licences = new Dictionary<LicenceType, Licence>
+        {
+            {
+                LicenceType.CcBy,
+                new Licence { Type = LicenceType.CcBy, Name = "Attribution 4.0 International", ShortName = "CC BY", Uri = "https://creativecommons.org/licenses/by/4.0", Open = true, NonCommercialOpen = false }
+            },
+            {
+                LicenceType.CcByNc,
+                new Licence { Type = LicenceType.CcByNc, Name = "Attribution-NonCommercial 4.0 International", ShortName = "CC BY-NC", Uri = "https://creativecommons.org/licenses/by-nc/4.0/", Open = true, NonCommercialOpen = true }
+            },
+            {
+                LicenceType.CcByNcNd,
+                new Licence { Type = LicenceType.CcByNcNd, Name = "Attribution-NonCommercial-NoDerivatives 4.0 International", ShortName = "CC BY-NC-ND", Uri = "https://creativecommons.org/licenses/by-nc-nd/4.0/", Open = true, NonCommercialOpen = true }
+            },
+            {
+                LicenceType.CcByNcSa,
+                new Licence { Type = LicenceType.CcByNcSa, Name = "Attribution-NonCommercial-ShareAlike 4.0 International", ShortName = "CC BY-NC-SA", Uri = "https://creativecommons.org/licenses/by-nc-sa/4.0/", Open = true, NonCommercialOpen = true }
+            },
+            {
+                LicenceType.CcByNd,
+                new Licence { Type = LicenceType.CcByNd, Name = "Attribution-NoDerivatives 4.0 International", ShortName = "CC BY-ND", Uri = "https://creativecommons.org/licenses/by-nd/4.0/", Open = true, NonCommercialOpen = false }
+            },
+            {
+                LicenceType.CcBySa,
+                new Licence { Type = LicenceType.CcBySa, Name = "Attribution-ShareAlike 4.0 International", ShortName = "CC BY-SA", Uri = "https://creativecommons.org/licenses/by-sa/4.0/", Open = true, NonCommercialOpen = false }
+            },
+            {
+                LicenceType.Cc0,
+                new Licence { Type = LicenceType.Cc0, Name = "Public Domain Dedication", ShortName = "Public Domain", Uri = "https://creativecommons.org/publicdomain/zero/1.0/", Open = true, NonCommercialOpen = false }
+            },
+            {
+                LicenceType.PublicDomainMark,
+                new Licence { Type = LicenceType.PublicDomainMark, Name = "Public Domain Mark", ShortName = "Public Domain", Uri = "http://creativecommons.org/publicdomain/mark/1.0/", Open = true, NonCommercialOpen = false }
+            },
+            {
+                LicenceType.AllRightsReserved,
+                new Licence { Type = LicenceType.AllRightsReserved, Name = "All Rights Reserved", ShortName = "All Rights Reserved", Uri = string.Empty, Open = false, NonCommercialOpen = false }
+            }
+        };
+
         public static string[] TaxonomyTypeStatuses = { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
     }
 }

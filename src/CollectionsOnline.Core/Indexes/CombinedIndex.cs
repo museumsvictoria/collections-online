@@ -32,9 +32,9 @@ namespace CollectionsOnline.Core.Indexes
                     // Sort fields
                     Quality =
                         ((article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any()) ? 1 : 0) +
-                        ((article.Keywords.Any()) ? 1 : 0) +
-                        Math.Log(article.Media.Count + 2, 2) +
-                        ((article.ChildArticleIds.Any()) ? 1 : 0),
+                        ((article.ChildArticleIds.Any()) ? 1 : 0) +
+                        ((article.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (article.Media.OfType<ImageMedia>().Any() ? Math.Log(article.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + article.Media.Count, 2) : 0),
                     DateModified = article.DateModified,
 
                     // Facet fields
@@ -100,8 +100,9 @@ namespace CollectionsOnline.Core.Indexes
                     // Sort fields
                     Quality = 
                         ((!string.IsNullOrWhiteSpace(item.PhysicalDescription) || !string.IsNullOrWhiteSpace(item.ObjectSummary) || !string.IsNullOrWhiteSpace(item.Significance) || !string.IsNullOrWhiteSpace(item.IsdDescriptionOfContent)) ? 1 : 0) + 
-                        Math.Log(item.Media.Count + 2, 2) +
-                        ((item.Associations.Any()) ? 1 : 0),
+                        ((item.Associations.Any()) ? 1 : 0) +
+                        ((item.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (item.Media.OfType<ImageMedia>().Any() ? Math.Log(item.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + item.Media.Count, 2) : 0),
                     DateModified = item.DateModified,
 
                     // Facet fields
@@ -214,10 +215,10 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Sort fields
                     Quality =
-                        ((!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet)) ? 1 : 0) +
-                        ((!string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
-                        Math.Log(species.Media.Count + 2, 2) +
-                        ((species.RelatedItemIds.Any() || species.RelatedSpecimenIds.Any()) ? 1 : 0),
+                        ((!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet) || !string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
+                        ((species.RelatedItemIds.Any() || species.RelatedSpecimenIds.Any()) ? 1 : 0) +
+                        ((species.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (species.Media.OfType<ImageMedia>().Any() ? Math.Log(species.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + species.Media.Count, 2) : 0),
                     DateModified = species.DateModified,
 
                     // Facet fields
@@ -327,11 +328,10 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Sort fields
                     Quality =
-                        ((specimen.CollectionEvent != null || !string.IsNullOrWhiteSpace(specimen.TypeStatus)) ? 1 : 0) +
-                        ((specimen.CollectionSite != null) ? 1 : 0) +
-                        Math.Log(specimen.Media.Count + 2, 2) +
-                        ((specimen.Taxonomy != null) ? 1 : 0) +
-                        ((!string.IsNullOrWhiteSpace(specimen.ObjectSummary)) ? 2 : 0),
+                        ((specimen.CollectionEvent != null || !string.IsNullOrWhiteSpace(specimen.TypeStatus) || (specimen.Taxonomy != null) || (specimen.CollectionSite != null)) ? 1 : 0) +
+                        ((!string.IsNullOrWhiteSpace(specimen.ObjectSummary)) ? 1 : 0) +
+                        ((specimen.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (specimen.Media.OfType<ImageMedia>().Any() ? Math.Log(specimen.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + specimen.Media.Count, 2) : 0),
                     DateModified = specimen.DateModified,
 
                     // Facet fields

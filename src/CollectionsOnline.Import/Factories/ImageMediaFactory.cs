@@ -37,7 +37,7 @@ namespace CollectionsOnline.Import.Factories
             {
                 new ImageMediaJob
                 {
-                    FileDerivativeType = FileDerivativeType.Original,
+                    FileDerivativeType = FileDerivativeType.Large,
                     Transform = (image, map) =>
                     {
                         image.Resize(new MagickGeometry(3000) { Greater = true });                        
@@ -66,7 +66,7 @@ namespace CollectionsOnline.Import.Factories
                 },
                 new ImageMediaJob
                 {
-                    FileDerivativeType = FileDerivativeType.Medium,
+                    FileDerivativeType = FileDerivativeType.Small,
                     Transform = (image, map) =>
                     {
                         image.Resize(new MagickGeometry(0, 500));
@@ -76,7 +76,7 @@ namespace CollectionsOnline.Import.Factories
                 },
                 new ImageMediaJob
                 {
-                    FileDerivativeType = FileDerivativeType.Large,
+                    FileDerivativeType = FileDerivativeType.Medium,
                     Transform = (image, map) =>
                     {
                         image.Resize(new MagickGeometry(1500) { Greater = true });
@@ -105,13 +105,14 @@ namespace CollectionsOnline.Import.Factories
                 using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
                 {
                     imuSession.FindKey(imageMedia.Irn);
+                    
                     var result = imuSession.Fetch("start", 0, -1, Columns).Rows[0];
 
                     var resource = result.GetMap("resource");
                     if (resource == null)
                         throw new IMuException("MultimediaResourceNotFound");
-                    var fileStream = resource["file"] as FileStream;
-                    
+                    var fileStream = resource["file"] as FileStream;                    
+
                     using (var originalImage = new MagickImage(fileStream))
                     {
                         foreach (var imageMediaJob in _imageMediaJobs)
@@ -151,9 +152,9 @@ namespace CollectionsOnline.Import.Factories
                             }
                         }
                     }
-
+                    
                     stopwatch.Stop();
-                    Log.Logger.Debug("Completed image {Irn} creation in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
+                    Log.Logger.Debug("Completed image {Irn} ({Bytes}) creation in {stopwatch} ms", imageMedia.Irn, fileStream.Length.BytesToString(), stopwatch.ElapsedMilliseconds);
 
                     return true;
                 }
