@@ -7,6 +7,6 @@ namespace CollectionsOnline.Import.Factories
     {
         Licence MakeMediaLicence(string licence);
 
-        Licence MakeItemSpecimenLicence(Map map);
+        Licence MakeSpecimenLicence(Map map);
     }
 }

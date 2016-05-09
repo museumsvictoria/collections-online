@@ -349,7 +349,7 @@ namespace CollectionsOnline.Import.Factories
                 specimen.ThumbnailUri = media.Thumbnail.Uri;
 
             // Licence
-            specimen.Licence = _licenceFactory.MakeItemSpecimenLicence(map);
+            specimen.Licence = _licenceFactory.MakeSpecimenLicence(map);
 
             // Relationships
 

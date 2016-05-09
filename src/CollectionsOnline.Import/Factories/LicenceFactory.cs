@@ -20,10 +20,9 @@ namespace CollectionsOnline.Import.Factories
             return Constants.Licences.Select(x => x.Value).SingleOrDefault(x => x.ShortName == licence) ?? Constants.Licences[LicenceType.AllRightsReserved];
         }
 
-        public Licence MakeItemSpecimenLicence(Map map)
+        public Licence MakeSpecimenLicence(Map map)
         {
-            if ((map.ContainsKey("ClaObjectSummary") && !string.IsNullOrWhiteSpace(map.GetString("ClaObjectSummary"))) ||
-                (map.ContainsKey("SubHistoryTechSignificance") && !string.IsNullOrWhiteSpace(map.GetString("SubHistoryTechSignificance"))))
+            if (map.ContainsKey("ClaObjectSummary") && !string.IsNullOrWhiteSpace(map.GetString("ClaObjectSummary")))
                 return Constants.Licences[LicenceType.CcBy];
 
             return Constants.Licences[LicenceType.Cc0];
