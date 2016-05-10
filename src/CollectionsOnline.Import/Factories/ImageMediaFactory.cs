@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using CollectionsOnline.Core.Config;
@@ -36,52 +35,68 @@ namespace CollectionsOnline.Import.Factories
             _imageMediaJobs = new List<ImageMediaJob>
             {
                 new ImageMediaJob
-                {
+                {                    
                     FileDerivativeType = FileDerivativeType.Large,
-                    Transform = (image, map) =>
+                    Transform = (imageMedia, magickImage, map) =>
                     {
-                        image.Resize(new MagickGeometry(3000) { Greater = true });                        
-                        image.Quality = 86;                                                
-                        return image;
+                        AddImageProfile(imageMedia, magickImage, true);
+                        
+                        magickImage.Format = MagickFormat.Jpeg;
+                        magickImage.Resize(new MagickGeometry(3000) { Greater = true });
+                        magickImage.Quality = 86;
+
+                        return magickImage;
                     }
                 },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Thumbnail,
-                    Transform = (image, map) =>
+                    Transform = (imageMedia, magickImage, map) =>
                     {
+                        AddImageProfile(imageMedia, magickImage);
+                        
+                        magickImage.Format = MagickFormat.Jpeg;
                         if (NeedsPadding(map))
                         {
-                            image.Resize(new MagickGeometry(250));
-                            image.Extent(new MagickGeometry(250), Gravity.Center, MagickColors.White);
+                            magickImage.Resize(new MagickGeometry(250));
+                            magickImage.Extent(new MagickGeometry(250), Gravity.Center, MagickColors.White);
                         }
                         else
                         {
-                            image.Resize(new MagickGeometry(250) { FillArea = true });
-                            image.Crop(250, 250, Gravity.Center);
+                            magickImage.Resize(new MagickGeometry(250) { FillArea = true });
+                            magickImage.Crop(250, 250, Gravity.Center);
                         }
-                        image.Quality = 70;
-                        return image;
+                        magickImage.Quality = 70;
+
+                        return magickImage;
                     }
                 },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Small,
-                    Transform = (image, map) =>
+                    Transform = (imageMedia, magickImage, map) =>
                     {
-                        image.Resize(new MagickGeometry(0, 500));
-                        image.Quality = 75;
-                        return image;
+                        AddImageProfile(imageMedia, magickImage, true);
+
+                        magickImage.Format = MagickFormat.Jpeg;
+                        magickImage.Resize(new MagickGeometry(0, 500));
+                        magickImage.Quality = 76;
+
+                        return magickImage;
                     }
                 },
                 new ImageMediaJob
                 {
                     FileDerivativeType = FileDerivativeType.Medium,
-                    Transform = (image, map) =>
+                    Transform = (imageMedia, magickImage, map) =>
                     {
-                        image.Resize(new MagickGeometry(1500) { Greater = true });
-                        image.Quality = 75;
-                        return image;
+                        AddImageProfile(imageMedia, magickImage, true);
+
+                        magickImage.Format = MagickFormat.Jpeg;
+                        magickImage.Resize(new MagickGeometry(1500) { Greater = true });
+                        magickImage.Quality = 76;
+
+                        return magickImage;
                     }
                 }
             };
@@ -120,21 +135,8 @@ namespace CollectionsOnline.Import.Factories
                             var destPath = PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
                             var uriPath = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
 
-                            using (var image = imageMediaJob.Transform(originalImage.Clone(), result))
+                            using (var image = imageMediaJob.Transform(imageMedia, originalImage.Clone(), result))
                             {
-                                // Save profiles if there are any
-                                var profile = image.GetColorProfile();
-
-                                // Strip exif and any profiles
-                                image.Strip();
-
-                                // Add original profile back
-                                if (profile != null)
-                                    image.AddProfile(profile);
-
-                                // Use jpeg format
-                                image.Format = MagickFormat.Jpeg;
-
                                 // Write image to disk
                                 image.Write(destPath);
 
@@ -273,11 +275,39 @@ namespace CollectionsOnline.Import.Factories
             return false;
         }
 
+        private void AddImageProfile(ImageMedia imageMedia, MagickImage magickImage, bool addIptcProfile = false)
+        {
+            // Save profiles if there are any
+            var profile = magickImage.GetColorProfile();
+
+            // Strip exif and any profiles
+            magickImage.Strip();
+
+            // Add original profile back
+            if (profile != null)
+                magickImage.AddProfile(profile);
+
+            if (addIptcProfile)
+            {
+                var iptcProfile = new IptcProfile();
+
+                iptcProfile.SetValue(IptcTag.CopyrightNotice, imageMedia.Licence.Name);
+                
+                if (!string.IsNullOrWhiteSpace(imageMedia.Credit))
+                    iptcProfile.SetValue(IptcTag.Credit, imageMedia.Credit);
+
+                if(imageMedia.Sources.Any())
+                    iptcProfile.SetValue(IptcTag.Source, imageMedia.Sources.Concatenate(", "));
+
+                magickImage.AddProfile(iptcProfile);
+            }            
+        }
+
         private class ImageMediaJob
         {
             public FileDerivativeType FileDerivativeType { get; set; }
 
-            public Func<MagickImage, Map, MagickImage> Transform { get; set; }
+            public Func<ImageMedia, MagickImage, Map, MagickImage> Transform { get; set; }
         }
     }
 }
