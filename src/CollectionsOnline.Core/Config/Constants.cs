@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 
 namespace CollectionsOnline.Core.Config

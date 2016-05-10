@@ -571,7 +571,7 @@ namespace CollectionsOnline.Import.Factories
             item.MuseumLocation = _museumLocationFactory.Make(map.GetMap("location"));
 
             // Licence
-            item.Licence = _licenceFactory.MakeItemSpecimenLicence(map);
+            item.Licence = Constants.Licences[LicenceType.CcBy];
 
             // Relationships
 
