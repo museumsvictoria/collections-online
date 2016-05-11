@@ -101,12 +101,12 @@ namespace CollectionsOnline.WebSite.Queries
 
                 foreach (var queryResult in queryResults)
                 {
-                    results.Add(Mapper.DynamicMap<EmuAggregateRootCsvModel>(queryResult));
+                    results.Add(Mapper.Map<EmuAggregateRootCsvModel>(queryResult));
                 }
 
                 return new SearchIndexCsvModel
                 {
-                    Results = new List<EmuAggregateRootCsvModel>(),
+                    Results = results,
                     SearchInputModel = searchInputModel
                 };
             }

@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
+using System.Linq;
 using AutoMapper;
 using CollectionsOnline.Core.Models;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
@@ -50,6 +52,43 @@ namespace CollectionsOnline.WebSite.Infrastructure
                 cfg.CreateMap<CollectionSite, CollectionSiteApiViewModel>();
                 cfg.CreateMap<Licence, LicenceApiViewModel>();
                 cfg.CreateMap<Author, AuthorApiViewModel>();
+
+                // Csv Download
+                cfg.CreateMap<Item, EmuAggregateRootCsvModel>()
+                    .AfterMap((src, dest) =>
+                    {
+                        dest.Licence = string.Format("{0} {1}", src.Licence.Name, !string.IsNullOrWhiteSpace(src.Licence.Uri) ? string.Format("({0})", src.Licence.Uri) : string.Empty).Trim();
+                        dest.Associations = src.Associations.Select(a => string.Format("{0} : {1}", a.Type, new[] { a.Name, a.StreetAddress }.Concatenate(", "))).Concatenate("; ");
+                        dest.TradeLiteraturePrimaryRoleAndName = (!string.IsNullOrWhiteSpace(src.TradeLiteraturePrimaryRole)) ? string.Format("{0} : {1}", src.TradeLiteraturePrimaryRole, src.TradeLiteraturePrimaryName) : null;
+                        dest.Dimensions = src.Dimensions.Select(d => string.Format("{0} : {1} {2}", (!string.IsNullOrWhiteSpace(d.Configuration)) ? d.Configuration : "Dimensions", d.Dimensions, d.Comments).Trim()).Concatenate("; ");
+                        dest.IndigenousCulturesLocalities = src.IndigenousCulturesLocalities.Concatenate(", ");
+                        dest.IndigenousCulturesCulturalGroups = src.IndigenousCulturesCulturalGroups.Concatenate(", ");                        
+                    });
+                cfg.CreateMap<Article, EmuAggregateRootCsvModel>()
+                    .AfterMap((src, dest) =>
+                    {
+                        dest.Licence = string.Format("{0} {1}", src.Licence.Name, !string.IsNullOrWhiteSpace(src.Licence.Uri) ? string.Format("({0})", src.Licence.Uri) : string.Empty).Trim();
+                        dest.Authors = src.Authors.Select(x => x.FullName).Concatenate(", ");
+                        dest.Contributors = src.Contributors.Select(x => x.FullName).Concatenate(", ");                        
+                        dest.ArticleTypes = src.Types.Concatenate(", ");
+                    });
+                cfg.CreateMap<Species, EmuAggregateRootCsvModel>()
+                    .AfterMap((src, dest) =>
+                    {
+                        dest.DisplayTitle = HtmlConverter.HtmlToText(src.DisplayTitle);
+                        dest.Licence = string.Format("{0} {1}", src.Licence.Name, !string.IsNullOrWhiteSpace(src.Licence.Uri) ? string.Format("({0})", src.Licence.Uri) : string.Empty).Trim();
+                        dest.Authors = src.Authors.Select(x => x.FullName).Concatenate(", ");
+                    });
+                cfg.CreateMap<Specimen, EmuAggregateRootCsvModel>()
+                    .AfterMap((src, dest) =>
+                    {
+                        dest.DisplayTitle = HtmlConverter.HtmlToText(src.DisplayTitle);
+                        dest.Licence = string.Format("{0} {1}", src.Licence.Name, !string.IsNullOrWhiteSpace(src.Licence.Uri) ? string.Format("({0})", src.Licence.Uri) : string.Empty).Trim();
+                        dest.Associations = src.Associations.Select(a => string.Format("{0} : {1}", a.Type, new[] { a.Name, a.StreetAddress }.Concatenate(", "))).Concatenate("; ");
+                        dest.Storage = src.Storages.Select(s => new[] { s.Nature, s.Form, s.FixativeTreatment, s.Medium}.Concatenate(", ")).Concatenate("; ");
+                        dest.CollectionSiteLatitudes = (src.CollectionSite != null) ? src.CollectionSite.Latitudes.Concatenate("; ") : string.Empty;
+                        dest.CollectionSiteLongitudes = (src.CollectionSite != null) ? src.CollectionSite.Longitudes.Concatenate("; ") : string.Empty;
+                    });
             });
         }
     }
