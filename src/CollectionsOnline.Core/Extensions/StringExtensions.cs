@@ -121,6 +121,9 @@ namespace CollectionsOnline.Core.Extensions
 
         public static string ReplaceNonWordWithDashes(this string input)
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
             // Remove Apostrophe Tags
             input = Regex.Replace(input, "[’'“”\"&]{1,}", "", RegexOptions.None);
 

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using CollectionsOnline.Core.Extensions;
 using Nancy.Cookies;
 
 namespace CollectionsOnline.WebSite.Models
@@ -34,6 +36,30 @@ namespace CollectionsOnline.WebSite.Models
             MultiFacets = new Dictionary<string, string[]>();
             Terms = new Dictionary<string, string>();
             Cookies = new List<NancyCookie>();
+        }
+
+        public override string ToString()
+        {
+            var searchInputStrings = new List<string>
+            {
+                (Queries.Any()) ? string.Format("query-{0}", Queries.Select(x => x.ReplaceNonWordWithDashes()).Concatenate("-")) : null,
+                (Facets.Any()) ? Facets.Select(x => string.Format("{0}-{1}", x.Key, x.Value)).Concatenate("-") : null,
+                (MultiFacets.Any()) ? MultiFacets.Select(x => string.Format("{0}-{1}", x.Key, x.Value.Concatenate("-"))).Concatenate("-") : null,
+                (Terms.Any()) ? Terms.Select(x => string.Format("{0}-{1}", x.Key, x.Value)).Concatenate("-") : null,
+            };
+
+            if (searchInputStrings.All(x => x == null))
+            {
+                searchInputStrings.Add("search");
+            }
+
+            searchInputStrings.Add(string.Format("page-{0}", Page));
+
+            return searchInputStrings
+                .Concatenate("-")
+                .Replace("&", "and")
+                .ReplaceNonWordWithDashes()
+                .ToLowerInvariant();
         }
     }
 }

@@ -1,5 +1,10 @@
-﻿using CollectionsOnline.WebSite.Models;
+﻿using System.IO;
+using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.WebSite.Models;
+using CsvHelper;
 using Nancy;
+using Nancy.Responses;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -7,7 +12,17 @@ namespace CollectionsOnline.WebSite.Queries
     {
         public Response BuildCsvResponse(SearchIndexCsvModel searchIndexCsvModel)
         {
-            return new Response();
+            var writer = new StreamWriter(new MemoryStream()) { AutoFlush = true };
+            var csv = new CsvWriter(writer);
+
+            csv.WriteRecords(searchIndexCsvModel.Results);
+            writer.BaseStream.Position = 0;
+
+            var response = new StreamResponse(() => writer.BaseStream, "text/csv");
+
+            response.WithHeader("Content-Disposition", string.Format("attachment; filename=\"{0}.csv\"", searchIndexCsvModel.SearchInputModel.ToString().Truncate(Constants.FileMaxChars)));
+
+            return response;
         }
     }
 }
