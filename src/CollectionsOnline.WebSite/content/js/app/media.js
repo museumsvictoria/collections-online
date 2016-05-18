@@ -344,15 +344,8 @@ module.exports = {
 
     if (media.RightsStatement) {
       this.$rightsStatement.html(media.RightsStatement);
-      if (media.$type.indexOf('ImageMedia') > 0)
-        this.$rightsStatementQualifier.html('This image is:');
-      else if (media.$type.indexOf('VideoMedia') > 0)
-        this.$rightsStatementQualifier.html('This video is:');
-      else if (media.$type.indexOf('AudioMedia') > 0)
-        this.$rightsStatementQualifier.html('This audio is:');
     } else {
       this.$rightsStatement.empty();
-      this.$rightsStatementQualifier.empty();
     }
 
     if (media.Licence.Uri) {

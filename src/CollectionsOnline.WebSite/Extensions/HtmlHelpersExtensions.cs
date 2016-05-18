@@ -86,6 +86,11 @@ namespace CollectionsOnline.WebSite.Extensions
             return new NonEncodedHtmlString(sb.ToString());
         }
 
+        public static IHtmlString RenderCurrentPath<T>(this HtmlHelpers<T> helper)
+        {
+            return new NonEncodedHtmlString(string.Format("{0}{1}", ConfigurationManager.AppSettings["CanonicalSiteBase"], helper.RenderContext.Context.Request.Path));
+        }
+
         public static IHtmlString RenderLocationExternalLink<T>(this HtmlHelpers<T> helper, MuseumLocation museumLocation)
         {
             var sb = new StringBuilder();

@@ -121,11 +121,11 @@
                     </div>
                     <div class="download">
                         <a class="link" href="@Model.CsvDownloadUrl" rel="nofollow">
-                            <span class="title">CSV Download</span>
+                            <span class="title">Download page results</span>
                         </a>
                     </div>
                 </div>
-            </div>    
+            </div>
             <div id="maincontent" class="results-area @(Model.ListViewButton.Active ? "list" : "")@(Model.GridViewButton.Active ? "grid" : "")@(Model.DataViewButton.Active ? "data" : "") ">
                 @foreach (var result in Model.Results)
                 {

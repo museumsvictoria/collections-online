@@ -73,39 +73,8 @@
                         <span class="credit">@first.Credit</span>
                     </div>
                     <div>
-                        <span class="rights-statement-qualifier">
-                            @if (!string.IsNullOrWhiteSpace(first.RightsStatement))
-                            {
-                                if (first is ImageMedia)
-                                {
-                                    @:This image is:
-                                }
-                                else if (first is VideoMedia)
-                                {
-                                    @:This video is:
-                                }
-                                else if (first is AudioMedia)
-                                {
-                                    @:This audio is:
-                                }
-                            }
-                        </span>
                         <span class="rights-statement">@first.RightsStatement</span>
-                    </div>
-                    <div>
-                        <span class="licence-qualifier">
-                            Licence:
-                        </span>
-                        <span class="licence">
-                            @if (string.IsNullOrWhiteSpace(first.Licence.Uri))
-                            {
-                                @first.Licence.Name
-                            }
-                            else
-                            {
-                                <a class="@first.Licence.Type.ToString().ToLower()" href="@first.Licence.Uri">@first.Licence.Name</a>
-                            }
-                        </span>
+                        <span class="licence-qualifier">(Licensed as <span class="licence">@if (string.IsNullOrWhiteSpace(first.Licence.Uri)){@first.Licence.Name} else {<a class="@first.Licence.Type.ToString().ToLower()" href="@first.Licence.Uri">@first.Licence.Name</a>}</span>)</span>
                     </div>
                 </div>
                 <div class="media-tools">
@@ -125,9 +94,7 @@
         <div class="wrapper">
             <h3>Reuse this image</h3>
             <div class="rights">
-                <div class="status">
-                    <h4>Rights status</h4>
-                    <p class="rights-statement">@first.RightsStatement</p>
+                <div class="status">                    
                     <p>
                         Can I reuse this image without permission?
                         <span class="permission">
@@ -154,6 +121,7 @@
                             }
                         </span>
                     </p>
+                    <p class="rights-statement">@first.RightsStatement</p>
                 </div>
                 <div class="non-commercial @((first.Licence.NonCommercialOpen) ? null : "disabled")">
                     <a class="request" href="http://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/">
@@ -183,11 +151,8 @@
                             @first.Credit
                         }
                     </div>
-                    <div class="rights-statement">
-                        @if (!string.IsNullOrWhiteSpace(first.RightsStatement))
-                        {
-                            @first.RightsStatement
-                        }
+                    <div>
+                        @Html.RenderCurrentPath()
                     </div>
                 </div>
                 <div class="download">
