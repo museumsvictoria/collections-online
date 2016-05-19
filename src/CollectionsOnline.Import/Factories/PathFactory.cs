@@ -67,12 +67,10 @@ namespace CollectionsOnline.Import.Factories
             if (string.IsNullOrWhiteSpace(path)) 
                 return;
 
-            var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(path));
-                
             try
             {
-                if (!directoryInfo.Exists)
-                    directoryInfo.Create();
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
             }
             catch (Exception ex)
             {

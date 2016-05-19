@@ -212,6 +212,7 @@
     <Compile Include="Fakes\FakeItems.cs" />
     <Compile Include="Fakes\FakeSpecies.cs" />
     <Compile Include="Fakes\FakeSpecimens.cs" />
+    <Compile Include="Import\Factories\PathFactoryTests.cs" />
     <Compile Include="Import\Factories\TaxonomyFactoryTests.cs" />
     <Compile Include="Import\Factories\ArticleFactoryTests.cs" />
     <Compile Include="Import\ImportRunnerTests.cs" />

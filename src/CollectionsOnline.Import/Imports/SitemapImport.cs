@@ -112,7 +112,7 @@ namespace CollectionsOnline.Import.Imports
                     }
 
                     // Save sitemap set with gzip compression
-                    using (var file = File.Create(string.Format("{0}\\sitemaps\\sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["WebSitePath"], count)))
+                    using (var file = File.Open(string.Format("{0}\\sitemaps\\sitemap-set-{1}.xml.gz", ConfigurationManager.AppSettings["WebSitePath"], count), FileMode.Create, FileAccess.Write))
                     using (var gzip = new GZipStream(file, CompressionMode.Compress, false))
                     {
                         sitemapUrlset.Save(gzip);
