@@ -229,3 +229,4 @@ node_modules
 bundle.js
 styles.css
 sitemaps/
+src/.vs/
