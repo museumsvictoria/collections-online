@@ -1,3 +1,4 @@
+/// <binding AfterBuild='default' ProjectOpened='watch' />
 /// <vs AfterBuild='build-html' SolutionOpened='watch' />
 // Steps to build
 // 1. install node: http://nodejs.org/download/

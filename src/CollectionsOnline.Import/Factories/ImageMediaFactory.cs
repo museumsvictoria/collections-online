@@ -171,10 +171,6 @@ namespace CollectionsOnline.Import.Factories
                 {
                     Log.Logger.Warning(ex, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
                 }
-                else if (ex is MagickException)
-                {
-                    Log.Logger.Warning(ex, "Multimedia resource is not an image format that is recognized, unable to save image {Irn}", imageMedia.Irn);
-                }
                 else
                 {
                     // Error is unexpected therefore we want the entire import to fail

@@ -73,8 +73,6 @@ namespace CollectionsOnline.Import.Imports
             };
         }
 
-
-
         public override void Run()
         {
             using (Log.Logger.BeginTimedOperation("Media Update Import starting", "MediaUpdateImport.Run"))
