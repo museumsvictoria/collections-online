@@ -63,18 +63,19 @@ namespace CollectionsOnline.Import.Factories
         }
 
         private static void CreateDirectory(string path)
-        {
+        {            
             if (string.IsNullOrWhiteSpace(path)) 
                 return;
 
+            var directory = Path.GetDirectoryName(path);
+
             try
-            {
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
+            {                
+                Directory.CreateDirectory(directory);
             }
             catch (Exception ex)
             {
-                Log.Logger.Fatal(ex, "Error creating {path} directory", path);
+                Log.Logger.Fatal(ex, "Error creating {directory} directory", directory);
                 throw;
             }
         }

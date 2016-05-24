@@ -79,7 +79,7 @@ namespace CollectionsOnline.Import.Imports
                     sitemapNodeIndexes.Add(sitemapNodes);
 
                 // Create destination folder
-                PathFactory.CreateDestPath(string.Format("{0}\\sitemaps", ConfigurationManager.AppSettings["WebSitePath"]));                
+                PathFactory.CreateDestPath(string.Format("{0}\\sitemaps\\", ConfigurationManager.AppSettings["WebSitePath"]));                
 
                 // Create then save sitemaps as xml
                 count = 0;
