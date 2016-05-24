@@ -81,7 +81,13 @@ namespace CollectionsOnline.WebSite.Infrastructure
                     MiniProfiler.Stop();
 
                     if (MiniProfiler.Current != null)
-                        Log.Logger.Debug(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
+                    {
+                        if(ctx.Request.Path.Contains("/api/"))
+                            Log.Logger.Information("Api accessed {Url} {@Headers}", ctx.Request.Url, ctx.Request.Headers.RenderHeaders());
+                        else
+                            Log.Logger.Debug(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
+                    }
+                        
                 };
 
                 // Automapper configuration
