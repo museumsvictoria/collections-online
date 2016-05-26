@@ -1,5 +1,4 @@
-﻿@using CollectionsOnline.Core.Models
-@using CollectionsOnline.WebSite.Extensions
+﻿@using CollectionsOnline.WebSite.Extensions
 @using CollectionsOnline.WebSite.Models
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ItemViewTransformerResult>
 @{
@@ -77,13 +76,13 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Item.Significance))
                 {
                     <h3>Significance</h3>
-                    <p>@Html.ConvertNewlines(@Model.Item.Significance)</p>
+                    <p>@Html.ConvertNewlines(Model.Item.Significance)</p>
                 }                
             </div>
             <h2>More Information</h2>
             <div class="detail">
                 <ul>
-                    @if (@Model.Item.CollectionNames.Any())
+                    @if (Model.Item.CollectionNames.Any())
                     {
                         <li>
                             <h3>Collection Names</h3>
@@ -95,7 +94,7 @@
                             </p>
                         </li>
                     }
-                    @if (@Model.Item.CollectingAreas.Any())
+                    @if (Model.Item.CollectingAreas.Any())
                     {
                         <li>
                             <h3>Collecting Areas</h3>
@@ -219,7 +218,7 @@
                             <p>@Model.Item.TradeLiteraturePublicationDate</p>
                         </li>
                     }
-                    @foreach (var association in @Model.Item.Associations)
+                    @foreach (var association in Model.Item.Associations)
                     {
                         <li>
                             <h3>@association.Type</h3>
@@ -273,7 +272,7 @@
                             <p><a href="/search?keyword=@HttpUtility.UrlEncode(Model.Item.AudioVisualRecordingDetails)">@Model.Item.AudioVisualRecordingDetails</a></p>
                         </li>
                     }
-                    @if (@Model.Item.AudioVisualContentSummaries.Any())
+                    @if (Model.Item.AudioVisualContentSummaries.Any())
                     {
                         <li>
                             <h3>Content Summary</h3>
@@ -320,7 +319,7 @@
                             <p>@Model.Item.Inscription</p>
                         </li>
                     }
-                    @if (@Model.Item.ModelNames.Any())
+                    @if (Model.Item.ModelNames.Any())
                     {
                         <li>
                             <h3>Model Name or Number</h3>
@@ -332,7 +331,7 @@
                             </p>
                         </li>
                     }
-                    @if (@Model.Item.Brands.Any())
+                    @if (Model.Item.Brands.Any())
                     {
                         <li>
                             <h3>Brand Names</h3>
@@ -637,7 +636,7 @@
                             <p>@Model.Item.ArtworkTertiaryInscriptions</p>
                         </li>
                     }
-                    @if (@Model.Item.IndigenousCulturesCulturalGroups.Any())
+                    @if (Model.Item.IndigenousCulturesCulturalGroups.Any())
                     {
                         <li>
                             <h3>Cultural Groups</h3>
@@ -703,7 +702,7 @@
                             <li>
                                 <h3>Other Common Names</h3>
                                 <p>
-                                    @foreach (var otherCommonNames in @Model.Item.Taxonomy.OtherCommonNames)
+                                    @foreach (var otherCommonNames in Model.Item.Taxonomy.OtherCommonNames)
                                     {
                                         <span>@otherCommonNames</span>
                                     }
@@ -737,7 +736,7 @@
                     {
                         <li>
                             <h3>Discipline</h3>
-                            <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Item.Discipline.ToLower())">@Model.Item.Discipline</a></p>
+                            <p><a href="/search?collection=@HttpUtility.UrlEncode(Model.Item.Discipline.ToLower())">@Model.Item.Discipline</a></p>
                         </li>
 
                     }
@@ -745,10 +744,10 @@
                     {
                         <li>
                             <h3>Type of item</h3>
-                            <p><a href="/search?itemtype=@HttpUtility.UrlEncode(@Model.Item.Type.ToLower())">@Model.Item.Type</a></p>
+                            <p><a href="/search?itemtype=@HttpUtility.UrlEncode(Model.Item.Type.ToLower())">@Model.Item.Type</a></p>
                         </li>
                     }
-                    @foreach (var dimension in @Model.Item.Dimensions.Where(x => !string.IsNullOrWhiteSpace(x.Dimensions)))
+                    @foreach (var dimension in Model.Item.Dimensions.Where(x => !string.IsNullOrWhiteSpace(x.Dimensions)))
                     {
                         <li>
                             <h3>

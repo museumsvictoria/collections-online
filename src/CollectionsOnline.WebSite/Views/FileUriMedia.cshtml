@@ -1,5 +1,4 @@
 ﻿@using CollectionsOnline.Core.Models
-@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IList<Media>>
 @if (Model.OfType<FileMedia>().Any() || Model.OfType<UriMedia>().Any())
 {
