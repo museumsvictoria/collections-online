@@ -18,6 +18,8 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public IList<EmuAggregateRootViewModel> RelatedArticles { get; set; }
 
+        public IList<EmuAggregateRootViewModel> RelatedSpecies { get; set; }
+
         public int RelatedItemSpecimenCount { get; set; }
 
         public ArticleViewTransformerResult()
@@ -26,6 +28,7 @@ namespace CollectionsOnline.WebSite.Transformers
             RelatedSpecimens = new List<EmuAggregateRootViewModel>();
             ChildArticles = new List<EmuAggregateRootViewModel>();
             RelatedArticles = new List<EmuAggregateRootViewModel>();
+            RelatedSpecies = new List<EmuAggregateRootViewModel>();
         }
     }
 }

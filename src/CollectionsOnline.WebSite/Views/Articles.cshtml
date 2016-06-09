@@ -127,7 +127,7 @@
         </aside>
     </div>
 </div>
-@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
+@if (Model.ParentArticle != null || Model.ChildArticles.Any() || Model.RelatedArticles.Any() || Model.RelatedSpecies.Any() || Model.RelatedItems.Any() || Model.RelatedSpecimens.Any())
 {
     <div id="related">
         <div class="wrapper">
@@ -144,6 +144,10 @@
                 @foreach (var relatedArticle in Model.RelatedArticles)
                 {
                     @Html.Partial("RecordTile", relatedArticle)
+                }
+                @foreach (var RelatedSpeciesDoc in Model.RelatedSpecies)
+                {
+                    @Html.Partial("RecordTile", RelatedSpeciesDoc)
                 }
                 @foreach (var relatedItem in Model.RelatedItems)
                 {

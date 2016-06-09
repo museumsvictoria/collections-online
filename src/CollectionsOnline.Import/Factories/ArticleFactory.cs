@@ -57,7 +57,7 @@ namespace CollectionsOnline.Import.Factories
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "parent=AssMasterNarrativeRef.(irn,DetPurpose_tab)",
                         "children=<enarratives:AssMasterNarrativeRef>.(irn,DetPurpose_tab)",
-                        "relatedarticles=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
+                        "relatedarticlesspecies=AssAssociatedWithRef_tab.(irn,DetPurpose_tab)",
                         "relateditemspecimens=ObjObjectsRef_tab.(irn,MdaDataSets_tab)"
                     };
             }
@@ -188,9 +188,16 @@ namespace CollectionsOnline.Import.Factories
 
             // sibling article
             article.RelatedArticleIds = map
-                .GetMaps("relatedarticles")
+                .GetMaps("relatedarticlesspecies")
                 .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                 .Select(x => "articles/" + x.GetEncodedString("irn"))
+                .ToList();
+
+            // related species
+            article.RelatedSpeciesIds = map
+                .GetMaps("relatedarticlesspecies")
+                .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
+                .Select(x => "species/" + x.GetEncodedString("irn"))
                 .ToList();
 
             // Related items/specimens (directly related)

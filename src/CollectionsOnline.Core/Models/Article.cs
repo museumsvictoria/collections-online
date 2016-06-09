@@ -52,6 +52,8 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> RelatedArticleIds { get; set; }
 
+        public IList<string> RelatedSpeciesIds { get; set; }
+
         public IList<string> RelatedItemIds { get; set; }
 
         public IList<string> RelatedSpecimenIds { get; set; }
@@ -66,6 +68,7 @@ namespace CollectionsOnline.Core.Models
             Media = new List<Media>();
             ChildArticleIds = new List<string>();
             RelatedArticleIds = new List<string>();
+            RelatedSpeciesIds = new List<string>();
             RelatedItemIds = new List<string>();
             RelatedSpecimenIds = new List<string>();
         }

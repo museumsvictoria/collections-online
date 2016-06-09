@@ -68,6 +68,17 @@ namespace CollectionsOnline.WebSite.Transformers
                             relatedArticle.Summary,
                             relatedArticle.ThumbnailUri,
                             RecordType = "Article"
+                        },
+                    RelatedSpecies = from speciesId in article.RelatedSpeciesIds
+                        let relatedSpecies = LoadDocument<Species>(speciesId)
+                        where relatedSpecies != null && !relatedSpecies.IsHidden
+                        select new
+                        {
+                            relatedSpecies.Id,
+                            relatedSpecies.DisplayTitle,
+                            relatedSpecies.Summary,
+                            relatedSpecies.ThumbnailUri,
+                            RecordType = "Species"
                         }
                 };
         }
