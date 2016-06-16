@@ -24,6 +24,8 @@ module.exports = {
     
     // Facets
     this.$facets = $('.facetgroup h4');
+
+    this.$downloadPageResultsLink = $('.pagination .download .link');
   },
   bindEvents: function () {
     // Search pagination
@@ -40,6 +42,8 @@ module.exports = {
     
     // Facets
     this.$facets.on('click keydown', this.toggleFacets.bind(this));
+
+    this.$downloadPageResultsLink.on('click', this.downloadPageResults.bind(this));
   },
   gotoPage: function (e) {
     var page = $(e.target).val().replace(/\D/g, '');
@@ -96,5 +100,15 @@ module.exports = {
         location.search = queryString.stringify(querystring);
       }
     }
+  },
+  downloadPageResults: function (e) {      
+      if (window.ga.loaded) {
+          ga('send', {
+              hitType: 'event',
+              eventCategory: 'Downloads',
+              eventAction: 'Search results',
+              eventLabel: $(e.currentTarget).attr('href')
+          });
+      }
   }
 };
