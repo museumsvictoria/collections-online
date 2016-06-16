@@ -527,72 +527,101 @@ button.icon {
     }
 
 
-    & figcaption {
+    figcaption {
         background: $colour-background-black;
         color: $colour-bodytext-inverted;
 
-        & .caption {
-            @include gridle(9);
-            float: left;
-            direction: ltr;
-            font-size: 14px;
-            margin: 1em 0 1.5em;
-            line-height: 20px;
-            min-height: 100px;
-
-            a {
-                text-decoration:underline;
-            }
-
-            @include gridle_state("print") {
-                height: auto;
-                font-size: 9pt;
-            }
-        }
-        //end caption block
-        & .media-tools {
-            @include gridle(3);
-            float: left;
-            direction: ltr;
+        .flex-jacket {
+            max-width: 1040px;
+            margin: 0 auto;
             @include display-flex();
-            float: left;
-            justify-content: flex-end;
-            margin: 1.5em 0;
-            padding-left: 10px;
-            padding-right: 10px;
-            @include gridle_hide("print");
 
-            & button {
-                background: rgba(0,0,0,0);
-                border: 2px solid $colour-bodytext-inverted;
-                border-radius: 3px;
-                box-sizing: border-box;
-                color: $colour-bodytext-inverted;
-                height: 50px;
-                margin: 0 0 0 10px;
-                width: 50px;
-                font-size: 20px;
+            justify-content:space-between;
 
-                &:hover {
-                    border: 2px solid $colour-heading-inverted;
-                    color: $colour-heading-inverted;
+            @include gridle_state("mobile") {
+                flex-flow:column;
+            }
+            
+            .caption {
+                @include display-flex();
+                flex-flow:column;
+            
+                font-size: 14px;
+                margin: 1em 0 1.5em;
+            
+                padding-left: 10px;
+                padding-right: 10px;
+
+                line-height: 20px;
+                min-height: 100px;
+
+                a {
+                    text-decoration:underline;
                 }
 
-                &.icon.info {
-                    display: none;
+                @include gridle_state("mobile") {
+                    order:1;
                 }
 
-                &#contract {
-                    display: none;
-                }
-
-                &.disabled, &.disabled:hover {
-                    opacity: 0.2;
-                    color: $colour-bodytext-inverted;
-                    border: 2px solid $colour-bodytext-inverted;
+                @include gridle_state("print") {
+                    height: auto;
+                    font-size: 9pt;
                 }
             }
+
+            .media-tools {
+                @include display-flex();
+                justify-content: flex-end;
+                margin: 1.5em 0;
+
+                padding-left: 10px;
+                padding-right: 10px;
+                @include gridle_hide("print");
+
+                @include gridle_state("mobile") {
+                    order:0;
+                    justify-content:space-around;
+                }
+
+                button {
+                    background: rgba(0,0,0,0);
+                    box-sizing: border-box;
+                    color: $colour-bodytext-inverted;
+                    margin: 0 0 0 20px;
+                    font-size: 30px;
+
+                    @include gridle_state("mobile") {
+                        margin:0;
+                    }
+
+                    &:hover {
+                        color: $colour-heading-inverted;
+                    }
+
+                    &.icon.info {
+                        display: none;
+                    }
+
+                    &#contract {
+                        display: none;
+                    }
+
+                    &.disabled, &.disabled:hover {
+                        opacity: 0.2;
+                        color: $colour-bodytext-inverted;
+                        border: 2px solid $colour-bodytext-inverted;
+                    }
+
+                    .media-text {
+                        white-space:nowrap;
+                        display:block;
+                        font-size:14px;
+                    }
+                }
+            }
+
         }
+
     }
 
     &.expanded .media-tools button .icon-expand::before {

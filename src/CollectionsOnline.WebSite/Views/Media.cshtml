@@ -35,7 +35,7 @@
             }
         </div>
         <figcaption>
-            <div class="wrapper">
+            <div class="flex-jacket">
                 <div class="caption" aria-live="polite" aria-atomic="true">
                     <div class="caption-text">
                         @if (!string.IsNullOrWhiteSpace(first.Caption))
@@ -54,7 +54,7 @@
                             @if (first.Sources.Any())
                             {
                                 @:Source:
-                            }
+                        }
                         </span>
                         <span class="sources">
                             @for (int i = 0; i < first.Sources.Count; i++)
@@ -68,23 +68,23 @@
                             @if (!string.IsNullOrWhiteSpace(first.Credit))
                             {
                                 @:Credit:
-                            }
+                        }
                         </span>
                         <span class="credit">@first.Credit</span>
                     </div>
                     <div>
                         <span class="rights-statement">@first.RightsStatement</span>
-                        <span class="licence-qualifier">(Licensed as <span class="licence">@if (string.IsNullOrWhiteSpace(first.Licence.Uri)){@first.Licence.Name} else {<a class="@first.Licence.Type.ToString().ToLower()" href="@first.Licence.Uri">@first.Licence.Name</a>}</span>)</span>
+                        <span class="licence-qualifier">(Licensed as <span class="licence">@if (string.IsNullOrWhiteSpace(first.Licence.Uri)){@first.Licence.Name}else{<a class="@first.Licence.Type.ToString().ToLower()" href="@first.Licence.Uri">@first.Licence.Name</a>}</span>)</span>
                     </div>
                 </div>
                 <div class="media-tools">
                     <button class="icon reuse @(!(first is ImageMedia) ? "disabled" : null)" aria-pressed="false" title="Reuse this image">
                         <span class="icon-reuse" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">Reuse image</span>
+                        <span class="media-text">Reuse image</span>
                     </button>
                     <button class="icon fullscreen @(!(first is ImageMedia) ? "disabled" : null)" aria-pressed="false" title="Toggle fullscreen">
                         <span class="icon-expand" aria-hidden="true"></span>
-                        <span class="icon-label-hidden">View full screen</span>
+                        <span class="media-text">Fullscreen</span>
                     </button>
                 </div>
             </div>
