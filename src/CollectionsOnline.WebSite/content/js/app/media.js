@@ -97,73 +97,77 @@ module.exports = {
     }
   },
   toggleFullscreen: function () {
-    if (!this.$fullscreenButton.hasClass('disabled')) {
-      var currentIndex = Math.max(this.$activeMedia.parent().index(), 0);
-      var media = this.Model[currentIndex];
-      var heroMediaImage = $('img', this.$heroMedia);
+    if (this.$fullscreenButton.hasClass('disabled'))
+        return;
 
-      var windowWidth = $(window).width();
-      var windowHeight = verge.viewportH();
+    var currentIndex = Math.max(this.$activeMedia.parent().index(), 0);
+    var media = this.Model[currentIndex];
+    var heroMediaImage = $('img', this.$heroMedia);
 
-      // Default size
-      var newHeroMediaImageSrc = media.Small.Uri;
+    var windowWidth = $(window).width();
+    var windowHeight = verge.viewportH();
 
-      // Scroll to top
-      $('html, body').scrollTop(heroMediaImage.offset().top);
+    // Default size
+    var newHeroMediaImageSrc = media.Small.Uri;
 
-      if (this.$mediaArea.hasClass('expanded')) {
-        // Contract media holder
-        this.$mediaHolder.css({
-          maxWidth: this.defaultMaxWidth,
-          height: ''
-        });
+    // Scroll to top
+    $('html, body').scrollTop(heroMediaImage.offset().top);
+
+    if (this.$mediaArea.hasClass('expanded')) {
+    // Contract media holder
+    this.$mediaHolder.css({
+        maxWidth: this.defaultMaxWidth,
+        height: ''
+    });
         
-        // Reset hero media image max height
-        heroMediaImage.css({
-          maxHeight: this.defaultMaxHeight,
-          height: ''
-        });
+    // Reset hero media image max height
+    heroMediaImage.css({
+        maxHeight: this.defaultMaxHeight,
+        height: ''
+    });
         
-        // change aria state
-        this.$fullscreenButton.attr('aria-pressed', 'false');
-      } else {                       
-        // Expand media holder
-        this.$mediaHolder.css({
-          maxWidth: windowWidth,
-          height: windowHeight
-        });
+    // change aria state
+    this.$fullscreenButton.attr('aria-pressed', 'false');
+    } else {                       
+    // Expand media holder
+    this.$mediaHolder.css({
+        maxWidth: windowWidth,
+        height: windowHeight
+    });
         
-        // Allow hero media image to take up max height available
-        heroMediaImage.css({
-          maxHeight: windowHeight
-        });
+    // Allow hero media image to take up max height available
+    heroMediaImage.css({
+        maxHeight: windowHeight
+    });
         
-        // Dont load meidum media if its even smaller than small otherwise preload then display medium image
-        if (!(media.Medium.Height < parseInt(this.defaultMaxHeight, 10))) {
-          // Enlarge small image temporarily to provide smooth transition
-          var heroMediaImageHeight = Math.round((windowWidth / media.Medium.Width) * media.Medium.Height);
+    // Dont load meidum media if its even smaller than small otherwise preload then display medium image
+    if (!(media.Medium.Height < parseInt(this.defaultMaxHeight, 10))) {
+        // Enlarge small image temporarily to provide smooth transition
+        var heroMediaImageHeight = Math.round((windowWidth / media.Medium.Width) * media.Medium.Height);
 
-          // Check to make sure we dont enlarge too much
-          if (heroMediaImageHeight > media.Medium.Height)
-            heroMediaImageHeight = media.Medium.Height;
+        // Check to make sure we dont enlarge too much
+        if (heroMediaImageHeight > media.Medium.Height)
+        heroMediaImageHeight = media.Medium.Height;
           
-          heroMediaImage.height(heroMediaImageHeight);
-          newHeroMediaImageSrc = media.Medium.Uri;
-        }
-        
-        // change aria state
-        this.$fullscreenButton.attr('aria-pressed', 'true');
-      }
-      
-      this.preloadImages(newHeroMediaImageSrc).done(function () {
-        heroMediaImage.attr('src', newHeroMediaImageSrc);
-        heroMediaImage.css('height', '');
-      });
-      
-      this.$mediaArea.toggleClass('expanded');
+        heroMediaImage.height(heroMediaImageHeight);
+        newHeroMediaImageSrc = media.Medium.Uri;
     }
+        
+    // change aria state
+    this.$fullscreenButton.attr('aria-pressed', 'true');
+    }
+      
+    this.preloadImages(newHeroMediaImageSrc).done(function () {
+    heroMediaImage.attr('src', newHeroMediaImageSrc);
+    heroMediaImage.css('height', '');
+    });
+      
+    this.$mediaArea.toggleClass('expanded');
   },
-  toggleReuse: function(e) {
+  toggleReuse: function (e) {
+    if (this.$reuseButton.hasClass('disabled'))
+        return;
+
     if (!$('#reuse').is(':visible')) {
       $('#reuse').show();
       $('html, body').scrollTop($('#reuse').offset().top + $('#reuse').outerHeight() - verge.viewportH());

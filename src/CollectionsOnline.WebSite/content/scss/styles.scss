@@ -609,7 +609,6 @@ button.icon {
                     &.disabled, &.disabled:hover {
                         opacity: 0.2;
                         color: $colour-bodytext-inverted;
-                        border: 2px solid $colour-bodytext-inverted;
                     }
 
                     .media-text {
