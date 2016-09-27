@@ -2,15 +2,87 @@
 @{
     Layout = "Layout.cshtml";
 }
-<div id="hero" style="background-image: url('@Model.HomeHeroUri'); background-repeat: no-repeat; background-position:center;">
+<div id="hero" style="background-image: url('@Model.HomeHeroUri'); background-repeat: no-repeat; background-position: center;">
     <div class="search-area">
         <form method="GET" action="/search" role="search">
-            <input type="text" name="query" placeholder="Enter a search term or leave blank to browse all records ..." />
+            <input type="text" name="query" placeholder="Enter a search term or leave blank to browse all records ..."/>
             <button class="search" type="submit">
                 <span class="icon-search" aria-hidden="true"></span>
                 <span class="icon-label-hidden">Search</span>
             </button>
         </form>
+    </div>
+</div>
+<div id="featured-explore">
+    <div class="container">
+        <h2>Phar Lap turns 90</h2>
+        <div class="tile full">
+            <a href="/specimens/139139">
+                <span class="tileimages">
+                    <img src="/content/img/img-featured-139139.jpg" alt="Taxidermied Mount - Phar Lap, 1932 &lt;em&gt;Equus caballus&lt;/em&gt;" />
+                </span>
+                <span class="title">
+                    <span class="tile-tag specimen" aria-hidden="true">
+                        <span class="count-wrapper">
+                            <span class="type">specimen</span>
+                        </span>
+                    </span>
+                    <span class="regnum">C 10726</span>
+                    <span class="heading">Taxidermied Mount - Phar Lap, 1932 <em>Equus caballus</em></span>                    
+                </span>
+            </a>
+        </div>
+        <div class="tile full">
+            <a href="/items/825543">
+                <span class="tileimages">
+                    <img src="/content/img/img-featured-825543.jpg" alt="Suitcase - Tommy Woodcock, Phar Lap, 1930s" />
+                </span>
+                <span class="title">
+                    <span class="tile-tag item" aria-hidden="true">
+                        <span class="count-wrapper">
+                            <span class="type">item</span>
+                        </span>
+                    </span>
+                    <span class="regnum">HT 6256</span>
+                    <span class="heading">Suitcase - Tommy Woodcock, Phar Lap, 1930s</span>
+                </span>
+            </a>
+        </div>
+        <div class="tile full">
+            <a href="/items/1373916">
+                <span class="tileimages">
+                    <img src="/content/img/img-featured-1373916.jpg" alt="Tonic Book - Harry Telford, Phar Lap, 1930s" />
+                </span>
+                <span class="title">
+                    <span class="tile-tag item" aria-hidden="true">
+                        <span class="count-wrapper">
+                            <span class="type">item</span>
+                        </span>
+                    </span>
+                    <span class="regnum">HT 20000</span>
+                    <span class="heading">Tonic Book - Harry Telford, Phar Lap, 1930s</span>
+                </span>
+            </a>
+        </div>
+        <div class="tile full">
+            <a href="/items/827225">
+                <span class="tileimages">
+                    <img src="/content/img/img-featured-827225.jpg" alt="Print - J L Fleury, Phar Lap before the Chariot of the Sun, 1932" />
+                </span>
+                <span class="title">
+                    <span class="tile-tag item" aria-hidden="true">
+                        <span class="count-wrapper">
+                            <span class="type">item</span>
+                        </span>
+                    </span>
+                    <span class="regnum">HT 6431</span>
+                    <span class="heading">Print - J L Fleury, Phar Lap before the Chariot of the Sun, 1932</span>
+                </span>
+            </a>
+        </div>
+        <div class="feature-link">
+            <a href="http://collections.museumvictoria.com.au/search?query=%22Phar+Lap%22">See everything about Phar Lap in our collections</a>
+        </div>
     </div>
 </div>
 <div id="home-explore" role="main">

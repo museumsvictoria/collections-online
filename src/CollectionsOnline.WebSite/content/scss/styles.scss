@@ -2823,7 +2823,7 @@ $padding-side: 3%;
         text-decoration: none;
         color: $colour-bodytext-light;
         background: $colour-background-title;
-        @include border-radius(4px);
+        @include border-radius(3px);
 
         #home-explore & {
             background: none;
@@ -3984,7 +3984,7 @@ footer {
     }
 }
 
-#recent-explore {
+#recent-explore, #featured-explore {
     padding: 40px 0px 50px;
 
     & .tile.full {
@@ -4014,6 +4014,42 @@ footer {
 
         & h2 {
             font-size: 16pt;
+        }
+    }
+}
+
+#featured-explore {
+    background:#606060;
+
+    h2 {
+        color:#f5f5f5;
+    }
+
+    .tile.full .heading {
+        font-size:16px;
+        font-weight:bold;
+        margin-top:8px;
+    }
+
+    .feature-link {
+        display:flex;
+        clear:both;
+        justify-content:center;
+                
+        a {
+            background:#212121;
+            color:#f5f5f5;
+            font-size:18px;
+            margin:20px 0 0;
+            padding:20px 25px 20px 30px;
+            @include border-radius(3px);
+
+            &::after{
+                font-family: "mv-collections";
+                content: "\e605";
+                font-size: 16px;
+                padding-left: 15px;
+            }
         }
     }
 }
