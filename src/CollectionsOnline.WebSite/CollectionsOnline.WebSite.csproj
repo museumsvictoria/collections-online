@@ -205,7 +205,6 @@
     <Content Include="content\img\img-home-species.jpg" />
     <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-creative-victoria.png" />
-    <Content Include="content\img\logo-mv.png" />
     <Content Include="content\img\bg-on-display-melbourne-museum.jpg" />
     <Content Include="content\img\bg-on-display-scienceworks.png" />
     <Content Include="content\js\app\map.js" />

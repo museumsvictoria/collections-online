@@ -213,8 +213,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Explore the fascinating collections of Museum Victoria in Melbourne, Australia, featuring over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology.",
-                Title = "Explore Museum Victoria's humanities and natural sciences collections",
+                Description = "Explore the fascinating collections of Museums Victoria in Melbourne, Australia, featuring over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology.",
+                Title = "Explore Museums Victoria's humanities and natural sciences collections",
                 CanonicalUri = ConfigurationManager.AppSettings["CanonicalSiteBase"]
             };
 
@@ -225,8 +225,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "This site allows users to explore the natural sciences and humanities collections of Museum Victoria in Australia, featuring collections of zoology, geology, palaeontology, history, indigenous cultures and technology. Over 1.15 million records were presented at launch in 2015, accompanied by over 150,000 images.",
-                Title = "About Museum Victoria Collections",
+                Description = "This site allows users to explore the natural sciences and humanities collections of Museums Victoria in Australia, featuring collections of zoology, geology, palaeontology, history, indigenous cultures and technology. Over 1.15 million records were presented at launch in 2015, accompanied by over 150,000 images.",
+                Title = "About Museums Victoria Collections",
             };
 
             return metadata;
@@ -236,8 +236,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Descriptions of the types of collections held at Museum Victoria in Melbourne, Australia.",
-                Title = "Descriptions of the collections held at Museum Victoria"
+                Description = "Descriptions of the types of collections held at Museums Victoria in Melbourne, Australia.",
+                Title = "Descriptions of the collections held at Museums Victoria"
             };
 
             return metadata;
@@ -247,8 +247,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Use our public API to extract data from over 1.15 million humanities and natural sciences records that document Museum Victoria's collections.",
-                Title = "Developer tools for Museum Victoria Collections"
+                Description = "Use our public API to extract data from over 1.15 million humanities and natural sciences records that document Museums Victoria's collections.",
+                Title = "Developer tools for Museums Victoria Collections"
             };
 
             return metadata;
@@ -258,8 +258,8 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Search a database of over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology from Museum Victoria's collections.",
-                Title = "Search Museum Victoria's collections"
+                Description = "Search a database of over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology from Museums Victoria's collections.",
+                Title = "Search Museums Victoria's collections"
             };
 
             return metadata;

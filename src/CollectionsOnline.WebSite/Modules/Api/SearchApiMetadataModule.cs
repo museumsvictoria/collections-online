@@ -150,7 +150,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "displaylocation",
                             Necessity = "optional",
-                            Description = "The display location at Museum Victoria venues for the record, will only return item or specimen records. Parameter is considered a facet.",
+                            Description = "The display location at Museums Victoria venues for the record, will only return item or specimen records. Parameter is considered a facet.",
                             ExampleValues = new[] { "melbourne museum", "scienceworks" }
                         },
                         new ApiParameter
@@ -248,7 +248,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "museumlocation",
                             Necessity = "optional",
-                            Description = "The <code>gallery</code> or <code>venue</code> a record may be on display at one of Museum Victoria's venues, will only return item and specimen records.",
+                            Description = "The <code>gallery</code> or <code>venue</code> a record may be on display at one of Museums Victoria's venues, will only return item and specimen records.",
                             ExampleValues = new[] { "immigration museum", "bunjilaka - first peoples" }
                         },
                         new ApiParameter

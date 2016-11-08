@@ -3222,6 +3222,12 @@ footer {
         }
 
         @include gridle_hide("print");
+
+        .mv-logo {
+            fill: $colour-heading-inverted;
+            height:60px;
+            margin-right:60px;
+        }
     }
 
     & .footerpromos {
@@ -3416,7 +3422,7 @@ footer {
     }
 
     &.about {
-        background: url("/content/img/bg-about-hero.jpg") no-repeat center center;
+        background: url("/content/img/bg-about-hero.jpg?v2") no-repeat center center;
     }
 
     & img {

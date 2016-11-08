@@ -52,7 +52,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var article = document as Article;
 
                 sb.Append(BuildAuthorsCitation(article.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}<br/>Accessed {3}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museums Victoria Collections {2}<br/>Accessed {3}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
             }
             else if(document is Species)
             {
@@ -69,18 +69,18 @@ namespace CollectionsOnline.WebSite.Extensions
                         sb.Append(string.Format("{0} ", species.Taxonomy.CommonName));
                 }
 
-                sb.Append(string.Format("in Museum Victoria Collections {0}<br/>Accessed {1}", currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("in Museums Victoria Collections {0}<br/>Accessed {1}", currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
             }
             else if(document is Item || document is Specimen)
             {
-                sb.Append(string.Format("Museum Victoria Collections {0}<br/>Accessed {1}", currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("Museums Victoria Collections {0}<br/>Accessed {1}", currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
             }
             else if(document is Collection)
             {
                 var collection = document as Collection;
 
                 sb.Append(BuildAuthorsCitation(collection.Authors));
-                sb.Append(string.Format("({0}) {1} in Museum Victoria Collections {2}<br/>Accessed {3}", collection.DateModified.Year, collection.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museums Victoria Collections {2}<br/>Accessed {3}", collection.DateModified.Year, collection.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
             }
 
             return new NonEncodedHtmlString(sb.ToString());
