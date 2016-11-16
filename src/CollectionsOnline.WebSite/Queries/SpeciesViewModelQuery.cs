@@ -8,7 +8,6 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
-using StackExchange.Profiling;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -24,7 +23,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public SpeciesViewTransformerResult BuildSpecies(string speciesId)
         {
-            using (MiniProfiler.Current.Step("Build Species view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 var result = _documentSession.Load<SpeciesViewTransformer, SpeciesViewTransformerResult>(speciesId);
@@ -68,7 +66,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ApiViewModel BuildSpeciesApiIndex(ApiInputModel apiInputModel)
         {
-            using (MiniProfiler.Current.Step("Build Species Api Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 RavenQueryStatistics statistics;

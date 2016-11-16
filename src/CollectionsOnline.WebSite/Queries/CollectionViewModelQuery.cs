@@ -5,7 +5,6 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
-using StackExchange.Profiling;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -21,7 +20,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public CollectionIndexViewModel BuildCollectionIndex()
         {
-            using (MiniProfiler.Current.Step("Build Collection Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 var collections = _documentSession
@@ -48,12 +46,7 @@ namespace CollectionsOnline.WebSite.Queries
 
         public CollectionViewTransformerResult BuildCollection(string collectionId)
         {
-            using (MiniProfiler.Current.Step("Build Collection transformer result"))
-            {
-                var result = _documentSession.Load<CollectionViewTransformer, CollectionViewTransformerResult>(collectionId);
-
-                return result;
-            }
+            return _documentSession.Load<CollectionViewTransformer, CollectionViewTransformerResult>(collectionId);
         }
     }
 }

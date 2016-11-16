@@ -17,8 +17,6 @@ using Ninject.Extensions.Conventions;
 using Raven.Client;
 using Raven.Client.Indexes;
 using Serilog;
-using StackExchange.Profiling;
-using StackExchange.Profiling.RavenDb;
 
 namespace CollectionsOnline.WebSite.Infrastructure
 {
@@ -39,9 +37,6 @@ namespace CollectionsOnline.WebSite.Infrastructure
                 // Register view transformers from website 
                 Log.Logger.Debug("Ensure Website indexes and transformers are created");
                 IndexCreation.CreateIndexes(typeof (ItemViewTransformer).Assembly, documentStore);
-
-                // Initialize raven miniprofiler
-                MiniProfilerRaven.InitializeFor(documentStore);
             }
         }
 
@@ -67,27 +62,12 @@ namespace CollectionsOnline.WebSite.Infrastructure
                     Log.Logger.Fatal(ex, "Unhandled Exception occured in Nancy pipeline {Url} {@Headers}", ctx.Request.Url, ctx.Request.Headers.RenderHeaders());
 
                     return null;
-                };
-
-                pipelines.BeforeRequest += ctx =>
-                {
-                    MiniProfiler.Start();
-
-                    return null;
-                };
+                };                
 
                 pipelines.AfterRequest += ctx =>
                 {
-                    MiniProfiler.Stop();
-
-                    if (MiniProfiler.Current != null)
-                    {
-                        if(ctx.Request.Path.Contains("/api/"))
-                            Log.Logger.Information("Api accessed {Url} {@Headers}", ctx.Request.Url, ctx.Request.Headers.RenderHeaders());
-                        else
-                            Log.Logger.Debug(MiniProfiler.Current.RenderPlainText().RemoveLineBreaks());
-                    }
-                        
+                    if(ctx.Request.Path.Contains("/api/"))
+                        Log.Logger.Information("Api accessed {Url} {@Headers}", ctx.Request.Url, ctx.Request.Headers.RenderHeaders());
                 };
 
                 // Automapper configuration

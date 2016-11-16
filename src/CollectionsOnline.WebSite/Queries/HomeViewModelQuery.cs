@@ -4,7 +4,6 @@ using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
 using Raven.Abstractions.Data;
 using Raven.Client;
-using StackExchange.Profiling;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -24,18 +23,13 @@ namespace CollectionsOnline.WebSite.Queries
 
         public HomeIndexViewModel BuildHomeIndex()
         {
-            using (MiniProfiler.Current.Step("Build Home Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))            
             {
                 var homeViewModel = new HomeIndexViewModel();
 
-                FacetResults facetResult;
-                using (MiniProfiler.Current.Step("Fetching combinedFacets"))
-                {
-                    facetResult = _documentSession.Advanced
-                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                        .ToFacets("facets/combinedFacets");
-                }
+                var facetResult = _documentSession.Advanced
+                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
+                    .ToFacets("facets/combinedFacets");
 
                 var recordTypeFacet = facetResult.Results["RecordType"];
 
@@ -58,17 +52,14 @@ namespace CollectionsOnline.WebSite.Queries
                         homeViewModel.SpecimenCount = specimenFacetItem.Hits;
                 }
 
-                using (MiniProfiler.Current.Step("Fetching RecentResults"))
-                {
-                    homeViewModel.RecentResults = _documentSession.Advanced
-                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                        .OrderByDescending(x => x.DateModified)
-                        .OrderByDescending(x => x.Quality)
-                        .WhereEquals("HasImages", "Yes")
-                        .Take(Constants.HomeMaxRecentResults)
-                        .SelectFields<EmuAggregateRootViewModel>()
-                        .ToList();
-                }
+                homeViewModel.RecentResults = _documentSession.Advanced
+                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
+                    .OrderByDescending(x => x.DateModified)
+                    .OrderByDescending(x => x.Quality)
+                    .WhereEquals("HasImages", "Yes")
+                    .Take(Constants.HomeMaxRecentResults)
+                    .SelectFields<EmuAggregateRootViewModel>()
+                    .ToList();
 
                 homeViewModel.HomeHeroUri = _homeHeroUriFactory.GetCurrentUri();
 

@@ -7,7 +7,6 @@ using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using Raven.Client;
-using StackExchange.Profiling;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -27,7 +26,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public SearchIndexViewModel BuildSearchIndex(SearchInputModel searchInputModel)
         {
-            using (MiniProfiler.Current.Step("Build Search Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 RavenQueryStatistics statistics;
@@ -72,7 +70,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public SearchIndexCsvModel BuiSearchIndexCsv(SearchInputModel searchInputModel)
         {
-            using (MiniProfiler.Current.Step("Build Search Index CSV model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 var results = new List<EmuAggregateRootCsvModel>();
@@ -114,7 +111,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ApiViewModel BuildSearchApi(SearchApiInputModel searchApiInputModel, ApiInputModel apiInputModel)
         {
-            using (MiniProfiler.Current.Step("Build Search Api view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 RavenQueryStatistics statistics;

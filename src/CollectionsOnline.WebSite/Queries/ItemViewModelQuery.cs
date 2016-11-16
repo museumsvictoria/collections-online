@@ -6,7 +6,6 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
-using StackExchange.Profiling;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -22,7 +21,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ItemViewTransformerResult BuildItem(string itemId)
         {
-            using (MiniProfiler.Current.Step("Build Item view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 var result = _documentSession.Load<ItemViewTransformer, ItemViewTransformerResult>(itemId);
@@ -47,7 +45,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ApiViewModel BuildItemApiIndex(ApiInputModel apiInputModel)
         {
-            using (MiniProfiler.Current.Step("Build Item Api Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 RavenQueryStatistics statistics;

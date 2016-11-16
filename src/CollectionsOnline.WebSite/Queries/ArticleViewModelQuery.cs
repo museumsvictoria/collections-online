@@ -6,7 +6,6 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Raven.Client;
-using StackExchange.Profiling;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -22,23 +21,14 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ArticleViewTransformerResult BuildArticle(string articleId)
         {
-            using (MiniProfiler.Current.Step("Build Article view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
-                ArticleViewTransformerResult result;
-                using (MiniProfiler.Current.Step("Fetching ArticleViewTransformerResult"))
-                {
-                    result = _documentSession.Load<ArticleViewTransformer, ArticleViewTransformerResult>(articleId);
-                }
+                var result = _documentSession.Load<ArticleViewTransformer, ArticleViewTransformerResult>(articleId);
 
-                IDocumentQuery<CombinedIndexResult> query;
-                using (MiniProfiler.Current.Step("Fetching RelatedItemSpecimenCount"))
-                {
-                    query = _documentSession.Advanced
-                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                        .WhereEquals("Article", result.Article.Title)
-                        .Take(1);
-                }
+                var query = _documentSession.Advanced
+                    .DocumentQuery<CombinedIndexResult, CombinedIndex>()
+                    .WhereEquals("Article", result.Article.Title)
+                    .Take(1);
 
                 result.RelatedItemSpecimenCount = query.QueryResult.TotalResults;
 
@@ -48,7 +38,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ApiViewModel BuildArticleApiIndex(ApiInputModel apiInputModel)
         {
-            using (MiniProfiler.Current.Step("Build Article Api Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 RavenQueryStatistics statistics;

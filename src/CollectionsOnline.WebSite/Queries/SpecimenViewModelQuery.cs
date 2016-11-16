@@ -10,7 +10,6 @@ using CollectionsOnline.WebSite.Models.Api;
 using CollectionsOnline.WebSite.Transformers;
 using Nancy.Helpers;
 using Raven.Client;
-using StackExchange.Profiling;
 
 namespace CollectionsOnline.WebSite.Queries
 {
@@ -26,7 +25,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public SpecimenViewTransformerResult BuildSpecimen(string specimenId)
         {
-            using (MiniProfiler.Current.Step("Build Specimen view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 var result = _documentSession.Load<SpecimenViewTransformer, SpecimenViewTransformerResult>(specimenId);
@@ -131,7 +129,6 @@ namespace CollectionsOnline.WebSite.Queries
 
         public ApiViewModel BuildSpecimenApiIndex(ApiInputModel apiInputModel)
         {
-            using (MiniProfiler.Current.Step("Build Specimen Api Index view model"))
             using (_documentSession.Advanced.DocumentStore.AggressivelyCacheFor(Constants.AggressiveCacheTimeSpan))
             {
                 RavenQueryStatistics statistics;
