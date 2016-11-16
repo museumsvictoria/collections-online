@@ -23,7 +23,7 @@ namespace CollectionsOnline.WebSite.Factories
                 Description = article.ContentText
                     .RemoveLineBreaks()
                     .Truncate(Constants.MetadataDescriptionMaxChars),
-                Title = article.DisplayTitle,
+                Title = HtmlConverter.HtmlToText(article.DisplayTitle),
                 MetaProperties = new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>("og:type", "article"),                        
@@ -51,7 +51,7 @@ namespace CollectionsOnline.WebSite.Factories
                     .HtmlToText(collection.CollectionSummary)
                     .RemoveLineBreaks()
                     .Truncate(Constants.MetadataDescriptionMaxChars),
-                Title = collection.DisplayTitle,
+                Title = HtmlConverter.HtmlToText(collection.DisplayTitle),
                 MetaProperties = new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>("og:type", "article"),
@@ -75,7 +75,7 @@ namespace CollectionsOnline.WebSite.Factories
             // General metadata
             var metadata = new MetadataViewModel
             {
-                Title = item.DisplayTitle
+                Title = HtmlConverter.HtmlToText(item.DisplayTitle)
             };
 
             if (!string.IsNullOrWhiteSpace(item.ObjectSummary))
