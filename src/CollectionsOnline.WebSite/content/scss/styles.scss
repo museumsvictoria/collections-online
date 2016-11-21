@@ -3210,11 +3210,9 @@ footer {
     & .logos {
         direction: ltr;
         float: left;
-        margin: 0 0 0px 0px;
-        padding: 0px 20px 10px 10px;
+        margin:0;
+        padding:0;
         @include gridle(12, 'mobile');
-        float: left;
-        direction: ltr;
 
         @include gridle_state('mobile') {
             float: left;
@@ -3223,10 +3221,20 @@ footer {
 
         @include gridle_hide("print");
 
+        a {
+            display:block;
+        }
+
         .mv-logo {
             fill: $colour-heading-inverted;
             height:60px;
-            margin-right:60px;
+            margin-right:30px;
+        }
+
+        .mv-logotype {
+            fill: $colour-heading-inverted;
+            height:30px;
+            margin-right:30px;
         }
     }
 
