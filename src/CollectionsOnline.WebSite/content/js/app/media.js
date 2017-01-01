@@ -77,6 +77,10 @@ module.exports = {
     if ($('input,textarea').is(':focus'))
       return;
 
+    // ignore inputs with modifier keys
+    if (e.ctrlKey || e.metaKey)
+      return;
+
     switch (e.which) {
       case 37: // left arrow
         this.$previous.triggerHandler('click');
