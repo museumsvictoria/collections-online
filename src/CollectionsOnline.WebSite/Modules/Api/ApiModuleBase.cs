@@ -106,7 +106,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
             if (apiInputModel.Page <= 0)
                 apiInputModel.Page = 1;
 
-            if (apiInputModel.PerPage < 0)
+            if (apiInputModel.PerPage <= 0)
                 apiInputModel.PerPage = Constants.PagingPerPageDefault;
 
             if (apiInputModel.PerPage > Constants.PagingPerPageMax)
