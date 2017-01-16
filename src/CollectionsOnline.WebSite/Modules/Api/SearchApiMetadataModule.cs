@@ -51,9 +51,14 @@ namespace CollectionsOnline.WebSite.Modules.Api
                                 {
                                     Name = "date",
                                     Description = "The date the record was last modified."
+                                },
+                                new ApiParameterValidValue
+                                {
+                                    Name = "random",
+                                    Description = "Results are returned in a random order."
                                 }
                             },
-                            ExampleValues = new[] { "quality", "relevance", "date" }
+                            ExampleValues = new[] { "quality", "relevance", "date", "random" }
                         },
                         new ApiParameter
                         {

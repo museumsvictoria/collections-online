@@ -51,6 +51,10 @@ namespace CollectionsOnline.WebSite.Queries
                         .OrderByDescending("DateModified")
                         .OrderByDescending("Quality");
                     break;
+                case "random":
+                    query = query
+                        .RandomOrdering();
+                    break;
             }
 
             if (queries.Any())

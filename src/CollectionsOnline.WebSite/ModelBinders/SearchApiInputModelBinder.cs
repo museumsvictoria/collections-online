@@ -26,6 +26,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchApiInputModel.Sort = "relevance";
             else if (string.Equals(queryString.Sort, "date", StringComparison.OrdinalIgnoreCase))
                 searchApiInputModel.Sort = "date";
+            else if (string.Equals(queryString.Sort, "random", StringComparison.OrdinalIgnoreCase))
+                searchApiInputModel.Sort = "random";
 
             // Set Date modified
             if (queryString.MinDateModified.HasValue)
