@@ -26,7 +26,7 @@
         <pre>@Model.ApiRootUrl</pre>
 
         <h2 id="pagination">Pagination</h2>
-        <p>Requests that return multiple objects will by default display @Constants.PagingPerPageDefault objects per request, you can increase this to @Constants.PagingPerPageMax by using a <em>?perpage</em> query string parameter.</p>
+        <p>Requests that return a list of objects will by default display @Constants.PagingPerPageDefault objects per request, you can change this to any number up to @Constants.PagingPerPageMax by using a <em>?perpage</em> query string parameter.</p>
         <p>You can also specify a page parameter to retrieve results from different pages via a <em>?page</em> query string parameter.</p>
         <h4>Link Header</h4>
         <p>The actual pagination information is stored in the response headers.  In order to allow easy traversing of data sets refer to the <a href="http://tools.ietf.org/html/rfc5988">Link header</a> to get the next page of objects in your request. E.g</p>
