@@ -167,7 +167,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "EAST WALKWAY", null),
-                new MuseumLocation { Gallery = "Jurassic World: The Exhibition", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Public Spaces Lower Level", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "WEST WALKWAY", null),
