@@ -95,7 +95,7 @@ namespace CollectionsOnline.WebSite.Extensions
         {
             var sb = new StringBuilder();
 
-            var formatString = "<a class=\"website icon-externallink\" href=\"http://museumvictoria.com.au/{0}/\">Visit {1}</a>";
+            var formatString = "<a class=\"website icon-externallink\" href=\"https://museumvictoria.com.au/{0}/\">Visit {1}</a>";
 
             switch (museumLocation.DisplayLocation)
             {

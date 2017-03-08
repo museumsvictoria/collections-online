@@ -427,7 +427,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 LicenceType.PublicDomainMark,
-                new Licence { Type = LicenceType.PublicDomainMark, Name = "Public Domain Mark", ShortName = "Public Domain", Uri = "http://creativecommons.org/publicdomain/mark/1.0/", Open = true, NonCommercialOpen = false }
+                new Licence { Type = LicenceType.PublicDomainMark, Name = "Public Domain Mark", ShortName = "Public Domain", Uri = "https://creativecommons.org/publicdomain/mark/1.0/", Open = true, NonCommercialOpen = false }
             },
             {
                 LicenceType.AllRightsReserved,

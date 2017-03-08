@@ -420,12 +420,12 @@ module.exports = {
 
       $('#mediaid', this.$reuseForm).val(media.Irn);
 
-      $('.statement', this.$reuseArea).html('Museums Victoria supports and encourages public access to our collection by offering image downloads for reuse.<br/><br/>Images marked as Public Domain have, to the best of Museums Victoria’s knowledge, no copyright or intellectual property rights that would restrict their free download and reuse. Images marked with a Creative Commons (CC) license may be downloaded and reused in accordance with the conditions of the relevant <a href="http://creativecommons.org.au/learn/licences/">CC license</a>. Please acknowledge Museums Victoria and cite the URL for the image so that others can also find it.');
+      $('.statement', this.$reuseArea).html('Museums Victoria supports and encourages public access to our collection by offering image downloads for reuse.<br/><br/>Images marked as Public Domain have, to the best of Museums Victoria’s knowledge, no copyright or intellectual property rights that would restrict their free download and reuse. Images marked with a Creative Commons (CC) license may be downloaded and reused in accordance with the conditions of the relevant <a href="https://creativecommons.org.au/learn/licences/">CC license</a>. Please acknowledge Museums Victoria and cite the URL for the image so that others can also find it.');
     } else {
       $('.permission', this.$reuseArea).html('No <span class="icon"><span class="icon-close2" aria-hidden="true"></span><span class="icon-label-hidden">Cross</span></span>');
       $('.attribution', this.$reuseArea).addClass('disabled');
       $('.attribution h4', this.$reuseArea).removeClass('disabled');
-      $('.download', this.$reuseArea).html('<a class="request" href="http://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/"><span class="title">Request image</span></a>');
+      $('.download', this.$reuseArea).html('<a class="request" href="https://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/"><span class="title">Request image</span></a>');
       $('.share', this.$reuseArea).addClass('disabled');
       $('.statement', this.$reuseArea).html('Museums Victoria does not own the copyright in all the material on this website. In some cases copyright belongs to third parties and has been published here under a licence agreement: this does not authorise you to copy that material. You may be required to obtain permission from the copyright owner.<br/><br/>Some unpublished material may require permission for reuse even if it is very old. Orphan works, where the copyright owner is unknown, also require permission for reuse. Indigenous works may have additional legal and cultural issues. You may be required to seek cultural clearances from Aboriginal and Torres Strait Islander communities, families, individuals or organisations before you reproduce Aboriginal and Torres Strait Islander material.');
     }

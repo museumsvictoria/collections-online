@@ -11,4 +11,4 @@ Disallow: /webmedia.php
 Disallow: /browser_mapper.php
 Allow: /
 
-Sitemap: http://collections.museumvictoria.com.au/sitemap.xml
+Sitemap: https://collections.museumvictoria.com.au/sitemap.xml

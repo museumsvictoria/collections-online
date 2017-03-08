@@ -2,6 +2,6 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
   <ShortName>MV Collections</ShortName>
   <Description>Explore Museums Victoria's humanities and natural sciences collections</Description>
-  <Url type="text/html" method="get" template="http://collections.museumvictoria.com.au/search?query={searchTerms}"/>
-  <moz:SearchForm>http://collections.museumvictoria.com.au/search</moz:SearchForm>
+  <Url type="text/html" method="get" template="https://collections.museumvictoria.com.au/search?query={searchTerms}"/>
+  <moz:SearchForm>https://collections.museumvictoria.com.au/search</moz:SearchForm>
 </OpenSearchDescription>

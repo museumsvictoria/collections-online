@@ -29,7 +29,7 @@ module.exports = {
   },
   select: function (e) {
     if (this.Video !== undefined) {
-      this.$videoLoaded.replaceWith('<iframe height="' + this.Video.Small.Height + '" width="' + this.Video.Small.Width + '" title="' + this.Video.AlternativeText + '" src="http://www.youtube.com/embed/' + this.Video.VideoId + '?disablekb=0&autoplay=1&rel=0"></iframe>');
+      this.$videoLoaded.replaceWith('<iframe height="' + this.Video.Small.Height + '" width="' + this.Video.Small.Width + '" title="' + this.Video.AlternativeText + '" src="https://www.youtube.com/embed/' + this.Video.VideoId + '?disablekb=0&autoplay=1&rel=0"></iframe>');
     }
   }
 };
