@@ -4033,32 +4033,54 @@ footer {
 }
 
 #featured-explore {
-    background:#606060;
+    background: #606060;
 
     h2 {
-        color:#f5f5f5;
+        color: #f5f5f5;
+        margin-bottom: 7px;
+    }
+
+    p {
+        width: 50%;
+        display: block;
+        padding-left: 10px;
+        direction: ltr;
+        font-weight: 300;
+        line-height: 22px;
+        margin-bottom: 25px;
+        font-size: 15px;
+        line-height: 20px;
+        color: #f5f5f5;
+
+        @include gridle_state('tablet') {
+            width: 100%;
+        }
+
+        @include gridle_state('mobile') {
+            width: 100%;
+        }
     }
 
     .tile.full .heading {
-        font-size:16px;
-        font-weight:bold;
-        margin-top:8px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 8px;
     }
 
     .feature-link {
-        display:flex;
-        clear:both;
-        justify-content:center;
-                
+        display: flex;
+        clear: both;
+        justify-content: center;
+
         a {
-            background:#212121;
-            color:#f5f5f5;
-            font-size:18px;
-            margin:20px 0 0;
-            padding:20px 25px 20px 30px;
+            background: #212121;
+            color: #f5f5f5;
+            font-size: 18px;
+            margin: 20px 0 0;
+            padding: 20px 25px 20px 30px;
             @include border-radius(3px);
 
-            &::after{
+            &::after {
                 font-family: "mv-collections";
                 content: "\e605";
                 font-size: 16px;
