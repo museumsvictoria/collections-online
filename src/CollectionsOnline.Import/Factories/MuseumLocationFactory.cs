@@ -13,7 +13,7 @@ namespace CollectionsOnline.Import.Factories
     {
         public MuseumLocation Make(Map map)
         {
-            if (map == null || map.GetEncodedString("LocLocationType") == null)
+            if (map?.GetEncodedString("LocLocationType") == null)
                 return null;
 
             if (map.GetEncodedString("LocLocationType").Contains("holder", StringComparison.OrdinalIgnoreCase))
@@ -25,15 +25,20 @@ namespace CollectionsOnline.Import.Factories
                 map.GetEncodedString("LocLevel3") ?? string.Empty,
                 map.GetEncodedString("LocLevel4") ?? string.Empty);
 
-            var location = Constants.MuseumLocations.Where(x =>
-                StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item1, locationKey.Item1) &&
-                StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item2, locationKey.Item2) &&
-                StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item3, locationKey.Item3) &&
-                (StringComparer.OrdinalIgnoreCase.Equals(x.Key.Item4, locationKey.Item4) || x.Key.Item4 == null))
-                .Select(x => new { x.Key, x.Value })
+            var location = Constants.MuseumLocations.Where(ml =>
+                StringComparer.OrdinalIgnoreCase.Equals(ml.Key.Item1, locationKey.Item1) &&
+                StringComparer.OrdinalIgnoreCase.Equals(ml.Key.Item2, locationKey.Item2) &&
+                StringComparer.OrdinalIgnoreCase.Equals(ml.Key.Item3, locationKey.Item3) &&
+                (StringComparer.OrdinalIgnoreCase.Equals(ml.Key.Item4, locationKey.Item4) || ml.Key.Item4 == null))
+                .Where(ml => !Constants.MuseumLocationsToExclude.Any(mle =>
+                StringComparer.OrdinalIgnoreCase.Equals(mle.Item1, locationKey.Item1) &&
+                StringComparer.OrdinalIgnoreCase.Equals(mle.Item2, locationKey.Item2) &&
+                StringComparer.OrdinalIgnoreCase.Equals(mle.Item3, locationKey.Item3) &&
+                StringComparer.OrdinalIgnoreCase.Equals(mle.Item4, locationKey.Item4)))
+                .Select(ml => new { ml.Key, ml.Value })
                 .FirstOrDefault();
 
-            return location != null ? location.Value : null;
+            return location?.Value;
         }
     }
 }

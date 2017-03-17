@@ -395,6 +395,15 @@ namespace CollectionsOnline.Core.Config
             },
         };
 
+        public static IEnumerable<Tuple<string, string, string, string>> MuseumLocationsToExclude => new[]
+        {
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F1"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F2"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F3"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F4"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F5")
+        };
+
         public static Dictionary<LicenceType, Licence> Licences = new Dictionary<LicenceType, Licence>
         {
             {
