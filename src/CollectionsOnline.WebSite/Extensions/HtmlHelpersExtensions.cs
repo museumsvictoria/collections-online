@@ -52,7 +52,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var article = document as Article;
 
                 sb.Append(BuildAuthorsCitation(article.Authors));
-                sb.Append(string.Format("({0}) {1} in Museums Victoria Collections {2}<br/>Accessed {3}", (!string.IsNullOrWhiteSpace(article.YearWritten)) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museums Victoria Collections {2}<br/>Accessed {3}", !string.IsNullOrWhiteSpace(article.YearWritten) ? article.YearWritten : article.DateModified.Year.ToString(), article.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
             }
             else if(document is Species)
             {
@@ -80,7 +80,7 @@ namespace CollectionsOnline.WebSite.Extensions
                 var collection = document as Collection;
 
                 sb.Append(BuildAuthorsCitation(collection.Authors));
-                sb.Append(string.Format("({0}) {1} in Museums Victoria Collections {2}<br/>Accessed {3}", collection.DateModified.Year, collection.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
+                sb.Append(string.Format("({0}) {1} in Museums Victoria Collections {2}<br/>Accessed {3}", !string.IsNullOrWhiteSpace(collection.YearWritten) ? collection.YearWritten : collection.DateModified.Year.ToString(), collection.Title, currentUrl, DateTime.Now.ToString("dd MMMM yyyy")));
             }
 
             return new NonEncodedHtmlString(sb.ToString());

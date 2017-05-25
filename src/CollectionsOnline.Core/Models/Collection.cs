@@ -36,6 +36,8 @@ namespace CollectionsOnline.Core.Models
 
         public IList<Author> Curators { get; set; }
 
+        public string YearWritten { get; set; }
+
         public IList<EmuSummary> FavoriteItems { get; set; }
 
         public IList<EmuSummary> FavoriteSpecimens { get; set; }

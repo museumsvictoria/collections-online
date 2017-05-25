@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.Import.Extensions;
@@ -43,6 +44,7 @@ namespace CollectionsOnline.Import.Factories
                         "DetNarrativeIdentifier",
                         "authors=NarAuthorsRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified))",
                         "curators=[curator=NarContributorRef_tab.(NamFirst,NamLast,NamFullName,BioLabel,media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)),NarContributorRole_tab]",
+                        "dates=[NarDate0,NarExplanation_tab]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "favorites=[itemspecimen=ObjObjectsRef_tab.(irn,MdaDataSets_tab),ObjObjectNotes_tab]",
                         "subcollections=[article=AssAssociatedWithRef_tab.(irn,DetPurpose_tab),AssAssociatedWithComment_tab]"
@@ -114,7 +116,25 @@ namespace CollectionsOnline.Import.Factories
                 });
             }
 
-            // Media           
+            // Year written
+            var dateWritten = map.GetMaps("dates")
+                .Where(x => x.GetEncodedString("NarExplanation_tab").Contains("date written", StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.GetEncodedString("NarDate0"))
+                .FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(dateWritten))
+            {
+                DateTime parsedDate;
+
+                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                    collection.YearWritten = parsedDate.Year.ToString();
+                else if (DateTime.TryParseExact(dateWritten, "/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                    collection.YearWritten = parsedDate.Year.ToString();
+                else if (DateTime.TryParseExact(dateWritten, "yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                    collection.YearWritten = parsedDate.Year.ToString();
+            }
+
+            // Media
             collection.Media = _mediaFactory.Make(map.GetMaps("media"));
 
             // Assign thumbnail
