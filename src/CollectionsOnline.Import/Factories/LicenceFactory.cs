@@ -14,7 +14,7 @@ namespace CollectionsOnline.Import.Factories
 
             if (licence.Contains("All Rights Reserved") || licence == "Third Party Copyright")
                 return Constants.Licences[LicenceType.AllRightsReserved];
-            if (licence == "No Known Restriction" || licence == "Public Domain Mark")
+            if (licence == "No Known Restriction" || licence == "Public Domain Mark" || licence == "Public Domain Mark")
                 return Constants.Licences[LicenceType.PublicDomainMark];
 
             return Constants.Licences.Select(x => x.Value).SingleOrDefault(x => x.ShortName == licence) ?? Constants.Licences[LicenceType.AllRightsReserved];
