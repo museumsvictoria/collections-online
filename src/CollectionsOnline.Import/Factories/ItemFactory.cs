@@ -77,7 +77,7 @@ namespace CollectionsOnline.Import.Factories
                         "SubHistoryTechSignificance",
                         "DimModelScale",
                         "DimShape",
-                        "dimensions=[DimConfiguration_tab,DimLengthUnit_tab,DimWeightUnit_tab,DimLength_tab,DimWidth_tab,DimDepth_tab,DimHeight_tab,DimCircumference_tab,DimWeight_tab,DimDimensionComments0]",
+                        "dimensions=[DimConfiguration_tab,DimLengthUnit_tab,DimWeightUnit_tab,DimLength_tab,DimWidth_tab,DimDepth_tab,DimHeight_tab,DimCircumference_tab,DimOutsideDiameter_tab,DimWeight_tab,DimDimensionComments0]",
                         "SupReferences",
                         "bibliography=[summary=BibBibliographyRef_tab.(SummaryData),BibIssuedDate_tab,BibPages_tab]",
                         "Pro2ModelNameNumber_tab",
@@ -271,6 +271,9 @@ namespace CollectionsOnline.Import.Factories
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimCircumference_tab")))
                     dimensions.Add(string.Format("{0} {1} (Circumference)", dimensionMap.GetEncodedString("DimCircumference_tab"), lengthUnit));
+
+                if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimOutsideDiameter_tab")))
+                    dimensions.Add(string.Format("{0} {1} (Outside Diameter)", dimensionMap.GetEncodedString("DimOutsideDiameter_tab"), lengthUnit));
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimWeight_tab")))
                     dimensions.Add(string.Format("{0} {1} (Weight)", dimensionMap.GetEncodedString("DimWeight_tab"), weightUnit));
