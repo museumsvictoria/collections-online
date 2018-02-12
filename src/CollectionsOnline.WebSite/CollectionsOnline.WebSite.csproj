@@ -24,6 +24,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>a2113a0d</NuGetPackageImportStamp>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -160,10 +161,6 @@
     <Content Include="content\img\favicon-96x96.png" />
     <Content Include="content\img\GitHub-Mark-Light-32px.png" />
     <Content Include="content\img\img-audio-thumbnail.png" />
-    <Content Include="content\img\img-featured-1039806.jpg" />
-    <Content Include="content\img\img-featured-1040604.jpg" />
-    <Content Include="content\img\img-featured-1040641.jpg" />
-    <Content Include="content\img\img-featured-1069323.jpg" />
     <Content Include="content\img\img-search-noresults.jpg" />
     <Content Include="content\img\logo-ala.png" />
     <Content Include="content\img\logo-bhl.png" />

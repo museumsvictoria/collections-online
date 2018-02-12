@@ -171,7 +171,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "EAST WALKWAY", null),
-                new MuseumLocation { Gallery = "Inside Out", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Public Spaces Lower Level", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "WEST WALKWAY", null),
@@ -179,7 +179,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "GALLERY 2", null),
-                new MuseumLocation { Gallery = "Inside Out", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Touring Hall", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("ROYAL EXHIBITION BUILDING (MvCIS)", "GROUND LEVEL", "CENTRAL HALL", null),
