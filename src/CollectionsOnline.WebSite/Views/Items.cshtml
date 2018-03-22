@@ -1,10 +1,11 @@
 ﻿@using CollectionsOnline.WebSite.Extensions
 @using CollectionsOnline.WebSite.Models
+@using CollectionsOnline.Core.Utilities
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ItemViewTransformerResult>
 @{
     Layout = "Layout.cshtml";
 }
-@Html.Partial("Media", new MediaViewModel { Medias = Model.Item.Media.WithThumbnails(), DocumentId = Model.Item.Id})
+@Html.Partial("Media", new MediaViewModel { Medias = Model.Item.Media.WithThumbnails(), DocumentId = Model.Item.Id })
 <div id="title">
     <div class="wrapper">
         @Html.Partial("MediaTypes", Model.Item.Media.WithThumbnails())
@@ -77,7 +78,7 @@
                 {
                     <h3>Significance</h3>
                     <p>@Html.ConvertNewlines(Model.Item.Significance)</p>
-                }                
+                }
             </div>
             <h2>More Information</h2>
             <div class="detail">
@@ -710,7 +711,7 @@
                             </li>
                         }
                     }
-                    @Html.Partial("Taxonomy", Model.Item.Taxonomy)                    
+                    @Html.Partial("Taxonomy", Model.Item.Taxonomy)
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IdentifiedBy))
                     {
                         <li>
@@ -815,6 +816,14 @@
             </div>
         </section>
         @Html.Partial("MuseumLocation", Model.Item.MuseumLocation)
+        <aside class="side-content">
+            <div class="enquiry">
+                <a href="https://museumsvictoria.com.au/ask-us/general-research-enquiries/?cid=@Model.Item.Id&title=@HttpUtility.UrlEncode(HtmlConverter.HtmlToText(Model.Item.DisplayTitle))">
+                    <span>Got a Question?</span>
+                    <span>send us an enquiry</span>
+                </a>
+            </div>
+        </aside>
         @Html.Partial("FileUriMedia", Model.Item.Media)
         <aside class="side-content" role="complementary">
             <div class="sidecolumn">
@@ -830,7 +839,7 @@
         </aside>
     </div>
 </div>
-@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || Model.RelatedSpecies.Any() )
+@if (Model.RelatedItems.Any() || Model.RelatedSpecimens.Any() || Model.RelatedArticles.Any() || Model.RelatedSpecies.Any())
 {
     <div id="related">
         <div class="wrapper">
@@ -866,8 +875,10 @@
                     <h3 id="addheader" style="display: block;">Share your knowledge</h3>
                     <div id="commentadd" style="display: block;">
                         <p>
-                            We appreciate your comments and are planning an upgraded system for you to share your knowledge with us.</p>
-                        <p>For now, please visit our <a href="https://museumvictoria.com.au/discoverycentre/ask-us-a-question/ ">Ask the Experts</a> page and get in touch with us there.
+                            We appreciate your comments and are planning an upgraded system for you to share your knowledge with us.
+                        </p>
+                        <p>
+                            For now, please visit our <a href="https://museumvictoria.com.au/discoverycentre/ask-us-a-question/ ">Ask the Experts</a> page and get in touch with us there.
                         </p>
                         <p>
                             Museums Victoria does not provide valuations, for more information please visit the valuation
@@ -877,12 +888,13 @@
                 </div>
             </div>
             <div class="comments">
-                @foreach (var comment in Model.Item.Comments.OrderByDescending(c=>c.Created)) {
-                <div class="comment">
-                    <span class="name">@comment.Author</span>
-                    <span class="date">Posted on @comment.Created.ToLocalTime().ToString("dd MMM yyyy \"at\" hh:mm tt \"GMT\"zzz")</span>
-                    <span class="commenttext">@comment.Content</span>
-                </div>
+                @foreach (var comment in Model.Item.Comments.OrderByDescending(c => c.Created))
+                {
+                    <div class="comment">
+                        <span class="name">@comment.Author</span>
+                        <span class="date">Posted on @comment.Created.ToLocalTime().ToString("dd MMM yyyy \"at\" hh:mm tt \"GMT\"zzz")</span>
+                        <span class="commenttext">@comment.Content</span>
+                    </div>
                 }
             </div>
         </div>
