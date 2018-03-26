@@ -448,9 +448,8 @@ module.exports = {
     for (var i = 0; i < l; i++) {
       p = $.Deferred();
       img = $("<img />");
-
-      img.load(p.resolve);
-      img.error(p.resolve);
+      
+      img.one("load loadend", p.resolve);
 
       promises.push(p);
 
