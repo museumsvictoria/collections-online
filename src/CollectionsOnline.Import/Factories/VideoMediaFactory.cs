@@ -138,7 +138,7 @@ namespace CollectionsOnline.Import.Factories
                     {
                         videoMedia.Small = new ImageMediaFile
                         {
-                            Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Medium),
+                            Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Small),
                             Size = new FileInfo(destPathSmall).Length,
                             Width = image.Width,
                             Height = image.Height
