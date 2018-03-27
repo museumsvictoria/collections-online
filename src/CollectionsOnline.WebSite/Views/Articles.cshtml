@@ -1,4 +1,5 @@
-﻿@using CollectionsOnline.WebSite.Extensions
+﻿@using CollectionsOnline.Core.Utilities
+@using CollectionsOnline.WebSite.Extensions
 @using CollectionsOnline.WebSite.Models
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.WebSite.Transformers.ArticleViewTransformerResult>
 @{
@@ -84,16 +85,24 @@
                         <li>
                             <h3>Article types</h3>
                             <p>
-                            @for (int i = 0; i < Model.Article.Types.Count; i++)
-                            {
-                                <a href="/search?articletype=@HttpUtility.UrlEncode(Model.Article.Types[i])">@Model.Article.Types[i]</a>@(i != Model.Article.Types.Count - 1 ? ", " : "")
-                            }
+                                @for (int i = 0; i < Model.Article.Types.Count; i++)
+                                {
+                                    <a href="/search?articletype=@HttpUtility.UrlEncode(Model.Article.Types[i])">@Model.Article.Types[i]</a>@(i != Model.Article.Types.Count - 1 ? ", " : "")
+                                }
                             </p>
                         </li>
                     }                    
                 </ul>
             </div>
         </section>
+        <aside class="side-content">
+            <div class="enquiry">
+                <a href="https://museumsvictoria.com.au/ask-us/general-research-enquiries/?cid=@Model.Article.Id&title=@HttpUtility.UrlEncode(HtmlConverter.HtmlToText(Model.Article.DisplayTitle))">
+                    <span>Got a Question?</span>
+                    <span>send us an enquiry</span>
+                </a>
+            </div>
+        </aside>
         @Html.Partial("FileUriMedia", Model.Article.Media)
         <aside class="side-content" role="complementary">
             <div class="sidecolumn">

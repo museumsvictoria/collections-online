@@ -1022,25 +1022,25 @@ button.icon {
                 }
             }
 
-            .ozcam:before, .ala:before, .bhl:before, .trove:before{
-                content:"";                
-                padding-left:25px;
+            .ozcam:before, .ala:before, .bhl:before, .trove:before {
+                content: "";
+                padding-left: 25px;
             }
 
             .ozcam:before {
-                background:url("/content/img/logo-ozcam.png") no-repeat / 20px;
+                background: url("/content/img/logo-ozcam.png") no-repeat / 20px;
             }
 
             .ala:before {
-                background:url("/content/img/logo-ala.png") no-repeat / 20px;
+                background: url("/content/img/logo-ala.png") no-repeat / 20px;
             }
 
             .bhl:before {
-                background:url("/content/img/logo-bhl.png") no-repeat / 20px;
+                background: url("/content/img/logo-bhl.png") no-repeat / 20px;
             }
 
             .trove:before {
-                background:url("/content/img/logo-trove.png") no-repeat / 20px;
+                background: url("/content/img/logo-trove.png") no-repeat / 20px;
             }
         }
     }
@@ -1058,6 +1058,31 @@ button.icon {
         float: right;
         direction: ltr;
 
+        & .enquiry {
+            direction: ltr;
+            border-radius: 3px;
+            line-height: 1.4em;
+            margin: 0 0 20px;
+            padding: 15px 20px 15px;
+            position: relative;
+            color: $colour-heading-inverted;
+            background: $colour-primary-green;
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            span {
+                display: block;
+
+                &:first-child {
+                    font-size: 22px;
+                    font-weight: 400;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+
         & .on-display {
             direction: ltr;
             border-radius: 3px;
@@ -1069,10 +1094,10 @@ button.icon {
 
             &.not {
                 background: $colour-background-footerbase;
-                padding-bottom:15px;
-                
+                padding-bottom: 15px;
+
                 p {
-                    margin:0;
+                    margin: 0;
                 }
             }
 
