@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace CollectionsOnline.WebSite.Models.Api
 {
-    public class MediaApiViewModel
+    public abstract class MediaApiViewModel
     {
+        public abstract string Type { get; }
+
         public DateTime DateModified { get; set; }
 
         public string Caption { get; set; }
@@ -22,6 +24,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 
     public class ImageMediaApiViewModel : MediaApiViewModel
     {
+        public override string Type => "image";
+
         public string AlternativeText { get; set; }
 
         public ImageMediaFileApiViewModel Large { get; set; }
@@ -30,11 +34,13 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public ImageMediaFileApiViewModel Small { get; set; }
 
-        public ImageMediaFileApiViewModel Thumbnail { get; set; }
+        public ImageMediaFileApiViewModel Thumbnail { get; set; }        
     }
 
     public class VideoMediaApiViewModel : MediaApiViewModel
     {
+        public override string Type => "video";
+
         public string AlternativeText { get; set; }
 
         public string Uri { get; set; }
@@ -48,16 +54,22 @@ namespace CollectionsOnline.WebSite.Models.Api
 
     public class AudioMediaApiViewModel : MediaApiViewModel
     {
+        public override string Type => "audio";
+
         public MediaFileApiViewModel File { get; set; }
     }
 
     public class FileMediaApiViewModel : MediaApiViewModel
     {
+        public override string Type => "file";
+
         public MediaFileApiViewModel File { get; set; }
     }
 
     public class UriMediaApiViewModel : MediaApiViewModel
     {
+        public override string Type => "uri";
+
         public string Uri { get; set; }
     }
 }
