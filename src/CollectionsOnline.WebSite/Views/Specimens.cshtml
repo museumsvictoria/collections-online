@@ -498,7 +498,7 @@
         @Html.Partial("MuseumLocation", Model.Specimen.MuseumLocation)
         <aside class="side-content">
             <div class="enquiry">
-                <a href="https://museumsvictoria.com.au/ask-us/general-research-enquiries/?cid=@Model.Specimen.Id&title=@HttpUtility.UrlEncode(HtmlConverter.HtmlToText(Model.Specimen.DisplayTitle))">
+                <a href="https://museumsvictoria.com.au/ask-us/general-research-enquiries/?cid=@Model.Specimen.Id&title=@HttpUtility.UrlEncode(HtmlConverter.HtmlToText(Model.Specimen.DisplayTitle))#EnquiryForm">
                     <span>Got a Question?</span>
                     <span>Send us an enquiry</span>
                 </a>
