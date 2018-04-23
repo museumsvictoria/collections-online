@@ -12,6 +12,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public DateTime DateModified { get; set; }
 
+        public string DisplayTitle { get; set; }
+
         public string Category { get; set; }
 
         public string ScientificGroup { get; set; }

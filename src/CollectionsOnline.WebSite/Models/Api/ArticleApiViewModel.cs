@@ -14,6 +14,8 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public string Title { get; set; }
 
+        public string DisplayTitle { get; set; }
+
         public IList<string> Keywords { get; set; }
 
         public IList<string> Localities { get; set; }
