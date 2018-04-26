@@ -161,9 +161,6 @@
     <Content Include="content\img\favicon-96x96.png" />
     <Content Include="content\img\GitHub-Mark-Light-32px.png" />
     <Content Include="content\img\img-audio-thumbnail.png" />
-    <Content Include="content\img\img-featured-135354.jpg" />
-    <Content Include="content\img\img-featured-236650.jpg" />
-    <Content Include="content\img\img-featured-255197.jpg" />
     <Content Include="content\img\img-search-noresults.jpg" />
     <Content Include="content\img\logo-ala.png" />
     <Content Include="content\img\logo-bhl.png" />
