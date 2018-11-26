@@ -295,7 +295,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "GALLERY 3", null),
-                new MuseumLocation { Gallery = "Journeys of a Lifetime (The Long Room)", Venue = "Immigration Museum" }
+                new MuseumLocation { Gallery = "Love", Venue = "Immigration Museum" }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "GALLERY 4", null),
