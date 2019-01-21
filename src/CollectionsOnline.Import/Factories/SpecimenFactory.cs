@@ -110,8 +110,10 @@ namespace CollectionsOnline.Import.Factories
                         "MetGroup",
                         "MetType",
                         "MetMainMineralsPresent",
-                        "MetSpecimenWeight",
-                        "MetTotalWeight",
+                        "MetSpecimenWeightValue",
+                        "MetSpecimenUnitOfWeight",
+                        "MetTotalWeightValue",
+                        "MetTotalUnitOfWeight",
                         "MetDateSpecimenFell",
                         "MetDateSpecimenFound",
                         "TekName",
@@ -323,8 +325,16 @@ namespace CollectionsOnline.Import.Factories
             specimen.MeteoritesGroup = map.GetEncodedString("MetGroup");
             specimen.MeteoritesType = map.GetEncodedString("MetType");
             specimen.MeteoritesMinerals = map.GetEncodedString("MetMainMineralsPresent");
-            specimen.MeteoritesSpecimenWeight = map.GetEncodedString("MetSpecimenWeight");
-            specimen.MeteoritesTotalWeight = map.GetEncodedString("MetTotalWeight");
+            specimen.MeteoritesSpecimenWeight = new[]
+            {
+                map.GetEncodedString("MetSpecimenWeightValue"),
+                map.GetEncodedString("MetSpecimenUnitOfWeight")
+            }.Concatenate(" ");
+            specimen.MeteoritesTotalWeight = new[]
+            {
+                map.GetEncodedString("MetTotalWeightValue"),
+                map.GetEncodedString("MetTotalUnitOfWeight")
+            }.Concatenate(" ");
             specimen.MeteoritesDateFell = map.GetEncodedString("MetDateSpecimenFell");
             specimen.MeteoritesDateFound = map.GetEncodedString("MetDateSpecimenFound");
             
