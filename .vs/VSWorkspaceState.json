@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\CollectionsOnline.Core",
+    "\\src\\CollectionsOnline.Core\\Config",
+    "\\src\\CollectionsOnline.Core\\Models",
+    "\\src\\CollectionsOnline.Import",
+    "\\src\\CollectionsOnline.Import\\Builders",
+    "\\src\\CollectionsOnline.Import\\Extensions",
+    "\\src\\CollectionsOnline.WebSite",
+    "\\src\\CollectionsOnline.WebSite\\Views"
+  ],
+  "SelectedNode": "\\src\\CollectionsOnline.sln",
+  "PreviewInSolutionExplorer": false
+}
