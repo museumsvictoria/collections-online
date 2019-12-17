@@ -148,6 +148,7 @@
     <Content Include="content\img\apple-touch-icon-72x72.png" />
     <Content Include="content\img\apple-touch-icon-76x76.png" />
     <Content Include="content\img\bg-about-hero.jpg" />
+    <Content Include="content\img\bg-collection-hero-library.jpg" />
     <Content Include="content\img\bg-error-404.jpg" />
     <Content Include="content\img\bg-error-500.jpg" />
     <Content Include="content\img\bg-home-hero-beetles.jpg" />
