@@ -127,7 +127,7 @@ namespace CollectionsOnline.WebSite.Extensions
 
         public static IHtmlString ConvertNewlines<T>(this HtmlHelpers<T> helper, string content)
         {
-            return new NonEncodedHtmlString(content.Replace("\n", "<br />"));
+            return new NonEncodedHtmlString(content?.Replace("\n", "<br />"));
         }
 
         public static IHtmlString ConvertHyperLinks<T>(this HtmlHelpers<T> helper, string content)
