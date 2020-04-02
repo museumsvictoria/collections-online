@@ -64,7 +64,6 @@ video {
     display: inline-block;
     @if $legacy_support_for_ie {
         *display: inline;
-        *zoom: 1;
     }
 }
 
