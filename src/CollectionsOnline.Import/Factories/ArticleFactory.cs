@@ -130,19 +130,23 @@ namespace CollectionsOnline.Import.Factories
             // Contributors
             article.Contributors.AddRange(
                 map.GetMaps("contributors")
-                   .Where(
-                       x =>
-                       x.GetEncodedString("NarContributorRole_tab").Contains("contributor of content", StringComparison.OrdinalIgnoreCase) ||
-                       x.GetEncodedString("NarContributorRole_tab").Contains("author of quoted text", StringComparison.OrdinalIgnoreCase) ||
-                       x.GetEncodedString("NarContributorRole_tab").Contains("researcher", StringComparison.OrdinalIgnoreCase))
-                   .Select(x => x.GetMap("contributor"))
-                   .Select(x => new Author
-                   {
-                       FirstName = x.GetEncodedString("NamFirst"),
-                       LastName = x.GetEncodedString("NamLast"),
-                       FullName = x.GetEncodedString("NamFullName"),
-                       Biography = x.GetEncodedString("BioLabel")
-                   }));
+                    .Where(
+                        x =>
+                            x.GetMap("contributor") != null &&
+                            (x.GetEncodedString("NarContributorRole_tab").Contains("contributor of content",
+                                 StringComparison.OrdinalIgnoreCase) ||
+                             x.GetEncodedString("NarContributorRole_tab").Contains("author of quoted text",
+                                 StringComparison.OrdinalIgnoreCase) ||
+                             x.GetEncodedString("NarContributorRole_tab")
+                                 .Contains("researcher", StringComparison.OrdinalIgnoreCase)))
+                    .Select(x => x.GetMap("contributor"))
+                    .Select(x => new Author
+                    {
+                        FirstName = x.GetEncodedString("NamFirst"),
+                        LastName = x.GetEncodedString("NamLast"),
+                        FullName = x.GetEncodedString("NamFullName"),
+                        Biography = x.GetEncodedString("BioLabel")
+                    }));
 
             // Year written
             var dateWritten = map.GetMaps("dates")
