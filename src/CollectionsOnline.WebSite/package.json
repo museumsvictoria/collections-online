@@ -16,7 +16,7 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "node-sass": "^4.13.1",
     "verge": "^1.10.2",
     "vinyl-buffer": "^1.0.1",
