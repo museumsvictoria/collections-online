@@ -6,8 +6,8 @@
     Layout = "Layout.cshtml";
 }
 @section Head {
-    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css' rel='stylesheet' />
 }
 @Html.Partial("Media", new MediaViewModel { Medias = Model.Specimen.Media.WithThumbnails(), DocumentId = Model.Specimen.Id })
 <div id="title">
@@ -474,26 +474,25 @@
                         @Html.Partial("Taxonomy", Model.Specimen.Taxonomy)
                     </ul>
                 }
-                @if (Model.GeoSpatial.Any())
-                {
-
-                    <div>
-                        <div id="mapdata">
-                            <h3 class="sub-heading">Geospatial Information</h3>
-                            <ul>
-                                @foreach (var geoSpatial in Model.GeoSpatial)
-                                {
-                                    <li>
-                                        <h3>@geoSpatial.Key</h3>
-                                        <p>@Html.Raw(geoSpatial.Value)</p>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                        <div id="map"></div>
-                    </div>
-                }
             </div>
+            @if (Model.GeoSpatial.Any())
+            {
+                <div class="geo-spatial">
+                    <div id="mapdata">
+                        <h3 class="sub-heading">Geospatial Information</h3>
+                        <ul>
+                            @foreach (var geoSpatial in Model.GeoSpatial)
+                            {
+                                <li>
+                                    <h3>@geoSpatial.Key</h3>
+                                    <p>@Html.Raw(geoSpatial.Value)</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="map"></div>
+                </div>
+            }
         </section>
         @Html.Partial("MuseumLocation", Model.Specimen.MuseumLocation)
         <aside class="side-content">

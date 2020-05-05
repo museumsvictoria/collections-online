@@ -910,7 +910,7 @@ button.icon {
             }
         }
 
-        .summary a, .detail a {
+        .summary a, .detail a, #mapdata a {
             border-bottom: 1px dotted;
             color: rgba(25, 102,93, 0.95);
 
@@ -925,8 +925,7 @@ button.icon {
             }
         }
 
-        .detail {
-
+        .detail, #mapdata {
             & h3 {
                 padding-bottom: 5px;
                 font-size: 22px;
