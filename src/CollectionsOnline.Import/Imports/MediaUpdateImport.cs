@@ -37,7 +37,7 @@ namespace CollectionsOnline.Import.Imports
                     GetDocumentIds = map => map
                         .GetMaps("narmedia")
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn")))
+                        .Select(x => $"articles/{x.GetEncodedString("irn")}")
                         .Concat(map
                         .GetMaps("catmedia")
                         .Where(x => x != null && x.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))

@@ -194,7 +194,6 @@
     <Compile Include="Imports\SitemapImport.cs" />
     <Compile Include="Imports\RelationshipImport.cs" />
     <Compile Include="Imports\MediaUpdateImport.cs" />
-    <Compile Include="Imports\MigrationImport.cs" />
     <Compile Include="Imports\TaxonomyUpdateImport.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -32,7 +32,7 @@ namespace CollectionsOnline.Import.Imports
                 {
                     // Get the id's of all items that were cached in the current import
                     importCache = documentSession.Load<ImportCache>("importCaches/item") ?? new ImportCache();
-                    importCacheItemIds = importCache.Irns.Select(x => string.Format("items/{0}", x)).ToList();
+                    importCacheItemIds = importCache.Irns.Select(x => $"items/{x}").ToList();
                 }
             
                 var currentOffset = 0;
@@ -83,10 +83,7 @@ namespace CollectionsOnline.Import.Imports
             }
         }
 
-        public int Order
-        {
-            get { return 200; }
-        }
+        public int Order => 200;
 
         private bool ImportCanceled()
         {

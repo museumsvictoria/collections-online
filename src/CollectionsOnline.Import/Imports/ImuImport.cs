@@ -31,7 +31,7 @@ namespace CollectionsOnline.Import.Imports
 
         public override void Run()
         {
-            using (Log.Logger.BeginTimedOperation(string.Format("{0} Imu Import starting", typeof(T).Name), "ImuImport<T>.Run"))
+            using (Log.Logger.BeginTimedOperation($"{typeof(T).Name} Imu Import starting", "ImuImport<T>.Run"))
             { 
                 ImportCache importCache;            
 
@@ -49,11 +49,11 @@ namespace CollectionsOnline.Import.Imports
                     }
 
                     // Check for existing cached results
-                    importCache = documentSession.Load<ImportCache>(string.Format("importCaches/{0}", typeof(T).Name.ToLower()));
+                    importCache = documentSession.Load<ImportCache>($"importCaches/{typeof(T).Name.ToLower()}");
                     if (importCache == null)
                     {
                         Log.Logger.Information("Caching {Name} results", typeof(T).Name);
-                        importCache = new ImportCache { Id = string.Format("importCaches/{0}", typeof(T).Name.ToLower()) };
+                        importCache = new ImportCache { Id = $"importCaches/{typeof(T).Name.ToLower()}"};
 
                         var terms = _imuFactory.Terms;
                         if (importStatus.PreviousDateRun.HasValue)
@@ -87,8 +87,7 @@ namespace CollectionsOnline.Import.Imports
                                         subDocumentSession.Load<T>(
                                             irnResults.Select(
                                                 x =>
-                                                    string.Format("{0}/{1}", Inflector.Pluralize(typeof(T).Name).ToLower(),
-                                                        x)))
+                                                    $"{Inflector.Pluralize(typeof(T).Name).ToLower()}/{x}"))
                                             .Where(x => x != null)
                                             .Select(x => long.Parse(x.Id.Substring(x.Id.IndexOf('/') + 1))));
                                 }
@@ -183,9 +182,6 @@ namespace CollectionsOnline.Import.Imports
             }
         }
 
-        public override int Order
-        {
-            get { return 100; }
-        }               
+        public override int Order => 100;
     }
 }

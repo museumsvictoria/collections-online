@@ -164,7 +164,7 @@ namespace CollectionsOnline.Import.Imports
                             // Update taxonomy on items, species and specimens
                             _documentStore.DatabaseCommands.UpdateByIndex(
                                 "CombinedIndex",
-                                new IndexQuery { Query = string.Format("TaxonomyIrn:{0}", row.GetString("irn")) },
+                                new IndexQuery { Query = $"TaxonomyIrn:{row.GetString("irn")}"},
                                 new[]
                                 {
                                     new PatchRequest
@@ -192,9 +192,6 @@ namespace CollectionsOnline.Import.Imports
             }
         }
 
-        public override int Order
-        {
-            get { return 10; }
-        }        
+        public override int Order => 10;
     }
 }

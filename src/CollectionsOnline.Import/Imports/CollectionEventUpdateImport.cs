@@ -200,9 +200,6 @@ namespace CollectionsOnline.Import.Imports
             }
         }
 
-        public override int Order
-        {
-            get { return 10; }
-        }
+        public override int Order => 10;
     }
 }
