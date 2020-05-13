@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using Raven.Abstractions.Data;

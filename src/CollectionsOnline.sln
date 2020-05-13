@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.Import", "CollectionsOnline.Import\CollectionsOnline.Import.csproj", "{362A7A4C-1A6F-41A2-A8A7-A143A7616812}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.RedirectWebSite", "CollectionsOnline.RedirectWebSite\CollectionsOnline.RedirectWebSite.csproj", "{3EF059D8-3822-40D0-95B9-4FB40F4D4DA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.WebSite", "CollectionsOnline.WebSite\CollectionsOnline.WebSite.csproj", "{B7B199DE-9766-4D15-948D-8925D5E5B4C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.Tasks", "CollectionsOnline.Tasks\CollectionsOnline.Tasks.csproj", "{8465B8E4-F946-4306-A591-08BA1F57C04D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{B7B199DE-9766-4D15-948D-8925D5E5B4C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7B199DE-9766-4D15-948D-8925D5E5B4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7B199DE-9766-4D15-948D-8925D5E5B4C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8465B8E4-F946-4306-A591-08BA1F57C04D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8465B8E4-F946-4306-A591-08BA1F57C04D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8465B8E4-F946-4306-A591-08BA1F57C04D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8465B8E4-F946-4306-A591-08BA1F57C04D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

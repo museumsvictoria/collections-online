@@ -46,10 +46,6 @@
       <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="Google.Apis, Version=1.9.3.19379, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.9.3\lib\net40\Google.Apis.dll</HintPath>
       <Private>True</Private>
@@ -197,7 +193,6 @@
     <Compile Include="Imports\TaxonomyUpdateImport.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Infrastructure\NetworkShareAccesser.cs" />
     <Compile Include="Infrastructure\ImportRunner.cs" />
     <Compile Include="Imports\ImuImport.cs" />
     <Compile Include="Infrastructure\IImuSessionProvider.cs" />

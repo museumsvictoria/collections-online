@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace CollectionsOnline.Import.Infrastructure
+namespace CollectionsOnline.Core.Infrastructure
 {
     /// <summary>
     /// Provides access to a network share.
