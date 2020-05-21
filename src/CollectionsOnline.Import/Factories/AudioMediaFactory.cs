@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;

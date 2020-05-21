@@ -86,6 +86,7 @@
     <Compile Include="Extensions\ExpandoObjectExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
+    <Compile Include="Factories\PathFactory.cs" />
     <Compile Include="Indexes\CombinedFacets.cs" />
     <Compile Include="Indexes\MediaByIrnWithChecksum.cs" />
     <Compile Include="Indexes\CombinedIndex.cs" />

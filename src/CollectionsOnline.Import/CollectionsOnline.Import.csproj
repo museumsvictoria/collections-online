@@ -178,7 +178,6 @@
     <Compile Include="Factories\ITaxonomyFactory.cs" />
     <Compile Include="Factories\MediaFactory.cs" />
     <Compile Include="Factories\TaxonomyFactory.cs" />
-    <Compile Include="Factories\PathFactory.cs" />
     <Compile Include="Factories\ArticleFactory.cs" />
     <Compile Include="Factories\SpecimenFactory.cs" />
     <Compile Include="Factories\SpeciesFactory.cs" />
@@ -187,7 +186,6 @@
     <Compile Include="Imports\ImuImportBase.cs" />
     <Compile Include="Imports\IImport.cs" />
     <Compile Include="Imports\CollectionEventUpdateImport.cs" />
-    <Compile Include="Imports\SitemapImport.cs" />
     <Compile Include="Imports\RelationshipImport.cs" />
     <Compile Include="Imports\MediaUpdateImport.cs" />
     <Compile Include="Imports\TaxonomyUpdateImport.cs">

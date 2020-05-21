@@ -14,6 +14,7 @@ using ImageMagick;
 using IMu;
 using Raven.Client;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Factories;
 using Serilog;
 
 namespace CollectionsOnline.Import.Factories

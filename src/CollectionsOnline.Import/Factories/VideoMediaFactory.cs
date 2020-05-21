@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Models;
 using Google.Apis.YouTube.v3;
 using ImageMagick;

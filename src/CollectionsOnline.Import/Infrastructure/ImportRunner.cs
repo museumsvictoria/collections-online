@@ -67,8 +67,7 @@ namespace CollectionsOnline.Import.Infrastructure
                     }
                     finally
                     {
-                        if (networkShareAccesser != null)
-                            networkShareAccesser.Dispose();
+                        networkShareAccesser?.Dispose();
                     }
 
                     // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.

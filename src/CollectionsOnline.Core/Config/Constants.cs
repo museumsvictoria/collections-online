@@ -32,7 +32,7 @@ namespace CollectionsOnline.Core.Config
 
         public static int MaxSitemapUrls = 50000;
 
-        public static int PagingStreamSize = 1000;
+        public static int PagingStreamSize = 10000;
 
         public static string ImuItemQueryString = "Collections Online: Humanities";
 

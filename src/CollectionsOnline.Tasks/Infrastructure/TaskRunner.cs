@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Serilog;
 
 namespace CollectionsOnline.Tasks.Infrastructure
@@ -22,7 +23,7 @@ namespace CollectionsOnline.Tasks.Infrastructure
                 try
                 {
                     // Run all tasks
-                    foreach (var task in _tasks)
+                    foreach (var task in _tasks.OrderBy(x => x.Order))
                     {
                         if (Program.TasksCanceled)
                             break;

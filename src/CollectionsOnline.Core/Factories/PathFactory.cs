@@ -4,7 +4,7 @@ using System.IO;
 using CollectionsOnline.Core.Models;
 using Serilog;
 
-namespace CollectionsOnline.Import.Factories
+namespace CollectionsOnline.Core.Factories
 {
     public static class PathFactory
     {
