@@ -1,4 +1,4 @@
-﻿namespace CollectionsOnline.Tasks.Infrastructure
+﻿namespace CollectionsOnline.Tasks.Net472.Infrastructure
 {
     public interface ITask
     {

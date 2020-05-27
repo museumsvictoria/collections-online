@@ -20,7 +20,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.RedirectW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.WebSite", "CollectionsOnline.WebSite\CollectionsOnline.WebSite.csproj", "{B7B199DE-9766-4D15-948D-8925D5E5B4C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.Tasks", "CollectionsOnline.Tasks\CollectionsOnline.Tasks.csproj", "{8465B8E4-F946-4306-A591-08BA1F57C04D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsOnline.Tasks.Net472", "CollectionsOnline.Tasks.Net472\CollectionsOnline.Tasks.Net472.csproj", "{8465B8E4-F946-4306-A591-08BA1F57C04D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionsOnline.Tasks.NetCoreApp31", "CollectionsOnline.Tasks.NetCoreApp31\CollectionsOnline.Tasks.NetCoreApp31.csproj", "{D26BE2A0-7742-4067-8A45-A92E5330A56E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{8465B8E4-F946-4306-A591-08BA1F57C04D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8465B8E4-F946-4306-A591-08BA1F57C04D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8465B8E4-F946-4306-A591-08BA1F57C04D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D26BE2A0-7742-4067-8A45-A92E5330A56E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D26BE2A0-7742-4067-8A45-A92E5330A56E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D26BE2A0-7742-4067-8A45-A92E5330A56E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D26BE2A0-7742-4067-8A45-A92E5330A56E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

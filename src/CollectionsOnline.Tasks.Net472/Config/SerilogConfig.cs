@@ -2,7 +2,7 @@
 using System.Configuration;
 using Serilog;
 
-namespace CollectionsOnline.Tasks.Config
+namespace CollectionsOnline.Tasks.Net472.Config
 {
     public static class SerilogConfig
     {

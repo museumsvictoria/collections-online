@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Serilog;
 
-namespace CollectionsOnline.Tasks.Infrastructure
+namespace CollectionsOnline.Tasks.Net472.Infrastructure
 {
     public class TaskRunner
     {

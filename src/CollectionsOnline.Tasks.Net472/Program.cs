@@ -1,8 +1,8 @@
-﻿using CollectionsOnline.Tasks.Config;
-using CollectionsOnline.Tasks.Infrastructure;
+﻿using CollectionsOnline.Tasks.Net472.Config;
+using CollectionsOnline.Tasks.Net472.Infrastructure;
 
-namespace CollectionsOnline.Tasks
-{
+namespace CollectionsOnline.Tasks.Net472
+{ 
     class Program
     {
         public static volatile bool TasksCanceled = false;

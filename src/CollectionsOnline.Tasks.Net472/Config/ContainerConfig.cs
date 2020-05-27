@@ -1,17 +1,10 @@
 ﻿using System.Configuration;
-using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Indexes;
-using CollectionsOnline.Core.Infrastructure;
-using CollectionsOnline.Core.Models;
-using CollectionsOnline.Tasks.Infrastructure;
-using Raven.Client;
+using CollectionsOnline.Tasks.Net472.Infrastructure;
 using Raven.Client.Document;
-using Raven.Client.Indexes;
 using Serilog;
-using Serilog.Events;
 using SimpleInjector;
 
-namespace CollectionsOnline.Tasks.Config
+namespace CollectionsOnline.Tasks.Net472.Config
 {
     public static class ContainerConfig
     {

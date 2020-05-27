@@ -9,12 +9,12 @@ using System.Xml.Linq;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Infrastructure;
-using CollectionsOnline.Tasks.Infrastructure;
+using CollectionsOnline.Tasks.Net472.Infrastructure;
 using Raven.Client;
 using Serilog;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
-namespace CollectionsOnline.Tasks.Tasks
+namespace CollectionsOnline.Tasks.Net472.Tasks
 {
     public class SitemapGeneratorTask : ITask
     {
