@@ -3,10 +3,7 @@
     <head>                        
         @Html.Partial("Metadata")        
         <link href="/content/static/styles.css" rel="stylesheet">
-        @if (IsSectionDefined("Head"))
-        {
-            @RenderSection("Head")
-        }
+            @RenderSection("Head", required:false)
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -57,7 +54,6 @@
                             <li><a href="https://museumvictoria.com.au/about/work-opportunities/employment/">Employment</a></li>
                             <li><a href="https://museumvictoria.com.au/education/">Education</a></li>
                             <li><a href="https://museumvictoria.com.au/about/media-centre/">Media</a></li>
-                            
                         </ul>
                     </div>
                 </div> <!--footer promos -->

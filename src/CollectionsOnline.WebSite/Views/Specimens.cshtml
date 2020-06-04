@@ -6,8 +6,8 @@
     Layout = "Layout.cshtml";
 }
 @section Head {
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
 }
 @Html.Partial("Media", new MediaViewModel { Medias = Model.Specimen.Media.WithThumbnails(), DocumentId = Model.Specimen.Id })
 <div id="title">
@@ -56,13 +56,13 @@
                 @if (!string.IsNullOrWhiteSpace(Model.Specimen.Significance))
                 {
                     <h3>Significance</h3>
-                    <p>@Html.ConvertNewlines(@Model.Specimen.Significance)</p>
+                    <p>@Html.ConvertNewlines(Model.Specimen.Significance)</p>
                 }
             </div>
             <h2>Specimen Details</h2>
             <div class="detail">
                 <ul>
-                    @if (@Model.Specimen.CollectionNames.Any())
+                    @if (Model.Specimen.CollectionNames.Any())
                     {
                         <li>
                             <h3>Collection Names</h3>
@@ -109,7 +109,7 @@
                             <li>
                                 <h3>Other Common Names</h3>
                                 <p>
-                                    @foreach (var otherCommonNames in @Model.Specimen.Taxonomy.OtherCommonNames)
+                                    @foreach (var otherCommonNames in Model.Specimen.Taxonomy.OtherCommonNames)
                                     {
                                         <span>@otherCommonNames</span>
                                     }
@@ -164,7 +164,7 @@
                         <li>
                             <h3>Specimen Nature</h3>
                             <p>
-                                @foreach (var storage in @Model.Specimen.Storages)
+                                @foreach (var storage in Model.Specimen.Storages)
                                 {
                                     <span>@storage.Nature @storage.Form @storage.FixativeTreatment @storage.Medium</span>
                                 }
@@ -346,7 +346,7 @@
                             <p><a href="/search?locality=@HttpUtility.UrlEncode(Model.Specimen.TektitesGlobalStrewnfield)">@Model.Specimen.TektitesGlobalStrewnfield</a></p>
                         </li>
                     }
-                    @foreach (var association in @Model.Specimen.Associations)
+                    @foreach (var association in Model.Specimen.Associations)
                     {
                         <li>
                             <h3>@association.Type</h3>
@@ -416,24 +416,24 @@
                     {
                         <li>
                             <h3>Category</h3>
-                            <p><a href="/search?category=@HttpUtility.UrlEncode(@Model.Specimen.Category.ToLower())">@Model.Specimen.Category</a></p>
+                            <p><a href="/search?category=@HttpUtility.UrlEncode(Model.Specimen.Category.ToLower())">@Model.Specimen.Category</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.ScientificGroup))
                     {
                         <li>
                             <h3>Scientific Group</h3>
-                            <p><a href="/search?specimenscientificgroup=@HttpUtility.UrlEncode(@Model.Specimen.ScientificGroup.ToLower())">@Model.Specimen.ScientificGroup</a></p>
+                            <p><a href="/search?specimenscientificgroup=@HttpUtility.UrlEncode(Model.Specimen.ScientificGroup.ToLower())">@Model.Specimen.ScientificGroup</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.Discipline))
                     {
                         <li>
                             <h3>Discipline</h3>
-                            <p><a href="/search?collection=@HttpUtility.UrlEncode(@Model.Specimen.Discipline.ToLower())">@Model.Specimen.Discipline</a></p>
+                            <p><a href="/search?collection=@HttpUtility.UrlEncode(Model.Specimen.Discipline.ToLower())">@Model.Specimen.Discipline</a></p>
                         </li>
                     }
-                    @if (@Model.Specimen.CollectingAreas.Any())
+                    @if (Model.Specimen.CollectingAreas.Any())
                     {
                         <li>
                             <h3>Collecting Areas</h3>
@@ -450,7 +450,7 @@
                     {
                         <li>
                             <h3>Type of Item</h3>
-                            <p><a href="/search?itemtype=@HttpUtility.UrlEncode(@Model.Specimen.Type.ToLower())">@Model.Specimen.Type</a></p>
+                            <p><a href="/search?itemtype=@HttpUtility.UrlEncode(Model.Specimen.Type.ToLower())">@Model.Specimen.Type</a></p>
                         </li>
                     }
                     @if (Model.Specimen.Keywords.Any())
@@ -550,10 +550,10 @@
 <script>
     @if (Model.Specimen.Media.WithThumbnails().Any())
     {
-        @:var mediaModel = @Html.ConvertToJson(Model.Specimen.Media.WithThumbnails());
+        @: const mediaModel = @Html.ConvertToJson(Model.Specimen.Media.WithThumbnails());
     }
     @if (Model.LatLongs.Any())
     {
-        @:var latlongsModel = @Html.ConvertToJson(Model.LatLongs);
+        @: const latlongsModel = @Html.ConvertToJson(Model.LatLongs);
     }
 </script>
