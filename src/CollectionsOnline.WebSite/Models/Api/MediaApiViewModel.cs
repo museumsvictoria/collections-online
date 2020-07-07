@@ -7,6 +7,8 @@ namespace CollectionsOnline.WebSite.Models.Api
     {
         public abstract string Type { get; }
 
+        public string Id { get; set; }
+
         public DateTime DateModified { get; set; }
 
         public string Caption { get; set; }
