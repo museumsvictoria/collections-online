@@ -1,11 +1,11 @@
-﻿using System.Configuration;
-using System.Linq;
-using AutoMapper;
-using CollectionsOnline.Core.Models;
+﻿using AutoMapper;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Models;
 using CollectionsOnline.Core.Utilities;
 using CollectionsOnline.WebSite.Models;
 using CollectionsOnline.WebSite.Models.Api;
+using System.Configuration;
+using System.Linq;
 
 namespace CollectionsOnline.WebSite.Infrastructure
 {
@@ -39,7 +39,11 @@ namespace CollectionsOnline.WebSite.Infrastructure
                     .Include<VideoMedia, VideoMediaApiViewModel>()
                     .Include<AudioMedia, AudioMediaApiViewModel>()
                     .Include<FileMedia, FileMediaApiViewModel>()
-                    .Include<UriMedia, UriMediaApiViewModel>();
+                    .Include<UriMedia, UriMediaApiViewModel>()
+                    .AfterMap((src, dest) =>
+                    {
+                        dest.Id = $"media/{src.Irn}";
+                    });
                 cfg.CreateMap<ImageMedia, ImageMediaApiViewModel>();
                 cfg.CreateMap<VideoMedia, VideoMediaApiViewModel>();
                 cfg.CreateMap<AudioMedia, AudioMediaApiViewModel>();
