@@ -172,7 +172,6 @@
     <Content Include="content\img\mstile-310x150.png" />
     <Content Include="content\img\mstile-310x310.png" />
     <Content Include="content\img\mstile-70x70.png" />
-    <Content Include="content\js\app\survey.js" />
     <Content Include="content\js\app\video.js" />
     <Content Include="content\img\bg-collection-hero.jpg" />
     <Content Include="content\img\bg-collection-hero-geology.jpg" />

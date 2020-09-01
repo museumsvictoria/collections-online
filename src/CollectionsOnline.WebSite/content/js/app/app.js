@@ -2,14 +2,12 @@
 var media = require('./media');
 var search = require('./search');
 var map = require('./map');
-var survey = require('./survey');
 
 var App = {
   init: function() {
     media.init();
     search.init();
     map.init();
-    survey.init();
 
     this.bindEvents();
   },
@@ -39,10 +37,6 @@ var App = {
 
 $(document).ready(function () {
   App.init();
-});
-
-$(window).on('load', function () {
-  survey.initialiseSurvey();
 });
 
 $.whenArray = function (array) {
