@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -6,20 +7,28 @@ using Serilog;
 
 namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
 {
-    public class TaskRunnerHostedService : IHostedService
+    public class TaskRunner : BackgroundService
     {
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly IHostEnvironment _env;
         private readonly IConfiguration _configuration;
+        private readonly IEnumerable<ITask> _tasks;
 
-        public TaskRunnerHostedService(
+        public TaskRunner(
             IHostApplicationLifetime appLifetime,
             IHostEnvironment env,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IEnumerable<ITask> tasks)
         {
             _appLifetime = appLifetime;
             _configuration = configuration;
             _env = env;
+            _tasks = tasks;
+        }
+
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            return Task.CompletedTask;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

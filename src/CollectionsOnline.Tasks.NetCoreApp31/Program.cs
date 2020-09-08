@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using CollectionsOnline.Tasks.NetCoreApp31.Extensions;
 using CollectionsOnline.Tasks.NetCoreApp31.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,8 +16,6 @@ namespace CollectionsOnline.Tasks.NetCoreApp31
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
                 .CreateLogger();
 
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
@@ -45,7 +44,13 @@ namespace CollectionsOnline.Tasks.NetCoreApp31
                 .CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddHostedService<TaskRunnerHostedService>();
+                    var configSection = context.Configuration.GetSection(
+                        Settings.SETTINGS);
+                    
+                    services.Configure<Settings>(configSection);
+                    services.AddHostedService<TaskRunner>();
+                    services.AddRavenDb(configSection.Get<Settings>());
+                    services.AddTasks();
                 })
                 .UseConsoleLifetime()
                 .UseSerilog();
