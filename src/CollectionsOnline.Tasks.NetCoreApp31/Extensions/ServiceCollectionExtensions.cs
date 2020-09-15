@@ -15,12 +15,12 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Extensions
             services.TryAddEnumerable(System.AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
                 .Where(type => typeof(ITask).IsAssignableFrom(type) && type.IsClass)
-                .Select(type => ServiceDescriptor.Singleton(typeof(ITask), type)));
+                .Select(type => ServiceDescriptor.Transient(typeof(ITask), type)));
 
             return services;
         }
 
-        public static IServiceCollection AddRavenDb(this IServiceCollection services, Settings settings)
+        public static IServiceCollection AddRavenDb(this IServiceCollection services, AppSettings appSettings)
         {
             // Add Raven DocumentStore
             services.TryAddSingleton(sp =>
@@ -29,8 +29,8 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Extensions
                 Log.Logger.Debug("Initialize Raven document store");
                 var documentStore = new DocumentStore
                 {
-                    Url = settings.DatabaseUrl,
-                    DefaultDatabase = settings.DatabaseName
+                    Url = appSettings.DatabaseUrl,
+                    DefaultDatabase = appSettings.DatabaseName
                 }.Initialize();
                 
                 return documentStore;

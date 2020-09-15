@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -28,41 +29,19 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            Log.Logger.Information("ExecuteAsync has been called.");
+            
+            var seqUrl = _configuration["AppSettings:SeqUrl"];
+            
+            // Run all tasks
+            foreach (var task in _tasks.OrderBy(x => x.Order))
+            {
+                task.Run();
+            }
+            
+            _appLifetime.StopApplication();
+            
             return Task.CompletedTask;
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _appLifetime.ApplicationStarted.Register(OnStarted);
-            _appLifetime.ApplicationStopping.Register(OnStopping);
-            _appLifetime.ApplicationStopped.Register(OnStopped);
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        private void OnStarted()
-        {
-            Log.Logger.Information("OnStarted has been called.");
-            // Perform post-startup activities here
-        }
-
-        private void OnStopping()
-        {
-            Log.Logger.Information("OnStopping has been called.");
-
-            // Perform on-stopping activities here
-        }
-
-        private void OnStopped()
-        {
-            Log.Logger.Information("OnStopped has been called.");
-
-            // Perform post-stopped activities here
         }
     }
 }

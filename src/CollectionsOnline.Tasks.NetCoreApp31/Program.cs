@@ -17,7 +17,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
-
+            
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
                 Log.Fatal((Exception) eventArgs.ExceptionObject, "Unhandled Exception occured in CollectionsOnline Tasks");
 
@@ -45,11 +45,11 @@ namespace CollectionsOnline.Tasks.NetCoreApp31
                 .ConfigureServices((context, services) =>
                 {
                     var configSection = context.Configuration.GetSection(
-                        Settings.SETTINGS);
+                        AppSettings.APP_SETTINGS);
                     
-                    services.Configure<Settings>(configSection);
+                    services.Configure<AppSettings>(configSection);
                     services.AddHostedService<TaskRunner>();
-                    services.AddRavenDb(configSection.Get<Settings>());
+                    services.AddRavenDb(configSection.Get<AppSettings>());
                     services.AddTasks();
                 })
                 .UseConsoleLifetime()

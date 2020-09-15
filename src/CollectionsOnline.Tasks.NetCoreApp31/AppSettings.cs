@@ -1,8 +1,8 @@
 namespace CollectionsOnline.Tasks.NetCoreApp31
 {
-    public class Settings
+    public class AppSettings
     {
-        public const string SETTINGS = "Settings";
+        public const string APP_SETTINGS = "AppSettings";
         
         public string DatabaseUrl { get; set; }
         
