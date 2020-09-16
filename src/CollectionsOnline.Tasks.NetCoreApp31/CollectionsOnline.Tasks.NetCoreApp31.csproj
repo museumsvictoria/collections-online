@@ -17,6 +17,7 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.0-dev-00174" />
+    <PackageReference Include="SerilogMetrics" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
@@ -25,5 +26,8 @@
     <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CollectionsOnline.Core\CollectionsOnline.Core.csproj" />
   </ItemGroup>
 </Project>

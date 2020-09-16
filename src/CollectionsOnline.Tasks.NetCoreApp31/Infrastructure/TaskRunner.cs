@@ -31,8 +31,6 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
         {
             Log.Logger.Information("ExecuteAsync has been called.");
             
-            var seqUrl = _configuration["AppSettings:SeqUrl"];
-            
             // Run all tasks
             foreach (var task in _tasks.OrderBy(x => x.Order))
             {
