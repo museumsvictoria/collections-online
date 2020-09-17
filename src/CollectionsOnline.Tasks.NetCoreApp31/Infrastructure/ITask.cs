@@ -1,8 +1,11 @@
-﻿namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
 {
     public interface ITask
     {
-        void Run();
+        Task Run(CancellationToken stoppingToken);
 
         int Order { get; }
     }
