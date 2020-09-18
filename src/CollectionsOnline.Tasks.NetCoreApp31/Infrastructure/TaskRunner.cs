@@ -31,8 +31,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
                 // Run all tasks
                 foreach (var task in _tasks.OrderBy(x => x.Order))
                 {
-                    if(stoppingToken.IsCancellationRequested)
-                        break;
+                    stoppingToken.ThrowIfCancellationRequested();
                     
                     await task.Run(stoppingToken);
                 }

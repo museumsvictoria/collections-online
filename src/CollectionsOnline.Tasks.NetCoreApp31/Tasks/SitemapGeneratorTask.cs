@@ -12,7 +12,6 @@ using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Infrastructure;
 using CollectionsOnline.Tasks.NetCoreApp31.Infrastructure;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Raven.Client;
 using Serilog;
@@ -86,8 +85,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
                                     }
                                 }
 
-                                if (stoppingToken.IsCancellationRequested)
-                                    return Task.FromCanceled(stoppingToken);
+                                stoppingToken.ThrowIfCancellationRequested();
 
                                 skip += Constants.PagingStreamSize;
 
@@ -100,8 +98,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
                             }
                         }
 
-                        if (stoppingToken.IsCancellationRequested)
-                            return Task.FromCanceled(stoppingToken);
+                        stoppingToken.ThrowIfCancellationRequested();
 
                         // Add the last sitemapNodes to our index
                         if (sitemapNodes.Any())
@@ -118,8 +115,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
 
                         foreach (var sitemapNodeIndex in sitemapNodeIndexes)
                         {
-                            if (stoppingToken.IsCancellationRequested)
-                                return Task.FromCanceled(stoppingToken);
+                            stoppingToken.ThrowIfCancellationRequested();
 
                             count++;
 
@@ -134,10 +130,10 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
                                         .ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture))));
 
                             var sitemapUrlset = new XElement(xmlns + "urlset");
+                            
                             foreach (var sitemapNode in sitemapNodeIndex)
                             {
-                                if (stoppingToken.IsCancellationRequested)
-                                    return Task.FromCanceled(stoppingToken);
+                                stoppingToken.ThrowIfCancellationRequested();
                                 
                                 var sitemapUrl = new XElement(xmlns + "url",
                                     new XElement(xmlns + "loc", Uri.EscapeUriString(sitemapNode.Url.AbsoluteUri)),
@@ -155,6 +151,8 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
 
                                 sitemapUrlset.Add(sitemapUrl);
                             }
+                            
+                            stoppingToken.ThrowIfCancellationRequested();
 
                             // Save sitemap set with gzip compression
                             using (var file = File.Open(
@@ -169,9 +167,8 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
                             }
                         }
 
-                        if (stoppingToken.IsCancellationRequested)
-                            return Task.FromCanceled(stoppingToken);
-
+                        stoppingToken.ThrowIfCancellationRequested();
+                        
                         // Save sitemap index
                         using (var fileWriter = new StreamWriter(
                             $"{_appSettings.WebSitePath}\\sitemaps\\sitemap.xml", false, utf8WithoutBom))
