@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CollectionsOnline.Tasks.NetCoreApp31" type="DotNetProject" factoryName=".NET Project">
-    <option name="EXE_PATH" value="$PROJECT_DIR$/CollectionsOnline.Tasks.NetCoreApp31/bin/Debug/netcoreapp3.1/CollectionsOnline.Tasks.NetCoreApp31.dll" />
+    <option name="EXE_PATH" value="$PROJECT_DIR$/CollectionsOnline.Tasks.NetCoreApp31/bin/netcoreapp3.1/CollectionsOnline.Tasks.NetCoreApp31.dll" />
     <option name="PROGRAM_PARAMETERS" value="" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CollectionsOnline.Tasks.NetCoreApp31/bin/Debug/netcoreapp3.1" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CollectionsOnline.Tasks.NetCoreApp31/bin/netcoreapp3.1" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <envs>
       <env name="DOTNET_ENVIRONMENT" value="Development" />

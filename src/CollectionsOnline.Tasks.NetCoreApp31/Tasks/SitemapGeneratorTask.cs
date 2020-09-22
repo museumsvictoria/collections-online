@@ -130,11 +130,11 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
                                         .ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture))));
 
                             var sitemapUrlset = new XElement(xmlns + "urlset");
-                            
+
                             foreach (var sitemapNode in sitemapNodeIndex)
                             {
                                 stoppingToken.ThrowIfCancellationRequested();
-                                
+
                                 var sitemapUrl = new XElement(xmlns + "url",
                                     new XElement(xmlns + "loc", Uri.EscapeUriString(sitemapNode.Url.AbsoluteUri)),
                                     new XElement(xmlns + "lastmod",
@@ -151,7 +151,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
 
                                 sitemapUrlset.Add(sitemapUrl);
                             }
-                            
+
                             stoppingToken.ThrowIfCancellationRequested();
 
                             // Save sitemap set with gzip compression
@@ -168,7 +168,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
                         }
 
                         stoppingToken.ThrowIfCancellationRequested();
-                        
+
                         // Save sitemap index
                         using (var fileWriter = new StreamWriter(
                             $"{_appSettings.WebSitePath}\\sitemaps\\sitemap.xml", false, utf8WithoutBom))
@@ -183,7 +183,7 @@ namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
                         networkShareAccesser?.Dispose();
                     }
                 }
-                
+
                 return Task.CompletedTask;
             }, stoppingToken);
         }
