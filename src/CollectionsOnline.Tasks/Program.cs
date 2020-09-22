@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using CollectionsOnline.Tasks.NetCoreApp31.Extensions;
-using CollectionsOnline.Tasks.NetCoreApp31.Infrastructure;
+using CollectionsOnline.Tasks.Infrastructure;
+using CollectionsOnline.Tasks.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace CollectionsOnline.Tasks.NetCoreApp31
+namespace CollectionsOnline.Tasks
 {
     public static class Program
     {

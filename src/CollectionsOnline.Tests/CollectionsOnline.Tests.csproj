@@ -221,7 +221,6 @@
     <Compile Include="Core\Utilities\NaturalDateConverterTests.cs" />
     <Compile Include="Core\Utilities\HtmlConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedirectWebSite\Modules\ItemModuleTests.cs" />
     <Compile Include="Website\Extensions\HtmlHelpersExtensionsTests.cs" />
     <Compile Include="Website\WebsiteBootstrapper.cs" />
     <Compile Include="Website\Modules\Api\ApiModuleBaseTests.cs" />

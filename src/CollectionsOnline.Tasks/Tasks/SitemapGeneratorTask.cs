@@ -11,12 +11,12 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Infrastructure;
-using CollectionsOnline.Tasks.NetCoreApp31.Infrastructure;
+using CollectionsOnline.Tasks.Infrastructure;
 using Microsoft.Extensions.Options;
 using Raven.Client;
 using Serilog;
 
-namespace CollectionsOnline.Tasks.NetCoreApp31.Tasks
+namespace CollectionsOnline.Tasks.Tasks
 {
     public class SitemapGeneratorTask : ITask
     {

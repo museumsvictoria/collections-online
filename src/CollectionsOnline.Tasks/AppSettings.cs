@@ -1,4 +1,4 @@
-namespace CollectionsOnline.Tasks.NetCoreApp31
+namespace CollectionsOnline.Tasks
 {
     public class AppSettings
     {

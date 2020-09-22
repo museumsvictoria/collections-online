@@ -1,11 +1,11 @@
 using System.Linq;
-using CollectionsOnline.Tasks.NetCoreApp31.Infrastructure;
+using CollectionsOnline.Tasks.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Raven.Client.Document;
 using Serilog;
 
-namespace CollectionsOnline.Tasks.NetCoreApp31.Extensions
+namespace CollectionsOnline.Tasks.Extensions
 {
     public static class ServiceCollectionExtensions
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
+namespace CollectionsOnline.Tasks.Infrastructure
 {
     public class TaskRunner : BackgroundService
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace CollectionsOnline.Tasks.NetCoreApp31.Infrastructure
+namespace CollectionsOnline.Tasks.Infrastructure
 {
     public interface ITask
     {
