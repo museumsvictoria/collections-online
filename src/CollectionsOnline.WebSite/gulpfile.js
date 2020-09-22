@@ -1,23 +1,22 @@
 /// <binding AfterBuild='default' ProjectOpened='watch' />
-/// <vs AfterBuild='build-html' SolutionOpened='watch' />
 'use strict';
 
-var gulp = require('gulp');
-var sass = require('gulp-sass');
+const gulp = require('gulp');
+const sass = require('gulp-sass');
 sass.compiler = require('node-sass');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
-var cleanCss = require('gulp-clean-css');
-var browserify = require('browserify');
-var del = require('del');
-var CacheBuster = require('gulp-cachebust');
-var cachebust = new CacheBuster({ checksumLength: 16 });
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const uglify = require('gulp-uglify');
+const cleanCss = require('gulp-clean-css');
+const browserify = require('browserify');
+const del = require('del');
+const CacheBuster = require('gulp-cachebust');
+const cachebust = new CacheBuster({checksumLength: 16});
 
-var filePaths = {
-    css: { src: './content/scss/styles.scss', dest: './dist/css', devdest: './content/static' },
-    js: { src: './content/js/app/app.js', dest: './dist/js', devdest: './content/static' },
-    html: { src: './Views/*Layout.cshtml', dest: './dist/cshtml' },
+const filePaths = {
+    css: {src: './content/scss/styles.scss', dest: './dist/css', devdest: './content/static'},
+    js: {src: './content/js/app/app.js', dest: './dist/js', devdest: './content/static'},
+    html: {src: './Views/*Layout.cshtml', dest: './dist/cshtml'},
 };
 
 function css() {
@@ -55,7 +54,6 @@ function watch() {
     gulp.watch('./content/js/app/*.js', js);
 }
 
-var build = gulp.series(clean, gulp.parallel(css, js), html);
+const build = gulp.series(clean, gulp.parallel(css, js), html);
 exports.build = build;
 exports.watch = watch;
-exports.default = build;

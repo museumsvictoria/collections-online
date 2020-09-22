@@ -1,25 +1,67 @@
-﻿using CollectionsOnline.Tasks.Config;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using CollectionsOnline.Tasks.Infrastructure;
+using CollectionsOnline.Tasks.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace CollectionsOnline.Tasks
 {
-    class Program
+    public static class Program
     {
-        public static volatile bool TasksCanceled = false;
-
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            // Configure serilog
-            SerilogConfig.Initialize();
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .CreateLogger();
+            
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+                Log.Fatal((Exception) eventArgs.ExceptionObject, "Unhandled Exception occured in CollectionsOnline Tasks");
 
-            // Configure Program
-            ProgramConfig.Initialize();
+            try
+            {
+                Log.Information("CollectionsOnline Tasks starting up...");
 
-            // Configure ioc
-            var container = ContainerConfig.Initialize();
-
-            // Begin task runner
-            container.GetInstance<TaskRunner>().RunAllTasks();
+                await CreateHostBuilder(args)
+                    .Build()
+                    .RunAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "CollectionsOnline Tasks startup failed...");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host
+                .CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) =>
+                {
+                    var configSection = context.Configuration.GetSection(
+                        AppSettings.APP_SETTINGS);
+                    
+                    services.Configure<AppSettings>(configSection);
+                    services.AddHostedService<TaskRunner>();
+                    services.AddRavenDb(configSection.Get<AppSettings>());
+                    services.AddTasks();
+                })
+                .UseConsoleLifetime()
+                .UseSerilog();
+
+        private static IConfiguration Configuration => new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile(
+                        $"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json",
+                        optional: true)
+                    .AddEnvironmentVariables()
+                    .Build();
     }
 }

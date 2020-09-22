@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Watch for CSS/JS changes" type="js.build_tools.gulp">
+    <node-interpreter>project</node-interpreter>
+    <node-options />
+    <gulpfile>$PROJECT_DIR$/CollectionsOnline.WebSite/gulpfile.js</gulpfile>
+    <tasks>
+      <task>watch</task>
+    </tasks>
+    <arguments />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>

@@ -1,49 +1,58 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace CollectionsOnline.Tasks.Infrastructure
 {
-    public class TaskRunner
+    public class TaskRunner : BackgroundService
     {
+        private readonly IHostApplicationLifetime _appLifetime;
         private readonly IEnumerable<ITask> _tasks;
 
-        public TaskRunner(IEnumerable<ITask> tasks)
+        public TaskRunner(
+            IHostApplicationLifetime appLifetime,
+            IEnumerable<ITask> tasks)
         {
+            _appLifetime = appLifetime;
             _tasks = tasks;
         }
 
-        public void RunAllTasks()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var tasksHaveFailed = false;
+            Log.Logger.Information("ExecuteAsync has been called.");
 
-            using (Log.Logger.BeginTimedOperation("Collections task runner starting", "TaskRunner.RunAllTasks"))
+            try
             {
-                try
+                // Run all tasks
+                foreach (var task in _tasks.OrderBy(x => x.Order))
                 {
-                    // Run all tasks
-                    foreach (var task in _tasks.OrderBy(x => x.Order))
-                    {
-                        if (Program.TasksCanceled)
-                            break;
-
-                        task.Run();
-                    }
+                    stoppingToken.ThrowIfCancellationRequested();
+                    
+                    await task.Run(stoppingToken);
                 }
-                catch (Exception ex)
-                {
-                    tasksHaveFailed = true;
-                    Log.Logger.Error(ex, "Exception occured running tasks");
-                }
-
-                if (Program.TasksCanceled || tasksHaveFailed)
-                    Log.Logger.Information("Collections task runner has been stopped prematurely {@Reason}", new { Program.TasksCanceled, tasksHaveFailed });
-                else
-                    Log.Logger.Information("All Collections tasks finished successfully");
             }
+            catch (Exception ex)
+            {
+                if (ex is OperationCanceledException)
+                {
+                    Log.Logger.Information("Collections task runner has been cancelled prematurely");
+                }
+                else
+                {
+                    Log.Logger.Error(ex, "Exception occured running tasks");                    
+                }
 
-            Log.CloseAndFlush();
+                throw;
+            }
+            
+            if(!stoppingToken.IsCancellationRequested)
+                Log.Logger.Information("All Collections tasks finished successfully");
+
+            _appLifetime.StopApplication();
         }
     }
 }

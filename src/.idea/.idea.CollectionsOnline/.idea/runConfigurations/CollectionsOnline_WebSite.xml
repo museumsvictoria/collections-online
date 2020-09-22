@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CollectionsOnline.WebSite" type="DotNetProject" factoryName=".NET Project">
+    <option name="EXE_PATH" value="C:/Program Files (x86)/IIS Express/iisexpress.exe" />
+    <option name="PROGRAM_PARAMETERS" value="/config:$PROJECT_DIR$/.idea/config/applicationhost.config /site:CollectionsOnline.WebSite /apppool:Clr4IntegratedAppPool" />
+    <option name="WORKING_DIRECTORY" value="C:/Program Files (x86)/IIS Express" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <option name="USE_MONO" value="0" />
+    <option name="RUNTIME_ARGUMENTS" value="" />
+    <option name="PROJECT_PATH" value="$PROJECT_DIR$/CollectionsOnline.WebSite/CollectionsOnline.WebSite.csproj" />
+    <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+    <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+    <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+    <option name="PROJECT_KIND" value="Web" />
+    <option name="PROJECT_TFM" value=".NETFramework,Version=v4.5.1" />
+    <browser url="http://localhost:61747/" name="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" start="true" />
+    <method v="2">
+      <option name="Build" />
+    </method>
+  </configuration>
+</component>
