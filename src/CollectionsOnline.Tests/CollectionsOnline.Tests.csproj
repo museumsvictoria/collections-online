@@ -251,10 +251,6 @@
       <Project>{362a7a4c-1a6f-41a2-a8a7-a143a7616812}</Project>
       <Name>CollectionsOnline.Import</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CollectionsOnline.RedirectWebSite\CollectionsOnline.RedirectWebSite.csproj">
-      <Project>{3EF059D8-3822-40D0-95B9-4FB40F4D4DA9}</Project>
-      <Name>CollectionsOnline.RedirectWebSite</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CollectionsOnline.WebSite\CollectionsOnline.WebSite.csproj">
       <Project>{b7b199de-9766-4d15-948d-8925d5e5b4c5}</Project>
       <Name>CollectionsOnline.WebSite</Name>
