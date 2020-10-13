@@ -13,75 +13,25 @@
         </form>
     </div>
 </div>
-<div id="featured-explore">
-    <div class="container">
-        <h2>Remembering the West Gate Bridge Collapse, 15 October 1970</h2>
-        <p>50 Years After Australia's Worst Construction Disaster</p>
-        <div class="tile full">
-            <a href="/articles/17000">
-                <span class="tileimages">
-                    <img src="/content/media/3/1313203-thumbnail.jpg" alt="Negative - West Gate Bridge Illuminated at Night, circa 1980" />
-                </span>
-                <span class="title">
-                    <span class="tile-tag article" aria-hidden="true">
-                        <span class="count-wrapper">
-                            <span class="type">article</span>
-                        </span>
-                    </span>
-                    <span class="heading">Remembering the West Gate Bridge Collapse, 15 October 1970</span>
-                </span>
-            </a>
-        </div>
-        <div class="tile full">
-            <a href="/items/1746640">
-                <span class="tileimages">
-                    <img src="/content/media/28/461378-thumbnail.jpg" alt="Journal - The Building Worker, Special Westgate Bridge Anniversary Issue, Vol 1 No 1, Oct 1990" />
-                </span>
-                <span class="title">
-                    <span class="tile-tag item" aria-hidden="true">
-                        <span class="count-wrapper">
-                            <span class="type">item</span>
-                        </span>
-                    </span>
-                    <span class="regnum">HT 28314</span>
-                    <span class="heading">Journal - The Building Worker, 'Special Westgate Bridge Anniversary Issue', Vol 1 No 1, Oct 1990</span>
-                </span>
-            </a>
-        </div>
-        <div class="tile full">
-            <a href="/items/1814674">
-                <span class="tileimages">
-                    <img src="/content/media/26/1313176-thumbnail.jpg" alt="Brown book with black printed text." />
-                </span>
-                <span class="title">
-                    <span class="tile-tag item" aria-hidden="true">
-                        <span class="count-wrapper">
-                            <span class="type">item</span>
-                        </span>
-                    </span>
-                    <span class="regnum">HT 30707</span>
-                    <span class="heading">Report - Royal Commission into the Failure of West Gate Bridge, Victoria, Australia, 1971</span>
-                </span>
-            </a>
-        </div>
-        <div class="tile full">
-            <a href="/items/1239749">
-                <span class="tileimages">
-                    <img src="/content/media/42/597442-thumbnail.jpg" alt="Safety Helmet - John Holland Constructions, circa 1970" />
-                </span>
-                <span class="title">
-                    <span class="tile-tag item" aria-hidden="true">
-                        <span class="count-wrapper">
-                            <span class="type">item</span>
-                        </span>
-                    </span>
-                    <span class="regnum">HT 13471</span>
-                    <span class="heading">Safety Helmet - John Holland Constructions, circa 1974</span>
-                </span>
-            </a>
-        </div>
-    </div>
-</div>
+@if (Model.Feature != null && !Model.Feature.IsHidden)
+{
+ <div id="featured-explore">
+     <div class="container">
+         @if (!string.IsNullOrWhiteSpace(Model.Feature.Title))
+         {
+             <h2>@Model.Feature.Title</h2>             
+         }
+         @if (!string.IsNullOrWhiteSpace(Model.Feature.Description))
+         {
+             <p>@Model.Feature.Description</p>
+         }
+         @foreach (var featuredRecord in Model.FeaturedRecords)
+         {
+             @Html.Partial("RecordTile", featuredRecord)
+         }
+     </div>
+</div>   
+}
 <div id="home-explore" role="main">
     <div class="container">
         <h1 id="maincontent">Explore our collection</h1>

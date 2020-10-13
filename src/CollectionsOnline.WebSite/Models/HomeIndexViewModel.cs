@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.Core.Models;
 
 namespace CollectionsOnline.WebSite.Models
 {
@@ -17,10 +18,15 @@ namespace CollectionsOnline.WebSite.Models
         public IList<EmuAggregateRootViewModel> RecentResults { get; set; }
 
         public string HomeHeroUri { get; set; }
+        
+        public Feature Feature { get; set; }
+
+        public List<EmuAggregateRootViewModel> FeaturedRecords { get; set; }
 
         public HomeIndexViewModel()
         {
             RecentResults = new List<EmuAggregateRootViewModel>();
+            FeaturedRecords = new List<EmuAggregateRootViewModel>();
         }
     }
 }
