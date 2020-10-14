@@ -550,10 +550,10 @@
 <script>
     @if (Model.Specimen.Media.WithThumbnails().Any())
     {
-        @: const mediaModel = @Html.ConvertToJson(Model.Specimen.Media.WithThumbnails());
+        @: var mediaModel = @Html.ConvertToJson(Model.Specimen.Media.WithThumbnails());
     }
     @if (Model.LatLongs.Any())
     {
-        @: const latlongsModel = @Html.ConvertToJson(Model.LatLongs);
+        @: var latlongsModel = @Html.ConvertToJson(Model.LatLongs);
     }
 </script>
