@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -47,10 +48,7 @@ namespace CollectionsOnline.Import.Factories
             _licenceFactory = licenceFactory;
         }
 
-        public string ModuleName
-        {
-            get { return "ecatalogue"; }
-        }
+        public string ModuleName => "ecatalogue";
 
         public string[] Columns
         {
@@ -155,7 +153,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
             
             specimen.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
+                $"{map.GetEncodedString("AdmDateModified")} {map.GetEncodedString("AdmTimeModified")}",
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU")).ToUniversalTime();
 
@@ -163,8 +161,8 @@ namespace CollectionsOnline.Import.Factories
             specimen.ScientificGroup = map.GetEncodedString("ColScientificGroup");
             specimen.Discipline = map.GetEncodedString("ColDiscipline");
             specimen.RegistrationNumber = map["ColRegPart"] != null
-                             ? string.Format("{0} {1}.{2}", map["ColRegPrefix"], map["ColRegNumber"], map["ColRegPart"])
-                             : string.Format("{0} {1}", map["ColRegPrefix"], map["ColRegNumber"]);
+                             ? $"{map["ColRegPrefix"]} {map["ColRegNumber"]}.{map["ColRegPart"]}"
+                             : $"{map["ColRegPrefix"]} {map["ColRegNumber"]}";
             specimen.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
             specimen.Type = map.GetEncodedString("ColTypeOfItem");
 
@@ -204,9 +202,9 @@ namespace CollectionsOnline.Import.Factories
                 {
                     var sources = accessionMap.GetMaps("source")
                     .Where(x => string.IsNullOrWhiteSpace(x.GetEncodedString("AcqSourceRole_tab")) ||
-                        (!x.GetEncodedString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetEncodedString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetEncodedString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
+                        !x.GetEncodedString("AcqSourceRole_tab").Contains("confindential", StringComparison.OrdinalIgnoreCase) &&
+                        !x.GetEncodedString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
+                        !x.GetEncodedString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase))
                     .Select(x => _partiesNameFactory.Make(x.GetMap("name"))).ToList();
 
                     if (sources.Any())
@@ -216,7 +214,7 @@ namespace CollectionsOnline.Import.Factories
                         else if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqDateOwnership")))
                             sources.Add(accessionMap.GetEncodedString("AcqDateOwnership"));
 
-                        specimen.AcquisitionInformation = string.Format("{0} from {1}", method, sources.Concatenate(", "));
+                        specimen.AcquisitionInformation = $"{method} from {sources.Concatenate(", ")}";
                     }
                     else
                     {
@@ -291,7 +289,7 @@ namespace CollectionsOnline.Import.Factories
                     var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
                     specimen.RelatedSpeciesIds.AddRange(relatedSpeciesMaps
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                        .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
+                        .Select(x => $"species/{x.GetEncodedString("irn")}"));
                 }
             }
 
@@ -367,27 +365,27 @@ namespace CollectionsOnline.Import.Factories
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    specimen.RelatedItemIds.Add($"items/{relatedItemSpecimen.GetEncodedString("irn")}");
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    specimen.RelatedSpecimenIds.Add($"specimens/{relatedItemSpecimen.GetEncodedString("irn")}");
             }
             // Physically attached
             var attachedItemSpecimenMap = map.GetMap("attacheditemspecimens");
             if (attachedItemSpecimenMap != null)
             {
                 if (attachedItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemIds.Add(string.Format("items/{0}", attachedItemSpecimenMap.GetEncodedString("irn")));
+                    specimen.RelatedItemIds.Add($"items/{attachedItemSpecimenMap.GetEncodedString("irn")}");
                 if (attachedItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", attachedItemSpecimenMap.GetEncodedString("irn")));
+                    specimen.RelatedSpecimenIds.Add($"specimens/{attachedItemSpecimenMap.GetEncodedString("irn")}");
             }
             // Parent record
             var parentItemSpecimenMap = map.GetMap("parentitemspecimens");
             if (parentItemSpecimenMap != null)
             {
                 if (parentItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    specimen.RelatedItemIds.Add(string.Format("items/{0}", parentItemSpecimenMap.GetEncodedString("irn")));
+                    specimen.RelatedItemIds.Add($"items/{parentItemSpecimenMap.GetEncodedString("irn")}");
                 if (parentItemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    specimen.RelatedSpecimenIds.Add(string.Format("specimens/{0}", parentItemSpecimenMap.GetEncodedString("irn")));
+                    specimen.RelatedSpecimenIds.Add($"specimens/{parentItemSpecimenMap.GetEncodedString("irn")}");
             }
 
             // Related articles/species (direct attached)
@@ -396,11 +394,11 @@ namespace CollectionsOnline.Import.Factories
             {
                 specimen.RelatedArticleIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                    .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                    .Select(x => $"articles/{x.GetEncodedString("irn")}"));
 
                 specimen.RelatedSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                    .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
+                    .Select(x => $"species/{x.GetEncodedString("irn")}"));
             }
 
             // Related articles (via party relationship)
@@ -411,7 +409,7 @@ namespace CollectionsOnline.Import.Factories
                         .Where(x => x != null)
                         .SelectMany(x => x.GetMaps("relatedarticles"))
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                        .Select(x => $"articles/{x.GetEncodedString("irn")}"));
             }
 
             // Related articles (via sites relationship)
@@ -421,7 +419,7 @@ namespace CollectionsOnline.Import.Factories
                 specimen.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
                         .GetMaps("relatedarticles")
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                        .Select(x => $"articles/{x.GetEncodedString("irn")}"));
             }
 
             // Related articles (via collection event relationship)
@@ -431,7 +429,7 @@ namespace CollectionsOnline.Import.Factories
                 specimen.RelatedArticleIds.AddRangeUnique(relatedCollectionEventArticlesMap
                         .GetMaps("relatedarticles")
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                        .Select(x => $"articles/{x.GetEncodedString("irn")}"));
             }
 
             // Build summary
@@ -442,7 +440,7 @@ namespace CollectionsOnline.Import.Factories
             if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.TektitesName))
                 specimen.DisplayTitle = specimen.TektitesName;
             else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MeteoritesName))
-                specimen.DisplayTitle = string.Format("{0} meteorite", specimen.MeteoritesName);
+                specimen.DisplayTitle = $"{specimen.MeteoritesName} meteorite";
             else if (string.Equals(specimen.Discipline, "Petrology", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.PetrologyRockName))
                 specimen.DisplayTitle = specimen.PetrologyRockName;
             else if (string.Equals(specimen.Discipline, "Mineralogy", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MineralogySpecies))
@@ -469,7 +467,8 @@ namespace CollectionsOnline.Import.Factories
             return specimen;
         }
 
-        public void UpdateDocument(Specimen newDocument, Specimen existingDocument, IDocumentSession documentSession)
+        public void UpdateDocument(Specimen newDocument, Specimen existingDocument, IList<string> missingDocumentIds,
+            IDocumentSession documentSession)
         {
             // Map over existing document
             Mapper.Map(newDocument, existingDocument);

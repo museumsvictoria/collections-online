@@ -46,7 +46,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                     var newArticle = FakeArticles.CreateFakeArticle("articles/1");
                     newArticle.RelatedItemIds = new[] { "items/168", "items/230" };
 
-                    articleFactory.UpdateDocument(newArticle, existingArticle, documentSession);
+                    articleFactory.UpdateDocument(newArticle, existingArticle, new List<string>(), documentSession);
                     documentSession.SaveChanges();
                 }
 
@@ -96,7 +96,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                     var newArticle = FakeArticles.CreateFakeArticle("articles/1");
                     newArticle.RelatedSpecimenIds = new[] {"specimens/168", "specimens/230"};
 
-                    articleFactory.UpdateDocument(newArticle, existingArticle, documentSession);
+                    articleFactory.UpdateDocument(newArticle, existingArticle, new List<string>(), documentSession);
                     documentSession.SaveChanges();
                 }
 
@@ -145,7 +145,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                     var newChildArticle1 = FakeArticles.CreateFakeArticle("articles/2126");
                     newChildArticle1.ParentArticleId = "articles/848";
 
-                    articleFactory.UpdateDocument(newChildArticle1, childArticle1, documentSession);
+                    articleFactory.UpdateDocument(newChildArticle1, childArticle1, new List<string>(), documentSession);
                     documentSession.SaveChanges();
                 }
 

@@ -42,10 +42,7 @@ namespace CollectionsOnline.Import.Factories
             _licenceFactory = licenceFactory;
         }
 
-        public string ModuleName
-        {
-            get { return "ecatalogue"; }
-        }
+        public string ModuleName => "ecatalogue";
 
         public string[] Columns
         {
@@ -207,7 +204,7 @@ namespace CollectionsOnline.Import.Factories
             item.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             item.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
+                $"{map.GetEncodedString("AdmDateModified")} {map.GetEncodedString("AdmTimeModified")}",
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU")).ToUniversalTime();
 
@@ -215,8 +212,8 @@ namespace CollectionsOnline.Import.Factories
             item.Discipline = map.GetEncodedString("ColDiscipline");
             item.Type = map.GetEncodedString("ColTypeOfItem");
             item.RegistrationNumber = !string.IsNullOrWhiteSpace(map.GetEncodedString("ColRegPart"))
-                                         ? string.Format("{0} {1}.{2}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"), map.GetEncodedString("ColRegPart"))
-                                         : string.Format("{0} {1}", map.GetEncodedString("ColRegPrefix"), map.GetEncodedString("ColRegNumber"));
+                                         ? $"{map.GetEncodedString("ColRegPrefix")} {map.GetEncodedString("ColRegNumber")}.{map.GetEncodedString("ColRegPart")}"
+                                         : $"{map.GetEncodedString("ColRegPrefix")} {map.GetEncodedString("ColRegNumber")}";
             
             // Collection names
             item.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
@@ -258,25 +255,25 @@ namespace CollectionsOnline.Import.Factories
                 var weightUnit = dimensionMap.GetEncodedString("DimWeightUnit_tab");
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimLength_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Length)", dimensionMap.GetEncodedString("DimLength_tab"), lengthUnit));
+                    dimensions.Add($"{dimensionMap.GetEncodedString("DimLength_tab")} {lengthUnit} (Length)");
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimWidth_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Width)", dimensionMap.GetEncodedString("DimWidth_tab"), lengthUnit));
+                    dimensions.Add($"{dimensionMap.GetEncodedString("DimWidth_tab")} {lengthUnit} (Width)");
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimDepth_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Depth)", dimensionMap.GetEncodedString("DimDepth_tab"), lengthUnit));
+                    dimensions.Add($"{dimensionMap.GetEncodedString("DimDepth_tab")} {lengthUnit} (Depth)");
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimHeight_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Height)", dimensionMap.GetEncodedString("DimHeight_tab"), lengthUnit));
+                    dimensions.Add($"{dimensionMap.GetEncodedString("DimHeight_tab")} {lengthUnit} (Height)");
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimCircumference_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Circumference)", dimensionMap.GetEncodedString("DimCircumference_tab"), lengthUnit));
+                    dimensions.Add($"{dimensionMap.GetEncodedString("DimCircumference_tab")} {lengthUnit} (Circumference)");
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimOutsideDiameter_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Outside Diameter)", dimensionMap.GetEncodedString("DimOutsideDiameter_tab"), lengthUnit));
+                    dimensions.Add($"{dimensionMap.GetEncodedString("DimOutsideDiameter_tab")} {lengthUnit} (Outside Diameter)");
 
                 if (!string.IsNullOrWhiteSpace(dimensionMap.GetEncodedString("DimWeight_tab")))
-                    dimensions.Add(string.Format("{0} {1} (Weight)", dimensionMap.GetEncodedString("DimWeight_tab"), weightUnit));
+                    dimensions.Add($"{dimensionMap.GetEncodedString("DimWeight_tab")} {weightUnit} (Weight)");
 
                 item.Dimensions.Add(new Dimension
                 {
@@ -301,7 +298,7 @@ namespace CollectionsOnline.Import.Factories
                     bibliography.Add(bibliographyMap.GetEncodedString("BibIssuedDate_tab"));
 
                 if (!string.IsNullOrWhiteSpace(bibliographyMap.GetEncodedString("BibPages_tab")))
-                    bibliography.Add(string.Format("{0} Pages", bibliographyMap.GetEncodedString("BibPages_tab")));
+                    bibliography.Add($"{bibliographyMap.GetEncodedString("BibPages_tab")} Pages");
 
                 item.Bibliographies.Add(bibliography.Concatenate(", "));
             }
@@ -374,7 +371,7 @@ namespace CollectionsOnline.Import.Factories
             item.AudioVisualRecordingDetails = new[]
                 {
                     map.GetEncodedString("AudRecordingType"),
-                    string.Format("{0} {1}", map.GetEncodedString("AudTotalLengthOfRecording"), map.GetEncodedString("AudUnits")).Trim(),
+                    $"{map.GetEncodedString("AudTotalLengthOfRecording")} {map.GetEncodedString("AudUnits")}".Trim(),
                     map.GetEncodedString("AudAudibilityRating"),
                     map.GetEncodedString("AudComments")
                 }.Concatenate(", ");
@@ -384,7 +381,9 @@ namespace CollectionsOnline.Import.Factories
                 var audioContent = new List<string>();
 
                 audioContent.Add(audioContentMap.GetEncodedString("AudItemNumber_tab"));
-                audioContent.Add(string.Format("{0} {1}", audioContentMap.GetEncodedString("AudSegmentPosition_tab"), audioContentMap.GetEncodedString("AudContentUnits_tab")).Trim());
+                audioContent.Add(
+                    $"{audioContentMap.GetEncodedString("AudSegmentPosition_tab")} {audioContentMap.GetEncodedString("AudContentUnits_tab")}"
+                        .Trim());
                 audioContent.Add(audioContentMap.GetEncodedString("AudSegmentContent_tab"));
 
                 item.AudioVisualContentSummaries.Add(audioContent.Concatenate(", "));
@@ -526,7 +525,7 @@ namespace CollectionsOnline.Import.Factories
                     var relatedSpeciesMaps = taxonomyMap.GetMaps("relatedspecies");
                     item.RelatedSpeciesIds.AddRange(relatedSpeciesMaps
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                        .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
+                        .Select(x => $"species/{x.GetEncodedString("irn")}"));
                 }
             }
 
@@ -542,9 +541,9 @@ namespace CollectionsOnline.Import.Factories
                 {
                     var sources = accessionMap.GetMaps("source")
                     .Where(x => string.IsNullOrWhiteSpace(x.GetEncodedString("AcqSourceRole_tab")) ||
-                        (!x.GetEncodedString("AcqSourceRole_tab").Contains("confidential", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetEncodedString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
-                         !x.GetEncodedString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase)))
+                        !x.GetEncodedString("AcqSourceRole_tab").Contains("confidential", StringComparison.OrdinalIgnoreCase) &&
+                        !x.GetEncodedString("AcqSourceRole_tab").Contains("contact", StringComparison.OrdinalIgnoreCase) &&
+                        !x.GetEncodedString("AcqSourceRole_tab").Contains("vendor", StringComparison.OrdinalIgnoreCase))
                     .Select(x => _partiesNameFactory.Make(x.GetMap("name"))).ToList();
 
                     if (sources.Any())
@@ -554,7 +553,7 @@ namespace CollectionsOnline.Import.Factories
                         else if (!string.IsNullOrWhiteSpace(accessionMap.GetEncodedString("AcqDateOwnership")))
                             sources.Add(accessionMap.GetEncodedString("AcqDateOwnership"));
 
-                        item.AcquisitionInformation = string.Format("{0} from {1}", method, sources.Concatenate(", "));
+                        item.AcquisitionInformation = $"{method} from {sources.Concatenate(", ")}";
                     }
                     else
                     {
@@ -582,9 +581,9 @@ namespace CollectionsOnline.Import.Factories
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    item.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    item.RelatedItemIds.Add($"items/{relatedItemSpecimen.GetEncodedString("irn")}");
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    item.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    item.RelatedSpecimenIds.Add($"specimens/{relatedItemSpecimen.GetEncodedString("irn")}");
             }
 
             // Related articles/species (direct attached)
@@ -593,11 +592,11 @@ namespace CollectionsOnline.Import.Factories
             {
                 item.RelatedArticleIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                    .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                    .Select(x => $"articles/{x.GetEncodedString("irn")}"));
 
                 item.RelatedSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                    .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
+                    .Select(x => $"species/{x.GetEncodedString("irn")}"));
             }
 
             // Related articles (via party relationship)
@@ -608,7 +607,7 @@ namespace CollectionsOnline.Import.Factories
                         .Where(x => x != null)
                         .SelectMany(x => x.GetMaps("relatedarticles"))
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                        .Select(x => $"articles/{x.GetEncodedString("irn")}"));
             }
 
             // Related articles (via sites relationship)
@@ -618,7 +617,7 @@ namespace CollectionsOnline.Import.Factories
                 item.RelatedArticleIds.AddRangeUnique(relatedSiteArticlesMap
                         .GetMaps("relatedarticles")
                         .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                        .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                        .Select(x => $"articles/{x.GetEncodedString("irn")}"));
             }
 
             // Build summary
@@ -648,7 +647,8 @@ namespace CollectionsOnline.Import.Factories
             return item;
         }
 
-        public void UpdateDocument(Item newDocument, Item existingDocument, IDocumentSession documentSession)
+        public void UpdateDocument(Item newDocument, Item existingDocument, IList<string> missingDocumentIds,
+            IDocumentSession documentSession)
         {
             // Map over existing document
             Mapper.Map(newDocument, existingDocument);

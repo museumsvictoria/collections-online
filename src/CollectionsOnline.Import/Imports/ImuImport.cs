@@ -144,12 +144,15 @@ namespace CollectionsOnline.Import.Imports
                             var newDocuments = results.Rows.Select(_imuFactory.MakeDocument).ToList();
                             var existingDocuments = documentSession.Load<T>(newDocuments.Select(x => x.Id));
 
+                            var missingDocumentIds = newDocuments.Select(nd => nd.Id)
+                                .Except(existingDocuments.Where(ed => ed != null).Select(ed => ed.Id)).ToList();
+
                             for (var i = 0; i < newDocuments.Count; i++)
                             {
                                 if (existingDocuments[i] != null)
                                 {
                                     // Update existing
-                                    _imuFactory.UpdateDocument(newDocuments[i], existingDocuments[i], documentSession);
+                                    _imuFactory.UpdateDocument(newDocuments[i], existingDocuments[i], missingDocumentIds, documentSession);
                                 }
                                 else
                                 {

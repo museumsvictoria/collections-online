@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -23,10 +24,7 @@ namespace CollectionsOnline.Import.Factories
             _mediaFactory = mediaFactory;
         }
 
-        public string ModuleName
-        {
-            get { return "enarratives"; }
-        }
+        public string ModuleName => "enarratives";
 
         public string[] Columns
         {
@@ -73,7 +71,7 @@ namespace CollectionsOnline.Import.Factories
             collection.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             collection.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
+                $"{map.GetEncodedString("AdmDateModified")} {map.GetEncodedString("AdmTimeModified")}",
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU")).ToUniversalTime();
             collection.Title = map.GetEncodedString("NarTitle");
@@ -106,14 +104,14 @@ namespace CollectionsOnline.Import.Factories
                 var curatorMap = curators.GetMap("curator");
 
                 if (string.Equals(curators.GetEncodedString("NarContributorRole_tab"), "Contributor", StringComparison.OrdinalIgnoreCase))
-                collection.Curators.Add(new Author
-                {
-                    FirstName = curatorMap.GetEncodedString("NamFirst"),
-                    LastName = curatorMap.GetEncodedString("NamLast"),
-                    FullName = curatorMap.GetEncodedString("NamFullName"),
-                    Biography = curatorMap.GetEncodedString("BioLabel"),
-                    ProfileImage = _mediaFactory.Make(curatorMap.GetMaps("media").FirstOrDefault()) as ImageMedia
-                });
+                    collection.Curators.Add(new Author
+                    {
+                        FirstName = curatorMap.GetEncodedString("NamFirst"),
+                        LastName = curatorMap.GetEncodedString("NamLast"),
+                        FullName = curatorMap.GetEncodedString("NamFullName"),
+                        Biography = curatorMap.GetEncodedString("BioLabel"),
+                        ProfileImage = _mediaFactory.Make(curatorMap.GetMaps("media").FirstOrDefault()) as ImageMedia
+                    });
             }
 
             // Year written
@@ -124,9 +122,7 @@ namespace CollectionsOnline.Import.Factories
 
             if (!string.IsNullOrWhiteSpace(dateWritten))
             {
-                DateTime parsedDate;
-
-                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out var parsedDate))
                     collection.YearWritten = parsedDate.Year.ToString();
                 else if (DateTime.TryParseExact(dateWritten, "/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
                     collection.YearWritten = parsedDate.Year.ToString();
@@ -154,13 +150,13 @@ namespace CollectionsOnline.Import.Factories
                 if (itemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
                     collection.FavoriteItems.Add(new EmuSummary
                     {
-                        Id = string.Format("items/{0}", itemSpecimenMap.GetEncodedString("irn")),
+                        Id = $"items/{itemSpecimenMap.GetEncodedString("irn")}",
                         Summary = favorite.GetEncodedString("ObjObjectNotes_tab")
                     });                    
                 if (itemSpecimenMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
                     collection.FavoriteSpecimens.Add(new EmuSummary
                     {
-                        Id = string.Format("specimens/{0}", itemSpecimenMap.GetEncodedString("irn")),
+                        Id = $"specimens/{itemSpecimenMap.GetEncodedString("irn")}",
                         Summary = favorite.GetEncodedString("ObjObjectNotes_tab")
                     });
             }
@@ -172,7 +168,7 @@ namespace CollectionsOnline.Import.Factories
                 if (articleMap.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
                     collection.SubCollectionArticles.Add(new EmuSummary
                     {
-                        Id = string.Format("articles/{0}", articleMap.GetEncodedString("irn")),
+                        Id = $"articles/{articleMap.GetEncodedString("irn")}",
                         Summary = subCollection.GetEncodedString("AssAssociatedWithComment_tab")
                     });
             }
@@ -197,7 +193,8 @@ namespace CollectionsOnline.Import.Factories
             return collection;
         }
 
-        public void UpdateDocument(Collection newDocument, Collection existingDocument, IDocumentSession documentSession)
+        public void UpdateDocument(Collection newDocument, Collection existingDocument,
+            IList<string> missingDocumentIds, IDocumentSession documentSession)
         {
             // Map over existing document
             Mapper.Map(newDocument, existingDocument);

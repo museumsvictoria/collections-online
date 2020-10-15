@@ -32,10 +32,7 @@ namespace CollectionsOnline.Import.Factories
             _summaryFactory = summaryFactory;
         }
 
-        public string ModuleName
-        {
-            get { return "enarratives"; }
-        }
+        public string ModuleName => "enarratives";
 
         public string[] Columns
         {
@@ -105,7 +102,7 @@ namespace CollectionsOnline.Import.Factories
             species.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             species.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
+                $"{map.GetEncodedString("AdmDateModified")} {map.GetEncodedString("AdmTimeModified")}",
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU")).ToUniversalTime();
 
@@ -114,7 +111,7 @@ namespace CollectionsOnline.Import.Factories
 
             species.Colours.AddRange(map.GetEncodedStrings("SpeColour_tab").Distinct());
 
-            species.MaximumSize = string.Format("{0} {1}", map.GetEncodedString("SpeMaximumSize"), map.GetEncodedString("SpeUnit")).Trim();
+            species.MaximumSize = $"{map.GetEncodedString("SpeMaximumSize")} {map.GetEncodedString("SpeUnit")}".Trim();
 
             species.Habitats = map.GetEncodedStrings("SpeHabitat_tab");
             species.WhereToLook = map.GetEncodedStrings("SpeWhereToLook_tab");
@@ -141,7 +138,7 @@ namespace CollectionsOnline.Import.Factories
                 var status = conservationMap.GetEncodedString("SpeStatus_tab");
 
                 if(!string.IsNullOrWhiteSpace(authority) && !string.IsNullOrWhiteSpace(status))
-                    species.ConservationStatuses.Add(string.Format("{0} {1}", authority, status));
+                    species.ConservationStatuses.Add($"{authority} {status}");
             }
 
             // Animal specific fields (spider/butterflies) 
@@ -165,9 +162,9 @@ namespace CollectionsOnline.Import.Factories
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    species.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    species.RelatedItemIds.Add($"items/{relatedItemSpecimen.GetEncodedString("irn")}");
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    species.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    species.RelatedSpecimenIds.Add($"specimens/{relatedItemSpecimen.GetEncodedString("irn")}");
             }
 
             // Related articles/species 
@@ -176,11 +173,11 @@ namespace CollectionsOnline.Import.Factories
             {
                 species.RelatedArticleIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuArticleQueryString))
-                    .Select(x => string.Format("articles/{0}", x.GetEncodedString("irn"))));
+                    .Select(x => $"articles/{x.GetEncodedString("irn")}"));
 
                 species.RelatedSpeciesIds.AddRangeUnique(relatedArticleSpeciesMap
                     .Where(x => x != null && x.GetEncodedStrings("DetPurpose_tab").Contains(Constants.ImuSpeciesQueryString))
-                    .Select(x => string.Format("species/{0}", x.GetEncodedString("irn"))));
+                    .Select(x => $"species/{x.GetEncodedString("irn")}"));
             }
 
             // Authors
@@ -203,9 +200,7 @@ namespace CollectionsOnline.Import.Factories
 
             if (!string.IsNullOrWhiteSpace(dateWritten))
             {
-                DateTime parsedDate;
-
-                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out var parsedDate))
                     species.YearWritten = parsedDate.Year.ToString();
                 else if (DateTime.TryParseExact(dateWritten, "/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
                     species.YearWritten = parsedDate.Year.ToString();
@@ -245,17 +240,18 @@ namespace CollectionsOnline.Import.Factories
             return species;
         }
 
-        public void UpdateDocument(Species newDocument, Species existingDocument, IDocumentSession documentSession)
+        public void UpdateDocument(Species newDocument, Species existingDocument, IList<string> missingDocumentIds,
+            IDocumentSession documentSession)
         {
             // Perform any denormalized updates
             var patchCommands = new List<ICommandData>();
 
             // Related Items update
-            foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
+            foreach (var itemIdToRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
             {
                 patchCommands.Add(new PatchCommandData
                 {
-                    Key = itemIdtoRemove,
+                    Key = itemIdToRemove,
                     Patches = new[]
                     {
                         new PatchRequest

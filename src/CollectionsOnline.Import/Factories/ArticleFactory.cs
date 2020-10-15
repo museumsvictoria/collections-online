@@ -30,10 +30,7 @@ namespace CollectionsOnline.Import.Factories
             _summaryFactory = summaryFactory;
         }
 
-        public string ModuleName
-        {
-            get { return "enarratives"; }
-        }
+        public string ModuleName => "enarratives";
 
         public string[] Columns
         {
@@ -84,7 +81,7 @@ namespace CollectionsOnline.Import.Factories
             article.IsHidden = string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase);
 
             article.DateModified = DateTime.ParseExact(
-                string.Format("{0} {1}", map.GetEncodedString("AdmDateModified"), map.GetEncodedString("AdmTimeModified")),
+                $"{map.GetEncodedString("AdmDateModified")} {map.GetEncodedString("AdmTimeModified")}",
                 "dd/MM/yyyy HH:mm",
                 new CultureInfo("en-AU")).ToUniversalTime();
 
@@ -156,9 +153,7 @@ namespace CollectionsOnline.Import.Factories
 
             if (!string.IsNullOrWhiteSpace(dateWritten))
             {
-                DateTime parsedDate;
-
-                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
+                if (DateTime.TryParseExact(dateWritten, "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out var parsedDate))
                     article.YearWritten = parsedDate.Year.ToString();
                 else if (DateTime.TryParseExact(dateWritten, "/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out parsedDate))
                     article.YearWritten = parsedDate.Year.ToString(); 
@@ -208,9 +203,9 @@ namespace CollectionsOnline.Import.Factories
             foreach (var relatedItemSpecimen in map.GetMaps("relateditemspecimens").Where(x => x != null && !string.IsNullOrWhiteSpace(x.GetEncodedString("irn"))))
             {
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuItemQueryString))
-                    article.RelatedItemIds.Add(string.Format("items/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    article.RelatedItemIds.Add($"items/{relatedItemSpecimen.GetEncodedString("irn")}");
                 if (relatedItemSpecimen.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
-                    article.RelatedSpecimenIds.Add(string.Format("specimens/{0}", relatedItemSpecimen.GetEncodedString("irn")));
+                    article.RelatedSpecimenIds.Add($"specimens/{relatedItemSpecimen.GetEncodedString("irn")}");
             }
 
             // Build summary
@@ -229,7 +224,8 @@ namespace CollectionsOnline.Import.Factories
             return article;
         }
 
-        public void UpdateDocument(Article newDocument, Article existingDocument, IDocumentSession documentSession)
+        public void UpdateDocument(Article newDocument, Article existingDocument, IList<string> missingDocumentIds,
+            IDocumentSession documentSession)
         {
             //TODO: because related id's can be from different relationships in emu, it is possible to remove a legitimate relationship when updating. consider splitting related id's into different relationships (related party articles, related sites articles)
 
@@ -237,11 +233,11 @@ namespace CollectionsOnline.Import.Factories
             var patchCommands = new List<ICommandData>();
 
             // Related Items update
-            foreach (var itemIdtoRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
+            foreach (var itemIdToRemove in existingDocument.RelatedItemIds.Except(newDocument.RelatedItemIds))
             {
                 patchCommands.Add(new PatchCommandData
                 {
-                    Key = itemIdtoRemove,
+                    Key = itemIdToRemove,
                     Patches = new[]
                     {
                         new PatchRequest
@@ -328,8 +324,8 @@ namespace CollectionsOnline.Import.Factories
                     });
                 }
 
-                // Add relationship
-                if (!string.IsNullOrWhiteSpace(newDocument.ParentArticleId))
+                // Add relationship only if document already exists, otherwise we would be patching a non existent document
+                if (!string.IsNullOrWhiteSpace(newDocument.ParentArticleId) && !missingDocumentIds.Contains(newDocument.ParentArticleId))
                 {
                     patchCommands.Add(new PatchCommandData
                     {
