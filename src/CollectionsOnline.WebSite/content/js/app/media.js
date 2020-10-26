@@ -425,7 +425,7 @@ module.exports = {
       $('.permission', this.$reuseArea).html('No <span class="icon"><span class="icon-close2" aria-hidden="true"></span><span class="icon-label-hidden">Cross</span></span>');
       $('.attribution', this.$reuseArea).addClass('disabled');
       $('.attribution h4', this.$reuseArea).removeClass('disabled');
-      $('.download', this.$reuseArea).html('<a class="request" href="https://museumvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/"><span class="title">Request image</span></a>');
+      $('.download', this.$reuseArea).html('<a class="request" href="https://museumsvictoria.com.au/discoverycentre/ask-us-a-question/image-requests/"><span class="title">Request image</span></a>');
       $('.share', this.$reuseArea).addClass('disabled');
       $('.statement', this.$reuseArea).html('Museums Victoria does not own the copyright in all the material on this website. In some cases copyright belongs to third parties and has been published here under a licence agreement: this does not authorise you to copy that material. You may be required to obtain permission from the copyright owner.<br/><br/>Some unpublished material may require permission for reuse even if it is very old. Orphan works, where the copyright owner is unknown, also require permission for reuse. Indigenous works may have additional legal and cultural issues. You may be required to seek cultural clearances from Aboriginal and Torres Strait Islander communities, families, individuals or organisations before you reproduce Aboriginal and Torres Strait Islander material.');
     }
