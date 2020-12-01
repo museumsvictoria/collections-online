@@ -1,4 +1,4 @@
-$font-family: "aktiv-grotesk-std",sans-serif;
+$font-family: aktiv-grotesk, sans-serif;
 $font-family-mv-collections: "mv-collections";
 
 $color-museum-green: #82aa05;
@@ -17,16 +17,16 @@ $color-specimen-alpha: rgba(107, 63, 104, 0.8);
 
 //PatternLab Variables 
 //Proper Collections Online Variables
-$colour-primary-green : #6a8818;
-$colour-highlight-green : #94AF19;
+$colour-primary-green: #6a8818;
+$colour-highlight-green: #94AF19;
 
 //backgrounds
-$colour-background-black : #000000;
-$colour-background-dark : #262626; //object title background, footer background
-$colour-background-footerbase : #606060;
-$colour-background-light : #ddd;
+$colour-background-black: #000000;
+$colour-background-dark: #262626; //object title background, footer background
+$colour-background-footerbase: #606060;
+$colour-background-light: #ddd;
 $colour-background-midlight: #e8e8e8;
-$colour-background-lightest : #f6f6f6;
+$colour-background-lightest: #f6f6f6;
 //$colour-background-mid : #565656;
 
 //Form Colours
@@ -36,21 +36,21 @@ $colour-input-border: #ddd;
 
 
 //text colours
-$colour-heading : #000000;
-$colour-bodytext : #333;
-$colour-bodytext-light : #454545;
-$colour-heading-inverted : #f5f5f5;
-$colour-bodytext-inverted : #a1a1a1;
+$colour-heading: #000000;
+$colour-bodytext: #333;
+$colour-bodytext-light: #454545;
+$colour-heading-inverted: #f5f5f5;
+$colour-bodytext-inverted: #a1a1a1;
 $colour-caption: #a1a1a1;
 $colour-sidetext: #555;
-$colour-objectlink : rgb(25,102,93);
+$colour-objectlink: rgb(25, 102, 93);
 
 
 //Object Colours
-$colour-articles :#2c79a8;
-$colour-items : #cf2f0c;
-$colour-species :#1f8176;
-$colour-specimens : #6b3f68;
+$colour-articles: #2c79a8;
+$colour-items: #cf2f0c;
+$colour-species: #1f8176;
+$colour-specimens: #6b3f68;
 
 //tiles
 $colour-background-image: #ffffff;
@@ -60,38 +60,36 @@ $colour-background-title: #f2f2f2;
 $colour-button-border: #999;
 $colour-button-active-background: #fff;
 $colour-button-background: #ccc;
-$colour-button-text:#333;
+$colour-button-text: #333;
 
 //Side headers
 $colour-sideheadings: #134d13;
 
 
 //padding
-$padding-side:3%;
+$padding-side: 3%;
 
 //Typography
+$font: aktiv-grotesk, sans-serif;
 
-$font : "aktiv-grotesk-std", sans-serif;
-$font-secondary : Georgia, Times, "Times New Roman", serif;
-
-$font-size-small : 0.75em;
-$font-size-small-2 : 0.875em;
-$font-size-med : 1em;
+$font-size-small: 0.75em;
+$font-size-small-2: 0.875em;
+$font-size-med: 1em;
 $font-size-med-2: 1.0625em;
-$font-size-large : 1.4375em;
+$font-size-large: 1.4375em;
 
 //Colors
-$gray : #808080;
-$gray-light : #f9f9f9;
-$gray-light-2 : #eee;
-$gray-light-3 : #ddd;
-$gray-med : #666;
-$gray-dark : #333;
-$gray-dark-2 : #131313;
-$white : #fff;
-$black : #000;
-$dim : rgba(0,0,0,0.2);
-$error : #f00;
-$valid : #089e00;
-$warning : #fff664;
-$information : #000db5;
+$gray: #808080;
+$gray-light: #f9f9f9;
+$gray-light-2: #eee;
+$gray-light-3: #ddd;
+$gray-med: #666;
+$gray-dark: #333;
+$gray-dark-2: #131313;
+$white: #fff;
+$black: #000;
+$dim: rgba(0, 0, 0, 0.2);
+$error: #f00;
+$valid: #089e00;
+$warning: #fff664;
+$information: #000db5;

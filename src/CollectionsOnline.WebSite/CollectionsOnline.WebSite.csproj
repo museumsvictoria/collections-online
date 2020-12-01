@@ -386,9 +386,6 @@
     <Content Include="content\scss\_mixins.scss" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="content\scss\_layout.scss" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="content\scss\_normalize.scss" />
   </ItemGroup>
   <ItemGroup>

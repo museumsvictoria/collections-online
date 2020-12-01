@@ -4,7 +4,6 @@
 @import 'mixins';
 @import 'grid';
 @import "typography";
-@import "layout";
 @import "lib/audioplayer";
 
 body {
@@ -90,12 +89,12 @@ nav {
         text-decoration: none;
 
         @include gridle_state("mobile") {
-            padding: 0 10px 0px 10px;
+            padding: 0 10px 0 10px;
             line-height: 44px;
 
             &:first-child {
                 padding-left: 20px;
-                padding-right: 0px;
+                padding-right: 0;
             }
         }
 
@@ -107,8 +106,7 @@ nav {
     .button-search {
         background-color: $colour-primary-green;
         color: $colour-heading-inverted;
-        padding: 0 20px;
-        padding-right: 60px;
+        padding: 0 60px 0 20px;
         display: inline-block;
         line-height: 76px;
         text-decoration: none;
@@ -225,8 +223,8 @@ button.icon {
             padding-right: 4em;
             font-size: 18pt;
             color: black;
-            padding-top: 0px;
-            padding-bottom: 0px;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         & .item:before {
@@ -463,7 +461,6 @@ button.icon {
                 height: 60px !important;
                 padding: 0 !important;
                 margin: -29px 0 0 -42px !important;
-                font-size: normal !important;
                 font-weight: normal !important;
                 line-height: 1 !important;
                 opacity: .9;
@@ -884,7 +881,7 @@ button.icon {
         & h2 {
             padding-bottom: 5px;
             font-size: 22px;
-            padding-left: 0px;
+            padding-left: 0;
             font-weight: 400;
             float: none;
 
@@ -930,9 +927,9 @@ button.icon {
                 padding-bottom: 5px;
                 font-size: 22px;
                 font-weight: 400;
-                padding-left: 0px;
+                padding-left: 0;
                 float: none;
-                margin-top: 0px;
+                margin-top: 0;
 
                 &.sub-heading {
                     font-size: 18px;
@@ -942,8 +939,7 @@ button.icon {
 
             & ul {
                 margin: 0;
-                padding: 0;
-                padding-bottom: 1px;
+                padding: 0 0 1px;
                 list-style: none;
                 overflow: hidden;
             }
@@ -962,10 +958,9 @@ button.icon {
                     color: $colour-sidetext;
                     line-height: 1.4em;
                     margin: 10px 0 0;
-                    color: $colour-sidetext;
                     padding-right: 10px;
-                    padding-bottom: 0px;
-                    padding-left: 0px;
+                    padding-bottom: 0;
+                    padding-left: 0;
 
                     @include gridle_state("print") {
                         font-size: 11.5pt;
@@ -996,7 +991,7 @@ button.icon {
         margin-top: 50px;
 
         @include gridle_state("print") {
-            margin-top: 0px;
+            margin-top: 0;
         }
     }
 
@@ -1220,7 +1215,7 @@ button.icon {
 
         p {
             font-size: 14px;
-            margin: 0 0 20px 0px;
+            margin: 0 0 20px 0;
             line-height: 1.4;
             word-wrap: break-word;
         }
@@ -1244,7 +1239,7 @@ button.icon {
 
 #related {
     background-color: $colour-background-midlight;
-    padding: 40px 0px;
+    padding: 40px 0;
     @include gridle_hide("print");
 
     @include gridle_state(tablet) {
@@ -1384,17 +1379,17 @@ button.icon {
 
     @include gridle_state(tablet) {
         display: block;
-        margin-top: 0px;
+        margin-top: 0;
     }
 
     @include gridle_state(mobile) {
         display: block;
-        margin-top: 0px;
+        margin-top: 0;
     }
 
     @include gridle_state("print") {
         display: block;
-        margin-top: 0px;
+        margin-top: 0;
     }
 
     #search-filter {
@@ -1419,7 +1414,7 @@ button.icon {
             direction: ltr;
             float: left;
             position: relative;
-            padding: 40px 20px 0px 20px;
+            padding: 40px 20px 0 20px;
             width: 100%;
 
             @include gridle_state("tablet") {
@@ -1437,7 +1432,7 @@ button.icon {
             & a {
                 text-decoration: none;
                 display: block;
-                padding: 6px 0px;
+                padding: 6px 0;
                 line-height: 18px;
                 font-size: 14px;
                 font-weight: 400;
@@ -1484,14 +1479,14 @@ button.icon {
                 font-size: 18px;
                 font-weight: 300;
                 margin: 10px 0 12px;
-                padding: 0 0px 10px;
+                padding: 0 0 10px;
                 color: $colour-bodytext-light;
                 border-bottom: 1px solid #ddd;
                 line-height: 27px;
                 cursor: pointer;
 
                 &:after {
-                    text-align: middle;
+                    text-align: center;
                     font-weight: 400;
                     font-size: 20px;
                     float: right;
@@ -1509,13 +1504,13 @@ button.icon {
 
             & .facetgroup {
                 & .facetitems {
-                    padding: 0px 0px 30px;
+                    padding: 0 0 30px;
                     border-bottom: 1px solid #ddd; //to-do rationalise colour
                 }
 
                 &.collapsed {
                     h4:after {
-                        text-align: middle;
+                        text-align: center;
                         font-weight: 400;
                         font-size: 20px;
                         float: right;
@@ -1535,7 +1530,7 @@ button.icon {
 
                     & h4 {
                         border-bottom: none;
-                        margin-bottom: 0px;
+                        margin-bottom: 0;
                     }
                 }
 
@@ -1545,7 +1540,7 @@ button.icon {
                     display: block;
                     font-weight: 500;
                     line-height: 18px;
-                    padding: 6px 0px;
+                    padding: 6px 0;
                     font-size: 14px;
 
                     span {
@@ -1637,21 +1632,21 @@ button.icon {
     .results {
         width: 100%;
         background: #e3e3e3;
-        padding: 0 0 20px 0px;
+        padding: 0 0 20px 0;
         margin-top: 70px;
         @include flex(1);
 
         @include gridle_state("tablet") {
-            margin-top: 0px;
+            margin-top: 0;
         }
 
         @include gridle_state("mobile") {
-            margin-top: 0px;
+            margin-top: 0;
         }
 
         @include gridle_state("print") {
             flex: none;
-            margin-top: 0px;
+            margin-top: 0;
         }
 
         .active-facets {
@@ -1663,7 +1658,6 @@ button.icon {
 
             a {
                 color: $colour-bodytext;
-                line-height: 35px;
                 display: inline-block;
                 font-weight: 500;
                 line-height: 30px;
@@ -1691,7 +1685,7 @@ button.icon {
             @include gridle_hide("print");
 
             &.bottom {
-                padding: 0px 20px 30px 20px;
+                padding: 0 20px 30px 20px;
             }
 
             clear: both;
@@ -1781,7 +1775,7 @@ button.icon {
                     color: $colour-bodytext;
                     border-right: 1px solid #999;
                     background: $colour-button-background;
-                    margin-left: 0px;
+                    margin-left: 0;
                     position: relative;
 
                     &:hover {
@@ -1825,15 +1819,13 @@ button.icon {
                         &:after {
                             top: 100%;
                             left: 50%;
-                            border: solid transparent;
                             content: " ";
                             height: 0;
                             width: 0;
                             position: absolute;
                             pointer-events: none;
-                            border-color: rgba(255, 255, 255, 0);
+                            border: 10px solid rgba(255, 255, 255, 0);
                             border-top-color: $colour-button-active-background;
-                            border-width: 10px;
                             margin-left: -10px;
                         }
 
@@ -1875,9 +1867,7 @@ button.icon {
                     text-decoration: none;
                     color: $colour-bodytext;
                     background: $colour-button-background;
-                    display: inline-block;
                     position: relative;
-                    text-decoration: none;
 
                     &:hover {
                         text-decoration: underline;
@@ -1899,15 +1889,13 @@ button.icon {
                             &:after {
                                 top: 100%;
                                 left: 50%;
-                                border: solid transparent;
                                 content: " ";
                                 height: 0;
                                 width: 0;
                                 position: absolute;
                                 pointer-events: none;
-                                border-color: rgba(255, 255, 255, 0);
+                                border: 10px solid rgba(255, 255, 255, 0);
                                 border-top-color: $colour-button-active-background;
-                                border-width: 10px;
                                 margin-left: -10px;
                             }
 
@@ -1931,15 +1919,13 @@ button.icon {
                             &:after {
                                 top: 100%;
                                 left: 50%;
-                                border: solid transparent;
                                 content: " ";
                                 height: 0;
                                 width: 0;
                                 position: absolute;
                                 pointer-events: none;
-                                border-color: rgba(255, 255, 255, 0);
+                                border: 10px solid rgba(255, 255, 255, 0);
                                 border-top-color: $colour-button-active-background;
-                                border-width: 10px;
                                 margin-left: -10px;
                             }
 
@@ -1957,15 +1943,13 @@ button.icon {
                         &:after {
                             top: 100%;
                             left: 50%;
-                            border: solid transparent;
                             content: " ";
                             height: 0;
                             width: 0;
                             position: absolute;
                             pointer-events: none;
-                            border-color: rgba(255, 255, 255, 0);
+                            border: 10px solid rgba(255, 255, 255, 0);
                             border-top-color: $colour-button-active-background;
-                            border-width: 10px;
                             margin-left: -10px;
                         }
 
@@ -2029,7 +2013,7 @@ button.icon {
                 }
 
                 & .tile a {
-                    margin-bottom: 0px;
+                    margin-bottom: 0;
                 }
             }
 
@@ -2064,7 +2048,7 @@ button.icon {
                 & .tile.full {
                     @include gridle(12);
                     max-width: none;
-                    min-width: 0px;
+                    min-width: 0;
                     padding-left: 10px;
                     padding-right: 10px;
 
@@ -2143,7 +2127,7 @@ button.icon {
                 & .tile.full {
                     @include gridle(12);
                     max-width: none;
-                    min-width: 0px;
+                    min-width: 0;
                     padding-left: 10px;
                     padding-right: 10px;
 
@@ -2293,12 +2277,11 @@ button.icon {
             display: table;
             content: "";
             clear: both;
-            padding-left: 10px;
             width: 100%;
             padding: 10px;
 
             & .pagination {
-                padding-top: 0px;
+                padding-top: 0;
                 padding-left: 10px;
             }
 
@@ -2334,7 +2317,7 @@ button.icon {
             width: 100%;
 
             & img {
-                margin: 0px auto;
+                margin: 0 auto;
                 width: 100%;
                 max-width: 1194px;
             }
@@ -2359,11 +2342,11 @@ button.icon {
             margin-left: 300px;
 
             @include gridle_state(tablet) {
-                margin-left: 0px;
+                margin-left: 0;
             }
 
             @include gridle_state(mobile) {
-                margin-left: 0px;
+                margin-left: 0;
             }
         }
     }
@@ -2436,13 +2419,13 @@ button.icon {
 button {
     &.search, &.search-add {
         height: 44px;
-        margin: 0px;
-        outline: 0px none;
-        padding: 0px 10px;
-        border: 0px none;
-        border-radius: 0px 2px 2px 0px;
+        margin: 0;
+        outline: 0 none;
+        padding: 0 10px;
+        border: 0 none;
+        border-radius: 0 2px 2px 0;
         color: $colour-heading-inverted;
-        background: none repeat scroll 0% 0% $colour-background-dark;
+        background: none repeat scroll 0 0 $colour-background-dark;
     }
 
     &.search-add {
@@ -3219,7 +3202,7 @@ footer {
     font-weight: 400;
 
     @include gridle_state("print") {
-        padding-top: 0px;
+        padding-top: 0;
     }
 
     & .wrapper {
@@ -3227,7 +3210,7 @@ footer {
         padding-left: 10px;
 
         @include gridle_state("print") {
-            padding-bottom: 0px;
+            padding-bottom: 0;
         }
     }
 
@@ -3278,14 +3261,12 @@ footer {
         @include gridle_hide("print");
 
         &.first {
-            padding-left: 0px;
+            padding-left: 0;
         }
 
         padding-left: 20px;
         padding-right: 20px;
         border-right: 1px solid #606060;
-        float: left;
-        direction: ltr;
 
         & ul {
             padding-left: 10px;
@@ -3340,9 +3321,7 @@ footer {
         background-color: #606060;
         float: left;
         direction: ltr;
-        padding: 20px 0px 0px;
-        padding-left: 0px;
-        padding-right: 0px;
+        padding: 20px 0 0;
 
         & a {
             font-size: 12px;
@@ -3471,7 +3450,7 @@ footer {
         height: 65px;
         background: rgba(0,0,0,0.5);
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
     }
 }
 
@@ -3547,7 +3526,7 @@ footer {
             float: none;
             font-size: 22px;
             padding-bottom: 5px;
-            padding-left: 0px;
+            padding-left: 0;
             font-weight: 400;
         }
 
@@ -3555,7 +3534,7 @@ footer {
             float: none;
             font-size: 22px;
             padding-bottom: 5px;
-            padding-left: 0px;
+            padding-left: 0;
             font-weight: 400;
         }
 
@@ -3564,7 +3543,7 @@ footer {
             font-weight: 300;
             margin-bottom: 1.5em;
             word-wrap: break-word;
-            padding-left: 0px;
+            padding-left: 0;
         }
 
         @include gridle_state("print") {
@@ -3613,7 +3592,7 @@ footer {
         float: none;
         font-size: 22px;
         padding-bottom: 5px;
-        padding-left: 0px;
+        padding-left: 0;
         font-weight: 400;
     }
 
@@ -3621,7 +3600,7 @@ footer {
         float: none;
         font-size: 22px;
         padding-bottom: 5px;
-        padding-left: 0px;
+        padding-left: 0;
         font-weight: 400;
     }
 
@@ -3630,7 +3609,7 @@ footer {
         font-weight: 300;
         margin-bottom: 1.5em;
         word-wrap: break-word;
-        padding-left: 0px;
+        padding-left: 0;
     }
 
     & .collcategory {
@@ -3696,8 +3675,8 @@ footer {
 
         & .tile.full {
             width: 100%;
-            padding-left: 0px;
-            padding-right: 0px;
+            padding-left: 0;
+            padding-right: 0;
             max-width: none;
         }
 
@@ -3794,8 +3773,8 @@ footer {
     & .subcoll {
 
         @include gridle(12);
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 0;
+        padding-right: 0;
         clear: both;
 
         & h2 {
@@ -3827,8 +3806,8 @@ footer {
 
     & .favorites {
         @include gridle(12);
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 0;
+        padding-right: 0;
         margin-bottom: 20px;
         clear: both;
 
@@ -3877,7 +3856,7 @@ footer {
     background: $colour-background-dark;
     display: block;
     color: $colour-heading-inverted;
-    padding: 60px 0px 0px;
+    padding: 60px 0 0;
 
     & .tile.full {
         @include gridle(3);
@@ -3954,7 +3933,6 @@ footer {
         padding-left: 10px;
         direction: ltr;
         font-weight: 300;
-        line-height: 22px;
         margin-bottom: 25px;
         font-size: 15px;
         line-height: 20px;
@@ -4027,7 +4005,7 @@ footer {
 }
 
 #recent-explore, #featured-explore {
-    padding: 40px 0px 50px;
+    padding: 40px 0 50px;
 
     & .tile.full {
         @include gridle(3);
@@ -4074,7 +4052,6 @@ footer {
         padding-left: 10px;
         direction: ltr;
         font-weight: 300;
-        line-height: 22px;
         margin-bottom: 25px;
         font-size: 15px;
         line-height: 20px;
@@ -4119,7 +4096,7 @@ footer {
 }
 
 #comments {
-    padding: 40px 0px 80px;
+    padding: 40px 0 80px;
 
     @include gridle_state(tablet) {
         padding-left: 10px;
@@ -4164,7 +4141,6 @@ footer {
         @include gridle(8);
         @include gridle(12, "tablet");
         @include gridle(12,"mobile");
-        float: left;
         direction: ltr;
     }
 
@@ -4173,7 +4149,7 @@ footer {
         float: left;
         direction: ltr;
         display: block;
-        padding: 15px 15px 15px 0px;
+        padding: 15px 15px 15px 0;
         font-size: 15px;
         font-weight: 300;
         border-bottom: 1px solid #e8e8e8;
@@ -4229,12 +4205,12 @@ footer {
         }
 
         & fieldset {
-            padding: 0px;
+            padding: 0;
             border: none;
         }
 
         & h3 {
-            padding-left: 0px !important;
+            padding-left: 0 !important;
             font-size: 17px !important;
             font-weight: 500 !important;
             padding-bottom: 10px !important;
@@ -4311,7 +4287,7 @@ footer {
         float: none;
         font-size: 22px;
         padding-bottom: 5px;
-        padding-left: 0px;
+        padding-left: 0;
         font-weight: 400;
     }
 
@@ -4319,7 +4295,7 @@ footer {
         float: none;
         font-size: 22px;
         padding-bottom: 5px;
-        padding-left: 0px;
+        padding-left: 0;
         font-weight: 400;
     }
 
@@ -4328,7 +4304,7 @@ footer {
         font-weight: 300;
         margin-bottom: 1.5em;
         word-wrap: break-word;
-        padding-left: 0px;
+        padding-left: 0;
 
         &.prelist {
             margin-bottom: 0;
@@ -4354,7 +4330,7 @@ footer {
         font-weight: 300;
         margin-bottom: 1.5em;
         word-wrap: break-word;
-        padding-left: 0px;
+        padding-left: 0;
     }
 
     & .desc {
@@ -4387,10 +4363,6 @@ footer {
         content: "My book";
         font-size: 9pt;
         color: #333;
-    }
-
-    a [href^=http]:after {
-      content:" <" attr(href) "> ";
     }
 }
 

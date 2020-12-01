@@ -2,6 +2,7 @@
 <html>
     <head>                        
         @Html.Partial("Metadata")        
+        <link rel="stylesheet" href="https://use.typekit.net/ofj4bxh.css">
         <link href="/content/static/styles.css" rel="stylesheet">
             @RenderSection("Head", required:false)
         <script>
@@ -12,8 +13,6 @@
             ga('create', 'UA-11442629-1', 'auto');
             ga('send', 'pageview');
         </script>
-        <script src="https://use.typekit.net/izq0fed.js"></script>
-        <script>try{Typekit.load({ async: true });}catch(e){}</script>
     </head>
     <body>
         @Html.Partial("Header")
