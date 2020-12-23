@@ -43,8 +43,11 @@ namespace CollectionsOnline.Import.Factories
                         AddImageProfile(imageMedia, magickImage, true);
                         
                         magickImage.Format = MagickFormat.Jpeg;
-                        magickImage.Resize(new MagickGeometry(3000) { Greater = true });
                         magickImage.Quality = 86;
+                        magickImage.FilterType = FilterType.Lanczos;
+                        magickImage.ColorSpace = ColorSpace.sRGB;
+                        magickImage.Resize(new MagickGeometry(3000) { Greater = true });
+                        magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
                         return magickImage;
                     }
@@ -57,6 +60,10 @@ namespace CollectionsOnline.Import.Factories
                         AddImageProfile(imageMedia, magickImage);
                         
                         magickImage.Format = MagickFormat.Jpeg;
+                        magickImage.Quality = 70;
+                        magickImage.FilterType = FilterType.Lanczos;
+                        magickImage.ColorSpace = ColorSpace.sRGB;
+                        
                         if (NeedsPadding(map))
                         {
                             magickImage.Resize(new MagickGeometry(250));
@@ -67,7 +74,8 @@ namespace CollectionsOnline.Import.Factories
                             magickImage.Resize(new MagickGeometry(250) { FillArea = true });
                             magickImage.Crop(250, 250, Gravity.Center);
                         }
-                        magickImage.Quality = 70;
+                        
+                        magickImage.UnsharpMask(0.5, 0.5, 0.5, 0.025);
 
                         return magickImage;
                     }
@@ -80,8 +88,11 @@ namespace CollectionsOnline.Import.Factories
                         AddImageProfile(imageMedia, magickImage, true);
 
                         magickImage.Format = MagickFormat.Jpeg;
-                        magickImage.Resize(new MagickGeometry(0, 500));
                         magickImage.Quality = 76;
+                        magickImage.FilterType = FilterType.Lanczos;
+                        magickImage.ColorSpace = ColorSpace.sRGB;
+                        magickImage.Resize(new MagickGeometry(0, 500));
+                        magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
                         return magickImage;
                     }
@@ -94,8 +105,11 @@ namespace CollectionsOnline.Import.Factories
                         AddImageProfile(imageMedia, magickImage, true);
 
                         magickImage.Format = MagickFormat.Jpeg;
-                        magickImage.Resize(new MagickGeometry(1500) { Greater = true });
                         magickImage.Quality = 76;
+                        magickImage.FilterType = FilterType.Lanczos;
+                        magickImage.ColorSpace = ColorSpace.sRGB;
+                        magickImage.Resize(new MagickGeometry(1500) { Greater = true });
+                        magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
                         return magickImage;
                     }
