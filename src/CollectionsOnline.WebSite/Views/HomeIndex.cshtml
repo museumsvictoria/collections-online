@@ -23,7 +23,7 @@
          }
          @if (!string.IsNullOrWhiteSpace(Model.Feature.Description))
          {
-             <p>@Model.Feature.Description</p>
+             <p>@Html.Raw(Model.Feature.Description)</p>
          }
          @foreach (var featuredRecord in Model.FeaturedRecords)
          {

@@ -24,6 +24,10 @@ a {
     }
 }
 
+a.textlink {
+    text-decoration: underline;
+}
+
 header {
     background: $colour-background-dark;
     width: 100%;
@@ -4047,7 +4051,6 @@ footer {
     }
 
     p {
-        width: 50%;
         display: block;
         padding-left: 10px;
         direction: ltr;
