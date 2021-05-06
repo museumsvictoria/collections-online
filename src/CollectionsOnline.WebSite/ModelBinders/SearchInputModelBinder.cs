@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CollectionsOnline.Core.Config;
+using CollectionsOnline.WebSite.Infrastructure;
 using CollectionsOnline.WebSite.Models;
 using Nancy;
 using Nancy.Cookies;
@@ -136,9 +137,9 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Terms.Add("SpeciesEndemicity", queryString.SpeciesEndemicity);
 
             // Add Cookies
-            searchInputModel.Cookies.Add(new NancyCookie("perPage", searchInputModel.PerPage.ToString(), true, false, DateTime.UtcNow.AddMonths(3)) { Path = "/" });
-            searchInputModel.Cookies.Add(new NancyCookie("sort", searchInputModel.Sort, true, false, DateTime.UtcNow.AddMonths(3)) { Path = "/" });
-            searchInputModel.Cookies.Add(new NancyCookie("view", searchInputModel.View, true, false, DateTime.UtcNow.AddMonths(3)) { Path = "/" });
+            searchInputModel.Cookies.Add(new Cookie("perPage", searchInputModel.PerPage.ToString(), false, true, DateTime.UtcNow.AddMonths(3), SameSite.Strict) { Path = "/" });
+            searchInputModel.Cookies.Add(new Cookie("sort", searchInputModel.Sort, false, true, DateTime.UtcNow.AddMonths(3), SameSite.Strict) { Path = "/" });
+            searchInputModel.Cookies.Add(new Cookie("view", searchInputModel.View, false, true, DateTime.UtcNow.AddMonths(3), SameSite.Strict) { Path = "/" });
             
             return searchInputModel;
         }

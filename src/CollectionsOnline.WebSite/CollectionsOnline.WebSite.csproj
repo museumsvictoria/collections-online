@@ -247,6 +247,7 @@
     <Compile Include="Factories\HomeHeroUriFactory.cs" />
     <Compile Include="Factories\IHomeHeroUriFactory.cs" />
     <Compile Include="Infrastructure\CustomStaticContentConventionBuilder.cs" />
+    <Compile Include="Infrastructure\Cookie.cs" />
     <Compile Include="Infrastructure\StatusCodeHandler.cs" />
     <Compile Include="ModelBinders\SearchApiInputModelBinder.cs" />
     <Compile Include="ModelBinders\SearchInputModelBinder.cs" />

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.WebSite.Infrastructure;
 using Nancy.Cookies;
 
 namespace CollectionsOnline.WebSite.Models
