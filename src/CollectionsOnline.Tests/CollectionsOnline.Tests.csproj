@@ -217,6 +217,7 @@
     <Compile Include="Import\Factories\PathFactoryTests.cs" />
     <Compile Include="Import\Factories\TaxonomyFactoryTests.cs" />
     <Compile Include="Import\Factories\ArticleFactoryTests.cs" />
+    <Compile Include="Import\Factories\VideoMediaFactoryTests.cs" />
     <Compile Include="Import\ImportRunnerTests.cs" />
     <Compile Include="Core\Utilities\NaturalDateConverterTests.cs" />
     <Compile Include="Core\Utilities\HtmlConverterTests.cs" />
