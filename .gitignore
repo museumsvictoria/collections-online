@@ -293,7 +293,7 @@ env/
 packages/
 logs/
 **/content/media/
-git-update-index-*-files.ps1
+*config-files.bat
 .sass-cache
 *.css.map
 node_modules

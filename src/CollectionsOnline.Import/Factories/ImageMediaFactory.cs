@@ -150,7 +150,7 @@ namespace CollectionsOnline.Import.Factories
                             var destPath = PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
                             var uriPath = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
 
-                            using (var image = imageMediaJob.Transform(imageMedia, originalImage.Clone(), result))
+                            using (var image = imageMediaJob.Transform(imageMedia, originalImage.Clone() as MagickImage, result))
                             {
                                 // Write image to disk
                                 image.Write(destPath);
@@ -300,7 +300,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Add original profile back
             if (profile != null)
-                magickImage.AddProfile(profile);
+                magickImage.SetProfile(profile);
 
             if (addIptcProfile)
             {
@@ -314,7 +314,7 @@ namespace CollectionsOnline.Import.Factories
                 if(imageMedia.Sources.Any())
                     iptcProfile.SetValue(IptcTag.Source, imageMedia.Sources.Concatenate(", "));
 
-                magickImage.AddProfile(iptcProfile);
+                magickImage.SetProfile(iptcProfile);
             }            
         }
 

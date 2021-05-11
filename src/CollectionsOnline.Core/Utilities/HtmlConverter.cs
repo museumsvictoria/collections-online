@@ -29,11 +29,13 @@ namespace CollectionsOnline.Core.Utilities
         {
             var sanitizer = new HtmlSanitizer(DefaultAllowedTags, allowedAttributes:DefaultAllowedAttributes);
 
+            sanitizer.KeepChildNodes = true;
+
             var result = new HtmlSanitizerResult();
 
-            sanitizer.RemovingTag += ((s, e) => { result.HasRemovedTag = true; });
-            sanitizer.RemovingStyle += ((s, e) => { result.HasRemovedStyle = true; });
-            sanitizer.RemovingAttribute += ((s, e) => { result.HasRemovedAttribute = true; });
+            sanitizer.RemovingTag += (s, e) => { result.HasRemovedTag = true; };
+            sanitizer.RemovingStyle += (s, e) => { result.HasRemovedStyle = true; };
+            sanitizer.RemovingAttribute += (s, e) => { result.HasRemovedAttribute = true; };
 
             result.Html = sanitizer.Sanitize(html);
 
