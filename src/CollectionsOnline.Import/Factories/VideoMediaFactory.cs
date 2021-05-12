@@ -31,14 +31,6 @@ namespace CollectionsOnline.Import.Factories
 
             if (!string.IsNullOrWhiteSpace(videoMedia.VideoId))
             {
-                if (ThereAreExistingMedia(ref videoMedia))
-                {
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Found existing video preview {Irn} in {ElapsedMilliseconds} ms", videoMedia.Irn, stopwatch.ElapsedMilliseconds);
-
-                    return true;
-                }
-
                 try
                 {
                     var request = _youTubeService.Videos.List("snippet");
@@ -105,48 +97,6 @@ namespace CollectionsOnline.Import.Factories
                 {
                     Log.Logger.Fatal(ex, "Unexpected error occured creating video preview {Irn}", videoMedia.Irn);
                     throw;
-                }
-            }
-
-            return false;
-        }
-
-        private bool ThereAreExistingMedia(ref VideoMedia videoMedia)
-        {
-            // First check to see if we are not overwriting existing data,
-            // then if we find existing files matching all of our image media, use the files on disk instead
-            if (!bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"]))
-            {
-                var destPathThumbnail = PathFactory.GetDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail);
-                var destPathSmall = PathFactory.GetDestPath(videoMedia.Irn, ".jpg", FileDerivativeType.Small);
-
-                if (File.Exists(destPathThumbnail) &&
-                    File.Exists(destPathSmall))
-                {
-                    using (var image = new MagickImage(destPathSmall))
-                    {
-                        videoMedia.Thumbnail = new ImageMediaFile
-                        {
-                            Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail),
-                            Size = new FileInfo(destPathThumbnail).Length,
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-                    }
-
-                    // Small preview placeholder
-                    using (var image = new MagickImage(destPathSmall))
-                    {
-                        videoMedia.Small = new ImageMediaFile
-                        {
-                            Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Small),
-                            Size = new FileInfo(destPathSmall).Length,
-                            Width = image.Width,
-                            Height = image.Height
-                        };
-                    }
-
-                    return true;
                 }
             }
 
