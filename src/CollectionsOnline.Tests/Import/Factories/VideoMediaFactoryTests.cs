@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
-using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Factories;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
-using IMu;
 using Shouldly;
 using Xunit;
 
@@ -36,6 +32,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                 result = thumbnail.Url;
             }
 
+            // Then
             result.ShouldBe("https://i.ytimg.com/vi/d83nSFEoz2A/maxresdefault.jpg");
         }
     }
