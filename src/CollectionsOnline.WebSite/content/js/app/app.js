@@ -1,4 +1,5 @@
 ﻿var $ = require('jquery');
+var jsCookie = require('js-cookie');
 var media = require('./media');
 var search = require('./search');
 var map = require('./map');
@@ -8,11 +9,18 @@ var App = {
     media.init();
     search.init();
     map.init();
-
+    
+    this.cacheElements();
     this.bindEvents();
+    this.culturalMessageCheck();
+  },
+  cacheElements: function () {
+    this.$culturalMessage = $('#cultural-message');
+    this.$culturalMessageButton = $('button', this.$culturalMessage);
   },
   bindEvents: function () {
     $('.social-tools a').on('click', this.openWindow.bind(this));
+    this.$culturalMessageButton.on('click', this.disableCulturalMessage.bind(this));
   },
   openWindow: function(e) {
     var target = e.currentTarget;
@@ -32,6 +40,20 @@ var App = {
       e.returnValue = false;
       e.preventDefault && e.preventDefault();
     }
+  },
+  culturalMessageCheck: function () {
+    var culturalCookie = jsCookie.get('culturalMessage');
+
+    if(culturalCookie === undefined) {
+      jsCookie.set('culturalMessage', 'false', { secure: true, expires: 180, sameSite: 'strict' });
+      this.$culturalMessage.removeClass('disabled');
+    } else if(culturalCookie !== 'true' ) {
+      this.$culturalMessage.removeClass('disabled');
+    }
+  },
+  disableCulturalMessage: function () {
+    jsCookie.set('culturalMessage', 'true', { secure: true, expires: 180, sameSite: 'strict' });
+    this.$culturalMessage.addClass('disabled');
   }
 };
 

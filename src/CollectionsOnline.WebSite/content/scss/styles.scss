@@ -132,6 +132,63 @@ nav {
     }
 }
 
+#cultural-message {
+    background: $colour-background-darker;
+    color: $white;
+    font-size: 14px;
+    transition: max-height 0s;
+    max-height: 500px;
+    overflow: hidden;
+    clear: both;
+
+    @include gridle_state("mobile") {
+        max-height: 1000px;
+    }
+    
+    &.disabled {
+        max-height: 0;
+        transition: max-height 0.5s ease-in-out;
+
+        @include gridle_state("mobile") {
+            transition: max-height 1s ease-in-out;
+        }
+    }
+    
+    .inner {
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: content-box;
+        line-height: 20px;
+        max-width: 728px;
+        
+        p {
+            margin-bottom: 12px;
+        }
+
+        h3 {
+            font-size: 18px;
+            line-height: 27px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        h4 {
+            font-weight: bold;
+        }
+        
+        button {
+            background: $colour-primary-green;
+            color: $white;
+            font-weight: bold;
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 3px;
+            margin: 20px auto 0;
+            display: block;
+        }
+    }
+}
+
 button.icon {
     background: none;
     border: 0;

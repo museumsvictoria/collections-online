@@ -16,10 +16,13 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-sass": "^4.1.0",
     "gulp-uglify": "^3.0.2",
-    "jquery": "^3.5.0",
     "node-sass": "^4.14.0",
-    "verge": "^1.10.2",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0",
+    "verge": "^1.10.2",
+    "js-cookie": "^2.2.1"
   }
 }
