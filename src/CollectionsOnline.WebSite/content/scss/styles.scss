@@ -2674,10 +2674,9 @@ button {
         float: none;
         width: 100%;
         display: inline-block;
-        font-size: 22px;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        padding-right: 10px;
+        font-size: 28px;
+        margin-bottom: 1.5em;
+        padding: 0 10px 0;
         font-weight: 400;
     }
 
@@ -2747,6 +2746,7 @@ button {
         border-radius: 3px;
         color: $colour-sidetext;
         direction: ltr;
+        margin: 1.5em 0;
     }
 
     & code, kbd, pre, samp {
@@ -2768,7 +2768,7 @@ button {
 
     & table {
         border-collapse: collapse;
-        margin: 10px;
+        margin: 10px 0 1.5em;
         vertical-align: middle;
         width: 100%;
         page-break-inside: avoid;

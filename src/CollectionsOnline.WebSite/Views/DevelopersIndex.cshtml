@@ -24,7 +24,8 @@
         <p>Our API is a set of methods based on restful ideas over HTTP.  At this time it only supports the GET verb and responses are in JSON only.</p>
         <p>The root uri for the current version is located at</p>
         <pre>@Model.ApiRootUrl</pre>
-
+        <h2 id="client-requirements">Client Requirements</h2>
+        <p>The only requirement is that the client must supply a <code>User-Agent</code> header in the API request.  This can be blank if need be, but it must be present.</p>
         <h2 id="pagination">Pagination</h2>
         <p>Requests that return a list of objects will by default display @Constants.PagingPerPageDefault objects per request, you can change this to any number up to @Constants.PagingPerPageMax by using a <em>?perpage</em> query string parameter.</p>
         <p>You can also specify a page parameter to retrieve results from different pages via a <em>?page</em> query string parameter.</p>
