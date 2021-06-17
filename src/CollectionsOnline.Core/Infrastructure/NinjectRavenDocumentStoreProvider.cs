@@ -1,4 +1,5 @@
-﻿using CollectionsOnline.Core.Config;
+﻿using System;
+using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using System.Configuration;
 using CollectionsOnline.Core.Models;
@@ -53,6 +54,8 @@ namespace CollectionsOnline.Core.Infrastructure
 
                     documentSession.SaveChanges();
                 }
+
+                documentStore.JsonRequestFactory.RequestTimeout = TimeSpan.FromSeconds(10);
 
                 return documentStore; 
             }
