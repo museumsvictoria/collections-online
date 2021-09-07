@@ -208,12 +208,10 @@ module.exports = {
     });
   },
   downloadMedia: function(e) {
-    if (window.ga.loaded) {
-      ga('send', {
-        hitType: 'event',
-        eventCategory: 'Downloads',
-        eventAction: 'Image',
-        eventLabel: $(e.currentTarget).attr('href')
+    if (typeof gtag === 'function') {
+      gtag('event', 'Image', {
+        'event_category': 'Downloads',
+        'event_label': $(e.currentTarget).attr('href')
       });
     }
   },

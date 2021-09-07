@@ -101,14 +101,12 @@ module.exports = {
       }
     }
   },
-  downloadPageResults: function (e) {      
-      if (window.ga.loaded) {
-          ga('send', {
-              hitType: 'event',
-              eventCategory: 'Downloads',
-              eventAction: 'Search results',
-              eventLabel: $(e.currentTarget).attr('href')
-          });
-      }
+  downloadPageResults: function (e) {
+    if (typeof gtag === 'function') {
+      gtag('event', 'Search results', {
+        'event_category': 'Downloads',
+        'event_label': $(e.currentTarget).attr('href')
+      });
+    }
   }
 };
