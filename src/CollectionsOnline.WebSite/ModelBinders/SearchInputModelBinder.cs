@@ -95,6 +95,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Facets.Add("DisplayLocation", queryString.DisplayLocation);
 
             // Multi-select Facets
+            if (queryString.HasMedia.HasValue)
+                searchInputModel.MultiFacets.Add("HasMedia", ((string)queryString.HasMedia.Value).Split(','));
             if (queryString.ArticleType.HasValue)
                 searchInputModel.MultiFacets.Add("ArticleType", ((string)queryString.ArticleType.Value).Split(','));
             if (queryString.CollectingArea.HasValue)

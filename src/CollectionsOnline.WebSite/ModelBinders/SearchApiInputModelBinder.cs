@@ -81,6 +81,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchApiInputModel.Facets.Add("DisplayLocation", queryString.DisplayLocation);
 
             // Multi-select Facets
+            if (queryString.HasMedia.HasValue)
+                searchApiInputModel.MultiFacets.Add("HasMedia", ((string)queryString.HasMedia.Value).Split(','));
             if (queryString.ArticleType.HasValue)
                 searchApiInputModel.MultiFacets.Add("ArticleType", ((string)queryString.ArticleType.Value).Split(','));
             if (queryString.CollectingArea.HasValue)
