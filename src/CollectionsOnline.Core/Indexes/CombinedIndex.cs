@@ -41,11 +41,10 @@ namespace CollectionsOnline.Core.Indexes
                     Category = (string)null,
                     HasMedia = new object[]
                     {
-                        article.Media.OfType<ImageMedia>().Any() ? "Image" : null,
-                        article.Media.OfType<VideoMedia>().Any() ? "Video" : null,
+                        article.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        article.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
                         article.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
-                        article.Media.OfType<FileMedia>().Any() ? "File" : null,
-                        article.Media.OfType<UriMedia>().Any() ? "Link" : null,
+                        article.Media.OfType<FileMedia>().Any() ? "Files" : null,
                     },
                     HasImages = article.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = (string)null,
@@ -117,11 +116,10 @@ namespace CollectionsOnline.Core.Indexes
                     item.Category,
                     HasMedia = new object[]
                     {
-                        item.Media.OfType<ImageMedia>().Any() ? "Image" : null,
-                        item.Media.OfType<VideoMedia>().Any() ? "Video" : null,
+                        item.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        item.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
                         item.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
-                        item.Media.OfType<FileMedia>().Any() ? "File" : null,
-                        item.Media.OfType<UriMedia>().Any() ? "Link" : null,
+                        item.Media.OfType<FileMedia>().Any() ? "Files" : null,
                     },
                     HasImages = item.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = item.MuseumLocation != null ? "Yes" : "No",
@@ -241,11 +239,10 @@ namespace CollectionsOnline.Core.Indexes
                     Category = "Natural Sciences",
                     HasMedia = new object[]
                     {
-                        species.Media.OfType<ImageMedia>().Any() ? "Image" : null,
-                        species.Media.OfType<VideoMedia>().Any() ? "Video" : null,
+                        species.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        species.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
                         species.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
-                        species.Media.OfType<FileMedia>().Any() ? "File" : null,
-                        species.Media.OfType<UriMedia>().Any() ? "Link" : null,
+                        species.Media.OfType<FileMedia>().Any() ? "Files" : null,
                     },
                     HasImages = species.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = (string)null,
@@ -362,11 +359,10 @@ namespace CollectionsOnline.Core.Indexes
                     specimen.Category,
                     HasMedia = new object[]
                     {
-                        specimen.Media.OfType<ImageMedia>().Any() ? "Image" : null,
-                        specimen.Media.OfType<VideoMedia>().Any() ? "Video" : null,
+                        specimen.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        specimen.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
                         specimen.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
-                        specimen.Media.OfType<FileMedia>().Any() ? "File" : null,
-                        specimen.Media.OfType<UriMedia>().Any() ? "Link" : null,
+                        specimen.Media.OfType<FileMedia>().Any() ? "Files" : null,
                     },
                     HasImages = specimen.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = specimen.MuseumLocation != null ? "Yes" : "No",
