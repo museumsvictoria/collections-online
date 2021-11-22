@@ -99,25 +99,25 @@ namespace CollectionsOnline.WebSite.Extensions
 
             switch (museumLocation.DisplayLocation)
             {
-                case "Bunjilaka":
+                case DisplayLocation.Bunjilaka:
                     sb.Append(string.Format(formatString, "bunjilaka", museumLocation.DisplayLocation));
                     break;
-                case "Discovery Centre":
+                case DisplayLocation.Curious:
                     sb.Append(string.Format(formatString, "melbournemuseum", museumLocation.Venue));
                     break;
-                case "Immigration Discovery Centre":
+                case DisplayLocation.ImmigrationDiscoveryCentre:
                     sb.Append(string.Format(formatString, "immigrationmuseum", museumLocation.Venue));
                     break;
-                case "Melbourne Museum":
+                case DisplayLocation.MelbourneMuseum:
                     sb.Append(string.Format(formatString, "melbournemuseum", museumLocation.DisplayLocation));
                     break;
-                case "Immigration Museum":
+                case DisplayLocation.ImmigrationMuseum:
                     sb.Append(string.Format(formatString, "immigrationmuseum", museumLocation.DisplayLocation));
                     break;
-                case "Royal Exhibition Building":
+                case DisplayLocation.RoyalExhibitionBuilding:
                     sb.Append(string.Format(formatString, "reb", museumLocation.DisplayLocation));
                     break;
-                case "Scienceworks":
+                case DisplayLocation.Scienceworks:
                     sb.Append(string.Format(formatString, "scienceworks", museumLocation.DisplayLocation));
                     break;
             }

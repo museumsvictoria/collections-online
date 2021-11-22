@@ -13,7 +13,7 @@ namespace CollectionsOnline.Tests.Import.Factories
         {
             // Given
             MuseumLocation result;
-            var museumLocationFactory = new MuseumLocationFactory();
+            var museumLocationFactory = new MuseumLocationFactory(new PartiesNameFactory());
             var locationMap = new Map
             {
                 {"LocLevel1", "MELBOURNE (MvCIS)"},
@@ -24,7 +24,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             };
 
             // When
-            result = museumLocationFactory.Make(locationMap);
+            result = museumLocationFactory.MakeFromLocationMap(locationMap);
 
             // Then
             result.ShouldBeNull();
@@ -34,7 +34,7 @@ namespace CollectionsOnline.Tests.Import.Factories
         public void MakeMuseumLocation_NotMatchingExcludedLocation_ReturnsCorrectLocation()
         {
             // Given
-            var museumLocationFactory = new MuseumLocationFactory();
+            var museumLocationFactory = new MuseumLocationFactory(new PartiesNameFactory());
             var locationMap = new Map
             {
                 {"LocLevel1", "MELBOURNE (MvCIS)"},
@@ -45,8 +45,8 @@ namespace CollectionsOnline.Tests.Import.Factories
             };
 
             // When
-            var result = museumLocationFactory.Make(locationMap);
-
+            var result = museumLocationFactory.MakeFromLocationMap(locationMap);
+            
             // Then
             result.Gallery.ShouldBe("Bunjilaka - First Peoples");
             result.Venue.ShouldBe("Melbourne Museum");
@@ -56,7 +56,7 @@ namespace CollectionsOnline.Tests.Import.Factories
         public void MakeMuseumLocation_NotMatchingExcludedLocationWithValidLocLevel4_ReturnsCorrectLocation()
         {
             // Given
-            var museumLocationFactory = new MuseumLocationFactory();
+            var museumLocationFactory = new MuseumLocationFactory(new PartiesNameFactory());
             var locationMap = new Map
             {
                 {"LocLevel1", "MELBOURNE (MvCIS)"},
@@ -67,7 +67,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             };
 
             // When
-            var result = museumLocationFactory.Make(locationMap);
+            var result = museumLocationFactory.MakeFromLocationMap(locationMap);
 
             // Then
             result.Gallery.ShouldBe("Bunjilaka - First Peoples");
