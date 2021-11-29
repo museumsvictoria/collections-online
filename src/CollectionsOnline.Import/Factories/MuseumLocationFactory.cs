@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
@@ -18,39 +20,44 @@ namespace CollectionsOnline.Import.Factories
             _partiesNameFactory = partiesNameFactory;
         }
         
-        public MuseumLocation Make(string parentType, Map[] exhibitionObjectMaps, Map[] partsMaps)
+        public MuseumLocation Make(string parentType, Map[] objectStatusMaps, Map[] partsMaps)
         {
             var museumLocation = new MuseumLocation() { DisplayStatus = DisplayStatus.NotOnDisplay };
+
+            Map currentExhibitionObjectMap;
             
-            // Find correct exhibition object reference
+            // Look in parts for current exhibition object map if parent is conceptual type otherwise look in object status maps
             if (string.Equals(parentType, "conceptual", StringComparison.OrdinalIgnoreCase))
             {
-                // Look in reverse linked children for event/location i.e. children map
-                var exhibitionObjectMap = partsMaps.Select(x => x.GetMaps("exhobj")).Where(x => x.Any());
+                currentExhibitionObjectMap = partsMaps.Select(x => x.GetMaps("objstatus")).Where(x => x.Any()).Select(this.FindLatestExhibitionObjectMap).FirstOrDefault(x => string.Equals(x?.GetEncodedString("StaStatus"), "On display",
+                    StringComparison.OrdinalIgnoreCase) || string.Equals(x?.GetEncodedString("StaStatus"),
+                    "On loan",
+                    StringComparison.OrdinalIgnoreCase));
             }
             else
             {
-                var exhibitionObjectMap = exhibitionObjectMaps.FirstOrDefault();
-                var eventMap = exhibitionObjectMap?.GetMap("event");
-                var venNameMap = eventMap?.GetMaps("venname").FirstOrDefault();
-                var locationMap = exhibitionObjectMap?.GetMap("location");
-                
-                if (string.Equals(exhibitionObjectMap.GetEncodedString("StaStatus"), "On display", 
-                    StringComparison.OrdinalIgnoreCase))
-                {
-                    // Check event lookup
-                    museumLocation = this.MakeFromEventMap(eventMap) ?? this.MakeFromLocationMap(locationMap);
-                }
-                
-                // Check for on loan or for record that has incorrect StaStatus but correct On Loan location
-                if (string.Equals(exhibitionObjectMap.GetEncodedString("StaStatus"), "On loan",
-                    StringComparison.OrdinalIgnoreCase) || museumLocation.DisplayStatus == DisplayStatus.OnLoan)
-                {
-                    // Get venue name and event title for Venue + Gallery
-                    museumLocation.DisplayStatus = DisplayStatus.OnLoan;
-                    museumLocation.Venue = venNameMap != null ? _partiesNameFactory.Make(venNameMap) : null;
-                    museumLocation.Gallery = eventMap?.GetEncodedString("EveEventTitle");
-                }
+                currentExhibitionObjectMap = this.FindLatestExhibitionObjectMap(objectStatusMaps);
+            }
+            
+            var eventMap = currentExhibitionObjectMap?.GetMap("event");
+            var venNameMap = eventMap?.GetMaps("venname").FirstOrDefault();
+            var locationMap = currentExhibitionObjectMap?.GetMap("location");
+            
+            if (string.Equals(currentExhibitionObjectMap?.GetEncodedString("StaStatus"), "On display", 
+                StringComparison.OrdinalIgnoreCase))
+            {
+                // Check event lookup then location lookup and return default museum location if nothing found
+                museumLocation = this.MakeFromEventMap(eventMap) ?? this.MakeFromLocationMap(locationMap) ?? museumLocation;
+            }
+            
+            // Check for on loan or for record that has incorrect StaStatus but correct On Loan location
+            if (string.Equals(currentExhibitionObjectMap?.GetEncodedString("StaStatus"), "On loan",
+                StringComparison.OrdinalIgnoreCase) || museumLocation.DisplayStatus == DisplayStatus.OnLoan)
+            {
+                // Get venue name and event title for Venue + Gallery
+                museumLocation.DisplayStatus = DisplayStatus.OnLoan;
+                museumLocation.Venue = venNameMap != null ? _partiesNameFactory.Make(venNameMap) : null;
+                museumLocation.Gallery = eventMap?.GetEncodedString("EveEventTitle");
             }
 
             return museumLocation;
@@ -92,11 +99,32 @@ namespace CollectionsOnline.Import.Factories
 
         public MuseumLocation MakeFromEventMap(Map map)
         {
-            var irn = map.GetEncodedString("irn");
+            var eventNumber = map.GetEncodedString("EveEventNumber");
 
-            return LocationDictionaries.Events.Where(ml => string.Equals(ml.Key, irn, StringComparison.OrdinalIgnoreCase))
+            return LocationDictionaries.Events.Where(ml => string.Equals(ml.Key, eventNumber, StringComparison.OrdinalIgnoreCase))
                 .Select(ml => ml.Value)
                 .FirstOrDefault();
+        }
+
+        private Map FindLatestExhibitionObjectMap(Map[] exhibitionObjectMaps)
+        {
+            if (exhibitionObjectMaps == null)
+                return null;
+            
+            // Find correct map to check by sorting by event DatCommencementDate
+            var sortedExhibitionObjectMaps = new List<KeyValuePair<DateTime, Map>>();
+            var culture = new CultureInfo("en-AU");
+            
+            foreach (var map in exhibitionObjectMaps)
+            {
+                if (DateTime.TryParseExact(map.GetMap("event")?.GetEncodedString("DatCommencementDate"), new[] { "dd/MM/yyyy", "dd/MM/yy", "/MM/yyyy", "yyyy" }, culture, DateTimeStyles.None, out var date))
+                {
+                    sortedExhibitionObjectMaps.Add(new KeyValuePair<DateTime, Map>(date, map));
+                }
+            }
+            
+            // Select first one in the list as it should be the current event.
+            return sortedExhibitionObjectMaps.OrderByDescending(x => x.Key).FirstOrDefault().Value;
         }
     }
 }
