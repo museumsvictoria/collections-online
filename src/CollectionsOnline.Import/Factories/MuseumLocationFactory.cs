@@ -25,18 +25,22 @@ namespace CollectionsOnline.Import.Factories
             var museumLocation = new MuseumLocation() { DisplayStatus = DisplayStatus.NotOnDisplay };
 
             Map currentExhibitionObjectMap;
+
+            bool FindValidExhibitionMap(Map x) =>
+                string.Equals(x?.GetEncodedString("StaStatus"), "On display", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(x?.GetEncodedString("StaStatus"), "On loan", StringComparison.OrdinalIgnoreCase);
             
             // Look in parts for current exhibition object map if parent is conceptual type otherwise look in object status maps
             if (string.Equals(parentType, "conceptual", StringComparison.OrdinalIgnoreCase))
             {
-                currentExhibitionObjectMap = partsMaps.Select(x => x.GetMaps("objstatus")).Where(x => x.Any()).Select(this.FindLatestExhibitionObjectMap).FirstOrDefault(x => string.Equals(x?.GetEncodedString("StaStatus"), "On display",
-                    StringComparison.OrdinalIgnoreCase) || string.Equals(x?.GetEncodedString("StaStatus"),
-                    "On loan",
-                    StringComparison.OrdinalIgnoreCase));
+                currentExhibitionObjectMap = partsMaps
+                    .Select(x => x.GetMaps("objstatus"))
+                    .Where(x => x.Any())
+                    .SelectMany(x => x).FirstOrDefault(FindValidExhibitionMap);
             }
             else
             {
-                currentExhibitionObjectMap = this.FindLatestExhibitionObjectMap(objectStatusMaps);
+                currentExhibitionObjectMap = objectStatusMaps.FirstOrDefault(FindValidExhibitionMap);
             }
             
             var eventMap = currentExhibitionObjectMap?.GetMap("event");
@@ -57,7 +61,12 @@ namespace CollectionsOnline.Import.Factories
                 // Get venue name and event title for Venue + Gallery
                 museumLocation.DisplayStatus = DisplayStatus.OnLoan;
                 museumLocation.Venue = venNameMap != null ? _partiesNameFactory.Make(venNameMap) : null;
-                museumLocation.Gallery = eventMap?.GetEncodedString("EveEventTitle");
+                
+                // Remove the two variations of extraneous descriptor
+                museumLocation.Gallery = eventMap?.GetEncodedString("EveEventTitle")
+                    .Replace("(Loan)", "")
+                    .Replace("loan", "")
+                    .Trim();
             }
 
             return museumLocation;
@@ -104,27 +113,6 @@ namespace CollectionsOnline.Import.Factories
             return LocationDictionaries.Events.Where(ml => string.Equals(ml.Key, eventNumber, StringComparison.OrdinalIgnoreCase))
                 .Select(ml => ml.Value)
                 .FirstOrDefault();
-        }
-
-        private Map FindLatestExhibitionObjectMap(Map[] exhibitionObjectMaps)
-        {
-            if (exhibitionObjectMaps == null)
-                return null;
-            
-            // Find correct map to check by sorting by event DatCommencementDate
-            var sortedExhibitionObjectMaps = new List<KeyValuePair<DateTime, Map>>();
-            var culture = new CultureInfo("en-AU");
-            
-            foreach (var map in exhibitionObjectMaps)
-            {
-                if (DateTime.TryParseExact(map.GetMap("event")?.GetEncodedString("DatCommencementDate"), new[] { "dd/MM/yyyy", "dd/MM/yy", "/MM/yyyy", "yyyy" }, culture, DateTimeStyles.None, out var date))
-                {
-                    sortedExhibitionObjectMaps.Add(new KeyValuePair<DateTime, Map>(date, map));
-                }
-            }
-            
-            // Select first one in the list as it should be the current event.
-            return sortedExhibitionObjectMaps.OrderByDescending(x => x.Key).FirstOrDefault().Value;
         }
     }
 }
