@@ -83,10 +83,10 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         },
                         new ApiParameter
                         {
-                            Parameter = "ondisplay",
+                            Parameter = "displaystatus",
                             Necessity = "optional",
-                            Description = "Specify whether or not the returned records are on display. Parameter is considered a facet.",
-                            ExampleValues = new[] { "yes", "no" }
+                            Description = "Specify the display status of records, will only return item or specimen records. Parameter is considered a facet.",
+                            ExampleValues = new[] { "on display", "on loan" }
                         },
                         new ApiParameter
                         {

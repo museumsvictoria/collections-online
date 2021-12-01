@@ -1138,7 +1138,7 @@ button.icon {
             }
         }
 
-        & .on-display {
+        .on-display, .on-loan {
             direction: ltr;
             border-radius: 3px;
             line-height: 1.4em;
@@ -1156,39 +1156,39 @@ button.icon {
                 }
             }
 
-            &.melbourne-museum {
-                background: url("/content/img/bg-on-display-melbourne-museum.jpg");
+            &.melbourne-museum, &.curious {
+                background: #0099fa;
             }
 
             &.bunjilaka {
-                background: url("/content/img/bg-on-display-bunjilaka.png");
+                background: #4da19e;
             }
 
             &.immigration-museum, &.immigration-discovery-centre {
-                background: url("/content/img/bg-on-display-immigration-museum.png");
+                background: #cb1733;
             }
 
             &.royal-exhibition-building {
-                background: url("/content/img/bg-on-display-reb.png");
+                background: #55517b;
             }
 
             &.scienceworks {
-                background: url("/content/img/bg-on-display-scienceworks.png");
+                background: #f66d12;
             }
-
-            &.discovery-centre {
-                background: url("/content/img/bg-on-display-melbourne-museum.jpg");
-            }
-
-            & .gallery {
+            
+            .exhibition {
                 font-weight: 300;
             }
 
-            & .venue {
+            .gallery {
+                font-weight: 300;
+            }
+
+            .venue {
                 font-weight: 400;
             }
 
-            & .website {
+            .website {
                 background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
                 bottom: 0;
                 display: block;
@@ -1197,6 +1197,7 @@ button.icon {
                 position: absolute;
                 width: 100%;
                 border-bottom: none;
+                border-radius: 0 0 3px 3px;
 
                 &:hover {
                     border-bottom: none;
@@ -1205,7 +1206,7 @@ button.icon {
             }
 
 
-            & h4 {
+            h4 {
                 font-size: 22px;
                 font-weight: 400;
                 padding-left: 0;
@@ -1213,13 +1214,24 @@ button.icon {
                 color: $colour-heading-inverted;
             }
 
-            & a {
-                border-bottom: 1px dotted;
+            a {
+                display: block;
+
+                span {
+                    border-bottom: 1px dotted;
+                }
             }
 
-            & a:hover {
-                border-bottom: 1px solid;
+            a:hover {
+                span {
+                    border-bottom: 1px solid;
+                }
             }
+        }
+        
+        .on-loan {
+            background: #2a2e3a;
+            padding: 20px 15px;
         }
 
         .print {

@@ -10,13 +10,13 @@ namespace CollectionsOnline.WebSite.Extensions
         {
             var values = self.GetValues(name);
 
-            return values != null ? values.SelectMany(x => x.Split(',')).ToArray() : null;
+            return values?.SelectMany(x => x.Split(',')).ToArray();
         }
 
         public static string RenderQueryString(this NameValueCollection self)
         {
-            string[] keys = self.AllKeys;
-            for (int i = 0; i < self.Count; i++)
+            var keys = self.AllKeys;
+            for (var i = 0; i < self.Count; i++)
             {
                 self[keys[i]] = HttpUtility.UrlEncode(self[keys[i]]);
             }

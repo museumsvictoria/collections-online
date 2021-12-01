@@ -41,7 +41,7 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Article",
                     Category = (string)null,
                     HasImages = (article.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
-                    OnDisplay = (string)null,
+                    DisplayStatus = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
                     ItemType = (string)null,
@@ -109,7 +109,7 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Item",
                     Category = item.Category,
                     HasImages = (item.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
-                    OnDisplay = (item.MuseumLocation != null) ? "Yes" : "No",
+                    DisplayStatus = item.MuseumLocation.DisplayStatus,
                     DisplayLocation = item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
@@ -177,7 +177,7 @@ namespace CollectionsOnline.Core.Indexes
                         LoadDocument<Species>(item.RelatedSpeciesIds).Select(x => x.Taxonomy.TaxonName) },
                     TypeStatus = (string)null,
                     GeoType = new object[] { },
-                    MuseumLocation = new object[] { item.MuseumLocation.Gallery, item.MuseumLocation.Venue },
+                    MuseumLocation = new object[] { item.MuseumLocation.Gallery, item.MuseumLocation.Venue, item.MuseumLocation.Exhibition },
                     Article = LoadDocument<Article>(item.RelatedArticleIds).Select(x => x.Title),
                     SpeciesEndemicity = (string)null,
                 });
@@ -225,7 +225,7 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Species",
                     Category = "Natural Sciences",
                     HasImages = (species.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
-                    OnDisplay = (string)null,
+                    DisplayStatus = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
                     ItemType = (string) null,
@@ -338,7 +338,7 @@ namespace CollectionsOnline.Core.Indexes
                     RecordType = "Specimen",
                     Category = specimen.Category,
                     HasImages = (specimen.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
-                    OnDisplay = (specimen.MuseumLocation != null) ? "Yes" : "No",
+                    DisplayStatus = specimen.MuseumLocation.DisplayStatus,
                     DisplayLocation = specimen.MuseumLocation.DisplayLocation,
                     CollectingArea = specimen.CollectingAreas,
                     ItemType = specimen.Type,
@@ -398,7 +398,7 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.MeteoritesGroup,
                         specimen.TektitesClassification,
                         specimen.MineralogySpecies },
-                    MuseumLocation = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue },
+                    MuseumLocation = new object[] { specimen.MuseumLocation.Gallery, specimen.MuseumLocation.Venue, specimen.MuseumLocation.Exhibition },
                     Article = LoadDocument<Article>(specimen.RelatedArticleIds).Select(x => x.Title),
                     SpeciesEndemicity = (string)null,
                 });
@@ -462,7 +462,7 @@ namespace CollectionsOnline.Core.Indexes
 
         public string HasImages { get; set; }
 
-        public string OnDisplay { get; set; }
+        public string DisplayStatus { get; set; }
 
         public string DisplayLocation { get; set; }
 

@@ -83,8 +83,8 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Facets.Add("Category", queryString.Category);
             if (queryString.HasImages.HasValue)
                 searchInputModel.Facets.Add("HasImages", queryString.HasImages);
-            if (queryString.OnDisplay.HasValue)
-                searchInputModel.Facets.Add("OnDisplay", queryString.OnDisplay);
+            if (queryString.DisplayStatus.HasValue)
+                searchInputModel.Facets.Add("DisplayStatus", queryString.DisplayStatus);
             if (queryString.ItemType.HasValue)
                 searchInputModel.Facets.Add("ItemType", queryString.ItemType);
             if (queryString.SpeciesType.HasValue)

@@ -1,17 +1,44 @@
-﻿@using CollectionsOnline.WebSite.Extensions
+﻿@using CollectionsOnline.Core.Models
+@using CollectionsOnline.WebSite.Extensions
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CollectionsOnline.Core.Models.MuseumLocation>
-@if (Model != null)
+@if (Model.DisplayStatus == DisplayStatus.OnDisplay)
 {
     <aside class="side-content">
         <div class="on-display @Model.DisplayLocation.ToClass()">
             <h4>On display</h4>
-            <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(Model.Gallery)">@Model.Gallery</a><br />
-            <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(@Model.Venue)">@Model.Venue</a>
+            @if (!string.IsNullOrWhiteSpace(Model.Exhibition))
+            {
+                <a class="exhibition" href="/search?museumlocation=@HttpUtility.UrlEncode(Model.Exhibition)"><span>@Model.Exhibition</span></a>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Gallery))
+            {
+                <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(Model.Gallery)"><span>@Model.Gallery</span></a>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Venue))
+            {
+                <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(Model.Venue)"><span>@Model.Venue</span></a>
+            }
             @Html.RenderLocationExternalLink(Model)
         </div>
     </aside>
 }
-else
+else if (Model.DisplayStatus == DisplayStatus.OnLoan)
+{
+    <aside class="side-content">
+        <div class="on-loan">
+            <h4>On loan</h4>
+            @if (!string.IsNullOrWhiteSpace(Model.Gallery))
+            {
+                <a class="gallery" href="/search?museumlocation=@HttpUtility.UrlEncode(Model.Gallery)"><span>@Model.Gallery</span></a>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Venue))
+            {
+                <a class="venue" href="/search?museumlocation=@HttpUtility.UrlEncode(Model.Venue)"><span>@Model.Venue</span></a>
+            }
+        </div>
+    </aside>
+}
+else if (Model.DisplayStatus == DisplayStatus.NotOnDisplay)
 {
     <aside class="side-content">
         <div class="not on-display">

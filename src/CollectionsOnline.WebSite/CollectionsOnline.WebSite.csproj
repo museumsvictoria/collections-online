@@ -154,7 +154,6 @@
     <Content Include="content\img\bg-home-hero-beetles.jpg" />
     <Content Include="content\img\bg-home-hero-image-making.jpg" />
     <Content Include="content\img\bg-home-hero-textiles.jpg" />
-    <Content Include="content\img\bg-on-display-reb.png" />
     <Content Include="content\img\favicon-128.png" />
     <Content Include="content\img\favicon-16x16.png" />
     <Content Include="content\img\favicon-196x196.png" />
@@ -180,8 +179,6 @@
     <Content Include="content\img\bg-collection-hero-palaeontology.jpg" />
     <Content Include="content\img\bg-collection-hero-technology-and-society.jpg" />
     <Content Include="content\img\bg-collection-hero-zoology.jpg" />
-    <Content Include="content\img\bg-on-display-bunjilaka.png" />
-    <Content Include="content\img\bg-on-display-immigration-museum.png" />
     <Content Include="content\img\img-home-article.jpg" />
     <Content Include="content\img\img-home-bunjilaka.jpg" />
     <Content Include="content\img\bg-home-hero-herpetology.jpg" />
@@ -195,8 +192,6 @@
     <Content Include="content\img\img-home-species.jpg" />
     <Content Include="content\img\img-home-specimen.jpg" />
     <Content Include="content\img\logo-creative-victoria.png" />
-    <Content Include="content\img\bg-on-display-melbourne-museum.jpg" />
-    <Content Include="content\img\bg-on-display-scienceworks.png" />
     <Content Include="content\js\app\map.js" />
     <Content Include="content\js\app\search.js" />
     <Content Include="content\js\app\media.js" />

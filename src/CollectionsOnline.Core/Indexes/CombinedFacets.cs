@@ -17,7 +17,11 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
-                    Name = x => x.OnDisplay
+                    Name = x => x.DisplayStatus
+                },
+                new Facet<CombinedIndexResult>
+                {
+                    Name = x => x.DisplayLocation
                 },
                 new Facet<CombinedIndexResult>
                 {
@@ -46,10 +50,6 @@ namespace CollectionsOnline.Core.Indexes
                 new Facet<CombinedIndexResult>
                 {
                     Name = x => x.ArticleType
-                },
-                new Facet<CombinedIndexResult>
-                {
-                    Name = x => x.DisplayLocation
                 },
                 new Facet<CombinedIndexResult>
                 {
