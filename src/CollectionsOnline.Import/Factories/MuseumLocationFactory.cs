@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
 using IMu;
@@ -72,7 +69,7 @@ namespace CollectionsOnline.Import.Factories
             return museumLocation;
         }
 
-        public MuseumLocation MakeFromLocationMap(Map map)
+        private MuseumLocation MakeFromLocationMap(Map map)
         {
             if (map?.GetEncodedString("LocLocationType") == null)
                 return null;
@@ -106,7 +103,7 @@ namespace CollectionsOnline.Import.Factories
             return location.FirstOrDefault()?.Value;
         }
 
-        public MuseumLocation MakeFromEventMap(Map map)
+        private MuseumLocation MakeFromEventMap(Map map)
         {
             var eventNumber = map.GetEncodedString("EveEventNumber");
 

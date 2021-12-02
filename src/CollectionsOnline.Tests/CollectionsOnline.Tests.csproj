@@ -216,6 +216,7 @@
     <Compile Include="Core\Utilities\IdShortenerTests.cs" />
     <Compile Include="Fakes\FakeArticles.cs" />
     <Compile Include="Fakes\FakeItems.cs" />
+    <Compile Include="Fakes\FakeMaps.cs" />
     <Compile Include="Fakes\FakeSpecies.cs" />
     <Compile Include="Fakes\FakeSpecimens.cs" />
     <Compile Include="FileBasedTest.cs" />
