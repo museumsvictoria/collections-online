@@ -46,6 +46,7 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 86;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        magickImage.AutoOrient();
                         magickImage.Resize(new MagickGeometry(3000) { Greater = true });
                         magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
@@ -63,6 +64,7 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 70;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        magickImage.AutoOrient();
                         
                         if (NeedsPadding(map))
                         {
@@ -91,6 +93,7 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 76;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        magickImage.AutoOrient();
                         magickImage.Resize(new MagickGeometry(0, 500));
                         magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
@@ -108,6 +111,7 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 76;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        magickImage.AutoOrient();
                         magickImage.Resize(new MagickGeometry(1500) { Greater = true });
                         magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 

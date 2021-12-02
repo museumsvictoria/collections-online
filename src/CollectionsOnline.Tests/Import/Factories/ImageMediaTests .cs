@@ -38,5 +38,36 @@ namespace CollectionsOnline.Tests.Import.Factories
             // Then
             File.Exists(outputFileName).ShouldBe(true);
         }
+        
+        [Fact]
+        public void ImageMagick_Correctly_OrientsImage()
+        {
+            // Given
+            var outputFileName = $"{Files.OutputFolder}{Path.GetFileNameWithoutExtension(Files.Brochure)}.jpg";
+
+            using (var image = new MagickImage())
+            {
+                image.Read(Files.Brochure);
+
+                var profile = image.GetColorProfile();
+                image.Strip();
+                if (profile != null)
+                    image.SetProfile(profile);
+
+                image.Format = MagickFormat.Jpeg;
+                image.Quality = 76;
+                image.FilterType = FilterType.Lanczos;
+                image.ColorSpace = ColorSpace.sRGB;
+                image.AutoOrient();
+                image.Resize(new MagickGeometry(1500) { Greater = true });
+                image.UnsharpMask(0.5, 0.5, 0.6, 0.025);
+
+                // When
+                image.Write(outputFileName);
+            }
+
+            // Then
+            File.Exists(outputFileName).ShouldBe(true);
+        }
     }
 }
