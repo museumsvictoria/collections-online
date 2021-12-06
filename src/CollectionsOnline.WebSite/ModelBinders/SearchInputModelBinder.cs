@@ -4,7 +4,6 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Infrastructure;
 using CollectionsOnline.WebSite.Models;
 using Nancy;
-using Nancy.Cookies;
 using Nancy.ModelBinding;
 using Raven.Abstractions.Extensions;
 
@@ -85,14 +84,14 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Facets.Add("HasImages", queryString.HasImages);
             if (queryString.DisplayStatus.HasValue)
                 searchInputModel.Facets.Add("DisplayStatus", queryString.DisplayStatus);
+            if (queryString.DisplayLocation.HasValue)
+                searchInputModel.Facets.Add("DisplayLocation", queryString.DisplayLocation);
             if (queryString.ItemType.HasValue)
                 searchInputModel.Facets.Add("ItemType", queryString.ItemType);
             if (queryString.SpeciesType.HasValue)
                 searchInputModel.Facets.Add("SpeciesType", queryString.SpeciesType);
             if (queryString.SpecimenScientificGroup.HasValue)
                 searchInputModel.Facets.Add("SpecimenScientificGroup", queryString.SpecimenScientificGroup);
-            if (queryString.DisplayLocation.HasValue)
-                searchInputModel.Facets.Add("DisplayLocation", queryString.DisplayLocation);
 
             // Multi-select Facets
             if (queryString.ArticleType.HasValue)
@@ -135,6 +134,10 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchInputModel.Terms.Add("Article", queryString.Article);
             if (queryString.SpeciesEndemicity.HasValue)
                 searchInputModel.Terms.Add("SpeciesEndemicity", queryString.SpeciesEndemicity);
+            
+            // Deprecated Facets/Terms
+            if (queryString.OnDisplay.HasValue)
+                searchInputModel.Facets.Add("OnDisplay", queryString.OnDisplay);
 
             // Add Cookies
             searchInputModel.Cookies.Add(new Cookie("perPage", searchInputModel.PerPage.ToString(), false, true, DateTime.UtcNow.AddMonths(3), SameSite.Strict) { Path = "/" });

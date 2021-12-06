@@ -54,7 +54,12 @@ namespace CollectionsOnline.Core.Indexes
                 new Facet<CombinedIndexResult>
                 {
                     Name = x => x.ImageLicence
-                }
+                },
+                // Deprecated Facets
+                new Facet<CombinedIndexResult>
+                {
+                    Name = x => x.OnDisplay
+                },
             };
         }
     }

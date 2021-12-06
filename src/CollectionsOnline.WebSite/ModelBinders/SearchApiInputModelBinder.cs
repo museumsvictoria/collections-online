@@ -71,14 +71,14 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchApiInputModel.Facets.Add("HasImages", queryString.HasImages);
             if (queryString.DisplayStatus.HasValue)
                 searchApiInputModel.Facets.Add("DisplayStatus", queryString.DisplayStatus);
+            if (queryString.DisplayLocation.HasValue)
+                searchApiInputModel.Facets.Add("DisplayLocation", queryString.DisplayLocation);
             if (queryString.ItemType.HasValue)
                 searchApiInputModel.Facets.Add("ItemType", queryString.ItemType);
             if (queryString.SpeciesType.HasValue)
                 searchApiInputModel.Facets.Add("SpeciesType", queryString.SpeciesType);
             if (queryString.SpecimenScientificGroup.HasValue)
                 searchApiInputModel.Facets.Add("SpecimenScientificGroup", queryString.SpecimenScientificGroup);
-            if (queryString.DisplayLocation.HasValue)
-                searchApiInputModel.Facets.Add("DisplayLocation", queryString.DisplayLocation);
 
             // Multi-select Facets
             if (queryString.ArticleType.HasValue)
@@ -121,6 +121,10 @@ namespace CollectionsOnline.WebSite.ModelBinders
                 searchApiInputModel.Terms.Add("Article", queryString.Article);
             if (queryString.SpeciesEndemicity.HasValue)
                 searchApiInputModel.Terms.Add("SpeciesEndemicity", queryString.SpeciesEndemicity);
+            
+            // Deprecated Facets/Terms
+            if (queryString.OnDisplay.HasValue)
+                searchApiInputModel.Facets.Add("OnDisplay", queryString.OnDisplay);
             
             return searchApiInputModel;
         }
