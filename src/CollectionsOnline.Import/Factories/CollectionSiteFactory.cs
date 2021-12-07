@@ -22,8 +22,11 @@ namespace CollectionsOnline.Import.Factories
         public CollectionSite Make(Map map, string discipline, string scientificGroup)
         {
             if (map != null &&
-                !((string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase))
-                && string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase)))
+                !((string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase) ||
+                   scientificGroup.Contains("Zoology", StringComparison.OrdinalIgnoreCase))
+                  && string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no",
+                      StringComparison.OrdinalIgnoreCase)))
             {
                 var collectionSite = new CollectionSite
                 {
