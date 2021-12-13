@@ -49,7 +49,8 @@ namespace CollectionsOnline.Import.Factories
                 }
 
                 // Lat/Long
-                var latlongMap = map.GetMaps("latlong").FirstOrDefault();
+                
+                var latlongMap = map.GetMaps("latlong").FirstOrDefault(x => string.Equals(x.GetEncodedString("LatPreferred_tab"), "yes", StringComparison.OrdinalIgnoreCase));
                 if (latlongMap != null &&
                     !(string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -57,16 +58,15 @@ namespace CollectionsOnline.Import.Factories
                     if (decimalLatitudes != null && decimalLatitudes.Any(x => x != null))
                         collectionSite.Latitudes.AddRange(decimalLatitudes.Where(x => x != null).Select(x => x.ToString()));
 
-                    var decimalLongitudes = ((object[])latlongMap["LatLongitudeDecimal_nesttab"]);
+                    var decimalLongitudes = (object[])latlongMap["LatLongitudeDecimal_nesttab"];
                     if (decimalLongitudes != null && decimalLongitudes.Any(x => x != null))
                         collectionSite.Longitudes.AddRange(decimalLongitudes.Where(x => x != null).Select(x => x.ToString()));
 
-                    collectionSite.GeodeticDatum = (string.IsNullOrWhiteSpace(latlongMap.GetEncodedString("LatDatum_tab"))) ? "WGS84" : latlongMap.GetEncodedString("LatDatum_tab");
+                    collectionSite.GeodeticDatum = string.IsNullOrWhiteSpace(latlongMap.GetEncodedString("LatDatum_tab")) ? "WGS84" : latlongMap.GetEncodedString("LatDatum_tab");
                     collectionSite.SiteRadius = latlongMap.GetEncodedString("LatRadiusNumeric_tab");
                     collectionSite.GeoreferenceBy = _partiesNameFactory.Make(latlongMap.GetMap("determinedBy"));
 
-                    DateTime georeferenceDate;
-                    if (DateTime.TryParseExact(latlongMap.GetEncodedString("LatDetDate0"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out georeferenceDate))
+                    if (DateTime.TryParseExact(latlongMap.GetEncodedString("LatDetDate0"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.None, out var georeferenceDate))
                         collectionSite.GeoreferenceDate = georeferenceDate.ToString("s");
 
                     collectionSite.GeoreferenceProtocol = latlongMap.GetEncodedString("LatLatLongDetermination_tab");
