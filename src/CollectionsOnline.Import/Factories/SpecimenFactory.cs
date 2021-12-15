@@ -89,7 +89,7 @@ namespace CollectionsOnline.Import.Factories
                         "associations=[AssAssociationType_tab,party=AssAssociationNameRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AssAssociationCountry_tab,AssAssociationState_tab,AssAssociationRegion_tab,AssAssociationLocality_tab,AssAssociationStreetAddress_tab,AssAssociationDate_tab,AssAssociationComments0]",
                         "relateditemspecimens=ColRelatedRecordsRef_tab.(irn,MdaDataSets_tab)",
                         "attacheditemspecimens=ColPhysicallyAttachedToRef.(irn,MdaDataSets_tab)",
-                        "parentitemspecimens=ColParentRecordRef.(irn,MdaDataSets_tab)",
+                        "parentitemspecimens=ColParentRecordRef.(irn,ColRegPrefix,ColRegNumber,ColRegPart,MdaDataSets_tab)",
                         "accession=AccAccessionLotRef.(AcqAcquisitionMethod,AcqDateReceived,AcqDateOwnership,AcqCreditLine,source=[name=AcqSourceRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AcqSourceRole_tab],AdmPublishWebNoPassword)",
                         "RigText0",
                         "location=LocCurrentLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,location=LocHolderLocationRef.(LocLocationType,LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4),LocLevel1,LocLevel2,LocLevel3,LocLevel4)",
@@ -124,6 +124,11 @@ namespace CollectionsOnline.Import.Factories
                         "RocRockName",
                         "RocRockDescription",
                         "RocMainMineralsPresent",
+                        "tissue=[TisInitialPreservation_tab,TisLtStorageMethod_tab,TisDatePrepared0]",
+                        "storage=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab,StrDatePrepared0]",
+                        "TisOtherInstitutionName",
+                        "TisOtherInstitutionNo",
+                        "TisRegistrationNumber",
                         "relatedarticlespecies=<enarratives:ObjObjectsRef_tab>.(irn,DetPurpose_tab)",
                         "relatedpartyarticles=AssAssociationNameRef_tab.(relatedarticles=<enarratives:ParPartiesRef_tab>.(irn,DetPurpose_tab))",
                         "relatedsitearticles=ArcSiteNameRef.(relatedarticles=<enarratives:SitSitesRef_tab>.(irn,DetPurpose_tab))",
@@ -243,17 +248,6 @@ namespace CollectionsOnline.Import.Factories
             specimen.Sex = map.GetEncodedStrings("SpeSex_tab").Concatenate(", ");
             // Stage Or Age
             specimen.StageOrAge = map.GetEncodedStrings("SpeStageAge_tab").Concatenate(", ");
-            // Storages
-            specimen.Storages.AddRange(
-                map.GetMaps("storage")
-                    .Select(x => new Storage
-                    {
-                        Nature = x.GetEncodedString("StrSpecimenNature_tab"),
-                        Form = x.GetEncodedString("StrSpecimenForm_tab"),
-                        FixativeTreatment = x.GetEncodedString("StrFixativeTreatment_tab"),
-                        Medium = x.GetEncodedString("StrStorageMedium_tab")
-                    })
-                    .Where(x => x != null));
 
             // Taxonomy
             // TODO: make factory method as code duplicated in ItemFactory
@@ -347,7 +341,73 @@ namespace CollectionsOnline.Import.Factories
             specimen.PetrologyRockName = map.GetEncodedString("RocRockName");
             specimen.PetrologyRockDescription = map.GetEncodedString("RocRockDescription");
             specimen.PetrologyMineralsPresent = map.GetEncodedString("RocMainMineralsPresent");
+            
+            // Storages
+            specimen.Storages.AddRange(
+                map.GetMaps("storage")
+                    .Select(x => new Storage
+                    {
+                        Nature = x.GetEncodedString("StrSpecimenNature_tab"),
+                        Form = x.GetEncodedString("StrSpecimenForm_tab"),
+                        FixativeTreatment = x.GetEncodedString("StrFixativeTreatment_tab"),
+                        Medium = x.GetEncodedString("StrStorageMedium_tab")
+                    })
+                    .Where(x => x != null));
+            
+            // Tissue/Preparations
+            specimen.SpecimenNature = map.GetMaps("storage")
+                .Select(x => x.GetEncodedString("StrSpecimenNature_tab"))
+                .Concatenate(", ");
+            
+            specimen.SpecimenForm = map.GetMaps("storage")
+                .Select(x => x.GetEncodedString("StrSpecimenForm_tab"))
+                .Concatenate(", ");
+            
+            specimen.Preservative = map.GetMaps("tissue")
+                .Select(x => x.GetEncodedString("TisInitialPreservation_tab"))
+                .Concatenate(", ");
+            
+            specimen.FixativeTreatment = map.GetMaps("storage")
+                .Select(x => x.GetEncodedString("StrFixativeTreatment_tab"))
+                .Concatenate(", ");
+            
+            specimen.StorageMedium = map.GetMaps("storage")
+                .Select(x => x.GetEncodedString("StrStorageMedium_tab"))
+                .Concatenate(", ");
+            
+            specimen.StorageTemperature = map.GetMaps("tissue")
+                .Select(x => x.GetEncodedString("TisLtStorageMethod_tab"))
+                .Concatenate(", ");
+            
+            if (DateTime.TryParseExact(
+                string.IsNullOrWhiteSpace(map.GetMaps("tissue").FirstOrDefault()?.GetString("TisDatePrepared0"))
+                    ? map.GetMaps("storage").FirstOrDefault()?.GetString("StrDatePrepared0")
+                    : map.GetMaps("tissue").FirstOrDefault()?.GetString("TisDatePrepared0"),
+                new[] {"dd/MM/yyyy", "dd/MM/yy"}, new CultureInfo("en-AU"), DateTimeStyles.None,
+                out var dateOfPreparation))
+            {
+                specimen.DateOfPreparation = dateOfPreparation.ToString("s");
+            }
 
+            var parentMap = map.GetMap("parentitemspecimens");
+            if (parentMap != null)
+            {
+                var parentRegistrationNumber = parentMap["ColRegPart"] != null ? $"{parentMap["ColRegPrefix"]} {parentMap["ColRegNumber"]}.{parentMap["ColRegPart"]}"
+                    : $"{parentMap["ColRegPrefix"]} {parentMap["ColRegNumber"]}";
+                specimen.TissueSampledFrom = $"Museums Victoria specimen {parentRegistrationNumber}";
+            }
+            else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("TisOtherInstitutionName")) ||
+                     !string.IsNullOrWhiteSpace(map.GetEncodedString("TisOtherInstitutionNo")) ||
+                     !string.IsNullOrWhiteSpace(map.GetEncodedString("TisRegistrationNumber")))
+            {
+                specimen.TissueSampledFrom = new[]
+                {
+                    string.IsNullOrWhiteSpace(map.GetEncodedString("TisOtherInstitutionName")) ? null : $"{map.GetEncodedString("TisOtherInstitutionName")} specimen",
+                    map.GetEncodedString("TisOtherInstitutionNo"),
+                    map.GetEncodedString("TisRegistrationNumber"),
+                }.Concatenate(" ");
+            }
+            
             // Media
             specimen.Media = _mediaFactory.Make(map.GetMaps("media"));
 
