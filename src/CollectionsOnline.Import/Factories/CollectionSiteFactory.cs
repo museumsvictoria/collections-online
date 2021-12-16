@@ -49,7 +49,6 @@ namespace CollectionsOnline.Import.Factories
                 }
 
                 // Lat/Long
-                
                 var latlongMap = map.GetMaps("latlong").FirstOrDefault(x => string.Equals(x.GetEncodedString("LatPreferred_tab"), "yes", StringComparison.OrdinalIgnoreCase));
                 if (latlongMap != null &&
                     !(string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)))

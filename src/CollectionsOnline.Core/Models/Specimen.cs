@@ -152,6 +152,8 @@ namespace CollectionsOnline.Core.Models
 
         public string SpecimenNature { get; set; }
         
+        public string TissueType { get; set; }
+        
         public string SpecimenForm { get; set; }
         
         public string Preservative { get; set; }

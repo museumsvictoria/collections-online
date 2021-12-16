@@ -72,7 +72,7 @@ namespace CollectionsOnline.Import.Factories
                     taxonomy.TaxonName = new[]
                     {
                         taxonomy.Genus,
-                        string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus),
+                        string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : $"({taxonomy.Subgenus})",
                         taxonomy.Species,
                         taxonomy.Subspecies
                     }.Concatenate(" ");
@@ -106,38 +106,56 @@ namespace CollectionsOnline.Import.Factories
 
             if (qualifierRank == QualifierRankType.Species)
             {
-                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus) }.Concatenate(" ");
-                var taxonSecondPart = new[] { taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
-                
-                scientificName = new[]
-                {
-                    string.IsNullOrWhiteSpace(taxonFirstPart) ? null : string.Format("<em>{0}</em>", taxonFirstPart),
-                    qualifier,
-                    string.IsNullOrWhiteSpace(taxonSecondPart) ? null : string.Format("<em>{0}</em>", taxonSecondPart),
-                    taxonomy.Author
+                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : $"({taxonomy.Subgenus})"
                 }.Concatenate(" ");
+                var taxonSecondPart = new[] { taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
+
+                if (!string.IsNullOrWhiteSpace(qualifier))
+                {
+                    scientificName = new[]
+                    {
+                        string.IsNullOrWhiteSpace(taxonFirstPart) ? null : $"<em>{taxonFirstPart}</em>",
+                        qualifier,
+                        string.IsNullOrWhiteSpace(taxonSecondPart) ? null : $"<em>{taxonSecondPart}</em>",
+                        taxonomy.Author
+                    }.Concatenate(" ");
+                }
+                else
+                {
+                    var taxon = new[]
+                    {
+                        taxonFirstPart,
+                        taxonSecondPart
+                    }.Concatenate(" ");
+                    
+                    scientificName = new[]
+                    {
+                        string.IsNullOrWhiteSpace(taxon) ? null : $"<em>{taxon}</em>",
+                        taxonomy.Author
+                    }.Concatenate(" ");
+                }
             }
             else if (qualifierRank == QualifierRankType.Genus)
             {
-                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus), 
+                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : $"({taxonomy.Subgenus})", 
                     taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
                 
                 scientificName = new[]
                 {
                     qualifier,
-                    string.IsNullOrWhiteSpace(taxonFirstPart) ? null : string.Format("<em>{0}</em>", taxonFirstPart),
+                    string.IsNullOrWhiteSpace(taxonFirstPart) ? null : $"<em>{taxonFirstPart}</em>",
                     taxonomy.Author
                 }.Concatenate(" ");
             }
             else
             {
                 // If there is no qualifier rank, try to concatenate taxon levels at and below genus, if that is empty instead use the taxon name
-                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : string.Format("({0})", taxonomy.Subgenus), 
+                var taxonFirstPart = new[] { taxonomy.Genus, string.IsNullOrWhiteSpace(taxonomy.Subgenus) ? null : $"({taxonomy.Subgenus})", 
                     taxonomy.Species, taxonomy.Subspecies }.Concatenate(" ");
 
                 scientificName = new[]
                 {
-                    string.IsNullOrWhiteSpace(taxonFirstPart) ? taxonomy.TaxonName : string.Format("<em>{0}</em>", taxonFirstPart),
+                    string.IsNullOrWhiteSpace(taxonFirstPart) ? taxonomy.TaxonName : $"<em>{taxonFirstPart}</em>",
                     taxonomy.Author
                 }.Concatenate(" ");
             }

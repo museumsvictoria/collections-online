@@ -70,7 +70,7 @@ namespace CollectionsOnline.Import.Factories
                         "SpeSex_tab",
                         "SpeStageAge_tab",
                         "storage=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab]",
-                        "site=SitSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab],AdmPublishWebNoPassword)",
+                        "site=SitSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab,LatPreferred_tab],AdmPublishWebNoPassword)",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab],relatedspecies=<enarratives:TaxTaxaRef_tab>.(irn,DetPurpose_tab))]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
                         "ColCategory",
@@ -124,7 +124,7 @@ namespace CollectionsOnline.Import.Factories
                         "RocRockName",
                         "RocRockDescription",
                         "RocMainMineralsPresent",
-                        "tissue=[TisInitialPreservation_tab,TisLtStorageMethod_tab,TisDatePrepared0]",
+                        "tissue=[TisTissueType_tab,TisInitialPreservation_tab,TisLtStorageMethod_tab,TisDatePrepared0]",
                         "storage=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab,StrDatePrepared0]",
                         "TisOtherInstitutionName",
                         "TisOtherInstitutionNo",
@@ -359,6 +359,10 @@ namespace CollectionsOnline.Import.Factories
                 .Select(x => x.GetEncodedString("StrSpecimenNature_tab"))
                 .Concatenate(", ");
             
+            specimen.TissueType = map.GetMaps("tissue")
+                .Select(x => x.GetEncodedString("TisTissueType_tab"))
+                .Concatenate(", ");
+            
             specimen.SpecimenForm = map.GetMaps("storage")
                 .Select(x => x.GetEncodedString("StrSpecimenForm_tab"))
                 .Concatenate(", ");
@@ -390,7 +394,7 @@ namespace CollectionsOnline.Import.Factories
             }
 
             var parentMap = map.GetMap("parentitemspecimens");
-            if (parentMap != null)
+            if (parentMap != null && parentMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
             {
                 var parentRegistrationNumber = parentMap["ColRegPart"] != null ? $"{parentMap["ColRegPrefix"]} {parentMap["ColRegNumber"]}.{parentMap["ColRegPart"]}"
                     : $"{parentMap["ColRegPrefix"]} {parentMap["ColRegNumber"]}";
