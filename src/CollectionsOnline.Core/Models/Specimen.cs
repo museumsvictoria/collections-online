@@ -77,6 +77,8 @@ namespace CollectionsOnline.Core.Models
         public string StageOrAge { get; set; }
 
         public IList<Storage> Storages { get; set; }
+        
+        public IList<Tissue> Tissues { get; set; }
 
         public string TypeStatus { get; set; }
 
@@ -150,20 +152,6 @@ namespace CollectionsOnline.Core.Models
 
         public string PetrologyMineralsPresent { get; set; }
 
-        public string SpecimenNature { get; set; }
-        
-        public string TissueType { get; set; }
-        
-        public string SpecimenForm { get; set; }
-        
-        public string Preservative { get; set; }
-        
-        public string FixativeTreatment { get; set; }
-        
-        public string StorageMedium { get; set; }
-        
-        public string StorageTemperature { get; set; }
-        
         public string DateOfPreparation { get; set; }
         
         public string TissueSampledFrom { get; set; }
@@ -181,6 +169,7 @@ namespace CollectionsOnline.Core.Models
             Keywords = new List<string>();
             Media = new List<Media>();
             Storages = new List<Storage>();
+            Tissues = new List<Tissue>();
         }
     }
 }

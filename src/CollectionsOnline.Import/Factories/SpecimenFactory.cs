@@ -69,7 +69,6 @@ namespace CollectionsOnline.Import.Factories
                         "BirTotalClutchSize",
                         "SpeSex_tab",
                         "SpeStageAge_tab",
-                        "storage=[StrSpecimenNature_tab,StrSpecimenForm_tab,StrFixativeTreatment_tab,StrStorageMedium_tab]",
                         "site=SitSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab,LatPreferred_tab],AdmPublishWebNoPassword)",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab],relatedspecies=<enarratives:TaxTaxaRef_tab>.(irn,DetPurpose_tab))]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
@@ -354,35 +353,16 @@ namespace CollectionsOnline.Import.Factories
                     })
                     .Where(x => x != null));
             
-            // Tissue/Preparations
-            specimen.SpecimenNature = map.GetMaps("storage")
-                .Select(x => x.GetEncodedString("StrSpecimenNature_tab"))
-                .Concatenate(", ");
-            
-            specimen.TissueType = map.GetMaps("tissue")
-                .Select(x => x.GetEncodedString("TisTissueType_tab"))
-                .Concatenate(", ");
-            
-            specimen.SpecimenForm = map.GetMaps("storage")
-                .Select(x => x.GetEncodedString("StrSpecimenForm_tab"))
-                .Concatenate(", ");
-            
-            specimen.Preservative = map.GetMaps("tissue")
-                .Select(x => x.GetEncodedString("TisInitialPreservation_tab"))
-                .Concatenate(", ");
-            
-            specimen.FixativeTreatment = map.GetMaps("storage")
-                .Select(x => x.GetEncodedString("StrFixativeTreatment_tab"))
-                .Concatenate(", ");
-            
-            specimen.StorageMedium = map.GetMaps("storage")
-                .Select(x => x.GetEncodedString("StrStorageMedium_tab"))
-                .Concatenate(", ");
-            
-            specimen.StorageTemperature = map.GetMaps("tissue")
-                .Select(x => x.GetEncodedString("TisLtStorageMethod_tab"))
-                .Concatenate(", ");
-            
+            specimen.Tissues.AddRange(
+                map.GetMaps("tissue")
+                    .Select(x => new Tissue
+                    {
+                        TissueType = x.GetEncodedString("TisTissueType_tab"),
+                        Preservative = x.GetEncodedString("TisInitialPreservation_tab"),
+                        StorageTemperature = x.GetEncodedString("TisLtStorageMethod_tab"),
+                    })
+                    .Where(x => x != null));
+
             if (DateTime.TryParseExact(
                 string.IsNullOrWhiteSpace(map.GetMaps("tissue").FirstOrDefault()?.GetString("TisDatePrepared0"))
                     ? map.GetMaps("storage").FirstOrDefault()?.GetString("StrDatePrepared0")
@@ -390,7 +370,7 @@ namespace CollectionsOnline.Import.Factories
                 new[] {"dd/MM/yyyy", "dd/MM/yy"}, new CultureInfo("en-AU"), DateTimeStyles.None,
                 out var dateOfPreparation))
             {
-                specimen.DateOfPreparation = dateOfPreparation.ToString("s");
+                specimen.DateOfPreparation = dateOfPreparation.ToString("d");
             }
 
             var parentMap = map.GetMap("parentitemspecimens");

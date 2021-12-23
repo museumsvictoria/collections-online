@@ -159,53 +159,18 @@
                             <p>@Model.Specimen.StageOrAge</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.SpecimenNature))
+                    @if (Model.Specimen.Storages.Any())
                     {
                         <li>
                             <h3>Specimen Nature</h3>
-                            <p>@Model.Specimen.SpecimenNature</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TissueType))
-                    {
-                        <li>
-                            <h3>Tissue Type</h3>
-                            <p>@Model.Specimen.TissueType</p>
+                            <p>@Html.RenderStorages(Model.Specimen.Storages)</p>
                         </li>
                     }                
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.SpecimenForm))
+                    @if (Model.Specimen.Tissues.Any())
                     {
                         <li>
-                            <h3>Specimen Form</h3>
-                            <p>@Model.Specimen.SpecimenForm</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.Preservative))
-                    {
-                        <li>
-                            <h3>Preservative</h3>
-                            <p>@Model.Specimen.Preservative</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.FixativeTreatment))
-                    {
-                        <li>
-                            <h3>Fixative/Treatment</h3>
-                            <p>@Model.Specimen.FixativeTreatment</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.StorageMedium))
-                    {
-                        <li>
-                            <h3>Storage Medium</h3>
-                            <p>@Model.Specimen.StorageMedium</p>
-                        </li>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.StorageTemperature))
-                    {
-                        <li>
-                            <h3>Storage Temperature</h3>
-                            <p>@Model.Specimen.StorageTemperature</p>
+                            <h3>Specimen Tissue</h3>
+                            <p>@Html.RenderTissues(Model.Specimen.Tissues)</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.DateOfPreparation))
@@ -492,7 +457,6 @@
                                 @for (int i = 0; i < Model.Specimen.CollectingAreas.Count; i++)
                                 {
                                     <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Specimen.CollectingAreas[i])">@Model.Specimen.CollectingAreas[i]</a>@(i != Model.Specimen.CollectingAreas.Count - 1 ? "," : "")
-
                                 }
                             </p>
                         </li>
@@ -512,7 +476,6 @@
                                 @for (int i = 0; i < Model.Specimen.Keywords.Count; i++)
                                 {
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Specimen.Keywords[i])">@Model.Specimen.Keywords[i]</a>@(i != Model.Specimen.Keywords.Count - 1 ? ", " : "")
-
                                 }
                             </p>
                         </li>
