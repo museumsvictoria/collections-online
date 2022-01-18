@@ -162,9 +162,9 @@
 
         public string CollectionSiteMaximumElevation { get; set; }
 
-        public string CollectionSiteLatitudes { get; set; }
+        public string CollectionSiteLatitude { get; set; }
 
-        public string CollectionSiteLongitudes { get; set; }
+        public string CollectionSiteLongitude { get; set; }
 
         public string CollectionSiteGeodeticDatum { get; set; }
 

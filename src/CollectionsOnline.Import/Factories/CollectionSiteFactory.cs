@@ -54,12 +54,12 @@ namespace CollectionsOnline.Import.Factories
                     !(string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)))
                 {
                     var decimalLatitudes = (object[])latlongMap["LatLatitudeDecimal_nesttab"];
-                    if (decimalLatitudes != null && decimalLatitudes.Any(x => x != null))
-                        collectionSite.Latitudes.AddRange(decimalLatitudes.Where(x => x != null).Select(x => x.ToString()));
+                    if (decimalLatitudes != null && double.TryParse(decimalLatitudes.FirstOrDefault(x => x != null)?.ToString(), out var latitude))
+                        collectionSite.Latitude = latitude;
 
                     var decimalLongitudes = (object[])latlongMap["LatLongitudeDecimal_nesttab"];
-                    if (decimalLongitudes != null && decimalLongitudes.Any(x => x != null))
-                        collectionSite.Longitudes.AddRange(decimalLongitudes.Where(x => x != null).Select(x => x.ToString()));
+                    if (decimalLongitudes != null && double.TryParse(decimalLongitudes.FirstOrDefault(x => x != null)?.ToString(), out var longitude))
+                        collectionSite.Longitude = longitude;
 
                     collectionSite.GeodeticDatum = string.IsNullOrWhiteSpace(latlongMap.GetEncodedString("LatDatum_tab")) ? "WGS84" : latlongMap.GetEncodedString("LatDatum_tab");
                     collectionSite.SiteRadius = latlongMap.GetEncodedString("LatRadiusNumeric_tab");

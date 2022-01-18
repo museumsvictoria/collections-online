@@ -6,23 +6,22 @@ module.exports = {
     this.buildMap();
   },
   cacheElements: function () {
-    this.Model = window.latlongsModel;
+    this.Model = window.lnglatModel;
   },
   buildMap: function () {
-      if (this.Model !== undefined && this.Model.length != 0) {
-          // Mapbox expects long/lat instead of lat/long
-          var longLat = [this.Model[0][1], this.Model[0][0]];
+      if (this.Model !== undefined && this.Model.length !== 0) {
           mapboxgl.accessToken = 'pk.eyJ1IjoibW1hc29uIiwiYSI6IlFtOXZGSW8ifQ.mIKIjLOaVEDuLDQOM-ddzA';
-
+          
           var map = new mapboxgl.Map({
               container: 'map',
-              style: 'mapbox://styles/mmason/ck9tfnhc90fv21inxraee3u6d',
-              center: longLat,
+              style: 'mapbox://styles/mmason/ckyjlbw3kdpk514lokzdw28jv',
+              center: this.Model,
               zoom: 8
           });
 
+          // Create a default Marker and add it to the map.
           var marker = new mapboxgl.Marker()
-              .setLngLat(longLat)
+              .setLngLat(this.Model)
               .addTo(map);
 
           var nav = new mapboxgl.NavigationControl({

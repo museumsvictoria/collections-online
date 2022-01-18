@@ -6,8 +6,8 @@
     Layout = "Layout.cshtml";
 }
 @section Head {
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
 }
 @Html.Partial("Media", new MediaViewModel { Medias = Model.Specimen.Media.WithThumbnails(), DocumentId = Model.Specimen.Id })
 <div id="title">
@@ -566,8 +566,8 @@
     {
         @: var mediaModel = @Html.ConvertToJson(Model.Specimen.Media.WithThumbnails());
     }
-    @if (Model.LatLongs.Any())
+    @if (Model.Specimen.CollectionSite != null && Model.Specimen.CollectionSite.Latitude != null && Model.Specimen.CollectionSite.Longitude != null)
     {
-        @: var latlongsModel = @Html.ConvertToJson(Model.LatLongs);
+        @: var lnglatModel = @Html.ConvertToJson(new[] { Model.Specimen.CollectionSite.Longitude, Model.Specimen.CollectionSite.Latitude });
     }
 </script>
