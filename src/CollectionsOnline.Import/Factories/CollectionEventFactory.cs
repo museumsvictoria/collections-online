@@ -18,7 +18,7 @@ namespace CollectionsOnline.Import.Factories
             _partiesNameFactory = partiesNameFactory;
         }
 
-        public CollectionEvent Make(Map map)
+        public CollectionEvent Make(Map map, string type, string registrationPrefix)
         {
             if (map != null)
             {
@@ -29,15 +29,18 @@ namespace CollectionsOnline.Import.Factories
                     CollectionEventCode = map.GetEncodedString("ColCollectionEventCode"),
                     SamplingMethod = map.GetEncodedString("ColCollectionMethod"),
                     DepthTo = map.GetEncodedString("AquDepthToMet"),
-                    DepthFrom = map.GetEncodedString("AquDepthFromMet"),
-                    CollectedBy = map.GetMaps("collectors").Where(x => x != null).Select(x => _partiesNameFactory.Make(x)).Concatenate(", ")
+                    DepthFrom = map.GetEncodedString("AquDepthFromMet")
                 };
-
-                DateTime dateVisitedFrom;
-                if (DateTime.TryParseExact(map.GetEncodedString("ColDateVisitedFrom"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.AssumeLocal, out dateVisitedFrom))
+                
+                if (!(string.Equals(type, "Observation", StringComparison.OrdinalIgnoreCase) && string.Equals(registrationPrefix, "ZI", StringComparison.OrdinalIgnoreCase)))
                 {
-                    TimeSpan timeVisitedFrom;
-                    if (TimeSpan.TryParseExact(map.GetEncodedString("ColTimeVisitedFrom"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedFrom))
+                    collectionEvent.CollectedBy = map.GetMaps("collectors").Where(x => x != null)
+                        .Select(x => _partiesNameFactory.Make(x)).Concatenate(", ");
+                }
+                
+                if (DateTime.TryParseExact(map.GetEncodedString("ColDateVisitedFrom"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.AssumeLocal, out DateTime dateVisitedFrom))
+                {
+                    if (TimeSpan.TryParseExact(map.GetEncodedString("ColTimeVisitedFrom"), @"hh\:mm", new CultureInfo("en-AU"), out TimeSpan timeVisitedFrom))
                     {
                         dateVisitedFrom += timeVisitedFrom;
                     }
@@ -45,11 +48,9 @@ namespace CollectionsOnline.Import.Factories
                     collectionEvent.DateVisitedFrom = dateVisitedFrom;
                 }
 
-                DateTime dateVisitedTo;
-                if (DateTime.TryParseExact(map.GetEncodedString("ColDateVisitedTo"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.AssumeLocal, out dateVisitedTo))
+                if (DateTime.TryParseExact(map.GetEncodedString("ColDateVisitedTo"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.AssumeLocal, out DateTime dateVisitedTo))
                 {
-                    TimeSpan timeVisitedTo;
-                    if (TimeSpan.TryParseExact(map.GetEncodedString("ColTimeVisitedTo"), @"hh\:mm", new CultureInfo("en-AU"), out timeVisitedTo))
+                    if (TimeSpan.TryParseExact(map.GetEncodedString("ColTimeVisitedTo"), @"hh\:mm", new CultureInfo("en-AU"), out TimeSpan timeVisitedTo))
                     {
                         dateVisitedTo += timeVisitedTo;
                     }

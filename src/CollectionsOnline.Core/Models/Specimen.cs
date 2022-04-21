@@ -29,6 +29,8 @@ namespace CollectionsOnline.Core.Models
         public string ScientificGroup { get; set; }
 
         public string Discipline { get; set; }
+        
+        public string RegistrationPrefix { get; set; }
 
         public string RegistrationNumber { get; set; }
 

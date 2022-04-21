@@ -164,9 +164,10 @@ namespace CollectionsOnline.Import.Factories
             specimen.Category = map.GetEncodedString("ColCategory");
             specimen.ScientificGroup = map.GetEncodedString("ColScientificGroup");
             specimen.Discipline = map.GetEncodedString("ColDiscipline");
+            specimen.RegistrationPrefix = map.GetEncodedString("ColRegPrefix");
             specimen.RegistrationNumber = map["ColRegPart"] != null
-                             ? $"{map["ColRegPrefix"]} {map["ColRegNumber"]}.{map["ColRegPart"]}"
-                             : $"{map["ColRegPrefix"]} {map["ColRegNumber"]}";
+                             ? $"{specimen.RegistrationPrefix} {map["ColRegNumber"]}.{map["ColRegPart"]}"
+                             : $"{specimen.RegistrationPrefix} {map["ColRegNumber"]}";
             specimen.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
             specimen.Type = map.GetEncodedString("ColTypeOfItem");
 
@@ -288,7 +289,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Collection Event
             var collectionEventMap = map.GetMap("colevent");
-            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap);
+            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix);
 
             // Sites
             var collectionSiteMap = map.GetMap("site");
