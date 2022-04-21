@@ -289,7 +289,7 @@ namespace CollectionsOnline.Import.Factories
 
             // Collection Event
             var collectionEventMap = map.GetMap("colevent");
-            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix);
+            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix, specimen.ScientificGroup);
 
             // Sites
             var collectionSiteMap = map.GetMap("site");

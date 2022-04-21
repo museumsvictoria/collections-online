@@ -8,45 +8,59 @@ namespace CollectionsOnline.Tests.Import.Factories
     public class CollectionEventFactoryTests
     {
         [Fact]
-        public void MakeCollectionEvent_WithZiObservation_ReturnsCorrectly()
+        public void MakeCollectionEvent_WithZiObservation_ReturnsNullCollectedBy()
         {
             // Given
             var collectionEventFactory = new CollectionEventFactory(new PartiesNameFactory());
             var map = MakeSampleCollectionEvent();
 
             // When
-            var result = collectionEventFactory.Make(map, "Observation", "ZI");
+            var result = collectionEventFactory.Make(map, "Observation", "ZI", "Invertebrate Zoology");
 
             // Then
             result.CollectedBy.ShouldBe(null);
         }
         
         [Fact]
-        public void MakeCollectionEvent_WithTObservation_ReturnsCorrectly()
+        public void MakeCollectionEvent_WithTObservation_ReturnsNonEmptyCollectedBy()
         {
             // Given
             var collectionEventFactory = new CollectionEventFactory(new PartiesNameFactory());
             var map = MakeSampleCollectionEvent();
 
             // When
-            var result = collectionEventFactory.Make(map, "Observation", "T");
+            var result = collectionEventFactory.Make(map, "Observation", "T", "Invertebrate Zoology");
 
             // Then
             result.CollectedBy.ShouldBe("Dr Ken Walker - Museum Victoria");
         }
         
         [Fact]
-        public void MakeCollectionEvent_WithZISpecimen_ReturnsCorrectly()
+        public void MakeCollectionEvent_WithZISpecimen_ReturnsNonEmptyCollectedBy()
         {
             // Given
             var collectionEventFactory = new CollectionEventFactory(new PartiesNameFactory());
             var map = MakeSampleCollectionEvent();
 
             // When
-            var result = collectionEventFactory.Make(map, "Specimen", "ZI");
+            var result = collectionEventFactory.Make(map, "Specimen", "ZI", "Invertebrate Zoology");
 
             // Then
             result.CollectedBy.ShouldBe("Dr Ken Walker - Museum Victoria");
+        }
+        
+        [Fact]
+        public void MakeCollectionEvent_WithSpecimenTypeModel_ReturnsNull()
+        {
+            // Given
+            var collectionEventFactory = new CollectionEventFactory(new PartiesNameFactory());
+            var map = MakeSampleCollectionEvent();
+
+            // When
+            var result = collectionEventFactory.Make(map, "Model (Natural Sciences)", "ZI", "Invertebrate Zoology");
+
+            // Then
+            result.ShouldBe(null);
         }
 
         private Map MakeSampleCollectionEvent()

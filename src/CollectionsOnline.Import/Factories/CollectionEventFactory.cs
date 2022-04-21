@@ -18,9 +18,10 @@ namespace CollectionsOnline.Import.Factories
             _partiesNameFactory = partiesNameFactory;
         }
 
-        public CollectionEvent Make(Map map, string type, string registrationPrefix)
+        public CollectionEvent Make(Map map, string type, string registrationPrefix, string scientificGroup)
         {
-            if (map != null)
+            if (map != null && !(string.Equals(type, "Model (Natural Sciences)", StringComparison.OrdinalIgnoreCase) &&
+                                 scientificGroup.Contains("Zoology", StringComparison.OrdinalIgnoreCase)))
             {
                 var collectionEvent = new CollectionEvent
                 {
@@ -31,8 +32,9 @@ namespace CollectionsOnline.Import.Factories
                     DepthTo = map.GetEncodedString("AquDepthToMet"),
                     DepthFrom = map.GetEncodedString("AquDepthFromMet")
                 };
-                
-                if (!(string.Equals(type, "Observation", StringComparison.OrdinalIgnoreCase) && string.Equals(registrationPrefix, "ZI", StringComparison.OrdinalIgnoreCase)))
+
+                if (!(string.Equals(type, "Observation", StringComparison.OrdinalIgnoreCase) &&
+                      string.Equals(registrationPrefix, "ZI", StringComparison.OrdinalIgnoreCase)))
                 {
                     collectionEvent.CollectedBy = map.GetMaps("collectors").Where(x => x != null)
                         .Select(x => _partiesNameFactory.Make(x)).Concatenate(", ");
