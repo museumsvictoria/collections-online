@@ -220,6 +220,7 @@
     <Compile Include="Fakes\FakeSpecimens.cs" />
     <Compile Include="FileBasedTest.cs" />
     <Compile Include="Import\Factories\CollectionEventFactoryTests.cs" />
+    <Compile Include="Import\Factories\CollectionSiteFactoryTests.cs" />
     <Compile Include="Import\Factories\ImageMediaTests .cs" />
     <Compile Include="Import\Factories\MuseumLocationFactoryTests.cs" />
     <Compile Include="Import\Factories\PathFactoryTests.cs" />

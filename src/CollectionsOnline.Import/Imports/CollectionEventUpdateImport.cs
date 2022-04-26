@@ -174,7 +174,7 @@ namespace CollectionsOnline.Import.Imports
                                         var specimen = document as Specimen;
 
                                         Log.Logger.Debug("Updating Collection Event on {DocumentId}", specimen.Id);
-                                        specimen.CollectionEvent = _collectionEventFactory.Make(row, specimen.Type, specimen.RegistrationPrefix, specimen.ScientificGroup);
+                                        specimen.CollectionEvent = _collectionEventFactory.Make(row, specimen.Type, specimen.RegistrationPrefix);
                                     }
 
                                     // Save any changes

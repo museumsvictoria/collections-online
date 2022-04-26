@@ -179,7 +179,7 @@ namespace CollectionsOnline.Import.Imports
                                         var specimen = document as Specimen;
 
                                         Log.Logger.Debug("Updating Collection Site on {DocumentId}", specimen.Id);
-                                        specimen.CollectionSite = _collectionSiteFactory.Make(row, specimen.Discipline, specimen.ScientificGroup);
+                                        specimen.CollectionSite = _collectionSiteFactory.Make(row, specimen.Type, specimen.Discipline, specimen.ScientificGroup);
                                     }
 
                                     // Save any changes

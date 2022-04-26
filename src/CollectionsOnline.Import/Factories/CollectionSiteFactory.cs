@@ -19,14 +19,18 @@ namespace CollectionsOnline.Import.Factories
             _partiesNameFactory = partiesNameFactory;
         }
 
-        public CollectionSite Make(Map map, string discipline, string scientificGroup)
+        public CollectionSite Make(Map map, string type, string discipline, string scientificGroup)
         {
-            if (map != null &&
-                !((string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase) ||
-                   scientificGroup.Contains("Zoology", StringComparison.OrdinalIgnoreCase))
-                  && string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no",
-                      StringComparison.OrdinalIgnoreCase)))
+            var palaeoGeoZoologyDoNotPublish =
+                (string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) ||
+                 string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase) ||
+                 scientificGroup.Contains("Zoology", StringComparison.OrdinalIgnoreCase))
+                && string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no",
+                    StringComparison.OrdinalIgnoreCase);
+            
+            var model = string.Equals(type, "Model (Natural Sciences)", StringComparison.OrdinalIgnoreCase);
+            
+            if (map != null && !palaeoGeoZoologyDoNotPublish && !model)
             {
                 var collectionSite = new CollectionSite
                 {

@@ -18,10 +18,9 @@ namespace CollectionsOnline.Import.Factories
             _partiesNameFactory = partiesNameFactory;
         }
 
-        public CollectionEvent Make(Map map, string type, string registrationPrefix, string scientificGroup)
+        public CollectionEvent Make(Map map, string type, string registrationPrefix)
         {
-            if (map != null && !(string.Equals(type, "Model (Natural Sciences)", StringComparison.OrdinalIgnoreCase) &&
-                                 scientificGroup.Contains("Zoology", StringComparison.OrdinalIgnoreCase)))
+            if (map != null && !string.Equals(type, "Model (Natural Sciences)", StringComparison.OrdinalIgnoreCase))
             {
                 var collectionEvent = new CollectionEvent
                 {

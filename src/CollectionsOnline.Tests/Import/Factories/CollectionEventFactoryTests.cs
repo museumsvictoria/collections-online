@@ -15,7 +15,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             var map = MakeSampleCollectionEvent();
 
             // When
-            var result = collectionEventFactory.Make(map, "Observation", "ZI", "Invertebrate Zoology");
+            var result = collectionEventFactory.Make(map, "Observation", "ZI");
 
             // Then
             result.CollectedBy.ShouldBe(null);
@@ -29,7 +29,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             var map = MakeSampleCollectionEvent();
 
             // When
-            var result = collectionEventFactory.Make(map, "Observation", "T", "Invertebrate Zoology");
+            var result = collectionEventFactory.Make(map, "Observation", "T");
 
             // Then
             result.CollectedBy.ShouldBe("Dr Ken Walker - Museum Victoria");
@@ -43,7 +43,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             var map = MakeSampleCollectionEvent();
 
             // When
-            var result = collectionEventFactory.Make(map, "Specimen", "ZI", "Invertebrate Zoology");
+            var result = collectionEventFactory.Make(map, "Specimen", "ZI");
 
             // Then
             result.CollectedBy.ShouldBe("Dr Ken Walker - Museum Victoria");
@@ -57,7 +57,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             var map = MakeSampleCollectionEvent();
 
             // When
-            var result = collectionEventFactory.Make(map, "Model (Natural Sciences)", "ZI", "Invertebrate Zoology");
+            var result = collectionEventFactory.Make(map, "Model (Natural Sciences)", "ZI");
 
             // Then
             result.ShouldBe(null);

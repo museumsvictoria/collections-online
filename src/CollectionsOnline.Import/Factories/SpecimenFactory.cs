@@ -289,14 +289,14 @@ namespace CollectionsOnline.Import.Factories
 
             // Collection Event
             var collectionEventMap = map.GetMap("colevent");
-            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix, specimen.ScientificGroup);
-
+            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix);
+            
             // Sites
             var collectionSiteMap = map.GetMap("site");
             if (collectionSiteMap == null && collectionEventMap != null)
                 collectionSiteMap = collectionEventMap.GetMap("site");
 
-            specimen.CollectionSite = _collectionSiteFactory.Make(collectionSiteMap, specimen.Discipline, specimen.ScientificGroup);
+            specimen.CollectionSite = _collectionSiteFactory.Make(collectionSiteMap, specimen.Type, specimen.Discipline, specimen.ScientificGroup);
                 
             // Discipline specific fields
             // Palaeontology
