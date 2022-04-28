@@ -22,6 +22,14 @@ namespace CollectionsOnline.Core.Models
 
         #endregion
 
+        #region Used-By-Import-Only
+
+        public string RegistrationPrefix { get; set; }
+        
+        public bool HasGeoIdentification { get; set; }
+
+        #endregion
+
         public DateTime DateModified { get; set; }
 
         public string Category { get; set; }
@@ -29,8 +37,6 @@ namespace CollectionsOnline.Core.Models
         public string ScientificGroup { get; set; }
 
         public string Discipline { get; set; }
-        
-        public string RegistrationPrefix { get; set; }
 
         public string RegistrationNumber { get; set; }
 
