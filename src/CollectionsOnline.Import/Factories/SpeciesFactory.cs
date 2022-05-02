@@ -138,7 +138,7 @@ namespace CollectionsOnline.Import.Factories
                 var status = conservationMap.GetEncodedString("SpeStatus_tab");
 
                 if(!string.IsNullOrWhiteSpace(authority) && !string.IsNullOrWhiteSpace(status))
-                    species.ConservationStatuses.Add($"{authority} {status}");
+                    species.ConservationStatuses.Add($"{authority}: {status}");
             }
 
             // Animal specific fields (spider/butterflies) 
