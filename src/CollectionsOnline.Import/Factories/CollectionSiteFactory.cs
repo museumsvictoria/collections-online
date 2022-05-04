@@ -25,7 +25,7 @@ namespace CollectionsOnline.Import.Factories
                 (string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) ||
                  string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase) ||
                  scientificGroup.Contains("Zoology", StringComparison.OrdinalIgnoreCase))
-                && string.Equals(map.GetEncodedString("AdmPublishWebNoPassword"), "no",
+                && string.Equals(map?.GetEncodedString("AdmPublishWebNoPassword"), "no",
                     StringComparison.OrdinalIgnoreCase);
             
             var model = string.Equals(type, "Model (Natural Sciences)", StringComparison.OrdinalIgnoreCase);

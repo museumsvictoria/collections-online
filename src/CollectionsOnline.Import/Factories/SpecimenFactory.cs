@@ -67,7 +67,7 @@ namespace CollectionsOnline.Import.Factories
                         "ColTypeOfItem",
                         "AdmDateModified",
                         "AdmTimeModified",
-                        "colevent=ColCollectionEventRef.(irn,ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedFrom,ColDateVisitedTo,ColTimeVisitedFrom,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab],AdmPublishWebNoPassword),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName))",
+                        "colevent=ColCollectionEventRef.(irn,ExpExpeditionName,ColCollectionEventCode,ColCollectionMethod,ColDateVisitedFrom,ColDateVisitedTo,ColTimeVisitedFrom,ColTimeVisitedTo,AquDepthToMet,AquDepthFromMet,site=ColSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab],AdmPublishWebNoPassword),collectors=ColParticipantRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),AdmPublishWebNoPassword)",
                         "SpeNoSpecimens",
                         "BirTotalClutchSize",
                         "SpeSex_tab",
@@ -292,17 +292,22 @@ namespace CollectionsOnline.Import.Factories
                 }
             }
 
-            // Collection Event
-            var collectionEventMap = map.GetMap("colevent");
-            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix);
+            // Do not assign any Collection Event or Collection Site data if from Zoology and Collection Event is set Do Not Publish
+            if (!(string.Equals(map.GetMap("colevent")?.GetEncodedString("AdmPublishWebNoPassword"), "no", StringComparison.OrdinalIgnoreCase) &&
+                  specimen.ScientificGroup.Contains("Zoology", StringComparison.OrdinalIgnoreCase)))
+            {
+                // Collection Event
+                var collectionEventMap = map.GetMap("colevent");
+                specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix);
             
-            // Sites
-            var collectionSiteMap = map.GetMap("site");
-            if (collectionSiteMap == null && collectionEventMap != null)
-                collectionSiteMap = collectionEventMap.GetMap("site");
+                // Sites
+                var collectionSiteMap = map.GetMap("site");
+                if (collectionSiteMap == null && collectionEventMap != null)
+                    collectionSiteMap = collectionEventMap.GetMap("site");
 
-            specimen.CollectionSite = _collectionSiteFactory.Make(collectionSiteMap, specimen.Type, specimen.Discipline, specimen.ScientificGroup);
-                
+                specimen.CollectionSite = _collectionSiteFactory.Make(collectionSiteMap, specimen.Type, specimen.Discipline, specimen.ScientificGroup);
+            }
+
             // Discipline specific fields
             // Palaeontology
             specimen.PalaeontologyDateCollectedFrom = map.GetEncodedString("LocDateCollectedFrom");
