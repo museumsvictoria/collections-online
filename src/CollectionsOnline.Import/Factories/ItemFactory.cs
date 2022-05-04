@@ -22,7 +22,7 @@ namespace CollectionsOnline.Import.Factories
         private readonly IMediaFactory _mediaFactory;
         private readonly IAssociationFactory _associationFactory;
         private readonly ISummaryFactory _summaryFactory;
-        private readonly ILicenceFactory _licenceFactory;
+        private readonly IDisplayTitleFactory _displayTitleFactory;
 
         public ItemFactory(
             IPartiesNameFactory partiesNameFactory,
@@ -31,7 +31,7 @@ namespace CollectionsOnline.Import.Factories
             IMediaFactory mediaFactory,
             IAssociationFactory associationFactory,
             ISummaryFactory summaryFactory,
-            ILicenceFactory licenceFactory)
+            IDisplayTitleFactory displayTitleFactory)
         {
             _partiesNameFactory = partiesNameFactory;
             _museumLocationFactory = museumLocationFactory;
@@ -39,7 +39,7 @@ namespace CollectionsOnline.Import.Factories
             _mediaFactory = mediaFactory;
             _associationFactory = associationFactory;
             _summaryFactory = summaryFactory;
-            _licenceFactory = licenceFactory;
+            _displayTitleFactory = displayTitleFactory;
         }
 
         public string ModuleName => "ecatalogue";
@@ -624,23 +624,7 @@ namespace CollectionsOnline.Import.Factories
             item.Summary = _summaryFactory.Make(item);
 
             // Display Title
-            // TODO: Move to display title factory and encapsulate entire process
-            if (string.Equals(map.GetEncodedString("ColCategory"), "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
-            {
-                item.DisplayTitle = new[]
-                    {
-                        item.IndigenousCulturesMedium,
-                        item.IndigenousCulturesLocalName,
-                        item.IndigenousCulturesCulturalGroups.Concatenate(", "),
-                        item.IndigenousCulturesLocalities.Concatenate(", "),
-                        item.IndigenousCulturesDate
-                    }.Concatenate(", ");
-            }
-            else if (!string.IsNullOrWhiteSpace(item.ObjectName))
-                item.DisplayTitle = item.ObjectName;
-
-            if (string.IsNullOrWhiteSpace(item.DisplayTitle))
-                item.DisplayTitle = "Item";
+            item.DisplayTitle = _displayTitleFactory.Make(item);
 
             Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", item.Id, item.Media.Count);
 

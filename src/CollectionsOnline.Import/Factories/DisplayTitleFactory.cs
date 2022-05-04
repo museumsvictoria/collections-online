@@ -12,7 +12,65 @@ namespace CollectionsOnline.Import.Factories
         {
             _taxonomyFactory = taxonomyFactory;
         }
-        
+
+        public string Make(Article article)
+        {
+            var displayTitle = string.Empty;
+            
+            if (!string.IsNullOrWhiteSpace(article.Title))
+                displayTitle = article.Title;
+
+            if (string.IsNullOrWhiteSpace(displayTitle))
+                displayTitle = "Article";
+
+            return displayTitle;
+        }
+
+        public string Make(Item item)
+        {
+            var displayTitle = string.Empty;
+            
+            if (string.Equals(item.Category, "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
+            {
+                displayTitle = new[]
+                {
+                    item.IndigenousCulturesMedium,
+                    item.IndigenousCulturesLocalName,
+                    item.IndigenousCulturesCulturalGroups.Concatenate(", "),
+                    item.IndigenousCulturesLocalities.Concatenate(", "),
+                    item.IndigenousCulturesDate
+                }.Concatenate(", ");
+            }
+            else if (!string.IsNullOrWhiteSpace(item.ObjectName))
+                displayTitle = item.ObjectName;
+
+            if (string.IsNullOrWhiteSpace(displayTitle))
+                displayTitle = "Item";
+
+            return displayTitle;
+        }
+
+        public string Make(Species species)
+        {
+            var displayTitle = string.Empty;
+            
+            if (species.Taxonomy != null)
+            {
+                var scientificName = _taxonomyFactory.MakeScientificName(QualifierRankType.None, null, species.Taxonomy);
+
+                displayTitle = new[]
+                {
+                    scientificName, 
+                    species.Taxonomy.CommonName
+                }.Concatenate(", ");
+            }
+
+            if (string.IsNullOrWhiteSpace(displayTitle))
+                displayTitle = "Species";
+            
+            return displayTitle;
+        }
+
         public string Make(Specimen specimen)
         {
             var displayTitle = string.Empty;
