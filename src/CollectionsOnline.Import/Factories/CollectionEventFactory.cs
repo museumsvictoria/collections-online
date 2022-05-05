@@ -27,7 +27,6 @@ namespace CollectionsOnline.Import.Factories
                     Irn = long.Parse(map.GetEncodedString("irn")),
                     ExpeditionName = map.GetEncodedString("ExpExpeditionName"),
                     CollectionEventCode = map.GetEncodedString("ColCollectionEventCode"),
-                    SamplingMethod = map.GetEncodedString("ColCollectionMethod"),
                     DepthTo = map.GetEncodedString("AquDepthToMet"),
                     DepthFrom = map.GetEncodedString("AquDepthFromMet")
                 };
@@ -37,6 +36,7 @@ namespace CollectionsOnline.Import.Factories
                 {
                     collectionEvent.CollectedBy = map.GetMaps("collectors").Where(x => x != null)
                         .Select(x => _partiesNameFactory.Make(x)).Concatenate(", ");
+                    collectionEvent.SamplingMethod = map.GetEncodedString("ColCollectionMethod");
                 }
                 
                 if (DateTime.TryParseExact(map.GetEncodedString("ColDateVisitedFrom"), "dd/MM/yyyy", new CultureInfo("en-AU"), DateTimeStyles.AssumeLocal, out DateTime dateVisitedFrom))
