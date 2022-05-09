@@ -37,7 +37,8 @@ namespace CollectionsOnline.Import.Factories
                     Irn = long.Parse(map.GetEncodedString("irn"))
                 };
 
-                if (!string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase))
+                if (!(string.Equals(discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) || 
+                      string.Equals(scientificGroup, "Geology", StringComparison.OrdinalIgnoreCase)))
                 {
                     // Site Code
                     collectionSite.SiteCode = new[]
