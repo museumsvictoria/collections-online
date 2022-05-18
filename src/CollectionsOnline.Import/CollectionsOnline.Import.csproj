@@ -73,6 +73,9 @@
     <Reference Include="imu-1.0.03">
       <HintPath>..\..\lib\IMu\imu-1.0.03.dll</HintPath>
     </Reference>
+    <Reference Include="LiteDB, Version=5.0.11.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.5.0.11\lib\net45\LiteDB.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.9.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
       <HintPath>..\packages\log4net.2.0.10\lib\net45\log4net.dll</HintPath>
       <Private>True</Private>
@@ -147,6 +150,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -203,6 +207,7 @@
     <Compile Include="Infrastructure\IImuSessionProvider.cs" />
     <Compile Include="Infrastructure\ImuSession.cs" />
     <Compile Include="Infrastructure\ImuSessionProvider.cs" />
+    <Compile Include="Infrastructure\LiteDatabaseProvider.cs" />
     <Compile Include="Infrastructure\YoutubeServiceProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

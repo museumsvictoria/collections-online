@@ -15,6 +15,7 @@ using IMu;
 using Raven.Client;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
+using LiteDB;
 using Serilog;
 
 namespace CollectionsOnline.Import.Factories
@@ -22,14 +23,17 @@ namespace CollectionsOnline.Import.Factories
     public class ImageMediaFactory : IImageMediaFactory
     {
         private readonly IDocumentStore _documentStore;
+        private readonly ILiteDatabase _liteDatabase;
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IList<ImageMediaJob> _imageMediaJobs;
 
         public ImageMediaFactory(
             IDocumentStore documentStore,
+            ILiteDatabase liteDatabase,
             IImuSessionProvider imuSessionProvider)
         {
             _documentStore = documentStore;
+            _liteDatabase = liteDatabase;
             _imuSessionProvider = imuSessionProvider;
 
             // Build a list the various image conversions used in the application
