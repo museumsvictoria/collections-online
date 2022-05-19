@@ -108,32 +108,32 @@ namespace CollectionsOnline.Import.Factories
 
             var mediaIrn = fileMedia.Irn;
 
-            // Check to see whether the file has changed in emu first
-            using (var documentSession = _documentStore.OpenSession())
-            {
-                // Find the latest document who's media contains the media we are checking
-                var result = documentSession
-                    .Query<MediaByIrnWithChecksumResult, MediaByIrnWithChecksum>()
-                    .OrderByDescending(x => x.DateModified)
-                    .FirstOrDefault(x => x.Irn == mediaIrn);
-
-                // If all imu imports have run before (not simply loading images from disk) and there are no results that use this media and we need to save file
-                var allImportsComplete = documentSession
-                    .Load<Application>(Constants.ApplicationId)
-                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
-                    .Select(x => x.PreviousDateRun)
-                    .Any(x => x.HasValue);
-
-                if (allImportsComplete && result == null)
-                    return false;
-
-                // If existing media checksum does not match the one from emu we need to save file
-                if (result != null && result.Md5Checksum != fileMedia.Md5Checksum)
-                {
-                    Log.Logger.Warning("Existing file {Irn} found but checksum {ExistingChecksum} did not match new file {NewChecksum}", fileMedia.Irn, result.Md5Checksum, fileMedia.Md5Checksum);
-                    return false;
-                }
-            }
+            // // Check to see whether the file has changed in emu first
+            // using (var documentSession = _documentStore.OpenSession())
+            // {
+            //     // Find the latest document who's media contains the media we are checking
+            //     var result = documentSession
+            //         .Query<MediaByIrnWithChecksumResult, MediaByIrnWithChecksum>()
+            //         .OrderByDescending(x => x.DateModified)
+            //         .FirstOrDefault(x => x.Irn == mediaIrn);
+            //
+            //     // If all imu imports have run before (not simply loading images from disk) and there are no results that use this media and we need to save file
+            //     var allImportsComplete = documentSession
+            //         .Load<Application>(Constants.ApplicationId)
+            //         .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
+            //         .Select(x => x.PreviousDateRun)
+            //         .Any(x => x.HasValue);
+            //
+            //     if (allImportsComplete && result == null)
+            //         return false;
+            //
+            //     // If existing media checksum does not match the one from emu we need to save file
+            //     if (result != null && result.Md5Checksum != fileMedia.Md5Checksum)
+            //     {
+            //         Log.Logger.Warning("Existing file {Irn} found but checksum {ExistingChecksum} did not match new file {NewChecksum}", fileMedia.Irn, result.Md5Checksum, fileMedia.Md5Checksum);
+            //         return false;
+            //     }
+            // }
 
             var destPath = PathFactory.GetDestPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None);
 
