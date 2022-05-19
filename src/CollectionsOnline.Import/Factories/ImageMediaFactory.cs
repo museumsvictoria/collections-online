@@ -120,10 +120,10 @@ namespace CollectionsOnline.Import.Factories
             {
                 // Fetch media checksum from lite db
                 var mediaIrn = imageMedia.Irn;
-                var imageMediaChecksum = db.FirstOrDefault<MediaChecksum>(x => x.Irn == mediaIrn);
+                var mediaChecksum = db.FirstOrDefault<MediaChecksum>(x => x.Irn == mediaIrn);
                 
                 // Try to find existing media in media checksum collection to compare checksum then check files on filesystem 
-                if (FileExists(ref imageMedia, imageMediaChecksum))
+                if (FileExists(ref imageMedia, mediaChecksum))
                 {
                     stopwatch.Stop();
                     Log.Logger.Debug("Found existing image {Irn} in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
@@ -132,22 +132,22 @@ namespace CollectionsOnline.Import.Factories
                 }
 
                 // Fetch fresh media from emu as no existing media found or media fails checksum
-                var (fetchIsSuccess, fileSize) = FetchMedia(ref imageMedia, stopwatch);
+                var (fetchIsSuccess, fileSize) = FetchMedia(ref imageMedia);
                 if (fetchIsSuccess)
                 {
                     stopwatch.Stop();
-                    Log.Logger.Debug("Completed image {Irn} ({fileSize}) creation in {stopwatch} ms", imageMedia.Irn,
+                    Log.Logger.Debug("Completed image {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", imageMedia.Irn,
                         fileSize, stopwatch.ElapsedMilliseconds);
 
                     // Update or insert image media checksum value into lite db
-                    if (imageMediaChecksum == null)
+                    if (mediaChecksum == null)
                         db.Insert(new MediaChecksum()
                         {
                             Irn = imageMedia.Irn,
                             Md5Checksum = imageMedia.Md5Checksum
                         });
                     else
-                        db.Update(imageMediaChecksum);
+                        db.Update(mediaChecksum);
 
                     return true;
                 }
@@ -155,8 +155,59 @@ namespace CollectionsOnline.Import.Factories
                 return false;
             }
         }
+        
+        private bool FileExists(ref ImageMedia imageMedia, MediaChecksum mediaChecksum)
+        {
+            var mediaIrn = imageMedia.Irn;
+            
+            // First check to see if we are not simply overwriting all existing media
+            if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"])) 
+                return false;
+            
+            // Check media checksum to see if file has changed
+            if (mediaChecksum == null)
+            {
+                return false;
+            }
+            else if (mediaChecksum.Md5Checksum != imageMedia.Md5Checksum)
+            {
+                Log.Logger.Debug("Existing image {Irn} checksum {ExistingChecksum} did not match current image {NewChecksum}", imageMedia.Irn, 
+                    mediaChecksum.Md5Checksum, imageMedia.Md5Checksum);
+                return false;
+            }
 
-        private (bool, string) FetchMedia(ref ImageMedia imageMedia, Stopwatch stopwatch)
+            // then check whether media exists on disk for all media jobs
+            if (!_imageMediaJobs.All(x => File.Exists(PathFactory.GetDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
+            {
+                Log.Logger.Debug("Existing image {Irn} checksum found but files not present", imageMedia.Irn);
+                return false;
+            }
+
+            foreach (var imageMediaJob in _imageMediaJobs)
+            {
+                var destPath = PathFactory.GetDestPath(mediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
+
+                using (var image = new MagickImage(destPath))
+                {
+                    // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
+                    typeof(ImageMedia).GetProperties().First(x =>
+                            x.PropertyType == typeof(ImageMediaFile) &&
+                            x.Name == imageMediaJob.FileDerivativeType.ToString())
+                        .SetValue(imageMedia, new ImageMediaFile
+                        {
+                            Uri = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg",
+                                imageMediaJob.FileDerivativeType),
+                            Size = new FileInfo(destPath).Length,
+                            Width = image.Width,
+                            Height = image.Height
+                        });
+                }
+            }
+                
+            return true;
+        }
+        
+        private (bool, string) FetchMedia(ref ImageMedia imageMedia)
         {
             try
             {
@@ -227,56 +278,6 @@ namespace CollectionsOnline.Import.Factories
             }
             
             return (false, null);
-        }
-
-        private bool FileExists(ref ImageMedia imageMedia, MediaChecksum mediaChecksum)
-        {
-            var mediaIrn = imageMedia.Irn;
-            
-            // First check to see if we are not simply overwriting all existing media
-            if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"])) 
-                return false;
-            
-            // Check media checksum to see if file has changed
-            if (mediaChecksum == null)
-            {
-                return false;
-            }
-            else if (mediaChecksum.Md5Checksum != imageMedia.Md5Checksum)
-            {
-                Log.Logger.Debug("Existing image {Irn} checksum {ExistingChecksum} did not match current image {NewChecksum}", imageMedia.Irn, mediaChecksum.Md5Checksum, imageMedia.Md5Checksum);
-                return false;
-            }
-
-            // then check whether media exists on disk for all media jobs
-            if (!_imageMediaJobs.All(x => File.Exists(PathFactory.GetDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
-            {
-                Log.Logger.Debug("Existing image {Irn} checksum found but files not present", imageMedia.Irn);
-                return false;
-            }
-
-            foreach (var imageMediaJob in _imageMediaJobs)
-            {
-                var destPath = PathFactory.GetDestPath(mediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
-
-                using (var image = new MagickImage(destPath))
-                {
-                    // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
-                    typeof(ImageMedia).GetProperties().First(x =>
-                            x.PropertyType == typeof(ImageMediaFile) &&
-                            x.Name == imageMediaJob.FileDerivativeType.ToString())
-                        .SetValue(imageMedia, new ImageMediaFile
-                        {
-                            Uri = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg",
-                                imageMediaJob.FileDerivativeType),
-                            Size = new FileInfo(destPath).Length,
-                            Width = image.Width,
-                            Height = image.Height
-                        });
-                }
-            }
-                
-            return true;
         }
 
         private string[] Columns
