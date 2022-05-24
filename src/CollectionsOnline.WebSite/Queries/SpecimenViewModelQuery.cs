@@ -50,29 +50,29 @@ namespace CollectionsOnline.WebSite.Queries
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.SiteCode))
                         result.GeoSpatial.Add(new KeyValuePair<string, string>("Site Code", result.Specimen.CollectionSite.SiteCode));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.Ocean))
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Ocean", string.Format(@"<a href=""/search?locality={0}"">{1}</a>", HttpUtility.UrlEncode(result.Specimen.CollectionSite.Ocean), result.Specimen.CollectionSite.Ocean)));
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Ocean", $@"<a href=""/search?locality={HttpUtility.UrlEncode(result.Specimen.CollectionSite.Ocean)}"">{result.Specimen.CollectionSite.Ocean}</a>"));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.Continent))
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Continent", string.Format(@"<a href=""/search?locality={0}"">{1}</a>", HttpUtility.UrlEncode(result.Specimen.CollectionSite.Continent), result.Specimen.CollectionSite.Continent)));
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Continent", $@"<a href=""/search?locality={HttpUtility.UrlEncode(result.Specimen.CollectionSite.Continent)}"">{result.Specimen.CollectionSite.Continent}</a>"));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.Country))
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Country", string.Format(@"<a href=""/search?locality={0}"">{1}</a>", HttpUtility.UrlEncode(result.Specimen.CollectionSite.Country), result.Specimen.CollectionSite.Country)));
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Country", $@"<a href=""/search?locality={HttpUtility.UrlEncode(result.Specimen.CollectionSite.Country)}"">{result.Specimen.CollectionSite.Country}</a>"));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.State))
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("State", string.Format(@"<a href=""/search?locality={0}"">{1}</a>", HttpUtility.UrlEncode(result.Specimen.CollectionSite.State), result.Specimen.CollectionSite.State)));
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("State", $@"<a href=""/search?locality={HttpUtility.UrlEncode(result.Specimen.CollectionSite.State)}"">{result.Specimen.CollectionSite.State}</a>"));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.District))
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("District", string.Format(@"<a href=""/search?locality={0}"">{1}</a>", HttpUtility.UrlEncode(result.Specimen.CollectionSite.District), result.Specimen.CollectionSite.District)));
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("District", $@"<a href=""/search?locality={HttpUtility.UrlEncode(result.Specimen.CollectionSite.District)}"">{result.Specimen.CollectionSite.District}</a>"));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.Town))
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Town", string.Format(@"<a href=""/search?locality={0}"">{1}</a>", HttpUtility.UrlEncode(result.Specimen.CollectionSite.Town), result.Specimen.CollectionSite.Town)));
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Town", $@"<a href=""/search?locality={HttpUtility.UrlEncode(result.Specimen.CollectionSite.Town)}"">{result.Specimen.CollectionSite.Town}</a>"));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.NearestNamedPlace))
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Nearest Named Place", string.Format(@"<a href=""/search?locality={0}"">{1}</a>", HttpUtility.UrlEncode(result.Specimen.CollectionSite.NearestNamedPlace), result.Specimen.CollectionSite.NearestNamedPlace)));
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Nearest Named Place", $@"<a href=""/search?locality={HttpUtility.UrlEncode(result.Specimen.CollectionSite.NearestNamedPlace)}"">{result.Specimen.CollectionSite.NearestNamedPlace}</a>"));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.PreciseLocation))
                         result.GeoSpatial.Add(new KeyValuePair<string, string>("Precise Location", result.Specimen.CollectionSite.PreciseLocation));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.MinimumElevation))
                         result.GeoSpatial.Add(new KeyValuePair<string, string>("Minimum Elevation", result.Specimen.CollectionSite.MinimumElevation));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.MaximumElevation))
                         result.GeoSpatial.Add(new KeyValuePair<string, string>("Maximum Elevation", result.Specimen.CollectionSite.MaximumElevation));
-                    if (result.Specimen.CollectionSite.Latitudes.Any())
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Latitude", result.Specimen.CollectionSite.Latitudes.Concatenate(";")));
-                    if (result.Specimen.CollectionSite.Longitudes.Any())
-                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Longitude", result.Specimen.CollectionSite.Longitudes.Concatenate(";")));
+                    if (result.Specimen.CollectionSite.Latitude != null)
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Latitude", result.Specimen.CollectionSite.Latitude.ToString()));
+                    if (result.Specimen.CollectionSite.Longitude != null)
+                        result.GeoSpatial.Add(new KeyValuePair<string, string>("Longitude", result.Specimen.CollectionSite.Longitude.ToString()));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.GeodeticDatum))
                         result.GeoSpatial.Add(new KeyValuePair<string, string>("Geodetic Datum", result.Specimen.CollectionSite.GeodeticDatum));
                     if (!string.IsNullOrWhiteSpace(result.Specimen.CollectionSite.SiteRadius))
@@ -103,14 +103,6 @@ namespace CollectionsOnline.WebSite.Queries
                         result.GeoSpatial.Add(new KeyValuePair<string, string>("Rock Type", result.Specimen.CollectionSite.GeologyRockType));
                 }
 
-                // Create Lat Long matched pairs for map use
-                if (result.Specimen.CollectionSite != null &&
-                    result.Specimen.CollectionSite.Latitudes.Any(x => !string.IsNullOrWhiteSpace(x)) &&
-                    result.Specimen.CollectionSite.Longitudes.Any(x => !string.IsNullOrWhiteSpace(x)))
-                {
-                    result.LatLongs = result.Specimen.CollectionSite.Latitudes.Zip(result.Specimen.CollectionSite.Longitudes, (lat, lon) => new[] { double.Parse(lat), double.Parse(lon) }).ToList();
-                }
-
                 // Add Uris for everything except Paleo and Geology
                 if (result.Specimen.Taxonomy != null &&
                     !(string.Equals(result.Specimen.Discipline, "Palaeontology", StringComparison.OrdinalIgnoreCase) ||
@@ -119,7 +111,7 @@ namespace CollectionsOnline.WebSite.Queries
                     result.Specimen.Media.Add(new UriMedia
                     {
                         Caption = "See more specimens of this species in OZCAM",
-                        Uri = string.Format("http://ozcam.ala.org.au/occurrences/search?taxa={0}", result.Specimen.Taxonomy.TaxonName)
+                        Uri = $"http://ozcam.ala.org.au/occurrences/search?taxa={result.Specimen.Taxonomy.TaxonName}"
                     });
                 }
 

@@ -6,8 +6,8 @@
     Layout = "Layout.cshtml";
 }
 @section Head {
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
 }
 @Html.Partial("Media", new MediaViewModel { Medias = Model.Specimen.Media.WithThumbnails(), DocumentId = Model.Specimen.Id })
 <div id="title">
@@ -109,9 +109,9 @@
                             <li>
                                 <h3>Other Common Names</h3>
                                 <p>
-                                    @foreach (var otherCommonNames in Model.Specimen.Taxonomy.OtherCommonNames)
+                                    @for (int i = 0; i < Model.Specimen.Taxonomy.OtherCommonNames.Count; i++)
                                     {
-                                        <span>@otherCommonNames</span>
+                                        <span>@Model.Specimen.Taxonomy.OtherCommonNames[i]@(i != Model.Specimen.Taxonomy.OtherCommonNames.Count - 1 ? ", " : "")</span>
                                     }
                                 </p>
                             </li>
@@ -163,12 +163,28 @@
                     {
                         <li>
                             <h3>Specimen Nature</h3>
-                            <p>
-                                @foreach (var storage in Model.Specimen.Storages)
-                                {
-                                    <span>@storage.Nature @storage.Form @storage.FixativeTreatment @storage.Medium</span>
-                                }
-                            </p>
+                            <p>@Html.RenderStorages(Model.Specimen.Storages)</p>
+                        </li>
+                    }                
+                    @if (Model.Specimen.Tissues.Any())
+                    {
+                        <li>
+                            <h3>Specimen Tissue</h3>
+                            <p>@Html.RenderTissues(Model.Specimen.Tissues)</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.DateOfPreparation))
+                    {
+                        <li>
+                            <h3>Date of preparation</h3>
+                            <p>@Model.Specimen.DateOfPreparation</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.TissueSampledFrom))
+                    {
+                        <li>
+                            <h3>Tissue sampled from</h3>
+                            <p>@Model.Specimen.TissueSampledFrom</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.PetrologyRockName))
@@ -441,7 +457,6 @@
                                 @for (int i = 0; i < Model.Specimen.CollectingAreas.Count; i++)
                                 {
                                     <a href="/search?collectingarea=@HttpUtility.UrlEncode(Model.Specimen.CollectingAreas[i])">@Model.Specimen.CollectingAreas[i]</a>@(i != Model.Specimen.CollectingAreas.Count - 1 ? "," : "")
-
                                 }
                             </p>
                         </li>
@@ -461,7 +476,6 @@
                                 @for (int i = 0; i < Model.Specimen.Keywords.Count; i++)
                                 {
                                     <a href="/search?keyword=@HttpUtility.UrlEncode(Model.Specimen.Keywords[i])">@Model.Specimen.Keywords[i]</a>@(i != Model.Specimen.Keywords.Count - 1 ? ", " : "")
-
                                 }
                             </p>
                         </li>
@@ -552,8 +566,8 @@
     {
         @: var mediaModel = @Html.ConvertToJson(Model.Specimen.Media.WithThumbnails());
     }
-    @if (Model.LatLongs.Any())
+    @if (Model.Specimen.CollectionSite != null && Model.Specimen.CollectionSite.Latitude != null && Model.Specimen.CollectionSite.Longitude != null)
     {
-        @: var latlongsModel = @Html.ConvertToJson(Model.LatLongs);
+        @: var lnglatModel = @Html.ConvertToJson(new[] { Model.Specimen.CollectionSite.Longitude, Model.Specimen.CollectionSite.Latitude });
     }
 </script>
