@@ -106,7 +106,6 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Factories\PathFactory.cs" />
     <Compile Include="Indexes\CombinedFacets.cs" />
-    <Compile Include="Indexes\MediaByIrnWithChecksum.cs" />
     <Compile Include="Indexes\CombinedIndex.cs" />
     <Compile Include="Infrastructure\NetworkShareAccesser.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
