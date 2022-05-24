@@ -169,7 +169,7 @@
                     @if (Model.Specimen.Tissues.Any())
                     {
                         <li>
-                            <h3>Specimen Tissue</h3>
+                            <h3>Tissue Details</h3>
                             <p>@Html.RenderTissues(Model.Specimen.Tissues)</p>
                         </li>
                     }
@@ -185,6 +185,20 @@
                         <li>
                             <h3>Tissue sampled from</h3>
                             <p>@Model.Specimen.TissueSampledFrom</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.PalaeontologyDateCollectedFrom))
+                    {
+                        <li>
+                            <h3>Date Collected From</h3>
+                            <p>@Model.Specimen.PalaeontologyDateCollectedFrom</p>
+                        </li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Specimen.PalaeontologyDateCollectedTo))
+                    {
+                        <li>
+                            <h3>Date Collected To</h3>
+                            <p>@Model.Specimen.PalaeontologyDateCollectedTo</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Specimen.PetrologyRockName))

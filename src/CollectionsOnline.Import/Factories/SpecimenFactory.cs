@@ -25,6 +25,7 @@ namespace CollectionsOnline.Import.Factories
         private readonly IMuseumLocationFactory _museumLocationFactory;
         private readonly ISummaryFactory _summaryFactory;
         private readonly ILicenceFactory _licenceFactory;
+        private readonly IDisplayTitleFactory _displayTitleFactory;
 
         public SpecimenFactory(
             IPartiesNameFactory partiesNameFactory,
@@ -35,7 +36,8 @@ namespace CollectionsOnline.Import.Factories
             IAssociationFactory associationFactory,
             IMuseumLocationFactory museumLocationFactory,
             ISummaryFactory summaryFactory,
-            ILicenceFactory licenceFactory)
+            ILicenceFactory licenceFactory,
+            IDisplayTitleFactory displayTitleFactory)
         {
             _partiesNameFactory = partiesNameFactory;
             _taxonomyFactory = taxonomyFactory;
@@ -46,6 +48,7 @@ namespace CollectionsOnline.Import.Factories
             _museumLocationFactory = museumLocationFactory;
             _summaryFactory = summaryFactory;
             _licenceFactory = licenceFactory;
+            _displayTitleFactory = displayTitleFactory;
         }
 
         public string ModuleName => "ecatalogue";
@@ -69,6 +72,7 @@ namespace CollectionsOnline.Import.Factories
                         "BirTotalClutchSize",
                         "SpeSex_tab",
                         "SpeStageAge_tab",
+                        "SpeIdentification_tab",
                         "site=SitSiteRef.(irn,SitSiteCode,SitSiteNumber,EraEra,EraAge1,EraAge2,EraMvStage,EraMvGroup_tab,EraMvRockUnit_tab,EraMvMember_tab,EraLithology_tab,geo=[LocOcean_tab,LocContinent_tab,LocCountry_tab,LocProvinceStateTerritory_tab,LocDistrictCountyShire_tab,LocTownship_tab,LocNearestNamedPlace_tab],LocPreciseLocation,LocElevationASLFromMt,LocElevationASLToMt,latlong=[LatLongitudeDecimal_nesttab,LatLatitudeDecimal_nesttab,LatDatum_tab,LatRadiusNumeric_tab,determinedBy=LatDeterminedByRef_tab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),LatDetDate0,LatLatLongDetermination_tab,LatDetSource_tab,LatPreferred_tab],AdmPublishWebNoPassword)",
                         "identifications=[IdeTypeStatus_tab,IdeCurrentNameLocal_tab,identifiers=IdeIdentifiedByRef_nesttab.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName),IdeDateIdentified0,IdeQualifier_tab,IdeQualifierRank_tab,taxa=TaxTaxonomyRef_tab.(irn,ClaKingdom,ClaPhylum,ClaSubphylum,ClaSuperclass,ClaClass,ClaSubclass,ClaSuperorder,ClaOrder,ClaSuborder,ClaInfraorder,ClaSuperfamily,ClaFamily,ClaSubfamily,ClaGenus,ClaSubgenus,ClaSpecies,ClaSubspecies,AutAuthorString,ClaApplicableCode,comname=[ComName_tab,ComStatus_tab],relatedspecies=<enarratives:TaxTaxaRef_tab>.(irn,DetPurpose_tab))]",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
@@ -164,9 +168,10 @@ namespace CollectionsOnline.Import.Factories
             specimen.Category = map.GetEncodedString("ColCategory");
             specimen.ScientificGroup = map.GetEncodedString("ColScientificGroup");
             specimen.Discipline = map.GetEncodedString("ColDiscipline");
+            specimen.RegistrationPrefix = map.GetEncodedString("ColRegPrefix");
             specimen.RegistrationNumber = map["ColRegPart"] != null
-                             ? $"{map["ColRegPrefix"]} {map["ColRegNumber"]}.{map["ColRegPart"]}"
-                             : $"{map["ColRegPrefix"]} {map["ColRegNumber"]}";
+                             ? $"{specimen.RegistrationPrefix} {map["ColRegNumber"]}.{map["ColRegPart"]}"
+                             : $"{specimen.RegistrationPrefix} {map["ColRegNumber"]}";
             specimen.CollectionNames = map.GetEncodedStrings("ColCollectionName_tab");
             specimen.Type = map.GetEncodedString("ColTypeOfItem");
 
@@ -247,6 +252,7 @@ namespace CollectionsOnline.Import.Factories
             specimen.Sex = map.GetEncodedStrings("SpeSex_tab").Concatenate(", ");
             // Stage Or Age
             specimen.StageOrAge = map.GetEncodedStrings("SpeStageAge_tab").Concatenate(", ");
+            specimen.HasGeoIdentification = map.GetEncodedStrings("SpeIdentification_tab").Any();
 
             // Taxonomy
             // TODO: make factory method as code duplicated in ItemFactory
@@ -288,15 +294,15 @@ namespace CollectionsOnline.Import.Factories
 
             // Collection Event
             var collectionEventMap = map.GetMap("colevent");
-            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap);
-
+            specimen.CollectionEvent = _collectionEventFactory.Make(collectionEventMap, specimen.Type, specimen.RegistrationPrefix);
+        
             // Sites
             var collectionSiteMap = map.GetMap("site");
             if (collectionSiteMap == null && collectionEventMap != null)
                 collectionSiteMap = collectionEventMap.GetMap("site");
 
-            specimen.CollectionSite = _collectionSiteFactory.Make(collectionSiteMap, specimen.Discipline, specimen.ScientificGroup);
-                
+            specimen.CollectionSite = _collectionSiteFactory.Make(collectionSiteMap, specimen.Type, specimen.Discipline, specimen.ScientificGroup);
+
             // Discipline specific fields
             // Palaeontology
             specimen.PalaeontologyDateCollectedFrom = map.GetEncodedString("LocDateCollectedFrom");
@@ -479,32 +485,8 @@ namespace CollectionsOnline.Import.Factories
             // Build summary
             specimen.Summary = _summaryFactory.Make(specimen);
 
-            // Display Title 
-            // TODO: Move to display title factory and encapsulate entire process
-            if (string.Equals(specimen.Discipline, "Tektites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.TektitesName))
-                specimen.DisplayTitle = specimen.TektitesName;
-            else if (string.Equals(specimen.Discipline, "Meteorites", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MeteoritesName))
-                specimen.DisplayTitle = $"{specimen.MeteoritesName} meteorite";
-            else if (string.Equals(specimen.Discipline, "Petrology", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.PetrologyRockName))
-                specimen.DisplayTitle = specimen.PetrologyRockName;
-            else if (string.Equals(specimen.Discipline, "Mineralogy", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(specimen.MineralogySpecies))
-                specimen.DisplayTitle = specimen.MineralogySpecies;
-            else if (specimen.Taxonomy != null)
-            {
-                var scientificName = _taxonomyFactory.MakeScientificName(specimen.QualifierRank, specimen.Qualifier, specimen.Taxonomy);
-
-                if (!string.IsNullOrWhiteSpace(scientificName))
-                    specimen.DisplayTitle = scientificName;
-            }
-
-            specimen.DisplayTitle = new[]
-            {
-                specimen.ObjectName,
-                specimen.DisplayTitle
-            }.Concatenate(" ");
-
-            if (string.IsNullOrWhiteSpace(specimen.DisplayTitle))
-                specimen.DisplayTitle = "Specimen";
+            // Display Title
+            specimen.DisplayTitle = _displayTitleFactory.Make(specimen);
 
             Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", specimen.Id, specimen.Media.Count);
             

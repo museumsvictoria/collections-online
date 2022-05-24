@@ -21,15 +21,18 @@ namespace CollectionsOnline.Import.Factories
         private readonly ITaxonomyFactory _taxonomyFactory;
         private readonly IMediaFactory _mediaFactory;
         private readonly ISummaryFactory _summaryFactory;
+        private readonly IDisplayTitleFactory _displayTitleFactory;
 
         public SpeciesFactory(
             ITaxonomyFactory taxonomyFactory,
             IMediaFactory mediaFactory,
-            ISummaryFactory summaryFactory)
+            ISummaryFactory summaryFactory,
+            IDisplayTitleFactory displayTitleFactory)
         {
             _taxonomyFactory = taxonomyFactory;
             _mediaFactory = mediaFactory;
             _summaryFactory = summaryFactory;
+            _displayTitleFactory = displayTitleFactory;
         }
 
         public string ModuleName => "enarratives";
@@ -138,7 +141,7 @@ namespace CollectionsOnline.Import.Factories
                 var status = conservationMap.GetEncodedString("SpeStatus_tab");
 
                 if(!string.IsNullOrWhiteSpace(authority) && !string.IsNullOrWhiteSpace(status))
-                    species.ConservationStatuses.Add($"{authority} {status}");
+                    species.ConservationStatuses.Add($"{authority}: {status}");
             }
 
             // Animal specific fields (spider/butterflies) 
@@ -220,20 +223,7 @@ namespace CollectionsOnline.Import.Factories
             species.Summary = _summaryFactory.Make(species);
 
             // Display Title
-            // TODO: Move to display title factory and encapsulate entire process
-            if (species.Taxonomy != null)
-            {
-                var scientificName = _taxonomyFactory.MakeScientificName(QualifierRankType.None, null, species.Taxonomy);
-
-                species.DisplayTitle = new[]
-                {
-                    scientificName, 
-                    species.Taxonomy.CommonName
-                }.Concatenate(", ");
-            }
-
-            if (string.IsNullOrWhiteSpace(species.DisplayTitle))
-                species.DisplayTitle = "Species";
+            species.DisplayTitle = _displayTitleFactory.Make(species);
 
             Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", species.Id, species.Media.Count);
             

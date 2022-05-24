@@ -161,8 +161,10 @@
     <Compile Include="Extensions\MapExtensions.cs" />
     <Compile Include="Factories\CollectionSiteFactory.cs" />
     <Compile Include="Factories\CollectionFactory.cs" />
+    <Compile Include="Factories\DisplayTitleFactory.cs" />
     <Compile Include="Factories\FileMediaFactory.cs" />
     <Compile Include="Factories\ICollectionSiteFactory.cs" />
+    <Compile Include="Factories\IDisplayTitleFactory.cs" />
     <Compile Include="Factories\IEmuAggregateRootFactory.cs" />
     <Compile Include="Factories\IAssociationFactory.cs" />
     <Compile Include="Factories\IAudioMediaFactory.cs" />

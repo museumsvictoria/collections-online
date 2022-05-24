@@ -22,6 +22,14 @@ namespace CollectionsOnline.Core.Models
 
         #endregion
 
+        #region Used-By-Import-Only
+
+        public string RegistrationPrefix { get; set; }
+        
+        public bool HasGeoIdentification { get; set; }
+
+        #endregion
+
         public DateTime DateModified { get; set; }
 
         public string Category { get; set; }

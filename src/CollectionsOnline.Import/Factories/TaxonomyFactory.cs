@@ -37,7 +37,7 @@ namespace CollectionsOnline.Import.Factories
                     Code = map.GetEncodedString("ClaApplicableCode")
                 };
 
-                //higherClassification
+                // HigherClassification
                 var higherClassification = new Dictionary<string, string>
                         {
                             { "Kingdom", taxonomy.Kingdom },
@@ -58,6 +58,12 @@ namespace CollectionsOnline.Import.Factories
                             { "Species", taxonomy.Species },
                             { "Subspecies", taxonomy.Subspecies }
                         };
+
+                // If all ranks are empty we do not want to assign taxonomy to record
+                if (higherClassification.All(x => string.IsNullOrWhiteSpace(x.Value)))
+                {
+                    return null;
+                }
 
                 taxonomy.TaxonRank = higherClassification.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Key).LastOrDefault();
 
