@@ -115,10 +115,11 @@ namespace CollectionsOnline.Import.Factories
 
         public bool Make(ref ImageMedia imageMedia)
         {
+            // TODO: provide base class that better encapsulates functionality between image/file/audio factories
             var stopwatch = Stopwatch.StartNew();
-            using (var db = new LiteRepository(new ConnectionString($"Filename={ConfigurationManager.AppSettings["WebSitePath"]}\\content\\media\\media-checksum-database.db")))
+            using (var db = new LiteRepository(new ConnectionString($"Filename={ConfigurationManager.AppSettings["WebSitePath"]}\\content\\media\\media-checksum.db")))
             {
-                // Fetch media checksum from lite db
+                // Fetch media checksum from db
                 var mediaIrn = imageMedia.Irn;
                 var mediaChecksum = db.FirstOrDefault<MediaChecksum>(x => x.Irn == mediaIrn);
                 
@@ -139,15 +140,21 @@ namespace CollectionsOnline.Import.Factories
                     Log.Logger.Debug("Completed image {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", imageMedia.Irn,
                         fileSize, stopwatch.ElapsedMilliseconds);
 
-                    // Update or insert image media checksum value into lite db
+                    // Update or insert image media checksum value in db
                     if (mediaChecksum == null)
+                    {
                         db.Insert(new MediaChecksum()
                         {
                             Irn = imageMedia.Irn,
                             Md5Checksum = imageMedia.Md5Checksum
                         });
+                    }
                     else
+                    {
+                        mediaChecksum.Md5Checksum = imageMedia.Md5Checksum;
+                        
                         db.Update(mediaChecksum);
+                    }
 
                     return true;
                 }
@@ -214,12 +221,14 @@ namespace CollectionsOnline.Import.Factories
                 using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
                 {
                     imuSession.FindKey(imageMedia.Irn);
-
                     var result = imuSession.Fetch("start", 0, -1, Columns).Rows[0];
 
                     var resource = result.GetMap("resource");
+                    
                     if (resource == null)
                         throw new IMuException("MultimediaResourceNotFound");
+                    
+                    // Load file stream
                     var fileStream = resource["file"] as FileStream;
 
                     using (var originalImage = new MagickImage(fileStream))

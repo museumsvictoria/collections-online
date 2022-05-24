@@ -34,10 +34,11 @@ namespace CollectionsOnline.Import.Factories
 
         public bool Make(ref AudioMedia audioMedia, string originalFileExtension)
         {
+            // TODO: provide base class that better encapsulates functionality between image/file/audio factories
             var stopwatch = Stopwatch.StartNew();
-            using (var db = new LiteRepository(new ConnectionString($"Filename={ConfigurationManager.AppSettings["WebSitePath"]}\\content\\media\\media-checksum-database.db")))
+            using (var db = new LiteRepository(new ConnectionString($"Filename={ConfigurationManager.AppSettings["WebSitePath"]}\\content\\media\\media-checksum.db")))
             {
-                // Fetch media checksum from lite db
+                // Fetch media checksum from db
                 var mediaIrn = audioMedia.Irn;
                 var mediaChecksum = db.FirstOrDefault<MediaChecksum>(x => x.Irn == mediaIrn);
                 
@@ -58,15 +59,21 @@ namespace CollectionsOnline.Import.Factories
                     Log.Logger.Debug("Completed audio {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", audioMedia.Irn,
                         fileSize, stopwatch.ElapsedMilliseconds);
 
-                    // Update or insert image media checksum value into lite db
+                    // Update or insert image media checksum value in db
                     if (mediaChecksum == null)
+                    {
                         db.Insert(new MediaChecksum()
                         {
                             Irn = audioMedia.Irn,
                             Md5Checksum = audioMedia.Md5Checksum
                         });
+                    }
                     else
+                    {
+                        mediaChecksum.Md5Checksum = audioMedia.Md5Checksum;
+                        
                         db.Update(mediaChecksum);
+                    }
 
                     return true;
                 }
