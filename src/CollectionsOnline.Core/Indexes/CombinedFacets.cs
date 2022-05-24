@@ -13,6 +13,10 @@ namespace CollectionsOnline.Core.Indexes
             {
                 new Facet<CombinedIndexResult>
                 {
+                    Name = x => x.HasMedia
+                },
+                new Facet<CombinedIndexResult>
+                {
                     Name = x => x.HasImages
                 },
                 new Facet<CombinedIndexResult>

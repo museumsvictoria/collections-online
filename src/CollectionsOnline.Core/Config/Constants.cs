@@ -453,5 +453,7 @@ namespace CollectionsOnline.Core.Config
         };
 
         public static string[] TaxonomyTypeStatuses = { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
+        
+        public static string[] DeprecatedFacets = { "HasImages" };
     }
 }
