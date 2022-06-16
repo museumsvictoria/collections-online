@@ -111,7 +111,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             var result = taxonomyFactory.Make(map);
 
             // Then;
-            result.Genus.ShouldBe(null);
+            result.ShouldBe(null);
         }
 
         private Map MakeEmptyTaxonomyMap()
