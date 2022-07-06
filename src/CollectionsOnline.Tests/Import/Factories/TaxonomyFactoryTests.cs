@@ -13,7 +13,6 @@ namespace CollectionsOnline.Tests.Import.Factories
         public void MakeScientificName_WithNoQualifierOrAuthor_ReturnsCorrectly()
         {
             // Given
-            string result;
             var taxonomyFactory = new TaxonomyFactory();
             var taxonomy = new Taxonomy
             {
@@ -23,7 +22,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             };
 
             // When
-            result = taxonomyFactory.MakeScientificName(QualifierRankType.None, null, taxonomy);
+            var result = taxonomyFactory.MakeScientificName(QualifierRankType.None, null, taxonomy);
 
             // Then
             result.ShouldBe("<em>Colluricincla harmonica rufiventris</em>");
@@ -33,7 +32,6 @@ namespace CollectionsOnline.Tests.Import.Factories
         public void MakeScientificName_WithSpeciesQualifier_ReturnsCorrectly()
         {
             // Given
-            string result;
             var taxonomyFactory = new TaxonomyFactory();
             var taxonomy = new Taxonomy
             {
@@ -43,7 +41,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             };
 
             // When
-            result = taxonomyFactory.MakeScientificName(QualifierRankType.Species, "cf", taxonomy);
+            var result = taxonomyFactory.MakeScientificName(QualifierRankType.Species, "cf", taxonomy);
 
             // Then
             result.ShouldBe("<em>Maxomys</em> cf <em>hellwaldii</em> (Jentink, 1878)");
@@ -53,7 +51,6 @@ namespace CollectionsOnline.Tests.Import.Factories
         public void MakeScientificName_WithGenusQualifier_ReturnsCorrectly()
         {
             // Given
-            string result;
             var taxonomyFactory = new TaxonomyFactory();
             var taxonomy = new Taxonomy
             {
@@ -63,10 +60,29 @@ namespace CollectionsOnline.Tests.Import.Factories
             };
 
             // When
-            result = taxonomyFactory.MakeScientificName(QualifierRankType.Genus, "df", taxonomy);
+            var result = taxonomyFactory.MakeScientificName(QualifierRankType.Genus, "df", taxonomy);
 
             // Then
             result.ShouldBe("df <em>Austriella corrugata</em> (Deshayes, 1843)");
+        }
+        
+        [Fact]
+        public void MakeScientificName_WithEmptySpeciesQualifier_ReturnsCorrectly()
+        {
+            // Given
+            var taxonomyFactory = new TaxonomyFactory();
+            var taxonomy = new Taxonomy
+            {
+                Genus = "Pardalotus",
+                Species = "striatus",
+                Family = "Pardalotidae"
+            };
+
+            // When
+            var result = taxonomyFactory.MakeScientificName(QualifierRankType.Species, "", taxonomy);
+
+            // Then
+            result.ShouldBe("<em>Pardalotus striatus</em>");
         }
 
         [Fact]
@@ -95,7 +111,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             var result = taxonomyFactory.Make(map);
 
             // Then;
-            result.Genus.ShouldBe(null);
+            result.ShouldBe(null);
         }
 
         private Map MakeEmptyTaxonomyMap()

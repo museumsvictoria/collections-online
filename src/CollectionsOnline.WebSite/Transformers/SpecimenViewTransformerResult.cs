@@ -18,8 +18,6 @@ namespace CollectionsOnline.WebSite.Transformers
 
         public int RelatedSpeciesSpecimenItemCount { get; set; }
 
-        public IList<double[]> LatLongs { get; set; }
-
         public IList<KeyValuePair<string, string>> GeoSpatial { get; set; }
 
         public SpecimenViewTransformerResult()
@@ -28,7 +26,6 @@ namespace CollectionsOnline.WebSite.Transformers
             RelatedSpecimens = new List<EmuAggregateRootViewModel>();
             RelatedSpecies = new List<EmuAggregateRootViewModel>();
             RelatedArticles = new List<EmuAggregateRootViewModel>();
-            LatLongs = new List<double[]>();
             GeoSpatial = new List<KeyValuePair<string, string>>();
         }
     }

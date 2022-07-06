@@ -5,7 +5,6 @@ using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.WebSite.Extensions;
 using CollectionsOnline.WebSite.Models;
 using Humanizer;
-using Nancy.Extensions;
 using Nancy.Helpers;
 using Raven.Abstractions.Data;
 
@@ -32,6 +31,10 @@ namespace CollectionsOnline.WebSite.Factories
             // Build facets
             foreach (var facet in facets.Results)
             {
+                // Dont add any deprecated facets to results
+                if (Core.Config.Constants.DeprecatedFacets.Contains(facet.Key, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                
                 var facetViewModel = new FacetViewModel { Name = facet.Key.Humanize() };
 
                 foreach (var facetValue in facet.Value.Values)

@@ -106,7 +106,6 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Factories\PathFactory.cs" />
     <Compile Include="Indexes\CombinedFacets.cs" />
-    <Compile Include="Indexes\MediaByIrnWithChecksum.cs" />
     <Compile Include="Indexes\CombinedIndex.cs" />
     <Compile Include="Infrastructure\NetworkShareAccesser.cs" />
     <Compile Include="Infrastructure\NinjectRavenDocumentSessionProvider.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\ISlugFactory.cs" />
     <Compile Include="Factories\SlugFactory.cs" />
+    <Compile Include="Models\Tissue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HtmlConverter.cs" />
     <Compile Include="Utilities\HtmlSanitizerResult.cs" />
