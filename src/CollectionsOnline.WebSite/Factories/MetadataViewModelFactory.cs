@@ -22,7 +22,7 @@ namespace CollectionsOnline.WebSite.Factories
             {
                 Description = article.ContentText
                     .RemoveLineBreaks()
-                    .Truncate(Constants.MetadataDescriptionMaxChars),
+                    .Truncate(Constants.MetadataDescriptionMaxChars, " ..."),
                 Title = HtmlConverter.HtmlToText(article.DisplayTitle),
                 MetaProperties = new List<KeyValuePair<string, string>>
                 {
@@ -50,7 +50,7 @@ namespace CollectionsOnline.WebSite.Factories
                 Description = HtmlConverter
                     .HtmlToText(collection.CollectionSummary)
                     .RemoveLineBreaks()
-                    .Truncate(Constants.MetadataDescriptionMaxChars),
+                    .Truncate(Constants.MetadataDescriptionMaxChars, " ..."),
                 Title = HtmlConverter.HtmlToText(collection.DisplayTitle),
                 MetaProperties = new List<KeyValuePair<string, string>>
                 {
@@ -94,7 +94,7 @@ namespace CollectionsOnline.WebSite.Factories
             if (!string.IsNullOrWhiteSpace(metadata.Description))
             {
                 metadata.Description = metadata.Description
-                    .Truncate(Constants.MetadataDescriptionMaxChars)
+                    .Truncate(Constants.MetadataDescriptionMaxChars, " ...")
                     .RemoveLineBreaks();
             }
 
@@ -131,7 +131,7 @@ namespace CollectionsOnline.WebSite.Factories
             if (!string.IsNullOrWhiteSpace(metadata.Description))
             {
                 metadata.Description = metadata.Description
-                    .Truncate(Constants.MetadataDescriptionMaxChars)
+                    .Truncate(Constants.MetadataDescriptionMaxChars, " ...")
                     .RemoveLineBreaks();
             }
 
@@ -193,7 +193,7 @@ namespace CollectionsOnline.WebSite.Factories
             if (!string.IsNullOrWhiteSpace(metadata.Description))
             {
                 metadata.Description = metadata.Description
-                    .Truncate(Constants.MetadataDescriptionMaxChars)
+                    .Truncate(Constants.MetadataDescriptionMaxChars, " ...")
                     .RemoveLineBreaks();
             }
 

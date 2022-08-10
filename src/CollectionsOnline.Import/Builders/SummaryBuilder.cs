@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
+using CollectionsOnline.Core.Utilities;
 
 namespace CollectionsOnline.Import.Builders
 {
@@ -19,20 +20,24 @@ namespace CollectionsOnline.Import.Builders
         {
             if (_charactersLeft <= 0 || string.IsNullOrWhiteSpace(value)) return this;
 
-            var text = _charactersLeft < value.Length ? value.Truncate(_charactersLeft) : value;
+            var text = _charactersLeft < value.Length ? value.Truncate(_charactersLeft, " ...") : value;
 
-            _summary.Append(string.Format("<h5>{0}</h5>", text));
+            _summary.Append($"<h5>{text}</h5>");
 
             _charactersLeft -= text.Length;
 
             return this;
         }
 
-        public SummaryBuilder AddText(string value)
+        public SummaryBuilder AddText(string value, bool containsHtml = false)
         {
             if (_charactersLeft <= 0 || string.IsNullOrWhiteSpace(value)) return this;
 
-            var text = _charactersLeft < value.Length ? value.Truncate(_charactersLeft) : value;
+            string text;
+            if (containsHtml)
+                text = _charactersLeft < value.Length ? value.Truncate(_charactersLeft, " ...") : value;
+            else
+                text = _charactersLeft < value.Length ? value.TruncateHtml(_charactersLeft, " ...") : value;
 
             _summary.Append(text);
 
@@ -45,9 +50,9 @@ namespace CollectionsOnline.Import.Builders
         {
             if (_charactersLeft <= 0 || string.IsNullOrWhiteSpace(value) || _charactersLeft <= field.Length) return this;
 
-            var text = _charactersLeft < (field.Length + value.Length) ? value.Truncate(_charactersLeft - field.Length) : value;
+            var text = _charactersLeft < (field.Length + value.Length) ? value.Truncate(_charactersLeft - field.Length, " ...") : value;
 
-            _summary.Append(string.Format("<span><strong>{0}</strong>{1}</span>", field, value));
+            _summary.Append($"<span><strong>{field}</strong>{value}</span>");
 
             _charactersLeft -= text.Length;
 

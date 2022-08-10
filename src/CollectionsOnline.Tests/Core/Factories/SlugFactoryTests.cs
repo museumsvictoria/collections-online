@@ -44,5 +44,18 @@ namespace CollectionsOnline.Tests.Core.Factories
             // Then
             result.ShouldBe("mechanical");
         }
+        
+        [Fact]
+        public void MakeSlug_WithReasonableMaxLength_ReturnsCorrectly()
+        {
+            // Given
+            var slugFactory = new SlugFactory();
+
+            // When
+            var result = slugFactory.MakeSlug("Mechanical Drawing - CSIRAC Computer, 'Detail 17'", 20);
+
+            // Then
+            result.ShouldBe("mechanical-drawing");
+        }
     }
 }
