@@ -34,10 +34,13 @@ namespace CollectionsOnline.Import.Builders
             if (_charactersLeft <= 0 || string.IsNullOrWhiteSpace(value)) return this;
 
             string text;
-            if (containsHtml)
-                text = _charactersLeft < value.Length ? value.Truncate(_charactersLeft, " ...") : value;
+
+            if (_charactersLeft >= value.Length)
+                text = value;
+            else if (containsHtml)
+                text = value.TruncateHtml(_charactersLeft, " ...");
             else
-                text = _charactersLeft < value.Length ? value.TruncateHtml(_charactersLeft, " ...") : value;
+                text = value.Truncate(_charactersLeft, " ...");
 
             _summary.Append(text);
 
