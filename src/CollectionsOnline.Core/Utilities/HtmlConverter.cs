@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CollectionsOnline.Import.Utilities;
 using Ganss.XSS;
 using HtmlAgilityPack;
@@ -40,6 +41,72 @@ namespace CollectionsOnline.Core.Utilities
             result.Html = sanitizer.Sanitize(html);
 
             return result;
+        }
+        
+        public static string TruncateHtml(this string html, int maxLength, string trailingText = "")
+        {
+            if (string.IsNullOrEmpty(html) || html.Length <= maxLength) return html;
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            if (doc.DocumentNode.InnerText.Length <= maxLength) return html;
+
+            var textNodes = new LinkedList<HtmlNode>(doc.DocumentNode.TextDescendants());
+            var precedingText = 0;
+            var lastNode = textNodes.First;
+            while (precedingText <= maxLength && lastNode != null)
+            {
+                var nodeTextLength = lastNode.Value.InnerText.Length;
+                if (precedingText + nodeTextLength > maxLength)
+                {
+                    var truncatedText = TruncateWords(lastNode.Value.InnerText, maxLength - precedingText);
+
+                    if (string.IsNullOrWhiteSpace(truncatedText) && lastNode.Previous != null)
+                    {
+                        // Put the ellipsis in the previous node and remove the empty node.
+                        lastNode.Previous.Value.InnerHtml = lastNode.Previous.Value.InnerText.Trim() + trailingText;
+                        lastNode.Value.InnerHtml = string.Empty;
+                        lastNode = lastNode.Previous;
+                    }
+                    else
+                    {
+                        lastNode.Value.InnerHtml = truncatedText + trailingText;
+                    }
+
+                    break;
+                }
+
+                precedingText += nodeTextLength;
+                lastNode = lastNode.Next;
+            }
+
+            // Remove all the nodes after lastNode
+            if (lastNode != null) RemoveFollowingNodes(lastNode.Value);
+
+            return doc.DocumentNode.InnerHtml;
+        }
+        
+        private static IEnumerable<HtmlNode> TextDescendants(this HtmlNode root)
+        {
+            return root.Descendants().Where(n => n.NodeType == HtmlNodeType.Text && !string.IsNullOrWhiteSpace(n.InnerText));
+        }
+
+        private static void RemoveFollowingNodes(HtmlNode lastNode)
+        {
+            while (lastNode.NextSibling != null) lastNode.NextSibling.Remove();
+            if (lastNode.ParentNode != null) RemoveFollowingNodes(lastNode.ParentNode);
+        }
+
+        private static string TruncateWords(string value, int length)
+        {
+            if (string.IsNullOrWhiteSpace(value) || length <= 0) return string.Empty;
+            if (length > value.Length) return value;
+
+            var endIndex = length;
+            while (char.IsLetterOrDigit(value[endIndex-1]) && char.IsLetterOrDigit(value[endIndex]) && endIndex > 1) endIndex--;
+
+            if (endIndex == 1) return string.Empty;
+            return value.Substring(0, endIndex).Trim();
         }
 
         private static void ConvertTo(HtmlNode node, StringWriter outText)
