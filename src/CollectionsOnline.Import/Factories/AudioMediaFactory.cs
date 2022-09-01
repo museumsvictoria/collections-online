@@ -2,84 +2,77 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using CollectionsOnline.Import.Models;
 using IMu;
 using LiteDB;
-using Raven.Client;
-using Raven.Client.Linq;
 using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class AudioMediaFactory : IAudioMediaFactory
     {
-        private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
+        private readonly ILiteDatabase _liteDatabase;
 
         public AudioMediaFactory(
-            IDocumentStore documentStore,
-            IImuSessionProvider imuSessionProvider)
+            IImuSessionProvider imuSessionProvider,
+            ILiteDatabase liteDatabase)
         {
-            _documentStore = documentStore;
             _imuSessionProvider = imuSessionProvider;
+            _liteDatabase = liteDatabase;
         }
 
         public bool Make(ref AudioMedia audioMedia, string originalFileExtension)
         {
             // TODO: provide base class that better encapsulates functionality between image/file/audio factories
+            var mediaIrn = audioMedia.Irn;
+        
+            // Fetch media checksum from db
             var stopwatch = Stopwatch.StartNew();
-            using (var db = new LiteRepository(new ConnectionString($"Filename={ConfigurationManager.AppSettings["WebSitePath"]}\\content\\media\\media-checksum.db")))
+            
+            var mediaChecksums = _liteDatabase.GetCollection<MediaChecksum>();
+            mediaChecksums.EnsureIndex(x => x.Irn, true);
+            var mediaChecksum = mediaChecksums.FindOne(x => x.Irn == mediaIrn);
+            
+            stopwatch.Stop();
+            Log.Logger.Debug("Fetched MediaChecksum from LiteDb for audio {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
+            
+            if (FileExists(ref audioMedia, originalFileExtension, mediaChecksum))
+                return true;
+
+            // Fetch fresh media from emu as no existing media found or media fails checksum
+            stopwatch.Restart();
+            var (fetchIsSuccess, fileSize) = FetchMedia(ref audioMedia, originalFileExtension);
+            if (fetchIsSuccess)
             {
-                // Fetch media checksum from db
-                var mediaIrn = audioMedia.Irn;
-                var mediaChecksum = db.FirstOrDefault<MediaChecksum>(x => x.Irn == mediaIrn);
-                
-                if (FileExists(ref audioMedia, originalFileExtension, mediaChecksum))
-                {
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Found existing audio {Irn} in {ElapsedMilliseconds} ms", audioMedia.Irn,
-                        stopwatch.ElapsedMilliseconds);
+                stopwatch.Stop();
+                Log.Logger.Debug("Completed audio {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", audioMedia.Irn,
+                    fileSize, stopwatch.ElapsedMilliseconds);
 
-                    return true;
+                // Update or insert image media checksum value in db
+                if (mediaChecksum == null)
+                {
+                    mediaChecksums.Insert(new MediaChecksum()
+                    {
+                        Irn = audioMedia.Irn,
+                        Md5Checksum = audioMedia.Md5Checksum
+                    });
+                }
+                else
+                {
+                    mediaChecksum.Md5Checksum = audioMedia.Md5Checksum;
+                    
+                    mediaChecksums.Update(mediaChecksum);
                 }
 
-                // Fetch fresh media from emu as no existing media found or media fails checksum
-                var (fetchIsSuccess, fileSize) = FetchMedia(ref audioMedia, originalFileExtension);
-                if (fetchIsSuccess)
-                {
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Completed audio {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", audioMedia.Irn,
-                        fileSize, stopwatch.ElapsedMilliseconds);
-
-                    // Update or insert image media checksum value in db
-                    if (mediaChecksum == null)
-                    {
-                        db.Insert(new MediaChecksum()
-                        {
-                            Irn = audioMedia.Irn,
-                            Md5Checksum = audioMedia.Md5Checksum
-                        });
-                    }
-                    else
-                    {
-                        mediaChecksum.Md5Checksum = audioMedia.Md5Checksum;
-                        
-                        db.Update(mediaChecksum);
-                    }
-
-                    return true;
-                }
-
-                return false;
+                return true;
             }
+
+            return false;
         }
 
         private bool FileExists(ref AudioMedia audioMedia, string originalFileExtension, MediaChecksum mediaChecksum)
@@ -95,12 +88,13 @@ namespace CollectionsOnline.Import.Factories
             }
             else if (mediaChecksum.Md5Checksum != audioMedia.Md5Checksum)
             {
-                Log.Logger.Debug("Existing file {Irn} checksum {ExistingChecksum} did not match current file {NewChecksum}", audioMedia.Irn, 
+                Log.Logger.Debug("Existing audio {Irn} checksum {ExistingChecksum} did not match current file {NewChecksum}", audioMedia.Irn, 
                     mediaChecksum.Md5Checksum, audioMedia.Md5Checksum);
                 return false;
             }
             
             // then if we find an existing file, use the files on disk instead
+            var stopwatch = Stopwatch.StartNew();
             var destPath = PathFactory.GetDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None);
             if (File.Exists(destPath))
             {
@@ -109,14 +103,15 @@ namespace CollectionsOnline.Import.Factories
                     Uri = PathFactory.BuildUriPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None),
                     Size = new FileInfo(destPath).Length
                 };
-
+                
+                stopwatch.Stop();
+                Log.Logger.Debug("Existing audio {Irn} checksum matches and file present, time elapsed {ElapsedMilliseconds} ms", audioMedia.Irn, stopwatch.ElapsedMilliseconds);
                 return true;
             }
-            else
-            {
-                Log.Logger.Debug("Existing file {Irn} checksum found but file not present", audioMedia.Irn);
-            }
 
+            stopwatch.Stop();
+            Log.Logger.Debug("Existing audio {Irn} checksum matches but file not present, time elapsed {ElapsedMilliseconds} ms", audioMedia.Irn, stopwatch.ElapsedMilliseconds);
+            
             return false;
         }
         

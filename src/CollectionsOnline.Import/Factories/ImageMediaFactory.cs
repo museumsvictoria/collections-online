@@ -22,11 +22,14 @@ namespace CollectionsOnline.Import.Factories
     {
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IList<ImageMediaJob> _imageMediaJobs;
+        private readonly ILiteDatabase _liteDatabase;
 
         public ImageMediaFactory(
-            IImuSessionProvider imuSessionProvider)
+            IImuSessionProvider imuSessionProvider,
+            ILiteDatabase liteDatabase)
         {
             _imuSessionProvider = imuSessionProvider;
+            _liteDatabase = liteDatabase;
 
             // Build a list the various image conversions used in the application
             _imageMediaJobs = new List<ImageMediaJob>
@@ -116,57 +119,57 @@ namespace CollectionsOnline.Import.Factories
         public bool Make(ref ImageMedia imageMedia)
         {
             // TODO: provide base class that better encapsulates functionality between image/file/audio factories
+            var mediaIrn = imageMedia.Irn;
+            
+            // Fetch media checksum from db
             var stopwatch = Stopwatch.StartNew();
-            using (var db = new LiteRepository(new ConnectionString($"Filename={ConfigurationManager.AppSettings["WebSitePath"]}\\content\\media\\media-checksum.db")))
+            
+            var mediaChecksums = _liteDatabase.GetCollection<MediaChecksum>();
+            mediaChecksums.EnsureIndex(x => x.Irn, true);
+            var mediaChecksum = mediaChecksums.FindOne(x => x.Irn == mediaIrn); 
+            
+            stopwatch.Stop();
+            Log.Logger.Debug("Fetched MediaChecksum from LiteDb for image {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
+            
+            // Try to find existing media in media checksum collection to compare checksum then check files on filesystem 
+            if (FileExists(ref imageMedia, mediaChecksum))
+                return true;
+            
+            // Fetch fresh media from emu as no existing media found or media fails checksum
+            stopwatch.Restart();
+            var (fetchIsSuccess, fileSize) = FetchMedia(ref imageMedia);
+            if (fetchIsSuccess)
             {
-                // Fetch media checksum from db
-                var mediaIrn = imageMedia.Irn;
-                var mediaChecksum = db.FirstOrDefault<MediaChecksum>(x => x.Irn == mediaIrn);
-                
-                // Try to find existing media in media checksum collection to compare checksum then check files on filesystem 
-                if (FileExists(ref imageMedia, mediaChecksum))
-                {
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Found existing image {Irn} in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
+                stopwatch.Stop();
+                Log.Logger.Debug("Completed image {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", imageMedia.Irn,
+                    fileSize, stopwatch.ElapsedMilliseconds);
 
-                    return true;
+                // Update or insert image media checksum value in db
+                if (mediaChecksum == null)
+                {
+                    mediaChecksums.Insert(new MediaChecksum()
+                    {
+                        Irn = imageMedia.Irn,
+                        Md5Checksum = imageMedia.Md5Checksum
+                    });
+                }
+                else
+                {
+                    mediaChecksum.Md5Checksum = imageMedia.Md5Checksum;
+                    
+                    mediaChecksums.Update(mediaChecksum);
                 }
 
-                // Fetch fresh media from emu as no existing media found or media fails checksum
-                var (fetchIsSuccess, fileSize) = FetchMedia(ref imageMedia);
-                if (fetchIsSuccess)
-                {
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Completed image {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", imageMedia.Irn,
-                        fileSize, stopwatch.ElapsedMilliseconds);
-
-                    // Update or insert image media checksum value in db
-                    if (mediaChecksum == null)
-                    {
-                        db.Insert(new MediaChecksum()
-                        {
-                            Irn = imageMedia.Irn,
-                            Md5Checksum = imageMedia.Md5Checksum
-                        });
-                    }
-                    else
-                    {
-                        mediaChecksum.Md5Checksum = imageMedia.Md5Checksum;
-                        
-                        db.Update(mediaChecksum);
-                    }
-
-                    return true;
-                }
-
-                return false;
+                return true;
             }
+
+            return false;
         }
         
         private bool FileExists(ref ImageMedia imageMedia, MediaChecksum mediaChecksum)
         {
             var mediaIrn = imageMedia.Irn;
-            
+
             // First check to see if we are not simply overwriting all existing media
             if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"])) 
                 return false;
@@ -182,14 +185,20 @@ namespace CollectionsOnline.Import.Factories
                     mediaChecksum.Md5Checksum, imageMedia.Md5Checksum);
                 return false;
             }
-
+            
             // then check whether media exists on disk for all media jobs
+            var stopwatch = Stopwatch.StartNew();
             if (!_imageMediaJobs.All(x => File.Exists(PathFactory.GetDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
             {
-                Log.Logger.Debug("Existing image {Irn} checksum found but files not present", imageMedia.Irn);
+                stopwatch.Stop();
+                Log.Logger.Debug("Existing image {Irn} checksum matches but files not present, creating new images, time elapsed {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
                 return false;
             }
-
+            
+            stopwatch.Restart();
+            Log.Logger.Debug("Existing image {Irn} checksum matches and files present, time elapsed {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
+            
+            // Recreate ImageMedia by loading all file derivatives
             foreach (var imageMediaJob in _imageMediaJobs)
             {
                 var destPath = PathFactory.GetDestPath(mediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
@@ -210,6 +219,9 @@ namespace CollectionsOnline.Import.Factories
                         });
                 }
             }
+            
+            stopwatch.Stop();
+            Log.Logger.Debug("Recreated ImageMedia {Irn} in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
                 
             return true;
         }
@@ -266,23 +278,22 @@ namespace CollectionsOnline.Import.Factories
             }
             catch (Exception ex)
             {
-                if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResolutionNotFound")
+                switch (ex)
                 {
-                    Log.Logger.Warning(ex, "Multimedia resolution not found, unable to save image {Irn}", imageMedia.Irn);
-                }
-                else if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResourceNotFound")
-                {
-                    Log.Logger.Warning(ex, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
-                }
-                else if (ex is MagickCoderErrorException || ex is MagickCorruptImageErrorException)
-                {
-                    Log.Logger.Warning(ex, "Multimedia resource appears to be corrupt {Irn}", imageMedia.Irn);
-                }
-                else
-                {
-                    // Error is unexpected therefore we want the entire import to fail
-                    Log.Logger.Fatal(ex, "Unexpected error occured creating image {Irn}", imageMedia.Irn);
-                    throw;
+                    case IMuException exception when exception.ID == "MultimediaResolutionNotFound":
+                        Log.Logger.Warning(exception, "Multimedia resolution not found, unable to save image {Irn}", imageMedia.Irn);
+                        break;
+                    case IMuException exception when exception.ID == "MultimediaResourceNotFound":
+                        Log.Logger.Warning(exception, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
+                        break;
+                    case MagickCoderErrorException _:
+                    case MagickCorruptImageErrorException _:
+                        Log.Logger.Warning(ex, "Multimedia resource appears to be corrupt {Irn}", imageMedia.Irn);
+                        break;
+                    default:
+                        // Error is unexpected therefore we want the entire import to fail
+                        Log.Logger.Fatal(ex, "Unexpected error occured creating image {Irn}", imageMedia.Irn);
+                        throw;
                 }
             }
             

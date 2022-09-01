@@ -202,6 +202,7 @@
     <Compile Include="Infrastructure\IImuSessionProvider.cs" />
     <Compile Include="Infrastructure\ImuSession.cs" />
     <Compile Include="Infrastructure\ImuSessionProvider.cs" />
+    <Compile Include="Infrastructure\LiteDatabaseProvider.cs" />
     <Compile Include="Infrastructure\YoutubeServiceProvider.cs" />
     <Compile Include="Models\MediaChecksum.cs" />
     <Compile Include="Program.cs" />
