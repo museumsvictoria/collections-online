@@ -128,22 +128,18 @@ namespace CollectionsOnline.Import.Factories
             mediaChecksums.EnsureIndex(x => x.Irn, true);
             var mediaChecksum = mediaChecksums.FindOne(x => x.Irn == mediaIrn); 
             
-            stopwatch.Stop();
-            Log.Logger.Debug("Fetched MediaChecksum from LiteDb for image {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
-            
             // Try to find existing media in media checksum collection to compare checksum then check files on filesystem 
             if (FileExists(ref imageMedia, mediaChecksum))
+            {
+                stopwatch.Stop();
+                Log.Logger.Debug("Found existing image {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
                 return true;
+            }
             
             // Fetch fresh media from emu as no existing media found or media fails checksum
-            stopwatch.Restart();
             var (fetchIsSuccess, fileSize) = FetchMedia(ref imageMedia);
             if (fetchIsSuccess)
             {
-                stopwatch.Stop();
-                Log.Logger.Debug("Completed image {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", imageMedia.Irn,
-                    fileSize, stopwatch.ElapsedMilliseconds);
-
                 // Update or insert image media checksum value in db
                 if (mediaChecksum == null)
                 {
@@ -159,7 +155,10 @@ namespace CollectionsOnline.Import.Factories
                     
                     mediaChecksums.Update(mediaChecksum);
                 }
-
+                
+                stopwatch.Stop();
+                Log.Logger.Debug("Completed image {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", mediaIrn,
+                    fileSize, stopwatch.ElapsedMilliseconds);
                 return true;
             }
 
@@ -187,17 +186,12 @@ namespace CollectionsOnline.Import.Factories
             }
             
             // then check whether media exists on disk for all media jobs
-            var stopwatch = Stopwatch.StartNew();
             if (!_imageMediaJobs.All(x => File.Exists(PathFactory.GetDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
             {
-                stopwatch.Stop();
-                Log.Logger.Debug("Existing image {Irn} checksum matches but files not present, creating new images, time elapsed {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
+                Log.Logger.Debug("Existing image {Irn} checksum matches but files not present, creating new images", imageMedia.Irn);
                 return false;
             }
-            
-            stopwatch.Restart();
-            Log.Logger.Debug("Existing image {Irn} checksum matches and files present, time elapsed {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
-            
+
             // Recreate ImageMedia by loading all file derivatives
             foreach (var imageMediaJob in _imageMediaJobs)
             {
@@ -220,9 +214,7 @@ namespace CollectionsOnline.Import.Factories
                 }
             }
             
-            stopwatch.Stop();
-            Log.Logger.Debug("Recreated ImageMedia {Irn} in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
-                
+            Log.Logger.Debug("Existing image {Irn} checksum matches, files present, ImageMedia re-created", imageMedia.Irn);
             return true;
         }
         

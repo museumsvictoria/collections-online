@@ -38,22 +38,18 @@ namespace CollectionsOnline.Import.Factories
             mediaChecksums.EnsureIndex(x => x.Irn, true);
             var mediaChecksum = mediaChecksums.FindOne(x => x.Irn == mediaIrn);
             
-            stopwatch.Stop();
-            Log.Logger.Debug("Fetched MediaChecksum from LiteDb for file {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
-            
             // Compare checksum then check files on filesystem 
             if (FileExists(ref fileMedia, originalFileExtension, mediaChecksum))
+            {
+                stopwatch.Stop();
+                Log.Logger.Debug("Found existing file {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
                 return true;
+            }
 
             // Fetch fresh media from emu as no existing media found or media fails checksum
-            stopwatch.Restart();
             var (fetchIsSuccess, fileSize) = FetchMedia(ref fileMedia, originalFileExtension);
             if (fetchIsSuccess)
             {
-                stopwatch.Stop();
-                Log.Logger.Debug("Completed file {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", fileMedia.Irn,
-                    fileSize, stopwatch.ElapsedMilliseconds);
-
                 // Update or insert image media checksum value in db
                 if (mediaChecksum == null)
                 {
@@ -70,6 +66,9 @@ namespace CollectionsOnline.Import.Factories
                     mediaChecksums.Update(mediaChecksum);
                 }
 
+                stopwatch.Stop();
+                Log.Logger.Debug("Completed file {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", fileMedia.Irn,
+                    fileSize, stopwatch.ElapsedMilliseconds);
                 return true;
             }
 
@@ -95,7 +94,6 @@ namespace CollectionsOnline.Import.Factories
             }
 
             // then if we find an existing file, use the files on disk instead
-            var stopwatch = Stopwatch.StartNew();
             var destPath = PathFactory.GetDestPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None);
             if (File.Exists(destPath))
             {
@@ -105,14 +103,11 @@ namespace CollectionsOnline.Import.Factories
                     Size = new FileInfo(destPath).Length
                 };
                 
-                stopwatch.Stop();
-                Log.Logger.Debug("Existing file {Irn} checksum matches and file present, time elapsed {ElapsedMilliseconds} ms", fileMedia.Irn, stopwatch.ElapsedMilliseconds);
+                Log.Logger.Debug("Existing file {Irn} checksum matches, file present, FileMedia re-created", fileMedia.Irn);
                 return true;
             }
             
-            stopwatch.Stop();
-            Log.Logger.Debug("Existing file {Irn} checksum matches but file not present, time elapsed {ElapsedMilliseconds} ms", fileMedia.Irn, stopwatch.ElapsedMilliseconds);
-
+            Log.Logger.Debug("Existing file {Irn} checksum matches but file not present", fileMedia.Irn);
             return false;
         }
         

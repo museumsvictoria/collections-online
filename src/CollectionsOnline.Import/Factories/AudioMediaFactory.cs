@@ -38,21 +38,18 @@ namespace CollectionsOnline.Import.Factories
             mediaChecksums.EnsureIndex(x => x.Irn, true);
             var mediaChecksum = mediaChecksums.FindOne(x => x.Irn == mediaIrn);
             
-            stopwatch.Stop();
-            Log.Logger.Debug("Fetched MediaChecksum from LiteDb for audio {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
-            
             if (FileExists(ref audioMedia, originalFileExtension, mediaChecksum))
+            {
+                stopwatch.Stop();
+                Log.Logger.Debug("Found existing audio {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
                 return true;
+            }
 
             // Fetch fresh media from emu as no existing media found or media fails checksum
             stopwatch.Restart();
             var (fetchIsSuccess, fileSize) = FetchMedia(ref audioMedia, originalFileExtension);
             if (fetchIsSuccess)
             {
-                stopwatch.Stop();
-                Log.Logger.Debug("Completed audio {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", audioMedia.Irn,
-                    fileSize, stopwatch.ElapsedMilliseconds);
-
                 // Update or insert image media checksum value in db
                 if (mediaChecksum == null)
                 {
@@ -69,6 +66,9 @@ namespace CollectionsOnline.Import.Factories
                     mediaChecksums.Update(mediaChecksum);
                 }
 
+                stopwatch.Stop();
+                Log.Logger.Debug("Completed audio {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", audioMedia.Irn,
+                    fileSize, stopwatch.ElapsedMilliseconds);
                 return true;
             }
 
@@ -94,7 +94,6 @@ namespace CollectionsOnline.Import.Factories
             }
             
             // then if we find an existing file, use the files on disk instead
-            var stopwatch = Stopwatch.StartNew();
             var destPath = PathFactory.GetDestPath(audioMedia.Irn, originalFileExtension, FileDerivativeType.None);
             if (File.Exists(destPath))
             {
@@ -104,13 +103,11 @@ namespace CollectionsOnline.Import.Factories
                     Size = new FileInfo(destPath).Length
                 };
                 
-                stopwatch.Stop();
-                Log.Logger.Debug("Existing audio {Irn} checksum matches and file present, time elapsed {ElapsedMilliseconds} ms", audioMedia.Irn, stopwatch.ElapsedMilliseconds);
+                Log.Logger.Debug("Existing audio {Irn} checksum matches and file present, FileMedia re-created", audioMedia.Irn);
                 return true;
             }
 
-            stopwatch.Stop();
-            Log.Logger.Debug("Existing audio {Irn} checksum matches but file not present, time elapsed {ElapsedMilliseconds} ms", audioMedia.Irn, stopwatch.ElapsedMilliseconds);
+            Log.Logger.Debug("Existing audio {Irn} checksum matches but file not present", audioMedia.Irn);
             
             return false;
         }
