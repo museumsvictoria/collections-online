@@ -218,6 +218,7 @@
     <Compile Include="Import\Factories\ImageMediaTests .cs" />
     <Compile Include="Import\Factories\MuseumLocationFactoryTests.cs" />
     <Compile Include="Import\Factories\PathFactoryTests.cs" />
+    <Compile Include="Import\Factories\SummaryBuilderTests.cs" />
     <Compile Include="Import\Factories\TaxonomyFactoryTests.cs" />
     <Compile Include="Import\Factories\ArticleFactoryTests.cs" />
     <Compile Include="Import\Factories\VideoMediaFactoryTests.cs" />

@@ -32,5 +32,47 @@ namespace CollectionsOnline.Tests.Core.Utilities
             
             result.ShouldBe("<h3>Peter Hunter OAM, Kodak Australasia Pty Ltd: Public Relations, 1961 - 1995</h3><h3>Early career in England</h3>");
         }
+        
+        [Fact]
+        public void TruncateHtml_GivenNoHtml()
+        {
+            // Given
+            var input =
+                "English artist Richard Du Bourg (1738-1826) learned the emerging technique of cork modelling of classical sites while living in Italy in the 1760s.";
+
+            // When
+            var result = input.TruncateHtml(50, " ...");
+
+            // Then
+            result.ShouldBe("English artist Richard Du Bourg (1738-1826) ...");
+        }
+        
+        [Fact]
+        public void TruncateHtml_GivenHtmlOneLevelDeep()
+        {
+            // Given
+            var input =
+                "<div>English artist Richard Du Bourg (1738-1826) learned the emerging technique of cork modelling of classical sites while living in Italy in the 1760s.</div>";
+
+            // When
+            var result = input.TruncateHtml(50, " ...");
+
+            // Then
+            result.ShouldBe("<div>English artist Richard Du Bourg (1738-1826) ...</div>");
+        }
+        
+        [Fact]
+        public void TruncateHtml_GivenHtmlManyLevelsDeep()
+        {
+            // Given
+            var input =
+                "<div><h2>English artist Richard Du Bourg</h2> <strong>(1738-1826)</strong> <span>learned <span>the emerging <span>technique of cork</span> modelling of classical sites</span> while living in Italy in the 1760s.</span></div>";
+
+            // When
+            var result = input.TruncateHtml(50, " ...");
+
+            // Then
+            result.ShouldBe("<div><h2>English artist Richard Du Bourg</h2> <strong>(1738-1826)</strong> <span>learned ...</span></div>");
+        }
     }
 }

@@ -55,8 +55,9 @@ namespace CollectionsOnline.Import
             // Db Bindings
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
 
-            // Services
+            // Providers
             kernel.Bind<YouTubeService>().ToProvider<YoutubeServiceProvider>().InSingletonScope();
+            kernel.Bind<ILiteDatabase>().ToProvider<LiteDatabaseProvider>().InSingletonScope();
 
             // Bind Imports
             kernel.Bind<IImport>().To<ImuImport<Article>>();

@@ -2,83 +2,77 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
-using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using CollectionsOnline.Import.Models;
 using IMu;
 using LiteDB;
-using Raven.Client;
-using Raven.Client.Linq;
 using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class FileMediaFactory : IFileMediaFactory
     {
-        private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
+        private readonly ILiteDatabase _liteDatabase;
 
         public FileMediaFactory(
-            IDocumentStore documentStore,
-            IImuSessionProvider imuSessionProvider)
+            IImuSessionProvider imuSessionProvider,
+            ILiteDatabase liteDatabase)
         {
-            _documentStore = documentStore;
             _imuSessionProvider = imuSessionProvider;
+            _liteDatabase = liteDatabase;
         }
 
         public bool Make(ref FileMedia fileMedia, string originalFileExtension)
         {
             // TODO: provide base class that better encapsulates functionality between image/file/audio factories
+            var mediaIrn = fileMedia.Irn;
+            
+            // Fetch media checksum from db
             var stopwatch = Stopwatch.StartNew();
-            using (var db = new LiteRepository(new ConnectionString($"Filename={ConfigurationManager.AppSettings["WebSitePath"]}\\content\\media\\media-checksum.db")))
+            
+            var mediaChecksums = _liteDatabase.GetCollection<MediaChecksum>();
+            mediaChecksums.EnsureIndex(x => x.Irn, true);
+            var mediaChecksum = mediaChecksums.FindOne(x => x.Irn == mediaIrn);
+            
+            // Compare checksum then check files on filesystem 
+            if (FileExists(ref fileMedia, originalFileExtension, mediaChecksum))
             {
-                // Fetch media checksum from db
-                var mediaIrn = fileMedia.Irn;
-                var mediaChecksum = db.FirstOrDefault<MediaChecksum>(x => x.Irn == mediaIrn);
-                
-                if (FileExists(ref fileMedia, originalFileExtension, mediaChecksum))
-                {
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Found existing file {Irn} in {ElapsedMilliseconds} ms", fileMedia.Irn, stopwatch.ElapsedMilliseconds);
-
-                    return true;
-                }
-
-                // Fetch fresh media from emu as no existing media found or media fails checksum
-                var (fetchIsSuccess, fileSize) = FetchMedia(ref fileMedia, originalFileExtension);
-                if (fetchIsSuccess)
-                {
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Completed file {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", fileMedia.Irn,
-                        fileSize, stopwatch.ElapsedMilliseconds);
-
-                    // Update or insert image media checksum value in db
-                    if (mediaChecksum == null)
-                    {
-                        db.Insert(new MediaChecksum()
-                        {
-                            Irn = fileMedia.Irn,
-                            Md5Checksum = fileMedia.Md5Checksum
-                        });
-                    }
-                    else
-                    {
-                        mediaChecksum.Md5Checksum = fileMedia.Md5Checksum;
-                        
-                        db.Update(mediaChecksum);
-                    }
-
-                    return true;
-                }
-
-                return false;
+                stopwatch.Stop();
+                Log.Logger.Debug("Found existing file {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
+                return true;
             }
+
+            // Fetch fresh media from emu as no existing media found or media fails checksum
+            var (fetchIsSuccess, fileSize) = FetchMedia(ref fileMedia, originalFileExtension);
+            if (fetchIsSuccess)
+            {
+                // Update or insert image media checksum value in db
+                if (mediaChecksum == null)
+                {
+                    mediaChecksums.Insert(new MediaChecksum()
+                    {
+                        Irn = fileMedia.Irn,
+                        Md5Checksum = fileMedia.Md5Checksum
+                    });
+                }
+                else
+                {
+                    mediaChecksum.Md5Checksum = fileMedia.Md5Checksum;
+                    
+                    mediaChecksums.Update(mediaChecksum);
+                }
+
+                stopwatch.Stop();
+                Log.Logger.Debug("Completed file {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", fileMedia.Irn,
+                    fileSize, stopwatch.ElapsedMilliseconds);
+                return true;
+            }
+
+            return false;
         }
 
         private bool FileExists(ref FileMedia fileMedia, string originalFileExtension, MediaChecksum mediaChecksum)
@@ -108,20 +102,17 @@ namespace CollectionsOnline.Import.Factories
                     Uri = PathFactory.BuildUriPath(fileMedia.Irn, originalFileExtension, FileDerivativeType.None),
                     Size = new FileInfo(destPath).Length
                 };
-
+                
+                Log.Logger.Debug("Existing file {Irn} checksum matches, file present, FileMedia re-created", fileMedia.Irn);
                 return true;
             }
-            else
-            {
-                Log.Logger.Debug("Existing file {Irn} checksum found but file not present", fileMedia.Irn);
-            }
-
+            
+            Log.Logger.Debug("Existing file {Irn} checksum matches but file not present", fileMedia.Irn);
             return false;
         }
         
         private (bool, string) FetchMedia(ref FileMedia fileMedia, string originalFileExtension)
         {
-            // Fetch from Imu as we were not able to find local files
             try
             {
                 using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
@@ -158,19 +149,18 @@ namespace CollectionsOnline.Import.Factories
             }
             catch (Exception ex)
             {
-                if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResolutionNotFound")
+                switch (ex)
                 {
-                    Log.Logger.Warning(ex, "Multimedia resolution not found, unable to save file {Irn}", fileMedia.Irn);
-                }
-                else if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResourceNotFound")
-                {
-                    Log.Logger.Warning(ex, "Multimedia resource not found, unable to save file {Irn}", fileMedia.Irn);
-                }
-                else
-                {
-                    // Error is unexpected therefore we want the entire import to fail
-                    Log.Logger.Fatal(ex, "Unexpected error occured creating file {Irn}", fileMedia.Irn);
-                    throw;
+                    case IMuException exception when exception.ID == "MultimediaResolutionNotFound":
+                        Log.Logger.Warning(exception, "Multimedia resolution not found, unable to save file {Irn}", fileMedia.Irn);
+                        break;
+                    case IMuException exception when exception.ID == "MultimediaResourceNotFound":
+                        Log.Logger.Warning(exception, "Multimedia resource not found, unable to save file {Irn}", fileMedia.Irn);
+                        break;
+                    default:
+                        // Error is unexpected therefore we want the entire import to fail
+                        Log.Logger.Fatal(ex, "Unexpected error occured creating file {Irn}", fileMedia.Irn);
+                        throw;
                 }
             }
 
