@@ -55,12 +55,12 @@ namespace CollectionsOnline.Import.Factories
                     "SpeHabitat_tab",
                     "SpeWhereToLook_tab",
                     "SpeWhenActive_tab",
-                    "SpeNationalParks_tab",
                     "SpeDiet",
                     "SpeDietCategories_tab",
                     "SpeFastFact",
                     "SpeHabitatNotes",
                     "SpeDistribution",
+                    "SpeStrataGeology",
                     "SpeBiology",
                     "SpeIdentifyingCharacters",
                     "SpeBriefID",
@@ -119,7 +119,6 @@ namespace CollectionsOnline.Import.Factories
             species.Habitats = map.GetEncodedStrings("SpeHabitat_tab");
             species.WhereToLook = map.GetEncodedStrings("SpeWhereToLook_tab");
             species.WhenActive = map.GetEncodedStrings("SpeWhenActive_tab");
-            species.NationalParks = map.GetEncodedStrings("SpeNationalParks_tab");
 
             species.Diet = map.GetEncodedString("SpeDiet");
             species.DietCategories = map.GetEncodedStrings("SpeDietCategories_tab");
@@ -127,6 +126,7 @@ namespace CollectionsOnline.Import.Factories
             species.FastFact = map.GetEncodedString("SpeFastFact");
             species.Habitat = map.GetEncodedString("SpeHabitatNotes");
             species.Distribution = map.GetEncodedString("SpeDistribution");
+            species.GeologicalRange = map.GetEncodedString("SpeStrataGeology");
             species.Biology = map.GetEncodedString("SpeBiology");
             species.GeneralDescription = map.GetEncodedString("SpeIdentifyingCharacters");
             species.BriefId = map.GetEncodedString("SpeBriefID");
