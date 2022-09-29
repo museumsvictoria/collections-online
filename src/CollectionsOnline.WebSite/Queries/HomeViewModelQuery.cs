@@ -4,9 +4,7 @@ using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.WebSite.Factories;
 using CollectionsOnline.WebSite.Models;
-using Raven.Abstractions.Data;
 using Raven.Client;
-using Raven.Client.Linq;
 using Constants = CollectionsOnline.Core.Config.Constants;
 
 namespace CollectionsOnline.WebSite.Queries
@@ -66,19 +64,28 @@ namespace CollectionsOnline.WebSite.Queries
 
                 homeViewModel.HomeHeroUri = _homeHeroUriFactory.GetCurrentUri();
 
-                var feature = _documentSession.Load<Feature>("features/home");
-                if (feature != null)
+                var featureViewModels = new List<FeatureViewModel>();
+                
+                var features = _documentSession
+                    .Query<Feature>()
+                    .ToList();
+
+                foreach (var feature in features)
                 {
-                    homeViewModel.Feature = feature;
-                    
                     var featuredRecords = _documentSession.Advanced
                         .DocumentQuery<CombinedIndexResult, CombinedIndex>()
                         .WhereIn("Id", feature.FeaturedIds)
                         .SelectFields<EmuAggregateRootViewModel>()
                         .ToList();
-                    
-                    homeViewModel.FeaturedRecords = featuredRecords.OrderBy(x => feature.FeaturedIds.IndexOf(x.Id)).ToList();
+
+                    featureViewModels.Add(new FeatureViewModel
+                    {
+                        Feature = feature,
+                        FeaturedRecords = featuredRecords.OrderBy(x => feature.FeaturedIds.IndexOf(x.Id)).ToList()
+                    });
                 }
+
+                homeViewModel.Features = featureViewModels;
 
                 return homeViewModel;
             }

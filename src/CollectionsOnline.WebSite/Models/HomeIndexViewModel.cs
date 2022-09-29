@@ -19,14 +19,12 @@ namespace CollectionsOnline.WebSite.Models
 
         public string HomeHeroUri { get; set; }
         
-        public Feature Feature { get; set; }
-
-        public List<EmuAggregateRootViewModel> FeaturedRecords { get; set; }
+        public IList<FeatureViewModel> Features { get; set; }
 
         public HomeIndexViewModel()
         {
             RecentResults = new List<EmuAggregateRootViewModel>();
-            FeaturedRecords = new List<EmuAggregateRootViewModel>();
+            Features = new List<FeatureViewModel>();
         }
     }
 }
