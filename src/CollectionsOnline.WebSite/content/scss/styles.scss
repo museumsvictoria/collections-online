@@ -4065,7 +4065,7 @@ footer {
     }
 }
 
-#recent-explore, #featured-explore {
+#recent-explore, .feature {
     padding: 40px 0 50px;
 
     & .tile.full {
@@ -4092,7 +4092,6 @@ footer {
     }
 
     @include gridle_state("print") {
-
         & h2 {
             font-size: 16pt;
         }
@@ -4100,8 +4099,13 @@ footer {
 }
 
 #featured-explore {
+    padding: 30px 0 40px;
     background: #606060;
+}
 
+.feature {
+    padding: 10px 0;
+    
     h2 {
         color: #f5f5f5;
         margin-bottom: 7px;
