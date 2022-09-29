@@ -262,6 +262,7 @@
     <Compile Include="Models\Api\CollectionEventApiViewModel.cs" />
     <Compile Include="Models\Api\TaxonomyApiViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootCsvModel.cs" />
+    <Compile Include="Models\FeatureViewModel.cs" />
     <Compile Include="Models\MediaViewModel.cs" />
     <Compile Include="Models\EmuAggregateRootViewModel.cs" />
     <Compile Include="Models\CollectionIndexViewModel.cs" />
