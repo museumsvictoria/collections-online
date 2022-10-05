@@ -34,30 +34,30 @@
                     <h3>Physical Description</h3>
                     <p>@Model.Item.PhysicalDescription</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDescription))
+                @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesDescription))
                 {
                     <h3>Physical Description</h3>
-                    <p>@Model.Item.IndigenousCulturesDescription</p>
+                    <p>@Model.Item.FirstPeoplesDescription</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.ArcheologyDescription))
                 {
                     <h3>Physical Description</h3>
                     <p>@Model.Item.ArcheologyDescription</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLocalName))
+                @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesLocalName))
                 {
                     <h3>Local Name</h3>
-                    <p>@Html.Raw(Model.Item.IndigenousCulturesLocalName)</p>
+                    <p>@Html.Raw(Model.Item.FirstPeoplesLocalName)</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteratureCoverTitle))
                 {
                     <h3>Title</h3>
                     <p>@Model.Item.TradeLiteratureCoverTitle</p>
                 }
-                @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesTitle))
+                @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesTitle))
                 {
                     <h3>Title</h3>
-                    <p>@Model.Item.IndigenousCulturesTitle</p>
+                    <p>@Model.Item.FirstPeoplesTitle</p>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Item.NumismaticsObverseDescription))
                 {
@@ -121,53 +121,53 @@
                             <p>@Model.Item.Acknowledgement</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesPhotographer))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesPhotographer))
                     {
                         <li>
                             <h3>Photographer</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesPhotographer)">@Model.Item.IndigenousCulturesPhotographer</a></p>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesPhotographer)">@Model.Item.FirstPeoplesPhotographer</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesAuthor))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesAuthor))
                     {
                         <li>
                             <h3>Author</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesAuthor)">@Model.Item.IndigenousCulturesAuthor</a></p>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesAuthor)">@Model.Item.FirstPeoplesAuthor</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesIllustrator))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesIllustrator))
                     {
                         <li>
                             <h3>Illustrator</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesIllustrator)">@Model.Item.IndigenousCulturesIllustrator</a></p>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesIllustrator)">@Model.Item.FirstPeoplesIllustrator</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesMaker))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesMaker))
                     {
                         <li>
                             <h3>Maker</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesMaker)">@Model.Item.IndigenousCulturesMaker</a></p>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesMaker)">@Model.Item.FirstPeoplesMaker</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDate))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesDate))
                     {
                         <li>
                             <h3>Date Produced</h3>
-                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesDate)">@Model.Item.IndigenousCulturesDate</a></p>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesDate)">@Model.Item.FirstPeoplesDate</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesCollector))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesCollector))
                     {
                         <li>
                             <h3>Collector</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCollector)">@Model.Item.IndigenousCulturesCollector</a></p>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesCollector)">@Model.Item.FirstPeoplesCollector</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesDateCollected))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesDateCollected))
                     {
                         <li>
                             <h3>Date Collected</h3>
-                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesDateCollected)">@Model.Item.IndigenousCulturesDateCollected</a></p>
+                            <p><a href="/search?date=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesDateCollected)">@Model.Item.FirstPeoplesDateCollected</a></p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.TradeLiteraturePrimaryRole))
@@ -226,11 +226,11 @@
                             <p>@Html.RenderAssociationDescription(association)</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesIndividualsIdentified))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesIndividualsIdentified))
                     {
                         <li>
                             <h3>Individuals Identified</h3>
-                            <p>@Model.Item.IndigenousCulturesIndividualsIdentified</p>
+                            <p>@Model.Item.FirstPeoplesIndividualsIdentified</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.IsdPeopleDepicted))
@@ -240,28 +240,28 @@
                             <p>@Model.Item.IsdPeopleDepicted</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLetterTo))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesLetterTo))
                     {
                         <li>
                             <h3>Letter To</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLetterTo)">@Model.Item.IndigenousCulturesLetterTo</a></p>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesLetterTo)">@Model.Item.FirstPeoplesLetterTo</a></p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesLetterFrom))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesLetterFrom))
                     {
                         <li>
                             <h3>Letter From</h3>
-                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLetterFrom)">@Model.Item.IndigenousCulturesLetterFrom</a></p>
+                            <p><a href="/search?name=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesLetterFrom)">@Model.Item.FirstPeoplesLetterFrom</a></p>
                         </li>
                     }
-                    @if (Model.Item.IndigenousCulturesLocalities.Any())
+                    @if (Model.Item.FirstPeoplesLocalities.Any())
                     {
                         <li>
                             <h3>Locality</h3>
                             <p>
-                                @for (int i = 0; i < Model.Item.IndigenousCulturesLocalities.Count; i++)
+                                @for (int i = 0; i < Model.Item.FirstPeoplesLocalities.Count; i++)
                                 {
-                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesLocalities[i])">@Model.Item.IndigenousCulturesLocalities[i]</a>@(i != Model.Item.IndigenousCulturesLocalities.Count - 1 ? ", " : "")
+                                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesLocalities[i])">@Model.Item.FirstPeoplesLocalities[i]</a>@(i != Model.Item.FirstPeoplesLocalities.Count - 1 ? ", " : "")
                                 }
                             </p>
                         </li>
@@ -299,18 +299,18 @@
                             <p>@Model.Item.IsdLanguage</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesSheets))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesSheets))
                     {
                         <li>
                             <h3>Number of Sheets</h3>
-                            <p>@Model.Item.IndigenousCulturesSheets</p>
+                            <p>@Model.Item.FirstPeoplesSheets</p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesPages))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesPages))
                     {
                         <li>
                             <h3>Number of Pages</h3>
-                            <p>@Model.Item.IndigenousCulturesPages</p>
+                            <p>@Model.Item.FirstPeoplesPages</p>
                         </li>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Item.Inscription))
@@ -637,23 +637,23 @@
                             <p>@Model.Item.ArtworkTertiaryInscriptions</p>
                         </li>
                     }
-                    @if (Model.Item.IndigenousCulturesCulturalGroups.Any())
+                    @if (Model.Item.FirstPeoplesCulturalGroups.Any())
                     {
                         <li>
                             <h3>Cultural Groups</h3>
                             <p>
-                                @for (int i = 0; i < Model.Item.IndigenousCulturesCulturalGroups.Count; i++)
+                                @for (int i = 0; i < Model.Item.FirstPeoplesCulturalGroups.Count; i++)
                                 {
-                                    <a href="/search?culturalgroup=@HttpUtility.UrlEncode(Model.Item.IndigenousCulturesCulturalGroups[i])">@Model.Item.IndigenousCulturesCulturalGroups[i]</a>@(i != Model.Item.IndigenousCulturesCulturalGroups.Count - 1 ? ", " : "")
+                                    <a href="/search?culturalgroup=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesCulturalGroups[i])">@Model.Item.FirstPeoplesCulturalGroups[i]</a>@(i != Model.Item.FirstPeoplesCulturalGroups.Count - 1 ? ", " : "")
                                 }
                             </p>
                         </li>
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Item.IndigenousCulturesMedium))
+                    @if (!string.IsNullOrWhiteSpace(Model.Item.FirstPeoplesMedium))
                     {
                         <li>
                             <h3>Object/Medium</h3>
-                            <p>@Model.Item.IndigenousCulturesMedium</p>
+                            <p>@Model.Item.FirstPeoplesMedium</p>
                         </li>
                     }
                     @if (Model.Item.Classifications.Any())

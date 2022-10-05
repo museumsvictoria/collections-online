@@ -58,27 +58,27 @@
 
         public string Dimensions { get; set; }
 
-        public string IndigenousCulturesDescription { get; set; }
+        public string FirstPeoplesDescription { get; set; }
 
-        public string IndigenousCulturesLocalName { get; set; }
+        public string FirstPeoplesLocalName { get; set; }
 
-        public string IndigenousCulturesCulturalGroups { get; set; }
+        public string FirstPeoplesCulturalGroups { get; set; }
 
-        public string IndigenousCulturesLocalities { get; set; }
+        public string FirstPeoplesLocalities { get; set; }
 
-        public string IndigenousCulturesPhotographer { get; set; }
+        public string FirstPeoplesPhotographer { get; set; }
 
-        public string IndigenousCulturesAuthor { get; set; }
+        public string FirstPeoplesAuthor { get; set; }
 
-        public string IndigenousCulturesIllustrator { get; set; }
+        public string FirstPeoplesIllustrator { get; set; }
 
-        public string IndigenousCulturesMaker { get; set; }
+        public string FirstPeoplesMaker { get; set; }
 
-        public string IndigenousCulturesDate { get; set; }
+        public string FirstPeoplesDate { get; set; }
 
-        public string IndigenousCulturesCollector { get; set; }
+        public string FirstPeoplesCollector { get; set; }
 
-        public string IndigenousCulturesDateCollected { get; set; }
+        public string FirstPeoplesDateCollected { get; set; }
 
         #endregion
 

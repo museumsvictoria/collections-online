@@ -84,8 +84,8 @@ namespace CollectionsOnline.WebSite.Factories
                 metadata.Description = item.IsdDescriptionOfContent;
             else if (!string.IsNullOrWhiteSpace(item.PhysicalDescription))
                 metadata.Description = item.PhysicalDescription;
-            else if (!string.IsNullOrWhiteSpace(item.IndigenousCulturesDescription))
-                metadata.Description = item.IndigenousCulturesDescription;
+            else if (!string.IsNullOrWhiteSpace(item.FirstPeoplesDescription))
+                metadata.Description = item.FirstPeoplesDescription;
             else if (!string.IsNullOrWhiteSpace(item.ArcheologyDescription))
                 metadata.Description = item.ArcheologyDescription;
             else if (!string.IsNullOrWhiteSpace(item.Significance))
@@ -213,7 +213,7 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Explore the fascinating collections of Museums Victoria in Melbourne, Australia, featuring over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology.",
+                Description = "Explore the fascinating collections of Museums Victoria in Melbourne, Australia, featuring over 1.15 million records of zoology, geology, palaeontology, history, First Peoples and technology.",
                 Title = "Explore Museums Victoria's humanities and natural sciences collections",
                 CanonicalUri = ConfigurationManager.AppSettings["CanonicalSiteBase"]
             };
@@ -225,7 +225,7 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "This site allows users to explore the natural sciences and humanities collections of Museums Victoria in Australia, featuring collections of zoology, geology, palaeontology, history, indigenous cultures and technology. Over 1.15 million records were presented at launch in 2015, accompanied by over 150,000 images.",
+                Description = "This site allows users to explore the natural sciences and humanities collections of Museums Victoria in Australia, featuring collections of zoology, geology, palaeontology, history, First Peoples and technology. Over 1.15 million records were presented at launch in 2015, accompanied by over 150,000 images.",
                 Title = "About Museums Victoria Collections",
             };
 
@@ -258,7 +258,7 @@ namespace CollectionsOnline.WebSite.Factories
         {
             var metadata = new MetadataViewModel
             {
-                Description = "Search a database of over 1.15 million records of zoology, geology, palaeontology, history, indigenous cultures and technology from Museums Victoria's collections.",
+                Description = "Search a database of over 1.15 million records of zoology, geology, palaeontology, history, First Peoples and technology from Museums Victoria's collections.",
                 Title = "Search Museums Victoria's collections"
             };
 

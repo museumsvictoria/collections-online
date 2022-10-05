@@ -172,41 +172,41 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public string TradeLiteraturePrimaryName { get; set; }
 
-        public IList<string> IndigenousCulturesLocalities { get; set; }
+        public IList<string> FirstPeoplesLocalities { get; set; }
 
-        public IList<string> IndigenousCulturesCulturalGroups { get; set; }
+        public IList<string> FirstPeoplesCulturalGroups { get; set; }
 
-        public string IndigenousCulturesMedium { get; set; }
+        public string FirstPeoplesMedium { get; set; }
 
-        public string IndigenousCulturesDescription { get; set; }
+        public string FirstPeoplesDescription { get; set; }
 
-        public string IndigenousCulturesLocalName { get; set; }
+        public string FirstPeoplesLocalName { get; set; }
 
-        public string IndigenousCulturesPhotographer { get; set; }
+        public string FirstPeoplesPhotographer { get; set; }
 
-        public string IndigenousCulturesAuthor { get; set; }
+        public string FirstPeoplesAuthor { get; set; }
 
-        public string IndigenousCulturesIllustrator { get; set; }
+        public string FirstPeoplesIllustrator { get; set; }
 
-        public string IndigenousCulturesMaker { get; set; }
+        public string FirstPeoplesMaker { get; set; }
 
-        public string IndigenousCulturesDate { get; set; }
+        public string FirstPeoplesDate { get; set; }
 
-        public string IndigenousCulturesCollector { get; set; }
+        public string FirstPeoplesCollector { get; set; }
 
-        public string IndigenousCulturesDateCollected { get; set; }
+        public string FirstPeoplesDateCollected { get; set; }
 
-        public string IndigenousCulturesIndividualsIdentified { get; set; }
+        public string FirstPeoplesIndividualsIdentified { get; set; }
 
-        public string IndigenousCulturesTitle { get; set; }
+        public string FirstPeoplesTitle { get; set; }
 
-        public string IndigenousCulturesSheets { get; set; }
+        public string FirstPeoplesSheets { get; set; }
 
-        public string IndigenousCulturesPages { get; set; }
+        public string FirstPeoplesPages { get; set; }
 
-        public string IndigenousCulturesLetterTo { get; set; }
+        public string FirstPeoplesLetterTo { get; set; }
 
-        public string IndigenousCulturesLetterFrom { get; set; }
+        public string FirstPeoplesLetterFrom { get; set; }
 
         public string ArtworkMedium { get; set; }
 
