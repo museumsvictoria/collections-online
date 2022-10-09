@@ -30,15 +30,15 @@ namespace CollectionsOnline.Import.Factories
         {
             var displayTitle = string.Empty;
             
-            if (string.Equals(item.Category, "Indigenous Collections", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(item.Category, "First Peoples", StringComparison.OrdinalIgnoreCase))
             {
                 displayTitle = new[]
                 {
-                    item.IndigenousCulturesMedium,
-                    item.IndigenousCulturesLocalName,
-                    item.IndigenousCulturesCulturalGroups.Concatenate(", "),
-                    item.IndigenousCulturesLocalities.Concatenate(", "),
-                    item.IndigenousCulturesDate
+                    item.FirstPeoplesMedium,
+                    item.FirstPeoplesLocalName,
+                    item.FirstPeoplesCulturalGroups.Concatenate(", "),
+                    item.FirstPeoplesLocalities.Concatenate(", "),
+                    item.FirstPeoplesDate
                 }.Concatenate(", ");
             }
             else if (!string.IsNullOrWhiteSpace(item.ObjectName))

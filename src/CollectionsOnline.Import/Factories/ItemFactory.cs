@@ -136,22 +136,22 @@ namespace CollectionsOnline.Import.Factories
                         "TLSPrimaryRole",
                         "tlparty=TLSPrimaryNameRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
                         "media=MulMultiMediaRef_tab.(irn,MulTitle,MulIdentifier,MulMimeType,MdaDataSets_tab,metadata=[MdaElement_tab,MdaQualifier_tab,MdaFreeText_tab],DetAlternateText,RigCreator_tab,RigSource_tab,RigAcknowledgementCredit,RigCopyrightStatement,RigCopyrightStatus,RigLicence,RigLicenceDetails,ChaRepository_tab,ChaMd5Sum,AdmPublishWebNoPassword,AdmDateModified,AdmTimeModified)",
-                        "iclocality=[ProStateProvince_tab,ProRegion_tab,ProSpecificLocality_tab]",
+                        "fplocality=[ProStateProvince_tab,ProRegion_tab,ProSpecificLocality_tab]",
                         "ProCountry",
                         "ProCulturalGroups_tab",
                         "DesObjectMedium_tab",                        
                         "DesObjectDescription",
                         "DesLocalName",
                         "DesSubjects_tab",
-                        "icphotographer=SouPhotographerRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
-                        "icauthor=SouAuthorRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
-                        "icillustrator=SouIllustratorRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
-                        "icmaker=SouMakerRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "fpphotographer=SouPhotographerRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "fpauthor=SouAuthorRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "fpillustrator=SouIllustratorRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "fpmaker=SouMakerRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
                         "SouDateProduced",
                         "SouDateProducedCirca",
                         "SouProducedEarliestDate",
                         "SouProducedLatestDate",
-                        "iccollector=SouCollectorRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "fpcollector=SouCollectorRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
                         "SouCollectionDate",
                         "SouCollectionDateCirca",
                         "SouCollectionEarliestDate",
@@ -160,8 +160,8 @@ namespace CollectionsOnline.Import.Factories
                         "ManTitle",
                         "ManSheets",
                         "ManPages",
-                        "icletterto=ManLetterToRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
-                        "icletterfrom=ManLetterFromRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "fpletterto=ManLetterToRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
+                        "fpletterfrom=ManLetterFromRef.(NamPartyType,NamFullName,NamOrganisation,NamBranch,NamDepartment,NamOrganisation,NamOrganisationOtherNames_tab,NamSource,AddPhysStreet,AddPhysCity,AddPhysState,AddPhysCountry,ColCollaborationName)",
                         "ArtMedium",
                         "ArtTechnique",
                         "ArtSupport",
@@ -409,75 +409,75 @@ namespace CollectionsOnline.Import.Factories
             if (media != null)
                 item.ThumbnailUri = media.Thumbnail.Uri;
             
-            // Indigenous Cultures Fields
-            var iclocalityMap = map.GetMaps("iclocality").FirstOrDefault();
-            if (iclocalityMap != null)
+            // First Peoples Fields
+            var fpLocalityMap = map.GetMaps("fplocality").FirstOrDefault();
+            if (fpLocalityMap != null)
             {
-                item.IndigenousCulturesLocalities = new[]
+                item.FirstPeoplesLocalities = new[]
                 {
-                    iclocalityMap.GetEncodedString("ProSpecificLocality_tab"),
-                    iclocalityMap.GetEncodedString("ProRegion_tab"),
-                    iclocalityMap.GetEncodedString("ProStateProvince_tab"),
+                    fpLocalityMap.GetEncodedString("ProSpecificLocality_tab"),
+                    fpLocalityMap.GetEncodedString("ProRegion_tab"),
+                    fpLocalityMap.GetEncodedString("ProStateProvince_tab"),
                     map.GetEncodedString("ProCountry")
                 }.Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToList();
             }
 
-            item.IndigenousCulturesCulturalGroups = map.GetEncodedStrings("ProCulturalGroups_tab");
-            item.IndigenousCulturesMedium = map.GetEncodedStrings("DesObjectMedium_tab").Concatenate(", ");
-            item.IndigenousCulturesDescription = map.GetEncodedString("DesObjectDescription");
-            item.IndigenousCulturesLocalName = map.GetEncodedString("DesLocalName");
+            item.FirstPeoplesCulturalGroups = map.GetEncodedStrings("ProCulturalGroups_tab");
+            item.FirstPeoplesMedium = map.GetEncodedStrings("DesObjectMedium_tab").Concatenate(", ");
+            item.FirstPeoplesDescription = map.GetEncodedString("DesObjectDescription");
+            item.FirstPeoplesLocalName = map.GetEncodedString("DesLocalName");
 
             item.Keywords.AddRange(map.GetEncodedStrings("DesSubjects_tab"));
 
-            item.IndigenousCulturesPhotographer = _partiesNameFactory.Make(map.GetMap("icphotographer"));
-            item.IndigenousCulturesAuthor = _partiesNameFactory.Make(map.GetMap("icauthor"));
-            item.IndigenousCulturesIllustrator = _partiesNameFactory.Make(map.GetMap("icillustrator"));
-            item.IndigenousCulturesMaker = _partiesNameFactory.Make(map.GetMap("icmaker"));
+            item.FirstPeoplesPhotographer = _partiesNameFactory.Make(map.GetMap("fpphotographer"));
+            item.FirstPeoplesAuthor = _partiesNameFactory.Make(map.GetMap("fpauthor"));
+            item.FirstPeoplesIllustrator = _partiesNameFactory.Make(map.GetMap("fpillustrator"));
+            item.FirstPeoplesMaker = _partiesNameFactory.Make(map.GetMap("fpmaker"));
 
             if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouDateProduced")))
             {
-                item.IndigenousCulturesDate = map.GetEncodedString("SouDateProduced");
+                item.FirstPeoplesDate = map.GetEncodedString("SouDateProduced");
             }
             else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouDateProducedCirca")))
             {
-                item.IndigenousCulturesDate = map.GetEncodedString("SouDateProducedCirca");
+                item.FirstPeoplesDate = map.GetEncodedString("SouDateProducedCirca");
             }
             else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouProducedEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetEncodedString("SouProducedLatestDate")))
             {
-                item.IndigenousCulturesDate = new[]
+                item.FirstPeoplesDate = new[]
                     {
                         map.GetEncodedString("SouProducedEarliestDate"),
                         map.GetEncodedString("SouProducedLatestDate")
                     }.Concatenate(" - ");
             }
 
-            item.IndigenousCulturesCollector = _partiesNameFactory.Make(map.GetMap("iccollector"));
+            item.FirstPeoplesCollector = _partiesNameFactory.Make(map.GetMap("fpcollector"));
 
             if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionDate")))
             {
-                item.IndigenousCulturesDateCollected = map.GetEncodedString("SouCollectionDate");
+                item.FirstPeoplesDateCollected = map.GetEncodedString("SouCollectionDate");
             }
             else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionDateCirca")))
             {
-                item.IndigenousCulturesDateCollected = map.GetEncodedString("SouCollectionDateCirca");
+                item.FirstPeoplesDateCollected = map.GetEncodedString("SouCollectionDateCirca");
             }
             else if (!string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionEarliestDate")) || !string.IsNullOrWhiteSpace(map.GetEncodedString("SouCollectionLatestDate")))
             {
-                item.IndigenousCulturesDateCollected = new[]
+                item.FirstPeoplesDateCollected = new[]
                     {
                         map.GetEncodedString("SouCollectionEarliestDate"),
                         map.GetEncodedString("SouCollectionLatestDate")
                     }.Concatenate(" - ");
             }
 
-            item.IndigenousCulturesIndividualsIdentified = map.GetEncodedString("DesIndividualsIdentified");
+            item.FirstPeoplesIndividualsIdentified = map.GetEncodedString("DesIndividualsIdentified");
 
-            item.IndigenousCulturesTitle = map.GetEncodedString("ManTitle");
-            item.IndigenousCulturesSheets = map.GetEncodedString("ManSheets");
-            item.IndigenousCulturesPages = map.GetEncodedString("ManPages");
-            item.IndigenousCulturesLetterTo = _partiesNameFactory.Make(map.GetMap("icletterto"));
-            item.IndigenousCulturesLetterFrom = _partiesNameFactory.Make(map.GetMap("icletterfrom"));           
+            item.FirstPeoplesTitle = map.GetEncodedString("ManTitle");
+            item.FirstPeoplesSheets = map.GetEncodedString("ManSheets");
+            item.FirstPeoplesPages = map.GetEncodedString("ManPages");
+            item.FirstPeoplesLetterTo = _partiesNameFactory.Make(map.GetMap("fpletterto"));
+            item.FirstPeoplesLetterFrom = _partiesNameFactory.Make(map.GetMap("fpletterfrom"));           
 
             // Artwork fields
             item.ArtworkMedium = map.GetEncodedString("ArtMedium");
