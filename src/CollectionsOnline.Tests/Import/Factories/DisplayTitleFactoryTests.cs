@@ -39,6 +39,20 @@ namespace CollectionsOnline.Tests.Import.Factories
             result.ShouldBe("Taxidermy Mount - Husky, (Ursa), 2001, <em>Canis lupus familiaris</em>");
         }
 
+        [Fact]
+        public void MakeDisplayTitle_ForFirstPeoplesItem_ReturnsCorrectyl()
+        {
+            // Given
+            var displayTitleFactory = new DisplayTitleFactory(new TaxonomyFactory());
+            var item = MakeFirstPeoplesItem();
+            
+            // When
+            var result = displayTitleFactory.Make(item);
+            
+            // Then
+            result.ShouldBe("<em>tunga</em>, Container. Tiwi. Bathurst or Melville Islands, North, Northern Territory, Australia. 1997");
+        }
+
         private Specimen MakeMineralogySpecimenWithIdentification()
         {
             var specimen = new Specimen
@@ -52,7 +66,7 @@ namespace CollectionsOnline.Tests.Import.Factories
                 MineralogySpecies = "Quartz",
                 MeteoritesName = null,
                 TektitesName = null,
-                PetrologyRockName = null,
+                PetrologyRockName = null
             };
 
             return specimen;
@@ -105,6 +119,43 @@ namespace CollectionsOnline.Tests.Import.Factories
           };
 
           return specimen;
+        }
+
+        private Item MakeFirstPeoplesItem()
+        {
+          return new Item
+          {
+            Category = "First Peoples",
+            ObjectName = "bark basket",
+            FirstPeoplesLocalities = new List<string>
+            {
+              "Bathurst or Melville Islands",
+              "North",
+              "Northern Territory",
+              "Australia"
+            },
+            FirstPeoplesCulturalGroups = new List<string>
+            {
+              "Tiwi"
+            },
+            FirstPeoplesMedium = "Container",
+            FirstPeoplesDescription =
+              "A single sheet of bark, Eucalyptus sp., folded over and stitched down the two long sides with cane. It is painted with natural pigments. The string handle is attached at the rim at the rear.",
+            FirstPeoplesLocalName = "<em>tunga</em>",
+            FirstPeoplesPhotographer = null,
+            FirstPeoplesAuthor = null,
+            FirstPeoplesIllustrator = null,
+            FirstPeoplesMaker = "Marie E. Pautjimi",
+            FirstPeoplesDate = "1997",
+            FirstPeoplesCollector = null,
+            FirstPeoplesDateCollected = "c. 1997",
+            FirstPeoplesIndividualsIdentified = null,
+            FirstPeoplesTitle = null,
+            FirstPeoplesSheets = null,
+            FirstPeoplesPages = null,
+            FirstPeoplesLetterTo = null,
+            FirstPeoplesLetterFrom = null
+          };
         }
     }
 }
