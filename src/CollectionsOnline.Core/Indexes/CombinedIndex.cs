@@ -256,7 +256,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Term fields
                     Keyword = new object[] { species.ConservationStatuses, species.AnimalSubType },
-                    Locality = new object[] { species.NationalParks },
+                    Locality = new object[] { },
                     Collection = new object[] { },
                     Date = new object[] { },
                     CulturalGroup = new object[] { },
