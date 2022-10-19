@@ -21,10 +21,12 @@ namespace CollectionsOnline.Import.Factories
         {
             var summaryBuilder = new SummaryBuilder();
 
-            return summaryBuilder
-                .AddHeading(item.CollectingAreas.Concatenate(", "))
-                .AddText(item.ObjectSummary)
-                .ToString();
+            if (!string.Equals(item.Category, "First Peoples", StringComparison.OrdinalIgnoreCase))
+                summaryBuilder.AddHeading(item.CollectingAreas.Concatenate(", "));
+
+            summaryBuilder.AddText(item.ObjectSummary);
+
+            return summaryBuilder.ToString();
         }
 
         public string Make(Species species)
