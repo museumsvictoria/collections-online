@@ -388,18 +388,6 @@
                                 <p>@Model.Item.IsdPeopleDepicted</p>
                             </li>
                         }
-                        if (Model.Item.FirstPeoplesLocalities.Any())
-                        {
-                            <li>
-                                <h3>Locality</h3>
-                                <p>
-                                    @for (int i = 0; i < Model.Item.FirstPeoplesLocalities.Count; i++)
-                                    {
-                                        <a href="/search?locality=@HttpUtility.UrlEncode(Model.Item.FirstPeoplesLocalities[i])">@Model.Item.FirstPeoplesLocalities[i]</a>@(i != Model.Item.FirstPeoplesLocalities.Count - 1 ? ", " : "")
-                                    }
-                                </p>
-                            </li>
-                        }
                         if (!string.IsNullOrWhiteSpace(Model.Item.AudioVisualRecordingDetails))
                         {
                             <li>
