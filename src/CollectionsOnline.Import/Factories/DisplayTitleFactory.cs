@@ -38,7 +38,7 @@ namespace CollectionsOnline.Import.Factories
                     {
                         item.FirstPeoplesLocalName,
                         item.FirstPeoplesMedium
-                    }.Concatenate(", "),
+                    }.Concatenate(" | "),
                     item.FirstPeoplesCulturalGroups.Concatenate(", "),
                     item.FirstPeoplesLocalities.Concatenate(", "),
                     item.FirstPeoplesDate
