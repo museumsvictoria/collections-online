@@ -2,7 +2,7 @@ namespace CollectionsOnline.Tasks
 {
     public class AppSettings
     {
-        public const string APP_SETTINGS = "AppSettings";
+        public const string SECTION_NAME = "AppSettings";
         
         public string DatabaseUrl { get; set; }
         
