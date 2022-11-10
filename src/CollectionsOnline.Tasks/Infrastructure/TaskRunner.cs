@@ -26,7 +26,7 @@ public class TaskRunner : BackgroundService
         try
         {
             // Run all tasks
-            foreach (var task in _tasks.OrderBy(x => x.Order))
+            foreach (var task in _tasks.Where(x => x.Enabled).OrderBy(x => x.Order))
             {
                 stoppingToken.ThrowIfCancellationRequested();
 

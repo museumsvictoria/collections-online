@@ -35,7 +35,7 @@ namespace CollectionsOnline.Tasks.Tasks
         {
             await Task.Run(() =>
             {
-                using (Log.Logger.BeginTimedOperation("Sitemap creation starting", "SitemapImport.Run"))
+                using (Log.Logger.BeginTimedOperation("Sitemap creation task starting", "SitemapGeneratorTask.Run"))
                 {
                     NetworkShareAccesser networkShareAccesser = null;
                     if (!string.IsNullOrWhiteSpace(_appSettings.WebSiteDomain))
@@ -189,6 +189,8 @@ namespace CollectionsOnline.Tasks.Tasks
         }
 
         public int Order => 100;
+
+        public bool Enabled => false;
     }
 
     public class SitemapResult
