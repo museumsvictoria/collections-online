@@ -1,67 +1,58 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using CollectionsOnline.Tasks.Infrastructure;
+﻿global using CollectionsOnline.Tasks.Infrastructure;
+global using CollectionsOnline.Tasks;
+global using Serilog;
+global using System;
 using CollectionsOnline.Tasks.Extensions;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
-namespace CollectionsOnline.Tasks
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile(
+        $"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json",
+        true)
+    .AddEnvironmentVariables()
+    .Build();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+    .WriteTo.File(Path.Combine(AppContext.BaseDirectory, "logs/log.txt"), rollingInterval: RollingInterval.Day)
+    .Enrich.WithEnvironmentName()
+    .Enrich.WithMachineName()
+    .CreateLogger();
+
+try
 {
-    public static class Program
-    {
-        public static async Task Main(string[] args)
+    Log.Information("CollectionsOnline Tasks starting up...");
+
+    // Configure host
+    var host = Host.CreateDefaultBuilder(args)
+        .ConfigureServices((context, services) =>
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                .CreateLogger();
-            
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
-                Log.Fatal((Exception) eventArgs.ExceptionObject, "Unhandled Exception occured in CollectionsOnline Tasks");
+            var configSection = context.Configuration.GetSection(AppSettings.SECTION_NAME);
 
-            try
-            {
-                Log.Information("CollectionsOnline Tasks starting up...");
+            services
+                .Configure<AppSettings>(configSection)
+                .Configure<HostOptions>(opts => opts.ShutdownTimeout = TimeSpan.FromSeconds(20))
+                .AddHostedService<TaskRunner>()
+                .AddRavenDb(configSection.Get<AppSettings>())
+                .AddTasks();
+        })
+        .UseConsoleLifetime()
+        .UseSerilog()
+        .Build();
 
-                await CreateHostBuilder(args)
-                    .Build()
-                    .RunAsync();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "CollectionsOnline Tasks startup failed...");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-        }
-
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host
-                .CreateDefaultBuilder(args)
-                .ConfigureServices((context, services) =>
-                {
-                    var configSection = context.Configuration.GetSection(
-                        AppSettings.APP_SETTINGS);
-                    
-                    services.Configure<AppSettings>(configSection);
-                    services.AddHostedService<TaskRunner>();
-                    services.AddRavenDb(configSection.Get<AppSettings>());
-                    services.AddTasks();
-                })
-                .UseConsoleLifetime()
-                .UseSerilog();
-
-        private static IConfiguration Configuration => new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddJsonFile(
-                        $"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json",
-                        optional: true)
-                    .AddEnvironmentVariables()
-                    .Build();
-    }
+    await host.RunAsync();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "CollectionsOnline Tasks startup failed...");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
