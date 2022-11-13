@@ -190,7 +190,7 @@ namespace CollectionsOnline.Tasks.Tasks
 
         public int Order => 100;
 
-        public bool Enabled => false;
+        public bool Enabled => true;
     }
 
     public class SitemapResult

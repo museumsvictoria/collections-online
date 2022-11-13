@@ -8,6 +8,7 @@ using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Indexes;
 using Raven.Client.Connection;
+using Raven.Client.Document;
 
 namespace CollectionsOnline.Tasks.Tasks;
 
@@ -31,6 +32,8 @@ public class MediaReuseMigrationTask : ITask
             using (Log.Logger.BeginTimedOperation("MediaReuse Migration task starting", "MediaReuseMigrationTask.Run"))
             {
                 UpgradeDeprecatedMediaReuses(stoppingToken);
+
+                TransferMediaReuses(stoppingToken);
             }
         }, stoppingToken);
     }
@@ -40,6 +43,7 @@ public class MediaReuseMigrationTask : ITask
         var count = 0;
         var deserializableMediaResues = 0;
         var deprecatedMediaReuses = 0;
+        var recreatedMedia = 0;
 
         Log.Logger.Information(
             "Attempting to upgrade any deprecated MediaReuses that cannot be deserialized from a RavenJObject");
@@ -80,16 +84,27 @@ public class MediaReuseMigrationTask : ITask
                 IList<Media> documentMedia = document?.Media;
                 var media = documentMedia?.SingleOrDefault(x => x.Irn == mediaIrn);
 
+                if (media == null)
+                {
+                    media = new ImageMedia
+                    {
+                        Irn = mediaIrn
+                    };
+
+                    Log.Logger.Debug(
+                        "Could not find media with Irn {mediaIrn} attached to target document {documentId}, recreating Media with Irn only",
+                        mediaIrn, documentId);
+
+                    recreatedMedia++;
+                }
+
                 var mediaReuse = new MediaReuse
                 {
                     Id = mediaReuseId,
                     Usage = usage,
                     UsageMore = usageMore,
                     DocumentId = documentId,
-                    Media = media ?? new ImageMedia()
-                    {
-                        Irn = mediaIrn
-                    }
+                    Media = media
                 };
 
                 mediaDocumentSession.Store(mediaReuse);
@@ -102,16 +117,71 @@ public class MediaReuseMigrationTask : ITask
 
             if (count % 100 == 0)
                 Log.Logger.Information(
-                    "UpgradeDeprecatedMediaReuses progress deserializable... {Offset}/{TotalResults}", 
+                    "Upgrading of deprecated MediaReuses progress... {Offset}/{TotalResults}",
                     count, queryHeaderInformation.TotalResults);
         }
-        
+
         Log.Logger.Information(
-            "UpgradeDeprecatedMediaReuses complete, deserializable MediaResues:{deserializableMediaResues} deprecated MediaReuses:{deprecatedMediaReuses} deserializable",
-            deserializableMediaResues, deprecatedMediaReuses);
+            "MediaReuse upgrading complete, deserializable MediaResues:{deserializableMediaResues}, deprecated MediaReuses:{deprecatedMediaReuses}, recreated Media with Irn only:{recreatedMedia}",
+            deserializableMediaResues, deprecatedMediaReuses, recreatedMedia);
+    }
+
+    private void TransferMediaReuses(CancellationToken stoppingToken)
+    {
+        foreach (var sourceDatabase in _appSettings.MediaReuseMigrationTask.SourceDatabases)
+        {
+            stoppingToken.ThrowIfCancellationRequested();
+
+            Log.Logger.Information("Fetching MediaReuses from Source Database {Url}{Name}",
+                sourceDatabase.Url, sourceDatabase.Name);
+
+            var sourceMediaReuses = new List<MediaReuse>();
+
+            using var sourceDocumentStore = new DocumentStore
+            {
+                Url = sourceDatabase.Url,
+                DefaultDatabase = sourceDatabase.Name
+            }.Initialize();
+
+            var enumerator = sourceDocumentStore
+                .DatabaseCommands
+                .StreamQuery(
+                    new RavenDocumentsByEntityName().IndexName,
+                    new IndexQuery
+                    {
+                        Query = "__document_id:mediareuses*"
+                    },
+                    out var queryHeaderInformation);
+
+            var count = 0;
+
+            while (enumerator.MoveNext())
+            {
+                stoppingToken.ThrowIfCancellationRequested();
+
+                var sourceMediaReuse = enumerator.Current.Deserialize<MediaReuse>(sourceDocumentStore.Conventions);
+                sourceMediaReuse.Id = "mediareuses/";
+
+                sourceMediaReuses.Add(sourceMediaReuse);
+
+                count++;
+
+                if (count % 100 == 0)
+                    Log.Logger.Information(
+                        "Fetching of MediaReuses from Source Database {Url}{Name} progress... {Offset}/{TotalResults}",
+                        sourceDatabase.Url, sourceDatabase.Name, count, queryHeaderInformation.TotalResults);
+            }
+
+            Log.Logger.Information("Saving {Count} MediaReuses to destination database {Url}{Name}",
+                sourceMediaReuses.Count, _appSettings.DatabaseUrl, _appSettings.DatabaseName);
+
+            using var bulkInsert = _documentStore.BulkInsert();
+
+            foreach (var mediaReuse in sourceMediaReuses) bulkInsert.Store(mediaReuse);
+        }
     }
 
     public int Order => 100;
 
-    public bool Enabled => true;
+    public bool Enabled => false;
 }
