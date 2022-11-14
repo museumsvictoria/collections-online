@@ -34,12 +34,15 @@ namespace CollectionsOnline.Import.Factories
             {
                 displayTitle = new[]
                 {
-                    item.FirstPeoplesMedium,
-                    item.FirstPeoplesLocalName,
+                    new[]
+                    {
+                        item.FirstPeoplesLocalName,
+                        item.FirstPeoplesMedium
+                    }.Concatenate(" | "),
                     item.FirstPeoplesCulturalGroups.Concatenate(", "),
                     item.FirstPeoplesLocalities.Concatenate(", "),
                     item.FirstPeoplesDate
-                }.Concatenate(", ");
+                }.Concatenate(". ");
             }
             else if (!string.IsNullOrWhiteSpace(item.ObjectName))
                 displayTitle = item.ObjectName;

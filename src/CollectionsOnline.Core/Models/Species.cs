@@ -38,8 +38,6 @@ namespace CollectionsOnline.Core.Models
 
         public IList<string> WhenActive { get; set; }
 
-        public IList<string> NationalParks { get; set; }
-
         public string Diet { get; set; }
 
         public IList<string> DietCategories { get; set; }
@@ -49,6 +47,8 @@ namespace CollectionsOnline.Core.Models
         public string Habitat { get; set; }
 
         public string Distribution { get; set; }
+        
+        public string GeologicalRange { get; set; }
 
         public string Biology { get; set; }
 
@@ -98,7 +98,6 @@ namespace CollectionsOnline.Core.Models
             Habitats = new List<string>();
             WhereToLook = new List<string>();
             WhenActive = new List<string>();
-            NationalParks = new List<string>();
             DietCategories = new List<string>();
             ConservationStatuses = new List<string>();
             Plants = new List<string>();
