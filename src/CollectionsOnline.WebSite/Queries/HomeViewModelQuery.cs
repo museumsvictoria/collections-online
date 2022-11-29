@@ -68,6 +68,7 @@ namespace CollectionsOnline.WebSite.Queries
                 
                 var features = _documentSession
                     .Query<Feature>()
+                    .OrderByDescending(x => x.Id)
                     .ToList();
 
                 foreach (var feature in features)
