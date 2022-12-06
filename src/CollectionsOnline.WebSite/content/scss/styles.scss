@@ -1080,22 +1080,24 @@ button.icon {
             .ozcam:before, .ala:before, .bhl:before, .trove:before {
                 content: "";
                 padding-left: 25px;
+                background-size: 15px;
+                background-repeat: no-repeat;
             }
 
             .ozcam:before {
-                background: url("/content/img/logo-ozcam.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-ozcam.png");
             }
 
             .ala:before {
-                background: url("/content/img/logo-ala.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-ala.png");
             }
 
             .bhl:before {
-                background: url("/content/img/logo-bhl.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-bhl.png");
             }
 
             .trove:before {
-                background: url("/content/img/logo-trove.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-trove.png");
             }
         }
     }
