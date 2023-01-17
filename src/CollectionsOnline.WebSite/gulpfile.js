@@ -2,8 +2,7 @@
 'use strict';
 
 const gulp = require('gulp');
-const sass = require('gulp-sass');
-sass.compiler = require('node-sass');
+const sass = require('gulp-sass')(require('node-sass'));
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const minify = require('gulp-minify');
