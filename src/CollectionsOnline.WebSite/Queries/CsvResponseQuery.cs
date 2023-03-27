@@ -20,7 +20,7 @@ namespace CollectionsOnline.WebSite.Queries
 
             var response = new StreamResponse(() => writer.BaseStream, "text/csv");
 
-            response.WithHeader("Content-Disposition", string.Format("attachment; filename=\"{0}.csv\"", searchIndexCsvModel.SearchInputModel.ToString().Truncate(Constants.FileMaxChars)));
+            response.WithHeader("Content-Disposition", $"attachment; filename=\"{searchIndexCsvModel.SearchInputModel.ToString().Truncate(Constants.FileMaxChars, "...")}.csv\"");
 
             return response;
         }

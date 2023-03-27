@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CollectionsOnline.Core.Models;
 using Raven.Abstractions.Indexing;
@@ -22,25 +21,32 @@ namespace CollectionsOnline.Core.Indexes
                     CollectionSiteIrn = 0,
 
                     // Content fields
-                    Id = article.Id,
-                    DisplayTitle = article.DisplayTitle,
+                    article.Id,
+                    article.DisplayTitle,
                     SubDisplayTitle = (string)null,
                     Content = new object[] { article.DisplayTitle, article.ContentText, article.ContentSummary, article.Keywords },
-                    Summary = article.Summary,
-                    ThumbnailUri = article.ThumbnailUri,
+                    article.Summary,
+                    article.ThumbnailUri,
 
                     // Sort fields
                     Quality =
-                        ((article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any()) ? 1 : 0) +
-                        ((article.ChildArticleIds.Any()) ? 1 : 0) +
-                        ((article.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (article.RelatedItemIds.Any() || article.RelatedSpecimenIds.Any() ? 1 : 0) +
+                        (article.ChildArticleIds.Any() ? 1 : 0) +
+                        (article.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)) ? 1 : 0) +
                         (article.Media.OfType<ImageMedia>().Any() ? Math.Log(article.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + article.Media.Count, 2) : 0),
-                    DateModified = article.DateModified,
+                    article.DateModified,
 
                     // Facet fields
                     RecordType = "Article",
                     Category = (string)null,
-                    HasImages = (article.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
+                    HasMedia = new object[]
+                    {
+                        article.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        article.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        article.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        article.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
+                    HasImages = article.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
@@ -80,37 +86,44 @@ namespace CollectionsOnline.Core.Indexes
                     CollectionSiteIrn = 0,
 
                     // Content fields
-                    Id = item.Id,
-                    DisplayTitle = item.DisplayTitle,
+                    item.Id,
+                    item.DisplayTitle,
                     SubDisplayTitle = item.RegistrationNumber,
                     Content = new object[] 
                     { 
                         item.ObjectName, item.Discipline, item.RegistrationNumber, item.RegistrationNumber.Replace(" ", ""),
                         item.ObjectSummary, item.PhysicalDescription, item.CollectionNames, item.Keywords, item.Significance,
-                        item.Associations.Select(x => string.Format("{0} {1} {2} {3} {4} {5} {6}", x.Name, x.Country, x.Date, x.Locality, x.Region, x.State, x.StreetAddress)),
-                        item.IndigenousCulturesMedium, item.IndigenousCulturesLocalName, item.IndigenousCulturesCulturalGroups, item.IndigenousCulturesLocalities,
-                        item.IndigenousCulturesDate, item.IndigenousCulturesLocalities, item.IndigenousCulturesDescription, item.IndigenousCulturesPhotographer,
-                        item.IndigenousCulturesAuthor, item.IndigenousCulturesIllustrator, item.IndigenousCulturesMaker, item.IndigenousCulturesDate, item.IndigenousCulturesCollector,
-                        item.IndigenousCulturesDateCollected, item.IndigenousCulturesIndividualsIdentified, item.IndigenousCulturesLetterTo, item.IndigenousCulturesLetterFrom,
+                        item.Associations.Select(x => $"{x.Name} {x.Country} {x.Date} {x.Locality} {x.Region} {x.State} {x.StreetAddress}"),
+                        item.FirstPeoplesMedium, item.FirstPeoplesLocalName, item.FirstPeoplesCulturalGroups, item.FirstPeoplesLocalities,
+                        item.FirstPeoplesDate, item.FirstPeoplesLocalities, item.FirstPeoplesDescription, item.FirstPeoplesPhotographer,
+                        item.FirstPeoplesAuthor, item.FirstPeoplesIllustrator, item.FirstPeoplesMaker, item.FirstPeoplesDate, item.FirstPeoplesCollector,
+                        item.FirstPeoplesDateCollected, item.FirstPeoplesIndividualsIdentified, item.FirstPeoplesLetterTo, item.FirstPeoplesLetterFrom,
                         item.IsdDescriptionOfContent, item.ArcheologyDescription, item.ArcheologyManufactureName, item.ArcheologyManufactureDate, item.TradeLiteraturePrimaryName
                     },
-                    Summary = item.Summary,
-                    ThumbnailUri = item.ThumbnailUri,
+                    item.Summary,
+                    item.ThumbnailUri,
 
                     // Sort fields
                     Quality = 
-                        ((!string.IsNullOrWhiteSpace(item.PhysicalDescription) || !string.IsNullOrWhiteSpace(item.ObjectSummary) || !string.IsNullOrWhiteSpace(item.Significance) || !string.IsNullOrWhiteSpace(item.IsdDescriptionOfContent)) ? 1 : 0) + 
-                        ((item.Associations.Any()) ? 1 : 0) +
-                        ((item.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (!string.IsNullOrWhiteSpace(item.PhysicalDescription) || !string.IsNullOrWhiteSpace(item.ObjectSummary) || !string.IsNullOrWhiteSpace(item.Significance) || !string.IsNullOrWhiteSpace(item.IsdDescriptionOfContent) ? 1 : 0) + 
+                        (item.Associations.Any() ? 1 : 0) +
+                        (item.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)) ? 1 : 0) +
                         (item.Media.OfType<ImageMedia>().Any() ? Math.Log(item.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + item.Media.Count, 2) : 0),
-                    DateModified = item.DateModified,
+                    item.DateModified,
 
                     // Facet fields
                     RecordType = "Item",
-                    Category = item.Category,
-                    HasImages = (item.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
-                    OnDisplay = (item.MuseumLocation != null) ? "Yes" : "No",
-                    DisplayLocation = item.MuseumLocation.DisplayLocation,
+                    item.Category,
+                    HasMedia = new object[]
+                    {
+                        item.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        item.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        item.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        item.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
+                    HasImages = item.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
+                    OnDisplay = item.MuseumLocation != null ? "Yes" : "No",
+                    item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
                     SpeciesType = (string)null,
@@ -133,24 +146,24 @@ namespace CollectionsOnline.Core.Indexes
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country), 
-                        item.IndigenousCulturesLocalities },
+                        item.FirstPeoplesLocalities },
                     Collection = new object[] { item.CollectionNames, item.Discipline },
                     Date = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date), 
-                        item.IndigenousCulturesDate, 
-                        item.IndigenousCulturesDateCollected,
+                        item.FirstPeoplesDate, 
+                        item.FirstPeoplesDateCollected,
                         item.ArcheologyManufactureDate,
                         item.PhilatelyDateIssued,
                         item.TradeLiteraturePublicationDate },
-                    CulturalGroup = item.IndigenousCulturesCulturalGroups,
+                    CulturalGroup = item.FirstPeoplesCulturalGroups,
                     Classification = item.Classifications,
                     Name = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name), 
-                        item.IndigenousCulturesPhotographer, 
-                        item.IndigenousCulturesAuthor, 
-                        item.IndigenousCulturesIllustrator, 
-                        item.IndigenousCulturesMaker, 
-                        item.IndigenousCulturesCollector,
-                        item.IndigenousCulturesLetterTo,
-                        item.IndigenousCulturesLetterFrom,
+                        item.FirstPeoplesPhotographer, 
+                        item.FirstPeoplesAuthor, 
+                        item.FirstPeoplesIllustrator, 
+                        item.FirstPeoplesMaker, 
+                        item.FirstPeoplesCollector,
+                        item.FirstPeoplesLetterTo,
+                        item.FirstPeoplesLetterFrom,
                         item.Brands.Select(x => x.Name),
                         item.ArcheologyManufactureName,
                         item.TradeLiteraturePrimaryName,
@@ -193,12 +206,12 @@ namespace CollectionsOnline.Core.Indexes
                     CollectionSiteIrn = 0,
 
                     // Content fields
-                    Id = species.Id,
-                    DisplayTitle = species.DisplayTitle,
+                    species.Id,
+                    species.DisplayTitle,
                     SubDisplayTitle = (string)null,
                     Content = new object[]
                     {
-                        (species.Taxonomy != null)
+                        species.Taxonomy != null
                         ? new object[]
                         {
                             species.Taxonomy.TaxonName, species.Taxonomy.Kingdom, species.Taxonomy.Phylum, species.Taxonomy.Subphylum,
@@ -210,21 +223,28 @@ namespace CollectionsOnline.Core.Indexes
                         : null,
                         species.AnimalType, species.AnimalSubType
                     },
-                    Summary = species.Summary,
-                    ThumbnailUri = species.ThumbnailUri,
+                    species.Summary,
+                    species.ThumbnailUri,
 
                     // Sort fields
                     Quality =
-                        ((!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet) || !string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards)) ? 1 : 0) +
-                        ((species.RelatedItemIds.Any() || species.RelatedSpecimenIds.Any()) ? 1 : 0) +
-                        ((species.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (!string.IsNullOrWhiteSpace(species.GeneralDescription) || !string.IsNullOrWhiteSpace(species.Biology) || !string.IsNullOrWhiteSpace(species.Habitat) || !string.IsNullOrWhiteSpace(species.Endemicity) || !string.IsNullOrWhiteSpace(species.Diet) || !string.IsNullOrWhiteSpace(species.BriefId) || !string.IsNullOrWhiteSpace(species.Hazards) ? 1 : 0) +
+                        (species.RelatedItemIds.Any() || species.RelatedSpecimenIds.Any() ? 1 : 0) +
+                        (species.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)) ? 1 : 0) +
                         (species.Media.OfType<ImageMedia>().Any() ? Math.Log(species.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + species.Media.Count, 2) : 0),
-                    DateModified = species.DateModified,
+                    species.DateModified,
 
                     // Facet fields
                     RecordType = "Species",
                     Category = "Natural Sciences",
-                    HasImages = (species.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
+                    HasMedia = new object[]
+                    {
+                        species.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        species.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        species.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        species.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
+                    HasImages = species.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
@@ -236,7 +256,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Term fields
                     Keyword = new object[] { species.ConservationStatuses, species.AnimalSubType },
-                    Locality = new object[] { species.NationalParks },
+                    Locality = new object[] { },
                     Collection = new object[] { },
                     Date = new object[] { },
                     CulturalGroup = new object[] { },
@@ -279,15 +299,15 @@ namespace CollectionsOnline.Core.Indexes
                     CollectionSiteIrn = specimen.CollectionSite.Irn,
 
                     // Content fields
-                    Id = specimen.Id,
-                    DisplayTitle = specimen.DisplayTitle,
+                    specimen.Id,
+                    specimen.DisplayTitle,
                     SubDisplayTitle = specimen.RegistrationNumber,
                     Content = new object[]
                     {
                         specimen.ObjectName, specimen.Discipline, specimen.RegistrationNumber, specimen.RegistrationNumber.Replace(" ", ""), specimen.ObjectSummary,
                         specimen.ScientificGroup, specimen.Category, specimen.CollectionNames, specimen.Discipline,
                         specimen.Sex, specimen.StageOrAge, specimen.Storages.Select(x => string.Format("{0} {1} {2} {3}", x.FixativeTreatment, x.Form, x.Medium, x.Nature)),
-                        (specimen.Taxonomy != null)
+                        specimen.Taxonomy != null
                             ? new object[]
                             {
                                 specimen.Taxonomy.TaxonName, specimen.Taxonomy.Kingdom, specimen.Taxonomy.Phylum, specimen.Taxonomy.Subphylum,
@@ -298,14 +318,14 @@ namespace CollectionsOnline.Core.Indexes
                             }
                             : null,
                         specimen.TypeStatus, 
-                        (specimen.CollectionEvent != null)
+                        specimen.CollectionEvent != null
                             ? new object[]
                             {
                                 specimen.CollectionEvent.ExpeditionName, specimen.CollectionEvent.CollectionEventCode,
                                 specimen.CollectionEvent.SamplingMethod, specimen.CollectionEvent.CollectedBy
                             }
                             : null,
-                        (specimen.CollectionSite != null)
+                        specimen.CollectionSite != null
                             ? new object[]
                             {
                                 specimen.CollectionSite.SiteCode, specimen.CollectionSite.Ocean, specimen.CollectionSite.Continent,
@@ -323,23 +343,30 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.TektitesName, specimen.TektitesClassification, specimen.TektitesShape, specimen.TektitesLocalStrewnfield,
                         specimen.TektitesGlobalStrewnfield                        
                     },
-                    Summary = specimen.Summary,
-                    ThumbnailUri = specimen.ThumbnailUri,
+                    specimen.Summary,
+                    specimen.ThumbnailUri,
 
                     // Sort fields
                     Quality =
-                        ((specimen.CollectionEvent != null || !string.IsNullOrWhiteSpace(specimen.TypeStatus) || (specimen.Taxonomy != null) || (specimen.CollectionSite != null)) ? 1 : 0) +
-                        ((!string.IsNullOrWhiteSpace(specimen.ObjectSummary)) ? 1 : 0) +
-                        ((specimen.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal))) ? 1 : 0) +
+                        (specimen.CollectionEvent != null || !string.IsNullOrWhiteSpace(specimen.TypeStatus) || specimen.Taxonomy != null || specimen.CollectionSite != null ? 1 : 0) +
+                        (!string.IsNullOrWhiteSpace(specimen.ObjectSummary) ? 1 : 0) +
+                        (specimen.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)) ? 1 : 0) +
                         (specimen.Media.OfType<ImageMedia>().Any() ? Math.Log(specimen.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + specimen.Media.Count, 2) : 0),
-                    DateModified = specimen.DateModified,
+                    specimen.DateModified,
 
                     // Facet fields
                     RecordType = "Specimen",
-                    Category = specimen.Category,
-                    HasImages = (specimen.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
-                    OnDisplay = (specimen.MuseumLocation != null) ? "Yes" : "No",
-                    DisplayLocation = specimen.MuseumLocation.DisplayLocation,
+                    specimen.Category,
+                    HasMedia = new object[]
+                    {
+                        specimen.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        specimen.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        specimen.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        specimen.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
+                    HasImages = specimen.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
+                    OnDisplay = specimen.MuseumLocation != null ? "Yes" : "No",
+                    specimen.MuseumLocation.DisplayLocation,
                     CollectingArea = specimen.CollectingAreas,
                     ItemType = specimen.Type,
                     SpeciesType = (string) null,                    
@@ -353,7 +380,7 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
                         specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
                         specimen.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country),
-                        (specimen.CollectionSite != null)
+                        specimen.CollectionSite != null
                             ? new object[]
                             {
                                 specimen.CollectionSite.Ocean, specimen.CollectionSite.Continent, specimen.CollectionSite.Country,
@@ -388,7 +415,7 @@ namespace CollectionsOnline.Core.Indexes
                         specimen.Taxonomy.Subgenus,
                         specimen.Taxonomy.TaxonName,
                         LoadDocument<Species>(specimen.RelatedSpeciesIds).Select(x => x.Taxonomy.TaxonName) },
-                    TypeStatus = specimen.TypeStatus,
+                    specimen.TypeStatus,
                     GeoType = new object[] { specimen.PetrologyRockClass, 
                         specimen.PetrologyRockGroup, 
                         specimen.MineralogyVariety, 
@@ -460,6 +487,8 @@ namespace CollectionsOnline.Core.Indexes
 
         public string Category { get; set; }
 
+        public string HasMedia { get; set; }
+        
         public string HasImages { get; set; }
 
         public string OnDisplay { get; set; }

@@ -5,32 +5,31 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CollectionsOnline.Core.Config;
-using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
-using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using ImageMagick;
 using IMu;
-using Raven.Client;
 using CollectionsOnline.Core.Extensions;
 using CollectionsOnline.Core.Factories;
+using CollectionsOnline.Import.Models;
+using LiteDB;
 using Serilog;
 
 namespace CollectionsOnline.Import.Factories
 {
     public class ImageMediaFactory : IImageMediaFactory
     {
-        private readonly IDocumentStore _documentStore;
         private readonly IImuSessionProvider _imuSessionProvider;
         private readonly IList<ImageMediaJob> _imageMediaJobs;
+        private readonly ILiteDatabase _liteDatabase;
 
         public ImageMediaFactory(
-            IDocumentStore documentStore,
-            IImuSessionProvider imuSessionProvider)
+            IImuSessionProvider imuSessionProvider,
+            ILiteDatabase liteDatabase)
         {
-            _documentStore = documentStore;
             _imuSessionProvider = imuSessionProvider;
+            _liteDatabase = liteDatabase;
 
             // Build a list the various image conversions used in the application
             _imageMediaJobs = new List<ImageMediaJob>
@@ -123,29 +122,122 @@ namespace CollectionsOnline.Import.Factories
 
         public bool Make(ref ImageMedia imageMedia)
         {
+            // TODO: provide base class that better encapsulates functionality between image/file/audio factories
+            var mediaIrn = imageMedia.Irn;
+            
+            // Fetch media checksum from db
             var stopwatch = Stopwatch.StartNew();
-
-            if (FileExists(ref imageMedia))
+            
+            var mediaChecksums = _liteDatabase.GetCollection<MediaChecksum>();
+            mediaChecksums.EnsureIndex(x => x.Irn, true);
+            var mediaChecksum = mediaChecksums.FindOne(x => x.Irn == mediaIrn); 
+            
+            // Try to find existing media in media checksum collection to compare checksum then check files on filesystem 
+            if (FileExists(ref imageMedia, mediaChecksum))
             {
                 stopwatch.Stop();
-                Log.Logger.Debug("Found existing image {Irn} in {ElapsedMilliseconds} ms", imageMedia.Irn, stopwatch.ElapsedMilliseconds);
-
+                Log.Logger.Debug("Found existing image {Irn} in {ElapsedMilliseconds} ms", mediaIrn, stopwatch.ElapsedMilliseconds);
+                return true;
+            }
+            
+            // Fetch fresh media from emu as no existing media found or media fails checksum
+            var (fetchIsSuccess, fileSize) = FetchMedia(ref imageMedia);
+            if (fetchIsSuccess)
+            {
+                // Update or insert image media checksum value in db
+                if (mediaChecksum == null)
+                {
+                    mediaChecksums.Insert(new MediaChecksum()
+                    {
+                        Irn = imageMedia.Irn,
+                        Md5Checksum = imageMedia.Md5Checksum
+                    });
+                }
+                else
+                {
+                    mediaChecksum.Md5Checksum = imageMedia.Md5Checksum;
+                    
+                    mediaChecksums.Update(mediaChecksum);
+                }
+                
+                stopwatch.Stop();
+                Log.Logger.Debug("Completed image {Irn} ({FileSize}) creation in {ElapsedMilliseconds} ms", mediaIrn,
+                    fileSize, stopwatch.ElapsedMilliseconds);
                 return true;
             }
 
-            // Fetch from Imu as we were not able to find local files
+            return false;
+        }
+        
+        private bool FileExists(ref ImageMedia imageMedia, MediaChecksum mediaChecksum)
+        {
+            var mediaIrn = imageMedia.Irn;
+
+            // First check to see if we are not simply overwriting all existing media
+            if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"])) 
+                return false;
+            
+            // Check media checksum to see if file has changed
+            if (mediaChecksum == null)
+            {
+                return false;
+            }
+            else if (mediaChecksum.Md5Checksum != imageMedia.Md5Checksum)
+            {
+                Log.Logger.Debug("Existing image {Irn} checksum {ExistingChecksum} did not match current image {NewChecksum}", imageMedia.Irn, 
+                    mediaChecksum.Md5Checksum, imageMedia.Md5Checksum);
+                return false;
+            }
+            
+            // then check whether media exists on disk for all media jobs
+            if (!_imageMediaJobs.All(x => File.Exists(PathFactory.GetDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
+            {
+                Log.Logger.Debug("Existing image {Irn} checksum matches but files not present, creating new images", imageMedia.Irn);
+                return false;
+            }
+
+            // Recreate ImageMedia by loading all file derivatives
+            foreach (var imageMediaJob in _imageMediaJobs)
+            {
+                var destPath = PathFactory.GetDestPath(mediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
+
+                using (var image = new MagickImage(destPath))
+                {
+                    // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
+                    typeof(ImageMedia).GetProperties().First(x =>
+                            x.PropertyType == typeof(ImageMediaFile) &&
+                            x.Name == imageMediaJob.FileDerivativeType.ToString())
+                        .SetValue(imageMedia, new ImageMediaFile
+                        {
+                            Uri = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg",
+                                imageMediaJob.FileDerivativeType),
+                            Size = new FileInfo(destPath).Length,
+                            Width = image.Width,
+                            Height = image.Height
+                        });
+                }
+            }
+            
+            Log.Logger.Debug("Existing image {Irn} checksum matches, files present, ImageMedia re-created", imageMedia.Irn);
+            return true;
+        }
+        
+        private (bool, string) FetchMedia(ref ImageMedia imageMedia)
+        {
             try
             {
                 using (var imuSession = _imuSessionProvider.CreateInstance("emultimedia"))
                 {
                     imuSession.FindKey(imageMedia.Irn);
-                    
                     var result = imuSession.Fetch("start", 0, -1, Columns).Rows[0];
 
                     var resource = result.GetMap("resource");
+                    
                     if (resource == null)
                         throw new IMuException("MultimediaResourceNotFound");
-                    var fileStream = resource["file"] as FileStream;                    
+                    
+                    // Load file stream
+                    var fileStream = resource["file"] as FileStream;
 
                     using (var originalImage = new MagickImage(fileStream))
                     {
@@ -154,7 +246,8 @@ namespace CollectionsOnline.Import.Factories
                             var destPath = PathFactory.MakeDestPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
                             var uriPath = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType);
 
-                            using (var image = imageMediaJob.Transform(imageMedia, originalImage.Clone() as MagickImage, result))
+                            using (var image =
+                                   imageMediaJob.Transform(imageMedia, originalImage.Clone() as MagickImage, result))
                             {
                                 // Write image to disk
                                 image.Write(destPath);
@@ -162,7 +255,8 @@ namespace CollectionsOnline.Import.Factories
                                 // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
                                 typeof(ImageMedia)
                                     .GetProperties()
-                                    .First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
+                                    .First(x => x.PropertyType == typeof(ImageMediaFile) &&
+                                                x.Name == imageMediaJob.FileDerivativeType.ToString())
                                     .SetValue(imageMedia, new ImageMediaFile
                                     {
                                         Uri = uriPath,
@@ -173,98 +267,33 @@ namespace CollectionsOnline.Import.Factories
                             }
                         }
                     }
-                    
-                    stopwatch.Stop();
-                    Log.Logger.Debug("Completed image {Irn} ({Bytes}) creation in {stopwatch} ms", imageMedia.Irn, fileStream.Length.BytesToString(), stopwatch.ElapsedMilliseconds);
 
-                    return true;
+                    // Image media successfully saved to disk
+                    return (true, fileStream.Length.BytesToString());
                 }
             }
             catch (Exception ex)
             {
-                if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResolutionNotFound")
+                switch (ex)
                 {
-                    Log.Logger.Warning(ex, "Multimedia resolution not found, unable to save image {Irn}", imageMedia.Irn);
-                }
-                else if (ex is IMuException && ((IMuException)ex).ID == "MultimediaResourceNotFound")
-                {
-                    Log.Logger.Warning(ex, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
-                }
-                else if (ex is MagickCoderErrorException || ex is MagickCorruptImageErrorException)
-                {
-                    Log.Logger.Warning(ex, "Multimedia resource appears to be corrupt {Irn}", imageMedia.Irn);
-                }
-                else
-                {
-                    // Error is unexpected therefore we want the entire import to fail
-                    Log.Logger.Fatal(ex, "Unexpected error occured creating image {Irn}", imageMedia.Irn);
-                    throw;
-                }
-            }
-
-            return false;
-        }
-
-        private bool FileExists(ref ImageMedia imageMedia)
-        {
-            // First check to see if we are not simply overwriting all existing media
-            if (bool.Parse(ConfigurationManager.AppSettings["OverwriteExistingMedia"])) 
-                return false;
-
-            var mediaIrn = imageMedia.Irn;
-
-            // Check to see whether the file has changed in emu first
-            using (var documentSession = _documentStore.OpenSession())
-            {
-                // Find the latest document who's media contains the media we are checking
-                var result = documentSession
-                    .Query<MediaByIrnWithChecksumResult, MediaByIrnWithChecksum>()
-                    .OrderByDescending(x => x.DateModified)
-                    .FirstOrDefault(x => x.Irn == mediaIrn);
-
-                // If all imu imports have run before (not simply loading images from disk) and there are no results that use this media and we need to save file
-                var allImportsComplete = documentSession
-                    .Load<Application>(Constants.ApplicationId)
-                    .ImportStatuses.Where(x => x.ImportType.Contains(typeof(ImuImport<>).Name, StringComparison.OrdinalIgnoreCase))
-                    .Select(x => x.PreviousDateRun)
-                    .All(x => x.HasValue);
-
-                if (allImportsComplete && result == null)
-                    return false;
-
-                // If existing media checksum does not match the one from emu we need to save file
-                if (result != null && result.Md5Checksum != imageMedia.Md5Checksum)
-                {
-                    Log.Logger.Warning("Existing image {Irn} found but checksum {ExistingChecksum} did not match new image {NewChecksum}", imageMedia.Irn, result.Md5Checksum, imageMedia.Md5Checksum);
-                    return false;
+                    case IMuException exception when exception.ID == "MultimediaResolutionNotFound":
+                        Log.Logger.Warning(exception, "Multimedia resolution not found, unable to save image {Irn}", imageMedia.Irn);
+                        break;
+                    case IMuException exception when exception.ID == "MultimediaResourceNotFound":
+                        Log.Logger.Warning(exception, "Multimedia resource not found, unable to save image {Irn}", imageMedia.Irn);
+                        break;
+                    case MagickCoderErrorException _:
+                    case MagickCorruptImageErrorException _:
+                        Log.Logger.Warning(ex, "Multimedia resource appears to be corrupt {Irn}", imageMedia.Irn);
+                        break;
+                    default:
+                        // Error is unexpected therefore we want the entire import to fail
+                        Log.Logger.Fatal(ex, "Unexpected error occured creating image {Irn}", imageMedia.Irn);
+                        throw;
                 }
             }
-
-            // then check whether media exists on disk for all media jobs
-            if (_imageMediaJobs.All(x => File.Exists(PathFactory.GetDestPath(mediaIrn, ".jpg", x.FileDerivativeType))))
-            {
-                foreach (var imageMediaJob in _imageMediaJobs)
-                {
-                    var destPath = PathFactory.GetDestPath(mediaIrn, ".jpg", imageMediaJob.FileDerivativeType);
-
-                    using (var image = new MagickImage(destPath))
-                    {
-                        // Set property via reflection (ImageMediaFile properties are used instead of a collection due to Raven Indexing)
-                        typeof(ImageMedia).GetProperties().First(x => x.PropertyType == typeof(ImageMediaFile) && x.Name == imageMediaJob.FileDerivativeType.ToString())
-                            .SetValue(imageMedia, new ImageMediaFile
-                            {
-                                Uri = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg", imageMediaJob.FileDerivativeType),
-                                Size = new FileInfo(destPath).Length,
-                                Width = image.Width,
-                                Height = image.Height
-                            });
-                    }
-                }
-                    
-                return true;
-            }
-
-            return false;
+            
+            return (false, null);
         }
 
         private string[] Columns

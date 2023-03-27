@@ -8,5 +8,7 @@ namespace CollectionsOnline.Tasks.Infrastructure
         Task Run(CancellationToken stoppingToken);
 
         int Order { get; }
+        
+        bool Enabled { get; }
     }
 }

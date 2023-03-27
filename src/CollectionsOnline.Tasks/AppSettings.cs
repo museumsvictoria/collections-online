@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 namespace CollectionsOnline.Tasks
 {
     public class AppSettings
     {
-        public const string APP_SETTINGS = "AppSettings";
+        public const string SECTION_NAME = "AppSettings";
         
         public string DatabaseUrl { get; set; }
         
@@ -19,5 +21,19 @@ namespace CollectionsOnline.Tasks
         public string WebSiteDomain { get; set; }
         
         public string CanonicalSiteBase { get; set; }
+        
+        public MediaReuseMigrationTask MediaReuseMigrationTask { get; set; }
+    }
+
+    public class MediaReuseMigrationTask
+    {
+        public IList<RavenDatabase> SourceDatabases { get; set; }
+    }
+
+    public class RavenDatabase
+    {
+        public string Url { get; set; }
+        
+        public string Name { get; set; }
     }
 }

@@ -1080,22 +1080,24 @@ button.icon {
             .ozcam:before, .ala:before, .bhl:before, .trove:before {
                 content: "";
                 padding-left: 25px;
+                background-size: 15px;
+                background-repeat: no-repeat;
             }
 
             .ozcam:before {
-                background: url("/content/img/logo-ozcam.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-ozcam.png");
             }
 
             .ala:before {
-                background: url("/content/img/logo-ala.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-ala.png");
             }
 
             .bhl:before {
-                background: url("/content/img/logo-bhl.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-bhl.png");
             }
 
             .trove:before {
-                background: url("/content/img/logo-trove.png") no-repeat / 20px;
+                background-image: url("/content/img/logo-trove.png");
             }
         }
     }
@@ -3469,8 +3471,8 @@ footer {
         background: url("/content/img/bg-collection-hero-historical-studies.jpg") no-repeat center center;
     }
 
-    &.indigenous-cultures {
-        background: url("/content/img/bg-collection-hero-indigenous-cultures.jpg") no-repeat center center;
+    &.first-peoples {
+        background: url("/content/img/bg-collection-hero-first-peoples.jpg") no-repeat center center;
     }
 
     &.palaeontology {
@@ -4065,7 +4067,7 @@ footer {
     }
 }
 
-#recent-explore, #featured-explore {
+#recent-explore, .feature {
     padding: 40px 0 50px;
 
     & .tile.full {
@@ -4092,7 +4094,6 @@ footer {
     }
 
     @include gridle_state("print") {
-
         & h2 {
             font-size: 16pt;
         }
@@ -4100,8 +4101,13 @@ footer {
 }
 
 #featured-explore {
+    padding: 30px 0 40px;
     background: #606060;
+}
 
+.feature {
+    padding: 10px 0;
+    
     h2 {
         color: #f5f5f5;
         margin-bottom: 7px;
@@ -4451,4 +4457,150 @@ footer {
 .hero-media.audio-loaded
 {
     flex-grow:1;
+}
+
+// Survey styles
+#survey {
+    position: fixed;
+    background-color: #54626f;
+    padding: 32px;
+    z-index: 1000;
+    right: 0;
+    display: none;
+    width: 35%;
+
+    .inner {
+        position: relative;
+
+        a {
+            color: #fff;
+        }
+
+        p {
+            color: #fff;
+            font-size: 1em;
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            margin-bottom: 1rem;
+            line-height: 2.1rem;
+            font-weight: normal;
+            padding-top: 0;
+            color: #fff;
+            width: 95%;
+        }
+
+        svg, path {
+            fill: #fff;
+        }
+
+        .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: 0;
+            padding: 0;
+            line-height: 2.1rem;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+        
+        .arrow-link {
+            font-family: $font;
+            line-height: 1.5rem;
+            color: #fff;
+            border-bottom: 0;
+            position: relative;
+            
+            &:hover {
+                text-decoration: none;
+                
+                .arrow-forward {
+                    margin-left: -1.25rem;
+                }
+            }
+                      
+            svg, path {
+                fill: #fff;
+            }
+            
+            svg {
+                position: absolute;
+                top: 0;
+            }
+
+            .external-link {
+                position: absolute;
+                margin-left: .425rem;
+            }
+            
+            .arrow-forward {
+                margin-left: -1.5rem;
+                transition: 100ms ease-out;
+            }
+        }
+        
+        .link-container {
+            ul {
+                padding-right: 1rem;
+                padding-top: 1rem;
+                margin-bottom: 0;
+                letter-spacing: -.5px;
+                margin-top: 0;
+                padding-left: 0;
+
+                li {
+                    margin-top: .25rem;
+                    padding-bottom: .25rem;
+                    padding-left: 1.5rem;
+                }
+            }
+            
+            .no-bullet {
+                list-style: none;
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+@media all and (max-width:992px) {
+    #survey {
+        width: 50%;
+        padding: 24px;
+
+        h3 {
+            font-size: 1.2em;
+            font-family: $font;
+        }
+    }
+}
+
+@media all and (max-width:767px) {
+    #survey {
+        width: 100%;
+        padding: 16px;
+
+        h3 {
+            font-size: 1.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .arrow-link {
+            font-size: 1.05em;
+        }
+
+        .link-container {
+            ul {
+                padding-top: 0.75rem;
+            }  
+        }
+    }
 }

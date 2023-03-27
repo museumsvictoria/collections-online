@@ -107,15 +107,15 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 5", null),
-                new MuseumLocation { Gallery = "Wild", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Evolution Gallery", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 5", "LINK"),
-                new MuseumLocation { Gallery = "Wild", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Evolution Gallery", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 11", null),
-                new MuseumLocation { Gallery = "Darwin to DNA", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Evolution Gallery", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 6", null),
@@ -453,5 +453,7 @@ namespace CollectionsOnline.Core.Config
         };
 
         public static string[] TaxonomyTypeStatuses = { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
+        
+        public static string[] DeprecatedFacets = { "HasImages" };
     }
 }

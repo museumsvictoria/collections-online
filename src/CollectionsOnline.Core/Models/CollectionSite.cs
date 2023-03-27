@@ -4,11 +4,6 @@ namespace CollectionsOnline.Core.Models
 {
     public class CollectionSite
     {
-        public CollectionSite()
-        {
-            InitializeCollections();
-        }
-
         public long Irn { get; set; }
 
         public string SiteCode { get; set; }
@@ -33,9 +28,9 @@ namespace CollectionsOnline.Core.Models
 
         public string MaximumElevation { get; set; }
 
-        public IList<string> Latitudes { get; set; }
+        public double? Latitude { get; set; }
 
-        public IList<string> Longitudes { get; set; }
+        public double? Longitude { get; set; }
 
         public string GeodeticDatum { get; set; }
 
@@ -64,11 +59,5 @@ namespace CollectionsOnline.Core.Models
         public string GeologyMember { get; set; }
 
         public string GeologyRockType { get; set; }
-
-        private void InitializeCollections()
-        {
-            Latitudes = new List<string>();
-            Longitudes = new List<string>();
-        }
     }
 }

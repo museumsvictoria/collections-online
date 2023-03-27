@@ -5,6 +5,6 @@ namespace CollectionsOnline.Import.Factories
 {
     public interface ICollectionEventFactory
     {
-        CollectionEvent Make(Map map);
+        CollectionEvent Make(Map map, string type, string registrationPrefix);
     }
 }

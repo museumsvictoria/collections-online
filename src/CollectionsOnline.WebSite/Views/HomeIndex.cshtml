@@ -13,29 +13,34 @@
         </form>
     </div>
 </div>
-@if (Model.Feature != null && !Model.Feature.IsHidden)
+@if (Model.Features.Any(x => !x.Feature.IsHidden))
 {
- <div id="featured-explore">
-     <div class="container">
-         @if (!string.IsNullOrWhiteSpace(Model.Feature.Title))
-         {
-             <h2>@Model.Feature.Title</h2>             
-         }
-         @if (!string.IsNullOrWhiteSpace(Model.Feature.Description))
-         {
-             <p>@Html.Raw(Model.Feature.Description)</p>
-         }
-         @foreach (var featuredRecord in Model.FeaturedRecords)
-         {
-             @Html.Partial("RecordTile", featuredRecord)
-         }
-     </div>
-</div>   
+    <div id="featured-explore">
+    @foreach (var feature in Model.Features.Where(x => !x.Feature.IsHidden))
+    {
+        <div class="feature">
+            <div class="container">
+                @if (!string.IsNullOrWhiteSpace(feature.Feature.Title))
+                {
+                    <h2>@feature.Feature.Title</h2>             
+                }
+                @if (!string.IsNullOrWhiteSpace(feature.Feature.Description))
+                {
+                    <p>@Html.Raw(feature.Feature.Description)</p>
+                }
+                @foreach (var featuredRecord in feature.FeaturedRecords)
+                {
+                    @Html.Partial("RecordTile", featuredRecord)
+                }
+            </div>
+        </div>
+    }
+    </div>
 }
 <div id="home-explore" role="main">
     <div class="container">
         <h1 id="maincontent">Explore our collection</h1>
-        <p>Explore a wealth of collections and research about natural sciences, history, technology and Indigenous cultures from Museums Victoria in Australia.</p>
+        <p>Explore a wealth of collections and research about natural sciences, history, technology and First Peoples from Museums Victoria in Australia.</p>
         <div class="tile home">
             <a href="/search?recordtype=article">
                 <span class="wrapper">

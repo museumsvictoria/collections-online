@@ -6,6 +6,7 @@ using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Imports;
 using CollectionsOnline.Import.Infrastructure;
 using Google.Apis.YouTube.v3;
+using LiteDB;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Raven.Client;
@@ -51,11 +52,12 @@ namespace CollectionsOnline.Import
 
         private static void RegisterServices(IKernel kernel)
         {
-            // Raven Db Bindings
+            // Db Bindings
             kernel.Bind<IDocumentStore>().ToProvider<NinjectRavenDocumentStoreProvider>().InSingletonScope();
 
-            // Services
+            // Providers
             kernel.Bind<YouTubeService>().ToProvider<YoutubeServiceProvider>().InSingletonScope();
+            kernel.Bind<ILiteDatabase>().ToProvider<LiteDatabaseProvider>().InSingletonScope();
 
             // Bind Imports
             kernel.Bind<IImport>().To<ImuImport<Article>>();
