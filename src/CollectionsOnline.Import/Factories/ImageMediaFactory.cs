@@ -45,6 +45,10 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 86;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        
+                        if (!HasIncorrectOrientation(map))
+                            magickImage.AutoOrient();
+                        
                         magickImage.Resize(new MagickGeometry(3000) { Greater = true });
                         magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
@@ -62,6 +66,9 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 70;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        
+                        if (!HasIncorrectOrientation(map))
+                            magickImage.AutoOrient();
                         
                         if (NeedsPadding(map))
                         {
@@ -90,6 +97,10 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 76;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        
+                        if (!HasIncorrectOrientation(map))
+                            magickImage.AutoOrient();
+                        
                         magickImage.Resize(new MagickGeometry(0, 500));
                         magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
@@ -107,6 +118,10 @@ namespace CollectionsOnline.Import.Factories
                         magickImage.Quality = 76;
                         magickImage.FilterType = FilterType.Lanczos;
                         magickImage.ColorSpace = ColorSpace.sRGB;
+                        
+                        if (!HasIncorrectOrientation(map))
+                            magickImage.AutoOrient();
+                        
                         magickImage.Resize(new MagickGeometry(1500) { Greater = true });
                         magickImage.UnsharpMask(0.5, 0.5, 0.6, 0.025);
 
@@ -299,6 +314,7 @@ namespace CollectionsOnline.Import.Factories
                 return new[]
                 {
                     "resource",
+                    "MdaDataSets_tab",
                     "catmedia=<ecatalogue:MulMultiMediaRef_tab>.(irn,MdaDataSets_tab,ColScientificGroup)",
                     "narmedia=<enarratives:MulMultiMediaRef_tab>.(irn,DetPurpose_tab)",
                     "parmedia=<eparties:MulMultiMediaRef_tab>.(narmedia=<enarratives:NarAuthorsRef_tab>.(irn,DetPurpose_tab))"
@@ -319,6 +335,11 @@ namespace CollectionsOnline.Import.Factories
             return false;
         }
 
+        private bool HasIncorrectOrientation(Map map)
+        {
+            return map.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuIncorrectOrientationQueryString);
+        }
+        
         private void AddImageProfile(ImageMedia imageMedia, MagickImage magickImage, bool addIptcProfile = false)
         {
             // Save profiles if there are any

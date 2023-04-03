@@ -50,6 +50,8 @@ namespace CollectionsOnline.Core.Config
 
         public static string ImuUriQueryString = "Webpage Link URL";
 
+        public static string ImuIncorrectOrientationQueryString = "Incorrect Orientation Display";
+
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(24);
 
         public static TimeSpan ImuOfflineTimeSpanStart = new TimeSpan(19, 00, 0); // 7:00pm
