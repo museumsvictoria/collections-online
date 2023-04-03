@@ -50,7 +50,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             var result = displayTitleFactory.Make(item);
             
             // Then
-            result.ShouldBe("<em>tunga</em>, Container. Tiwi. Bathurst or Melville Islands, North, Northern Territory, Australia. 1997");
+            result.ShouldBe("<em>tunga</em> | Container. Tiwi. Bathurst or Melville Islands, North, Northern Territory, Australia. 1997");
         }
 
         private Specimen MakeMineralogySpecimenWithIdentification()
