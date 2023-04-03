@@ -121,7 +121,7 @@ namespace CollectionsOnline.Tasks.Tasks
 
                             sitemapIndex.Add(new XElement(xmlns + "sitemap",
                                 new XElement(xmlns + "loc",
-                                    Uri.EscapeUriString(string.Format("{0}/sitemap-set-{1}.xml.gz",
+                                    Uri.EscapeDataString(string.Format("{0}/sitemap-set-{1}.xml.gz",
                                         _appSettings.CanonicalSiteBase,
                                         count))),
                                 new XElement(xmlns + "lastmod",
@@ -136,7 +136,7 @@ namespace CollectionsOnline.Tasks.Tasks
                                 stoppingToken.ThrowIfCancellationRequested();
 
                                 var sitemapUrl = new XElement(xmlns + "url",
-                                    new XElement(xmlns + "loc", Uri.EscapeUriString(sitemapNode.Url.AbsoluteUri)),
+                                    new XElement(xmlns + "loc", Uri.EscapeDataString(sitemapNode.Url.AbsoluteUri)),
                                     new XElement(xmlns + "lastmod",
                                         sitemapNode.LastModified.ToString("yyyy-MM-ddTHH:mm:sszzz",
                                             CultureInfo.InvariantCulture)),
