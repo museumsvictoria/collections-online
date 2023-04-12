@@ -12,52 +12,52 @@ namespace CollectionsOnline.WebSite.Transformers
                 select new
                 {
                     Species = species,
-                    RelatedItems = from itemId in species.RelatedItemIds
-                        let relatedItem = LoadDocument<Item>(itemId)
-                        where relatedItem != null && !relatedItem.IsHidden
-                        select new
+                    RelatedItems = species.RelatedItemIds
+                        .Select(LoadDocument<Item>)
+                        .Where(item => item != null && !item.IsHidden)
+                        .Select(item => new
                         {
-                            relatedItem.Id,                             
-                            relatedItem.DisplayTitle,
-                            SubDisplayTitle = relatedItem.RegistrationNumber,
-                            relatedItem.Summary,
-                            relatedItem.ThumbnailUri,
+                            item.Id,
+                            item.DisplayTitle,
+                            SubDisplayTitle = item.RegistrationNumber,
+                            item.Summary,
+                            item.ThumbnailUri,
                             RecordType = "Item"
-                        },
-                    RelatedSpecimens = from specimenId in species.RelatedSpecimenIds
-                        let relatedSpecimen = LoadDocument<Specimen>(specimenId)
-                        where relatedSpecimen != null && !relatedSpecimen.IsHidden
-                        select new
+                        }),
+                    RelatedSpecimens = species.RelatedSpecimenIds
+                        .Select(LoadDocument<Specimen>)
+                        .Where(specimen => specimen != null && !specimen.IsHidden)
+                        .Select(specimen => new
                         {
-                            relatedSpecimen.Id,
-                            relatedSpecimen.DisplayTitle,
-                            SubDisplayTitle = relatedSpecimen.RegistrationNumber,
-                            relatedSpecimen.Summary,
-                            relatedSpecimen.ThumbnailUri,
+                            specimen.Id,
+                            specimen.DisplayTitle,
+                            SubDisplayTitle = specimen.RegistrationNumber,
+                            specimen.Summary,
+                            specimen.ThumbnailUri,
                             RecordType = "Specimen"
-                        },
-                    RelatedArticles = from articleId in species.RelatedArticleIds
-                        let relatedArticle = LoadDocument<Article>(articleId)
-                        where relatedArticle != null && !relatedArticle.IsHidden
-                        select new
+                        }),
+                    RelatedArticles = species.RelatedArticleIds
+                        .Select(LoadDocument<Article>)
+                        .Where(article => article != null && !article.IsHidden)
+                        .Select(article => new
                         {
-                            relatedArticle.Id,
-                            relatedArticle.DisplayTitle,
-                            relatedArticle.Summary,
-                            relatedArticle.ThumbnailUri,
+                            article.Id,
+                            article.DisplayTitle,
+                            article.Summary,
+                            article.ThumbnailUri,
                             RecordType = "Article"
-                        },
-                    RelatedSpecies = from speciesId in species.RelatedSpeciesIds
-                        let relatedSpecies = LoadDocument<Species>(speciesId)
-                        where relatedSpecies != null && !relatedSpecies.IsHidden
-                        select new
+                        }),
+                    RelatedSpecies = species.RelatedSpeciesIds
+                        .Select(LoadDocument<Species>)
+                        .Where(relatedSpecies => relatedSpecies != null && !relatedSpecies.IsHidden)
+                        .Select(relatedSpecies => new
                         {
                             relatedSpecies.Id,
                             relatedSpecies.DisplayTitle,
                             relatedSpecies.Summary,
                             relatedSpecies.ThumbnailUri,
                             RecordType = "Species"
-                        }
+                        })
                 };
         }
     }
