@@ -8,19 +8,21 @@ namespace CollectionsOnline.WebSite.Transformers
     {
         public Article Article { get; set; }
 
-        public IList<EmuAggregateRootViewModel> RelatedItems { get; set; }
+        public IList<EmuAggregateRootViewModel> RelatedItems { get; }
 
-        public IList<EmuAggregateRootViewModel> RelatedSpecimens { get; set; }
+        public IList<EmuAggregateRootViewModel> RelatedSpecimens { get; }
 
         public EmuAggregateRootViewModel ParentArticle { get; set; }
 
-        public IList<EmuAggregateRootViewModel> ChildArticles { get; set; }
+        public IList<EmuAggregateRootViewModel> ChildArticles { get; }
 
-        public IList<EmuAggregateRootViewModel> RelatedArticles { get; set; }
+        public IList<EmuAggregateRootViewModel> RelatedArticles { get; }
 
-        public IList<EmuAggregateRootViewModel> RelatedSpecies { get; set; }
+        public IList<EmuAggregateRootViewModel> RelatedSpecies { get; }
 
         public int RelatedItemSpecimenCount { get; set; }
+
+        public int TransformedItemSpecimenCount => RelatedItems.Count + RelatedSpecimens.Count;
 
         public ArticleViewTransformerResult()
         {

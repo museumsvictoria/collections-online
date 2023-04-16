@@ -167,6 +167,14 @@
                     @Html.Partial("RecordTile", relatedSpecimen)
                 }
             </div>
+            @if (Model.RelatedItemSpecimenCount > Model.TransformedItemSpecimenCount)
+            {
+                <div class="all-related-records">
+                    <h3>
+                        <a href="/search?article=@HttpUtility.UrlEncode(Model.Article.Title)">See all related records (@Model.RelatedItemSpecimenCount)</a>
+                    </h3>
+                </div>
+            }
         </div>
     </div>
 }

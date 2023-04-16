@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using AutoMapper;
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
@@ -27,36 +28,14 @@ namespace CollectionsOnline.WebSite.Queries
             {
                 var result = _documentSession.Load<SpeciesViewTransformer, SpeciesViewTransformerResult>(speciesId);
 
-                // Check to see whether there are related specimens
-                if (result.Species.Taxonomy != null)
-                {
-                    var query = _documentSession.Advanced
-                        .DocumentQuery<CombinedIndexResult, CombinedIndex>()
-                        .WhereEquals("Taxon", result.Species.Taxonomy.TaxonName)
-                        .Take(1);
-
-                    // Dont allow a link to search page if the current species is the only result
-                    if (query
-                        .SelectFields<CombinedIndexResult>("Id")
-                        .Select(x => x.Id)
-                        .Except(new[] {speciesId})
-                        .Any())
-                    {
-                        result.RelatedSpecimenCount = query.QueryResult.TotalResults;
-                    }
-                }
-
                 // Add UriMedia link to ALA (except for fossils)
                 if (result.Species.Taxonomy != null &&
                     !(result.Species.AnimalType.Contains("fossil", StringComparison.OrdinalIgnoreCase) || result.Species.AnimalSubType.Contains("fossil", StringComparison.OrdinalIgnoreCase)))
                 {
                     result.Species.Media.Add(new UriMedia
                     {
-                        Caption =
-                            string.Format("See {0} in the Atlas of Living Australia", result.Species.Taxonomy.TaxonName),
-                        Uri =
-                            string.Format("http://bie.ala.org.au/search?q={0}&fq=idxtype:TAXON",
-                                result.Species.Taxonomy.TaxonName)
+                        Caption = $"See {result.Species.Taxonomy.TaxonName} in the Atlas of Living Australia",
+                        Uri = $"https://bie.ala.org.au/search?q={HttpUtility.UrlEncode(result.Species.Taxonomy.TaxonName)}&fq=idxtype:TAXON"
                     });
                 }
 

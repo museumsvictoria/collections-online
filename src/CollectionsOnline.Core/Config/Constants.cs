@@ -18,8 +18,6 @@ namespace CollectionsOnline.Core.Config
 
         public static int PagingPerPageMax = 100;
 
-        public static int SuggestionsMinResultsSize = 15;
-
         public static int SummaryMaxChars = 230;
 
         public static int MetadataDescriptionMaxChars = 400;
