@@ -36,7 +36,8 @@ namespace CollectionsOnline.Tests.Import.Factories
 
             using (var documentStore = NewDocumentStore(seedData: dataToBeSeeded))
             {
-                var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>(), Substitute.For<ISummaryFactory>());
+                var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>(),
+                    Substitute.For<ISummaryFactory>(), Substitute.For<IDisplayTitleFactory>());
 
                 // When
                 using (var documentSession = documentStore.OpenSession())
@@ -86,7 +87,8 @@ namespace CollectionsOnline.Tests.Import.Factories
 
             using (var documentStore = NewDocumentStore(seedData: dataToBeSeeded))
             {
-                var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>(), Substitute.For<ISummaryFactory>());
+                var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>(),
+                    Substitute.For<ISummaryFactory>(), Substitute.For<IDisplayTitleFactory>());
 
                 // When
                 using (var documentSession = documentStore.OpenSession())
@@ -135,7 +137,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             using (var documentStore = NewDocumentStore(seedData: dataToBeSeeded))
             {
                 var articleFactory = new ArticleFactory(Substitute.For<IMediaFactory>(),
-                    Substitute.For<ISummaryFactory>());
+                    Substitute.For<ISummaryFactory>(), Substitute.For<IDisplayTitleFactory>());
 
                 // When
                 using (var documentSession = documentStore.OpenSession())

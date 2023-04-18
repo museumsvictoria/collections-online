@@ -28,7 +28,7 @@ namespace CollectionsOnline.WebSite.Queries
 
                 foreach (var collection in collections.Where(x => !string.IsNullOrWhiteSpace(x.Summary)))
                 {
-                    collection.Summary = collection.Summary.Truncate(Constants.CollectionSummaryMaxChars);
+                    collection.Summary = collection.Summary.Truncate(Constants.CollectionSummaryMaxChars, " ...");
                 }
 
                 // Todo : move linq query to an index

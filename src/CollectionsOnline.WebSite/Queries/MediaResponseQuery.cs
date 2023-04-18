@@ -62,7 +62,7 @@ namespace CollectionsOnline.WebSite.Queries
                 response.WithHeader("Content-Disposition", string.Format("attachment; filename={0}-{1}-{2}.jpg",
                     HtmlConverter.HtmlToText(media.Caption)
                     .ToLower()
-                    .Truncate(Constants.FileMaxChars)
+                    .Truncate(Constants.FileMaxChars, "...")
                     .RemoveLineBreaks()
                     .ReplaceNonWordWithDashes(),
                     media.Irn,

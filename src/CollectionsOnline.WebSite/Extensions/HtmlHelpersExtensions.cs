@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using CollectionsOnline.Core.Extensions;
@@ -149,6 +150,39 @@ namespace CollectionsOnline.WebSite.Extensions
             jsonSerializerSettings.Converters.Add(new StringEnumConverter());
 
             return new NonEncodedHtmlString(JsonConvert.SerializeObject(input, jsonSerializerSettings));
+        }
+
+        public static IHtmlString RenderStorages<T>(this HtmlHelpers<T> helper, IList<Storage> storages)
+        {
+            var sb = new StringBuilder();
+
+            var storagesString = storages.Select(x => new[]
+            {
+                string.IsNullOrWhiteSpace(x.Nature) ? null : $"Nature: {x.Nature}",
+                string.IsNullOrWhiteSpace(x.Form) ? null : $"Form: {x.Form}",
+                string.IsNullOrWhiteSpace(x.FixativeTreatment) ? null : $"Fixative treatment: {x.FixativeTreatment}",
+                string.IsNullOrWhiteSpace(x.Medium) ? null : $"Medium: {x.Medium}",
+            }.Concatenate(", ")).Concatenate("; ");
+
+            sb.Append(storagesString);
+
+            return new NonEncodedHtmlString(sb.ToString());
+        }
+        
+        public static IHtmlString RenderTissues<T>(this HtmlHelpers<T> helper, IList<Tissue> tissues)
+        {
+            var sb = new StringBuilder();
+
+            var tissuesString = tissues.Select(x => new[]
+            {
+                string.IsNullOrWhiteSpace(x.TissueType) ? null : $"Type: {x.TissueType}",
+                string.IsNullOrWhiteSpace(x.Preservative) ? null : $"Preservative: {x.Preservative}",
+                string.IsNullOrWhiteSpace(x.StorageTemperature) ? null : $"Storage temperature: {x.StorageTemperature}",
+            }.Concatenate(", ")).Concatenate("; ");
+
+            sb.Append(tissuesString);
+
+            return new NonEncodedHtmlString(sb.ToString());
         }
 
         private static string BuildAuthorsCitation(IList<Author> authors)

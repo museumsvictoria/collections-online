@@ -21,13 +21,16 @@ namespace CollectionsOnline.Import.Factories
     {
         private readonly IMediaFactory _mediaFactory;
         private readonly ISummaryFactory _summaryFactory;
+        private readonly IDisplayTitleFactory _displayTitleFactory;
 
         public ArticleFactory(
             IMediaFactory mediaFactory,
-            ISummaryFactory summaryFactory)
+            ISummaryFactory summaryFactory,
+            IDisplayTitleFactory displayTitleFactory)
         {
             _mediaFactory = mediaFactory;
             _summaryFactory = summaryFactory;
+            _displayTitleFactory = displayTitleFactory;
         }
 
         public string ModuleName => "enarratives";
@@ -212,12 +215,7 @@ namespace CollectionsOnline.Import.Factories
             article.Summary = _summaryFactory.Make(article);
 
             // Display Title
-            // TODO: Move to display title factory and encapsulate entire process
-            if (!string.IsNullOrWhiteSpace(article.Title))
-                article.DisplayTitle = article.Title;
-
-            if (string.IsNullOrWhiteSpace(article.DisplayTitle))
-                article.DisplayTitle = "Article";
+            article.DisplayTitle = _displayTitleFactory.Make(article);
 
             Log.Logger.Debug("Completed {Id} creation with {MediaCount} media", article.Id, article.Media.Count);
 

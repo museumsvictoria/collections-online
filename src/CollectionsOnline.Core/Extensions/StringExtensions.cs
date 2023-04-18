@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using AngleSharp.Text;
 
 namespace CollectionsOnline.Core.Extensions
 {
@@ -37,12 +38,12 @@ namespace CollectionsOnline.Core.Extensions
             return Regex.Replace(input.ToLower(), @"(?<=(^|[.;:])\s*)[a-z]", (match) => match.Value.ToUpper());
         }
 
-        public static string Truncate(this string input, int maxLength)
+        public static string Truncate(this string input, int maxLength, string trailingText = "")
         {
             if (string.IsNullOrWhiteSpace(input))
                 return input;
 
-            return input.Length <= maxLength ? input : input.TrimToMaxLength(maxLength, ' ') + " ...";
+            return input.Length <= maxLength ? input : input.TrimToMaxLength(maxLength, ' ') + trailingText;
         }
 
         public static string TrimToMaxLength(this string input, int maxLength, char separator)
@@ -61,6 +62,8 @@ namespace CollectionsOnline.Core.Extensions
                     {
                         if (builder.Length == 0)
                             builder.Append(word);
+                        else // Remove last separator
+                            builder.Remove(builder.Length - 1, 1);
 
                         break;
                     }
@@ -68,7 +71,7 @@ namespace CollectionsOnline.Core.Extensions
                     builder.Append(word + separator);
                 }
 
-                input = builder.ToString();
+                return builder.ToString();
             }
 
             return input;

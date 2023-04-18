@@ -21,10 +21,12 @@ namespace CollectionsOnline.Import.Factories
         {
             var summaryBuilder = new SummaryBuilder();
 
-            return summaryBuilder
-                .AddHeading(item.CollectingAreas.Concatenate(", "))
-                .AddText(item.ObjectSummary)
-                .ToString();
+            if (!string.Equals(item.Category, "First Peoples", StringComparison.OrdinalIgnoreCase))
+                summaryBuilder.AddHeading(item.CollectingAreas.Concatenate(", "));
+
+            summaryBuilder.AddText(item.ObjectSummary);
+
+            return summaryBuilder.ToString();
         }
 
         public string Make(Species species)
@@ -32,7 +34,7 @@ namespace CollectionsOnline.Import.Factories
             var summaryBuilder = new SummaryBuilder();
 
             return summaryBuilder
-                .AddText(species.Biology)
+                .AddText(species.Biology, true)
                 .ToString();
         }
 
@@ -58,7 +60,7 @@ namespace CollectionsOnline.Import.Factories
             else
             {
                 summaryBuilder
-                    .AddField("Common name", (specimen.Taxonomy == null) ? null : specimen.Taxonomy.CommonName)
+                    .AddField("Common name", specimen.Taxonomy?.CommonName)
                     .AddField("Type status", specimen.TypeStatus)
                     .AddField("Specimen nature", specimen.Storages.Select(x => x.Nature).Concatenate(", "))
                     .AddField("Higher taxonomy", (specimen.Taxonomy == null) ? null : new[]

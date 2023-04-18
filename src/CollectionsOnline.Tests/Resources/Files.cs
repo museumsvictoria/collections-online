@@ -10,5 +10,7 @@ namespace CollectionsOnline.Tests.Resources
         public static string OutputFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Output\";
         
         public static string Fish => RootFolder + @"parma-victoriae.tif";
+        
+        public static string Brochure => RootFolder + @"brochure.jpg";
     }
 }

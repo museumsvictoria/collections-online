@@ -59,7 +59,7 @@ namespace CollectionsOnline.Tests.Import.Factories
             new DirectoryInfo(directory).Exists.ShouldBe(true);
 
             // Cleanup
-            Directory.Delete($"{ConfigurationManager.AppSettings["WebSitePath"]}\\content\\", true);
+            Directory.Delete($"{ConfigurationManager.AppSettings["WebSitePath"]}", true);
         }
     }
 }

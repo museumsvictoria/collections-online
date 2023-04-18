@@ -18,8 +18,6 @@ namespace CollectionsOnline.Core.Config
 
         public static int PagingPerPageMax = 100;
 
-        public static int SuggestionsMinResultsSize = 15;
-
         public static int SummaryMaxChars = 230;
 
         public static int MetadataDescriptionMaxChars = 400;
@@ -49,6 +47,8 @@ namespace CollectionsOnline.Core.Config
         public static string ImuVideoQueryString = "Video URL";
 
         public static string ImuUriQueryString = "Webpage Link URL";
+
+        public static string ImuIncorrectOrientationQueryString = "Incorrect Orientation Display";
 
         public static TimeSpan AggressiveCacheTimeSpan = TimeSpan.FromHours(24);
 
@@ -100,6 +100,6 @@ namespace CollectionsOnline.Core.Config
 
         public static string[] TaxonomyTypeStatuses = { "holotype", "lectotype", "neotype", "paralectotype", "paratype", "syntype", "type" };
         
-        public static string[] DeprecatedFacets = { "OnDisplay" };
+        public static string[] DeprecatedFacets = { "HasImages", "OnDisplay" };
     }
 }

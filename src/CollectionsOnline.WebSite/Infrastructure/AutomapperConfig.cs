@@ -75,8 +75,8 @@ namespace CollectionsOnline.WebSite.Infrastructure
                         dest.Associations = src.Associations.Select(a => string.Format("{0}: {1}", a.Type, new[] { a.Name, a.StreetAddress, a.Locality, a.Region, a.State, a.Country, a.Date }.Concatenate(", "))).Concatenate("; ");
                         dest.TradeLiteraturePrimaryRoleAndName = (!string.IsNullOrWhiteSpace(src.TradeLiteraturePrimaryRole)) ? string.Format("{0} : {1}", src.TradeLiteraturePrimaryRole, src.TradeLiteraturePrimaryName) : null;
                         dest.Dimensions = src.Dimensions.Select(d => string.Format("{0}: {1} {2}", (!string.IsNullOrWhiteSpace(d.Configuration)) ? d.Configuration : "Dimensions", d.Dimensions, d.Comments).Trim()).Concatenate("; ");
-                        dest.IndigenousCulturesLocalities = src.IndigenousCulturesLocalities.Concatenate(", ");
-                        dest.IndigenousCulturesCulturalGroups = src.IndigenousCulturesCulturalGroups.Concatenate(", ");
+                        dest.FirstPeoplesLocalities = src.FirstPeoplesLocalities.Concatenate(", ");
+                        dest.FirstPeoplesCulturalGroups = src.FirstPeoplesCulturalGroups.Concatenate(", ");
                     });
                 cfg.CreateMap<Species, EmuAggregateRootCsvModel>()
                     .ForMember(dest => dest.RecordType, opt => opt.UseValue("species"))
@@ -94,8 +94,6 @@ namespace CollectionsOnline.WebSite.Infrastructure
                         dest.Licence = string.Format("{0} {1}", src.Licence.Name, !string.IsNullOrWhiteSpace(src.Licence.Uri) ? string.Format("({0})", src.Licence.Uri) : string.Empty).Trim();
                         dest.Associations = src.Associations.Select(a => string.Format("{0}: {1}", a.Type, new[] { a.Name, a.StreetAddress, a.Locality, a.Region, a.State, a.Country, a.Date }.Concatenate(", "))).Concatenate("; ");
                         dest.Storage = src.Storages.Select(s => new[] { s.Nature, s.Form, s.FixativeTreatment, s.Medium}.Concatenate(", ")).Concatenate("; ");
-                        dest.CollectionSiteLatitudes = (src.CollectionSite != null) ? src.CollectionSite.Latitudes.Concatenate("; ") : string.Empty;
-                        dest.CollectionSiteLongitudes = (src.CollectionSite != null) ? src.CollectionSite.Longitudes.Concatenate("; ") : string.Empty;
                     });
             });
         }

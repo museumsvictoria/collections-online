@@ -2,11 +2,10 @@
 'use strict';
 
 const gulp = require('gulp');
-const sass = require('gulp-sass');
-sass.compiler = require('node-sass');
+const sass = require('gulp-sass')(require('node-sass'));
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
-const uglify = require('gulp-uglify');
+const minify = require('gulp-minify');
 const cleanCss = require('gulp-clean-css');
 const browserify = require('browserify');
 const del = require('del');
@@ -34,7 +33,12 @@ function js() {
         .pipe(source('bundle.js'))
         .pipe(gulp.dest(filePaths.js.devdest))
         .pipe(buffer())
-        .pipe(uglify())
+        .pipe(minify({
+            ext:{
+                src:'-debug.js',
+                min:'.js'
+            }
+        }))
         .pipe(cachebust.resources())
         .pipe(gulp.dest(filePaths.js.dest));
 }

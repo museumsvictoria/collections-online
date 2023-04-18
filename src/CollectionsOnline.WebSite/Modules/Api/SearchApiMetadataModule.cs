@@ -100,7 +100,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             Parameter = "category",
                             Necessity = "optional",
                             Description = "Collection category of a record. Parameter is considered a facet.",
-                            ExampleValues = new[] { "natural sciences", "indigenous collections" }
+                            ExampleValues = new[] { "natural sciences", "first peoples" }
                         },
                         new ApiParameter
                         {
@@ -169,7 +169,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "locality",
                             Necessity = "optional",
-                            Description = "The general locality a record may be associated with. Locality can come from a variety of other fields on records such as...<br/>articles:<br/><code>localities</code><br/>items:<br/><code>locality, region, state, country, indigenousCulturesLocalities</code><br/>species:<br/><code>nationalParks</code><br/>specimens:<br/><code>locality, region, state, country, ocean, continent, district, town, nearestNamedPlace, tektitesLocalStrewnfield, tektitesGlobalStrewnfield</code>.",
+                            Description = "The general locality a record may be associated with. Locality can come from a variety of other fields on records such as...<br/>articles:<br/><code>localities</code><br/>items:<br/><code>locality, region, state, country, firstPeoplesLocalities</code><br/>species:<br/><code>nationalParks</code><br/>specimens:<br/><code>locality, region, state, country, ocean, continent, district, town, nearestNamedPlace, tektitesLocalStrewnfield, tektitesGlobalStrewnfield</code>.",
                             ExampleValues = new[] { "barossa valley", "germany" }
                         },
                         new ApiParameter
@@ -183,14 +183,14 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "date",
                             Necessity = "optional",
-                            Description = "The general date a record may be associated with, due to the variation in the way date is cataloged the string must be an exact match and is not parsed into a standardised date format, will only return item or specimen records. Collection can come from a variety of other fields on records such as...<br/>items:<br/><code>date, indigenousCulturesDate, indigenousCulturesDateCollected, archeologyManufactureDate, philatelyDateIssued, tradeLiteraturePublicationDate</code><br/>specimens:<br/><code>date</code>.",
+                            Description = "The general date a record may be associated with, due to the variation in the way date is cataloged the string must be an exact match and is not parsed into a standardised date format, will only return item or specimen records. Collection can come from a variety of other fields on records such as...<br/>items:<br/><code>date, firstPeoplesDate, firstPeoplesDateCollected, archeologyManufactureDate, philatelyDateIssued, tradeLiteraturePublicationDate</code><br/>specimens:<br/><code>date</code>.",
                             ExampleValues = new[] { "02 nov 1956", "05/11/1908" }
                         },
                         new ApiParameter
                         {
                             Parameter = "culturalgroup",
                             Necessity = "optional",
-                            Description = "The indigenous cultures cultural group a record may be associated with, will only return item records.",
+                            Description = "The First Peoples cultural group a record may be associated with, will only return item records.",
                             ExampleValues = new[] { "woi wurrung", "barapa barapa" }
                         },
                         new ApiParameter
@@ -204,7 +204,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "name",
                             Necessity = "optional",
-                            Description = "A person or companies name a record may be associated with. Name can come from a variety of other fields on records such as...<br/>articles:<br/><code>author.fullName</code><br/>items:<br/><code>association.name, indigenousCulturesPhotographer, indigenousCulturesAuthor, indigenousCulturesIllustrator, indigenousCulturesMaker, indigenousCulturesCollector, indigenousCulturesLetterTo, indigenousCulturesLetterFrom, brand.name, archeologyManufactureName, tradeLiteraturePrimaryName, artworkPublisher</code><br/>species:<br/><code>author.fullName</code><br/>specimens:<br/><code>association.name</code>.",
+                            Description = "A person or companies name a record may be associated with. Name can come from a variety of other fields on records such as...<br/>articles:<br/><code>author.fullName</code><br/>items:<br/><code>association.name, firstPeoplesPhotographer, firstPeoplesAuthor, firstPeoplesIllustrator, firstPeoplesMaker, firstPeoplesCollector, firstPeoplesLetterTo, firstPeoplesLetterFrom, brand.name, archeologyManufactureName, tradeLiteraturePrimaryName, artworkPublisher</code><br/>species:<br/><code>author.fullName</code><br/>specimens:<br/><code>association.name</code>.",
                             ExampleValues = new[] { "Mrs Jane Burn", "Senator George F. Pearce - Australian Government" }
                         },
                         new ApiParameter

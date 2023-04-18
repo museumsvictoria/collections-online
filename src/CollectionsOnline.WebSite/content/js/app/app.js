@@ -3,12 +3,14 @@ var jsCookie = require('js-cookie');
 var media = require('./media');
 var search = require('./search');
 var map = require('./map');
+var survey = require('./survey');
 
 var App = {
   init: function() {
     media.init();
     search.init();
     map.init();
+    survey.init();
     
     this.cacheElements();
     this.bindEvents();

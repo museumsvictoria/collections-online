@@ -34,6 +34,11 @@
             <h3>Distribution</h3>
             <p>@Html.Raw(Model.Species.Distribution)</p>
         }
+        @if (!string.IsNullOrWhiteSpace(Model.Species.GeologicalRange))
+        {
+            <h3>Geological Range</h3>
+            <p>@Html.Raw(Model.Species.GeologicalRange)</p>
+        }
         @if (!string.IsNullOrWhiteSpace(Model.Species.Habitat))
         {
             <h3>Habitat</h3>
@@ -122,18 +127,6 @@
                 @for (int i = 0; i < Model.Species.WhenActive.Count; i++)
                 {
                     <span>@Model.Species.WhenActive[i]</span>@(i != Model.Species.WhenActive.Count - 1 ? ", " : "")
-                }
-            </p>
-        </li>
-    }
-    @if (Model.Species.NationalParks.Any())
-    {
-        <li>
-            <h3>National Parks</h3>
-            <p>
-                @for (int i = 0; i < Model.Species.NationalParks.Count; i++)
-                {
-                    <a href="/search?locality=@HttpUtility.UrlEncode(Model.Species.NationalParks[i])">@Model.Species.NationalParks[i]</a>@(i != Model.Species.NationalParks.Count - 1 ? ", " : "")
                 }
             </p>
         </li>

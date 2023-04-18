@@ -39,7 +39,13 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Article",
                     Category = (string)null,
-                    HasImages = article.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
+                    HasMedia = new object[]
+                    {
+                        article.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        article.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        article.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        article.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
                     DisplayStatus = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
@@ -68,6 +74,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = (string)null,
                     
                     // Deprecated Facets/Terms
+                    HasImages = article.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = (string)null,
                 });
 
@@ -90,10 +97,10 @@ namespace CollectionsOnline.Core.Indexes
                         item.ObjectName, item.Discipline, item.RegistrationNumber, item.RegistrationNumber.Replace(" ", ""),
                         item.ObjectSummary, item.PhysicalDescription, item.CollectionNames, item.Keywords, item.Significance,
                         item.Associations.Select(x => $"{x.Name} {x.Country} {x.Date} {x.Locality} {x.Region} {x.State} {x.StreetAddress}"),
-                        item.IndigenousCulturesMedium, item.IndigenousCulturesLocalName, item.IndigenousCulturesCulturalGroups, item.IndigenousCulturesLocalities,
-                        item.IndigenousCulturesDate, item.IndigenousCulturesLocalities, item.IndigenousCulturesDescription, item.IndigenousCulturesPhotographer,
-                        item.IndigenousCulturesAuthor, item.IndigenousCulturesIllustrator, item.IndigenousCulturesMaker, item.IndigenousCulturesDate, item.IndigenousCulturesCollector,
-                        item.IndigenousCulturesDateCollected, item.IndigenousCulturesIndividualsIdentified, item.IndigenousCulturesLetterTo, item.IndigenousCulturesLetterFrom,
+                        item.FirstPeoplesMedium, item.FirstPeoplesLocalName, item.FirstPeoplesCulturalGroups, item.FirstPeoplesLocalities,
+                        item.FirstPeoplesDate, item.FirstPeoplesLocalities, item.FirstPeoplesDescription, item.FirstPeoplesPhotographer,
+                        item.FirstPeoplesAuthor, item.FirstPeoplesIllustrator, item.FirstPeoplesMaker, item.FirstPeoplesDate, item.FirstPeoplesCollector,
+                        item.FirstPeoplesDateCollected, item.FirstPeoplesIndividualsIdentified, item.FirstPeoplesLetterTo, item.FirstPeoplesLetterFrom,
                         item.IsdDescriptionOfContent, item.ArcheologyDescription, item.ArcheologyManufactureName, item.ArcheologyManufactureDate, item.TradeLiteraturePrimaryName
                     },
                     item.Summary,
@@ -110,8 +117,13 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Item",
                     item.Category,
-                    HasImages = item.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
-                    item.MuseumLocation.DisplayStatus,
+                    HasMedia = new object[]
+                    {
+                        item.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        item.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        item.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        item.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
                     item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
@@ -135,24 +147,24 @@ namespace CollectionsOnline.Core.Indexes
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Region)).Select(x => x.Region), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.State)).Select(x => x.State), 
                         item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Country)).Select(x => x.Country), 
-                        item.IndigenousCulturesLocalities },
+                        item.FirstPeoplesLocalities },
                     Collection = new object[] { item.CollectionNames, item.Discipline },
                     Date = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Date)).Select(x => x.Date), 
-                        item.IndigenousCulturesDate, 
-                        item.IndigenousCulturesDateCollected,
+                        item.FirstPeoplesDate, 
+                        item.FirstPeoplesDateCollected,
                         item.ArcheologyManufactureDate,
                         item.PhilatelyDateIssued,
                         item.TradeLiteraturePublicationDate },
-                    CulturalGroup = item.IndigenousCulturesCulturalGroups,
+                    CulturalGroup = item.FirstPeoplesCulturalGroups,
                     Classification = item.Classifications,
                     Name = new object[] { item.Associations.Where(x => !string.IsNullOrWhiteSpace(x.Name)).Select(x => x.Name), 
-                        item.IndigenousCulturesPhotographer, 
-                        item.IndigenousCulturesAuthor, 
-                        item.IndigenousCulturesIllustrator, 
-                        item.IndigenousCulturesMaker, 
-                        item.IndigenousCulturesCollector,
-                        item.IndigenousCulturesLetterTo,
-                        item.IndigenousCulturesLetterFrom,
+                        item.FirstPeoplesPhotographer, 
+                        item.FirstPeoplesAuthor, 
+                        item.FirstPeoplesIllustrator, 
+                        item.FirstPeoplesMaker, 
+                        item.FirstPeoplesCollector,
+                        item.FirstPeoplesLetterTo,
+                        item.FirstPeoplesLetterFrom,
                         item.Brands.Select(x => x.Name),
                         item.ArcheologyManufactureName,
                         item.TradeLiteraturePrimaryName,
@@ -184,7 +196,8 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = (string)null,
                     
                     // Deprecated Facets/Terms
-                    OnDisplay = (item.MuseumLocation != null) ? "Yes" : "No",
+                    HasImages = item.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
+                    OnDisplay = item.MuseumLocation != null ? "Yes" : "No",
                 });
 
             AddMap<Species>(speciesDocs =>
@@ -229,7 +242,13 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Species",
                     Category = "Natural Sciences",
-                    HasImages = species.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
+                    HasMedia = new object[]
+                    {
+                        species.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        species.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        species.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        species.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
                     DisplayStatus = (string)null,
                     DisplayLocation = (string)null,
                     CollectingArea = new object[] { },
@@ -241,7 +260,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Term fields
                     Keyword = new object[] { species.ConservationStatuses, species.AnimalSubType },
-                    Locality = new object[] { species.NationalParks },
+                    Locality = new object[] { },
                     Collection = new object[] { },
                     Date = new object[] { },
                     CulturalGroup = new object[] { },
@@ -273,6 +292,7 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = species.Endemicity,
                     
                     // Deprecated Facets/Terms
+                    HasImages = species.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
                     OnDisplay = (string)null,
                 });
 
@@ -305,7 +325,7 @@ namespace CollectionsOnline.Core.Indexes
                                 specimen.Taxonomy.Subfamily, specimen.Taxonomy.CommonName, specimen.Taxonomy.OtherCommonNames
                             }
                             : null,
-                        specimen.TypeStatus,
+                        specimen.TypeStatus, 
                         specimen.CollectionEvent != null
                             ? new object[]
                             {
@@ -336,7 +356,7 @@ namespace CollectionsOnline.Core.Indexes
 
                     // Sort fields
                     Quality =
-                        (specimen.CollectionEvent != null || !string.IsNullOrWhiteSpace(specimen.TypeStatus) || (specimen.Taxonomy != null) || (specimen.CollectionSite != null) ? 1 : 0) +
+                        (specimen.CollectionEvent != null || !string.IsNullOrWhiteSpace(specimen.TypeStatus) || specimen.Taxonomy != null || specimen.CollectionSite != null ? 1 : 0) +
                         (!string.IsNullOrWhiteSpace(specimen.ObjectSummary) ? 1 : 0) +
                         (specimen.Media.Any(x => !string.Equals(AsDocument(x)["$type"].ToString(), "CollectionsOnline.Core.Models.ImageMedia, CollectionsOnline.Core", StringComparison.Ordinal)) ? 1 : 0) +
                         (specimen.Media.OfType<ImageMedia>().Any() ? Math.Log(specimen.Media.OfType<ImageMedia>().Average(x => Math.Max(x.Large.Height, x.Large.Width) / 100) + specimen.Media.Count, 2) : 0),
@@ -345,7 +365,13 @@ namespace CollectionsOnline.Core.Indexes
                     // Facet fields
                     RecordType = "Specimen",
                     specimen.Category,
-                    HasImages = (specimen.Media.OfType<ImageMedia>().Any()) ? "Yes" : "No",
+                    HasMedia = new object[]
+                    {
+                        specimen.Media.OfType<ImageMedia>().Any() ? "Images" : null,
+                        specimen.Media.OfType<VideoMedia>().Any() ? "Videos" : null,
+                        specimen.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
+                        specimen.Media.OfType<FileMedia>().Any() ? "Files" : null,
+                    },
                     specimen.MuseumLocation.DisplayStatus,
                     specimen.MuseumLocation.DisplayLocation,
                     CollectingArea = specimen.CollectingAreas,
@@ -411,7 +437,8 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = (string)null,
                     
                     // Deprecated Facets/Terms
-                    OnDisplay = (specimen.MuseumLocation != null) ? "Yes" : "No",
+                    HasImages = specimen.Media.OfType<ImageMedia>().Any() ? "Yes" : "No",
+                    OnDisplay = specimen.MuseumLocation != null ? "Yes" : "No",
                 });
             
             Index(x => x.Id, FieldIndexing.No);
@@ -471,6 +498,8 @@ namespace CollectionsOnline.Core.Indexes
 
         public string Category { get; set; }
 
+        public string HasMedia { get; set; }
+        
         public string HasImages { get; set; }
 
         public string DisplayStatus { get; set; }
