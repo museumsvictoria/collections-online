@@ -17,10 +17,6 @@ namespace CollectionsOnline.Core.Indexes
                 },
                 new Facet<CombinedIndexResult>
                 {
-                    Name = x => x.HasImages
-                },
-                new Facet<CombinedIndexResult>
-                {
                     Name = x => x.DisplayStatus
                 },
                 new Facet<CombinedIndexResult>
@@ -60,6 +56,10 @@ namespace CollectionsOnline.Core.Indexes
                     Name = x => x.ImageLicence
                 },
                 // Deprecated Facets
+                new Facet<CombinedIndexResult>
+                {
+                    Name = x => x.HasImages
+                },
                 new Facet<CombinedIndexResult>
                 {
                     Name = x => x.OnDisplay

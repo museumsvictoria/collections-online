@@ -124,6 +124,7 @@ namespace CollectionsOnline.Core.Indexes
                         item.Media.OfType<AudioMedia>().Any() ? "Audio" : null,
                         item.Media.OfType<FileMedia>().Any() ? "Files" : null,
                     },
+                    item.MuseumLocation.DisplayStatus,
                     item.MuseumLocation.DisplayLocation,
                     CollectingArea = item.CollectingAreas,
                     ItemType = item.Type,
@@ -499,8 +500,6 @@ namespace CollectionsOnline.Core.Indexes
         public string Category { get; set; }
 
         public string HasMedia { get; set; }
-        
-        public string HasImages { get; set; }
 
         public string DisplayStatus { get; set; }
 
@@ -553,6 +552,8 @@ namespace CollectionsOnline.Core.Indexes
         public string SpeciesEndemicity { get; set; }
         
         // Deprecated Facets/Terms
+        public string HasImages { get; set; }
+        
         public string OnDisplay { get; set; }
     }
 }
