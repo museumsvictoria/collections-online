@@ -76,10 +76,10 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         },
                         new ApiParameter
                         {
-                            Parameter = "hasimages",
+                            Parameter = "hasmedia",
                             Necessity = "optional",
-                            Description = "Specify whether or not the returned records contain images. Parameter is considered a facet.",
-                            ExampleValues = new[] { "yes", "no" }
+                            Description = "Whether the record has specific types of media attached to it. Parameter is considered a facet.",
+                            ExampleValues = new[] { "images", "videos", "audio" }
                         },
                         new ApiParameter
                         {
@@ -276,7 +276,22 @@ namespace CollectionsOnline.WebSite.Modules.Api
                             Necessity = "optional",
                             Description = "The endemicity of a species, will only return species records.",
                             ExampleValues = new[] { "introduced pest", "native to australia" }
-                        }
+                        },
+                        // Deprecated Facets/Terms
+                        new ApiParameter
+                        {
+                            Parameter = "hasimages (deprecated)",
+                            Necessity = "optional",
+                            Description = "Specify whether or not the returned records contain images. Parameter is considered a facet. Parameter has been deprecated, consider using hasmedia instead.",
+                            ExampleValues = new[] { "yes", "no" }
+                        },
+                        new ApiParameter
+                        {
+                            Parameter = "ondisplay (deprecated)",
+                            Necessity = "optional",
+                            Description = "Specify whether or not the returned records are on display. Parameter is considered a facet. Parameter has been deprecated, consider using displaystatus instead",
+                            ExampleValues = new[] { "yes", "no" }
+                        },
                     },
                     StatusCodes = new Dictionary<HttpStatusCode, string>
                     {
