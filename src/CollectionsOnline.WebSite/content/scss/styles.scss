@@ -952,9 +952,7 @@ button.icon {
                 line-height: 15pt;
             }
         }
-
-
-
+        
         .summary {
             h3 {
                 padding-bottom: 5px;
@@ -1390,6 +1388,27 @@ button.icon {
 
             @include gridle_state(mobile) {
                 max-width: none;
+            }
+        }
+    }
+    
+    .all-related-records {
+        display: flex;
+        justify-content: center;
+        padding-top: 25px;
+        
+        a {
+            border-bottom: 1px dotted;
+            color: rgba(25, 102, 93, 0.95);
+
+            &:hover {
+                border-bottom: 1px solid;
+                color: rgba(25, 102, 93, 1);
+            }
+
+            @include gridle_state("print") {
+                color: black;
+                border-bottom: none;
             }
         }
     }
