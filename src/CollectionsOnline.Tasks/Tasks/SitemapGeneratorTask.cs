@@ -120,10 +120,7 @@ namespace CollectionsOnline.Tasks.Tasks
                             count++;
 
                             sitemapIndex.Add(new XElement(xmlns + "sitemap",
-                                new XElement(xmlns + "loc",
-                                    Uri.EscapeDataString(string.Format("{0}/sitemap-set-{1}.xml.gz",
-                                        _appSettings.CanonicalSiteBase,
-                                        count))),
+                                new XElement(xmlns + "loc", $"{_appSettings.CanonicalSiteBase}/sitemap-set-{count}.xml.gz"),
                                 new XElement(xmlns + "lastmod",
                                     sitemapNodeIndex.OrderByDescending(x => x.LastModified).Select(x => x.LastModified)
                                         .First()
@@ -136,9 +133,8 @@ namespace CollectionsOnline.Tasks.Tasks
                                 stoppingToken.ThrowIfCancellationRequested();
 
                                 var sitemapUrl = new XElement(xmlns + "url",
-                                    new XElement(xmlns + "loc", Uri.EscapeDataString(sitemapNode.Url.AbsoluteUri)),
-                                    new XElement(xmlns + "lastmod",
-                                        sitemapNode.LastModified.ToString("yyyy-MM-ddTHH:mm:sszzz",
+                                    new XElement(xmlns + "loc", sitemapNode.Url.AbsoluteUri), new XElement(
+                                        xmlns + "lastmod", sitemapNode.LastModified.ToString("yyyy-MM-ddTHH:mm:sszzz",
                                             CultureInfo.InvariantCulture)),
                                     new XElement(xmlns + "changefreq",
                                         sitemapNode.Frequency.ToString().ToLowerInvariant()));
