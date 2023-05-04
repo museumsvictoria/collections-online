@@ -13,10 +13,10 @@
         </form>
     </div>
 </div>
-@if (Model.Features.Any(x => !x.Feature.IsHidden))
+@if (Model.Features.Any())
 {
     <div id="featured-explore">
-    @foreach (var feature in Model.Features.Where(x => !x.Feature.IsHidden))
+    @foreach (var feature in Model.Features)
     {
         <div class="feature">
             <div class="container">

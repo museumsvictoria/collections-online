@@ -68,10 +68,9 @@ namespace CollectionsOnline.WebSite.Queries
                 
                 var features = _documentSession
                     .Query<Feature>()
-                    .OrderByDescending(x => x.Id)
                     .ToList();
 
-                foreach (var feature in features)
+                foreach (var feature in features.Where(x => !x.IsHidden).OrderByDescending(x => x.Id))
                 {
                     var featuredRecords = _documentSession.Advanced
                         .DocumentQuery<CombinedIndexResult, CombinedIndex>()

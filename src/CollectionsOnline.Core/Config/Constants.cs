@@ -182,6 +182,10 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Touring Hall", Venue = "Melbourne Museum" }
             },
             {
+                new Tuple<string, string, string, string>("ROYAL EXHIBITION BUILDING (MvCIS)", "BASEMENT", "GALLERY 1", null),
+                new MuseumLocation { Gallery = "Basement Gallery", Venue = "Royal Exhibition Building" }
+            },
+            {
                 new Tuple<string, string, string, string>("ROYAL EXHIBITION BUILDING (MvCIS)", "GROUND LEVEL", "CENTRAL HALL", null),
                 new MuseumLocation { Gallery = "Ground Level", Venue = "Royal Exhibition Building" }
             },
@@ -339,7 +343,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 2", "GALLERY 8", null),
-                new MuseumLocation { Gallery = "Becoming You: An Incomplete Guide", Venue = "Immigration Museum" }
+                new MuseumLocation { Gallery = "East Wing Gallery", Venue = "Immigration Museum" }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 2", "EAST CORRIDOR", null),
@@ -355,7 +359,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 2", "GALLERY 10", null),
-                new MuseumLocation { Gallery = "Becoming You: An Incomplete Guide", Venue = "Immigration Museum" }
+                new MuseumLocation { Gallery = "Long Room", Venue = "Immigration Museum" }
             },
             {
                 new Tuple<string, string, string, string>("PUMPING STATION (MvCIS)", "SOUTH", "STRAINING HOUSE", null),
