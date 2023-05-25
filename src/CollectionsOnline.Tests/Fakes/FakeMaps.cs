@@ -510,6 +510,8 @@ namespace CollectionsOnline.Tests.Fakes
                     {
                         "event", new Map
                         {
+                            { "DatCommencementDate", "11/11/2014"},
+                            { "DatCompletionDate", "/11/2024"},
                             { "EveEventTitle", "Galleries of Remembrance (Loan)" },
                             { "EveEventNumber", "865" },
                             {
@@ -550,6 +552,36 @@ namespace CollectionsOnline.Tests.Fakes
                             { "LocLevel1", "EXTERNAL (MvCIS)" }
                         }
                     }
+                }
+            };
+        }
+
+        public static Map[] CreateExpiredOnLoanStatusMap()
+        {
+            return new[]
+            {
+                new Map
+                {
+                    { "event", new Map
+                    {
+                        { "DatCommencementDate", "/10/2020" },
+                        { "DatCompletionDate", "30/04/2023" },
+                        { "venname", new object[]
+                        {
+                        } },
+                        { "EveEventNumber", "1135" },
+                        { "EveEventTitle", "Melbourne Connect" }
+                    } },
+                    { "StaStatus", "On loan" },
+                    { "location", new Map
+                    {
+                        { "location", null },
+                        { "LocLevel1", "EXTERNAL (MvCIS)" },
+                        { "LocLocationType", "Location" },
+                        { "LocLevel3", null },
+                        { "LocLevel2", "EXHIBITION LOAN" },
+                        { "LocLevel4", null }
+                    } }
                 }
             };
         }

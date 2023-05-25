@@ -54,5 +54,20 @@ namespace CollectionsOnline.Tests.Import.Factories
             // Then
             result.DisplayStatus.ShouldBe(DisplayStatus.OnLoan);
         }
+
+        [Fact]
+        public void MakeMuseumLocation_WithExpiredEndDate_ReturnsNotOnDisplay()
+        {
+            // Given
+            var museumLocationFactory = new MuseumLocationFactory(new PartiesNameFactory());
+            var partsMaps = FakeMaps.CreateEmptyMapArray();
+            var objectStatusMaps = FakeMaps.CreateExpiredOnLoanStatusMap();
+
+            // When
+            var result = museumLocationFactory.Make(null, objectStatusMaps, partsMaps);
+            
+            // Then
+            result.DisplayStatus.ShouldBe(DisplayStatus.NotOnDisplay);
+        }
     }
 }

@@ -14,6 +14,10 @@ namespace CollectionsOnline.Core.Models
         public string DisplayLocation { get; set; }
         
         public string DisplayStatus { get; set; }
+        
+        public DateTime? DisplayStartDate { get; set; }
+        
+        public DateTime? DisplayEndDate { get; set; }
     }
     
     public static class DisplayLocation

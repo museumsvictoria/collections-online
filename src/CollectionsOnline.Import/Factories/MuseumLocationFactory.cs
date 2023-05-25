@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using CollectionsOnline.Core.Models;
 using CollectionsOnline.Import.Extensions;
@@ -50,20 +51,30 @@ namespace CollectionsOnline.Import.Factories
                 // Check event lookup then location lookup and return default museum location if nothing found
                 museumLocation = this.MakeFromEventMap(eventMap) ?? this.MakeFromLocationMap(locationMap) ?? museumLocation;
             }
-            
+
             // Check for on loan or for record that has incorrect StaStatus but correct On Loan location
             if (string.Equals(currentExhibitionObjectMap?.GetEncodedString("StaStatus"), "On loan",
                 StringComparison.OrdinalIgnoreCase) || museumLocation.DisplayStatus == DisplayStatus.OnLoan)
             {
+                // Set Start/End date
+                museumLocation.DisplayStartDate = eventMap?.ParseDate("DatCommencementDate");
+                museumLocation.DisplayEndDate = eventMap?.ParseDate("DatCompletionDate");
+                
                 // Get venue name and event title for Venue + Gallery
                 museumLocation.DisplayStatus = DisplayStatus.OnLoan;
                 museumLocation.Venue = venNameMap != null ? _partiesNameFactory.Make(venNameMap) : null;
-                
+
                 // Remove the two variations of extraneous descriptor
                 museumLocation.Gallery = eventMap?.GetEncodedString("EveEventTitle")
                     .Replace("(Loan)", "")
                     .Replace("loan", "")
                     .Trim();
+                
+                // If Start/End date is set and outside of current date then set to Not On Display
+                if (!(DateTime.Now >= museumLocation.DisplayStartDate && DateTime.Now <= museumLocation.DisplayEndDate))
+                {
+                    museumLocation.DisplayStatus = DisplayStatus.NotOnDisplay;
+                }
             }
 
             return museumLocation;
