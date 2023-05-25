@@ -76,8 +76,7 @@ namespace CollectionsOnline.Core.Extensions
 
             return input;
         }
-
-
+        
         public static bool Contains(this string input, string valueToCheck, StringComparison comparisonType)
         {
             if (string.IsNullOrWhiteSpace(input) || string.IsNullOrWhiteSpace(valueToCheck))
