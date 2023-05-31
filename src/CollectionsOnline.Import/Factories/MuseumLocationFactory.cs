@@ -60,15 +60,9 @@ namespace CollectionsOnline.Import.Factories
                 museumLocation.DisplayStartDate = eventMap?.ParseDate("DatCommencementDate");
                 museumLocation.DisplayEndDate = eventMap?.ParseDate("DatCompletionDate");
                 
-                // Get venue name and event title for Venue + Gallery
+                // Get venue name
                 museumLocation.DisplayStatus = DisplayStatus.OnLoan;
                 museumLocation.Venue = venNameMap != null ? _partiesNameFactory.Make(venNameMap) : null;
-
-                // Remove the two variations of extraneous descriptor
-                museumLocation.Gallery = eventMap?.GetEncodedString("EveEventTitle")
-                    .Replace("(Loan)", "")
-                    .Replace("loan", "")
-                    .Trim();
                 
                 // If Start/End date is set and outside of current date then set to Not On Display
                 if (!(DateTime.Now >= museumLocation.DisplayStartDate && DateTime.Now <= museumLocation.DisplayEndDate))
