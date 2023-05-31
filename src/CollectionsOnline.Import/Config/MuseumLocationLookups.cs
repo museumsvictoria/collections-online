@@ -110,6 +110,10 @@ namespace CollectionsOnline.Import.Config
                 new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
             },
             {
+                new Tuple<string, string, string, string>("ROYAL EXHIBITION BUILDING (MvCIS)", "BASEMENT", "GALLERY 1", "*"),
+                new MuseumLocation { Venue = "Royal Exhibition Building", Gallery = "Basement", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.RoyalExhibitionBuilding }
+            },
+            {
                 new Tuple<string, string, string, string>("ROYAL EXHIBITION BUILDING (MvCIS)", "GROUND LEVEL", "*", "*"),
                 new MuseumLocation { Venue = "Royal Exhibition Building", Gallery = "Ground Level", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.RoyalExhibitionBuilding }
             },
@@ -143,7 +147,7 @@ namespace CollectionsOnline.Import.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "NORTH EAST CORRIDOR", "*"),
-                new MuseumLocation { Venue = "Immigration Museum", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
+                new MuseumLocation { Venue = "Immigration Museum", Gallery = "Level 1 East Wing Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "GALLERY 5", "*"),
@@ -159,7 +163,7 @@ namespace CollectionsOnline.Import.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "EAST CORRIDOR", "*"),
-                new MuseumLocation { Venue = "Immigration Museum", Gallery = "Getting In", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
+                new MuseumLocation { Venue = "Immigration Museum", Gallery = "Level 1 East Wing Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "GALLERY 2", "*"),
@@ -167,7 +171,7 @@ namespace CollectionsOnline.Import.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "GALLERY 1", "*"),
-                new MuseumLocation { Venue = "Immigration Museum", Gallery = "Leaving Home", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
+                new MuseumLocation { Venue = "Immigration Museum", Gallery = "Level 1 West Wing Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "WEST CORRIDOR", "*"),
@@ -229,8 +233,6 @@ namespace CollectionsOnline.Import.Config
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 2", "NORTH EAST CORRIDOR", "*"),
                 new MuseumLocation { Venue = "Immigration Museum", Gallery = "Level 2 West Wing Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
             },
-            
-            
             {
                 new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "GROUND LEVEL", "GALLERY 2", "*"),
                 new MuseumLocation { Venue = "Scienceworks", Gallery = "Ground Floor Exhibition Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
@@ -271,7 +273,20 @@ namespace CollectionsOnline.Import.Config
             new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F2"),
             new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F3"),
             new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F4"),
-            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F5")
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F5"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID C1"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID C2"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID D1"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID D2"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID D3"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID E1"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID E2"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID E3"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID F1"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID F2"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID Y1"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID Y2"),
+            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 12", "GRID X2"),
         };
 
         public static Dictionary<string, MuseumLocation> Events = new Dictionary
