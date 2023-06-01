@@ -26,8 +26,6 @@ namespace CollectionsOnline.Core.Models
         
         public const string Curious = "Curious?";
     
-        public const string ImmigrationDiscoveryCentre = "Immigration Discovery Centre";
-        
         public const string MelbourneMuseum = "Melbourne Museum";
         
         public const string ImmigrationMuseum = "Immigration Museum";

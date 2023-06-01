@@ -139,7 +139,7 @@ namespace CollectionsOnline.Import.Config
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "GROUND LEVEL", "DISCOVERY CENTRE", "*"),
-                new MuseumLocation { Venue = "Immigration Museum", Gallery = "Immigration Discovery Centre", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationDiscoveryCentre }
+                new MuseumLocation { Venue = "Immigration Museum", Gallery = "Immigration Discovery Centre", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "GROUND LEVEL", "FOYER", "*"),
