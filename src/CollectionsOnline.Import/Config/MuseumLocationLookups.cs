@@ -299,46 +299,19 @@ namespace CollectionsOnline.Import.Config
                     "94", new MuseumLocation { Venue = "Immigration Museum", Exhibition = "Getting In", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
                 },
                 {
-                    "719", new MuseumLocation { Venue = "Immigration Museum", Exhibition = "Immigrant Stories and Timeline", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
-                },
-                {
-                    "864", new MuseumLocation { Venue = "Immigration Museum", Exhibition = "Immigrant Stories and Timeline", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
-                },
-                {
-                    "897", new MuseumLocation { Venue = "Immigration Museum", Exhibition = "Immigrant Stories and Timeline", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
-                },
-                {
-                    "1144", new MuseumLocation { Venue = "Immigration Museum", Exhibition = "Immigrant Stories and Timeline", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
-                },
-                {
                     "294", new MuseumLocation { Venue = "Immigration Museum", Exhibition = "Leaving Home", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
                 },
                 {
-                    "621", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
+                    "517", new MuseumLocation { Venue = "Immigration Museum", Exhibition = "Identity: Yours, Mine, Ours", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.ImmigrationMuseum }
                 },
                 {
-                    "700", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
+                    "30", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Forest Secrets", Exhibition = "Forest Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "701", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
+                    "46", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "Bugs Alive!", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "914", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Children's Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
-                },
-                {
-                    "852", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Curious?", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Curious }
-                },
-                {
-                    "1184", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Evolution Gallery", Exhibition = "Triceratops: Age of the Dinosaurs", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
-                },
-                {
-                    "30", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Gallery of Life", Exhibition = "Forest Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
-                },
-                {
-                    "916", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Ground floor walkway", Exhibition = "Transcendence", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
-                },
-                {
-                    "443", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Main Entrance", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "56", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Te Pasifika Gallery", Exhibition = "Te Vainui O Pasifika", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
                     "306", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Melbourne Gallery", Exhibition = "Melbourne Story", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
@@ -368,50 +341,92 @@ namespace CollectionsOnline.Import.Config
                     "314", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Melbourne Gallery", Exhibition = "Melbourne Story", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "242", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Mind and Body Gallery", Exhibition = "The Mind: Enter the Labyrinth", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "355", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "West Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "484", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "600 Million Years: Victoria Evolves", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "363", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "West Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "426", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "Bugs Alive!", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "365", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "West Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
+                    "366", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "Federation Tapastries", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
+                    "367", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "West Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
+                    "368", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "West Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
+                    "373", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "East Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
+                    "376", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "East Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },                
+                {
+                    "412", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "West Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
+                    "443", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Main Entrance", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
                     "483", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "Dinosaur Walk", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
+                    "484", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "600 Million Years: Victoria Evolves", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
                     "485", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "Dynamic Earth", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "245", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "Marine Life", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "525", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "East Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "56", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Te Pasifika Gallery", Exhibition = "Te Vainui O Pasifika", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "601", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Level Balcony", Exhibition = "East Balcony Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "1157", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Te Pasifika Gallery", Exhibition = "Te Vainui O Pasifika", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "621", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
                 },
                 {
-                    "632", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Balcony", Exhibition = "Federation Handbells", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "1064", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Melbourne Gallery", Exhibition = "Mini Mega Model Museum", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
                 },
                 {
-                    "366", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Upper Balcony", Exhibition = "Federation Tapastries", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                    "700", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
                 },
                 {
-                    "1172", new MuseumLocation { Venue = "Scienceworks", Exhibition = "Born or Built", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                    "701", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
                 },
                 {
-                    "495", new MuseumLocation { Venue = "Scienceworks", Exhibition = "Heritage Machines Garage", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                    "914", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Children's Gallery", Exhibition = "Children's Museum", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "180", new MuseumLocation { Venue = "Scienceworks", Exhibition = "Sportsworks", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                    "916", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Ground Level Concourse", Exhibition = "East Concourse Displays", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "496", new MuseumLocation { Venue = "Scienceworks", Exhibition = "Spotswood Pumping Station", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                    "1157", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Te Pasifika Gallery", Exhibition = "Tok stori Vikitolia Pasifiki | Victorian Pacific Community Stories", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
-                    "611", new MuseumLocation { Venue = "Scienceworks", Exhibition = "Think Ahead", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                    "1184", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Evolution Gallery", Exhibition = "Triceratops: Age of the Dinosaurs", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
+                {
+                    "1229", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Science & Life Gallery", Exhibition = "Museums Victoria Research Institute Gallery", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
+                },
+                {
+                    "1115", new MuseumLocation { Venue = "Royal Exhibition Building", Gallery = "Basement", Exhibition = "Basement Gallery Display", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.RoyalExhibitionBuilding }
+                },
+                {
+                    "180", new MuseumLocation { Venue = "Scienceworks", Gallery = "Ground Floor, Main Exhibition Space", Exhibition = "Sportsworks", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                },
+                {
+                    "495", new MuseumLocation { Venue = "Scienceworks", Gallery = "Garage", Exhibition = "Heritage Machines", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                },
+                {
+                    "496", new MuseumLocation { Venue = "Scienceworks", Gallery = "Spotswood Pumping Station", Exhibition = "Pumping Station", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                },
+                {
+                    "611", new MuseumLocation { Venue = "Scienceworks", Gallery = "Ground Floor, Main Exhibition Space", Exhibition = "Think Ahead", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Scienceworks }
+                },                
             };
     }
 }
