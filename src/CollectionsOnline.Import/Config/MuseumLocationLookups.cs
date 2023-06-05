@@ -51,7 +51,7 @@ namespace CollectionsOnline.Import.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "CURIOUS", "*"),
-                new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Curious?", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Curious }
+                new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Curious?", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 5", "*"),

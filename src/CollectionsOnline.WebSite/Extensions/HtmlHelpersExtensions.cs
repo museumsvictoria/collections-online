@@ -103,9 +103,6 @@ namespace CollectionsOnline.WebSite.Extensions
                 case DisplayLocation.Bunjilaka:
                     sb.Append(string.Format(formatString, "bunjilaka", museumLocation.DisplayLocation));
                     break;
-                case DisplayLocation.Curious:
-                    sb.Append(string.Format(formatString, "melbournemuseum", museumLocation.Venue));
-                    break;
                 case DisplayLocation.MelbourneMuseum:
                     sb.Append(string.Format(formatString, "melbournemuseum", museumLocation.DisplayLocation));
                     break;
