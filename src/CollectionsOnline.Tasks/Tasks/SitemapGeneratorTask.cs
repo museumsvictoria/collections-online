@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -11,10 +10,8 @@ using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Factories;
 using CollectionsOnline.Core.Indexes;
 using CollectionsOnline.Core.Infrastructure;
-using CollectionsOnline.Tasks.Infrastructure;
 using Microsoft.Extensions.Options;
 using Raven.Client;
-using Serilog;
 
 namespace CollectionsOnline.Tasks.Tasks
 {
