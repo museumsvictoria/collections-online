@@ -380,7 +380,8 @@ namespace CollectionsOnline.Import.Factories
             }
 
             var parentMap = map.GetMap("parentitemspecimens");
-            if (parentMap != null && parentMap.GetEncodedStrings("MdaDataSets_tab").Contains(Constants.ImuSpecimenQueryString))
+            if (string.Equals(specimen.Discipline, "DNA Laboratory", StringComparison.OrdinalIgnoreCase) && 
+                parentMap != null)
             {
                 var parentRegistrationNumber = parentMap["ColRegPart"] != null ? $"{parentMap["ColRegPrefix"]} {parentMap["ColRegNumber"]}.{parentMap["ColRegPart"]}"
                     : $"{parentMap["ColRegPrefix"]} {parentMap["ColRegNumber"]}";
