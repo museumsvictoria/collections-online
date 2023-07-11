@@ -389,7 +389,7 @@ namespace CollectionsOnline.Import.Config
                     "621", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
                 },
                 {
-                    "1064", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Melbourne Gallery", Exhibition = "Mini Mega Model Museum", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
+                    "1064", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Melbourne Gallery", Exhibition = "Mini Mega Model Museum", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.MelbourneMuseum }
                 },
                 {
                     "700", new MuseumLocation { Venue = "Melbourne Museum", Gallery = "Bunjilaka Cultural Centre", Exhibition = "First Peoples", DisplayStatus = DisplayStatus.OnDisplay, DisplayLocation = DisplayLocation.Bunjilaka }
