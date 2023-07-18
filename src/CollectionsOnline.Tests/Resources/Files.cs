@@ -12,5 +12,7 @@ namespace CollectionsOnline.Tests.Resources
         public static string Fish => RootFolder + @"parma-victoriae.tif";
         
         public static string Brochure => RootFolder + @"brochure.jpg";
+
+        public static string AgileAntechinus => RootFolder + @"antechinus-agilis.jpg";
     }
 }
