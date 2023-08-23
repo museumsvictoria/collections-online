@@ -130,6 +130,10 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Bunjilaka - Kalaya & Milarri Gardens", Venue = "Melbourne Museum" }
             },
             {
+                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 13", null),
+                new MuseumLocation { Gallery = "Bunjilaka - Temporary Exhibition Space", Venue = "Melbourne Museum" }
+            },
+            {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 7", null),
                 new MuseumLocation { Gallery = "Te Pasifika Gallery", Venue = "Melbourne Museum" }
             },
@@ -407,14 +411,7 @@ namespace CollectionsOnline.Core.Config
             },
         };
 
-        public static IEnumerable<Tuple<string, string, string, string>> MuseumLocationsToExclude => new[]
-        {
-            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F1"),
-            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F2"),
-            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F3"),
-            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F4"),
-            new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 8", "GRID F5")
-        };
+        public static Tuple<string, string, string, string>[] MuseumLocationsToExclude => new Tuple<string, string, string, string>[] {};
 
         public static Dictionary<LicenceType, Licence> Licences = new Dictionary<LicenceType, Licence>
         {
