@@ -130,10 +130,6 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Bunjilaka - Kalaya & Milarri Gardens", Venue = "Melbourne Museum" }
             },
             {
-                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "GALLERY 13", null),
-                new MuseumLocation { Gallery = "Bunjilaka - Temporary Exhibition Space", Venue = "Melbourne Museum" }
-            },
-            {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 7", null),
                 new MuseumLocation { Gallery = "Te Pasifika Gallery", Venue = "Melbourne Museum" }
             },
