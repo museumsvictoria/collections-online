@@ -125,6 +125,10 @@ namespace CollectionsOnline.WebSite.ModelBinders
             // Deprecated Facets/Terms
             if (queryString.HasImages.HasValue)
                 searchApiInputModel.Facets.Add("HasImages", queryString.HasImages);
+            
+            // Filter by Ids
+            if (queryString.Id.HasValue)
+                searchApiInputModel.Ids.AddRange(((string)queryString.Id.Value).Split(',').Where(x => !string.IsNullOrWhiteSpace(x)));
 
             return searchApiInputModel;
         }

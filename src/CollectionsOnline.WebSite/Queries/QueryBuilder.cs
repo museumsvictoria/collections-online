@@ -16,6 +16,7 @@ namespace CollectionsOnline.WebSite.Queries
             IDictionary<string, string> facets,
             IDictionary<string, string[]> multiFacets,
             IDictionary<string, string> terms,
+            IList<string> ids = null,
             DateTime? minDateModified = null,
             DateTime? maxDateModified = null,
             EscapeQueryOptions escapeQueryOptions = EscapeQueryOptions.RawQuery)
@@ -90,6 +91,10 @@ namespace CollectionsOnline.WebSite.Queries
                 query = query.AndAlso().WhereGreaterThanOrEqual("DateModified", minDateModified);
             else if (maxDateModified.HasValue)
                 query = query.AndAlso().WhereLessThanOrEqual("DateModified", maxDateModified);
+            
+            // Ids to filter by
+            if (ids != null && ids.Any())
+                query = query.AndAlso().WhereIn("Id", ids);
 
             return query;
         }

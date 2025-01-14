@@ -11,20 +11,14 @@ namespace CollectionsOnline.WebSite.Models.Api
 
         public DateTime? MaxDateModified { get; set; }
 
-        public IList<string> Queries { get; set; }
+        public IList<string> Queries { get; set; } = new List<string>();
 
-        public IDictionary<string, string> Facets { get; set; }
+        public IDictionary<string, string> Facets { get; set; } = new Dictionary<string, string>();
 
-        public IDictionary<string, string[]> MultiFacets { get; set; }
+        public IDictionary<string, string[]> MultiFacets { get; set; } = new Dictionary<string, string[]>();
 
-        public IDictionary<string, string> Terms { get; set; }
+        public IDictionary<string, string> Terms { get; set; } = new Dictionary<string, string>();
 
-        public SearchApiInputModel()
-        {
-            Queries = new List<string>();
-            Facets = new Dictionary<string, string>();
-            MultiFacets = new Dictionary<string, string[]>();
-            Terms = new Dictionary<string, string>();
-        }
+        public IList<string> Ids { get; set; } = new List<string>();
     }
 }

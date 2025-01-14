@@ -430,13 +430,12 @@ namespace CollectionsOnline.Core.Indexes
                     SpeciesEndemicity = (string)null,
                 });
             
-            Index(x => x.Id, FieldIndexing.No);
+            Index(x => x.Id, FieldIndexing.NotAnalyzed);
             Index(x => x.DisplayTitle, FieldIndexing.NotAnalyzed);
             Index(x => x.SubDisplayTitle, FieldIndexing.No);
             Index(x => x.Content, FieldIndexing.Analyzed);
             Index(x => x.Summary, FieldIndexing.No);
             Index(x => x.ThumbnailUri, FieldIndexing.No);
-
             Index(x => x.TaxonomyIrn, FieldIndexing.NotAnalyzed);
 
             Store(x => x.Id, FieldStorage.Yes);

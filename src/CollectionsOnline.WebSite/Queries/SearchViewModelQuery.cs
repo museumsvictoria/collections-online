@@ -116,7 +116,7 @@ namespace CollectionsOnline.WebSite.Queries
                 RavenQueryStatistics statistics;
                 IList<dynamic> queryResults;
                 var results = new List<dynamic>();
-                var query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, apiInputModel.Page, apiInputModel.PerPage, searchApiInputModel.Sort, searchApiInputModel.Queries, searchApiInputModel.Facets, searchApiInputModel.MultiFacets, searchApiInputModel.Terms, searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified);
+                var query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, apiInputModel.Page, apiInputModel.PerPage, searchApiInputModel.Sort, searchApiInputModel.Queries, searchApiInputModel.Facets, searchApiInputModel.MultiFacets, searchApiInputModel.Terms, searchApiInputModel.Ids, searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified);
 
                 try
                 {
@@ -129,7 +129,7 @@ namespace CollectionsOnline.WebSite.Queries
                     if (IsQueryFailedException(exception))
                     {
                         // Re-build and escape search query
-                        query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, apiInputModel.Page, apiInputModel.PerPage, searchApiInputModel.Sort, searchApiInputModel.Queries, searchApiInputModel.Facets, searchApiInputModel.MultiFacets, searchApiInputModel.Terms, searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified, EscapeQueryOptions.EscapeAll);
+                        query = QueryBuilder<dynamic>.BuildIndexQuery(_documentSession, apiInputModel.Page, apiInputModel.PerPage, searchApiInputModel.Sort, searchApiInputModel.Queries, searchApiInputModel.Facets, searchApiInputModel.MultiFacets, searchApiInputModel.Terms, searchApiInputModel.Ids, searchApiInputModel.MinDateModified, searchApiInputModel.MaxDateModified, EscapeQueryOptions.EscapeAll);
 
                         queryResults = query
                             .Statistics(out statistics)
