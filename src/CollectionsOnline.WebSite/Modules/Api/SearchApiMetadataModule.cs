@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CollectionsOnline.Core.Config;
 using CollectionsOnline.WebSite.Models.Api;
 using Nancy;
 using Nancy.Metadata.Modules;
@@ -27,7 +26,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "query",
                             Necessity = "optional",
-                            Description = "Specify a search term. Can contain one or more values. In order to add more terms repeat the query parameter as follows \"query=coin&query=india\"",
+                            Description = "Specify a search term. Can contain one or more values. In order to add more values repeat the query parameter as follows <code>query=coin&query=india</code> or use comma separated values instead <code>query=coin,india</code>.",
                             ExampleValues = new[] { "coin", "india" }
                         },
                         new ApiParameter
@@ -59,6 +58,13 @@ namespace CollectionsOnline.WebSite.Modules.Api
                                 }
                             },
                             ExampleValues = new[] { "quality", "relevance", "date", "random" }
+                        },
+                        new ApiParameter
+                        {
+                            Parameter = "id",
+                            Necessity = "optional",
+                            Description = "Specify the unique indentifier of record to return. Can contain one or more values that will be added as OR conditions to search query, similar to a SQL IN operator. Can be used to only retrieve specific records in one call. In order to add more values repeat the query parameter as follows <code>id=items/385994&id=specimens/139139</code> or use comma separated values instead <code>id=items/385994,specimens/139139</code>.",
+                            ExampleValues = new[] { "items/385994", "specimens/139139" }
                         },
                         new ApiParameter
                         {
@@ -106,7 +112,7 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "collectingarea",
                             Necessity = "optional",
-                            Description = "Collecting area of a record. Can contain one or more values. In order to add more terms repeat the query parameter as follows \"collectingarea=ornithology&collectingarea=mammalogy\". Parameter is considered a facet.",
+                            Description = "Collecting area of a record. Can contain one or more values. In order to add more values repeat the query parameter as follows <code>collectingarea=ornithology&collectingarea=mammalogy</code> or use comma separated values instead <code>collectingarea=ornithology,mammalogy</code>. Parameter is considered a facet.",
                             ExampleValues = new[] { "ornithology", "mammalogy" }
                         },
                         new ApiParameter
@@ -141,14 +147,14 @@ namespace CollectionsOnline.WebSite.Modules.Api
                         {
                             Parameter = "imagelicence",
                             Necessity = "optional",
-                            Description = "The open access licences that are attributed to a records images. Can contain one or more values. In order to add more terms repeat the query parameter as follows \"imagelicence=public+domain&imagelicence=cc+by\". Parameter is considered a facet.",
+                            Description = "The open access licences that are attributed to a records images. Can contain one or more values. In order to add more values repeat the query parameter as follows <code>imagelicence=public+domain&imagelicence=cc+by</code> or use comma separated values instead <code>imagelicence=public+domain,cc+by</code>. Parameter is considered a facet.",
                             ExampleValues = new[] { "public domain", "cc by" }
                         },
                         new ApiParameter
                         {
                             Parameter = "articletype",
                             Necessity = "optional",
-                            Description = "The type of article, will only return article records. Can contain one or more values. In order to add more terms repeat the query parameter as follows \"articletype=party&articletype=physical+object\". Parameter is considered a facet.",
+                            Description = "The type of article, will only return article records. Can contain one or more values. In order to add more values repeat the query parameter as follows <code>articletype=party&articletype=physical+object</code> or use comma separated values instead <code>articletype=party,physical+object</code>. Parameter is considered a facet.",
                             ExampleValues = new[] { "party", "physical object" }
                         },
                         new ApiParameter
