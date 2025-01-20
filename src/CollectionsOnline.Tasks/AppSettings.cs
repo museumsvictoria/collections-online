@@ -10,6 +10,12 @@ namespace CollectionsOnline.Tasks
         
         public string DatabaseName { get; set; }
         
+        public string DatabaseUserName { get; set; }
+        
+        public string DatabasePassword { get; set; }
+        
+        public string DatabaseDomain { get; set; }
+        
         public string WebSitePath { get; set; }
         
         public string WebSiteUser { get; set; }

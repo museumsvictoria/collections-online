@@ -1,9 +1,8 @@
 using System.Linq;
-using CollectionsOnline.Tasks.Infrastructure;
+using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Raven.Client.Document;
-using Serilog;
 
 namespace CollectionsOnline.Tasks.Extensions
 {
@@ -30,7 +29,10 @@ namespace CollectionsOnline.Tasks.Extensions
                 var documentStore = new DocumentStore
                 {
                     Url = appSettings.DatabaseUrl,
-                    DefaultDatabase = appSettings.DatabaseName
+                    DefaultDatabase = appSettings.DatabaseName,
+                    Credentials = new NetworkCredential(appSettings.DatabaseUserName,
+                        appSettings.DatabasePassword,
+                        appSettings.DatabaseDomain)
                 }.Initialize();
                 
                 return documentStore;
