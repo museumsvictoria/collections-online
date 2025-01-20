@@ -2,6 +2,7 @@
 using CollectionsOnline.Core.Config;
 using CollectionsOnline.Core.Indexes;
 using System.Configuration;
+using System.Net;
 using CollectionsOnline.Core.Models;
 using Ninject.Activation;
 using Raven.Client;
@@ -23,7 +24,10 @@ namespace CollectionsOnline.Core.Infrastructure
                 var documentStore = new DocumentStore
                 {
                     Url = ConfigurationManager.AppSettings["DatabaseUrl"],
-                    DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"]
+                    DefaultDatabase = ConfigurationManager.AppSettings["DatabaseName"],
+                    Credentials = new NetworkCredential(ConfigurationManager.AppSettings["DatabaseUserName"],
+                        ConfigurationManager.AppSettings["DatabasePassword"],
+                        ConfigurationManager.AppSettings["DatabaseDomain"])
                 }.Initialize();
 
                 // Ensure DB exists
