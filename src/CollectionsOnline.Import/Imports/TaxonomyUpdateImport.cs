@@ -161,6 +161,9 @@ namespace CollectionsOnline.Import.Imports
 
                         foreach (var row in results.Rows)
                         {
+                            var taxonomy = _taxonomyFactory.Make(row);
+                            var jObject = taxonomy == null ? null : RavenJObject.FromObject(taxonomy);
+                            
                             // Update taxonomy on items, species and specimens
                             _documentStore.DatabaseCommands.UpdateByIndex(
                                 "CombinedIndex",
@@ -171,7 +174,7 @@ namespace CollectionsOnline.Import.Imports
                                     {
                                         Type = PatchCommandType.Set,
                                         Name = "Taxonomy",
-                                        Value = RavenJObject.FromObject(_taxonomyFactory.Make(row))
+                                        Value = jObject
                                     }
                                 });
                         }
