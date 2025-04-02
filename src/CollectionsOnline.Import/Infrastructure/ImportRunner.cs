@@ -30,6 +30,10 @@ namespace CollectionsOnline.Import.Infrastructure
             var importHasFailed = false;
 
             using (Log.Logger.BeginTimedOperation("Emu data Import starting", "ImportRunner.Run"))
+            using (ConnectToSharedFolder.Access(ConfigurationManager.AppSettings["WebSitePath"],
+                       ConfigurationManager.AppSettings["WebSiteDomain"],
+                       ConfigurationManager.AppSettings["WebSiteUser"],
+                       ConfigurationManager.AppSettings["WebSitePassword"]))
             {
                 var documentSession = _documentStore.OpenSession();
                 var application = documentSession.Load<Application>(Constants.ApplicationId);
@@ -39,16 +43,7 @@ namespace CollectionsOnline.Import.Infrastructure
                     application.RunAllImports();
                     documentSession.SaveChanges();
                     documentSession.Dispose();
-
-                    NetworkShareAccesser networkShareAccesser = null;
-                    if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["WebSiteDomain"]))
-                    {
-                        networkShareAccesser =
-                            NetworkShareAccesser.Access(ConfigurationManager.AppSettings["WebSiteComputer"],
-                                ConfigurationManager.AppSettings["WebSiteDomain"],
-                                ConfigurationManager.AppSettings["WebSiteUser"],
-                                ConfigurationManager.AppSettings["WebSitePassword"]);
-                    }
+                    
                     try
                     {
                         // Run all imports
@@ -64,10 +59,6 @@ namespace CollectionsOnline.Import.Infrastructure
                     {
                         importHasFailed = true;
                         Log.Logger.Error(ex, "Exception occured running import");
-                    }
-                    finally
-                    {
-                        networkShareAccesser?.Dispose();
                     }
 
                     // Imports have run, finish up, need a fresh session as we may have been waiting a while for imports to complete.
