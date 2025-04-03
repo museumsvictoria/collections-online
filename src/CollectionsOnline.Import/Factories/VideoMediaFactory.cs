@@ -67,8 +67,8 @@ namespace CollectionsOnline.Import.Factories
                             {
                                 Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Thumbnail),
                                 Size = new FileInfo(destPath).Length,
-                                Width = thumbnailImage.Width,
-                                Height = thumbnailImage.Height
+                                Width = (int)thumbnailImage.Width,
+                                Height = (int)thumbnailImage.Height
                             };
 
                             // Create small preview placeholder
@@ -82,8 +82,8 @@ namespace CollectionsOnline.Import.Factories
                             {
                                 Uri = PathFactory.BuildUriPath(videoMedia.Irn, ".jpg", FileDerivativeType.Small),
                                 Size = new FileInfo(destPath).Length,
-                                Width = smallImage.Width,
-                                Height = smallImage.Height
+                                Width = (int)smallImage.Width,
+                                Height = (int)smallImage.Height
                             };
                         }
 

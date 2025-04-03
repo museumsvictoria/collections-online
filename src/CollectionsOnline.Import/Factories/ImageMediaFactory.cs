@@ -223,8 +223,8 @@ namespace CollectionsOnline.Import.Factories
                             Uri = PathFactory.BuildUriPath(imageMedia.Irn, ".jpg",
                                 imageMediaJob.FileDerivativeType),
                             Size = new FileInfo(destPath).Length,
-                            Width = image.Width,
-                            Height = image.Height
+                            Width = (int)image.Width,
+                            Height =(int)image.Height
                         });
                 }
             }
@@ -272,8 +272,8 @@ namespace CollectionsOnline.Import.Factories
                                     {
                                         Uri = uriPath,
                                         Size = new FileInfo(destPath).Length,
-                                        Width = image.Width,
-                                        Height = image.Height
+                                        Width = (int)image.Width,
+                                        Height = (int)image.Height
                                     });
                             }
                         }
