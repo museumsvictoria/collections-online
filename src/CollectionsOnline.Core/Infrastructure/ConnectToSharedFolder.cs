@@ -11,6 +11,12 @@ namespace CollectionsOnline.Core.Infrastructure
 
         public static ConnectToSharedFolder Access(string networkName, string domain, string userName, string password)
         {
+            // If any credentials are null or empty we don't need to connect to a file share
+            if(string.IsNullOrEmpty(domain) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+            
             return new ConnectToSharedFolder(networkName, new NetworkCredential(userName, password, domain));
         }
 
