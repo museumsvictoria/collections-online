@@ -67,7 +67,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "CURIOUS", null),
-                new MuseumLocation { Gallery = "Curious", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Main Entrance", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "GROUND LEVEL", "ADMINISTRATION OFFICE", null),
@@ -159,11 +159,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LEVEL 1", "GALLERY 10", null),
-                new MuseumLocation { Gallery = "Mind and Body Gallery", Venue = "Melbourne Museum" }
-            },
-            {
-                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "GALLERY 1", null),
-                new MuseumLocation { Gallery = "Discovery Centre", Venue = "Melbourne Museum" }
+                new MuseumLocation { Gallery = "Biodiversity Gallery", Venue = "Melbourne Museum" }
             },
             {
                 new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "CENTRAL WALKWAY", null),
@@ -235,7 +231,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "LEVEL 1", "GALLERY 3", null),
-                new MuseumLocation { Gallery = "Nitty Gritty Super City", Venue = "Scienceworks" }
+                new MuseumLocation { Gallery = "Level One Gallery", Venue = "Scienceworks" }
             },
             {
                 new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "GROUND LEVEL", "PLANETARIUM", null),
@@ -251,7 +247,7 @@ namespace CollectionsOnline.Core.Config
             },
             {
                 new Tuple<string, string, string, string>("SCIENCEWORKS (MvCIS)", "GROUND LEVEL", "GALLERY 1", null),
-                new MuseumLocation { Gallery = "Touring Hall", Venue = "Scienceworks" }
+                new MuseumLocation { Gallery = "Tinkertown", Venue = "Scienceworks" }
             },
             {
                 new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "GROUND LEVEL", "FOYER", null),
