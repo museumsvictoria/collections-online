@@ -6,29 +6,19 @@ module.exports = {
     this.buildMap();
   },
   cacheElements: function () {
-    this.Model = window.lnglatModel;
+    this.Model = window.latlngModel;
   },
   buildMap: function () {
       if (this.Model !== undefined && this.Model.length !== 0) {
-          mapboxgl.accessToken = 'pk.eyJ1IjoibW1hc29uIiwiYSI6IlFtOXZGSW8ifQ.mIKIjLOaVEDuLDQOM-ddzA';
+          var map = L.map('map').setView(this.Model, 9);
+          // Add OpenStreetMap tile layer
+          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(map);
           
-          var map = new mapboxgl.Map({
-              container: 'map',
-              style: 'mapbox://styles/mmason/ckyjlbw3kdpk514lokzdw28jv',
-              center: this.Model,
-              zoom: 8
-          });
-
-          // Create a default Marker and add it to the map.
-          var marker = new mapboxgl.Marker()
-              .setLngLat(this.Model)
-              .addTo(map);
-
-          var nav = new mapboxgl.NavigationControl({
-              showCompass: false
-          });
-
-          map.addControl(nav, 'top-left');
+          // Add a marker at the specified coordinates
+          L.marker(this.Model).addTo(map);
       } else {
       $('#map').hide();
     }
