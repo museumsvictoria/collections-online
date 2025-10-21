@@ -11,6 +11,8 @@ module.exports = {
   buildMap: function () {
       if (this.Model !== undefined && this.Model.length !== 0) {
           var map = L.map('map').setView(this.Model, 9);
+          map.attributionControl.setPrefix(false);
+          
           // Add OpenStreetMap tile layer
           L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
               maxZoom: 19,
