@@ -13,6 +13,14 @@ namespace CollectionsOnline.WebSite
             Response.Headers.Remove("Server");
             Response.Headers.Remove("X-MiniProfiler-Ids");
         }
+        
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            if (HttpContext.Current.Request.IsSecureConnection)
+            {
+                HttpContext.Current.Response.AddHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+            }
+        }
 
         protected void Application_Error(object sender, EventArgs e)
         {
