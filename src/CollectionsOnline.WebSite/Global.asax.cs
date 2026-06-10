@@ -1,13 +1,21 @@
 ﻿using System;
+using System.Net;
+using System.Threading;
 using System.Web;
 using CollectionsOnline.WebSite.Extensions;
-using Nancy;
 using Serilog;
+using HttpStatusCode = Nancy.HttpStatusCode;
 
 namespace CollectionsOnline.WebSite
 {
     public class Global : HttpApplication
     {
+        protected void Application_Start(object sender, EventArgs e)
+        {
+            ServicePointManager.DefaultConnectionLimit = 100;
+            ThreadPool.SetMinThreads(100, 100);
+        }
+        
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             Response.Headers.Remove("Server");

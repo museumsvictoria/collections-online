@@ -59,7 +59,7 @@ namespace CollectionsOnline.Core.Infrastructure
                     documentSession.SaveChanges();
                 }
 
-                documentStore.JsonRequestFactory.RequestTimeout = TimeSpan.FromSeconds(10);
+                documentStore.JsonRequestFactory.RequestTimeout = TimeSpan.FromSeconds(30);
 
                 return documentStore; 
             }
