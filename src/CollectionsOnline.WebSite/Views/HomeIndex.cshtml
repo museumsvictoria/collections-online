@@ -22,7 +22,7 @@
             <div class="container">
                 @if (!string.IsNullOrWhiteSpace(feature.Feature.Title))
                 {
-                    <h2>@feature.Feature.Title</h2>             
+                    <h2>@Html.Raw(feature.Feature.Title)</h2>             
                 }
                 @if (!string.IsNullOrWhiteSpace(feature.Feature.Description))
                 {
