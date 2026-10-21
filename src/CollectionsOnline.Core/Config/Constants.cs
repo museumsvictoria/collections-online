@@ -174,10 +174,6 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Public Spaces Lower Level", Venue = "Melbourne Museum" }
             },
             {
-                new Tuple<string, string, string, string>("MELBOURNE (MvCIS)", "LOWER GROUND", "GALLERY 2", null),
-                new MuseumLocation { Gallery = "Touring Hall", Venue = "Melbourne Museum" }
-            },
-            {
                 new Tuple<string, string, string, string>("ROYAL EXHIBITION BUILDING (MvCIS)", "BASEMENT", "GALLERY 1", null),
                 new MuseumLocation { Gallery = "Basement Gallery", Venue = "Royal Exhibition Building" }
             },
@@ -274,7 +270,7 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Public Spaces Level 1", Venue = "Immigration Museum" }
             },
             {
-                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "CENTRAL VESTIBULE", null),
+                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 1", "VESTIBULE", null),
                 new MuseumLocation { Gallery = "Public Spaces Level 1", Venue = "Immigration Museum" }
             },
             {
@@ -334,7 +330,7 @@ namespace CollectionsOnline.Core.Config
                 new MuseumLocation { Gallery = "Public Spaces Level 2", Venue = "Immigration Museum" }
             },
             {
-                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 2", "CENTRAL VESTIBULE", null),
+                new Tuple<string, string, string, string>("IMMIGRATION MUSEUM (MvCIS)", "LEVEL 2", "VESTIBULE", null),
                 new MuseumLocation { Gallery = "Public Spaces Level 2", Venue = "Immigration Museum" }
             },
             {
