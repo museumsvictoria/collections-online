@@ -19,10 +19,13 @@ var App = {
   cacheElements: function () {
     this.$culturalMessage = $('#cultural-message');
     this.$culturalMessageButton = $('button', this.$culturalMessage);
+    this.$caretakerMessage = $('#caretaker-message');
+    this.$caretakerMessageButton = $('button', this.$caretakerMessage);
   },
   bindEvents: function () {
     $('.social-tools a').on('click', this.openWindow.bind(this));
     this.$culturalMessageButton.on('click', this.disableCulturalMessage.bind(this));
+    this.$caretakerMessageButton.on('click', this.disableCaretakerMessage.bind(this));
   },
   openWindow: function(e) {
     var target = e.currentTarget;
@@ -56,6 +59,10 @@ var App = {
   disableCulturalMessage: function () {
     jsCookie.set('culturalMessage', 'true', { secure: true, expires: 180, sameSite: 'strict' });
     this.$culturalMessage.addClass('disabled');
+  },
+  disableCaretakerMessage: function () {
+    jsCookie.set('caretakerMessage', 'true', { secure: true, expires: 180, sameSite: 'strict' });
+    this.$caretakerMessage.addClass('disabled');
   }
 };
 

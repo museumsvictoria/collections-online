@@ -1,4 +1,10 @@
-﻿<a class="skipto" href="#maincontent">Skip to main content</a> 
+﻿<a class="skipto" href="#maincontent">Skip to main content</a>
+<div id="caretaker-message" @((DateTime.Now < new DateTime(2026, 11, 3, 18, 0, 0) || DateTime.Now >= new DateTime(2026, 11, 29) || (RenderContext.Context.Request.Cookies.ContainsKey("caretakerMessage") && RenderContext.Context.Request.Cookies["caretakerMessage"] == "true")) ? Html.Raw("class=\"disabled\"") : null)>
+    <div class="inner">
+        <p>The State election will be held on Saturday 28 November 2026. During the caretaker period (starting 6 pm on Tuesday 3 November) content will only be added to this website in line with the caretaker conventions.</p>
+        <button type="button" class="close" title="Close" aria-label="Close"><svg width="28" height="28" viewBox="0 0 28 28"><path fill="none" fill-rule="nonzero" d="M28 2.82L25.18 0 14 11.18 2.82 0 0 2.82 11.18 14 0 25.18 2.82 28 14 16.82 25.18 28 28 25.18 16.82 14z"></path></svg></button>
+    </div>
+</div>
 <header role="banner">
     <a class="brand" href="/">Museums Victoria <span>Collections</span></a>
     <nav role="navigation">
