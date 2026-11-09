@@ -99,13 +99,9 @@ namespace CollectionsOnline.Import.Factories
                         "LocDateCollectedFrom",
                         "LocDateCollectedTo",
                         "LocSamplingMethod",
-                        "MinSpecies",
                         "MinVariety",
-                        "MinGroup",
-                        "MinClass",
                         "MinAssociatedMatrix",
                         "MinType",
-                        "MinTypeType",
                         "MetName",
                         "MetClass",
                         "MetGroup",
@@ -309,13 +305,14 @@ namespace CollectionsOnline.Import.Factories
             specimen.PalaeontologyDateCollectedTo = map.GetEncodedString("LocDateCollectedTo");
             
             // Geology
-            specimen.MineralogySpecies = map.GetEncodedString("MinSpecies");
             specimen.MineralogyVariety = map.GetEncodedString("MinVariety");
-            specimen.MineralogyGroup = map.GetEncodedString("MinGroup");
-            specimen.MineralogyClass = map.GetEncodedString("MinClass");
             specimen.MineralogyAssociatedMatrix = map.GetEncodedString("MinAssociatedMatrix");
             specimen.MineralogyType = map.GetEncodedString("MinType");
-            specimen.MineralogyTypeOfType = map.GetEncodedString("MinTypeType");
+            // TODO: refactor when we know where to get this data from 
+            //specimen.MineralogySpecies = map.GetEncodedString("MinSpecies");
+            //specimen.MineralogyGroup = map.GetEncodedString("MinGroup");
+            //specimen.MineralogyClass = map.GetEncodedString("MinClass");
+            //specimen.MineralogyTypeOfType = map.GetEncodedString("MinTypeType");
             
             specimen.MeteoritesName = map.GetEncodedString("MetName");
             specimen.MeteoritesClass = map.GetEncodedString("MetClass");
